@@ -58,6 +58,7 @@ public class Transfer extends HttpServlet {
             Properties prop = (Properties)session.getAttribute("props");
             String lookup = prop.getProperty("DTS");
             String cert = null;
+            String result = "";
             try{
                 
                 //get the proxy from the session manager
@@ -72,7 +73,7 @@ public class Transfer extends HttpServlet {
                 Object[] ob1 = new Object[]{sid};
                 
                 cert = (String) call1.invoke(ob1 );
-           
+                
                 
                 String proxyServer= prop.getProperty("proxy_server_url");
                 
@@ -89,15 +90,28 @@ public class Transfer extends HttpServlet {
                 
                 Object[] ob = new Object[]{url,urlTo,cert};
                 
-                Object whatever = (Object) call.invoke(ob );
-                response.sendRedirect("../jsp/transferOk.jsp");
+                result = (String) call.invoke(ob );
+                
                 
             }
             catch(Exception e){
                 //System.out.println(e);
-                logger.warn("Could not transfer the file " +url,e);
-                response.sendRedirect("../jsp/transferError.jsp?error="+e.getMessage()+"&url="+url);
+                logger.warn("Unable to transfer srb collection",e);
+                response.sendRedirect("../jsp/error.jsp");
+               
+                return;
             }
+            if(result.equals("true")) {
+                response.sendRedirect("../jsp/transferOk.jsp");
+                
+            }
+            else {
+                logger.warn("Error in transfering srb object.\nError: "+result);
+                response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+url);
+                
+            }
+            
         }
+        
     }
 }
