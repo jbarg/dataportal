@@ -181,7 +181,7 @@ public class sgetrservlet extends HttpServlet {
                 LaunchProcess.runCommand( props.getProperty("tarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             }
             else if(exe.equals("zip")){
-                 LaunchProcess.runCommand("cd"+ props.getProperty("srbDest");
+                LaunchProcess.runCommand("cd"+ props.getProperty("srbDest");
                 LaunchProcess.runCommand( props.getProperty("zipHome")+" -rvj "+ request.getSession().getId() + ".zip  "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+File.separator+"*");
                 
             }
@@ -193,86 +193,83 @@ public class sgetrservlet extends HttpServlet {
                 LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             }
             File myFileIn = null;
-            if(exe.equals("zip")){
-                myFileIn = new File(System.getProperty("user.home")+File.separator + request.getSession().getId() + "."+exe);
-            }
-            else if(exe.equals("tar") || exe.equals("jar")){
-                myFileIn = new File(props.getProperty("srbDest")+File.separator + request.getSession().getId() + "."+exe);
-            }
-            FileInputStream myFileInputStream = new FileInputStream(myFileIn);
-            BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
             
-            BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(out);
-            
-            byte[] buffer = new byte[65536];
-            int c=0;
-            
-            while ((c=myBufferedInputStream.read(buffer)) > -1) {
-                myBufferedOutputStream.write(buffer,0,c);
-            }
-            
-            myBufferedOutputStream.flush();
-            myBufferedOutputStream.close();
-            myBufferedInputStream.close();
-            
-            out.close();
-            LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + "."+exe);
-            LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() );
-            
+            myFileIn = new File(props.getProperty("srbDest")+File.separator + request.getSession().getId() + "."+exe);
         }
-        catch (java.lang.Exception e) {
-            
-            // Better error handling is required for when things go wrong.....
-            
-            response.flushBuffer();
-            response.setContentType("text/html");
-            response.setHeader("Content-disposition",null);
-            
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet</title>");
-            out.println("</head>");
-            out.println("<h1>ERROR!</h1>");
-            out.println("<body>");
-            out.println("</body>");
-            out.println("</html>");
-            out.close();
-            e.printStackTrace();
+        FileInputStream myFileInputStream = new FileInputStream(myFileIn);
+        BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
+        
+        BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(out);
+        
+        byte[] buffer = new byte[65536];
+        int c=0;
+        
+        while ((c=myBufferedInputStream.read(buffer)) > -1) {
+            myBufferedOutputStream.write(buffer,0,c);
         }
+        
+        myBufferedOutputStream.flush();
+        myBufferedOutputStream.close();
+        myBufferedInputStream.close();
+        
+        out.close();
+        LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + "."+exe);
+        LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() );
+        
     }
-    
-    /** Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, java.io.IOException {
-        try {
-            processRequest(request, response);
-        }
-        catch (java.lang.Exception e) {
-            e.printStackTrace();
-        }
+    catch (java.lang.Exception e) {
+        
+        // Better error handling is required for when things go wrong.....
+        
+        response.flushBuffer();
+        response.setContentType("text/html");
+        response.setHeader("Content-disposition",null);
+        
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Servlet</title>");
+        out.println("</head>");
+        out.println("<h1>ERROR!</h1>");
+        out.println("<body>");
+        out.println("</body>");
+        out.println("</html>");
+        out.close();
+        e.printStackTrace();
     }
-    
-    /** Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, java.io.IOException {
-        try {
-            processRequest(request, response);
-        }
-        catch (java.lang.Exception e) {
-            e.printStackTrace();
-        }
+}
+
+/** Handles the HTTP <code>GET</code> method.
+ * @param request servlet request
+ * @param response servlet response
+ */
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+throws ServletException, java.io.IOException {
+    try {
+        processRequest(request, response);
     }
-    
-    /** Returns a short description of the servlet.
-     */
-    public String getServletInfo() {
-        return "SRB Sget -r wrapper";
+    catch (java.lang.Exception e) {
+        e.printStackTrace();
     }
-    
+}
+
+/** Handles the HTTP <code>POST</code> method.
+ * @param request servlet request
+ * @param response servlet response
+ */
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+throws ServletException, java.io.IOException {
+    try {
+        processRequest(request, response);
+    }
+    catch (java.lang.Exception e) {
+        e.printStackTrace();
+    }
+}
+
+/** Returns a short description of the servlet.
+ */
+public String getServletInfo() {
+    return "SRB Sget -r wrapper";
+}
+
 }
