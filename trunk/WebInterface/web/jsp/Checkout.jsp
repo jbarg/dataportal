@@ -82,14 +82,20 @@ function selectAll(formID, fieldName, value)
 function checkall1(formID, fieldName){
 
 var oneNotChecked = false;
-
+var oneChecked = false;
 var elements = document.forms[formID].elements;
 
  for (i = 0; i < elements.length; i++) {
     
+    //checks to see if all are checked, if so confirm that they
+    // wish to delete all of cart
     if (elements[i].name && elements[i].name.indexOf(fieldName) > -1  && (elements[i].checked == false)) {
       oneNotChecked = true;
     //alert(elements[i].checked +" name  " + elements[i].name);
+    }
+    //check to see if any are checked, if no checked, do nothing
+     if (elements[i].name && elements[i].name.indexOf(fieldName) > -1  && (elements[i].checked == true)) {
+            oneChecked = true;
     }
  }
  if(!oneNotChecked){
@@ -98,7 +104,10 @@ var elements = document.forms[formID].elements;
     if(temp == true) return true;
     else return false;
  }
- else return true;
+ else if(oneChecked){
+    return true;
+ }
+ else return false;
 
 }
 //-->
@@ -160,7 +169,7 @@ html/netscape.html file from the content root.-->
 
 <c:choose>
 <c:when test="<%=checkout.isEmpty()%>">
-    <br /><br /><br />There are no items in your shopping basket<br /><br /><br />
+    <br /><br /><br />There are no items in your shopping cart<br /><br /><br />
 </c:when>
 <c:otherwise>
 <%
