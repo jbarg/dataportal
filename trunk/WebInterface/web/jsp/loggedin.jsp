@@ -16,7 +16,7 @@
         }
         // if get to here, then first time user has get here, and certi has ran out
 	else if ( !loggedIn ) {
-                uk.ac.dl.web.Cleanup.session(session.getAttribute("sessionid"));
+                uk.ac.dl.web.Cleanup.session(session);
 		throw new uk.ac.dl.web.SessionTimedOutException();
 	}
 %>
