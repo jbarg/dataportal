@@ -41,7 +41,6 @@ public class SessionSingleton
    String src_port ;
    String src_sid ;
    String src_user ;
-   String src_user ;
    String src_pass ;
 
    // The machine on which the database resides
@@ -236,7 +235,7 @@ public class SessionSingleton
       Properties config = new Properties();
       try 
       {
-         if(this.host == null)
+         if(this.src_host == null)
          {
             loadPropertiesFile() ;
          }
@@ -476,9 +475,9 @@ public class SessionSingleton
 
    DBHelper getXMLDBHelper()
    {
-      if (rel_xml == null)
+      if (xml_dbh == null)
       {
-         this.rel_dbh = DBHelperFactory.create("xml") ;
+         this.xml_dbh = DBHelperFactory.create("xml") ;
       }
 
       return xml_dbh ;
