@@ -1,0 +1,15 @@
+Pre-installation Tasks
+----------------------
+
+None
+
+
+To test the module individually
+-------------------------------
+
+1. Install the web service at address: http://localhost:8080/axis/services/QueryAndReply
+
+2. Run TestClient.class with the following arguments:
+
+<method> <valid session id> <number of seconds before timeout> <query> <facility 1> <facility 2> <facility 3> <facility 4>
+e.g. doBasicQuery 9 30 "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'" BADC MPIM ISIS SRD

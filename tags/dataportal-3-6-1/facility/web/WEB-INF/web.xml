@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd"    version="2.4">
+
+
+  <display-name>Facility Admin</display-name>
+  <servlet>
+    <servlet-name>AxisServlet</servlet-name>
+    <display-name>Apache-Axis Servlet</display-name>
+    <servlet-class>
+        org.apache.axis.transport.http.AxisServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>CreateFacility</servlet-name>
+    <display-name>createFacility</display-name>
+    <servlet-class>
+       uk.ac.clrc.dataportal.facility.facilityAdmin.createFacilityServlet
+    </servlet-class>
+  </servlet>
+  
+   <servlet>
+    <servlet-name>CreateDataPortal</servlet-name>
+    <display-name>CreateDataPortal</display-name>
+    <servlet-class>
+       uk.ac.clrc.dataportal.facility.facilityAdmin.createDataportalServlet
+    </servlet-class>
+  </servlet>
+  
+   <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <display-name>LoginServlet</display-name>
+    <servlet-class>
+       uk.ac.clrc.dataportal.facility.facilityAdmin.LoginServlet
+    </servlet-class>
+     <load-on-startup>1</load-on-startup>
+
+  </servlet>
+
+  <servlet>
+    <servlet-name>DeleteFacility</servlet-name>
+    <display-name>deleteFacility</display-name>
+    <servlet-class>
+       uk.ac.clrc.dataportal.facility.facilityAdmin.deleteFacilityServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>AdminServlet</servlet-name>
+    <display-name>Axis Admin Servlet</display-name>
+    <servlet-class>
+        org.apache.axis.transport.http.AdminServlet
+    </servlet-class>
+    <load-on-startup>100</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>SOAPMonitorService</servlet-name>
+    <display-name>SOAPMonitorService</display-name>
+    <servlet-class>
+        org.apache.axis.monitor.SOAPMonitorService
+    </servlet-class>
+    <init-param>
+      <param-name>SOAPMonitorPort</param-name>
+      <param-value>5002</param-value>
+    </init-param>
+    <load-on-startup>100</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AxisServlet</servlet-name>
+    <url-pattern>/servlet/AxisServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AxisServlet</servlet-name>
+    <url-pattern>*.jws</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AxisServlet</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>SOAPMonitorService</servlet-name>
+    <url-pattern>/SOAPMonitor</url-pattern>
+  </servlet-mapping>
+
+ <!-- uncomment this if you want the admin servlet -->
+  <servlet-mapping>
+    <servlet-name>AdminServlet</servlet-name>
+    <url-pattern>/servlet/AdminServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>DeleteFacility</servlet-name>
+    <url-pattern>/servlet/deleteFacilityServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>CreateDataPortal</servlet-name>
+    <url-pattern>/servlet/createDataportalServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>CreateFacility</servlet-name>
+    <url-pattern>/servlet/createFacilityServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/servlet/LoginServlet</url-pattern>
+  </servlet-mapping>
+
+  <welcome-file-list id="WelcomeFileList_1">
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.jws</welcome-file>
+  </welcome-file-list>
+  
+</web-app>

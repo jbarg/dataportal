@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="assStudy" type="xs:string"/>
+	<xs:element name="cera">
+		<xs:complexType>
+			<xs:attribute name="endday" type="xs:int" use="optional"/>
+			<xs:attribute name="endmonth" type="xs:int" use="optional"/>
+			<xs:attribute name="endyear" type="xs:int" use="optional"/>
+			<xs:attribute name="maxalt" type="xs:int" use="optional"/>
+			<xs:attribute name="maxlat" type="xs:int" use="optional"/>
+			<xs:attribute name="maxlon" type="xs:int" use="optional"/>
+			<xs:attribute name="minalt" type="xs:int" use="optional"/>
+			<xs:attribute name="minlat" type="xs:int" use="optional"/>
+			<xs:attribute name="minlon" type="xs:int" use="optional"/>
+			<xs:attribute name="startday" type="xs:int" use="optional"/>
+			<xs:attribute name="startmonth" type="xs:int" use="optional"/>
+			<xs:attribute name="startyear" type="ceratype" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="date" type="xs:string"/>
+	<xs:element name="item">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="notes"/>
+				<xs:element ref="assStudy"/>
+				<xs:element ref="date"/>
+				<xs:element ref="name"/>
+				<xs:element ref="url"/>
+				<xs:element ref="cera" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="type" type="xs:string" use="required"/>
+			<xs:attribute name="url" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="name" type="xs:string"/>
+	<xs:element name="notes" type="xs:string"/>
+	<xs:element name="shoppingCart">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="url" type="xs:string"/>
+	<xs:simpleType name="ceratype1">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="ceratype2">
+		<xs:restriction base="xs:int"/>
+	</xs:simpleType>
+	<xs:simpleType name="ceratype">
+		<xs:union memberTypes="ceratype1 ceratype2"/>
+	</xs:simpleType>
+</xs:schema>
