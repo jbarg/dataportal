@@ -656,9 +656,10 @@ public class ISISCsmdMapper implements CsmdMapper
 
       return ;
    }
+
+   //perhaps the following needs to be removed - perhaps
    void buildMDRelatedReferanceLocation(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
@@ -866,9 +867,10 @@ public class ISISCsmdMapper implements CsmdMapper
          //atomic do - needs a recursive call more temp statement handles perhaps
          buildMDDataDescription(dataset_id, sbr, ii+li, "datacollection" , true) ;
          buildMDDataCollectionLocator(key, sbr, ii+li, null, true) ;
-         buildMDRelatedReferance(key, sbr, ii+li, null, true) ;
+         buildMDRelatedReferance(key, sbr, ii+li, "datacollection", true) ;
          buildMDAtomicDataObject(key, sbr, ii+li, null, true) ;
-         buildMDDataCollection(key, sbr, ii+li, null, true) ;
+         //won't need the recursive call for isis - but maybe in the future
+         //buildMDDataCollection(key, sbr, ii+li, "datacollection", true) ;
 
       }
 
@@ -876,6 +878,94 @@ public class ISISCsmdMapper implements CsmdMapper
 
       return ;
    }
+   //
+   void buildMDAtomicDataObject(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
+   {
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
+
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+      //
+
+
+      //
+      return ;
+   }
+   //
+   void buildMDDataCollectionLocator(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
+   {
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
+
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+
+      String name = place_holder ;
+      String locator = place_holder ;
+      String id = place_holder ;
+
+      t_r=t_s.executeQuery("select name from dataset where id = '"+key"'") ;
+      if(t_r.next())
+      {
+         name=sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+      }
+      t_r.close() ;
+
+      t_r=t_s.executeQuery("select uri from datafile where datafile.id in " +
+                           "(select datafile_id from datafile_list where dataset_id ='" + key + "')") ;
+      if(t_r.next())
+      {
+         locator = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
+      }
+
+      StringBuffer sbt=new StringBuffer(locator) ;
+
+      sbt.reverse() ;
+
+      boolean process=true ;
+      while(process == true)
+      {
+         if(sbr.charAt(i) == "\\" || sbr.charAt(i) == "/")
+         {
+            proc=false ;
+         }
+         else
+         {
+            sbr.deleteCharAt(0) ;
+         }
+      }
+
+      locator = (sbt.reverse()).toString() ;
+         
+      sbr.append(ii+"<DataCollectionLocator>\n") ; 
+      abr.append(ii+li+"<DataName>"+name+"</DataName>\n") ;
+      abr.append(ii+li+"<Locator>"+locator+"</Locator>\n") ;
+      sbr.append(ii+"</DataCollectionLocator>\n") ; 
+
+      t_r.close() ;
+      t_s.close() ;
+
+      return ;
+
+   }
+
+   //
+
          
 
    void buildMDDataDescription(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
@@ -974,7 +1064,6 @@ public class ISISCsmdMapper implements CsmdMapper
 
       if(type.compareTo("datacollection")==0)
       {
-         //HERE - post 1st jan 2005
          sbr.append(ii+"</LogicalDescription>\n") ;
 
          buildMDParemeters(key, sbr, ii+li, "datacollection", true) ;
@@ -1030,38 +1119,45 @@ public class ISISCsmdMapper implements CsmdMapper
 
             sbr.append(ii+"<Parameter paramid=\""+id+"\">\n") ;
 
-            sbr.append(ii+li+"<ParamName>"+description+"</ParamName>\n") ;
-            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
-            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
-            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
-            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
-            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
-            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
-            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
-
+            sbr.append(ii+li+"<ParamName>"+name+"</ParamName>\n") ;
+            sbr.append(ii+li+"<Units>\n") ;
+            sbr.append(ii+li+li+"<UnitName>"+units+"</UnitName>\n") ;
+            sbr.append(ii+li+li+"<UnitAcronym>"+units+"</UnitAcronym>\n") ;
+            sbr.append(ii+li+"</Units>\n") ;
+            //range information does not seem to be filled in - need to perhaps clear some of the semantics when
+            //instances appear
+            sbr.append(ii+li+"<ParamValue>"+value+"</ParamValue>\n") ;
             sbr.append(ii+"</Parameter>\n") ;
 
          }
 
+      }// all done for ado
 
-         t_r.close() ;
-         t_s.close() ;
-       
+      t_r.close() ;
+      t_s.close() ;
 
       return ;
    }
-   void buildMDTimePeriod(String key, StringBuffer sbr, String ii, String type) throws SQLException
+
+   //
+
+   void buildMDTimePeriod(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
+
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
-   void buildMDFacilityUsed(String key, StringBuffer sbr, String ii, String type) throws SQLException
+
+   //
+
+   void buildMDFacilityUsed(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
+
+   //
+
    void buildMDDataHoldingLocator(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
       Connection c = ss.getConnection() ;
