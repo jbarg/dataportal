@@ -69,7 +69,9 @@ public class sgetrservlet extends HttpServlet {
         // but for now just have it so that the Web Service is configured locally and connects to just one SRB server / domain
         if (! sinitdone) {
             log.info("Logging on to SRB");
-            log.info("Executing "+props.getProperty("srbHome") + "/Sinit");
+            String srbHome = props.getProperty("srbHome");
+            if(srbHome == null) log.info("srbHome is null");
+            else log.info("Executing "+props.getProperty("srbHome") + "/Sinit");
             LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sinit");
         }
         sinitdone = true;
