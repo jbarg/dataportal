@@ -53,6 +53,9 @@ public class SRBTransfer extends HttpServlet {
             //get all the attributes needed
             File tarFile = null;
             String dir = request.getParameter("url");
+            String urldir = dir.replaceFirst("srb","http");
+            URL srburl= new URL(urldir);
+            dir = srburl.getFile();
             String urlTo = request.getParameter("urlTo");
             String sid = (String)session.getAttribute("sessionid");
             String wd =  (String)session.getAttribute("wd");
@@ -174,7 +177,7 @@ public class SRBTransfer extends HttpServlet {
             } catch (Exception e) {
                 logger.warn("Unable to transfer srb collection",e);
                 tarFile.delete();
-               // savefile.delete();
+                // savefile.delete();
                 response.sendRedirect("../jsp/error.jsp");
                 isError = true;
                 return;
