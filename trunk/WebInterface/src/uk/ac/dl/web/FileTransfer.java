@@ -53,6 +53,9 @@ public class FileTransfer extends HttpServlet {
             
             //get all the attributes needed
             String url = request.getParameter("url");
+            //file url
+            
+            
             String urlTo = request.getParameter("urlTo");
             // String username = (String)session.getAttribute("username");
             String sid = (String)session.getAttribute("sessionid");

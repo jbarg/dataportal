@@ -113,58 +113,58 @@ public class FileDownload extends HttpServlet {
                 return;
             }
             
-            /*if(result.equals("true")) {
-                response.sendRedirect("../jsp/transferOk.jsp");
-             
+            if(result.equals("true")) {
+                
+                ServletOutputStream out = response.getOutputStream();
+                try{
+                    //now download the file to the user.
+                    
+                    response.setContentType("application/download");
+                    response.setBufferSize(65536);
+                    
+                    String filename = url.substring(url.lastIndexOf("/") + 1);
+                    filename = filename.replace('.','_');
+                    response.setHeader("Content-disposition","attachment; filename=" + filename + ".tar");
+                    
+                    response.setContentType("application/download");
+                    response.setBufferSize(65536);
+                    
+                    String filename1 = url.substring(url.lastIndexOf("/") + 1);
+                    //filename1 = filename1.replace('.','_');
+                    response.setHeader("Content-disposition","attachment; filename=" + filename1 );
+                    
+                    File myFileIn = new File("/tmp/"+sid);
+                    FileInputStream myFileInputStream = new FileInputStream(myFileIn);
+                    BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
+                    
+                    BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(out);
+                    
+                    byte[] buffer = new byte[65536];
+                    int c=0;
+                    
+                    while ((c=myBufferedInputStream.read(buffer)) > -1) {
+                        myBufferedOutputStream.write(buffer,0,c);
+                    }
+                    
+                    myBufferedOutputStream.flush();
+                    myBufferedOutputStream.close();
+                    myBufferedInputStream.close();
+                    
+                    out.close();
+                    myFileIn.delete();
+                }
+                catch(Exception e){
+                    out.close();
+                    System.out.println(e);
+                    response.sendRedirect("../jsp/error.jsp");
+                }
             }
             else {
                 logger.warn("Error in transfering srb object.\nError: "+result);
                 response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+url);
-             
-            }*/
-            ServletOutputStream out = response.getOutputStream();
-            try{
-                //now download the file to the user.
                 
-                response.setContentType("application/download");
-                response.setBufferSize(65536);
-                
-                String filename = url.substring(url.lastIndexOf("/") + 1);
-                filename = filename.replace('.','_');
-                response.setHeader("Content-disposition","attachment; filename=" + filename + ".tar");
-                
-                response.setContentType("application/download");
-                response.setBufferSize(65536);
-                
-                String filename1 = url.substring(url.lastIndexOf("/") + 1);
-                //filename1 = filename1.replace('.','_');
-                response.setHeader("Content-disposition","attachment; filename=" + filename1 );
-                
-                File myFileIn = new File("/tmp/"+sid);
-                FileInputStream myFileInputStream = new FileInputStream(myFileIn);
-                BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
-                
-                BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(out);
-                
-                byte[] buffer = new byte[65536];
-                int c=0;
-                
-                while ((c=myBufferedInputStream.read(buffer)) > -1) {
-                    myBufferedOutputStream.write(buffer,0,c);
-                }
-                
-                myBufferedOutputStream.flush();
-                myBufferedOutputStream.close();
-                myBufferedInputStream.close();
-                
-                out.close();
-                myFileIn.delete();
             }
-            catch(Exception e){
-                out.close();
-                System.out.println(e);
-                response.sendRedirect("../jsp/error.jsp");
-            }
+            
         }
         
     }

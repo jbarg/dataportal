@@ -49,6 +49,11 @@ public class SRBDownload extends HttpServlet {
             //get all the attributes needed
             File tarFile = null;
             String dir = request.getParameter("dir");
+            //this is a srb url.  Need to parse to get dir out
+            String urldir = dir.replaceFirst("srb","http");
+            URL srburl= new URL(urldir);
+            dir = srburl.getFile();
+            
            // String urlTo = request.getParameter("urlTo");
             String sid = (String)session.getAttribute("sessionid");
             try{
