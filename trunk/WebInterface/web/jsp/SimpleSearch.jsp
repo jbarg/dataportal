@@ -128,15 +128,7 @@ request.  This is stored in the session attribute NoRes--%>
 <xtags:query name="timedOut" send="no" project="eminerals" message="Results timed out from: " host="exchange06.dl.ac.uk" />
 <br />
 <hr />
-<p class="footer" align="right"><a href="http://validator.w3.org/check/referer"><img
-
-         src="../img/vxhtml.gif"
-
-        alt="Valid XHTML 1.0!"   border="0" height="31" width="88" /></a>
-
-<br />
-<br /><a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top">&copy;  2003 CLRC DataPortal</a></p>
-</td>
+<%@ include file="../html/footer.html"%>/td>
 </tr>
 </table>
 </body>
