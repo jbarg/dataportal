@@ -215,6 +215,7 @@ public class XmlWrapperDocBuilder
 	    //sends only validated XML - as sent over soap remote cannot validate as have to remove the
 	    //reference
             dbf.setValidating(true);
+            dbf.setNamespaceAware(true); 
             dbf.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                               "http://www.w3.org/2001/XMLSchema");
             DocumentBuilder db = dbf.newDocumentBuilder() ;
