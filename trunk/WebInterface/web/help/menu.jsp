@@ -138,6 +138,8 @@ document.onmousedown=click*/
 <input type="text" size="15"  name="search_string"/>
 </form>
 -->
+<hr />
+<br />
 <form name="search" method="post" onsubmit="return check();" action="../servlet/HelpSearch1">
 <span id="headmenu">Type in keyword(s)</span>
 <br />
@@ -167,14 +169,15 @@ text = text.replaceAll("\"","'");
     else if(hits.length()!=0){
     System.out.println(hits.length());
 %>        
-
-<span id="headmenu">Select topic to display</span>
+<hr />
+<br />
+<span id="headmenu">Select topic to display:</span>
 <br />
 <br />
 <table>
 <tr>
-   <td width="100" id="headmemu">Title</td>
-       <td id="headmemu">Rank</td>
+   <td width="100" id="headmemu"><u>Title</u></td>
+       <td id="headmemu"><u>Rank</u></td>
 	
 </tr>
 <%
