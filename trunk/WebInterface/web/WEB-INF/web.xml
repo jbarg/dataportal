@@ -138,7 +138,7 @@
 		<display-name>Transfer Servlett</display-name>
 		<servlet-class>
 	
-		       uk.ac.dl.web.Download
+		       uk.ac.dl.web.FileDownload
 	
 		    </servlet-class>
 	</servlet>
