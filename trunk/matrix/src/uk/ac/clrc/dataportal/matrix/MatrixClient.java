@@ -49,24 +49,52 @@ public class MatrixClient {
     
     public static void main(String[] args) {
         
+        String logicalLocation = null;
+        String dataSetId = null;
+        String collection = null;
         
         try {
-            MatrixDataGridRequest request = new MatrixDataGridRequest();
+            if (args.length == 0) {
+                System.out.println("Syntax: MatrixClient <list|ingest|download> [<operationArgs>]");
+                return;
+            }
+            
+            if (args[0].equalsIgnoreCase("ingest") || args[0].equalsIgnoreCase("download")) {
+                if (args.length != 3) {
+                    System.out.println("Syntax: MatrixClient " + args[0] + " <logicalLocation> <dataSetId>");
+                    return;
+                } else {
+                    logicalLocation = args[1];
+                    dataSetId = args[2];
+                }
+            } else if (args[0].equals("list")) {
+                if (args.length != 2) {
+                    System.out.println("Syntax: MatrixClient list <collection>");
+                    return;
+                } else {
+                    collection = args[1];
+                }
+            }
+            
+            MatrixDataGridRequest request = new MatrixDataGridRequest("sapphire.esc.rl.ac.uk",5544,"srbadm","srbadm4badc","badc","/home/srbadm.matrix","badc-escience");
             Transaction tx = null;
             
-            // Setup your transaction to perform the operation you want.... should be a parameter
-            
-            //MatrixDownloadOp downloadOp = new MatrixDownloadOp();
-            //tx = downloadOp.createDownloadOpTransaction();
-            
-            //MatrixListOp listOp = new MatrixListOp();
-            //tx = listOp.createListOpTransaction();
-            
-            // Ingest the file as /home/srbadm.matrix/ingest2.txt (regardless of what the source filename is)
-            // The resource used should be changed int the MatrixDataGridRequest object for now but it should be possible to specify it for different file
-            // This will have to wait until the next version!
-            MatrixIngestOp ingestOp = new MatrixIngestOp();
-            tx = ingestOp.createIngestOpTransaction("/home/srbadm.matrix", "ingest2.txt");
+            if (args[0].equalsIgnoreCase("download")) {
+                // Note: another bug is the Matrix Server is that the transaction keeps running if it can't find the file!
+                
+                MatrixDownloadOp downloadOp = new MatrixDownloadOp();
+                tx = downloadOp.createDownloadOpTransaction(logicalLocation, dataSetId);
+            } else if (args[0].equalsIgnoreCase("list")) {
+                MatrixListOp listOp = new MatrixListOp();
+                tx = listOp.createListOpTransaction(collection);
+            } else if (args[0].equalsIgnoreCase("ingest")) {
+                // The resource used should be changed in the MatrixDataGridRequest object for now but it should be possible to specify it for different files
+                MatrixIngestOp ingestOp = new MatrixIngestOp();
+                tx = ingestOp.createIngestOpTransaction(logicalLocation, dataSetId);
+            } else {
+                System.out.println("Operation " + args[0] + " not supported.");
+                return;
+            }
             
             // Attach transaction to request
             request.setTransaction(tx);
@@ -86,10 +114,13 @@ public class MatrixClient {
             String stepName = step.getStepName();
             
             if (stepName.equals("ingestOp")) {
-                // Get a data source, this could be a URLDataSource too or even extended further for possibly GridFTP etc
-                FileDataSource ds = new FileDataSource("ingest.txt"); // Source file.  Should be a parameter!
-                DataHandler dh = new DataHandler(ds);
                 
+                // NOTE:  There seems to be a bug in the Matrix server when ingesting large files - it seems to add a little bit extra to the of the files in some instances.
+                // It's not know if this is a server or client problem but the problem exists for both this home grown client and their example ingest program which kind of suggests the server is to blame.....
+                
+                // Get a data source, this could be a URLDataSource too or even extended further for possibly GridFTP etc
+                FileDataSource ds = new FileDataSource(dataSetId);
+                DataHandler dh = new DataHandler(ds);
                 // Attach file to be ingested to the SOAP message
                 // We can attach multiple files if specified in the DataGridRequest but let's just play with one for now...
                 AttachmentPart attPart = msg.createAttachmentPart(dh);
@@ -100,9 +131,13 @@ public class MatrixClient {
             Source source = request.getSource();
             soapPart.setContent(source);
             
+            //printReply(msg);  // Print out the request
+            
             System.out.println("Sending request to endpoint : " + MatrixClient.ENDPOINT);
             SOAPMessage reply = connection.call(msg, new URL(MatrixClient.ENDPOINT));
-           
+            
+            Thread.sleep(1000);  // Give it a chance to run....
+            
             // printReply(reply);
             
             // Get the TRANSACTION ID from the reply so we can get the status of our request
@@ -114,7 +149,8 @@ public class MatrixClient {
             System.out.println("TRANSACTION ID IS " + txnId);
             
             // Now create another request to get the status.....
-            request = new MatrixDataGridRequest();
+            //request = new MatrixDataGridRequest("sapphire.esc.rl.ac.uk",5544,"srbadm","srbadm4badc","badc","/home/srbadm.matrix","badc-escience");
+            request.setTransaction(null); // Clear the last transaction
             MatrixStatusRequest statusRequest = new MatrixStatusRequest();
             request.setTransactionStatusQuery(statusRequest.createTransactionStatusQuery(txnId));
             
@@ -126,6 +162,31 @@ public class MatrixClient {
             System.out.println("Sending status query to endpoint : " + MatrixClient.ENDPOINT);
             reply = connection.call(msg, new URL(MatrixClient.ENDPOINT));
             
+            // listOp response is not complient with the schema so don't unmarshal it for now.... see below
+            if (!stepName.equals("listOp")) {
+                // Status Codes are in edu/sdsc/matrix/srb/code/MatrixCodes.java
+                int statusCode = 9000003; // This is the transaction started (but not finished) status code
+                int countLoop = 0;
+                // Loop until the transaction has finished
+                while ( statusCode == 9000003 ) {
+                    replyxml = reply.getSOAPPart().getContent();
+                    dgresponse = (DataGridResponse) unmarshaller.unmarshal(replyxml);
+                    TransactionStatusResponse txnStatus = dgresponse.getTransactionStatusResponse();
+                    
+                    // Because we know there was only one step in our transaction we can get the first object in the list
+                    // This will need changing when multiple steps support is added to our client
+                    StepStatusResponse stepStatusResponse = (StepStatusResponse) txnStatus.getFlowStatusResponse().getStepStatusResponse().get(0);
+                    statusCode = stepStatusResponse.getStatusCode();
+                    if (countLoop++ == 0) {
+                        System.out.println("FIRST STATUS CODE IS " + statusCode + "\n");
+                    } else if (countLoop > 10) {
+                        System.out.println("STATUS CODE IS STILL " + statusCode + ". Not waiting any more!");
+                        return;
+                    }
+                    Thread.sleep(1000);
+                }
+            }
+            
             if (stepName.equals("listOp")) {
                 System.out.println("List Op Response");
                 // We should, in theory,  be able to unmarshal this response in the same way as below but the schema file
@@ -136,24 +197,6 @@ public class MatrixClient {
                 System.out.println("Ingest Op processing.....");
                 printReply(reply);
             } else if (stepName.equals("downloadDataSetOp")) {
-                
-                // Status Codes are in edu/sdsc/matrix/srb/code/MatrixCodes.java
-                int statusCode = 9000003; // This is the transaction started (but not finished) status code
-                
-                // Loop until the transaction has finished
-                while ( statusCode == 9000003 ) {
-                    
-                    replyxml = reply.getSOAPPart().getContent();
-                    dgresponse = (DataGridResponse) unmarshaller.unmarshal(replyxml);
-                    TransactionStatusResponse txnStatus = dgresponse.getTransactionStatusResponse();
-                    
-                    // Because we know there was only one step in our transaction we can get the first object in the list
-                    // This will need changing when multiple files support is added to our client
-                    StepStatusResponse stepStatusResponse = (StepStatusResponse) txnStatus.getFlowStatusResponse().getStepStatusResponse().get(0);
-                    statusCode = stepStatusResponse.getStatusCode();
-                    
-                    System.out.println("STATUS CODE IS " + statusCode + "\n");
-                }
                 
                 System.out.println("Received " + reply.countAttachments() + " attachments:");
                 Iterator it = reply.getAttachments();
