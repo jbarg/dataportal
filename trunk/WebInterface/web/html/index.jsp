@@ -1,5 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<%@ page errorPage="error.jsp"   %>
+<% response.setHeader("pragma","no-cache");
+ response.setHeader("cache-control","no-store");
+ %>
+<%@ include file="loggedin.jsp" %>
+<%@ include file="logger.jsp" %>
 <head>
 <title>E-minerals Mini Grid</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,6 +20,7 @@ facilities,E-minerals, data, search, Glen Drinkwater, Synchrotron Radiation,Brit
 </style>
 </head>
 <body>
+
 
 <table id="top_table"  width="100%" cellspacing="3" ><tr>
 <td id="td_top1" valign="top" width="18%">
