@@ -214,11 +214,13 @@ echo "|"
 if [ $qfile -ne 0 ]
 then
 	{ while read TOWNER qfname; do
-	   /usr/sbin/sysreq flfsys query owner=$TOWNER \
+# 	   /usr/sbin/sysreq flfsys query owner=$TOWNER \
+		$SYSREQ flfsys query owner=$TOWNER \
 	   name=$qfname sh\<. name numpages wdate maxpages
 	done } < $TQFILE
 else
-	/usr/sbin/sysreq flfsys query owner=$TOWNER \
+# 	/usr/sbin/sysreq flfsys query owner=$TOWNER \
+		$SYSREQ flfsys query owner=$TOWNER \
 	name=$fname sh\<. name numpages wdate maxpages
 fi
 #
