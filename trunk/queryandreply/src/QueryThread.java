@@ -111,7 +111,7 @@ public class QueryThread extends Thread {
          * NB lookup currently requires facility in an array and returns an array of
          * facility addresses
          */
-        String[] facilityList = {facilityName+defaultid};
+        String[] facilityList = {facilityName};
         String[] result = (String[]) call.invoke( new Object [] {facilityList, "XMLW"});
         
         logger.info(facilityName+":"+"address of wrapper is "+result[0]);
