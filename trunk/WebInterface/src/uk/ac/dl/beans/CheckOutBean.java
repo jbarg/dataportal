@@ -70,8 +70,7 @@ public class CheckOutBean {
                 List list = root.getChildren("item");
                 
                 if(list.size() == 0){
-                    isEmpty = true;
-                    
+                    isEmpty = true;                    
                 }
                 isEmpty = false;
             }
