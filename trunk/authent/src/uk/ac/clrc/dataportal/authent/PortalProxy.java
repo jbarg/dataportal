@@ -1,4 +1,4 @@
-package uk.ac.clrc.dataportal.authent;
+/*package uk.ac.clrc.dataportal.authent;
 //***************************************************************************
 // Uses Cog kit to create a GlobusProxy from portal's private key and       *
 // certificate and stores on MyProxy Server.                                *
@@ -78,6 +78,6 @@ public abstract class PortalProxy
 
 //********************
 
-}
+}*/
 
 //*********************************************************************
