@@ -9,6 +9,11 @@ package uk.ac.clrc.dataportal.lookup;
 /**
  * @author  Mark Williams
  */
+
+import javax.servlet.http.HttpServletRequest;
+import org.apache.axis.MessageContext;
+import org.apache.axis.transport.http.HTTPConstants;
+
 import java.net.URL;
 import org.uddi4j.*;
 import org.uddi4j.client.*;
@@ -24,30 +29,71 @@ import org.uddi4j.util.*;
 import org.uddi4j.transport.TransportFactory;
 import java.util.Vector;
 import java.util.Enumeration;
-import org.apache.log4j.Logger;
+import java.util.Properties;
+import java.io.FileInputStream;
+
+import org.apache.axis.components.logger.LogFactory;
+import org.apache.commons.logging.Log;
+
 
 public class LookUpModule
 {
+    static Log log = LogFactory.getLog(LookUpModule.class.getName());
+    
     private UDDIProxy getUDDIProxy()
     {
-        // Create a UDDI proxy based on the Apache SOAP transport
         
+        // Create a UDDI proxy based on the Apache SOAP transport
         System.setProperty(TransportFactory.PROPERTY_NAME, "org.uddi4j.transport.ApacheSOAPTransport");
         //System.setProperty(TransportFactory.PROPERTY_NAME, "org.uddi4j.transport.ApacheAxisTransport");
         //System.setProperty("org.uddi4j.logEnabled", "true");
-        // Create a UDDI proxy based on the Apache SOAP transport
         
         UDDIProxy proxy = null;
         try
         {
-            // URL should really be in a property file somewhere....
-            proxy = new UDDIProxy((new URL("http://escpc10.esc.rl.ac.uk:8080/wasp/uddi/inquiry")), null);
+            // Get UDDI URL properties
+            Properties uddiProps = getUDDIProps();
+            proxy = new UDDIProxy(new URL(uddiProps.getProperty("uddi_inquiry")), null);
+            log.info("Using UDDI Server at  " + uddiProps.getProperty("uddi_inquiry"));
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
         return proxy;
+    }
+    
+    private Properties getUDDIProps() throws Exception
+    {
+        // Load UDDI Properties from file - need to change this to include context path
+        Properties UDDIProps = null;
+        // This is hardcoded for testing outside of Axis - when running in Axis it gets overwritten by the context path below
+        String propertiesFileName = "C:/cygwin/home/maw24/dataportal/lookup/web/WEB-INF/uddi.properties";
+        
+        // We can only get the context path when deployed within Axis
+        MessageContext messageContext = MessageContext.getCurrentContext();
+        if (messageContext != null)
+        {
+            HttpServletRequest request = (HttpServletRequest) messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+            String fileSeparator = System.getProperty("file.separator");
+            propertiesFileName = request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(fileSeparator));
+            propertiesFileName = propertiesFileName + fileSeparator + "WEB-INF" + fileSeparator + "uddi.properties";
+        }
+        
+        try
+        {
+            log.info("Loading properties from " + propertiesFileName);
+            UDDIProps = new Properties();
+            FileInputStream in = new FileInputStream(propertiesFileName);
+            UDDIProps.load(in);
+            in.close();
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        
+        return UDDIProps;
     }
     
     public String[] lookup(String[] facilityList, String serviceType)
@@ -74,7 +120,7 @@ public class LookUpModule
         /*  Input:  String array containing list of Facilities to search against (e.g. BADC or Dataportal)
          *          Service type (e.g. XMLW or ACL)
          *          Query (currently WSDL or Endpoint)
-         *  Output: If query is "WSDL" then String array containing path to WSDL file for corresponding facility 
+         *  Output: If query is "WSDL" then String array containing path to WSDL file for corresponding facility
          *          otherwise if "EndPoint" then String array containing URL endpoint to the webservice for correspoding facility
          */
         
@@ -195,6 +241,9 @@ public class LookUpModule
             fq.setText(FindQualifier.exactNameMatch);
             fqs.add(fq);
             
+            // Get the TModel key for uddi-org:types
+            String wsdlKey = getTModelKey(proxy, "uddi-org:types");
+            
             // Business Name vector
             Vector names = new Vector();
             names.add(new Name(facility));
@@ -214,32 +263,46 @@ public class LookUpModule
                 for (int s=0; s < serviceInfoVector.size();s++)
                 {
                     ServiceInfo serviceInfo = (ServiceInfo)serviceInfoVector.elementAt(s);
-
+                    
                     // Get the service detail and store the wsdl path in our array
                     ServiceDetail serviceDetail = proxy.get_serviceDetail(serviceInfo.getServiceKey());
                     Vector businessServiceVector = serviceDetail.getBusinessServiceVector();
                     BusinessService businessService = (BusinessService)businessServiceVector.elementAt(0);
-                    Vector bindingTemplateVector = businessService.getBindingTemplates().getBindingTemplateVector();
-                    if (bindingTemplateVector.size() > 0)
+                    BindingTemplates bindingTemplates = businessService.getBindingTemplates();
+                    Vector bindingTemplateVector = null;
+                    if (bindingTemplates != null)
+                    {
+                        bindingTemplateVector = bindingTemplates.getBindingTemplateVector();
+                    }
+                    
+                    if (bindingTemplateVector != null && bindingTemplateVector.size() > 0)
                     {
                         BindingTemplate bindingTemplate = (BindingTemplate)bindingTemplateVector.elementAt(0);
                         TModelInstanceDetails details = bindingTemplate.getTModelInstanceDetails();
                         
                         Vector instanceInfoVector = details.getTModelInstanceInfoVector();
-                        TModelInstanceInfo instanceInfo = (TModelInstanceInfo)instanceInfoVector.elementAt(0);
-                        String tModelKey = instanceInfo.getTModelKey();
+                        TModelInstanceInfo instanceInfo = null;
+                        String tModelKey = null;
+                        TModel tModel = null;
+                        CategoryBag catBag = null;
                         
-                        TModelDetail tModelDetail = proxy.get_tModelDetail(tModelKey);
-                        TModel tModel = (TModel)tModelDetail.getTModelVector().elementAt(0);
-                        IdentifierBag idbag = tModel.getIdentifierBag();
-                        if (idbag != null)
+                        if (instanceInfoVector.size() > 0)
                         {
-                            Vector keyedReferenceVector = idbag.getKeyedReferenceVector();
+                            instanceInfo = (TModelInstanceInfo)instanceInfoVector.elementAt(0);
+                            tModelKey = instanceInfo.getTModelKey();
+                            TModelDetail tModelDetail = proxy.get_tModelDetail(tModelKey);
+                            tModel = (TModel)tModelDetail.getTModelVector().elementAt(0);
+                            catBag = tModel.getCategoryBag();
+                        }
+                        
+                        if (catBag != null)
+                        {
+                            Vector keyedReferenceVector = catBag.getKeyedReferenceVector();
                             boolean found = false;
                             for (Enumeration e = keyedReferenceVector.elements();e.hasMoreElements();)
                             {
                                 KeyedReference kr = (KeyedReference) e.nextElement();
-                                if (kr.getKeyName().equalsIgnoreCase("uddi-org:types") && kr.getKeyValue().equalsIgnoreCase("wsdlSpec"))
+                                if (kr.getTModelKey().equals(wsdlKey))
                                 {
                                     found = true;
                                     break;
@@ -283,11 +346,11 @@ public class LookUpModule
         try
         {
             // Create an Identifier bag to retrieve only wsdlSpec TModels
-            IdentifierBag idbag = new IdentifierBag();
-            KeyedReference keyref = new KeyedReference("uddi-org:types","wsdlSpec");
-            idbag.add(keyref);
+            CategoryBag catBag = new CategoryBag();
+            KeyedReference keyref = new KeyedReference("UDDI Types", "wsdlSpec", getTModelKey(proxy,"uddi-org:types"));
+            catBag.add(keyref);
             
-            TModelList tModelList = proxy.find_tModel(null, null, idbag, null,0);
+            TModelList tModelList = proxy.find_tModel(null, catBag, null, null,0);
             Vector tModelInfoVector = tModelList.getTModelInfos().getTModelInfoVector();
             for (Enumeration e = tModelInfoVector.elements();e.hasMoreElements();)
             {
@@ -319,24 +382,32 @@ public class LookUpModule
         
         UDDIProxy proxy = getUDDIProxy();
         
-        Vector names = new Vector();
-        names.add(new Name("%"));
-        Vector resultsVector = new Vector();
-        
+        // Create some find qualifiers so that Tmodel bag keys are or'd when applied
+        FindQualifiers findQualifiers = new FindQualifiers();
+        Vector qualifier = new Vector();
+        qualifier.add(new FindQualifier(FindQualifier.orAllKeys));
+        qualifier.add(new FindQualifier(FindQualifier.sortByNameAsc));
+        findQualifiers.setFindQualifierVector(qualifier);
         
         try
         {
-            BusinessList businessList = proxy.find_business(names, null, null, null, null, null, 0);
-            Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
-            
-            for (Enumeration e = businessInfoVector.elements();e.hasMoreElements();)
+            TModelBag tmBag = getTModelBag(proxy);
+            // If there are no TModels of type wsdlSpec then there can't be any Facilities!
+            if (tmBag.size() > 0)
             {
-                BusinessInfo businessInfo = (BusinessInfo) e.nextElement();
-                // Find all tmodels here for this business
-                if (getServicesImpl(proxy, businessInfo.getNameString()).length > 0)
+                BusinessList businessList = proxy.find_business(null, null, null, null, tmBag, findQualifiers, 0);
+                Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
+                
+                String results[] = new String[businessInfoVector.size()];
+                
+                int i=0;
+                for (Enumeration e = businessInfoVector.elements();e.hasMoreElements();)
                 {
-                    resultsVector.add(businessInfo.getNameString());
+                    BusinessInfo businessInfo = (BusinessInfo) e.nextElement();
+                    results[i++] = businessInfo.getNameString();
                 }
+                
+                return results;
             }
         }
         catch (Exception e)
@@ -344,14 +415,71 @@ public class LookUpModule
             e.printStackTrace();
         }
         
-        // Convert our vector into a String array to return (easier for SOAP)
-        String results[] = new String[resultsVector.size()];
-        Enumeration e = resultsVector.elements();
-        for (int i=0;e.hasMoreElements();i++)
+        // Only return null if nothing was found!
+        return null;
+    }
+    private String getTModelKey(UDDIProxy proxy, String serviceType) throws UDDIException
+    // Returns the TModel Key for our service type (e.g. XMLW or ACL etc)
+    {
+        String tModelKey = null;
+        
+        // Setting FindQualifiers to 'exactNameMatch' instead of the default wildcard option
+        FindQualifiers findQualifiers = new FindQualifiers();
+        Vector qualifier = new Vector();
+        qualifier.add(new FindQualifier(FindQualifier.exactNameMatch));
+        findQualifiers.setFindQualifierVector(qualifier);
+        
+        try
         {
-            results[i] = (String)e.nextElement();
+            TModelList tModelList = proxy.find_tModel(serviceType, null, null, findQualifiers, 1);
+            Vector tModelInfoVector = tModelList.getTModelInfos().getTModelInfoVector();
+            if (!tModelInfoVector.isEmpty())
+            {
+                TModelInfo tModelInfo = (TModelInfo) tModelInfoVector.elementAt(0);
+                tModelKey = tModelInfo.getTModelKey();
+            }
+        }
+        catch (UDDIException ue)
+        {
+            throw ue;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return tModelKey;
+    }
+    
+    private TModelBag getTModelBag(UDDIProxy proxy) throws UDDIException
+    // Returns TModel Bag of all TModels of type wsdlSpec
+    {
+        TModelBag tModelBag = new TModelBag();
+        
+        // Create an Identifier bag to retrieve only wsdlSpec type TModels
+        CategoryBag catBag = new CategoryBag();
+        KeyedReference keyref = new KeyedReference("UDDI Type","wsdlSpec", getTModelKey(proxy, "uddi-org:types"));
+        catBag.add(keyref);
+        
+        try
+        {
+            TModelList tModelList = proxy.find_tModel(null, catBag, null, null, 0);
+            Vector tModelInfoVector = tModelList.getTModelInfos().getTModelInfoVector();
+            
+            for (int t=0;t<tModelInfoVector.size();t++)
+            {
+                TModelInfo tModelInfo = (TModelInfo) tModelInfoVector.elementAt(t);
+                tModelBag.add(new TModelKey(tModelInfo.getTModelKey()));
+            }
+        }
+        catch (UDDIException ue)
+        {
+            throw ue;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
         
-        return results;
+        return tModelBag;
     }
 }

@@ -2,6 +2,7 @@
 <project basedir="." default="all" name="lookupmodule">
 
     <target name="init">
+        <property name="tomcatlibs" value="C:/jakarta-tomcat-4.1.12/common/lib"/>
         <property name="src" value="${basedir}/src"/>
         <property name="web" value="${basedir}/web"/>
         <property name="docs" value="${basedir}/docs"/>
@@ -14,6 +15,7 @@
         <javac debug="true" deprecation="true" destdir="${dest}" srcdir="${src}">
             <classpath>
                 <pathelement location="${dest}"/>
+                <pathelement location="${tomcatlibs}/servlet.jar"/>
                 <fileset dir="${webinf}/lib">
                     <include name="**/*.jar"/>
                 </fileset>

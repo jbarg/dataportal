@@ -16,12 +16,12 @@ public class LookUpClient {
         LookUpModuleService service = new LookUpModuleServiceLocator();
         
         LookUpModule port = service.getLookUpService();
-        String[] facs = { "BADC", "DataPortal", "MPIM", "ISIS", "SRD" };
-        String[] results = port.lookupEndpoint(facs, "XMLW");
-        //String[] results = port.getFacilities();
+//        String[] facs = { "BADC", "DataPortal", "MPIM", "ISIS", "SRD", "MAWTEST" };
+        String[] facs = port.getFacilities();
+        String[] results = port.lookupEndpoint(facs, "ACL");
         
         for (int i=0;i<results.length;i++) {
-            System.out.println(results[i]);
+            System.out.println(facs[i] + "=" + results[i]);
         }
     }
 }
