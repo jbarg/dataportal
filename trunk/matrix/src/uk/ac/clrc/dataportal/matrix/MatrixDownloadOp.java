@@ -38,18 +38,18 @@ public class MatrixDownloadOp {
     
     private static ObjectFactory objFactory = new ObjectFactory();
     
-    public Transaction createDownloadOpTransaction() {
+    public Transaction createDownloadOpTransaction(String logicalLocation, String dataId) {
         
         Transaction tx = null;
         
         try {
             DataSet dataSet = objFactory.createDataSet();
-            dataSet.setDataIdentifier("dbtf.pdf");
-            dataSet.setLogicalLocation("/home/srbadm.matrix");
+            dataSet.setDataIdentifier(dataId);
+            dataSet.setLogicalLocation(logicalLocation);
             
             DownloadDataSetParams downloadParams = objFactory.createDownloadDataSetParams();
             downloadParams.setDataSource(dataSet);
-            downloadParams.setContentMIMEID("download_filename"); // Should be a parameter
+            downloadParams.setContentMIMEID(dataId); // The file is written out with this filename so could be different if you want
             
             DownloadDataSetOp downloadOp = objFactory.createDownloadDataSetOp();
             downloadOp.setStdParams(downloadParams);
@@ -64,7 +64,7 @@ public class MatrixDownloadOp {
             
             Flow flow = objFactory.createFlow();
             flow.setFlowType("sequential");
-            flow.getSteps().add(step);
+            flow.getSteps().add(step);  
             
             tx = objFactory.createTransaction();
             tx.setFlow(flow);

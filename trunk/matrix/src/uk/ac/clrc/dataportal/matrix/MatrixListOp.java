@@ -39,14 +39,14 @@ public class MatrixListOp {
     
     private static ObjectFactory objFactory = new ObjectFactory();
     
-    public Transaction createListOpTransaction() {
+    public Transaction createListOpTransaction(String collection) {
         
         Transaction tx = null;
         
         try {
             
             Collection.StdCollectionType collType = objFactory.createCollectionStdCollectionType();
-            collType.setCollectionName(MatrixDataGridRequest.COLLECTION);
+            collType.setCollectionName(collection);
             
             Collection coll = objFactory.createCollection();
             coll.setStdCollection(collType);
