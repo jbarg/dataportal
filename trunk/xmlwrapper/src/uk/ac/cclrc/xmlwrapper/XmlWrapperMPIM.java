@@ -29,24 +29,25 @@ public class XmlWrapperMPIM
    public XmlWrapperMPIM()
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
+      
+      //setup wrapper name
+      ss.setWrapperName("mpim") ;
 
-      //setup file paths here - as we are using AXIS we can rely upon catalina.home 
-      ss.setReadPath(System.getProperty("catalina.home")) ;
-      ss.setLogPropFile("MpimCXW.log.properties") ;
-      //change
-      ss.setMapFile("MPIMmap.data") ;
-      
       //setup logger
-      //change
       ss.setLogger(XmlWrapperMPIM.class.getName()) ;
-      
+
       //setup login details
-      //change
-      ss.SetDbConnectionInfo("neptun.dkrz.de",
- 	                     "1521",
- 	     		     "a804",
-			     "clrc_portal",
-			     "clrc4all") ;
+      Logger log = ss.getLogger() ;
+
+      try
+      {
+         ss.SetDbConnectionInfo() ;
+      }
+      catch (IOException e)
+      {
+         log.fatal("Cannot load" + ss.getPropFile() + "\n\t Exiting ....") ;
+         System.exit(-1) ;
+      }
 
       //set database name
       ss.setDbs("CERA2.") ;

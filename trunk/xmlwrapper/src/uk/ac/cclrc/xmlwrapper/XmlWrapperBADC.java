@@ -29,20 +29,25 @@ public class XmlWrapperBADC
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
 
-      //setup file paths here - as we are using AXIS we can rely upon catalina.home 
-      ss.setReadPath(System.getProperty("catalina.home")) ;
-      ss.setLogPropFile("BadcCXW.log.properties") ;
-      ss.setMapFile("BADCmap.data") ;
+      //setup wrapper name    
+      ss.setWrapperName("badc") ;
       
       //setup logger
       ss.setLogger(XmlWrapperBADC.class.getName()) ;
       
       //setup login details
-      ss.SetDbConnectionInfo("twister.badc.rl.ac.uk",
- 	                     "1521",
- 	     		     "RAS805",
-			     "cera",
-			     "BaumannP") ;
+      Logger log = ss.getLogger() ;
+      
+      try
+      {
+         ss.SetDbConnectionInfo() ;
+      }
+      catch (IOException e)
+      {
+         log.fatal("Cannot load" + ss.getPropFile() + "\n\t Exiting ....") ;
+         System.exit(-1) ;
+      }
+
 
       //connect to the database
       DBHelper dbh = ss.getDBHelper() ;

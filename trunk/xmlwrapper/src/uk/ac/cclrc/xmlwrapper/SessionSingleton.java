@@ -7,6 +7,11 @@ import org.apache.log4j.* ; //for Logger
 
 import java.sql.* ; //for jdbc
 
+import org.apache.axis.MessageContext;               //needed for context path
+import org.apache.axis.transport.http.HTTPConstants; //needed for context path
+import javax.servlet.http.*;                         //needed for context path
+
+
 //controls the variable accessable by the XmlWrapper service
 
 
@@ -14,6 +19,9 @@ public class SessionSingleton
 {
    //single reference to single object of class ... hence singleton
    static SessionSingleton _instance ;
+
+   //Wrapper name
+   String wrapper_name ;
 
    //log for the class - using log4j
    Logger log ;
@@ -56,8 +64,6 @@ public class SessionSingleton
    //path to read log config file from and read/write <x>map.data to
    //-i.e. serialized hashmap will compressed xml doclets as values
    String read_path  ;
-   String log_prop_file ;
-   String map_file ;
 
    //holds decomposed sql 'like' where clause from query to wrapper
    ParseQuery pq = new ParseQuery() ;
@@ -88,6 +94,15 @@ public class SessionSingleton
    //
    //
    //
+   void setWrapperName(String wrapper_name)
+   {
+      this.wrapper_name = wrapper_name ;
+   }
+
+   String getWrapperName()
+   {
+      return wrapper_name ;
+   }
    //
 
    void setLogger(String className)
@@ -124,13 +139,25 @@ public class SessionSingleton
    //
    //
 
-   void SetDbConnectionInfo(String host, String port, String sid, String user, String pass)
+   void SetDbConnectionInfo() throws IOException
    {
-      this.host = host ;
-      this.port = port ;
-      this.sid = sid ;
-      this.user = user ;
-      this.pass = pass ;
+
+      Properties config = new Properties();
+      try 
+      {
+         config.load(new FileInputStream(getPropFile()));
+
+         this.host = config.getProperty("dbhost");
+         this.port = config.getProperty("dbport");
+         this.sid =  config.getProperty("dbsid");
+         this.user = config.getProperty("dbuser");
+         this.pass = config.getProperty("dbpass");
+      }
+      catch (IOException e)
+      {
+        throw e;    
+      }
+
    }
 
    String getHost()
@@ -194,34 +221,47 @@ public class SessionSingleton
    //
    //
 
-   void setReadPath(String read_path)
+   void setReadPath()
    {
-      this.read_path = read_path ;
+      String con_path;
+      String file_path=System.getProperty("catalina.home");
+      MessageContext messageContext = MessageContext.getCurrentContext();
+      if (messageContext != null) 
+      {
+         // Get the servlet request
+         HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+            
+         // Strip off the web service name off the end of the path
+         // and append our properties file path
+         con_path = request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(File.separator));
+         file_path = con_path + File.separator + "WEB-INF" + File.separator;
+      }
+
+      this.read_path = file_path ;
    }
 
    String getReadPath()
    {
+      if (read_path == null)
+      {
+         setReadPath() ;
+      }
       return read_path ;
-   }
-
-   void setLogPropFile(String log_prop_file)
-   {
-      this.log_prop_file = log_prop_file ;
    }
 
    String getLogPropFile()
    {
-      return getReadPath() + File.separatorChar + "conf" + File.separatorChar + log_prop_file ;
-   }
-
-   void setMapFile(String map_file) 
-   {
-      this.map_file = map_file ;
+      return getReadPath() + File.separatorChar + "conf" + File.separatorChar + getWrapperName() + ".log.properties" ;
    }
 
    String getMapFile()
    {
-      return getReadPath() + File.separatorChar + "conf" + File.separatorChar + map_file ;
+      return getReadPath() + File.separatorChar + "conf" + File.separatorChar + getWrapperName() + ".map.data" ; 
+   }
+
+   String getPropFile()
+   {
+      return getReadPath() + File.separatorChar + "conf" + File.separatorChar + getWrapperName() + ".properties" ;
    }
 
    //
