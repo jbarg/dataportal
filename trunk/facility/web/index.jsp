@@ -3,7 +3,7 @@
 <BODY>
 <H1>Facility Administration Web Service</H1>
 <P>http://<%
-out.println(request.getHeader("Host") + "/" + request.getContextPath() + "/service/FacilityAdminService");
+out.println(request.getHeader("Host") + request.getContextPath() + "/service/FacilityAdminService");
 %></P>
 <P>Create Facility Request</P>
 <TEXTAREA cols='100' rows='20' readonly>
