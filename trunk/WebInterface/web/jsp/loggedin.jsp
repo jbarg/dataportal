@@ -19,7 +19,7 @@
         // if get to here, then first time the user has got here, and certi has ran out
         // clean up and invalidate session.  Next time user will go to above
 	else if ( !loggedIn ) {
-                uk.ac.dl.web.Cleanup.session(session);
+                uk.ac.dl.beans.Cleanup.session(session);
 		throw new uk.ac.dl.web.SessionTimedOutException();
 	}
 %>
