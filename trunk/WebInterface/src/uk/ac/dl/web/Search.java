@@ -63,9 +63,11 @@ public class Search {
             //System.out.println(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
             Saver.save(doc1, new File(workingDir+File.separator+"profiles"+File.separator+sid+"1.xml"));
             
-                        
+            System.out.println("Elements returned is "+el.length);
             ArrayList[] res= new ArrayList[3];
+            System.out.println("ArrayList size is "+res.length);
             for(int i = 1; i<el.length;i++){
+                System.out.println("i is "+i);
                 Element build = builder.build(el[i]);
                 List list = build.getContent();
                 Iterator it = list.iterator();
@@ -73,6 +75,7 @@ public class Search {
                     Object o = it.next();
                     if(o instanceof org.jdom.Element){
                         org.jdom.Element e = (org.jdom.Element)o;
+                        System.out.println("adding to res "+(i-1));
                         res[i-1].add(e.getName());
                     }
                 }
