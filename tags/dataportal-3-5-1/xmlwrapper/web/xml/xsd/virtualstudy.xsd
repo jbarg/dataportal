@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema targetNamespace="http://www.escience.clrc.ac.uk/schemas/scientific/virtual"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:cmd="http://www.escience.clrc.ac.uk/schemas/scientific"
+	    xmlns:vsm="http://www.escience.clrc.ac.uk/schemas/scientific/virtual"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+   <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+         Virtual Studies Metadata.
+      </xsd:documentation>
+   </xsd:annotation>
+
+   <xsd:import namespace="http://www.escience.clrc.ac.uk/schemas/scientific" schemaLocation="clrcmetadata.xsd"/>
+
+
+   <xsd:element name="VSContainer" type="vsm:VSContainerType"/>
+
+   <xsd:complexType name="VSContainerType">
+      <xsd:sequence>
+	 <xsd:element name="VirtualStudy" type="vsm:VirtualStudyType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="VirtualStudyType">
+      <xsd:sequence>
+	 <xsd:element name="StudyName" type="xsd:string"/>
+	 <xsd:element name="StudyURI" type="xsd:string"/>
+	 <xsd:element name="PIName" type="xsd:string"/>
+	 <xsd:element name="PIURI" type="xsd:string"/>
+	 <xsd:element ref="cmd:MetadataRecord" maxOccurs="unbounded"/>
+         <xsd:element name="VirtualStudy" type="vsm:VirtualStudyType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <!-- as these are held in the dataportal we can assign numbers from a unique list -->
+      <!-- perhaps we should prepend this with the name of the dataportal instance      -->
+      <!-- for later dataportal-dataportal communication -->
+      <xsd:attribute name="vsid" type="xsd:string" use="required"/>
+   </xsd:complexType>
+
+
+
+</xsd:schema>
+
