@@ -28,7 +28,7 @@
   <parameter name="className" value="org.apache.axis.utils.Admin"/>
   <namespace>http://xml.apache.org/axis/wsdd/</namespace>
  </service>
- <service name="isis" provider="java:RPC">
+ <service name="acm" provider="java:RPC">
   <parameter name="allowedMethods" value="*"/>
   <parameter name="className" value="uk.ac.clrc.dataportal.acm.AcmWS"/>
  </service>
