@@ -96,7 +96,8 @@ public class Transfer extends HttpServlet {
             }
             catch(Exception e){
                 //System.out.println(e);
-                logger.warn("Unable to transfer srb collection",e);
+                logger.warn("Unable to transfer file collection",e);
+                
                 response.sendRedirect("../jsp/error.jsp");
                
                 return;
