@@ -34,4 +34,10 @@ out.println(request.getHeader("Host") + "/" + request.getContextPath() + "/servi
   <deleteFacility facilityID="b4f27310-27de-11d7-b4c0-b8a03c50a862"/>
 </fadm:facilityAdmin>
 </TEXTAREA>
+<P>Find Facility Request</P>
+<TEXTAREA cols='100' rows='3' readonly>
+<fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
+  <findFacility>FAC</findFacility>
+</fadm:facilityAdmin>
+</TEXTAREA>
 </HTML>
