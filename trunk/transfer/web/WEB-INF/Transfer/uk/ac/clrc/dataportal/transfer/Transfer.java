@@ -75,12 +75,12 @@ public class Transfer {
         }
         catch(Exception e){
             //credFile.delete();
-            System.out.println(e);
+            System.err.println(e.getMessage());
         }
         
         
     }
-    public static boolean copy(String urlFrom, String urlTo, String credFile){
+    public static boolean copy(String urlFrom, String urlTo, String credFile) throws Exception{
         //File credFile = null;
         
         try{
@@ -89,7 +89,7 @@ public class Transfer {
             // credFile = new File(System.getProperty("user.home")+File.separator+time);
             //FileWriter writer = new FileWriter(credFile);
             //writer.write(cred);
-            // writer.close();
+          // writer.close();
             
             GlobusCredential globusCredential = new GlobusCredential(credFile);
             //portalCertFile, portalKeyFile);
@@ -113,10 +113,11 @@ public class Transfer {
             return true;
         }
         catch (Exception e) {
-            
+            System.out.println(e);
+            throw e;
            // credFile.delete();
-            System.err.println(e);
-            return false;
+            //System.err.println(e);
+            //return false;
         }
     }
 }
