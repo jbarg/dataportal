@@ -162,7 +162,7 @@ public class sgetrservlet extends HttpServlet {
             File cre = new File(props.getProperty("srbDest")+File.separator+request.getSession().getId());
             cre.mkdir();
             
-            LaunchProcess.runCommand( props.getProperty("srbHome") + File.separator+"Sget -r " + dir + "+props.getProperty("srbDest") + File.separator+request.getSession().getId());
+            LaunchProcess.runCommand( props.getProperty("srbHome") + File.separator+"Sget -r " + dir +props.getProperty("srbDest") + File.separator+request.getSession().getId());
             
             //this is my one with the single files
             // LaunchProcess.runCommand("/bin/sh -c \""+ props.getProperty("srbHome") + "/Sls -C " + dir + " > /tmp/srbtemp/" + request.getSession().getId()+"conf\"");
