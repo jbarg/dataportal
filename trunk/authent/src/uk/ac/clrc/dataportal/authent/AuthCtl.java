@@ -39,10 +39,10 @@ public class AuthCtl {
             sessionId = -1;
         else {
             facilityEndPoints = lookupFacility();
-            System.out.println(facilityEndPoints.length);
-            if (facilityEndPoints.length > 0) {
-                System.out.println(facilityEndPoints[0]);
-            }
+            //            System.out.println(facilityEndPoints.length);
+            //            if (facilityEndPoints.length > 0) {
+            //                System.out.println(facilityEndPoints[0]);
+            //            }
             facilityAccess = buildAccess( userName, facilityEndPoints );
             sessionId = getSessionId( userName, facilityAccess );
         }
@@ -120,9 +120,9 @@ public class AuthCtl {
                 }
             }
         }
-
+        
         org.w3c.dom.Element accessRightsDOM = domOut.output(accessRights);
-//        System.out.println(XMLUtils.ElementToString(accessRightsDOM));
+        //        System.out.println(XMLUtils.ElementToString(accessRightsDOM));
         
         return accessRightsDOM;
         
@@ -134,18 +134,26 @@ public class AuthCtl {
         // need to define endpoint or call lookup module
         // below is a fix
         // use String[] lookupEndpoint(String[] facilityList, String serviceType) with "dataportal" and "session"
-        String endpoint = "http://escvig1.dl.ac.uk:8080/axis/services/SessionManager";
+        
+        LookUpModuleService lookupService = new LookUpModuleServiceLocator();
+        LookUpModule port = lookupService.getLookUpService();
+        String[] facilities = { "Dataportal" };
+        String[] facilityEndPoints = port.lookupEndpoint(facilities, "SESSION");
+
+        // String endpoint = "http://escvig1.dl.ac.uk:8080/axis/services/SessionManager";
+        
+        // error handling in case no endpoint in returned!
         
         Service service = new Service();
         Call call = (Call) service.createCall();
-        call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+        call.setTargetEndpointAddress( new java.net.URL(facilityEndPoints[0]) );
         call.setOperationName("startSession");
         call.addParameter( "userName", XMLType.XSD_STRING, ParameterMode.IN );
         call.addParameter( "facilityAccess", XMLType.SOAP_ELEMENT, ParameterMode.IN );
         call.setReturnType( XMLType.XSD_INT );
         
         Integer ret = (Integer) call.invoke( new Object [] {userName, facilityAccess});
-        System.out.println("Results: " + ret);
+        //        System.out.println("Results: " + ret);
         return ret.intValue();
     }
     
