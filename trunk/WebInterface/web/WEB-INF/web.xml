@@ -50,6 +50,15 @@
     </servlet-class>
 
 	</servlet>
+          <servlet>
+		<servlet-name>SRBDownload</servlet-name>
+		<display-name>SRBDownload</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.SRBDownload
+    </servlet-class>
+
+	</servlet>
 	<servlet>
 		<servlet-name>emineralsServlet</servlet-name>
 		<display-name>Axis Admin Servlet</display-name>
@@ -115,11 +124,21 @@
 	</servlet>
         
         <servlet>
-		<servlet-name>TransferCOPServlet</servlet-name>
+		<servlet-name>FileTransfer</servlet-name>
 		<display-name>Transfer Servlett</display-name>
 		<servlet-class>
 	
-		       uk.ac.dl.web.TransferCOPServlet
+		       uk.ac.dl.web.FileTransfer
+	
+		    </servlet-class>
+	</servlet>
+        
+         <servlet>
+		<servlet-name>FileDownload</servlet-name>
+		<display-name>Transfer Servlett</display-name>
+		<servlet-class>
+	
+		       uk.ac.dl.web.Download
 	
 		    </servlet-class>
 	</servlet>
@@ -267,9 +286,21 @@
 		<servlet-name>TransferDataSet</servlet-name>
 		<url-pattern>/servlet/TransferDataSet</url-pattern>
 	</servlet-mapping>
+        <servlet-mapping>
+		<servlet-name>FileTransfer</servlet-name>
+		<url-pattern>/servlet/FileTransfer</url-pattern>
+	</servlet-mapping>
+        <servlet-mapping>
+		<servlet-name>FileDownload</servlet-name>
+		<url-pattern>/servlet/FileDownload</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>SRBTransfer</servlet-name>
 		<url-pattern>/servlet/SRBTransfer</url-pattern>
+	</servlet-mapping>
+        <servlet-mapping>
+		<servlet-name>SRBDownload</servlet-name>
+		<url-pattern>/servlet/SRBDownload</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>HelpSearchPage</servlet-name>
