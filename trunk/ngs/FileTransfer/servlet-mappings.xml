@@ -1,0 +1,9 @@
+<!-- servlet mappings -->
+      <servlet-mapping>
+          <servlet-name>
+             GridFTPDownload
+          </servlet-name>
+          <url-pattern>
+              /gfd
+          </url-pattern>
+      </servlet-mapping>
