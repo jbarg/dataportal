@@ -52,10 +52,10 @@ public class SessionSingleton
    //urn prefix for xml repository
    String dest_prefix ;   
 
-   //xindice handles
+   //xml:db handles
    org.xmldb.api.base.Collection col ;
    XPathQueryService  xpqs ;
-   XQueryService  xqs ;
+   org.exist.xmldb.XQueryService xqs ;
    ResourceSet res  ;
    XMLResource xmlr ;
 
@@ -308,7 +308,7 @@ public class SessionSingleton
       this.xpqs = xpqs ;
    }
 
-   void setXQueryService(XQueryService xqs)
+   void setXQueryService(org.exist.xmldb.XQueryService xqs)
    {
       this.xqs = xqs ;
    }
@@ -329,7 +329,7 @@ public class SessionSingleton
       return xpqs;
    }
 
-   XQueryService getXQueryService()
+   org.exist.xmldb.XQueryService getXQueryService()
    {
       return xqs;
    }

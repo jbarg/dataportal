@@ -61,6 +61,10 @@ public class XmlWrapperDocBuilder
       //load the map (i.e. the compressed entry cache)
       //loadMap() ;
 
+      //setup the xml database helper
+      DBHelper dbxh = ss.getXMLDBHelper() ;
+      dbxh.connectToDB() ;
+
    }
 
    //
@@ -211,7 +215,10 @@ public class XmlWrapperDocBuilder
 	    //sends only validated XML - as sent over soap remote cannot validate as have to remove the
 	    //reference
             dbf.setValidating(true);
+            dbf.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+                              "http://www.w3.org/2001/XMLSchema");
             DocumentBuilder db = dbf.newDocumentBuilder() ;
+            // perhaps need one of these - dbf.setErrorHandler(eh) ;
             org.w3c.dom.Document d = db.parse(new InputSource(new StringReader(result.toString()))) ;
             //el = d.getDocumentElement();
 
@@ -228,6 +235,7 @@ public class XmlWrapperDocBuilder
          {
 	    jii.printStackTrace() ;
          }
+
          
          //get the exist handles needed for insert
          org.xmldb.api.base.Collection col = ss.getXMLCollection() ;
@@ -252,7 +260,8 @@ public class XmlWrapperDocBuilder
             //System.out.println("Document " + args[0] + " inserted");
          }
          catch (XMLDBException xmle) {
-            System.err.println("XML:DB Exception occured " + xmle.errorCode);
+            System.err.println("XML:DB Exception occured " + xmle.errorCode + "\t VenorCode: " + xmle.vendorErrorCode );
+            xmle.printStackTrace() ;
          }
 
 

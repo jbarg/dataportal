@@ -94,7 +94,7 @@ public class RelationalDBHelper implements DBHelper
 
             if(reconnection_attempt == true)
             {
-               log.info("Now reconnected") ;
+               log.info("Now reconnected to Relational Database") ;
             }
 
          } catch (SQLException sqle) {
