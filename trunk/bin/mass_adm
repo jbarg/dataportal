@@ -4,6 +4,10 @@
 # MDOHERTY 16/01/2004
 #
 #
+# Note the term "Index File" has now been replaced with "Schedule"
+# MDOHERTY 20/02/2004
+#
+#
 #Set up environment variables
 #
 # Read the config file first
@@ -29,6 +33,7 @@ offbold=`tput rmso`
 
 export MASS_CTL=$MASS_HOME/ctl/control.dat
 export MASS_BCTL=$MASS_HOME/ctl/control.bck
+TQFILE=$MASS_HOME/tmp/new_ads_files.tqf
 #
 #
 #declare the arrays for use in program
@@ -57,6 +62,32 @@ function toupper()	{
   echo "$@" | tr a-z A-Z
   # Translate all passed arguments ($@).
   return
+}
+#
+#
+# This function is used to split up CSV strings when working out the names
+# of ADS files from a qfile - MDOHERTY 20/2/2004
+#
+function splitstr()     {
+  tapein=$1
+  if [ -r $TQFILE ]
+  then
+     rm $TQFILE
+  fi
+  tapeout=""
+  indx=1
+  { while [ "$indx" -ne 0 ]; do
+        indx=`expr index "$tapein" ,`
+        if [ "$indx" = 0 ]
+        then
+                tapeout=$tapein
+        else
+                length=$(($indx-1))
+                tapeout=`expr substr $tapein 1 $length`
+        fi
+        echo $tapeout >> $TQFILE
+        tapein=${tapein:$indx}
+  done }
 }
 #
 #
@@ -133,7 +164,7 @@ function dispCtl() {
 	tput cup 2 0
 	echo "			$1"
 	tput cup 4 0
-	echo "Disk			Index File	Day	Method	Valid"\
+	echo "Disk			Schedule	Day	Method	Valid"\
 	"	Append	Level"
 	tput cup 6 0
 	wcount=1
@@ -162,18 +193,25 @@ function dispCtl() {
 #
 #
 function dispIdx() {
-	tput cup 2 0
-	echo "			$1"
+	tput cup 2 25
+	echo "$1"
 	tput cup 4 0
-	echo "ADS File	Date		Time		Size	Pool"
+	echo "ADS File                            Date         Time        Size(Gb)     Pool"
 	tput cup 6 0
 	adswcount=1
 	{ while [[ $adswcount -le $adscount ]];do
 		if [[ ${adsfile[$adswcount]} != $1 ]]; then
-			echo	${adsfile[$adswcount]}"		"\
-			${adsdate[$adswcount]}"	"${adstime[$adswcount]}\
-			"	"${adstapesize[$adswcount]}\
-			"	"${adstapepool[$adswcount]}
+			icurs=$(($adswcount+5))
+			tput cup $icurs 0
+			echo ${adsfile[$adswcount]}
+			tput cup $icurs 36
+			echo ${adsdate[$adswcount]}
+			tput cup $icurs 49
+			echo ${adstime[$adswcount]}
+			tput cup $icurs 61
+			echo ${adstapesize[$adswcount]}
+			tput cup $icurs 74
+			echo ${adstapepool[$adswcount]}
 		fi
 		adswcount=$(($adswcount+1))
 	done }
@@ -213,7 +251,7 @@ function writeCtl()	{
 #
 #
 function writeIdx()	{
-#Write the indxex file in a loop using $adscount
+#Write the index file in a loop using $adscount
 	adswcount=1
 	{ while [[ $adswcount -le $adscount ]];do
 		if [[ "$2" != "DEL" ]]; then
@@ -274,14 +312,40 @@ function newAdsFile () {
 	done	
 	stopnow=0
 	header
-	dispIdx "New ADS File (Virtual Tape) - Index File $2"
-	echo "NEW ADS File Name (6 chars max) - X to stop: " 
-	tput cup 20 50
+	dispIdx "New ADS File (Virtual Tape) - Schedule $2"
+	echo "NEW ADS File (6 chars, CSV for qfile) - X to stop: " 
+	tput cup 20 55
 	until [[ $stopnow -eq 1 ]] ; do
 		read adsfile[$adscount]
+		#
+		#
+		#Check to see if we are bing passed mutiple ADS files
+		#if so set the qfile variable - MDOHERTY 20/02/2004
+		#just use a simple test to look for a "," in the file name
+		qfile=0
+		qfile=`expr index ${adsfile[$adscount]} ,`
+		if [ "$qfile" -ne 0 ]
+		then
+   			splitstr ${adsfile[$adscount]}
+		fi
+#
+#
 		adsfile[$adscount]=`toupper ${adsfile[$adscount]}`
-		validfile=`datastore query owner="$TOWNER" \
-		name | grep -i "${adsfile[$adscount]}" | wc -l`
+		if [ ${adsfile[$adscount]} = "X" ]; then
+			validfile=0
+		else
+			if [ $qfile -eq 0 ]; then
+				validfile=`datastore query owner="$TOWNER" \
+				name | grep -i "${adsfile[$adscount]}" | wc -l`
+			else
+				{ while read qfname; do
+					validfile=`datastore query \
+					owner="$TOWNER" \
+					name | grep -i \
+					"$qfname" | wc -l`
+				done } < $TQFILE
+			fi
+		fi
 		if [ "$validfile" -ne "0" ]; then
 			dupfile=${adsfile[$adscount]}
 			adsfile[$adscount]="V"
@@ -294,11 +358,11 @@ function newAdsFile () {
 			v*|V*)
 				adsfile[$adscount]=" "
 				header
-				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				dispIdx "New ADS File Name (Virtual Tape) - Schedule $2"
 				echo "ADS File "$dupfile" exists!"
 				sleep 5
 				header
-				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				dispIdx "New ADS File Name (Virtual Tape) - Schedule $2"
 				echo "NEW ADS File Name (6 chars max) - X to stop: " 
 				tput cup 20 45
 			;;
@@ -306,26 +370,36 @@ function newAdsFile () {
 				header
 				adsdate[$adscount]="00/00/00"
 				adstime[$adscount]="00:00:00"
-				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				dispIdx "New ADS File Name (Virtual Tape) - Schedule $2"
 				echo "Virtual Tape Size (1-48Gb): "
 				tput cup 20 45
 				read adstapesize[$adscount]
 				header
-				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				dispIdx "New ADS File Name (Virtual Tape) - Schedule $2"
 				echo "ADS Tape Pool: "
 				tput cup 20 45
 				read adstapepool[$adscount]
 				adstapepool[$adscount]=`toupper ${adstapepool[$adscount]}`
-				datastore create $TOWNER ${adsfile[$adscount]} \
-				${adstapesize[$adscount]}Gb pool\
-				${adstapepool[$adscount]}
+				if [ "$qfile" -eq 0 ]; then
+					datastore create $TOWNER \
+					${adsfile[$adscount]} \
+					${adstapesize[$adscount]}Gb pool\
+					${adstapepool[$adscount]}
+				else
+					{ while read qfname; do
+						datastore create $TOWNER \
+						$qfname \
+						${adstapesize[$adscount]}Gb \
+						pool ${adstapepool[$adscount]}
+					done } < $TQFILE
+				fi
 				sleep 5
 				writeIdx $1 new
 				adscount=$(($adscount+1))
 				header
-				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
-				echo "NEW ADS File Name (6 chars max) - X to stop: " 
-				tput cup 20 45
+				dispIdx "New ADS File Name (Virtual Tape) - Schedule $2"
+				echo "NEW ADS File (6 chars, CSV for qfile) - X to stop: "
+				tput cup 20 55
 			;;
 		esac
 	done	
@@ -337,7 +411,7 @@ function newIdxFile ()	{
 	stopnow=0
 	adscount=1
 	header
-	dispIdx "New Index File: $2"
+	dispIdx "New Schedule: $2"
 	echo "Create New ADS Files?: "
 	tput cup 20 35
 	until [[ $stopnow -eq 1 ]] ; do
@@ -352,7 +426,7 @@ function newIdxFile ()	{
 			;;
 			*)
 				header
-				dispIdx "New Index File: $2"
+				dispIdx "New Schedule: $2"
 				echo "Create New ADS Files? "
 				tput cup 20 35
 			;;
@@ -361,7 +435,7 @@ function newIdxFile ()	{
 	stopnow=0
 	#touch $1
 	header
-	dispIdx "New Index File: $2"
+	dispIdx "New Schedule: $2"
 	echo "EXISTING ADS File Name (or X to stop): "
 	tput cup 20 50
 	until [[ $stopnow -eq 1 ]] ; do
@@ -382,11 +456,11 @@ function newIdxFile ()	{
 			v*|V*)
 				adsfile[$adscount]=" "
 				header
-				dispIdx "New Index File: $2"
+				dispIdx "New Schedule: $2"
 				echo "ADS File "$dupfile" already in use!"
 				sleep 5
 				header
-				dispIdx "New Index File: $2"
+				dispIdx "New Schedule: $2"
 				echo "EXISTING ADS File Name (or X to stop): "
 				tput cup 20 45
 			;;
@@ -394,12 +468,12 @@ function newIdxFile ()	{
 				adsdate[$adscount]="00/00/00"
 				adstime[$adscount]="00:00:00"
 				header
-				dispIdx "New Index File: $2"
+				dispIdx "New Schedule: $2"
 				echo "Virtual Tape Size (1-48Gb): "
 				tput cup 20 45
 				read adstapesize[$adscount]
 				header
-				dispIdx "New Index File: $2"
+				dispIdx "New Schedule: $2"
 				echo "ADS Tape Pool: "
 				tput cup 20 45
 				read adstapepool[$adscount]
@@ -407,7 +481,7 @@ function newIdxFile ()	{
 					${adstapepool[$adscount]}`
 				writeIdx $1 new
 				header
-				dispIdx "New Index File: $2"
+				dispIdx "New Schedule: $2"
 				echo "EXISTING ADS File Name (or X to stop): "
 				tput cup 20 50
 				adscount=$(($adscount+1))
@@ -430,8 +504,8 @@ function checkIdx ()	{
 	stopnow=0
 	if [ ! -r "$MASS_HOME"/ctl/"$1".idx ]; then
 		header
-		dispCtl "New Index File"
-		echo "Index file does not exist. Create new? (Y/N): "
+		dispCtl "New Schedule"
+		echo "Schedule does not exist. Create new? (Y/N): "
 		tput cup 20 50 
 		until [[ $stopnow -eq 1 ]] ; do
 			read idxans
@@ -445,8 +519,8 @@ function checkIdx ()	{
 				;;
 				*)
 					header
-					dispCtl "New Index File"
-					echo "Index file does not exist. Create new? (Y/N)"
+					dispCtl "New Schedule"
+					echo "Schedule does not exist. Create new? (Y/N)"
 					tput cup 20 45 
 				;;
 			esac
@@ -464,7 +538,7 @@ function repAdd()	{
 	read disk[$count]
 	header
 	dispCtl "New Backup Schedule"
-	echo "Enter Index File Name:"
+	echo "Enter Schedule Name:"
 	tput cup 20 25
 	read idxfile[$count]
 	checkIdx ${idxfile[$count]}
@@ -476,13 +550,13 @@ function repAdd()	{
 	sday[$count]=`toupper ${sday[$count]}`
 	header
 	dispCtl "New Backup Schedule"
-	echo "Enter Method (TAR/DUMP):"
-	tput cup 20 25
+	echo "Enter Method (TAR/OTAR/DUMP):"
+	tput cup 20 35
 	read method[$count]
 	method[$count]=`toupper ${method[$count]}`
 	header
 	dispCtl "New Backup Schedule"
-	echo "Is Backup Active?:"
+	echo "Is Backup In Use?:"
 	tput cup 20 25
 	read sync[$count]
 	sync[$count]=`toupper ${sync[$count]}`
@@ -510,7 +584,7 @@ function repDel()	{
 	read ddisk
 	header
 	dispCtl "Delete Backup Schedule"
-	echo "Enter Index File: "
+	echo "Enter Schedule: "
 	tput cup 20 25 
 	read didxfile
 #Rather than do anything fancy, best way is just to skip writing the
@@ -526,7 +600,7 @@ function repMod()	{
 	read mdisk
 	header
 	dispCtl "Modify Backup Schedule"
-	echo "Enter Index File: "
+	echo "Enter Schedule: "
 	tput cup 20 25 
 	read midxfile
 #wcount is just a loop counter
@@ -552,7 +626,7 @@ function repMod()	{
 # for loop for modification
 	header
 	dispCtl "Modify Backup Schedule"
-	echo "Option: (D)Day (S)Synch (I)Index (M)Method (A)Append (L)Dump Level:"
+	echo "Option: (D)Day (I)In Use (S)Schedule (M)Method (A)Append (L)Dump Level:"
 	tput cup 20 70 
 	modans=""
 	stopnow=0
@@ -586,10 +660,10 @@ function repMod()	{
 				done
 				stopnow=1
 			;;	
-			s*|S*)
+			i*|I*)
 				header
 				dispCtl "Modify Backup Schedule"
-				echo "Enter Sync Flag:"
+				echo "Enter In Use Flag:"
 				tput cup 20 25 
 				read sync[$modindex]
 				sync[$modindex]=`toupper ${sync[$modindex]}`
@@ -603,10 +677,10 @@ function repMod()	{
 				read method[$modindex]
 				stopnow=1
 			;;	
-			i*|I*)
+			s*|S*)
 				header
 				dispCtl "Modify Backup Schedule"
-				echo "Enter New Index File:"
+				echo "Enter New Schedule:"
 				tput cup 20 25
 				read idxfile[$modindex]
 				stopnow=1
@@ -654,7 +728,7 @@ function repNow()	{
 	read ndisk
 	header
 	dispCtl "Immediate Backup"
-	echo "Enter Index File: "
+	echo "Enter Schedule: "
 	tput cup 20 25
 	read nidxfile
 #wcount is just a loop counter

@@ -132,41 +132,73 @@ if [ "$method" = "TAR" ]
 	then
 		if [ "$tapp" = "N" ]
 		then
-        		tar --o_direct -clf - $disk  | /usr/local/bin/tape \
+        		tar -clf - $disk  | /usr/local/bin/tape \
 			-n${disk##*/} -w $TOWNER $fname
 		else
-        		tar --o_direct -clf - $disk  | /usr/local/bin/tape \
+        		tar -clf - $disk  | /usr/local/bin/tape \
 			-me -n${disk##*/} -w $TOWNER $fname
 		fi
 	else
 		if [ "$tapp" = "N" ]
 		then
-        		tar --o_direct -clf - $disk  | /usr/local/bin/tape \
+        		tar -clf - $disk  | /usr/local/bin/tape \
 			-n${disk##*/} -w -q$TQFILE 
 		else
-        		tar --o_direct -clf - $disk  | /usr/local/bin/tape \
+        		tar -clf - $disk  | /usr/local/bin/tape \
 			-me -n${disk##*/} -w -q$TQFILE
 		fi
 	fi
    else
-	if [ "$qfile" = 0 ]
-	then
-		if [ "$tapp" = "N" ]
+	if [ "$method" = "OTAR" ];
+   	then 
+		if [ "$qfile" = 0 ]
 		then
-        		/sbin/dump $level -uf - $disk | /usr/local/bin/tape \
-			-n${disk##*/} -w $TOWNER $fname
+			if [ "$tapp" = "N" ]
+			then
+       	 			tar --o_direct -clf - $disk \
+				| /usr/local/bin/tape \
+				-n${disk##*/} -w $TOWNER $fname
+			else
+       		 		tar --o_direct -clf - $disk \
+				| /usr/local/bin/tape  -me -n${disk##*/} \
+				-w $TOWNER $fname
+			fi
 		else
-        		/sbin/dump $level -uf - $disk | /usr/local/bin/tape \
-			-me -n${disk##*/} -w $TOWNER $fname
+			if [ "$tapp" = "N" ]
+			then
+       		 		tar --o_direct -clf - $disk \
+				| /usr/local/bin/tape \
+				-n${disk##*/} -w -q$TQFILE 
+			else
+       		 		tar --o_direct -clf - $disk \
+				| /usr/local/bin/tape \
+				-me -n${disk##*/} -w -q$TQFILE
+			fi
 		fi
-	else
-		if [ "$tapp" = "N" ]
+   	else
+		if [ "$qfile" = 0 ]
 		then
-        		/sbin/dump $level -uf - $disk | /usr/local/bin/tape \
-			-n${disk##*/} -w -q$TQFILE
+			if [ "$tapp" = "N" ]
+			then
+       		 		/sbin/dump $level -uf - $disk \
+				| /usr/local/bin/tape \
+				-n${disk##*/} -w $TOWNER $fname
+			else
+       		 		/sbin/dump $level -uf - $disk \
+				| /usr/local/bin/tape \
+				-me -n${disk##*/} -w $TOWNER $fname
+			fi
 		else
-        		/sbin/dump $level -uf - $disk | /usr/local/bin/tape \
-			-me -n${disk##*/} -w -q$TQFILE
+			if [ "$tapp" = "N" ]
+			then
+       		 		/sbin/dump $level -uf - $disk \
+				| /usr/local/bin/tape \
+				-n${disk##*/} -w -q$TQFILE
+			else
+       		 		/sbin/dump $level -uf - $disk \
+				| /usr/local/bin/tape \
+				-me -n${disk##*/} -w -q$TQFILE
+			fi
 		fi
 	fi
 fi
@@ -175,6 +207,10 @@ fi
 #Verify the last write into the datastore
 #
 qfname="NULL"
+echo "|"
+echo "+----------------------------------------------------------"
+echo "| Verify last write into the ADS..."
+echo "|"
 if [ $qfile -ne 0 ]
 then
 	{ while read TOWNER qfname; do
