@@ -73,7 +73,7 @@ public class Search {
                     Object o = it.next();
                     if(o instanceof org.jdom.Element){
                         org.jdom.Element e = (org.jdom.Element)o;
-                        res[i].add(e.getName());
+                        res[i-1].add(e.getName());
                     }
                 }
             }            
