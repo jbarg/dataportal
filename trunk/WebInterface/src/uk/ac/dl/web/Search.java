@@ -65,7 +65,9 @@ public class Search {
             
             
             ArrayList[] res= new ArrayList[3];
-            
+            System.out.println(res[0]);
+             System.out.println(res[1]);
+              System.out.println(res[2]);
             for(int i = 1; i<el.length;i++){
                 System.out.println("i is "+i);
                 Element build = builder.build(el[i]);
@@ -79,7 +81,7 @@ public class Search {
                         if(name == null) name= "null";
                         System.out.println(res[(i-1)]);
                         if(res[(i-1)]==null){}
-                        else                         res[(i-1)].add(name);
+                        else res[(i-1)].add(name);
                     }
                 }
             }
