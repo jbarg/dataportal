@@ -64,7 +64,7 @@ public class AddToCart extends HttpServlet{
         catch(Exception e){
             e.printStackTrace();
             //System.out.println(e);
-            response.sendRedirect("../html/Login.html");
+            response.sendRedirect("../jsp/error.jsp");
         }
         
         
@@ -168,7 +168,7 @@ public class AddToCart extends HttpServlet{
             Element facility = new Element("facility");
             StringBuffer Sfacs = new StringBuffer();
             for(int i = 0;i <facs.length;i++){
-                Sfacs.append("facs[i] ");
+                Sfacs.append(facs[i]);
                 
             }
            // facility.setAttribute(new Attribute("facs",Sfacs.toString()));
