@@ -133,6 +133,9 @@ public class HelpSearch1 extends HttpServlet{
             }
             catch(Exception e){
                 logger.warn("Unable to preocess query",e);
+                session.removeAttribute("hits");
+                session.removeAttribute("text");
+                session.removeAttribute("searcher");
                 response.sendRedirect("../help/menu.jsp");
                 
                 

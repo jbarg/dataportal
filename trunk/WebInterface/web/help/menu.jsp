@@ -143,8 +143,9 @@ document.onmousedown=click*/
 <br />
  <%
  String text = (String)session.getAttribute("text");
-text = text.replaceAll("\"","'");
+
  if(text == null) text = "";
+text = text.replaceAll("\"","'");
 %>
 <input name="search_string" type="text" value="<%=text%>" size="23"/>
 <br />
