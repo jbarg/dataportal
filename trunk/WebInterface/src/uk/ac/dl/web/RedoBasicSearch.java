@@ -22,7 +22,8 @@ import ac.dl.xml.*;
 import org.jdom.*;
 import java.io.*;
 /**
- *
+ *       This is called from the shopping cart.  The url is used to get the
+ *  notes from the shopping cart and then resend the query
  * @author  gjd37
  * @version
  */
@@ -107,9 +108,9 @@ public class RedoBasicSearch extends HttpServlet {
                 
                 String endpoint =   prop.getProperty("QNR");
                 //System.out.println(endpoint);
-                Service  service = new Service();
+                /*Service  service = new Service();
                 Call  call    = (Call) service.createCall();
-                
+                 
                 call.setTargetEndpointAddress( new java.net.URL(endpoint) );
                 call.setOperationName( "doBasicQuery" );
                 call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
@@ -117,19 +118,24 @@ public class RedoBasicSearch extends HttpServlet {
                 call.addParameter( "op3", XMLType.XSD_STRING, ParameterMode.IN );
                 call.addParameter( "op4", XMLType.XSD_INTEGER, ParameterMode.IN );
                 call.setReturnType( XMLType.SOAP_ELEMENT );
-                
+                 
                 Object[] ob = new Object[]{sid,facs,Discipline,max2};
-                
+                 
                 org.w3c.dom.Element el = (org.w3c.dom.Element) call.invoke(ob );
-                
+                 
                 //build the file
                 org.jdom.input.DOMBuilder builder = new org.jdom.input.DOMBuilder();
                 Element el1 = builder.build(el);
                 el1.detach();
                 Document doc1  = new org.jdom.Document(el1);
-                
+                 
                 //System.out.println(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
                 Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
+                 */
+                
+                Search.doBasicSearh(sid,facs,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
+                
+                
                 response.sendRedirect("../jsp/SimpleSearch.jsp");
             }
             catch(Exception a){

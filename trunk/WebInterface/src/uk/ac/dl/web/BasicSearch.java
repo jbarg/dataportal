@@ -88,7 +88,7 @@ public class BasicSearch extends HttpServlet {
                 
                 String endpoint =   prop.getProperty("QNR");
                 //System.out.println(endpoint);
-                Service  service = new Service();
+                /*Service  service = new Service();
                 Call  call    = (Call) service.createCall();
                 
                 call.setTargetEndpointAddress( new java.net.URL(endpoint) );
@@ -112,6 +112,10 @@ public class BasicSearch extends HttpServlet {
                 //System.out.println(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
                 Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
                 logHistoryFile(object, (String)session.getAttribute("dn"),wd);
+                */
+                //use the class files
+                Search.doBasicSearh(sid,facs,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
+                
                 
                 response.sendRedirect("../jsp/SimpleSearch.jsp");
             }
