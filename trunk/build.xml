@@ -127,6 +127,11 @@
       <ant antfile="acmsrd/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/acmsrd"/>
       </ant>
+      
+      <ant antfile="acmemin/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/acmemin"/>
+      </ant>
+
 
       <ant antfile="authent/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/authent"/>
@@ -138,6 +143,10 @@
 
       <ant antfile="queryandreply/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/queryandreply"/>
+      </ant>
+      
+       <ant antfile="datainsertion/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/datainsertion"/>
       </ant>
 
    </target>
