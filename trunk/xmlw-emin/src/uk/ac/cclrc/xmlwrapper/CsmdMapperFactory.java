@@ -14,7 +14,11 @@ public class CsmdMapperFactory
       }
       else if (mapper.compareToIgnoreCase("emat") == 0 )
       {
-	 return new EMATCsmdMapper() ;
+         //needs to be changed to something like:
+	 //return new EMATCsmdMapper() ;
+         //in the future
+
+	 return new EMINCsmdMapper() ;
       }
       else
       {
