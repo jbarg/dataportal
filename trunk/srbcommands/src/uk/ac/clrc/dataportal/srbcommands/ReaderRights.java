@@ -4,7 +4,7 @@
  * Created on 10 September 2003, 11:43
  */
 
-package dataportal.srbcommands.src.uk.ac.clrc.dataportal.srbcommands;
+package uk.ac.clrc.dataportal.srbcommands;
 
 import java.io.*;
 import java.util.*;
