@@ -50,24 +50,31 @@ public class SessionManager {
      *
      * Returns new session id or null if there is no proxy left or exception occurred
      */
-    public String startSession(String cert, String[][] permissionList) throws Exception{
+    public String startSession(String cert, String[][] permissionList) throws Exception {
         
         String sid = null;
         
-        // Check if any time left on proxy
-        Certificate c = new Certificate(cert);
-        String dn = c.getDName();
-        if (c.lifetimeLeft()) {
+        try {
             
-            // Proxy ok so create new session
-            Session s = new Session(c, permissionList);
-            sid = s.start();
-            logger.info("New session created for user: "+dn+" sid: "+sid);
-            return sid;
-            
-        } else {
-            logger.warn("No session created. Proxy has expired for "+dn);
-            return null;
+            // Check if any time left on proxy
+            Certificate c = new Certificate(cert);
+            String dn = c.getDName();
+            if (c.lifetimeLeft()) {
+                
+                // Proxy ok so create new session
+                Session s = new Session(c, permissionList);
+                sid = s.start();
+                logger.info("New session created for user: "+dn+" sid: "+sid);
+                return sid;
+                
+            } else {
+                logger.warn("No session created. Proxy has expired for "+dn);
+                return null;
+            }
+        }
+        catch (Exception e) {
+            logger.fatal("Cannot start session",e);
+            throw e;
         }
     }
     
@@ -80,22 +87,30 @@ public class SessionManager {
         
         logger.info("Getting user's facility access details");
         
-        // Get session from database
-        Session s = new Session(sid);
-        s.getSession();
-        Certificate c = s.getCert();
-        
-        // Check if any time left on proxy
-        String dn = c.getDName();
-        if (c.lifetimeLeft()) {
+        try {
             
-            // Proxy ok so return permissions
-            return(s.getPermissions());
+            // Get session from database
+            Session s = new Session(sid);
+            s.getSession();
+            Certificate c = s.getCert();
             
-        } else {
-            logger.warn("Proxy has expired for "+dn);
-            return null;
+            // Check if any time left on proxy
+            String dn = c.getDName();
+            if (c.lifetimeLeft()) {
+                
+                // Proxy ok so return permissions
+                return(s.getPermissions());
+                
+            } else {
+                logger.warn("Proxy has expired for "+dn);
+                return null;
+            }
         }
+        catch (Exception e) {
+            logger.fatal("Cannot get permissions for session: "+sid,e);
+            throw e;
+        }
+        
     }
     
     /*
@@ -105,10 +120,18 @@ public class SessionManager {
      * otherwise returns false
      */
     public Boolean isValid(String sid) throws Exception {
-        Session s = new Session(sid);
-        s.getSession();
-        Certificate c = s.getCert();
-        return new Boolean(c.lifetimeLeft());
+        
+        try {
+            Session s = new Session(sid);
+            s.getSession();
+            Certificate c = s.getCert();
+            return new Boolean(c.lifetimeLeft());
+        }
+        catch (Exception e) {
+            logger.fatal("Cannot check session: "+sid,e);
+            throw e;
+        }
+        
     }
     
     /*
@@ -119,21 +142,27 @@ public class SessionManager {
      */
     public String getDName(String sid) throws Exception {
         
-        // Get session from database
-        Session s = new Session(sid);
-        s.getSession();
-        Certificate c = s.getCert();
-        
-        // Check if any time left on proxy
-        String dn = c.getDName();
-        if (c.lifetimeLeft()) {
+        try {
+            // Get session from database
+            Session s = new Session(sid);
+            s.getSession();
+            Certificate c = s.getCert();
             
-            // Proxy ok so return permissions
-            return(c.getDName());
-            
-        } else {
-            logger.warn("Proxy has expired for "+dn);
-            return null;
+            // Check if any time left on proxy
+            String dn = c.getDName();
+            if (c.lifetimeLeft()) {
+                
+                // Proxy ok so return permissions
+                return(c.getDName());
+                
+            } else {
+                logger.warn("Proxy has expired for "+dn);
+                return null;
+            }
+        }
+        catch (Exception e) {
+            logger.fatal("Cannot get DN for session: "+sid,e);
+            throw e;
         }
     }
     
@@ -143,8 +172,14 @@ public class SessionManager {
      */
     public void endSession(String sid) throws Exception {
         
-        Session s = new Session(sid);
-        s.end();
+        try {
+            Session s = new Session(sid);
+            s.end();
+        }
+        catch (Exception e) {
+            logger.warn("Cannot end session: "+sid,e);
+            throw e;
+        }
     }
     
     /*
@@ -155,23 +190,31 @@ public class SessionManager {
      */
     public Boolean putCredentials(String sid, String cert,String password) throws Exception{
         
-        logger.info("Session passed from third party: "+sid);
-        if(!password.equals("dataportal")) throw new Exception("Wrong password");
-        
-        // Check proxy lifetime
-        Certificate c = new Certificate(cert);
-        if (!c.lifetimeLeft()) {
-            return new Boolean(false);
+        try {
+            if(!password.equals("dataportal")) throw new Exception("Wrong password");
+            
+            // Check proxy lifetime
+            Certificate c = new Certificate(cert);
+            if (!c.lifetimeLeft()) {
+                logger.info("No lifetime left: "+sid);
+                return new Boolean(false);
+            }
+            
+            // Get permissions for user from AUTH
+            String dn = c.getDName();
+            String[][] p = getAllPermissions(dn);
+            
+            // Create new session in database
+            Session s = new Session(sid, c, p);
+            s.start();
+            logger.info("Third party session started: "+sid);
+            return new Boolean(true);
+        }
+        catch (Exception e) {
+            logger.fatal("Cannot start third party session: "+sid,e);
+            throw e;
         }
         
-        // Get permissions for user from AUTH
-        String dn = c.getDName();
-        String[][] p = getAllPermissions(dn);
-        
-        // Create new session in database
-        Session s = new Session(sid, c, p);
-        s.start();
-        return new Boolean(true);
     }
     
     /*
@@ -183,18 +226,25 @@ public class SessionManager {
      */
     public String getProxy(String sid) throws Exception{
         
-        Session s = new Session(sid);
-        s.getSession();
-        Certificate c = s.getCert();
-        String dn = c.getDName();
-        
-        // Check lifetime
-        if (c.lifetimeLeft()) {
-            return c.toString();
-        } else {
-            logger.warn("Proxy has expired for "+dn);
-            return null;
+        try {
+            Session s = new Session(sid);
+            s.getSession();
+            Certificate c = s.getCert();
+            String dn = c.getDName();
+            
+            // Check lifetime
+            if (c.lifetimeLeft()) {
+                return c.toString();
+            } else {
+                logger.warn("Proxy has expired for "+dn);
+                return null;
+            }
         }
+        catch (Exception e) {
+            logger.fatal("Cannot get proxy certificate for session: "+sid,e);
+            throw e;
+        }
+        
     }
     
     /*
@@ -206,13 +256,20 @@ public class SessionManager {
      */
     public long getLifetime(String sid) throws Exception {
         
-        Session s = new Session(sid);
-        s.getSession();
-        Certificate c = s.getCert();
-        String dn = c.getDName();
+        try {
+            Session s = new Session(sid);
+            s.getSession();
+            Certificate c = s.getCert();
+            String dn = c.getDName();
+            
+            // Get lifetime
+            return c.getLifetime();
+        }
+        catch (Exception e) {
+            logger.fatal("Cannot get lifetime for session: "+sid,e);
+            throw e;
+        }
         
-        // Get lifetime
-        return c.getLifetime();
     }
     
     /*
@@ -267,8 +324,10 @@ public class SessionManager {
     
     // Test stub
     private static void prt(SessionManager sm, String sid) throws Exception {
+        
         System.out.println("DN: "+sm.getDName(sid));
         System.out.println("LIFETIME: "+sm.getLifetime(sid));
+        System.out.println("LIFETIME LEFT: "+sm.isValid(sid));
         
         String p[][] = sm.getPermissions(sid);
         for (int i = 0; i < p.length; i++) {
@@ -285,12 +344,24 @@ public class SessionManager {
         String[][] p = { {"BADC_access_permissions","BADC"},
         {"MPIM_access_permissions","MPIM"}};
         
-        Certificate c = new Certificate(new URL("file:///E:/cog-1.1/build/cog-1.1/bin/x509up_17456.pem"));
+        Certificate c = new Certificate(new URL("file:///E:/cog-1.1/build/cog-1.1/bin/x509up_37349.pem"));
         
+        System.out.println("Creating new session");
         SessionManager sm = new SessionManager();
-        //String sid = sm.startSession(c.toString(),p);
+        String sid = sm.startSession(c.toString(),p);
+        if (sid != null) {
+            prt(sm,sid);
+            sm.endSession(sid);
+        }
         
-        System.out.println(sm.getDName("c548092e-2649-11d8-965c-9768792e49d2"));
+        System.out.println("Creating third party session");
+        Boolean result = sm.putCredentials("HPC sid", c.toString(), "dataportal");
+        if (result.booleanValue() == true) {
+            prt(sm, "HPC sid");
+            sm.endSession(sid);
+        }
+        
+        //System.out.println(sm.getDName("c548092e-2649-11d8-965c-9768792e49d2"));
         
         
     }
