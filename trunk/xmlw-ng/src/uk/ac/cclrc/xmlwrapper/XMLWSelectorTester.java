@@ -169,7 +169,7 @@ public class XMLWSelectorTester {
 
    void test_selector(String endpoint_url,
                  String query,
-                 String file_name)
+                 String file_name) throws Exception
    {
 
     try
@@ -261,20 +261,27 @@ public class XMLWSelectorTester {
       ////////////////////////////////////////////////////////////////////
 
 
-      xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
-                         "<result>\n" +
-                         "{\n" +
-                         //"let $data_i := document(\"metadata.xml\")\n" + this is a qexo line
-	                 "for $b in //MetadataRecord\n" +
-	                 "return\n" +
-	                 //"<metadata id=\"{$b/@metadataID}>\n" + this line needed to test arbitary return data not just well
-                         // formed xml
-	                 "<metadata id=\"{$b/@metadataID}\">\n" +
-		         "{$b//StudyName}\n" +
-	                 "</metadata>\n" +
-                         "}\n" +
-                         "</result>", xquery_result_format, proxy_cert, auth_token,
-                         "results_from_xquery.txt") ;
+      try
+      {
+         xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
+                            "<result>\n" +
+                            "{\n" +
+                            //"let $data_i := document(\"metadata.xml\")\n" + this is a qexo line
+	                    "for $b in //MetadataRecord\n" +
+	                    "return\n" +
+	                    //"<metadata id=\"{$b/@metadataID}>\n" + this line needed to test arbitary return data not just well
+                            // formed xml
+	                    "<metadata id=\"{$b/@metadataID}\">\n" +
+		            "{$b//StudyName}\n" +
+	                    "</metadata>\n" +
+                            "}\n" +
+                            "</result>", xquery_result_format, proxy_cert, auth_token,
+                            "results_from_xquery.txt") ;
+     }
+     catch (Exception e)
+     {
+        e.printStackTrace() ;
+     }
 
 
       return ;

@@ -28,6 +28,51 @@ public class Xmlwrapper_SelectorSoapBindingStub extends org.apache.axis.client.S
         } else {
             super.service = service;
         }
+            java.lang.Class cls;
+            javax.xml.namespace.QName qName;
+            java.lang.Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;
+            java.lang.Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;
+            java.lang.Class enumsf = org.apache.axis.encoding.ser.EnumSerializerFactory.class;
+            java.lang.Class enumdf = org.apache.axis.encoding.ser.EnumDeserializerFactory.class;
+            java.lang.Class arraysf = org.apache.axis.encoding.ser.ArraySerializerFactory.class;
+            java.lang.Class arraydf = org.apache.axis.encoding.ser.ArrayDeserializerFactory.class;
+            java.lang.Class simplesf = org.apache.axis.encoding.ser.SimpleSerializerFactory.class;
+            java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("http://xmlwrapper.cclrc.ac.uk", "FormatterProducedNullOutputException");
+            cachedSerQNames.add(qName);
+            cls = uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedNullOutputException.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://xmlwrapper.cclrc.ac.uk", "FormatterProducedInvalidXMLException");
+            cachedSerQNames.add(qName);
+            cls = uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedInvalidXMLException.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://xmlwrapper.cclrc.ac.uk", "UserNotAuthorisedException");
+            cachedSerQNames.add(qName);
+            cls = uk.ac.cclrc.xmlwrapper.ws.selector.UserNotAuthorisedException.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://xmlwrapper.cclrc.ac.uk", "XQueryProducedNullOutputException");
+            cachedSerQNames.add(qName);
+            cls = uk.ac.cclrc.xmlwrapper.ws.selector.XQueryProducedNullOutputException.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://client.authorisation.cclrc.ac.uk", "InvalidAuthorisationTokenException");
+            cachedSerQNames.add(qName);
+            cls = uk.ac.cclrc.xmlwrapper.ws.selector.InvalidAuthorisationTokenException.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
     }
 
     private org.apache.axis.client.Call createCall() throws java.rmi.RemoteException {
@@ -60,6 +105,27 @@ public class Xmlwrapper_SelectorSoapBindingStub extends org.apache.axis.client.S
                 else
                     _call.setScopedProperty(key, super.cachedProperties.get(key));
             }
+            // All the type mapping information is registered
+            // when the first call is made.
+            // The type mapping information is actually registered in
+            // the TypeMappingRegistry of the service, which
+            // is the reason why registration is only needed for the first call.
+            synchronized (this) {
+                if (firstCall()) {
+                    // must set encoding style before registering serializers
+                    _call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP11_ENC);
+                    for (int i = 0; i < cachedSerFactories.size(); ++i) {
+                        java.lang.Class cls = (java.lang.Class) cachedSerClasses.get(i);
+                        javax.xml.namespace.QName qName =
+                                (javax.xml.namespace.QName) cachedSerQNames.get(i);
+                        java.lang.Class sf = (java.lang.Class)
+                                 cachedSerFactories.get(i);
+                        java.lang.Class df = (java.lang.Class)
+                                 cachedDeserFactories.get(i);
+                        _call.registerTypeMapping(cls, qName, sf, df, false);
+                    }
+                }
+            }
             return _call;
         }
         catch (java.lang.Throwable t) {
@@ -67,7 +133,7 @@ public class Xmlwrapper_SelectorSoapBindingStub extends org.apache.axis.client.S
         }
     }
 
-    public org.w3c.dom.Element queryMetaData(java.lang.String external_Xquery, java.lang.String result_Formatter, java.lang.String proxy_Cert, java.lang.String auth_Token) throws java.rmi.RemoteException {
+    public org.w3c.dom.Element queryMetaData(java.lang.String external_Xquery, java.lang.String result_Formatter, java.lang.String proxy_Cert, java.lang.String auth_Token) throws java.rmi.RemoteException, uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedInvalidXMLException, uk.ac.cclrc.xmlwrapper.ws.selector.InvalidAuthorisationTokenException, uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedNullOutputException, uk.ac.cclrc.xmlwrapper.ws.selector.UserNotAuthorisedException, uk.ac.cclrc.xmlwrapper.ws.selector.XQueryProducedNullOutputException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }

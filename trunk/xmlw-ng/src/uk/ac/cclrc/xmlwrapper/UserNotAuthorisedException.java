@@ -10,20 +10,20 @@ package uk.ac.cclrc.xmlwrapper;
  *
  * @author  sas27
  */
-public class UserNotAuthorizedException extends java.lang.Exception {
+public class UserNotAuthorisedException extends java.lang.Exception {
 
     /**
-     * Creates a new instance of <code>UserNotAuthorizedException</code> without detail message.
+     * Creates a new instance of <code>UserNotAuthorisedException</code> without detail message.
      */
-    public UserNotAuthorizedException() {
+    public UserNotAuthorisedException() {
     }
 
 
     /**
-     * Constructs an instance of <code>UserNotAuthorizedException</code> with the specified detail message.
+     * Constructs an instance of <code>UserNotAuthorisedException</code> with the specified detail message.
      * @param msg the detail message.
      */
-    public UserNotAuthorizedException(String msg) {
+    public UserNotAuthorisedException(String msg) {
         super(msg);
     }
 }
