@@ -168,7 +168,7 @@ public class XmlWrapperEMIN
       //get the keys in the archive for the valid studies
       String entries = cm.getKeys(query) ;
 
-      log.info("the valid keys are \t:" + entries) ;
+      log.debug("the valid keys are \t:" + entries) ;
 
       StringTokenizer st = new StringTokenizer(entries, ", ") ;
 
@@ -214,7 +214,7 @@ public class XmlWrapperEMIN
             try 
             {
 	       //allows us to see the state of xml incase of sql error 
-               log.info("the value of the key at this point is \t:" + tmp_tok) ;
+               log.debug("the value of the key at this point is \t:" + tmp_tok) ;
                cm.buildMetadataRecord(tmp_tok, sbr) ;
             } 
             catch (SQLException se) 
