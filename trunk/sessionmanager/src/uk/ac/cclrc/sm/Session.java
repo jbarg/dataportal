@@ -59,23 +59,26 @@ public class Session {
             sid = uuidgen.generateTimeBasedUUID().toString();
             logger.info("New sid is "+sid);
         }
-
+        
         // Save session to database
         DBAccess db = new DBAccess(getClass());
         db.connect();
-        logger.info("Inserting new session in database: "+sid);
-        
-        db.updateData("insert into session values('"+sid+"','"+dName+"','"+cert.toString()+"'::bytea,CURRENT_TIMESTAMP)");
-        for (int i=0; i < p.length; i++ ) {
+        try {
+            logger.info("Inserting new session in database: "+sid);
             
-            // add facility and user permissions for facility to DB
-            db.updateData("insert into session_access_rights "+
-            "(sid, facility_code, permissions) "+
-            "values ('"+sid+"', '"+p[i][1]+"', '"+p[i][0]+"')");
+            db.updateData("insert into session values('"+sid+"','"+dName+"','"+cert.toString()+"'::bytea,CURRENT_TIMESTAMP)");
+            for (int i=0; i < p.length; i++ ) {
+                
+                // add facility and user permissions for facility to DB
+                db.updateData("insert into session_access_rights "+
+                "(sid, facility_code, permissions) "+
+                "values ('"+sid+"', '"+p[i][1]+"', '"+p[i][0]+"')");
+            }
         }
-        
-        db.disconnect();
-        
+        finally {
+            
+            db.disconnect();
+        }
         // Store sid
         this.sid = sid;
         
@@ -90,40 +93,44 @@ public class Session {
         // Check if session in database
         DBAccess db = new DBAccess(getClass());
         db.connect();
-        rs = db.getData("select * from session where sid = '"+sid+"'");
-        if (!rs.next()) {
-            logger.info("Session "+sid+" is not in database");
+        try {
+            rs = db.getData("select * from session where sid = '"+sid+"'");
+            if (!rs.next()) {
+                logger.info("Session "+sid+" is not in database");
+                db.disconnect();
+                throw new Exception("Session "+sid+" is not in database");
+            }
+            
+            // Convert certificate to string
+            this.cert = new Certificate(rs.getBinaryStream("certificate"));
+            this.dName = rs.getString("user_id");
+            
+            
+            rs.close();
+            
+            // Get user's permissions - one row per facility
+            rs = db.getData("select * from session_access_rights "+
+            "where sid = '"+sid+"'");
+            
+            // Find out how many rows from select hence number of facilities
+            rs.last();
+            int rowcount = rs.getRow();
+            rs.beforeFirst();
+            
+            p = new String[rowcount][2];
+            
+            // Populate permissions
+            int i = 0;
+            while (rs.next()) {
+                p[i][1] = rs.getString("facility_code");
+                p[i][0] = rs.getString("permissions");
+                i++;
+            }
+            
+        }
+        finally {
             db.disconnect();
-            throw new Exception("Session "+sid+" is not in database");
         }
-        
-        // Convert certificate to string
-        this.cert = new Certificate(rs.getBinaryStream("certificate"));
-        this.dName = rs.getString("user_id");
-        
-        
-        rs.close();
-        
-        // Get user's permissions - one row per facility
-        rs = db.getData("select * from session_access_rights "+
-        "where sid = '"+sid+"'");
-        
-        // Find out how many rows from select hence number of facilities
-        rs.last();
-        int rowcount = rs.getRow();
-        rs.beforeFirst();
-        
-        p = new String[rowcount][2];
-        
-        // Populate permissions
-        int i = 0;
-        while (rs.next()) {
-            p[i][1] = rs.getString("facility_code");
-            p[i][0] = rs.getString("permissions");
-            i++;
-        }
-        
-        db.disconnect();
     }
     
     /*
@@ -134,9 +141,13 @@ public class Session {
         logger.info("Ending session: "+this.sid);
         DBAccess db = new DBAccess(getClass());
         db.connect();
-        db.updateData("delete from session where sid='"+this.sid+"'");
-        db.updateData("delete from session_access_rights where sid='"+this.sid+"'");
-        db.disconnect();
+        try {
+            db.updateData("delete from session where sid='"+this.sid+"'");
+            db.updateData("delete from session_access_rights where sid='"+this.sid+"'");
+        }
+        finally {
+            db.disconnect();
+        }
     }
     
     // Testing stub
@@ -161,26 +172,26 @@ public class Session {
         /*
         String[][] p = { {"BADC_access_permissions","BADC"},
         {"MPIM_access_permissions","MPIM"}};
-        
-        
+         
+         
         Certificate cert = new Certificate(new URL("file:///E:/cog-1.1/build/cog-1.1/bin/x509up_46088.pem"));
-        
+         
         Session s = new Session(cert,p);
         String newSid = s.start();
         prt(s);
-        
+         
         // Get a session from the database
         Session q = new Session(newSid);
         q.getSession();
         prt(q);
-        
+         
         // Create a session with a particular sid
         Session r = new Session("mysid", cert, p);
         prt(r);
-        
+         
         s.end();
         r.end();
-        */
+         */
         
         Session s = new Session("c548092e-2649-11d8-965c-9768792e49d2");
         s.getSession();
