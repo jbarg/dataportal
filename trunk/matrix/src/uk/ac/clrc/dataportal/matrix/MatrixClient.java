@@ -54,14 +54,19 @@ public class MatrixClient {
             MatrixDataGridRequest request = new MatrixDataGridRequest();
             Transaction tx = null;
             
+            // Setup your transaction to perform the operation you want.... should be a parameter
+            
             //MatrixDownloadOp downloadOp = new MatrixDownloadOp();
             //tx = downloadOp.createDownloadOpTransaction();
             
             //MatrixListOp listOp = new MatrixListOp();
             //tx = listOp.createListOpTransaction();
             
+            // Ingest the file as /home/srbadm.matrix/ingest2.txt (regardless of what the source filename is)
+            // The resource used should be changed int the MatrixDataGridRequest object for now but it should be possible to specify it for different file
+            // This will have to wait until the next version!
             MatrixIngestOp ingestOp = new MatrixIngestOp();
-            tx = ingestOp.createIngestOpTransaction();
+            tx = ingestOp.createIngestOpTransaction("/home/srbadm.matrix", "ingest2.txt");
             
             // Attach transaction to request
             request.setTransaction(tx);
@@ -76,18 +81,19 @@ public class MatrixClient {
             SOAPPart soapPart = msg.getSOAPPart();
             
             // Figure out what the transaction was..... use the step name for this as it's set to the op name
-            // Note that SDSC may fix this as some point!!
+            // Note that SDSC may fix this as some point so we might need another way to get the step name!!
             Step step = (Step) tx.getFlow().getSteps().get(0);
             String stepName = step.getStepName();
             
             if (stepName.equals("ingestOp")) {
-                FileDataSource ds = new FileDataSource("ingest.txt");
+                // Get a data source, this could be a URLDataSource too or even extended further for possibly GridFTP etc
+                FileDataSource ds = new FileDataSource("ingest.txt"); // Source file.  Should be a parameter!
                 DataHandler dh = new DataHandler(ds);
                 
                 // Attach file to be ingested to the SOAP message
                 // We can attach multiple files if specified in the DataGridRequest but let's just play with one for now...
                 AttachmentPart attPart = msg.createAttachmentPart(dh);
-                attPart.setContentId("INGESTFILE");
+                attPart.setContentId("INGESTFILE"); // Hard coded for now but should be dynamic when ingesting multiple files.  See MatrixIngestOp.java
                 msg.addAttachmentPart(attPart);
             }
             
@@ -96,6 +102,8 @@ public class MatrixClient {
             
             System.out.println("Sending request to endpoint : " + MatrixClient.ENDPOINT);
             SOAPMessage reply = connection.call(msg, new URL(MatrixClient.ENDPOINT));
+           
+            // printReply(reply);
             
             // Get the TRANSACTION ID from the reply so we can get the status of our request
             Source replyxml = reply.getSOAPPart().getContent();
@@ -120,6 +128,9 @@ public class MatrixClient {
             
             if (stepName.equals("listOp")) {
                 System.out.println("List Op Response");
+                // We should, in theory,  be able to unmarshal this response in the same way as below but the schema file
+                // bundled with their release does not include the extra elements returned by the listOp operation!
+                // So just print out the reply for now to show the contents of the Container
                 printReply(reply);
             } else if (stepName.equals("ingestOp")) {
                 System.out.println("Ingest Op processing.....");
@@ -137,6 +148,7 @@ public class MatrixClient {
                     TransactionStatusResponse txnStatus = dgresponse.getTransactionStatusResponse();
                     
                     // Because we know there was only one step in our transaction we can get the first object in the list
+                    // This will need changing when multiple files support is added to our client
                     StepStatusResponse stepStatusResponse = (StepStatusResponse) txnStatus.getFlowStatusResponse().getStepStatusResponse().get(0);
                     statusCode = stepStatusResponse.getStatusCode();
                     
