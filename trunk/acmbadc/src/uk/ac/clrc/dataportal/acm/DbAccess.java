@@ -40,7 +40,7 @@ public class DbAccess {
             throw e; // need to modify it
         }catch (SQLException e) {
             System.out.println("db naming problem");
-            throw e; // need to modify it
+            throw e; // need 779019eb-d47a-11d7-be96-9b6824aaa95bto modify it
         }
     }
     

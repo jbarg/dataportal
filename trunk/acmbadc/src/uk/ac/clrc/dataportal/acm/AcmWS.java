@@ -20,15 +20,18 @@ public class AcmWS {
      *@return   String XML File specifying the user access privileges
      */
     public String getAccessInXMLString(String userId) throws Exception{
+       
          DbAccess db = new DbAccess();
          ResultSet rs =db.query("SELECT * from userTable where userName='"+userId+"'");
          if (rs.next()){
+             
             return db.buildXML(rs);
          } else {
              // if user does not have an account in the facility then it returns the privileges of
              // a demo user which is stored in the database as Demo. 
              ResultSet rs1 = db.query("SELECT * from userTable where userName='demo'");
              rs1.next();
+            
              return db.buildXML(rs1);
          }
     }
@@ -43,7 +46,8 @@ public class AcmWS {
             DbAccess db = new DbAccess();
             ResultSet rs =db.query("SELECT * from userTable where userName='"+userId+"'");
             if (rs.next()){
-                rs.next();
+                //rs.next();
+                System.out.println("found");
                 el= db.buildW3CElement(rs);
             } else {
                 // if user does not have an account in the facility then it returns the privileges of
