@@ -94,7 +94,7 @@ public class SRBDownload extends HttpServlet {
                 
                 String filename = dir.substring(dir.lastIndexOf("/") + 1);
                 filename = filename.replace('.','_');
-                response.setHeader("Content-disposition","attachment; filename=" + filename + ".tar");
+                response.setHeader("Content-disposition","attachment; filename=" + filename + "."+format);
                 byte[] buffer = new byte[65536];
                 int c=0;
                 
