@@ -666,16 +666,9 @@ public class ISISCsmdMapper implements CsmdMapper
    void buildMDInvestigation(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
 ////////////      
-      String surname = place_holder ;
-      String forename = place_holder ;
-      String middle_initial = place_holder ;
-      String title = place_holder ;
       String email = place_holder ;
 
-      r = s.executeQuery ("select first_name, middle_name, last_name, title, email_address from party where party.id in " +
-                            "(select party_id from investigator_list where investigation_id in " +
-                                "(select investigation_id from investigation_list where study_id = '" + key + "')" +
-                             ")") ;
+      r = s.executeQuery ("select cols from investigation where investigation_id in (select investigation_id from investigation_list 
 
       while(r.next())
       {
