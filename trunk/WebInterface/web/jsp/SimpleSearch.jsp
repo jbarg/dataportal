@@ -76,7 +76,7 @@ html/netscape.html file from the content root.--%>
 <!-- top and bottom hyperlinks-->
 
 <hr />
-<div align="right"><a name="#top"/><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
+<div align="right"><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
 
 <br />
 <form class="mess" name="simpleresult" action="../servlet/ExpandResultsServlet" method="post">

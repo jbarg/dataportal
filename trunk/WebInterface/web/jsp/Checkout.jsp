@@ -91,7 +91,7 @@ html/netscape.html file from the content root.-->
 &nbsp;&nbsp;>&nbsp;<a href="Explore.jsp">Data</a>
 &nbsp;&nbsp;>&nbsp;<a href="Checkout.jsp">Shopping Cart</a>
 <hr />
-<div align="right"><a name="#top"/><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
+<div align="right"><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
 
 <%
         String sid  = (String)session.getAttribute("sessionid");

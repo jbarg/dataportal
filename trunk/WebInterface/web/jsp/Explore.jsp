@@ -66,7 +66,7 @@ html/netscape.html file from the content root.-->
 &nbsp;&nbsp;>&nbsp;<a href="Explore.jsp">Data</a>
 
 <hr />
-<div align="right"><a name="#top"/><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
+<div align="right"><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
 
 <br />
  <form class="mess" name="simpleresult" action="../servlet/AddToCart" method="post">
