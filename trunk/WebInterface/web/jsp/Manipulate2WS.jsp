@@ -651,7 +651,7 @@ else return true;
 
 <td valign="top" width="20%" align="left">
 
-<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
+<!--<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>-->
 <br />&nbsp;<br /><br />
 <!-- out puts the content if the browser is not netsacpe 4.  If so out puts
 

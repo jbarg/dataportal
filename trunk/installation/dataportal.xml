@@ -210,7 +210,7 @@
 			    
 			    -->
 			    <target name="jar" description="jars all of the directories to the dataportal">
-			    <jar destfile="dp3.6.1.1.jar" >
+			    <jar destfile="dp3.6.1.2.jar" >
 
 			 			 <fileset dir="../installation" excludes="**/dp3.6*.jar, **/dataportal.xml **/INSTALLATION_TOMCAT.txt"/>
 			       			
