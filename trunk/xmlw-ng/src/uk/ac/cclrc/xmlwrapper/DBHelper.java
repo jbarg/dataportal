@@ -59,6 +59,8 @@ public class DBHelper
       
       boolean connected = false ;
       boolean reconnection_attempt = false ;
+
+      String connect_string = "" ;
     
       while (connected == false)
       {
@@ -72,7 +74,13 @@ public class DBHelper
             }
 
             //e.g. of full connect string xindice://escdmg.dl.ac.uk:4080/db/cclrcmetadata
-            ss.setCollection(DatabaseManager.getCollection(ss.getPrefix()+ss.getHost()+ss.getPort()+ss.getCollectionName()));
+            //connect_string = ss.getPrefix()+ss.getHost()+ss.getPort()+ss.getCollectionName(); 
+            //above should work but value in property file xindice:// not liked - seen as comment perhaps
+            connect_string = "xmldb:xindice://"+ss.getHost()+":"+ss.getPort()+ss.getCollectionName(); 
+
+            log.info(connect_string) ;
+
+            ss.setCollection(DatabaseManager.getCollection(connect_string));
             col = ss.getXMLCollection() ;
 
 

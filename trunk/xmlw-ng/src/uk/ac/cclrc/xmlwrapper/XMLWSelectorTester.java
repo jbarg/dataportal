@@ -134,37 +134,10 @@ public class XMLWSelectorTester {
    {
       XMLWSelectorTester xmlwt = new XMLWSelectorTester() ;
 
-     // xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc",
-     //      "Discipline='/earth sciences/atmosphere/atmospheric temperature/Temperature'",
-     //      "saved_badc.xml") ;
-		     
-      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-      //           "Discipline='All'",
-      //           "saved_emin.xml") ;
 
-      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emat",
-      //           "Discipline='All'",
-      //           "saved_emat.xml") ;
-
-      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-      //           "Discipline='Agriculture/Soils/Soil Minerology/Weathering'",
-      //           "saved_emin2.xml") ;
-      
-      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-      //           "Discipline='Geology/Minerals/Silicates'",
-      //           "saved_emin3.xml") ;
- 
-      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-      //           "Discipline='Chemistry/Inorganic/Structure'",
-      //           "saved_emin4.xml") ;
-
-      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-      //           "Discipline='Geochemistry/Crystallography'",
-      //           "saved_emin5.xml") ;
-
-      xmlwt.test_builder("http://escdmg.dl.ac.uk:9090/xmlw-ng/services/xmlwrapper_builder",
-                     "Go for it !!",
-                     "did_it_work.txt") ;
+      xmlwt.test_builder("http://escdmg.dl.ac.uk:9090/xmlw-ng/services/xmlwrapper_selector",
+                         "XML Query goes here!",
+                         "results_from_xquery.txt") ;
 
 
       return ;
