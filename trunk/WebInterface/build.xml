@@ -443,11 +443,11 @@
     <java classname="uk.ac.dl.web.Indexer" fork="false">
         <arg value="create" />
      
-       <!--  <arg value="build/help/xml" />
-        <arg value="build/help/xml/index" />-->
+        <arg value="build/help/xml" />
+        <arg value="build/help/xml/index" />
         <classpath refid="compile.classpath"/>
         <classpath>
-        <pathelement path="build/WEb-INF/classes"/>
+        <pathelement path="build/WEB-INF/classes"/>
         </classpath>
     </java>
   </target>
