@@ -31,7 +31,7 @@
     </servlet-class>
     <init-param>
       <param-name>SOAPMonitorPort</param-name>
-      <param-value>5001</param-value>
+      <param-value>5002</param-value>
     </init-param>
     <load-on-startup>100</load-on-startup>
   </servlet>
