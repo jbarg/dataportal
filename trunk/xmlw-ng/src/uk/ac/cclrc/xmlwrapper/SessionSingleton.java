@@ -71,6 +71,9 @@ public class SessionSingleton
    //a HashMap (reb-black tree holding a cache of the entries that we have had)
    Map m  ;
 
+   //map is fine for the test loader but need something more appropriate to hold the cache
+   Object container ;
+
    //database helper class - perhaps this needs Factory - ising to support different databases one day
 
    DBHelper dbh = new DBHelper() ;
@@ -333,6 +336,20 @@ public class SessionSingleton
    {
       return m ;
    }
+
+   //
+   //
+
+   void setContainer(Object container)
+   {
+      this.container = container ;
+   }
+
+   Object getContainer() 
+   {
+      return container ;
+   }
+
 
    //
    //
