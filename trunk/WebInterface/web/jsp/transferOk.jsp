@@ -76,7 +76,7 @@ html/netscape.html file from the content root.-->
 &nbsp;&nbsp;>&nbsp;<a href="Expand.jsp">Expanded Studies</a>
 &nbsp;&nbsp;>&nbsp;<a href="Explore.jsp">Data</a>
 &nbsp;&nbsp;>&nbsp;<a href="Checkout.jsp">Shopping Cart</a>
-&nbsp;&nbsp;>&nbsp;<a href="transfer.jsp?url=<%=request.getParamter("url")%>">File transfer</a>
+&nbsp;&nbsp;>&nbsp;<a href="transfer.jsp?url=<%=request.getParameter("url")%>">File transfer</a>
 <hr />
 <br />
 <br />
