@@ -23,7 +23,7 @@
 
  <service name="DataTransferService" provider="java:RPC">
   <parameter name="allowedMethods" value="*"/>
-  <parameter name="className" value="uk.ac.clrc.dataportal.datatransfer.DataTransferModule"/>
+  <parameter name="className" value="uk.ac.clrc.dataportal.transfer.DataTransfer"/>
  </service>
 
 <!-- <service name="AdminService" provider="java:MSG">

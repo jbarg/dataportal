@@ -240,6 +240,9 @@
 			<!-- added in ,**/test/** -->
 			<fileset dir="${src.home}" excludes="**/*.java"/>
 		</copy>
+                 <exec dir="${build.home}/WEB-INF/Transfer" os="Linux,Unix" executable="/bin/chmod">
+                    <arg line="754 UrlCopy.sh TestWS.sh compile.sh setEnv.sh" />
+                </exec>
 	</target>
 	<!-- ==================== Dist Target ===================================== -->
 	<!--
@@ -284,7 +287,8 @@
 
 -->
 	<target name="install" depends="compile" description="Install application to servlet container">
-		<install url="${manager.url}" username="${manager.username}" password="${manager.password}" path="${app.path}" war="file://${build.home}"/>
+	        <install url="${manager.url}" username="${manager.username}" password="${manager.password}" path="${app.path}" war="file://${build.home}"/>
+               
 	</target>
 	<!-- ==================== Javadoc Target ================================== -->
 	<!--

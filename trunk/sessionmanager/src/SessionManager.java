@@ -5,7 +5,7 @@ import java.util.Properties;
 //import org.gridforum.jgss.*;
 import java.sql.*;
 import java.io.*;
-import ac.dl.xml.Converter;//
+import ac.dl.xml.*;//
 //import org.globus.security.GlobusProxy;
 import org.globus.gsi.*;
 import org.globus.gsi.gssapi.*;
@@ -96,7 +96,14 @@ public class SessionManager {
     
     //new start session
     public String startSession(String cert,org.w3c.dom.Element permissionList, String sid) throws Exception{
-        
+     
+
+       // org.jdom.input.DOMBuilder buildert = new org.jdom.input.DOMBuilder();
+       // org.jdom.Element el = buildert.build(permissionList);
+       // org.jdom.Document doc1  =new org.jdom.Document(el);
+//        System.out.println("Saving the xml to "+save);
+       // Saver.save(doc1, new File("/tmp/permio.xml"));
+        //Saver.save(doc,new File("/tmp/permissions"));
         logger.info("startSession with permissions SERVICE activated");
         byte[] data = cert.getBytes();
         //GlobusProxy cred = GlobusProxy.load(data,System.getProperty("user.home")+File.separator+".globus"+File.separator+"certificates"+File.separator+"01621954.0");
@@ -127,6 +134,8 @@ public class SessionManager {
             //sid = (sid ==null) ? String.valueOf(System.currentTimeMillis()) : sid;
             sid = (sid ==null) ? uuidgen.generateTimeBasedUUID().toString() : sid;
             String dn = cred.getName().toString();
+            System.out.println("DN oFf cert is  "+dn );
+            System.out.println("sid of this is "+sid);
             //String dn = cred.getName().toString();
             //String dn = cred.getSubject();
             
@@ -213,7 +222,7 @@ public class SessionManager {
             call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
             call.setReturnType( XMLType.SOAP_ARRAY );
             String[] name = {"Dataportal"};
-            Object[] ob = new Object[]{name,"AUTH"};
+            Object[] ob = new Object[]{name,"AUTH-EMIN"};
             
             url= (String[]) call.invoke(ob );
             //System.out.println(url[0] + "   "+serviceTypes[i]);
@@ -591,7 +600,7 @@ public class SessionManager {
         
     }
     
-    private org.w3c.dom.Element buildXML(ResultSet rs) throws JDOMException, SQLException {
+    private org.w3c.dom.Element buildXML(ResultSet rs) throws Exception, SQLException {
         
         Document doc = new Document();
         Element root = new Element("UserAccessPrivilege");
