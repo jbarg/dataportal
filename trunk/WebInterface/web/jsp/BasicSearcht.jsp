@@ -40,14 +40,14 @@
 
     <base target="_top" />
 
-    <frameset border="0" frameborder="0" bgcolor="white" bordercolor="black" cols="20%,*">
+   <frameset border="0" frameborder="0" bgcolor="white" bordercolor="black" cols="220,*">
 
   	<frame name="qinetiq_logo"  src="menu.jsp" scrolling="no" target="parent" />
-
-  	   		
-
-        <frame name="footer" src="dataxmlformemat.jsp?list=<%=facility%>"   scrolling="yes" />
-
+       <frameset border="0"  frameborder="0" bgcolor="white" bordercolor="black" rows="98,*">
+        <frame name="header" src="../html/top.html"   scrolling="no" />
+        <frame name="footer" src="dataxmlformemat<%=topics%>.jsp?list=<%=facility%>"   scrolling="no" />
+        
+        </frameset>
    </frameset>
 
  

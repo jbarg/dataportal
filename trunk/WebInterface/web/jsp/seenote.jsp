@@ -1,4 +1,4 @@
-<%@page  import="java.util.*,org.apache.axis.client.*,javax.xml.rpc.ParameterMode,org.apache.axis.encoding.XMLType,javax.xml.namespace.QName,ac.dl.xml.*,org.apache.log4j.*,java.io.*,java.security.*,java.security.interfaces.*"%>
+<%@page errorPage="../html/seenoteError.html" import="java.util.*,org.apache.axis.client.*,javax.xml.rpc.ParameterMode,org.apache.axis.encoding.XMLType,javax.xml.namespace.QName,ac.dl.xml.*,org.apache.log4j.*,java.io.*,java.security.*,java.security.interfaces.*"%>
 <%@ include file="loggedin.jsp"%>
 <%@ include file="logger.jsp"%>
 <%
@@ -13,10 +13,12 @@ Properties prop = (Properties)session.getAttribute("props");
 </jsp:useBean>
 <%--  Call the web service and get user cart information --%>
 <% 
+
    try{
         cartNote.getCart();
    }
    catch(Exception e){
+        logger.error("Unable to show notes",e);
         throw e;
    }
 %>

@@ -26,18 +26,22 @@ function openwindow(page){
 <title>CLRC Data Portal/Estedi - Basic database search</title>
   <!--<link rel="stylesheet" href="../style/mainNN4frame.css" type="text/css" /> -->
 <style type="text/css"> 
-@import url(../style/mainmenu.css); /*IE and NN6x styles*/
+@import url(../style/main.css); /*IE and NN6x styles*/
 </style>
 <base target="_top"/>
 
 
 </head>
-<body background="../img/redbg.gif" >
+<body>
 
 <table width="140" cellspacing="3" border="0"><tr>
 <td valign="top" width="140" align="left">
-<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
+<!--<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>-->
 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<br />&nbsp;<br /><br />
 <br />&nbsp;<br /><br />
 
 <xtags:menu netscapefile="html/netscape.html" iefile="html/ie.html">

@@ -11,22 +11,30 @@
    
 %>
 <title>CCLRC Data Portal</title>
-<LINK REL=STYLESHEET HREF="../style/main.css" TYPE="text/css">
+<LINK REL=STYLESHEET HREF="../style/mainmenu.css" TYPE="text/css">
 </head>
-<body background="../img/redbg.gif">
-<table width="100%" cellspacing=3 border=0><tr>
-<td valign=top width="18%" align=left>
-<a href="http://www.clrc.ac.uk"><img border=0 src="../img/clrc.gif" alt="CLRC logo"></a>
+<body>
+<table width="100%" cellspacing="3" border="0"><tr>
+<td valign=top width="180" align="left">
+<!--<a href="http://www.clrc.ac.uk"><img border=0 src="../img/clrc.gif" alt="CLRC logo"></a>-->
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<br />&nbsp;<br /><br />
 <br />&nbsp;<br /><br />
 
+
 </td>
-<td valign=top>
-<h1>Log off</h1>
+<td valign="top">
+<p id="topheader">Log Off</p>
+<br />
+<br />
+<br />
+<br />
 <hr />
 <br />
 <br />
 <br />
-<table cellspacing=0 border=0 cellpadding=3>
+<table cellspacing="2" border="0" cellpadding="3">
 </TABLE>
 <table>
 <tr><td>Thank you for using the <a href="../">dataportal.</a>

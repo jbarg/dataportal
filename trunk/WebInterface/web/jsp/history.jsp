@@ -13,11 +13,8 @@
 <%@ taglib uri="/tldweb" prefix="xtags" %>
 
 <html>
-
 <head>
-
 <title>CCLRC Data Portal - History</title>
-
 <script type="text/javascript">
 
 <!--
@@ -50,14 +47,18 @@ function openwindow(page){
 
 <body>
 <a name="top" />
-<table width="100%" cellspacing="3" border="0">
+<table width="100%" cellspacing="0" border="0">
 
 <tr>
 
-<td class="width" valign="top" width="20%" align="left">
+<td class="width" valign="top" width="180" align="left">
 
-<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
+<!--<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>-->
 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<br />&nbsp;<br /><br />
 <br />&nbsp;<br /><br />
 
 
@@ -73,8 +74,11 @@ html/netscape.html file from the content root.-->
 
 <td valign="top">
 
-<h1>Data Portal History</h1>
-<br/>
+<p id="topheader">Search History</p>
+
+<br />
+<br />
+<br />
 &nbsp;Home&nbsp;&nbsp;&nbsp;>&nbsp;<a href="history.jsp">History</a>
 
 <hr />
@@ -83,11 +87,11 @@ html/netscape.html file from the content root.-->
 <br />
 <table border="1"  width="100%" cellspacing="0" cellpadding="1">
 <tr bgcolor="#ADD8E6">
-<td width="15%"><b>Facility(s)</b></td>
-<td width="33%"><b>Discipline</b></td>
-<td width="32%"><b>Date</b></td>
-<td width="10%"><b>Waiting (seconds)</b></td>
-<td width="15%"><b>Resend Query</td>
+<td width="15%" id="tablehead">Facility(s)</td>
+<td width="33%" id="tablehead">Discipline</td>
+<td width="32%" id="tablehead">Date</td>
+<td width="10%" id="tablehead">Waiting (seconds)</td>
+<td width="15%" id="tablehead">Resend Query</td>
 </tr>
 <%
         //set static log for the class

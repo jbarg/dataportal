@@ -50,14 +50,18 @@ function openwindow(page){
 
 </head>
 
-<body background="../img/redbg.gif">
+<body>
 
-<table width="100%" cellspacing="3" border="0"><tr>
+<table width="100%" cellspacing="0" border="0"><tr>
 
-<td valign="top" width="20%" align="left">
+<td valign="top" width="180" align="left">
 
-<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
+<!--<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>-->
 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<br />&nbsp;<br /><br />
 <br />&nbsp;<br /><br />
 <!-- out puts the content if the browser is not netsacpe 4.  If so out puts
 
@@ -71,8 +75,10 @@ html/netscape.html file from the content root.-->
 
 <td valign="top">
 
-<h1>Transfer DataSet</h1>
-
+<p id="topheader">Transfer DataSet</p>
+<br />
+<br />
+<br />
 <hr />
 <br />
 <br />

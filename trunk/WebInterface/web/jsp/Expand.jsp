@@ -52,9 +52,12 @@ function selectAll(formID, fieldName, value)
 </head>
 <body>
 <a name="top" />
-<table width="100%" cellspacing="3" border="0"><tr>
-<td class="tdwidth" valign="top" width="20%" align="left">
-<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
+<table width="100%" cellspacing="0" border="0"><tr>
+<td class="tdwidth" valign="top" width="180" align="left">
+<!--<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>-->
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<br />&nbsp;<br /><br />
 <br />&nbsp;<br /><br />
 
 <!-- out puts the content if the browser is not netsacpe 4.  If so out puts
@@ -65,8 +68,10 @@ html/netscape.html file from the content root.-->
 </td>
 <td valign="top">
 
-<h1>Data Portal expanded results</h1>
+<p id="topheader">Data Portal expanded results</p>
 <br/>
+<br/>
+<br />
 &nbsp;Home&nbsp;&nbsp;&nbsp;>&nbsp;<a href="BasicSearch.jsp">Basic Search</a>
 &nbsp;&nbsp;>&nbsp;<a href="SimpleSearch.jsp">Studies</a>
 &nbsp;&nbsp;>&nbsp;<a href="Expand.jsp">Expanded Studies</a>

@@ -2,7 +2,7 @@
 
 
 
-body 		{ margin: 10px; font-family: Trebuchet, Arial, sans-serif; background-image:
+body 		{ margin: 7px; font-family: Trebuchet, Arial, sans-serif; background-image:
 
 url("../img/bluebg.gif")
 
@@ -33,26 +33,48 @@ hr		{ color: #ADD8E6; height: 3px; }
 
 
 .button {height:40px; width:100px; }
-
+.button70 {height:21px;  }
 
 
 span.NavBar1 {color: white; font-size:16px; }
 
+.menuhr { color: grey ; height: 2px; }
 
 
-a:link 		{ color: BLUE; text-decoration: none; background: #FFFFFF;}
+.menu:link, .menu:visited {
+  color: white;
+  text-decoration: none;
+  font-family: tahoma, verdana, sans-serif;
+  font-size: 14px;
+}
+.menu:hover {
+  color: white;
+text-decoration: none;
+  font-family: tahoma, verdana, sans-serif;
+  font-size: 15px;
+}
+
+#headmenu {
+font-family: times,tahoma, verdana, sans-serif;
+  font-size: 18px;
+color: white;
+
+}
+
+
+a:link 		{ color: BLUE; text-decoration: none; }
 
 
 
-a:visited 	{ color: #0000FF; text-decoration: none; background: #FFFFFF; }
+a:visited 	{ color: #0000FF; text-decoration: none;  }
 
 
 
-a:hover		{ color: #999999; text-decoration: underline;  background: #FFFFFF;}
+a:hover		{ color: #999999; text-decoration: underline;  }
 
 
 
-a:active 	{ color: #9999CC; text-decoration: underline;  background: #FFFFFF;}
+a:active 	{ color: #9999CC; text-decoration: underline;  }
 
 
 
@@ -80,8 +102,9 @@ img             {border-style: solid; border-width: 0px; border:0px }
 
 #xhtml          { width:88; height:31; border-style: solid; border-width: 0px}
 
-
-
+#tablerow  {font-size:14px; text-align:center}
+#tablehead  {text-align:center; font-family:courier,fantasy; font-weight:bold}
+p#topheader   {text-align: right; color:white; font-size:19px; font-style:italic}
 p.footer       	{ text-align: right; font-size: 8pt; }
 
 
