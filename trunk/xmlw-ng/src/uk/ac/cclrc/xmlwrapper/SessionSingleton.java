@@ -5,11 +5,13 @@ import java.io.* ;
 
 import org.apache.log4j.* ; //for Logger
 
-import java.sql.* ; //for jdbc
-
 import org.apache.axis.MessageContext;               //needed for context path
 import org.apache.axis.transport.http.HTTPConstants; //needed for context path
 import javax.servlet.http.*;                         //needed for context path
+
+import org.xmldb.api.base.*; //needed for xindice stuff
+import org.xmldb.api.modules.*;
+import org.xmldb.api.*;
 
 
 //controls the variable accessable by the XmlWrapper service
@@ -36,18 +38,16 @@ public class SessionSingleton
    String host ;    
    // The TNS listener port
    String port  ;
-   // The database name (SID)
-   String sid ;
-   // The database User ID
-   String user ;   
-   // The database user password
-   String pass ;    
+   //the xml doc collection name
+   String collection ;
+   //urn prefix for xml repository
+   String prefix ;   
 
-   //jdbc handles
-   Connection c ;
-   Statement  s ;
-   ResultSet  r ;
-   ResultSetMetaData rsmd  ;
+   //xindice handles
+   Collection col ;
+   XPathQueryService  xqs ;
+   ResourceSet res  ;
+   XMLResource xmlr ;
 
    //application should set the connection string based on driver type
    //perhaps there are some templates for this
@@ -77,9 +77,6 @@ public class SessionSingleton
 
    //name of the server and port - so we can figure out url of the dtd / schema
    String server_port;
-
-   //should we use caching (perhaps not needed on small/fast databases
-   boolean use_caching;
 
    //
    //
@@ -181,23 +178,9 @@ public class SessionSingleton
 
          this.host = config.getProperty("dbhost");
          this.port = config.getProperty("dbport");
-         this.sid =  config.getProperty("dbsid");
-         this.user = config.getProperty("dbuser");
-         this.pass = config.getProperty("dbpass");
+         this.collection =  config.getProperty("dbcollection");
+         this.prefix = config.getProperty("dbconprefix");
          
-         this.server_port = config.getProperty("catalinahost") ;
-
-	 //is caching turned on/off
-	 String tmp = config.getProperty("use_caching") ;
-         if (tmp.compareTo("false") == 0 )
-	 {
-	    this.use_caching = false ;
-	 }
-	 else
-	 {
-	    this.use_caching = true ;
-	 }
-	 
       }
       catch (IOException e)
       {
@@ -235,52 +218,53 @@ public class SessionSingleton
       return port ;
    }
 
-   String getSid()
+   String getCollection()
    {
-      return sid ;
+      return collection ;
    }
 
-   String getUser()
+   String getPrefix()
    {
-      return user ;
+      return prefix ;
    }
 
-   String getPass()
-   {
-      return pass ;
-   }
 
    //
    //
 
-   void setConnection(Connection c)
+   void setCollection(Collection col)
    {
-      this.c = c ;
+      this.col = col
    }
 
-   void setStatement(Statement s)
+   void setXPathQueryService(XPathQueryService xqs)
    {
-      this.s = s ;
+      this.xqs = xqs ;
    }
 
-   Connection getConnection()
+   void setXMLResource(XMLResource xmlr)
    {
-      return c;
+      this.xmlr = xmlr ;
    }
 
-   Statement getStatement()
+   Collection getCollection()
    {
-      return s;
+      return col;
    }
 
-   ResultSet getResultSet()
+   XPathQueryService getXPathQueryService()
    {
-      return r;
+      return xqs;
    }
 
-   ResultSetMetaData getResultSetMetaData()
+   ResourceSet getResourceSet()
    {
-      return rsmd;
+      return res;
+   }
+
+   XMLResource getXMLResource()
+   {
+      return xmlr ;
    }
 
    //
@@ -374,10 +358,6 @@ public class SessionSingleton
 
    //
 
-   boolean getUseCaching()
-   {
-      return use_caching ;
-   }
    
 }
   
