@@ -35,7 +35,7 @@ public class SaveCartServlet extends HttpServlet{
             }
             else{
                 //locate the prop file.  Normal get this from web.xml file
-                String wd =  (String)session.getAttribute("wd");
+               /* String wd =  (String)session.getAttribute("wd");
                 PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
 
                 Properties prop   = (Properties)session.getAttribute("props");
@@ -43,7 +43,8 @@ public class SaveCartServlet extends HttpServlet{
                 String sid  = (String)session.getAttribute("sessionid");
                 endSession(sid,session_url );
 
-                deleteFiles(sid,wd);
+                deleteFiles(sid,wd);*/
+                Cleanup.session(session);
 
                 //workingDir = (String)session.getAttribute("wd");
                 //logger.warn("Error with logging off",e);
