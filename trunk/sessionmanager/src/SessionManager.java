@@ -222,7 +222,7 @@ public class SessionManager {
             call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
             call.setReturnType( XMLType.SOAP_ARRAY );
             String[] name = {"Dataportal"};
-            Object[] ob = new Object[]{name,"AUTH-EMIN"};
+            Object[] ob = new Object[]{name,"AUTH"};
             
             url= (String[]) call.invoke(ob );
             //System.out.println(url[0] + "   "+serviceTypes[i]);
