@@ -373,4 +373,11 @@
 	compiles and reloads
 	
 	-->
+        
+        <!-- cleans the xml from all the config data-->
+	<target name="clear" description="Removes all application configuration data from the config files">
+		<java classname="uk.ac.dl.rasgrib.ClearConfigData" fork="false" classpath="build/WEB-INF/classes">
+		</java>
+	</target>
+	
 </project>
