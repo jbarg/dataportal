@@ -1,5 +1,10 @@
+<%@ page  isErrorPage="true" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<%
+    //invalidate session at this point
+    //id invalidate and then sendRediect another session is the created!!!! 
+    session.invalidate();
+%>
 <html>
 <head>
 <title>CCLRC Data Portal</title>

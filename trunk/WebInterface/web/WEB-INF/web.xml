@@ -333,7 +333,7 @@
 	</welcome-file-list>
 	<error-page>
 		<exception-type>uk.ac.dl.web.SessionTimedOutException</exception-type>
-		<location>/html/SessionTimedOut.html</location>
+		<location>/jsp/SessionTimedOut.jsp</location>
 	</error-page>
         <error-page>
 		<error-code>500</error-code>
