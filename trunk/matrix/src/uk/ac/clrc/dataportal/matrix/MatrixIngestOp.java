@@ -5,7 +5,16 @@
  *
  * This creates a transaction used by DataGridRequest to ingest a dataset into a collection
  *
+ */
+
+/*
+ * PLEASE NOTE!!
  *
+ * There is a bug in the Matrix server Ingest operation which I have traced to the buffering process when writing to SRB
+ * This may be fixed by them in future but if not make sure you apply the following fix if you install a new Matrix server
+ *
+ * In src/edu/sdsc/matrix/srb/operations/IngestDataSetOperation.java look for the line attachment.write(buffer,0,buffer.length) and change this to
+ * attachment.write(buffer,0,c)
  */
 
 package uk.ac.clrc.dataportal.matrix;
@@ -34,7 +43,7 @@ import java.io.FileOutputStream;
  */
 
 public class MatrixIngestOp {
-    
+
     private static ObjectFactory objFactory = new ObjectFactory();
     
     public Transaction createIngestOpTransaction(String logicalLocation, String dataId) {
