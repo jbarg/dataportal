@@ -102,6 +102,9 @@ public class Transfer extends HttpServlet {
                
                 return;
             }
+            System.out.println("");
+            System.out.println("result of transfer is "+result);
+            System.out.println("");
             if(result.equals("true")) {
                 response.sendRedirect("../jsp/transferOk.jsp");
                 

@@ -72,7 +72,7 @@ public class SRBTransfer extends HttpServlet {
                 URLConnection yc = url.openConnection();
                 InputStream p = yc.getInputStream();
                 
-                 tarFile = new File(wd+File.separator+"xml"+File.separator+sid+".tar");
+                tarFile = new File(wd+File.separator+"xml"+File.separator+sid+".tar");
                 BufferedInputStream myBufferedInputStream = new BufferedInputStream(p);
                 
                 BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(new FileOutputStream(tarFile));
