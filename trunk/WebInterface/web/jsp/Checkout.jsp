@@ -5,7 +5,9 @@
  %>
 <%@ include file="loggedin.jsp" %>
 <%@ include file="logger.jsp" %>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <%@ taglib uri="/tldweb" prefix="xtags" %>
+
 <html>
 <head>
 <title>CCLRC Data Portal - Checkout</title>
@@ -20,47 +22,48 @@
 var win;
 function seenoteWS(page){
 
-if(navigator.appVersion.indexOf("MSIE") !=-1 ){
+    if(navigator.appVersion.indexOf("MSIE") !=-1 ){
 
-//alert("micrsoft");
-    if(win) win.close();
-    var x = event.screenX+15;
-    var y = event.screenY-150;
-    win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note","toolbar=no, width=380, height=350, left="+x+",top="+y+"");
+        //alert("micrsoft");
+        if(win) win.close();
+        var x = event.screenX+15;
+        var y = event.screenY-150;
+        win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note","toolbar=no, width=380, height=350, left="+x+",top="+y+"");
 
-}
-
-else if(navigator.userAgent.indexOf("Mozilla/4") != -1 && navigator.appName.indexOf("Netscape") !=-1 && parseInt(navigator.appVersion) < 5){
-//alert("netsacpe 4");
- //win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note"," width=100, height=100,toolbar=no");
-   win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=380,height=350,left=0,top=0");
-}
-else{
- win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note","toolbar=no, width=385, height=360");
-}
+    }
+    else if(navigator.userAgent.indexOf("Mozilla/4") != -1 && navigator.appName.indexOf("Netscape") !=-1 && parseInt(navigator.appVersion) < 5){
+        //alert("netsacpe 4");
+        //win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note"," width=100, height=100,toolbar=no");
+        win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=380,height=350,left=0,top=0");
+    }
+    else{
+        win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note","toolbar=no, width=385, height=360");
+    }
 }
 
 function addnote(page){
-window.open("../jsp/addnote.jsp?url="+page+"","Add_note","toolbar=no, width=300, height=300");
+    window.open("../jsp/addnote.jsp?url="+page+"","Add_note","toolbar=no, width=300, height=300");
 
 }
 
 function nothing(){
-window.status = 'Done';
-return true;
+    window.status = 'Done';
+    return true;
 
 }
+
 function openwindow(page){
-   //window.open("../help/Help.jsp?page="+page+"","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
- window.open("../help/Help.jsp","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
+    //window.open("../help/Help.jsp?page="+page+"","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
+    window.open("../help/Help.jsp","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
 
-   // window.open("../style/help.html","Help", "width=900, height=600, toolbar=0, status=1, location=0,directories=0,menubar=1,resizable=1, scrollbars=1,left=0, top=0");
+    // window.open("../style/help.html","Help", "width=900, height=600, toolbar=0, status=1, location=0,directories=0,menubar=1,resizable=1, scrollbars=1,left=0, top=0");
 }
-function check(){
-var temp = window.confirm("Are you sure you want to clear your shopping cart?");
 
-if(temp == true) return true;
-else return false;
+function check(){
+    var temp = window.confirm("Are you sure you want to clear your shopping cart?");
+
+    if(temp == true) return true;
+    else return false;
 }
 
 //-->
@@ -87,115 +90,91 @@ html/netscape.html file from the content root.-->
 &nbsp;&nbsp;>&nbsp;<a href="Explore.jsp">Data</a>
 &nbsp;&nbsp;>&nbsp;<a href="Checkout.jsp">Shopping Cart</a>
 <hr />
-<%          
-            //if dpuser, not allowed to download data, so change stylesheet
-            //so that when the user presses the download button, it takes them
-            // to a another page
-            String xsl  = null;
-            String xsldpuser = "";
-            //get the sorting request of the shopping cart
-            String by  = (String)request.getParameter("by");
-            org.jdom.Document doc1  = null;
-             //get users name
-            String dn  = (String)session.getAttribute("sessionid");
-           if(by == null){
-                 xsl = "checkoutWS";
-            }
-            else  if(by.equals("date")) xsl = "checkoutWSdate";
-            else  if(by.equals("name")) xsl = "checkoutWS";
-            session.setAttribute("sort",by);
-            //call ws to get the shopping basket
-             org.w3c.dom.Element ret = null;
-           try{ 
-            Properties prop = (Properties)session.getAttribute("props");
-            String url = prop.getProperty("CART");
-          // System.out.println("url of shopping cart "+url);
-            //normal long inded service call
-            String endpoint = url;
-            Service  service = new Service();
-            Call     call    = (Call) service.createCall();
-            call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-            call.setOperationName( "getCart" );
-            call.addParameter( "op1", XMLType.XSD_INT, ParameterMode.IN );
-            call.setReturnType( XMLType.SOAP_ELEMENT );
-            //old way using invoke
-            Object[] ob = new Object[]{dn};
-            ret = (org.w3c.dom.Element) call.invoke(ob );
-            //System.out.println(ret);
+<%
+        String sid  = (String)session.getAttribute("sessionid");
+        
+        Properties prop  = (Properties)session.getAttribute("props");
+%>
+<%-- Set the cart instance and pass through the sid, url and properties--%>
+<jsp:useBean class="uk.ac.dl.beans.CheckOutBean" id="checkout" scope="request">
+<jsp:setProperty name="checkout" property="*" />
+<jsp:setProperty name="checkout" property="sid" value="<%=sid%>" />
+<jsp:setProperty name="checkout" property="properties" value="<%=prop%>" />
+<jsp:setProperty name="checkout" property="wd" value="<%=wd%>" />
+<jsp:setProperty name="checkout" property="*"  />
 
-            org.jdom.input.DOMBuilder buildert = new org.jdom.input.DOMBuilder();
-            org.jdom.Element el = buildert.build(ret);
-            el.detach();
-           doc1  = new org.jdom.Document(el);
-            //Saver.save(doc1,"c:/check.xml£");
-              
-        } catch (Exception e) {
-            logger.error("building document",e);
-            
-        }
-        //check if cart is empty
-        Element root = doc1.getRootElement();
-        List list = root.getChildren("item");
-        boolean isEmpty = false;
-        if(list.size() == 0){
-            isEmpty = true;
-        }
+</jsp:useBean>
+<%--  Call the web service and get user cart information --%>
+<% 
+    
+   try{
+        session.setAttribute("sort",checkout.getBy());
+        checkout.setFiles();
+        checkout.getCart();
+       
+   }
+   catch(Exception e){
+        throw e;
+   }
 %>
 
 <form name="deleteSelected" action="../servlet/DeleteSelectedWS" method="post">
 
+<c:choose>
+<c:when test="<%=checkout.isEmpty()%>">
+    <br /><br /><br />There are no items in your shopping basket<br /><br /><br />
+</c:when>
+<c:otherwise>
 <%
-    if(isEmpty){
-        out.println("<br /><br /><br />There are no items in your shopping basket<br /><br /><br />");
+    try{
+        XSLTransformer.transformJDOMtoWriter(checkout.getDoc(), checkout.getFiles() , out);
+
+        XSLTransformer.transformJDOMtoWriter(checkout.getDoc(),checkout.getDatasets() , out);
+
+        XSLTransformer.transformJDOMtoWriter(checkout.getDoc(),checkout.getStudys() , out);
     }
-    else{
-        try{
-            XSLTransformer.transformJDOMtoWriter(doc1, new File(wd+File.separator+"xsl"+File.separator+xsl+".xsl"), out);
-
-           XSLTransformer.transformJDOMtoWriter(doc1, new File(wd+File.separator+"xsl"+File.separator+xsl+"dataset.xsl"), out);
-
-            XSLTransformer.transformJDOMtoWriter(doc1, new File(wd+File.separator+"xsl"+File.separator+xsl+"study.xsl"), out);
-        }
-        catch(Exception e){
-            logger.error("unable to transofrm shopping cart",e);
-         }
+    catch(Exception e){
+        logger.error("Unable to transform shopping cart",e);
     }
 %>
+</c:otherwise>
+</c:choose>
+
 <br />
-<%
 
-    if(!isEmpty){
-%>
-<div align="right">
-<input type="submit" value="Delete" /></div>
-<%}else{}
-%>
+<c:choose>
+<c:when test="<%=!checkout.isEmpty()%>" >
+    <div align="right">
+    <input type="submit" value="Delete" />
+    </div>
+</c:when>
+</c:choose>
 </form>
-<%
-    if(!isEmpty){
-%>
-<table border="0">
-<tr>
-<td width="140">
 
-<form name="date" action="Checkout.jsp" method="post">
-<select name="by">
-<option value="date">Date</option>
-<option value="name">Name</option>
-</select><input type="submit" value="Sort" />
-</form>
-</td>
-<td>
+<c:choose>
+<c:when test="<%=!checkout.isEmpty()%>" >
+    <table border="0">
+    <tr>
+    <td width="140">
 
-<form name="Delete_contents" onsubmit="return check();" action="../servlet/DeleteCart" method="post">
-<input type="submit" value="Delete all contents" />
-</form>
-</td>
-</tr>
-</table>
-<% }else {}
+    <form name="date" action="Checkout.jsp" method="post">
+    <select name="by">
+    <option value="date">Date</option>
+    <option value="name">Name</option>
+    </select><input type="submit" value="Sort" />
+    </form>
+    </td>
+    <td>
 
-%>
+    <form name="Delete_contents" onsubmit="return check();" action="../servlet/DeleteCart" method="post">
+    <input type="submit" value="Delete all contents" />
+    </form>
+    </td>
+    </tr>
+    </table>
+</c:when>
+</c:choose>
+
 <hr />
 <%@ include file="../html/footer.html"%></td>
 </tr>

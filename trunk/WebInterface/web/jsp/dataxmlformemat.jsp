@@ -837,7 +837,7 @@ else checked = "checked='checked'";
 
 <hr />
 
-<<%@ include file="../html/footer.html" %>
+<%@ include file="../html/footer.html" %>
 
 
 
