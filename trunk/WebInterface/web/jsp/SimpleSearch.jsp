@@ -42,12 +42,7 @@ function openwindow(page){
 <tr>
 <td valign="top" width="20%" align="left">
 <a href="http://www.clrc.ac.uk/"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
-<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /><br />
+<br />&nbsp;<br /><br />
 
 <%-- out puts the content if the browser is not netsacpe 4.  If so out puts
 html/netscape.html file from the content root.--%>
@@ -128,7 +123,7 @@ request.  This is stored in the session attribute NoRes--%>
 <xtags:query name="timedOut" send="no" project="eminerals" message="Results timed out from: " host="exchange06.dl.ac.uk" />
 <br />
 <hr />
-<%@ include file="../html/footer.html"%>/td>
+<%@ include file="../html/footer.html"%></td>
 </tr>
 </table>
 </body>
