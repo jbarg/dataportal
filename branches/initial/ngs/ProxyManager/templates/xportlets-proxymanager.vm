@@ -1,0 +1,71 @@
+<font color="$!{skin.Color}">
+<br/>
+
+#if ($error)
+  <font style="color: red">$error</font>
+#end
+
+#if ($success)
+  <font style="color: green">$success</font>
+#end
+
+<h2>The following GSI proxy credentials are loaded into your account:</h2>
+<table>
+  <tr><td colspan=4 height=2 style="background-color: $skin.getTitleBackgroundColor()"></td>
+  </tr>
+  #set( $proxy_keys = $proxies.keys() )
+  #foreach( $hash in $proxy_keys )
+    <form action="$jslink.Template" method="post">
+      <input type="hidden" name="proxy" value="$hash">
+      <tr>
+        #if ("$hash" == "$default_proxy" || $proxies.size() == 1 || ("$!default_proxy" == "" && "$!proxy_first" == "") )
+          #set( $proxy_first = "true" )
+          <td align="middle">(default proxy)</td>
+        #else
+          <td align="left">
+            <input type="submit" name="eventSubmit_doSet_default" value="Set as default" style="font-size:10; background-color: $skin.getTitleBackgroundColor()">
+          </td>
+        #end
+        <td align="left"> 
+          &nbsp $proxies.get($hash).getName().toString() &nbsp
+        </td>
+        <td align="left">
+          <input type="submit" name="eventSubmit_doView_proxy" value="View" style="font-size:10; background-color: $skin.getTitleBackgroundColor()">
+        </td>
+        <td align="left">
+          <input type="submit" name="eventSubmit_doDestroy_proxy" value="Remove" style="font-size:10; background-color: $skin.getTitleBackgroundColor()">
+        </td>
+      </tr>
+    </form>
+  #end
+
+  #if ((!$proxies) || ( $proxies.size() == 0 ))
+    <tr>
+      <td>
+        No proxies currently loaded
+      </td>
+    </tr>
+  #end
+  <tr>
+    <td colspan=4 height=2 style="background-color: $skin.getTitleBackgroundColor()">
+    </td>
+  </tr>
+</table>
+
+#if ($status)
+  <font style="color: green">$status</font>
+#end
+
+<br/>
+<form action="$jslink.Template" method="post">
+  <h2>Click the button below to add 
+  #if ($proxies)
+    another 
+  #else
+  a
+  #end
+  GSI proxy credential to your account:</h2> 
+    <input type="submit" name="eventSubmit_doGet_proxy_screen" value="Get New Proxy" style="font-size:10; background-color: $skin.getTitleBackgroundColor()">
+</form>
+
+</font>

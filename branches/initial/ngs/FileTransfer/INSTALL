@@ -1,0 +1,37 @@
+--------------------------------------------------------------------------------
+                              Grid FTP Client Portlet 
+--------------------------------------------------------------------------------
+
+First you need to specify alliance.home in build.properties.
+ 
+To compile source:
+------------------
+ 
+  ant build
+ 
+To install files into Jetspeed:
+-------------------------------
+ 
+  ant deploy
+ 
+To build a binary distribution:
+-------------------------------
+ 
+  ant bindist
+
+  Note that if you want to change the version number you'll need to update the 
+  VERSION file.  
+
+--------------------------------------------------------------------------------
+                           Extreme! Computing Lab
+                       http://www.extreme.indiana.edu
+
+
+
+
+
+
+
+
+
+

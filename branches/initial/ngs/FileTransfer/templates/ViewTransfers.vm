@@ -1,0 +1,62 @@
+<div align="left">
+
+#set ( $link1 = $jslink.getPortletById($portlet.ID).addQueryData("eventSubmit_doShow_main","") )
+#set ( $link2 = $jslink.getPortletById($portlet.ID).addQueryData("eventSubmit_doShow_progress","") )
+
+<table cellspacing=10>
+   <tr>
+	<td>
+	   <a href= "${link1}">
+             Switch to directory view 
+	   </a>
+        </td>
+	<td>
+	   <a href= "${link2}">
+              Refresh 
+	   </a>
+        </td>
+   </tr>
+</table>
+
+#if($FileTransfer_Queue)
+ <table columns=4 border=0 cellpadding=5>
+ <tr>
+  <td align="center"><b>Source</b></td>
+  <td align="center"><b>Destination</b></td>
+  <td align="center"><b>Job Status</b></td>
+  <td align="center"><b>Progress</b></td>
+ </tr>
+ #set ($j = $FileTransfer_Queue.size() - 1)
+ #foreach ($i in [0..$j])
+   #set ($transfer = $FileTransfer_Queue.get($i))
+   #set ($fromURL = $FileTransfer_fromURLs.get($i))
+   #set ($toURL = $FileTransfer_toURLs.get($i))
+   <tr>
+   ##<td align="center">$fromURL.getHost() <br> $fromURL.getPort() <br> $fromURL.getPath() </td>
+   ##<td align="center">$toURL.getHost() <br> $toURL.getPort() <br> $toURL.getPath() </td>
+   <td> $fromURL.getPath() </td>
+   <td> $toURL.getPath() </td>
+    #if ($transfer.progress == 100)
+        <td align="center">Finished</td>
+    #else
+        <td align="center">$transfer.status</td>
+    #end
+    #if ($transfer.status == "Finished")
+        <td align="center"> 100 %</td>
+    #else
+        <td align="center">$transfer.progress %</td>
+    #end
+   </tr>
+ #end
+ </table>
+#else
+ <table width=100%>
+   <tr>
+	<td>
+            No file transfers in progress.
+        </td>
+   </tr>
+  </table>
+#end
+ 
+</div>

@@ -1,0 +1,11 @@
+catalina.home=/u/gkandasw/install/jakarta-tomcat-4.1.24
+alliance.home=/u/gkandasw/install/jakarta-tomcat-4.1.24/webapps/alliance
+project.name=alliance
+
+#########################################
+# New User Registration mail support for alliance 
+#########################################
+
+mail.server=whale.cs.indiana.edu
+alliance_admin=gkandasw@cs.indiana.edu
+
