@@ -868,6 +868,10 @@ public class ISISCsmdMapper implements CsmdMapper
          buildMDDataDescription(dataset_id, sbr, ii+li, "datacollection" , true) ;
          buildMDDataCollectionLocator(key, sbr, ii+li, null, true) ;
          buildMDRelatedReferance(key, sbr, ii+li, "datacollection", true) ;
+
+         Statement t_t_s = null ;
+         ResultSet t_t_r = null ;
+         //HERE-need to iterate through all ados
          buildMDAtomicDataObject(key, sbr, ii+li, null, true) ;
          //won't need the recursive call for isis - but maybe in the future
          //buildMDDataCollection(key, sbr, ii+li, "datacollection", true) ;
@@ -894,8 +898,9 @@ public class ISISCsmdMapper implements CsmdMapper
          t_s=s ;
       }
       //
-
-
+      buildMDDataDescription(dataset_id, sbr, ii+li, "datacollection" , true) ;
+      
+      
       //
       return ;
    }
