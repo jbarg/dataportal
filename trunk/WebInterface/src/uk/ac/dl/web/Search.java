@@ -97,7 +97,7 @@ public class Search {
                 wr.write("<td>"+dis+"</td>");
                 wr.write("<td>"+new java.util.Date()+"</td>");
                 wr.write("<td>"+waiting+"</td>");
-                wr.write("<td><a href='../servlet/ResendQuery?discipline="+discipline+"&wait="+waiting+""+buff2.toString()+"'>Resend Query</a></td></tr>");
+                wr.write("<td><a href='../servlet/ResendQuery?discipline="+discipline+"&wait="+waiting+""+buff2.toString()+"'>Resend Query</a></td></tr>\n");
                 wr.close();
             }
         }
