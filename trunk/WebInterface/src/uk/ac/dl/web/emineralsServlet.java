@@ -152,7 +152,7 @@ public class emineralsServlet extends HttpServlet {
             session.setAttribute("username", reName);
             session.setAttribute("passphrase", rePass);
             session.setAttribute("LOGIN_STATUS", new Boolean(true));
-           session.setMaxInactiveInterval(Integer.parseInt(lifetime));
+            session.setMaxInactiveInterval(Integer.parseInt(lifetime));
             //get HPC info out of the prop file
             String isHPC  = prop.getProperty("isHPC");
             String HPC_url = prop.getProperty("HPC_url");

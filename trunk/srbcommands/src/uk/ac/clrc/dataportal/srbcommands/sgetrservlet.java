@@ -26,11 +26,13 @@ public class sgetrservlet extends HttpServlet {
     Log log = LogFactory.getLog(this.getClass().getName());
     private boolean sinitdone = false;
     private Properties props = null;
+    private ServletConfig scon = null ;
     
     public void init(ServletConfig config) throws ServletException {
+        scon = config;
         super.init(config);
         try {
-            props = getProps();
+            
             this.Sinit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,13 +48,13 @@ public class sgetrservlet extends HttpServlet {
         }
     }
     
-    public Properties getProps() throws Exception {
-        String propertiesFileName = "/home/maw24/srb.properties";
+    public Properties getProps(String propertiesFileName) throws Exception {
+        //String propertiesFileName = "/home/tomcat4/srb.properties";
         
         try {
-            log.info("Loading SRB properties from " + propertiesFileName);
+            log.info("Loading SRB properties from " + propertiesFileName+File.separator+"WEB-INF"+File.separator+"srb.properties");
             props = new Properties();
-            FileInputStream in = new FileInputStream(propertiesFileName);
+            FileInputStream in = new FileInputStream(propertiesFileName+File.separator+"WEB-INF"+File.separator+"srb.properties");
             props.load(in);
             in.close();
         }
@@ -85,41 +87,56 @@ public class sgetrservlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, java.io.IOException {
         
+        ServletContext sc = scon.getServletContext();
+        String workingDir = sc.getRealPath("");
+        try{
+            props = getProps(workingDir);
+        }
+        catch(Exception e){
+            log.warn(e);
+            throw new Exception("Unable to load properties file");
+        }
         ServletOutputStream out = response.getOutputStream();
         
         try {
             
             //does file /tmp/srbtemp exist
-            File srbtemp = new File("/tmp/srbtemp");
-            if(!srbtemp.exists()) srbtemp.mkdir();            
+            File srbtemp = new File(props.getProperty("srbDest"));
+            if(!srbtemp.exists()) srbtemp.mkdir();
             
             response.setContentType("application/download");
             response.setBufferSize(65536);
             String dir = request.getParameter("dir");
             String filename = dir.substring(dir.lastIndexOf("/") + 1);
             filename = filename.replace('.','_');
-            response.setHeader("Content-disposition","attachment; filename=" + filename + ".zip");
+            response.setHeader("Content-disposition","attachment; filename=" + filename + ".tar");
             //this is the one that is working with the whole collection
-            //LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sget -r " + dir + " /tmp/srbtemp/" + request.getSession().getId());
+            File cre = new File(props.getProperty("srbDest")+File.separator+request.getSession().getId());
+            cre.mkdir();
+            
+            LaunchProcess.runCommand( props.getProperty("srbHome") + File.separator+"Sget -r " + dir + File.separator+"*.* "+props.getProperty("srbDest") + File.separator+request.getSession().getId());
             
             //this is my one with the single files
-            LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sls -C " + dir + " > /tmp/srbtemp/" + request.getSession().getId()+"conf");
-            Vector files = ReaderRights.ReaderRights("glen",request.getSession().getId()+"conf");
+            // LaunchProcess.runCommand("/bin/sh -c \""+ props.getProperty("srbHome") + "/Sls -C " + dir + " > /tmp/srbtemp/" + request.getSession().getId()+"conf\"");
+            
+            /*Vector files = ReaderRights.ReaderRights("glen","/tmp/srbtemp/"+request.getSession().getId()+"conf",Runtime.getRuntime().exec(props.getProperty("srbHome") + "/Sls -C " + dir ).getInputStream());
             StringBuffer filenames = new StringBuffer();
             for(int i = 0; i < files.size();i++){
                 filenames.append(" "+files.get(i));
             }
-            
-            LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sget  " + filenames.toString() + " /tmp/srbtemp/" + request.getSession().getId());
-            
-            
+             
+            LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sget  -r " + dir +" "+ filenames.toString() + " /tmp/srbtemp/" + request.getSession().getId());
+             
+             
             // Even though this works when typed into a shell it doesn't work from here!!  More work needed.....
             //LaunchProcess.runCommand( "/bin/sh -c \"cd /tmp/srbtemp/" + request.getSession().getId() + ";/usr/bin/zip -mr /tmp/srbtemp/" + request.getSession().getId() + ".zip .\"");
+             */
             
             // Need to fix the above command to strip off the extra path information that we don't want
-            LaunchProcess.runCommand( "/usr/bin/zip -mr /tmp/srbtemp/" + request.getSession().getId() + ".zip /tmp/srbtemp/" + request.getSession().getId());
+            //LaunchProcess.runCommand( "/usr/bin/zip -mr /tmp/srbtemp/" + request.getSession().getId() + ".zip /tmp/srbtemp/" + request.getSession().getId());
+            LaunchProcess.runCommand( props.getProperty("tarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             
-            File myFileIn = new File("/tmp/srbtemp/" + request.getSession().getId() + ".zip");
+            File myFileIn = new File(props.getProperty("srbDest")+File.separator + request.getSession().getId() + ".tar");
             FileInputStream myFileInputStream = new FileInputStream(myFileIn);
             BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
             
@@ -137,16 +154,18 @@ public class sgetrservlet extends HttpServlet {
             myBufferedInputStream.close();
             
             out.close();
-            LaunchProcess.runCommand( "/bin/rm /tmp/srbtemp/" + request.getSession().getId() + ".zip");
+            LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar");
+            LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() );
+            
         }
-        catch (jafileconfva.lang.Exception e) {
+        catch (java.lang.Exception e) {
             
             // Better error handling is required for when things go wrong.....
             
             response.flushBuffer();
             response.setContentType("text/html");
             response.setHeader("Content-disposition",null);
-
+            
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet</title>");
