@@ -56,6 +56,10 @@ public class SRBTransfer extends HttpServlet {
             String urlTo = request.getParameter("urlTo");
             String sid = (String)session.getAttribute("sessionid");
             String wd =  (String)session.getAttribute("wd");
+            String srb_location; 
+            String srb_password; 
+            String data_transfer_location;
+            String data_transfer_password;
             try{
                 //locate the prop file.  Normal get this from web.xml file
                 
@@ -63,9 +67,10 @@ public class SRBTransfer extends HttpServlet {
                 //load properties
                 Properties props = new Properties();
                 props.load(new FileInputStream(wd+File.separator+"WEB-INF"+File.separator+"webserviceslocation.conf"));
-                String srb_location = props.getProperty("srb_location");
-                String srb_password = props.getProperty("srb_password");
-                
+                srb_location = props.getProperty("srb_location");
+                srb_password = props.getProperty("srb_password");
+                data_transfer_location = props.getProperty("data_transfer_location");
+                data_transfer_password = props.getProperty("data_transfer_password");
                 
                 
                 //need to add section to get the value from properties file.
@@ -124,7 +129,7 @@ public class SRBTransfer extends HttpServlet {
             }
             String result = "";
             String error= "";
-            File savefile;
+            File savefile = null;
             try{
                 //HARD CODE FOR NOW
                 
@@ -152,7 +157,7 @@ public class SRBTransfer extends HttpServlet {
                 
                 
                 //read in the message
-                URL  urlservlet = new URL("http://"+InetAddress.getLocalHost().getCanonicalHostName()+":8080/datatransfer/servlet/TransferDataServlet?cred="+save+"&from="+tarFile+"&to="+urlTo+"&passwd=dpu()3^");
+                URL  urlservlet = new URL(data_transfer_location+"?cred="+save+"&from="+tarFile+"&to="+urlTo+"&passwd="+data_transfer_password);
                 
                 URLConnection urlc = urlservlet.openConnection();
                 InputStream input = urlc.getInputStream();

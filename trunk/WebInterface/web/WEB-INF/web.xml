@@ -342,10 +342,7 @@
 		<servlet-name>Transfer</servlet-name>
 		<url-pattern>/servlet/Transfer</url-pattern>
 	</servlet-mapping>
-        <servlet-mapping>
-		<servlet-name>TransferCOPServlet</servlet-name>
-		<url-pattern>/servlet/TransferCOPServlet</url-pattern>
-	</servlet-mapping>
+   
 	<servlet-mapping>
 		<servlet-name>TestTransfer</servlet-name>
 		<url-pattern>/servlet/TestTransfer</url-pattern>
