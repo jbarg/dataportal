@@ -61,7 +61,7 @@ facilities,E-minerals, data, search, Glen Drinkwater, Synchrotron Radiation,Brit
 <a href="../jsp/BasicSearch.jsp">DataPortal</a>
 <br />
 <br />
-<a href="http://wk-pc1.dl.ac.uk/HPCPortal/Session/usertransfer.cgi?session=<%=sessionid%>">HPC Portal</a>
+<a href="http://wk-pc1.dl.ac.uk/HPCPortal/Session/usertransfer.cgi?session=${sessionScope.sessionid}">HPC Portal</a>
 <br />
 <br />
 <a href="http://wk-pc1.dl.ac.uk:8080/datainsertion/SelectStudy.jsp">Insertion Tool</a>
