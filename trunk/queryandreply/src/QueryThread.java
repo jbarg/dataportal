@@ -10,7 +10,7 @@ import org.jdom.input.DOMBuilder;
 import org.jdom.Element;
 import org.jdom.Document;
 import java.util.*;
-
+import org.apache.axis.*;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
@@ -50,15 +50,15 @@ public class QueryThread extends Thread {
         logger.info(getFacilityName()+":creating thread");
         
     }
-
+    
     /** Creates a new instance of QueryThread with permissions */
     public QueryThread(String facilityName, String topic, Permissions p) {
         
         this(facilityName, topic);
-        this.p = p;    
+        this.p = p;
         
     }
-
+    
     public void run() {
         
         logger.info(getFacilityName()+":"+"starting thread");
@@ -68,9 +68,42 @@ public class QueryThread extends Thread {
             String wrapperAddress = lookup();
             sendQuery(wrapperAddress, p.hasMetadataAccess(), p.hasDataAccess());
             
-        } catch (Exception e) {
-            logger.error(getFacilityName()+":"+e);
-            return;
+        }
+       /* catch(AxisFault a){
+           logger.error(getFacilityName()+":"+a.getFaultActor());
+             logger.error(getFacilityName()+":"+a.getFaultCode());
+               logger.error(getFacilityName()+":"+a.getMessage());
+            if(a.getMessage(). startsWith("java.net.ConnectException: Connection refused:")){
+                //added section for catching connection refused.
+                //create new document and make the iterator
+                Document doc = new Document(new Element("CLRCMetaData"));
+                doc.getRootElement().setAttribute("error","Connection Refused");
+                iterator = doc.getContent().iterator();
+                GOT_REPLY=true;
+            }
+           return;
+        
+        }*/
+        catch (Exception e) {
+            if(e.toString().startsWith("java.net.ConnectException: Connection refused")){
+                logger.error(getFacilityName()+" Connection refused");
+                Document doc = new Document(new Element("CLRCMetaData"));
+                doc.getRootElement().setAttribute("error","Connection Refused");
+                iterator = doc.getContent().iterator();
+                GOT_REPLY=true;
+            }
+            else if(e.toString().startsWith("(500)")){
+                logger.error(getFacilityName()+ " Service down");
+                Document doc = new Document(new Element("CLRCMetaData"));
+                doc.getRootElement().setAttribute("error","Connection Refused");
+                iterator = doc.getContent().iterator();
+                GOT_REPLY=true;
+            }
+            else{
+                logger.error(getFacilityName()+":"+e);
+                               
+                return;
+            }
         }
     }
     
@@ -79,7 +112,7 @@ public class QueryThread extends Thread {
         //DUMMY LOOKUP & WRAPPERS
         //String endpoint = "http://localhost:8080/axis/services/ServicesSimulator";
         //LIVE LOOKUP & WRAPPERS
-      //  String endpoint = "http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService";
+        //  String endpoint = "http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService";
         Properties prop = new Properties();
         prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
         String defaultid = prop.getProperty("defaultid");
@@ -103,7 +136,7 @@ public class QueryThread extends Thread {
         String[] result = (String[]) call.invoke( new Object [] {facilityList, "XMLW"});
         
         logger.info(getFacilityName()+":"+"address of wrapper is "+result[0]);
-                
+        
         return result[0];
         
     }
@@ -111,9 +144,9 @@ public class QueryThread extends Thread {
     private void sendQuery(String wrapperAddress, boolean MetadataAccess, boolean DataAccess) throws Exception {
         // Add later - send query with metadataAccess and dataAccess
         sendQuery(wrapperAddress);
-    
+        
     }
-    private void sendQuery(String wrapperAddress) throws Exception {
+    private void sendQuery(String wrapperAddress) throws Exception ,AxisFault{
         
         logger.info(getFacilityName()+":sending query to " + wrapperAddress);
         
@@ -127,15 +160,22 @@ public class QueryThread extends Thread {
         System.out.println("FROM WRAPPER -- SENT IS : "+topic);
         // Call service
         org.w3c.dom.Element domElem = (org.w3c.dom.Element) call.invoke( new Object [] {topic});
-                
+        
         // Save xml results in a JDOM element
         DOMBuilder builder = new DOMBuilder();
         Element jdomElem = builder.build(domElem);
         
         List list = jdomElem.getContent();
         logger.info(getFacilityName()+":received XML ***"+list.size()+" elements***");
-        iterator = list.iterator();
-                
+        Document newdoc = null;
+        if(list.size()==1){
+            newdoc = new Document(new Element("CLRCMetadata"));
+            newdoc.getRootElement().setAttribute("error","No Results");
+            iterator = newdoc.getContent().iterator();
+        }
+        else{
+            iterator = list.iterator();
+        }
         GOT_REPLY = true;
     }
 }
