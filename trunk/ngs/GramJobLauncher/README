@@ -1,21 +1,10 @@
---------------------------------------------------------------------------------
-README for Gram Job Launcher Version VERSION 
---------------------------------------------------------------------------------
+GRAM Job Launcher Tool for NGS Portal
+=====================================
 
-To compile source:
-------------------
+GRAM Job Launcher Tool for NGS Portal is designed as a CHEF tool to perform GRAM
+job submission to remote computing resource. It supports both interactive and
+batch job submission.
 
-ant all
 
-To install files into Jetspeed:
--------------------------------
-
-ant deploy
-
-Note: 
-1. CATALINA_HOME must be predefined.
-2. If you want to change the version number you'll need to update the VERSION file.  
-
---------------------------------------------------------------------------------
-                           Extreme! Computing Lab
-                       http://www.extreme.indiana.edu
+CCLRC e-Science Centre
+http://www.e-science.clrc.ac.uk/
