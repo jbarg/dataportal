@@ -1,0 +1,11 @@
+#Service Types to be created as TModels in UDDI
+ACM=Access Control Module
+AUTH=Authentication
+FACADM=Facilities Administation
+LOOKUP=Service Lookup
+QNR=Query and Reply
+XMLW=XML Wrapper
+SESSION=Session Manager
+CART=Shopping Cart
+RASGRIB=RasDaMan
+DTS=Data Transfer
