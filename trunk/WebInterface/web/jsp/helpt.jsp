@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<%@ page import="ac.dl.xml.*,java.util.*, java.io.*"%>
+<%@ page import="uk.ac.dl.xml.*,java.util.*, java.io.*"%>
 <html>
 <head>
 <title>CLRC Data Portal/Estedi - Data Portal query results</title>
