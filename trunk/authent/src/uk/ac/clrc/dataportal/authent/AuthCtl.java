@@ -13,7 +13,7 @@ import org.jdom.input.*;
 import java.lang.*;
 import uk.ac.clrc.dataportal.authent.lookupclient.*;
 
-
+import org.globus.security.GlobusProxy;
 //web axis stuff
 import javax.xml.rpc.ParameterMode;
 import org.apache.axis.client.Call;
@@ -51,8 +51,9 @@ public class AuthCtl {
         
     }
     
-    
-    private boolean idCheck( String userName, String userPassword ) throws Exception {
+    // This was used when we checked the ID in throws database. Kept in case we revert
+    // mrd67 17/02/2003
+    private boolean idCheckDb( String userName, String userPassword ) throws Exception {
         //users password and name from database
         boolean loggedIn = false;
         try {
@@ -72,6 +73,44 @@ public class AuthCtl {
         catch (Exception e) {
             throw e;
         }
+        return ( loggedIn );
+    }
+    
+    // new version of idCheck that uses MyProxy and GSI certificates
+    private boolean idCheck( String userName, String userPassword ) throws Exception {
+        //users password and name from database
+        boolean loggedIn = false;
+        GlobusProxy portalProxy = null;
+        
+        try {
+            portalProxy = PortalProxy.getPortalProxy();
+            
+            //            System.out.println( "Successfully created proxy for: ");
+            //            System.out.println( "\t\tUser: " + portalProxy.getSubject() );
+            //            System.out.println( "\t\tCA:  " + portalProxy.getIssuer() );
+        }
+        catch( Exception e ) {
+            System.out.println( "Caught exception while creating portal proxy:\n\t" + e.toString() );
+            System.exit( -1 );
+        }
+        
+        GlobusProxy delegateUserProxy = null;
+        
+        try {
+            delegateUserProxy = DelegateProxy.getProxy( "rty", "test", portalProxy );
+            //            System.out.println( "Successfully retrieved proxy" );
+            loggedIn = true;
+        }
+        catch( Exception e ) {
+            System.out.println( "Caught exception while retrieving proxy:\n\t" + e.toString() );
+        }
+        
+        //        X509Certificate userCert = delegateUserProxy.getUserCert();
+        //        System.out.println( "---> User:     " + userCert.getSubjectDN() );
+        //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
+        //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
+        
+        
         return ( loggedIn );
     }
     
@@ -139,7 +178,7 @@ public class AuthCtl {
         LookUpModule port = lookupService.getLookUpService();
         String[] facilities = { "Dataportal" };
         String[] facilityEndPoints = port.lookupEndpoint(facilities, "SESSION");
-
+        
         // String endpoint = "http://escvig1.dl.ac.uk:8080/axis/services/SessionManager";
         
         // error handling in case no endpoint in returned!
