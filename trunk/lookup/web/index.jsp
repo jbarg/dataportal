@@ -3,6 +3,6 @@
 <head><title>DataPortal Lookup Module</title></head>
 <body>
 <h1>Data Portal Lookup Service</h1>
-<p>http://escpc10.esc.rl.ac.uk:8080/lookup/servlet/AxisServlet</p>
+<p>http://escdmg.dl.ac.uk:8080/lookup/services</p>
 </body>
 </html>
