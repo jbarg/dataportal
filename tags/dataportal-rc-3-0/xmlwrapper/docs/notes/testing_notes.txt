@@ -1,0 +1,228 @@
+
+http://sas27vig.dl.ac.uk:8080/dataportal/clrcmetadata.dtd
+
+url for the DTD
+
+---------------
+
+original one:
+
+<!DOCTYPE CLRCMetadata SYSTEM "clrcmetadata.dtd">
+
+--------------
+
+xhtml one:
+
+http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd
+
+-------------- test query:
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=Discipline%3DALL
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=Discipline%3DV-velocity -worked also
+
+http:/sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=%27Discipline%3D/earth%20sciences/atmosphere/atmospheric%20temperature/Temperature%27
+
+------------- actual formats meant to be dealt with:
+
+<url name>?where=Topic=%27/level1/level2%27;userid=dpuser;
+or 
+<url name>?where=Topic%20Like%20%27%/level1/level2%%27;userid=dpuser;
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=Discipline%3D%27ALL%27
+	i.e.						?where=Discipline='ALL'
+
+
+http:/sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=Discipline%3D%27/earth%20sciences/atmosphere/atmospheric%20temperature/Temperature%27
+
+or
+
+http:/sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=Discipline%20Like%20%27/earth%20sciences/atmosphere/atmospheric%20temperature/Temperature%27
+
+valid topic (only 6):
+
+Geopotential (at the surface, orography)
+Relative humidity
+Temperature
+U-velocity
+V-velocity
+Vertical velocity
+
+------------- some sql:
+
+ select year||month||day||hour||minute||second "TIME" from moment where moment_id = 12 ;
+
+ insert into moment (MOMENT_ID,MOMENT_NAME,YEAR,MONTH,DAY,HOUR,MINUTE,SECOND,UTC_DIFFERENCE) values (97,'97',2001,10,4,4,4,4,-5) ;
+
+ insert into moment (MOMENT_ID,MOMENT_NAME,YEAR,MONTH,DAY,HOUR,MINUTE,SECOND,UTC_DIFFERENCE)
+ values (99,'99',2001,10,4,4,4,4,-11) ;
+
+ select lpad(utc_difference,2,'0') from moment ;
+
+YYYYMMDD24HHMISSTTT
+
+brus - F2973452
+
+---------------
+http://burks.bton.ac.uk/
+
+ISO-8859-1
+Measurement	StudyName
+%20Like%20%27%25<value>%25%27%20<AND|OR>%20
+%3D%27value%27%20<AND|OR>%20
+--------------------------------------------------------------------------------- some test urls from toria
+HERE
+
+http://escvig2.dl.ac.uk:8080/xmlwrapper/xmlwrapper_mpim?where=%20Discipline%20like%20%27%25/earth%20sciences/atmosphere%25%27%20and%20DMInstitutionName%20like%20%27%25BADC%25%27;UserID%3ddpuser
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=Discipline=%27ALL%27
+
+-----------------------------------
+some test url:
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper?where=Discipline=%27ALL%27 - not work need to refer to url-pattern not servlet name 
+
+
+(test the default context thingy:
+
+http://sas27vig.dl.ac.uk:8080/dataportal/servlet/CeraXmlWrapper?where=Discipline=%27ALL%27
+--------------------------------
+http://sas27vig.dl.ac.uk:8080/dataportal/grib/lipr00010100
+http://sas27vig.dl.ac.uk:8080/dataportal/files/xmlwrapper_badc.xml
+----------------------------------
+
+dpuser
+d@t@p0rt@1
+
+----------------------------------
+for calling the grib things:
+
+http://twister.badc.rl.ac.uk:8080/examples/servlet/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_130
+
+http://twister.badc.rl.ac.uk:8080/examples/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_130
+
+-- testing at home --
+
+http://sas27vig.dl.ac.uk:8080/rasdaman/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_130
+
+---------------------
+
+/home/tornado/rasdaman/obsolete/util/bin/wget 'http://twister.badc.rl.ac.uk:8080/examples/servlet/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_132'
+
+/home/tornado/rasdaman/obsolete/util/bin/wget 'http://twister.badc.rl.ac.uk:8080/rasdaman/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_132'
+
+/home/tornado/rasdaman/obsolete/util/bin/wget 'http://twister:8080/examples/servlet/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_132'
+
+/home/tornado/rasdaman/obsolete/util/bin/wget 'http://twister:8080/rasdaman/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_132'
+
+
+/home/tornado/rasdaman/obsolete/util/bin/wget 'http://twister.badc.rl.ac.uk:8080/examples/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_130'
+
+http://twister.badc.rl.ac.uk:8080/test/servlet2
+
+---------------------------------
+what works: (servlet mapping done and lib added with rasj & oracle drivers under WEB-INF) - wel as much as is possible given some ras table was not actually filled in
+
+/home/tornado/rasdaman/obsolete/util/bin/wget 'http://twister:8080/examples/servlet/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_132'
+
+/home/tornado/rasdaman/obsolete/util/bin/wget 'http://twister:8080/examples/RasGribServlet?operation_mode=minimum&ras_collection=PARAM_132'
+
+
+kind off ?!! - something about calling rasadmin
+--------------------------------
+
+<?xml-stylesheet type="text/xsl" href="C:\WINNT\Profiles\sas27\Desktop\xml results\simpleresulttable.xsl"?>
+the way to add a stylesheet reference
+
+--------------------------------
+
+the dtd reference:
+
+<!DOCTYPE CLRCMetadata PUBLIC "-//W3C//DTD CLRC-MD 1.0 Strict//EN" "http://sas27vig.dl.ac.uk:8080/dataportal/clrcmetadata.dtd">
+
+
+-----------------------------------
+Advanced Search Queries:
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper?where= Discipline like '%/earth sciences/atmosphere/atmospheric temperature/temperature%' and DMInstitutionName like '
+%BADC%' and StartDate like '%19900303%' and EndDate like '%19920604%';UserID=dpuser
+
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=%20Discipline%20like%20%27%25/earth%20sciences/atmosphere/atmospheric%20temperature/temperature%25%27%20and%20DMInstitutionName%20like%20%27%25BADC%25%27%20and%20StartDate%20like%20%27%2519900303%25%27%20and%20EndDate%20like%20%27%2519920604%25%27;UserID=dpuser
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=%20Discipline%20like%20%27%25/earth%20sciences/atmosphere/atmospheric%20temperature/temperature%25%27%20and%20DMInstitutionName%20like%20%27%25BADC%25%27%20and%20StartDate%20like%20%27%2520001103%25%27%20and%20EndDate%20like%20%27%2520001104%25%27%20and%20StudyName%20like%20%27%25lipr00010100.Temperature.cera16%25%27;UserID=dpuser 
+
+---------------------------------
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=%20StudyName%20like%20%27%25lipr00010100.Temperature.cera16%25%27;UserID=dpuser 
+---------------------------------
+
+The data portal on my machine:
+
+http://sas27vig.dl.ac.uk:8080/dp/html/ui/front.html
+
+hand to change:
+
+1.
+
+<context>\html\front.htm
+and
+<context>\html\front.html
+
+to point to /realdp/servlets/DataPortal
+
+2.  its in notes.txt in the <context>
+
+-------------------------------------------------------------------
+
+SELECT ENTRY_ID FROM ENTRY WHERE lower(ENTRY_NAME||'.temperature.cera'||ENTRY_ID) LIKE 
+'%lipr00010100.temperature.cera102%' UNION 
+SELECT ENTRY_ID FROM CAMPAIGN WHERE PROJECT_ID IN 
+(SELECT PROJECT_ID FROM PROJECT WHERE lower(PROJECT_NAME) 
+LIKE '%lipr00010100.temperature.cera102%')
+
+-------------------------- Glens data portal ---------------------
+
+http://gjd37vig.dl.ac.uk:9000/ver7/Login.html
+
+
+----------------------------------------------------------------------
+
+http://sas27vig.dl.ac.uk:8080/test_wrapper/xmlwrapper_badc?where=Discipline=%27ALL%27
+
+
+http://gjd37vig.dl.ac.uk:9000/gjd/Login.html -- test url for the dp
+
+------------------------------------------------------------------------
+
+<LogicalDescription>
+   <Parameter>
+      <ParamName>temperature</ParamName>
+      <Units>K</Units>
+   </Parameter>
+<LogicalDescription> - storing the rasdaman information
+
+TypeofData as RasDaMan-Collection(MDD)
+
+
+-----------------------------------------------------------------
+for cache re-generation:
+
+http://escvig2.dl.ac.uk:8080/xmlwrapper/xmlwrapper_badc?where=Discipline%3DALL
+
+http://escvig2.dl.ac.uk:8080/xmlwrapper/xmlwrapper_mpim?where=Discipline%3DALL
+
+
+----------------------------------
+for testing:
+
+http://escvig2.dl.ac.uk:8080/xmlwrapper/xmlwrapper_mpim?where=%27Discipline%3D/earth%20sciences/atmosphere/atmospheric%20temperature/Temperature%27
+ 
+http://escvig2.dl.ac.uk:8080/xmlwrapper/xmlwrapper_badc?where=%27Discipline%3D/earth%20sciences/atmosphere/atmospheric%20temperature/Temperature%27
+
+
+
+-----------------------------------
+e.g. of valid where clause:
+
+'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'
