@@ -80,35 +80,66 @@
 
    <target name="do" description="redirects ant call to all dataportal modules">
 
-      <ant antfile="ShoppingCart/build.xml" target="${target}"> </ant>
+      <ant antfile="ShoppingCart/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/ShoppingCart"/>
+      </ant>
 
-      <ant antfile="ISIS-SRD/build.xml" target="${target}"> </ant>
+      <ant antfile="ISIS-SRD/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/ISIS-SRD"/>
+      </ant>
 
-      <ant antfile="Rasgrib/build.xml" target="${target}"> </ant>
+      <ant antfile="RasGrib/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/RasGrib"/>
+      </ant>
 
-      <ant antfile="WebInterface/build.xml" target="${target}"> </ant>
+      <!-- 
+      <ant antfile="WebInterface/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/WebInterface"/>
+      </ant> to be re-instated sometime -->
 		
-      <ant antfile="xmlwrapper/build.xml" target="${target}"> </ant>
+      <ant antfile="xmlwrapper/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/xmlwrapper"/>
+      </ant>
 		
-      <ant antfile="lookup/build.xml" target="${target}"> </ant>
+      <ant antfile="lookup/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/lookup"/>
+      </ant>
 
-      <ant antfile="facility/build.xml" target="${target}"> </ant>
+      <ant antfile="facility/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/facility"/>
+      </ant>
 
-      <ant antfile="acm/build.xml" target="${target}"> </ant>
+      <ant antfile="acm/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/acm"/>
+      </ant>
 
-      <ant antfile="acmbadc/build.xml" target="${target}"> </ant>
+      <ant antfile="acmbadc/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/acmbadc"/>
+      </ant>
 
-      <ant antfile="acmisis/build.xml" target="${target}"> </ant>
+      <ant antfile="acmisis/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/acmisis"/>
+      </ant>
 
-      <ant antfile="acmpim/build.xml" target="${target}"> </ant>
+      <ant antfile="acmpim/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/acmpim"/>
+      </ant>
 
-      <ant antfile="authent/build.xml" target="${target}"> </ant>
+      <ant antfile="authent/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/authent"/>
+      </ant>
 
-      <ant antfile="lookup/build.xml" target="${target}"> </ant>
+      <ant antfile="lookup/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/lookup"/>
+      </ant>
 
-      <ant antfile="sessionmanager/build.xml" target="${target}"> </ant>
+      <ant antfile="sessionmanager/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/sessionmanager"/>
+      </ant>
 
-      <ant antfile="queryandreply/build.xml" target="${target}"> </ant>
+      <ant antfile="queryandreply/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/queryandreply"/>
+      </ant>
 
    </target>
 	
