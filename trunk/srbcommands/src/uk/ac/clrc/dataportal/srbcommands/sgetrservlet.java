@@ -101,6 +101,7 @@ public class sgetrservlet extends HttpServlet {
             //check password
             String password = props.getProperty("srb_passwd");
             String exe = request.getParameter("format");
+            System.out.println("FORMAT is "+exe);
             if(exe == null ) exe  ="tar";
             //String executable = props.getProperty("tarHome");
             //if(exe.equals("tar")) executable = props.getProperty("tarHome")+" -cvf";
@@ -146,6 +147,7 @@ public class sgetrservlet extends HttpServlet {
             String filename = dir.substring(dir.lastIndexOf("/") + 1);
             filename = filename.replace('.','_');
             response.setHeader("Content-disposition","attachment; filename=" + filename + "."+exe);
+            System.out.println("File name ius "+filename+exe);
             //this is the one that is working with the whole collection
             File srbtempdir = new File(props.getProperty("srbDest"));
             if(!srbtempdir.exists()) srbtempdir.mkdir();
