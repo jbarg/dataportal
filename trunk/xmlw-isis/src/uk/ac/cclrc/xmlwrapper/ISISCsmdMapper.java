@@ -25,14 +25,15 @@ public class ISISCsmdMapper implements CsmdMapper
    int i_place_holder = 0 ;
    //indentation level for layout reasons (ti - tree indent - indent level for subtrees)
    String ti = null ;
-   int    token_indent = 0 ;
+   int    level_indent = 0 ;
+   String li = null ;
    //retrieve the database schema name if their is a need to prepend this before the table names
    String dbs = null ;
 
    public ISISCsmdMapper()
    {
       //setup wrapper name
-      ss.setWrapperName("isis") ; // perhaps this duplicates the facility name - but they could be different
+      ss.setWrapperName("ISIS") ; // perhaps this duplicates the facility name - but they could be different
       //setup these local variables as it would be too verbose to put them at the start of each function in this class
       //get local values needed from SessionSingleton
       this.ss = SessionSingleton.getInstance() ;
@@ -41,15 +42,13 @@ public class ISISCsmdMapper implements CsmdMapper
       //setup logger
       ss.setLogger(ISISCsmdMapper.class.getName() + ".class" ) ;
       this.log = ss.getLogger() ;
-      this.s = ss.getStatement() ;
-      this.r = ss.getResultSet() ;
       this.place_holder = ss.place_holder ;
       this.i_place_holder = ss.i_place_holder ;
       this.ti = indentToStr(ss.indent) ;
-      this.token_indent = ss.indent ;
+      this.level_indent = ss.indent ;
+      this.li = indentToStr(levell_ident) ; 
       //retrieve the database name
       this.dbs = ss.getDbs() ;
-
 
       try
       {
@@ -65,7 +64,10 @@ public class ISISCsmdMapper implements CsmdMapper
       DBHelper dbh = ss.getRelDBHelper() ;
       dbh.connectToDB() ;
 
-
+      //note have to remember to re-set the local handles from the SessionSingleton if we have disconnected
+      //as the local handles will be stale
+      this.s = ss.getStatement() ;
+      this.r = ss.getResultSet() ;
 
    }
 
@@ -361,152 +363,208 @@ public class ISISCsmdMapper implements CsmdMapper
    //
    //
 
-   //Indexing 
-   void buildMDTopic(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   //Indexing  - note ii is initial indent - is the indentation level (i.e. number of space in a String)
+   void buildMDTopic(String key, StringBuffer sbr, String  ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
 
       sbr.append(ii +  "<Topic>\n") ;
 
-      buildMDKeywords(key, sbr, (initial_indent+token_indent), null) ;
+      buildMDKeywords(key, sbr, ii+li, null) ;
       //following will have to list all distinct subjects related to study
-      buildMDSubject(key, sbr, (initial_indent+token_indent), null) ;
+      //ISIS only have keywords
+      //buildMDSubject(key, sbr, ii+li, null) ;
 
       sbr.append(ii +  "</Topic>\n") ;
 
       return ;
    }
 
-   void buildMDKeywords(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   //note spaceing of ii worked out for you by calling function - thus we pass on requests for ii + li to called methods
+   void buildMDKeywords(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+      String keyword = place_holder ;
+
+      r = s.executeQuery("select name from " + dbs + "keyword where keyword.id in (select keyword.id from " + dbs + "keyword_list" +
+                         " where study_id  = '" + key + "'") ; 
+      
+      sbr.append(ii + "<Keywords>\n") ;
+
+      //temp - perhaps need re-classifying
+      sbr.append(ii+li+"<Discipline>" + ss.getWrapperName() + "</Discipline>\n") ;
+
+      while(r.next())
+      {
+         r.getRow() ;
+         keyword = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+         sbr.append(ii+li+"<Keyword>" + keyword + "</Keyword>\n") ;
+      }
+      r.close() ;
+ 
+      sbr.append(ii + "</Keywords>\n") ;
 
       return ;
    }
 
-   void buildMDSubjects(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
+   //ISIS only have keywords
+   //void buildMDSubjects(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   //{
+   //   String ii = indentToStr(initial_indent) ;
+   //
+   //     return ;
+   // }
 
    //Study/investigation information (keeping mainly leaf node level complexity)
-   void buildMDStudy(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   void buildMDStudy(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+    
+      String studyname = place_holder ;
+      String notes = place_holder ; 
+
+      r = s.executeQuery("select name, notes from study where id='" + key + "'") ;
+      if(r.next())
+      {
+         r.getRow() ;
+         studyname = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+         notes = sr.LitWithEnt(xt.makeValid(r.getString("NOTES") ));
+      }
+      r.close() ;
+      sbr.append(ii + "<Study StudyID=\"" + key "\">\n") ;
+      sbr.append(ii + li + "<StudyName>" + studyname + "</StudyName>\n") ;
+
+      buildMDStudyInstitution(key, sbr, ii+li, null) ;  
+      buildMDStudyPerson(key, sbr, ii+li, null) ;  
+      buildMDStudyInformation(key, sbr, ii+li, null) ;  
+     
+      sbr.append(ii + li + "<Notes>" + notes + "</Notes>\n") ;
+
+      buildMDRelatedReferance(key, sbr, ii+li, null) ;  
+      buildMDInvestigation(key, sbr, ii+li, null) ;  
+
+      sbr.append(ii + "</Study>\n") ;
 
       return ;
    }
-   void buildMDNameRole(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //some where you might use type as
+       
+
+
+
+      return ;
+   }
+   void buildMDNameRole(String key, StringBuffer sbr, String ii, String type) throws SQLException //some where you might use type as
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 													   //you can have InstitutionRole and PersonRole
-   void buildMDContactDetails(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //similar to buildMDContact template
+   void buildMDContactDetails(String key, StringBuffer sbr, String ii, String type) throws SQLException //similar to buildMDContact template
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
-   void buildMDStudyPerson(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //similar to buildMDContact template
+   void buildMDStudyPerson(String key, StringBuffer sbr, String ii, String type) throws SQLException //similar to buildMDContact template
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
-   void buildMDStudyInformation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDStudyInstitution(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      //there is no such info in the ISIS ICAT yet so essentially putting in a meaningful place holder
+
+      sbr.append(ii + "<StudyInsitution>\n");
+      sbr.append(ii + li + "<Name institutiontype=\"research\">ISIS, RAL</Name>\n") 
+      sbr.append(ii + li + "<Role>Facility</Role>\n") ;
+      sbr.append(ii + "</StudyInsitution>\n");
+
+      return ;
+   }
+
+   void buildMDRelatedReference(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
-
-   void buildMDRelatedReference(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDRelatedReferanceLocation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-
-   void buildMDInvestigation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-
-   void buildMDDataHolding(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDDataDescription(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDDataTopic(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //will use Keywords & Subjects above
+   void buildMDRelatedReferanceLocation(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 
-   void buildMDLogicalDescription(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDParameter(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDTimePeriod(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDFacilityUsed(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDDataHoldingLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDInvestigation(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 
-   void buildMDCollectionLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDDataHolding(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
-   void buildMDAtomicDataObject(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDDataDescription(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
-   void buildMDADOLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //definately need type here
+   void buildMDDataTopic(String key, StringBuffer sbr, String ii, String type) throws SQLException //will use Keywords & Subjects above
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+
+   void buildMDLogicalDescription(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+   void buildMDParameter(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+   void buildMDTimePeriod(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+   void buildMDFacilityUsed(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+   void buildMDDataHoldingLocator(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+
+   void buildMDCollectionLocator(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+   void buildMDAtomicDataObject(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+   void buildMDADOLocator(String key, StringBuffer sbr, String ii, String type) throws SQLException //definately need type here
    {
       String ii = indentToStr(initial_indent) ;
 
@@ -515,28 +573,28 @@ public class ISISCsmdMapper implements CsmdMapper
  													     //files and selects
 
    //all the Misc type information
-   void buildMDAccessConditions(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDAccessConditions(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 
-   void buildMDLegalNotice(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDLegalNotice(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 
-   void buildMDRelatedPublication(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDRelatedPublication(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 
-   void buildMDOtherRelatedMaterial(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDOtherRelatedMaterial(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
@@ -545,7 +603,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
    
 
-   void buildMDContact(String key, StringBuffer sbr, int initial_indent, String contact_type) throws SQLException
+   void buildMDContact(String key, StringBuffer sbr, String ii, String contact_type) throws SQLException
    {
       String ii = indentToStr(initial_indent) ;
 
@@ -640,7 +698,6 @@ public class ISISCsmdMapper implements CsmdMapper
    //
    //
    //
-   //
 
    public void buildMetadataRecord(String key, StringBuffer sbr) throws SQLException
    {
@@ -650,393 +707,42 @@ public class ISISCsmdMapper implements CsmdMapper
          sbr.delete(0,sbr.length()) ;
       }
 
-      //dhl - dataholding location
-      //some local ones are needed otherwise it gets recursive
-      StringBuffer sbr_dhl = new StringBuffer() ;
-      StringBuffer sbr_dhl_files = new StringBuffer() ;
-
-      //get local values needed from SessionSingleton
-      SessionSingleton ss = SessionSingleton.getInstance() ;
-
-      StringReplace sr=ss.getStringReplace() ;
-      XmlText xt=ss.getXmlText() ;
-
-      Logger log = ss.getLogger() ;
-
-      Statement s = ss.getStatement() ;
-      ResultSet r = ss.getResultSet() ;
-
-      String place_holder = ss.place_holder ;
-      int i_place_holder = ss.i_place_holder ;
-      int indent = ss.indent ;
-
-      //retrieve the database name
-      String dbs = ss.getDbs() ;
-      
-      //using an indent of 3
-
       //all elements of the study need extracting as will be used later ;
       String study_id = place_holder ;
-      String study_name = place_holder ;
-      String funding = place_holder ;
-      String start_date = place_holder ;
-      String end_date = place_holder ;
-      String access_conditions = place_holder ;
-      String purpose = place_holder ;
-      String status = place_holder ;
-      String resources = place_holder ;
-      String notes = place_holder ;
-      //String related_study = place_holder ;
-      //String relation_type = place_holder ;
 
-      r = s.executeQuery("select study_id, name, funding, start_date, end_date, access_conditions, " +
-                         "purpose, status, resources, notes, related_study, relation_type from " + 
-                          dbs + "study where study_id = '" + key + "'") ;
+      r = s.executeQuery("select study_id from " + dbs + "study where study_id = '" + key + "'") ; 
       if(r.next())
       {
 	 r.getRow() ;
 	 study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") ));
-	 study_name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-	 funding = sr.LitWithEnt(xt.makeValid(r.getString("FUNDING") ));
-	 start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
-	 end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
-	 access_conditions = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_CONDITIONS") ));
-	 purpose = sr.LitWithEnt(xt.makeValid(r.getString("PURPOSE") ));
-	 status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
-	 resources = sr.LitWithEnt(xt.makeValid(r.getString("RESOURCES") ));
-	 notes = sr.LitWithEnt(xt.makeValid(r.getString("NOTES") ));
-	 //related_study = sr.LitWithEnt(xt.makeValid(r.getString("RELATED_STUDY") ));
-	 //relation_type = sr.LitWithEnt(xt.makeValid(r.getString("RELATION_TYPE") ));
       }
-
-      sbr.append("   <MetadataRecord metadataID=\"" + ss.getWrapperName() + "-" + key + "\">\n");
-
       r.close() ;
 
-      // lookup Topic - at the moment only one leaf topic per study perhaps something like:
-      // gptopic/ptopic/topic, gptopic/ptopic/topic is needed
-
-      sbr.append("      <Topic>\n") ;
-
-      r = s.executeQuery("select topic from " + dbs + "topic where topic_id in" +
-                        "(select distinct topic_id  from " + dbs + "study_topic where study_id='" + key + "')" ) ;
-     
-
-      String topic_name = place_holder ;
-
-      if(r.next())
-      {
-         r.getRow() ;
-         topic_name = sr.LitWithEnt(xt.makeValid(r.getString("TOPIC") ));
-      }
-
-      sbr.append("         <Discipline>" + topic_name + "</Discipline>\n") ;
-     
-
-      // following should the resultset handle
-      r.close() ;
-
-      //r = s.executeQuery("SELECT KEYWORD FROM " + dbs + "KEYWORD WHERE KEYWORD_ID IN " +
-      //                  "(SELECT DISTINCT KEYWORD_ID FROM " + dbs + "STUDY_KEYWORD WHERE " +
-      //                  " STUDY_ID='" + key + "' )") ;
-
-      //as there can be multiple ones - i.e. Keywords - 
-
-      String subject = place_holder ;
-
-      //while(r.next())
-      //{
-      //   subject = sr.LitWithEnt(xt.makeValid(r.getString("KEYWORD") ));
-      //   sbr.append("         <Subject>" + sr.LitWithEnt(xt.makeValid(subject)) + "</Subject>\n") ;
-      //}
-
-      // duplication needed as there maybe multiple values
-      if(subject.compareTo(place_holder) == 0 )
-      {
-         sbr.append("         <Subject>" + place_holder + "</Subject>\n") ;
-      }
-
-      //r.close() ;
-
-      sbr.append("      </Topic>\n") ;
-
-      // end of Topic
-
-      // start of Investigation (rxperiment)
-
-      sbr.append("      <Experiment>\n") ;
-
-      // may need to link this with role in study_person as we have the concept of
-      //The investigator could be one of: investigator, inhouse or originator
-      //The data manager could be one of: distributor or owner
-
-      
-      sbr.append("         <StudyName>" + study_name + "</StudyName>\n" ) ;
-
-      //finding institution information
-      String institution_id = place_holder ;
-      String institution_name = place_holder ;
-
-      r = s.executeQuery("select institution_id, name from " + dbs + "institution where institution_id in " +
-                         "(select institution_id from " + dbs + "person where person_id in " +
-                         "(select person_id from " + dbs + "study_person where study_id = '" + key + "'))" ) ; 
-
-      while(r.next())
-      {
-         institution_id = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTION_ID") ));
-         institution_name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-      }
-     
-
-      if(study_name.compareTo(place_holder) != 0 )
-      {
-         if(institution_name.compareTo(place_holder) != 0)
-         {
-            sbr.append("         <StudyID studyid=\"" + study_name + "\" institutionref=\"I" + institution_id + "\"/>\n") ;
-         }
-         else
-         {
-            sbr.append("         <StudyID studyid=\"" + study_name + "\"/>\n") ;
-         }
-      }
-      else
-      {
-         sbr.append("         <StudyID studyid=\"" + place_holder + "\" institutionref=\"" + place_holder + "\"/>\n") ;
-      }
-
-      r.close() ;
-
-      //Investigator
-      buildMDContact(key, sbr, 3*indent, "Investigator") ;
-
-      // onto the StudyInformation
-      // may have to fill a section in with place holders
-
-      sbr.append("          <StudyInformation>\n") ;
-      sbr.append("             <Funding>" + funding + "</Funding>\n") ;
-      sbr.append("             <TimePeriod>\n") ;
-      sbr.append("                <StartDate>\n") ;
-      sbr.append("                   <Date>"+ start_date + "</Date>\n") ;
-      sbr.append("                </StartDate>\n") ;
-      sbr.append("             </TimePeriod>\n") ;
-      sbr.append("             <Purpose>\n") ;
-      sbr.append("                <Abstract>" + purpose + "</Abstract>\n") ;
-      sbr.append("             </Purpose>\n") ;
-      sbr.append("             <StudyStatus>" + status + "</StudyStatus>\n") ;
-      sbr.append("             <Resources>"+ resources + "</Resources>\n") ;
-      sbr.append("          </StudyInformation>\n") ;
-
-      //DataManager 
-       buildMDContact(key, sbr, 3*indent, "DataManager") ;
-
-      //Instrument
-
-      sbr.append("          <Instrument>" + place_holder + "</Instrument>\n") ;
-
-      appendConditionsForEntry(key, 3*indent, "experiment",  sbr) ; // 9 = 3 spaces per level - and 3 level 3x3
-
- 
-      // end of measurement now measurement
-      sbr.append("       </Experiment>\n") ;
-
-      //access_conditions
-
-      sbr.append("       <AccessConditions>" + access_conditions + "</AccessConditions>\n") ;
-
-      //DataHolding
-
-      //Each experiment for this Study will be the name of a Data Holding
-      // really need a loop for this in case there are more that one experiment - save re-implementation
-      // later
-
-      List experiments = new LinkedList() ;
-      List datasets = new LinkedList() ;
-      List datafiles = new LinkedList() ;
-      
-      //as the dtd and this version of the model only support one investigation for one study
-      // the experiment in this case is the study
-        
-      experiments.add(key) ;
-
-
-      //and now for each investigation
-
-      Iterator e = experiments.iterator() ;
-
-      String exp_id = place_holder ;
-      
-      while(e.hasNext())
-      {
-	 exp_id = (String) e.next() ;
-
-	 String typeofdata = "EXPERIMENT" ; //could replace with a search
-
-         sbr.append("       <DataHolding dataid=\"" + study_id + "\">\n") ;
-	 sbr.append("          <DataName>" + study_name + "</DataName>\n") ;
-	 sbr.append("          <TypeOfData>" + typeofdata + "</TypeOfData>\n") ;
-	 sbr.append("          <Status>" + status + "</Status>\n") ;
-
-	 // fill in the dataholdinglocation details - save uneccessary calls later
-	 //////
-
-	 sbr_dhl.append("      <DataHoldingLocator dataidref=\"" + study_id + "\">\n") ;
-         sbr_dhl.append("         <DataName>" + study_name + "</DataName>\n") ;
-	 sbr_dhl.append("         <Locator type=\"absolute\">\n") ;
-         sbr_dhl.append("            <URL>" + place_holder + "</URL>\n") ;
-         sbr_dhl.append("            <DataSourceAccess>" + access_conditions + "</DataSourceAccess>\n") ;
-	 sbr_dhl.append("         </Locator>\n") ;
-	 
-         //////
-	 // now select the datasets associated with this experiment
-
-	 log.debug("STUDY_ID at this point is: " + study_id) ;
-
-         r = s.executeQuery("SELECT DATASET_ID FROM " + dbs + "DATASET WHERE STUDY_ID = '" + exp_id + "'") ;
-
-         while(r.next())
-         {
-	    datasets.add(Integer.toString(r.getInt("DATASET_ID"))) ;
-         }
-         r.close() ;
-
-         //and now for each dataset
-         Iterator g = datasets.iterator() ;
-         String dataset_id = place_holder ;
-
-         //create object references outside of the loop
-         String dataset_name = place_holder ;
-         String dataset_description = place_holder ;
-         String dataset_facility = place_holder ;
-         String dataset_uri = place_holder ;
-         String access_method = place_holder ;
-         String dataset_start_date = place_holder ;
-         String dataset_end_date = place_holder ;
-      
-         while(g.hasNext())
-         {
-	    dataset_id = (String) g.next() ;
-	    typeofdata = "DATA_SET" ; //could replace with a search
-
-	    r = s.executeQuery("SELECT DATASET_NAME, DESCRIPTION, FACILITY_USED, URI, " +
-                               "ACCESS_METHOD, START_DATE, END_DATE FROM " + dbs + "DATASET WHERE DATASET_ID  = '" + dataset_id + "'") ;
-	    if(r.next())
-	    {
-	       dataset_name = sr.LitWithEnt(xt.makeValid(r.getString("DATASET_NAME") ));
-	       dataset_description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
-	       dataset_facility = sr.LitWithEnt(xt.makeValid(r.getString("FACILITY_USED") ));
-	       dataset_uri = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
-	       access_method = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_METHOD") ));
-	       dataset_start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
-	       dataset_end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
-	    }
-	    r.close() ;
-	 
-            sbr.append("          <DataSet dataid=\"" + dataset_id + "\">\n") ;
-	    sbr.append("             <DataName>" + dataset_name + "</DataName>\n") ;
-	    sbr.append("             <TypeOfData>" + typeofdata + "</TypeOfData>\n") ;
-	    sbr.append("             <Status>" + place_holder + "</Status>\n") ;
-	    sbr.append("             <LogicalDescription>\n") ;
-            appendConditionsForEntry(dataset_id, 5*indent, "dataset", sbr) ; // 5 levels in
-	    sbr.append("             </LogicalDescription>\n") ;
-
-            //a fair place to populate the DataHoldingLocator
-            sbr_dhl.append("         <DataSetLocator dataidref=\"" + dataset_id + "\">\n") ;
-            sbr_dhl.append("            <DataName>" + dataset_name + "</DataName>\n") ;
-            sbr_dhl.append("            <Locator type=\"absolute\">\n") ;
-            sbr_dhl.append("               <URL>" + dataset_uri + "</URL>\n") ;
-            sbr_dhl.append("            </Locator>\n") ;
-            sbr_dhl.append("         </DataSetLocator>\n") ;
-
-
-	    // now select the data_files associated with this data_set
-            r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATASET_ID = '" + dataset_id + "'") ;
-            while(r.next())
-            {
-	       r.getRow() ;
-	       datafiles.add(Integer.toString(r.getInt("DATA_ID"))) ;
-            }
-            r.close() ;
-
-            //and now for each entry
-            Iterator ro = datafiles.iterator() ;
-            String data_id = place_holder ;
-      
-	    //put in the child references for files
-
-            //object references here
-            String data_name = place_holder ;
-            String data_format = place_holder ;
-            //status = place_holder ;
-            //String data_description = place_holder ;
-            //String producing_facility = place_holder ;
-            String data_uri = place_holder ;
-            access_method = place_holder ;
-            String data_start_date = place_holder ;
-            String data_end_date = place_holder ;
-
-            while(ro.hasNext())
-            {
-	       data_id = (String) ro.next() ;
-	       
-	       r = s.executeQuery("SELECT DATA_NAME, DATA_FORMAT, DESCRIPTION, " +
-                                  "URI, ACCESS_METHOD, START_DATE, END_DATE FROM " + dbs + "DATA WHERE DATA_ID = '" + data_id + "'") ;
-	       if(r.next())
-	       {
-		  data_name = sr.LitWithEnt(xt.makeValid(r.getString("DATA_NAME") ));
-		  data_format = sr.LitWithEnt(xt.makeValid(r.getString("DATA_FORMAT") ));
-		  //most of these commented out due to null data causing null references
-		  //this needs addressing and the null value replacing with a place_holder
-		  //status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
-		  //data_description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
-		  //producing_facility = sr.LitWithEnt(xt.makeValid(r.getString("PRODUCING_FACILITY") ));
-		  data_uri = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
-		  access_method = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_METHOD") ));
-		  data_start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
-		  data_end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
-	       }
-	       r.close() ;
-
-	       sbr.append("            <File dataid=\"" + data_id + "\">\n") ;
-	       sbr.append("               <DataName>" + data_name + "</DataName>\n") ;
-	       sbr.append("               <URI>" + data_uri + "</URI>\n") ;
-	       sbr.append("            </File>\n") ;
-
-	       //add dataholdinglocation info to sbr_dhl
-	       //////
-	       sbr_dhl_files.append("         <FileLocator dataidref=\"" + data_id + "\">\n") ;
-               sbr_dhl_files.append("            <URI>" + data_name + "</URI>\n") ;
-	       sbr_dhl_files.append("            <Locator type=\"absolute\">\n") ;
-               sbr_dhl_files.append("               <URL>" + data_uri + "</URL>\n") ;
-	       sbr_dhl_files.append("            </Locator>\n") ;
-	       sbr_dhl_files.append("         </FileLocator>\n") ;
-	       //////
-	    }
-
-
-	    sbr.append("            </DataSet>\n") ;
-
-	 } //filled in the data sets
-
-         sbr.append("      </DataHolding>\n") ;
-
-      } //filled in the experiments
-
-      // - following moved to experiments bit so get the id attribute
-      //sbr.append("      <DataHoldingLocator>\n") ;
-
-      //add collected holding location data
-      sbr.append(sbr_dhl.toString()) ;
-      //as FileLocators needed after DataSetLocatos
-      sbr.append(sbr_dhl_files.toString()) ; 
-      sbr.append("      </DataHoldingLocator>\n") ;
-      //
-      
-
-      sbr.append("   </MetadataRecord>\n") ;
+      // li is of type String and it is the number of spaces in the indentation when going to a more nested level 
+      //MetadataRecord starts
+      sbr.append(li + "<MetadataRecord metadataID=\"" + ss.getWrapperName() + "-" + key + "\"" +
+                             " facilityi=\"" + ss.getWrapperName()+ "\">\n");
+
+      //Topic
+      buildMDTopic(key, sbr, (li+li), null) ;
+      //Study
+      buildMDStudy(key, sbr, (li+li), null) ;
+      //AccessConditions
+      buildMDAccessConditions(key, sbr, (li+li), null) ;
+      //LegalNotice
+      buildMDLegalNotice(key, sbr, (li+li), null) ;
+      //RelatedPublication
+      buildMDRelatedPublication(key, sbr, (li+li), null) ;
+      //OtherRelatedMaterial
+      buildMDOtherRelatedMaterial(key, sbr, (li+li), null) ;
+
+      //MetadataRecord ends
+      sbr.append(indentToStr(level_indent) + "</MetadataRecord>\n");
 
       return ;
 
    }
+
    //
    //
    //
