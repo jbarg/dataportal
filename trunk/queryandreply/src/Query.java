@@ -115,6 +115,11 @@ public class Query {
                 }
             }
         }
+        for(int j =0;j<getFacilities().length;j++){
+            qThread[j].stop();
+            
+        }
+        
         
         org.w3c.dom.Document d = Converter.JDOMtoDOM(newdoc);
         logger.info("RESULTS COLLATED");
