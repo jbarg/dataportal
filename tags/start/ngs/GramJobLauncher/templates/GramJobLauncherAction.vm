@@ -1,0 +1,52 @@
+#**
+ Velocity Template file for Launching Components
+@author <A HREF="mailto:gkandasw@cs.indiana.edu"> Gopi Kandaswamy </A>
+**#
+
+<BR>
+<H2> Launch a Gram Job </H2> <HR> <BR>
+
+#if($GramJobLauncherError) 
+	<P> The following is the result of the Gram Job execution </P>
+	$GramJobLauncherError
+#end <HR> <BR>
+
+<FORM METHOD="POST" ACTION="$jslink.Template">  
+
+<TABLE BORDER="0" WIDTH="100%"> 
+
+
+<TR>
+	<TD WIDTH="50%"> <B>Executable name *<B> </TD>
+	<TD WIDTH="50%"> <INPUT TYPE="TEXT" SIZE="50%" NAME="execName" VALUE="$!GJL_EXEC_NAME"> </TD>
+</TR>
+
+<TR>
+	<TD WIDTH="50%"> <B> Parameters <B> </TD>
+	<TD WIDTH="50%"> <INPUT TYPE="TEXT" SIZE="50%" NAME="arguments" VALUE="$!GJL_ARGUMENTS"></TD>
+</TR>
+
+<TR>
+	<TD WIDTH="50%"> <B>Host name *<B> </TD>
+	<TD WIDTH="50%"> <INPUT TYPE="TEXT" SIZE="50%" NAME="execHost" VALUE="$!GJL_EXEC_HOST"></TD>
+</TR>
+
+<TR>
+	<TD WIDTH="50%"> <B> Executable Directory <B> </TD>
+	<TD WIDTH="50%"> <INPUT TYPE="TEXT" SIZE="50%" NAME="execDir" VALUE="$!GJL_EXEC_DIR"></TD>
+</TR>
+
+<TR>
+	<TD WIDTH="50%"> <B>Output file *<B> </TD> 
+	<TD WIDTH="50%"> <INPUT TYPE="TEXT" SIZE="50%" NAME="outputFile" VALUE="$!GJL_OUTPUT_FILE"> </TD>
+</TR>
+
+<TR>
+	<TD WIDTH="50%" ALIGN="LEFT"> <BR> <INPUT TYPE="SUBMIT" NAME="eventSubmit_doLaunch" VALUE="Launch Gram Job"> </TD>
+</TR>
+
+</TABLE> 
+
+</FORM>
+
+<H5> Fields marked with * are required </H5>

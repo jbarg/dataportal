@@ -1,0 +1,562 @@
+CHANGES
+=======
+ 
+ (7/14)  Removed jaas.jar, ldap.jar, jndi.jar, and ldapbp.jar 
+         because of licensing issues.
+
+ (7/11)  Fixed bugs:
+         http://bugzilla.globus.org/bugzilla/show_bug.cgi?id=1078
+         http://bugzilla.globus.org/bugzilla/show_bug.cgi?id=1043
+         http://bugzilla.globus.org/bugzilla/show_bug.cgi?id=1042
+
+ (7/07)  Fixed RemoteGassServer credential problem.
+
+ (7/01)  Updated FileInfo API for getting file permissions.
+         Contribution from Warren Smith.
+
+ (6/26)  Fixed bugs:
+         http://bugzilla.globus.org/bugzilla/show_bug.cgi?id=1040
+
+ (6/20)  Removed extKeyUsage extension handling. The
+         extKeyUsage extension is no longer copied into 
+         proxy certificates. The cert path validation code
+         doesn't check for extKeyUsage constrains any more.
+
+ (6/19)  Fixed FTPClient.exists() function to work with files
+         and directories. 
+         Increased secure data channel establishment timeout.
+         Fixed gsiftp->ftp url copy transfers.
+
+ (6/16)  Fixed bugs:
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=995
+
+ (6/10)  Integrated JAAS with GSS Manager. createCredential() will
+         check the current Subject object for credential.
+  
+ (5/25)  Fixed bugs:
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=963
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=856
+
+ (5/14)  Updated MyProxy client. Added multiple credential support,
+         change password operation, credential renewers/retrievers, etc.
+
+ (5/13)  Added globus header license to all files.
+
+ (5/12)  Updated PureTLS library to 0.9b4
+
+ (5/07)  Added an utility class for internationalization.
+
+ (5/05)  Removed junit.Assert runtime dependency from ftp classes.
+
+ (4/15)  Added JAAS abstration utility classes.
+
+ (4/04)  New proxy cert info extension updates (removed version field)
+
+ (3/31)  Added quote and site operations to gridftp client library
+
+ (3/11)  Added gridmap refresh functionality.
+
+ (3/03)  Updated KeyUsage extension handling as specified by latest 
+         (new proxy cert format) spec.
+
+ (2/21)  Fixed bugs:
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=718
+
+-------------------------------- 1.1a -----------------------------------------
+
+ (2/20)  Added some API from the old ftp library to ease migration to the
+         new ftp library.
+  
+ (2/13)  Fixed bugs:
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=652
+
+ (1/29)  Fixed bugs:
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=653 
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=647
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=642
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=637
+
+ (1/05)  Fixed bugs:
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=640
+
+ (12/08) Deprecated all code in org/globus/security except
+         org.globus.security.gridmap package.
+
+ (12/08) Deprecated all code in org/globus/io/ftp.
+
+ (12/08) Deprecated the old debugging code in org/globus/util/debug.
+
+ (12/06) Added org.globus.ftp.app.Transfer: small command line application 
+	 performing 3rd party transfer.
+
+ (12/05) FileInfo now does not throw exceptions on device file entries 
+	 (but it does not fully parse them either).
+
+ (11/07) Updated the UrlCopy library & command line tool to use the updated  
+         stream classes, and the new ftp library. Also, added support for
+         setting source and destination authorization type, and 
+	 enabling/disabling DCAU.
+
+ (11/06) Updated FTP stream classes to use the new ftp library. Added support
+         for setting transfer type (ASCII, Image)
+         [http://bugzilla.globus.org/globus/show_bug.cgi?id=693]
+
+ (11/05) Added 'authorization' parameter to the constructor of stream classes 
+
+ (11/05) Imported the new ftp library.
+
+ (11/04) Imported GSI Axis and GSI Tomcat extensions.
+
+ (11/03) Added support of 'info' operation for MyProxy.
+
+ (11/02) Converted most of the code (libraries and the tools) to use the 
+         new security library (pkcs11 is not updated as of yet)
+
+ (11/01) Imported the new security library. It is based on PureTLS and
+         BouncyCastle libraries (both open-source and free for commercial
+         use) The new security library is an implementation of Java GSSAPI.
+
+------------------------ 1.0 ----------------------------------------------
+
+ (10/15) Fixed bugs:
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=461
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=430
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=697
+
+ (07/02) Fixed bugs: 
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=695
+         http://bugzilla.globus.org/globus/show_bug.cgi?id=694
+
+ (07/01) Replaced the Base64 library with Apache version (because of licensing
+         reasons)
+
+ (06/28) Added transferCompleted() to UrlCopyListener.java to indicate
+         transfer completion (bug #44)
+  
+ (06/25) Added an experimental implementation of GSSAPI GSI (uses socket-based
+         SSL library underneath)
+
+ (06/20) Fixed MyProxy client to work with latest MyProxy server 
+         (version 0.4.4) (bug #42)
+
+ (06/14) Fixed ascii data transmission bug over protected data channel.
+
+ (04/30) Fixed bug #39. Also fixed a problem with RequestThread in ftp. In certain
+         cases the thread would not get stopped.
+
+ (04/29) Fixed bug #33.
+
+ (04/28) Fixed bug #36. Made MDSException chainable. Also marked the entire
+         MDS class as deprecated.
+
+ (04/25) Fixed a number of bugs in GridFTP code (bug #38, append mode in third
+         party transfer, etc.)
+
+ (04/15) Reimplemented grid-info-search. Added support for most options from
+         standard 'ldapsearch' command line tool and added GSI SASL support.
+         [http://bugzilla.globus.org/globus/show_bug.cgi?id=376]
+
+------------------------ 0.9.13 ----------------------------------------------
+
+- (03/28)  Added two methods to Gram class to explicitely register or 
+           unregister a job from a given callback handler. Before, only
+           the internal callback handler were used for job status updates.
+
+- (03/20)  Added support for data channel authentication (DCAU) for the FTP
+           library. Integrated the new FTP code with url-copy library and
+           tool. Added GridFTP stream classes.
+
+- (02/21)  Updated MyProxy API and added support for the anonymous get 
+           operation (where local credentials are not required)
+
+- (02/20)  Check in new iaik libraries (to work with Java 1.4)
+
+- (02/18)  Added gridmap file support.
+
+- (02/17)  Changed default behaviour of how user cert, key, ca certificates 
+           and proxy files are discovered. Now, a system property is first 
+           checked, then configuration option (initialized from from a file 
+           for example) and then the local file system is checked 
+           appropriately.
+
+- (02/16)  Added 'httpg' protocol handler for Java URL class. It can be
+           seamlessly integrated with the standard Java URL class.
+
+- (01/08)  Added initial implementation of Java gatekeeper/jobmanager. It is a
+           full implementation of GRAM 1.0 protocol. The implementation 
+           requires Java 1.3.1. Multiple users are supported but not setuid()
+           support.
+
+- (01/08)  Moved BaseServer.java class to net/ directory (from security
+           directory) and updated depended classes.
+
+- (12/16)  Misc. updates: updated host/service authentication, fixed rsl parser
+           to handle quoted variable attributes (rsl_substitution) and to catch
+           errors (unresolved variable references) during rsl evaluation.
+	   Improved API for saving proxies.
+
+- (12/04)  Explicit methods were added to set the default proxy credentials and
+  	   default trusted certificates to use. Also, the GlobusProxy load() 
+	   methods were updated to initialize a proxy with arbitrary sources of
+	   trusted certificates. 
+
+- (12/03)  Stream classes in org/globus/io/streams now extend from standard
+	   Java IO stream classes.
+
+- (12/03)  UrlCopy: progress reporting bug fixed (two fields were switched) and
+	   added explicit methods for setting source and destination 
+ 	   credentials.
+
+- (09/24)  More updates to GRAM library related to GRAM 1.5 protocol. 
+	   The code was tested against the latest globus-beta code.
+
+- (09/22)  Removed Netlogger.java from org/globus/util.
+
+- (09/19)  The GRAM library was updated to support GRAM 1.5 protocol features.
+	   A simple example was added to demonstrate most of the features.
+
+- (09/18)  The setup program was slightly updated to use the new configuration code 
+	   (CoGProperties.java) and fixed to support certificate directories for
+	   trusted certificates.
+
+- (09/17)  Added new graphical grid-proxy-init code into org/globus/tools/proxy.
+	   The new code is now also integrated with the different demos.
+	   The new code supports PKCS11 devices and is better integrated with the
+	   new configuration code (CoGProperties.java)
+
+- (09/16)  The ConfigUtil.java in org/globus/security was moved into
+	   org/globus/util. The Config.java in org/globus/security is now
+	   deprecated and replaced by CoGProperties.java in org/globus/common.
+
+- (08/27)  Fixed the RSL parser to handle attributes with underscores in their
+           names.
+
+- (08/24)  Re-implemented the authorization framework. It is now more flexible as new
+	   authorization code can be easily added and plugged into the existing code.
+
+- (08/20)  Added support for multiple transfer listeners for the UrlCopy class.
+
+-------------------------- 0.9.12 ---------------------------------------------------
+
+- (08/15)  Updated the PKCS11 classes to support multiple credentials and integrated
+	   the ProxyInit program with the new PKCS11 code. The new ProxyInit 
+           program is able to generate a proxy from standard globus credentials 
+           (from files) or directly from a PKCS11 device.
+
+- (08/08)  Reimplemented GlobusRun tool to use the new RSL parser, and added support
+	   for multiple GRAM submissions. This replaces the functionality of the 
+ 	   GramMultiJobRequest program. The GramMultiJobRequest program was removed
+	   from the CVS along with the regular expression library and any reference
+	   to it in the build files.
+
+- (08/07)  Replaced the old RSL parser with a new more advanced version that 
+	   supports parse trees, variable substitution, evaluation, and more. 
+	   A new version of RslAttributes was also added (it is not entirely 
+	   backwards compatible wit the old version, it was also moved to the
+	   org.globus.rsl package) Also, a new class GramAttributes was added
+	   to simplify operations on common GRAM attributes.
+
+- (07/31)  Disabled SSL session management (session resume) in SSLClientConnection.	
+	   It was causing problems with latest OpenSSL code. 
+
+- (07/26)  Added makefiles to the org.globus.gos and org.globus.pkcs11.  The
+	   pkcs11 makefile is only a dummy makefile at this point since we
+           don't want this package to compile by default.
+
+- (07/25)  Various updates to the io/streams and io/urlcopy classes. Mostly bug
+	   fixes and minor enhancements. Factored out HTTPInput/OutputStream classes
+	   from GassInput/OutputStream classes. Added supported for 'chunked' HTTP 
+           downloads. Updated the gass server to properly decode urls and better
+	   handle the relative vs. absolute file specifications.
+
+- (07/25)  Changed org.globus.pkcs11.PKCS11Util so that the pkcs11 native dll is
+           specified by a property rather than hardcoded.'
+
+- (07/03)  Added preliminary pkcs11 support in the packages org.globus.pkcs11 and
+           org.globus.pkcs11.tools.  This consists of two utility classes for dealing
+           with pkcs11, and two programs: one to load Globus credentials onto pkcs11
+           devices, and one to do a grid-proxy-init with credentials on pkcs11 devices.
+           These packages require libraries from IBM available from alphaworks so
+           these packages are not compiled by default at this time.
+
+ - (07/03) Added a new tool for converting the Globus credentials to Java compatible
+	   format - JKS supported by Sun. So the globus credentials can be used to
+	   sign jar files.
+
+ - (07/02) Gram updates: the rsl when sent over the wire is now properly quotified.
+           Also, added the JOB_STATE_ALL mask to GRAM. Defined two functions in 
+	   Util class to quotify and dequotify arbitrary strings.
+
+ - (07/01) Fixed GlobusRun -f command to read the whole file instead of just the 
+    	   first line.
+ 
+ - (06/24) Moved GARA GUI stuff (workbench) to computingportals/gara/workbench.
+
+ - (06/21) Improved error handling of the doDeleg() function in 
+	   SSLClientConnection class. Now throws IOExceptions in case of an
+	   error instead of displaying the error to stderr. Also added a
+	   ChainedIOException class. Updated Gram and Gara to use the
+	   updated function.
+
+ - (06/12) Added JUnit testing library into the cvs. Implemented
+	   first unit tests for MVHashtable class.
+	   Also, removed jni/, attributes/, and blank/ directories
+	   from CVS.
+
+ - (06/11) MDS with GSI: Improved examples and provided more 
+	   documentation.
+
+ - (06/11) MyProxy: Added options for selecting host and subject 
+	   authentication. Also, updated javadoc.
+
+ - (06/08) GassServer: fixed the bug when redirected streams where 
+	   not closed. Also, updated the JobOutputListener and 
+	   JobOutputStream classes with a call to indicate the closing for a 
+	   stream. The JobOutputListener interface was changed. It might 
+	   require updates of the client code that uses that interface.
+
+ - (06/08) Updates to MyProxy documentation in javadoc. It specifies more
+	   clearly which version of MyProxy code is required and where
+	   it can be obtained from.
+
+ - (05/18) Updated the error messages for the GRAM client. Also implemented
+	   -dryrun and -parse options for GlobusRun command-line tool.
+
+ - (05/16) Proxy loading code was improved. Also, new API was added so the 
+  	   proxy can now be loaded from an arbitrary input stream or a byte
+ 	   array.
+
+ - (05/15) Minor updates the the globusrun program. The internal gass server
+	   now runs with more specific options. Also added toString() 
+	   function to the GassServer for debugging purposes.
+
+ - (04/15) Added secure ldap client libraries for both Netscape LDAP SDK
+ 	   and JNDI/LDAP provider. Please read README file before using.
+   
+--------------------------- 0.9.11 --------------------------------------
+    
+ - (02/16) Added support for /dev/urandom device (where available) so 
+	   the seed generation would be much faster. A significant
+	   improvement of the initialization time of CoG Kit tools
+	   and libraries should be visible on Linux machines or on
+	   machines with that device is installed. If the device
+	   is not installed the default seed generator will be used
+	   just like before.
+
+ - (02/09) Config.java was updated with better documentation and a small
+           change for the GPDK that allows for it to disable the reading 
+	   of the cog.properties. 
+
+ - (02/08) Base64.java class was updated to the latest version.
+  	   Also, a small bug in the SSLeayKeyHolder.java class was fixed
+	   that prevented reading private keys with some text before the
+	   BEGIN PRIVATE KEY line.
+
+	   GlobusChainVerifier.java class was added to fix the problem
+	   with the CA certificate with the extensions. It does what
+	   the OpenSSL implementaion does - that is, ignores the CA
+	   certificate that it received from the server and instead
+	   compares it to the local copy of the CA certificate.
+
+	   The SSLClientConnection was updated to use that new chain
+	   verifier. The GSIServerSocketFactory does not need to be
+	   updated at this point because it only trusts the user 
+	   certificate. This might change in the future.
+
+ - (01/30) SSLClientConnection class now is able to handle encrypted and 
+	   unencrypted connections. The SSLEncClientConnection class 
+           is obsolete and so is deleted from the CVS. To enable
+	   encryption just call enableEncryption(true).
+
+	   ProxyInit program is now also able to verify user certificate
+ 	   and CA certificate for signing. 
+
+	   COG Version was updated to patch version 11.
+
+	   Security classes were updated to automatically discover 
+	   locations of CA certificates and proxy file. Also,
+           the default trusted certificates are now cached in memory.
+	   So if a new proxy is loaded, the trusted certificates do
+	   no have to be re-loaded.
+
+ - (01/19) Added size() and lastModified() functions to the FTP library.
+
+ - (01/18) Fixed the windows scripts to work with COG_INSTALL_PATH that 
+	   contains spaces in it. 
+
+ - (01/17) Minor updates to the FTP library. Added socket timeouts and 
+	   optimized the classes a bit for better efficiency.
+
+ - (01/16) Added support for firewalls - creating server sockets within 
+	   specified port ranges. The port range can be specified within
+	   a cog.properites file or through the java system properties.
+
+ - (01/15) Added ChainedException class and updated GlobusProxyException, 
+	   GramException, MyProxyException to use that class for 
+	   exception handling. It allows for chaining multiple exceptions
+	   together. It helps to display more detailed messages and localize
+	   errors faster.
+	   Also, added Debug.out stream for displaying the debugging 
+	   messages. All classes should use that stream to display its 
+	   messages.
+
+ - (01/04) Updated the FileInfo class to handle softlinks and spaces in
+	   filenames.
+
+ - (01/04) Improved ProxyInit and MyProxy to work with both unencrypted
+           and encrypted private user keys.
+
+ - (01/04) Added an extra parameter to the GRAM library for specifying
+	   full vs. limited delegation. Also updated the globusrun program
+	   with an new command line option for enabling the full delegation.
+	   The limitedproxy property in the cog.properties file is no
+	   longer supported.
+
+ ------------------ 0.9.10 --------------------------------------------
+
+	- (12/03) Improved GridProxyInit to have a better UI as Alain suggested.
+
+	- (11/27) Added new SSLeayKeyHolder class that allows decrypting and 
+		  encrypting SSLeay keys. Also implemented a 
+                  grid-chage-pass-phrase program.
+
+	- (11/23) Added a class that represents a remote gass server. Also 
+                  updated the FTP library to support ASCII data transfers 
+                  correctly.
+
+	- (11/22) Added grid-cert-info program. Also updated 
+                  SSLClientConnection class to perform better HOST 
+                  authentication.
+
+	- (11/21) Updated the Gass server to support enabling/disabling 
+                  writting, reading, stdout/err redirection and added a new 
+                  program globus-gass-server-shutdown. Updated FTP to perform 
+                  host authentication by default. It can still be disabled 
+                  by calling setHostAuthentication() method.
+
+	- (11/20) Implemented two new programs grid-proxy-info and 
+                  grid-proxy-destory.
+
+	- (11/17) Updated FAQs with two more questions, updated build.xml 
+                  file for ANT 1.2
+
+	- (11/15) GSIFTP updates: added support for setting TCP socket 
+                  buffers (local and remote) and added support for NLIST 
+                  command for mgets() or copy() functions.
+
+	- (10/16) Fixed minor problems with GassOutputStream. Only occured 
+                  on Windows platorms.
+
+	- (10/15) Updated the Gass Server program to have better command 
+                  line interface.
+
+	- (10/12) Added a Version class that returns current CoG version.
+
+	- (10/11) Updated MyProxy tool to better reflect c client mesages. Also
+		  a new proxy is always created for PUT operation.
+
+	- (10/10) Minor changes to the mkprops.pl script to autodetect 
+                  certificate directory.
+
+   	- (10/10) Added FAQ.txt and README.txt files for binary distribution.
+		  Fixed bunch of scripts to rely on the COG_INSTALL_PATH 
+                  variable.
+
+	- (9/27)  commited new configuration wizard that hopefully will 
+                  simply the configuration of cog. with that also new batch 
+                  and shell scripts where added for binary distribution. 
+
+	- (9/27)  also added manifest file that is used internally by jar 
+                  files. On windows machines it will start the configuration 
+                  manager just by clicking on the jar file.
+
+	- (9/22)  updates for MyProxy stuff: Added MyProxy program into tools
+	  	  directory, implemented MyProxyTest and updated the MyProxy 
+                  protocol to work with the latest MyProxy protocol. Also 
+                  added batch and shell scripts for executing MyProxy tool.
+
+	- (9/11)  added new gram example showing multiuser support
+
+	- (9/11)  removed the old rsl-xml. (backup in Attic in CVS repos.)
+
+	- (9/11)  fixed MDS examples in examples/ dir. All parameters are now
+	  	  passed from command line.
+
+	- (9/8)   moved the source code to src/ directory
+
+	- (9/8)   add new exsists() method to ftp
+
+	- (9/8)   updated the goUpDir() method in ftp to use ftp command 
+                  instead.
+
+	- (9/1)   updated javadoc documentation in a couple of classes
+
+	- (8/25)  directory structure changes: programs -> tools
+                  and new io package.
+
+	- (8/25)  added visual GridProxyInit program
+
+	- (8/20)  updated FTP and GSIFTP client libraries for support of
+	          common ftp client operations such as list(), mget(), 
+                  mput(), etc.
+
+	- (8/20)  added new UrlCopy library (replacement for Transfer.java)
+
+	- (8/15)  added support for multiple CAs
+
+	- (8/15)  updated Gram and Gara callback handlers and Gass server
+	          to share the same base server class.
+
+	- (8/15)  fixed server side security problem (accepting wrong 
+                  certificates)
+  	
+	- (7/11)  added a first implementation of myProxy (client side only)
+
+	- (7/11)  fixed trusted cert problem
+
+	- (7/11)  moved a couple of proxy functions from CertUtil class to 
+                  GlobusProxy (load(), save(), destroy(), etc.)
+
+	- (7/11)  added better error messages to proxy init function
+
+	- implemented the HOST authorization mechanism. it is only enabled 
+          in GRAM. GSIFTP currently is not enabled to perform HOST 
+          authorization.
+
+	- fixed Gram to verify the protocol version of the messages
+
+	- updated Gram to read error messages from a file. 
+
+        - updated globusrun to support Globus 1.1.3 specifying the resource
+          manager contact
+
+	- updated GSIFTP client to work with latest GSIFTP server 
+          (verion 0.4.0)
+
+	- globusrun: removed -rsl option. now excepts the last argument 
+          to be RSL
+
+        - fixed the proxy_sign function and proxy generation NOT to copy 
+          the certificate extentions
+
+	- updated GassServer to provide an easy way to redirect job stdout/err
+	  to a user specifed window. nice for cool demos.
+	  [JobOutputStream and JobOutputListener classes introduced]
+
+	- GSIFTP was rewritten to support both GSIFTPD servers and to support
+          direct server-to-server file transfers
+          
+        - removed iaik provider dependencies in our server code so that
+          switching ssl providers will be less painful. right now only 4
+          files need to be changed: CertUtil, SSLClientConnection, 
+          SSLServerConnection and Util (all in security directory)
+
+        - proxy_sign and proxy init did not copy certificate extensions. 
+	  [fixed but not in provider independent way]
+
+	- add simple applets for job submission with output
+          redirection and proxy generation. 
+
+	- add simple applets to the cvs (proxy, job submission, gara?)
+
+	- removed gsiftp client dependecy on the iaik class

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registry>
+	<portlet-entry name="chef.grid.test" hidden="false" type="ref"
+		parent="chef.tool" application="false">
+		<meta-info>
+			<title>GRID: Certificate Information</title>
+			<description>Display the current CHEF Grid Certificate.</description>
+		</meta-info>
+		<parameter name="template" value="chef_grid_test" hidden="true"/>
+		<parameter name="action" value="GridTestAction" hidden="true"/>
+		<media-type ref="html"/>
+	</portlet-entry>
+<!--
+	<portlet-entry name="chef.grid.test" hidden="false" type="ref"
+		parent="CustomizerVelocity" application="false">
+		<meta-info>
+			<title>GRID Operations</title>
+			<description>Simple Grid Operations</description>
+		</meta-info>
+		<parameter name="template" value="chef_grid_test" hidden="true"/>
+		<parameter name="action" value="GridTestAction" hidden="true"/>
+		<media-type ref="html"/>
+	</portlet-entry>
+-->
+<!--
+	<portlet-entry name="chef.nsds.test" hidden="false" type="ref"
+		parent="CustomizerVelocity" application="false">
+		<meta-info>
+			<title>OGSA/NSDS Test Teamlet</title>
+			<description>Sample Teamlet for NSDS testing.</description>
+		</meta-info>
+		<parameter name="template" value="chef_nsds_test" hidden="true"/>
+		<parameter name="action" value="NSDSTestAction" hidden="true"/>
+		<media-type ref="html"/>
+	</portlet-entry>
+-->
+</registry>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlets id="100">
+    <metainfo>
+        <title>My Workspace</title>
+    </metainfo>
+    <skin name="ctng-standard"/>
+    <control name="ChefWorkspaceControl"/>
+    <controller name="ChefWorkspaceController"/>
+    <portlets id="P-f0545b2177-10017">
+        <metainfo>
+            <title>Home</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+		<entry id="101" parent="chef.synoptic.announcement">
+			<metainfo>
+				<title>Message of the Day</title>
+			</metainfo>
+			<layout position="-1" size="-1">
+				<property name="column" value="0"/>
+				<property name="row" value="0"/>
+			</layout>
+			<parameter name="channel" value="site-motd"/>
+			<parameter name="days" value="1"/>
+			<parameter name="items" value="1"/>
+			<parameter name="length" value="50000"/>
+			<parameter name="show-subject" value="false"/>
+		</entry>
+        <entry id="P-f0545c84dc-1001b" parent="chef.www">
+			<metainfo>
+				<title>My Workspace Information</title>
+			</metainfo>
+			<parameter name="workspace" value="true"/>
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="1"/>
+            </layout>
+        </entry>
+    </portlets>
+    <portlets id="P-f0545b87cf-10018b">
+        <metainfo>
+            <title>Membership</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+        <entry id="P-f0545d1612-1001cb" parent="chef.membership">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+    <portlets id="P-f0545b87cf-10018">
+        <metainfo>
+            <title>Schedule</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+        <entry id="P-f0545d1612-1001c" parent="chef.schedule">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+    <portlets id="P-f0545bae05-10019">
+        <metainfo>
+            <title>Resources</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+        <entry id="P-f0545d964f-1001d" parent="chef.resources">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+    <portlets id="P-f0545be5b7-1001a">
+        <metainfo>
+            <title>News</title>
+        </metainfo>
+        <skin name="ctng-standard-framed"/>
+        <controller name="ChefTwoColumns"/>
+        <entry id="P-f0545e8092-1001e" parent="BBCFrontPage">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+        <entry id="P-f0545e8092-1001f" parent="BBCTechnology">
+            <layout position="-1" size="-1">
+                <property name="column" value="1"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+        <entry id="P-f0545e8092-10020" parent="BBCWorld">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="1"/>
+            </layout>
+        </entry>
+   </portlets>
+    <portlets id="P-f0545bae05-1001b">
+        <metainfo>
+            <title>Grid Cert Info</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+        <entry id="P-f0545d964f-1001f" parent="chef.grid.test">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+    <portlets id="P-f0545bae05-1001c">
+        <metainfo>
+            <title>OGSA/NSDS</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+        <entry id="P-f0545d964f-1001g" parent="chef.nsds.test">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+    <portlets id="P-f0545bae05-1001d">
+        <metainfo>
+            <title>DataViewer</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+	<entry id="P-f0545d964f-1001d" parent="nees.dataviewer">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+    
+    <portlets id="P-f0545bae05-1001r">
+        <metainfo>
+            <title>Extreme Proxy</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+        <entry id="P-f0545d964f-1001r" parent="xportlets:ProxyManager">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+    <portlets id="P-f0545bae05-1001s">
+        <metainfo>
+            <title>Extreme LDAP</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+        <entry id="P-f0545d964f-1001s" parent="xportlets:LdapBrowser">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+    <portlets id="P-f0545bae05-1001t">
+        <metainfo>
+            <title>Extreme GridFTP</title>
+        </metainfo>
+        <skin name="ctng-standard"/>
+        <controller name="ChefOneColumn"/>
+        <entry id="P-f0545d964f-1001t" parent="xportlets:GridFTPClient">
+            <layout position="-1" size="-1">
+                <property name="column" value="0"/>
+                <property name="row" value="0"/>
+            </layout>
+        </entry>
+    </portlets>
+</portlets>
