@@ -534,10 +534,9 @@
 
    <xsd:complexType name="ADOType">
       <xsd:sequence>
-	 <xsd:element name="Name" type="xsd:string"/>
          <xsd:element name="DataDescription" type="cmd:DataDescriptionType"/>
-         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="ADOLocator"        type="cmd:ADOLocatorType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="dataid" type="xsd:ID" use="required"/>
    </xsd:complexType>
@@ -561,8 +560,8 @@
       <xsd:complexContent>
          <xsd:extension base="cmd:ADOLocatorType">
             <xsd:sequence>
-	       <xsd:element name="Media" type="xsd:string"/>
-	       <xsd:element name="Filetype" type="xsd:string"/>
+	       <xsd:element name="Media" type="xsd:string" minOccurs="0" />
+	       <xsd:element name="Filetype" type="xsd:string" minOccurs="0"/>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
@@ -634,15 +633,21 @@
 
    <xsd:complexType name="ADOLocatorType">
       <xsd:sequence>
-         <xsd:element name="URI" type="xsd:string"/>
+         <xsd:element name="Locator" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                     <xsd:attribute name="pathtype" type="cmd:PathTypes"/>
+                  </xsd:extension>
+               </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
 	 <xsd:element name="AccessMethod" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="Size" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="offset"  type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="length"  type="xsd:string" minOccurs="0"/>
       </xsd:sequence>
 <!-- type of this attribute should really be a CDATA - no equivelent in XMLSchema -->
-      <xsd:attribute name="dataidref" type="xsd:string" use="required"/>
-      <xsd:attribute name="pathtype" type="cmd:PathTypes" default="absolute" use="optional"/>
    </xsd:complexType>
 
 
