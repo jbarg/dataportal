@@ -31,7 +31,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Text;
 import org.jdom.JDOMException;
-import ac.dl.xml.Converter;
+import uk.ac.dl.xml.*;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -106,7 +106,7 @@ public class Permissions {
         return new Integer(sid.getText());
     }
     
-    public static org.w3c.dom.Element buildTest() throws JDOMException {
+    public static org.w3c.dom.Element buildTest() throws JDOMException ,XMLException{
         
         /** Create test XML */
         Document doc = new Document();

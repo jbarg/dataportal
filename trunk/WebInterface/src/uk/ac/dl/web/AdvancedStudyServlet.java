@@ -15,7 +15,7 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 //jar file for shopping cart classes and user record
 import org.jdom.input.*;
-import ac.dl.xml.*;
+import uk.ac.dl.xml.*;
 //log classes
 
 import org.apache.log4j.*;

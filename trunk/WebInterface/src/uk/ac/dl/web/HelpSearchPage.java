@@ -6,7 +6,7 @@ import javax.servlet.http.*;
 
 //log classes
 import org.apache.log4j.*;
-import ac.dl.xml.*;
+import uk.ac.dl.xml.*;
 
 
 /** This class takes the studies selected from the Expand class to decrease
