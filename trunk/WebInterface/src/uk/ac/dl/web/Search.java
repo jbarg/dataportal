@@ -81,8 +81,10 @@ public class Search {
                 }
                 dn = h.toString();
                 
+                String dis = discipline;
                 //add %20 to dis
                 int l = discipline.length();
+                
                 StringBuffer bu = new StringBuffer();
                 for(int i = 0; i<l; i++){
                     if( discipline.charAt(i) == ' ') bu.append("%20");
@@ -92,7 +94,7 @@ public class Search {
                 
                 wr = new FileWriter(workingDir+File.separator+"profiles"+File.separator+"history"+File.separator+dn,true);
                 wr.write("<tr><td>"+buff.toString()+" </td>");
-                wr.write("<td>"+discipline+"</td>");
+                wr.write("<td>"+dis+"</td>");
                 wr.write("<td>"+new java.util.Date()+"</td>");
                 wr.write("<td>"+waiting+"</td>");
                 wr.write("<td><a href='../servlet/ResendQuery?discipline="+discipline+"&wait="+waiting+""+buff2.toString()+"'>Resend Query</a></td></tr>");
