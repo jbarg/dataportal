@@ -84,6 +84,7 @@ public class Search {
                 wr.close();
             }
             catch(Exception ignore){}
+            throw e;
         }
     }
     

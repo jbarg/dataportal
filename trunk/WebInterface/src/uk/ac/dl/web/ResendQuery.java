@@ -1,3 +1,4 @@
+
 package uk.ac.dl.web;
 
 import javax.servlet.*;
@@ -15,6 +16,7 @@ import ac.dl.xml.*;
 import org.jdom.*;
 import java.io.*;
 /**
+ *  This is used in the history page
  * @date 04/07/02
  */
 public class ResendQuery extends HttpServlet{
@@ -46,7 +48,7 @@ public class ResendQuery extends HttpServlet{
             
             String endpoint =   prop.getProperty("QNR");
             //System.out.println(endpoint);
-            Service  service = new Service();
+           /*Service  service = new Service();
             Call  call    = (Call) service.createCall();
             
             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
@@ -70,6 +72,10 @@ public class ResendQuery extends HttpServlet{
             //System.out.println(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
             Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
             logHistoryFile(object, (String)session.getAttribute("dn"),wd);
+            */
+            
+            Search.doBasicSearh(sid,facilities,discipline, wait,endpoint,wd,(String)session.getAttribute("dn"), true);
+            
             
             response.sendRedirect("../jsp/SimpleSearch.jsp");
         }
@@ -111,13 +117,13 @@ public class ResendQuery extends HttpServlet{
             
             wr.close();
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
+    
+    
+    
+    
+    
+    
+    
+    
+}
