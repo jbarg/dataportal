@@ -666,12 +666,70 @@ public class ISISCsmdMapper implements CsmdMapper
    void buildMDInvestigation(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
 ////////////      
-      String email = place_holder ;
+      //following needed as some calls from nested context:
+      //as this is called from a nested context
+      Connection c = ss.getConnection() ;
+      Statement t_s = c.createStatement() ;
+      Resultset t_r = null ;
 
-      r = s.executeQuery ("select cols from investigation where investigation_id in (select investigation_id from investigation_list 
+      //variables
+      String id = place_holder ;
+      String experiment_number = place_holder ;
+      String title = place_holder ;
+      String investigation_type =place_holder ;
+      String instrument_id = place_holder ;
+      String inst_calibaration_id = place_holder ;
+      String inv_abstract = place_holder ;
+      String prev_experiment_number = place_holder ;
+      String bcat_inv_str = place_holder ;
+      String comments = place_holder ;
+
+      String name = place_holder ;
+      String short_name = place_holder ;
+      String instrument_comments =  place_holder ;
+
+      r = s.executeQuery ("select id, experiment_number, title, investigation_type, instrument_id, inst_calibration_id, inv_abstract, " +
+                          " prev_experiment_number, bcat_inv_str, comments from investigation where investigation_id in " +
+                          "(select investigation_id from investigation_list where study_id='" + key +"')") ;
 
       while(r.next())
       {
+         
+         id = sr.LitWithEnt(xt.makeValid(r.getString("ID") ));
+         experiment_number = sr.LitWithEnt(xt.makeValid(r.getString("EXPERIMENT_NUMBER") ));
+         title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+         investigation_type = sr.LitWithEnt(xt.makeValid(r.getString("INVASTIGATION_TYPE") ));
+         instrument_id = sr.LitWithEnt(xt.makeValid(r.getString("INSTRUMENT_ID") ));
+         inst_calibaration_id = sr.LitWithEnt(xt.makeValid(r.getString("INST_CALIBRATION_ID") ));
+         inv_abstract = sr.LitWithEnt(xt.makeValid(r.getString("INV_ABSTRACT") ));
+         prev_experiment_number = sr.LitWithEnt(xt.makeValid(r.getString("PREV_EXPERIMENT_NUMBER") ));
+         bcat_inv_str = sr.LitWithEnt(xt.makeValid(r.getString("BCAT_INV_STR") ));
+         comments = sr.LitWithEnt(xt.makeValid(r.getString("COMMENTS") ));
+
+         sbr.append(ii+"<Investigation>\n") ;
+         sbr.append(ii+li+"<Name>"+title+"</Name>\n") ;
+         sbr.append(ii+li+"<InvestigationType>"+investigation_type+"</InvestigationType") ; 
+         sbr.append(ii+li+"<Abstract>"+inv_abstract+"</Abstract>\n") ;
+
+         t_r=t_s.executeQuery("Select name, short_name, comments from intrument where id ='"+ instrument_idi +"'") ; 
+
+         if(t_r.next())
+         {
+            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+            short_name = sr.LitWithEnt(xt.makeValid(r.getString("SHORT_NAME") ));
+            instrument_comments = sr.LitWithEnt(xt.makeValid(r.getString("COMMENTS") ));
+         }
+         // put in the resource/instrument used 
+         sbr.append(ii+li+"<Resources\n>") ; 
+         sbr.append(ii+li+li"<Name"> + name + "</Name>\n") ;
+         sbr.append(ii+li+li"<ShortName"> + short_name + "</ShortName">) ;
+         sbr.append(ii+li+li"<Comments"> + instrument_comments + "</Comments>\n") ;
+         sbr.append(ii+li+"<Resources\n>") ; 
+
+         t_r.close() ;
+
+         //getting the related information/experimens
+         
 
       return ;
 /////////////
