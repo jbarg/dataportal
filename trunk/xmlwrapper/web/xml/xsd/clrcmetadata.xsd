@@ -61,6 +61,16 @@
       </xsd:sequence>
    </xsd:complexType> 
 
+   <!-- perhaps there is a cleverer way to do this by restriction but for now to control optionality we just use another top level element -->
+
+   <xsd:complexType name="DataTopicType">
+      <xsd:sequence>
+         <xsd:element name="Keywords" type="cmd:KeywordsType" minOccurs="0" maxOccurs="unbounded" />
+	 <xsd:element name="Subjects"    type="cmd:SubjectsType" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+   </xsd:complexType> 
+   
+
    <xsd:complexType name="KeywordsType">
       <xsd:sequence>
 	 <xsd:element name="Discipline" type="xsd:string"/>
@@ -211,7 +221,8 @@
      <xsd:complexContent>
         <xsd:extension base="cmd:PersonType">
            <xsd:sequence>
-              <xsd:element name="Role" type="cmd:RoleTypes"/>
+              <xsd:element name="RoleInStudy" type="cmd:RoleTypes"/>
+              <xsd:element name="RoleInInstitution" type="cmd:RoleTypes"/>
            </xsd:sequence>
         </xsd:extension>
      </xsd:complexContent>
@@ -230,9 +241,11 @@
   <xsd:complexType name="ContactDetailsType">
      <xsd:sequence>
         <xsd:element name="Address"   type="cmd:AddressType"/>
-        <xsd:element name="Telephone" type="xsd:string"/>
-        <xsd:element name="Email"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="DirectLine" type="xsd:string"/>
+        <xsd:element name="Switchboard" type="xsd:string"/>
         <xsd:element name="Fax"       type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Email"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="WebPage"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
      </xsd:sequence>
   </xsd:complexType>
 
@@ -332,7 +345,7 @@
    <xsd:complexType name="DataHoldingType">
       <xsd:sequence>
          <xsd:element name="DataDescription"    type="cmd:DataDescriptionType"/>
-         <xsd:element name="DataSet"            type="cmd:DataSetType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="DataCollection"            type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="RelatedStudy"       type="cmd:RelatedStudyType" minOccurs="0"/>
          <xsd:element name="DataHoldingLocator" type="cmd:DataHoldingLocatorType"/>
       </xsd:sequence>
@@ -416,6 +429,7 @@
          <xsd:element name="DataName"   type="xsd:string"/>
 	 <xsd:element name="TypeOfData" type="cmd:TypesOfData" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="Status"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="DataTopic"  type="cmd:DataTopicType" />
 <!-- need to use a union type as LogicalDescription can be of one or more type -->
          <xsd:element name="LogicalDescription" type="cmd:LogicalDescriptionTypes" minOccurs="0" maxOccurs="1"/>
       </xsd:sequence>
@@ -430,33 +444,33 @@
    </xsd:simpleType>
 
  
-   <xsd:complexType name="DataSetType">
+   <xsd:complexType name="DataCollectionType">
       <xsd:sequence>
          <xsd:element name="DataDescription" type="cmd:DataDescriptionType"/>
 	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="DataSet"           type="cmd:DataSetType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="RelatedDataSetRef" type="cmd:RelatedDataSetRefType" minOccurs="0"/>
-	 <!--         <xsd:element name="ParentDataSetRef"  type="xsd:string" minOccurs="0" maxOccurs="1"/> -->
-	 <!-- <xsd:element name="ChildDataSetRef"   type="xsd:string" minOccurs="0"/> -->
-         <xsd:element name="DerivedFromDataSetRef" type="cmd:DerivedFromDataSetRefType" minOccurs="0"/>
-         <xsd:element name="DataSetLocator"    type="cmd:DataSetLocatorType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="DataCollection"           type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="RelatedDataCollectionRef" type="cmd:RelatedDataCollectionRefType" minOccurs="0"/>
+	 <!--         <xsd:element name="ParentDataCollectionRef"  type="xsd:string" minOccurs="0" maxOccurs="1"/> -->
+	 <!-- <xsd:element name="ChildDataCollectionRef"   type="xsd:string" minOccurs="0"/> -->
+         <xsd:element name="DerivedFromDataCollectionRef" type="cmd:DerivedFromDataCollectionRefType" minOccurs="0"/>
+         <xsd:element name="DataCollectionLocator"    type="cmd:DataCollectionLocatorType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
 <!-- again the following is stated as a CDATA type in the original DTD -->
       <xsd:attribute name="dataid" type="xsd:ID" use="required"/>
    </xsd:complexType>
 
 
-   <xsd:complexType name="DerivedFromDataSetRefType">
+   <xsd:complexType name="DerivedFromDataCollectionRefType">
       <xsd:sequence>
          <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="DataSetRef"     type="xsd:string"/>
+         <xsd:element name="DataCollectionRef"     type="xsd:string"/>
       </xsd:sequence>
    </xsd:complexType>
 
 
-   <xsd:complexType name="RelatedDataSetRefType">
+   <xsd:complexType name="RelatedDataCollectionRefType">
       <xsd:sequence>
-         <xsd:element name="DataSetRef"   type="xsd:string"/>
+         <xsd:element name="DataCollectionRef"   type="xsd:string"/>
          <xsd:element name="RelationType" type="xsd:string"/>
       </xsd:sequence>
    </xsd:complexType>
@@ -530,7 +544,7 @@
    <xsd:complexType name="DerivedFromADORefType">
       <xsd:sequence>
          <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="DataSetRef"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="DataCollectionRef"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="ADORef"        type="xsd:string" />
       </xsd:sequence>
    </xsd:complexType>
@@ -574,7 +588,7 @@
    </xsd:simpleType>
 
 
-   <xsd:complexType name="DataSetLocatorType">
+   <xsd:complexType name="DataCollectionLocatorType">
       <xsd:sequence>
          <xsd:element name="DataName" type="xsd:string"/>
          <xsd:element name="Locator"  type="cmd:LocatorTypes" minOccurs="0" maxOccurs="unbounded"/>
