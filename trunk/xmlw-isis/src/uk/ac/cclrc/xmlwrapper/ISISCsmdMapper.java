@@ -957,7 +957,7 @@ public class ISISCsmdMapper implements CsmdMapper
       return ;
    }
 
-   void buildMDLogicalDescription(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   void buildMDLogicalDescription(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
@@ -974,15 +974,79 @@ public class ISISCsmdMapper implements CsmdMapper
 
       if(type.compareTo("datacollection")==0)
       {
-         //HERE
-         buildMDParemeters(
-         buildMDTimePeriod(
-         buildMDFacilityUsed(
+         //HERE - post 1st jan 2005
+         sbr.append(ii+"</LogicalDescription>\n") ;
+
+         buildMDParemeters(key, sbr, ii+li, "datacollection", true) ;
+         buildMDTimePeriod(key, sbr, ii+li, "datacollection", true) ;
+         buildMDFacilityUsed(key, sbr, ii+li, "datacollection", true) ;
+
+         sbr.append(ii+"</LogicalDescription>\n") ;
+      }
+
       return ;
    }
-   void buildMDParameter(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   void buildMDParameters(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
+
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+
+      if(type.compareTo("ado")==0)
+      {
+         String name=place_holder ;
+         String value=place_holder ;
+         String units=place_holder ;
+         String exponent=place_holder ;
+         String range_top=place_holder ;
+         String range_bottom=place_holder ;
+         String error=place_holder ;
+
+         t_r=t_s.execute("select id, name, value, units, exponent, range_top, range_bottom, error from parameter "+
+                         "where parameter.id in (select parameterid from parameter_list where datafileid = '" + key + "')") ;
+
+         //may need to check to see results otherwise might get empty tags - not a serious one
+
+         while(t_r.next())
+         {
+            id = sr.LitWithEnt(xt.makeValid(r.getString("ID") ));
+            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+            value = sr.LitWithEnt(xt.makeValid(r.getString("VALUE") ));
+            units = sr.LitWithEnt(xt.makeValid(r.getString("UNITS") ));
+            exponent = sr.LitWithEnt(xt.makeValid(r.getString("EXPONENT") ));
+            range_top = sr.LitWithEnt(xt.makeValid(r.getString("RANGE_TOP") ));
+            range_bottom = sr.LitWithEnt(xt.makeValid(r.getString("RANGE_BOTTOM") ));
+            error = sr.LitWithEnt(xt.makeValid(r.getString("ERROR") ));
+
+            sbr.append(ii+"<Parameter paramid=\""+id+"\">\n") ;
+
+            sbr.append(ii+li+"<ParamName>"+description+"</ParamName>\n") ;
+            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
+            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
+            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
+            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
+            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
+            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
+            sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
+
+            sbr.append(ii+"</Parameter>\n") ;
+
+         }
+
+
+         t_r.close() ;
+         t_s.close() ;
+       
 
       return ;
    }
