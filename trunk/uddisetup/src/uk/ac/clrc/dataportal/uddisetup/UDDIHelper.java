@@ -64,6 +64,7 @@ public class UDDIHelper
         
         // Set System properties required by JSSE
         //System.setProperty("javax.net.ssl.trustStore", "path_to_trust_store/.keystore"); // Location of keystore
+        //System.setProperty("javax.net.debug","ssl");
         System.setProperty("java.protocol.handler.pkgs","com.sun.net.ssl.internal.www.protocol"); // Use Sun's https URL handler
         
         // Dynamically register Sun's SSL provider
@@ -76,7 +77,6 @@ public class UDDIHelper
             proxy = new UDDIProxy();
             //            proxy.setInquiryURL("http://escpc10.esc.rl.ac.uk:8080/wasp/uddi/inquiry");
             proxy.setInquiryURL("http://escdmg.dl.ac.uk:7080/uddi/inquiry");
-            //proxy.setPublishURL("https://escpc10.esc.rl.ac.uk:8443/wasp/uddi/publishing");
             //            proxy.setPublishURL("http://escpc10.esc.rl.ac.uk:8080/wasp/uddi/publishing");
             proxy.setPublishURL("https://escdmg.dl.ac.uk:7443/uddi/publishing");
         }
