@@ -75,6 +75,9 @@ public class SessionSingleton
 
    DBHelper dbh = new DBHelper() ;
 
+   //name of the server and port - so we can figure out url of the dtd / schema
+   String server_port;
+
    //
    //
    //
@@ -139,11 +142,34 @@ public class SessionSingleton
    //
    //
 
-   void SetDbConnectionInfo() throws IOException
+   String getDTDLocation()
    {
+      String ret_val = "http://escvig2.dl.ac.uk:8080/xmlwrapper/xml/dtd/clrcmetadata.dtd" ;
 
-      Properties config = new Properties();
-      try 
+      StringBuffer sb = new StringBuffer(getReadPath()) ;
+   
+      sb.reverse() ;
+
+      StringTokenizer st = new StringTokenizer(sb.toString(), File.separator);
+
+      if (st.hasMoreTokens())
+      {
+         StringBuffer con = new StringBuffer(st.nextToken()) ;
+         con.reverse() ;
+
+         ret_val = "http://" + server_port + "/" + con.toString() + "/xml/dtd/clrcmetadata.dtd" ;
+      }
+
+      return ret_val ;
+   }
+  
+   //
+   //
+
+   void loadPropertiesFile() throws IOException
+   {
+      Properties config = new Properties() ;
+      try
       {
          config.load(new FileInputStream(getPropFile()));
 
@@ -152,12 +178,33 @@ public class SessionSingleton
          this.sid =  config.getProperty("dbsid");
          this.user = config.getProperty("dbuser");
          this.pass = config.getProperty("dbpass");
+         
+         this.server_port = config.getProperty("catalinahost") ;
+      }
+      catch (IOException e)
+      {
+        throw e;
+      }
+
+      return ;
+   }
+
+   void SetDbConnectionInfo() throws IOException
+   {
+
+      Properties config = new Properties();
+      try 
+      {
+         if(this.host == null)
+         {
+            loadPropertiesFile() ;
+         }
       }
       catch (IOException e)
       {
         throw e;    
       }
-
+      return ;
    }
 
    String getHost()
@@ -251,17 +298,17 @@ public class SessionSingleton
 
    String getLogPropFile()
    {
-      return getReadPath() + File.separatorChar + "conf" + File.separatorChar + getWrapperName() + ".log.properties" ;
+      return getReadPath() +  "conf" + File.separatorChar + getWrapperName() + ".log.properties" ;
    }
 
    String getMapFile()
    {
-      return getReadPath() + File.separatorChar + "conf" + File.separatorChar + getWrapperName() + ".map.data" ; 
+      return getReadPath() +  "conf" + File.separatorChar + getWrapperName() + ".map.data" ; 
    }
 
    String getPropFile()
    {
-      return getReadPath() + File.separatorChar + "conf" + File.separatorChar + getWrapperName() + ".properties" ;
+      return getReadPath() + "conf" + File.separatorChar + getWrapperName() + ".properties" ;
    }
 
    //
