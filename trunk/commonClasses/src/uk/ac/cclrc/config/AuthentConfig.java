@@ -13,14 +13,14 @@ import java.util.*;
  * @author  gjd37
  */
 public class AuthentConfig {
-    
+
     /** Creates a new instance of AuthentConfig */
     public AuthentConfig() {
     }
-    
-    
-    
-    
+
+
+
+
     /**
      * @param args the command line arguments
      */
@@ -33,10 +33,10 @@ public class AuthentConfig {
         filewriter.write("globusCert="+args[2]);
         filewriter.close();*/
         Properties prop = new Properties();
-        prop.setProperty("globusKey", args[1]);
-        prop.setProperty("globusCert", args[2]);
+        prop.setProperty("portal_private_key_filename", args[1]);
+        prop.setProperty("portal_private_cert_filename", args[2]);
         prop.store(new FileOutputStream(file),"Globus configuration");
-        
+
     }
-    
+
 }
