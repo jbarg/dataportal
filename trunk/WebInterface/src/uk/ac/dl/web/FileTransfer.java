@@ -29,7 +29,7 @@ import org.apache.axis.AxisFault;
  * @author  gjd37
  * @version
  */
-public class Transfer extends HttpServlet {
+public class FileTransfer extends HttpServlet {
     
     /** Handles the HTTP <code>POST</code> method.
      * @param request servlet request
@@ -40,7 +40,7 @@ public class Transfer extends HttpServlet {
     throws ServletException, IOException {
         //set static log for the class
         
-        Logger logger = Logger.getLogger("Transfer.class");
+        Logger logger = Logger.getLogger(this.getClass().getName());
         HttpSession session = request.getSession(false);
         if(session == null){
             response.sendRedirect("../html/Login.html");
@@ -79,8 +79,14 @@ public class Transfer extends HttpServlet {
                 cred = new FileWriter(save);
                 cred.write(cert);
                 cred.close();
-               /* String proxyServer= prop.getProperty("proxy_server_url");
-                
+                int no = save.length();
+                StringBuffer h1 = new StringBuffer();
+                for(int i = 0; i<no; i++){
+                    if( save.charAt(i) == ' ') h1.append("%20");
+                    
+                    else h1.append(save.charAt(i));
+                }
+                save = h1.toString();
                 
                 Service  service = new Service();
                 Call  call    = (Call) service.createCall();
@@ -92,7 +98,7 @@ public class Transfer extends HttpServlet {
                 call.addParameter( "cert", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.XSD_STRING );
                 
-                Object[] ob = new Object[]{url,urlTo,cert};
+                Object[] ob = new Object[]{url,urlTo,save};
                 
                 result = (String) call.invoke(ob );
                 
@@ -106,11 +112,7 @@ public class Transfer extends HttpServlet {
                 
                 return;
             }
-                
-                
-            System.out.println("");
-            System.out.println("result of transfer is "+result);
-            System.out.println("");
+            
             if(result.equals("true")) {
                 response.sendRedirect("../jsp/transferOk.jsp");
                 
@@ -119,72 +121,64 @@ public class Transfer extends HttpServlet {
                 logger.warn("Error in transfering srb object.\nError: "+result);
                 response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+url);
                 
-            }*/
-                
-                ///////////////////////CHEATING/////////////////////////////
-                int no = save.length();
-                StringBuffer h1 = new StringBuffer();
-                for(int i = 0; i<no; i++){
-                    if( save.charAt(i) == ' ') h1.append("%20");
-                    
-                    else h1.append(save.charAt(i));
-                }
-                save = h1.toString();
-                
-                //read in the message
-                URL  urlservlet = new URL("http://"+InetAddress.getLocalHost().getCanonicalHostName()+":8080/datatransfer/servlet/TransferDataServlet?cred="+save+"&from="+url+"&to="+urlTo+"&passwd=dpu()3^");
-                
-                URLConnection urlc = urlservlet.openConnection();
-                InputStream input = urlc.getInputStream();
-                BufferedReader read = new BufferedReader(new InputStreamReader(input));
-                String str;
-                StringBuffer buff = new StringBuffer();
-                while((str = read.readLine()) != null){
-                    buff.append(str);
-                }
-                read.close();
-                
-                if(buff.toString().equals("true")){
-                    response.sendRedirect("../jsp/TransferOk.jsp");
-                }
-                else {
-                    logger.warn("Error in transfering srb object.\nError: "+result);
-                    response.sendRedirect("../jsp/transferError.jsp?error="+buff.toString()+"&url="+url);
-                    
-                }
-                //send it back to the browser
-                //BufferedInputStream buffread = new BufferedInputStream(input);
-                
-                
+            }
+            ///////////////////////CHEATING/////////////////////////////
+            
+            
+            //read in the message
+            /*URL  urlservlet = new URL("http://"+InetAddress.getLocalHost().getCanonicalHostName()+":8080/datatransfer/servlet/TransferDataServlet?cred="+save+"&from="+url+"&to="+urlTo+"&passwd=dpu()3^");
+             
+            URLConnection urlc = urlservlet.openConnection();
+            InputStream input = urlc.getInputStream();
+            BufferedReader read = new BufferedReader(new InputStreamReader(input));
+            String str;
+            StringBuffer buff = new StringBuffer();
+            while((str = read.readLine()) != null){
+                buff.append(str);
+            }
+            read.close();
+             
+            if(buff.toString().equals("true")){
+                response.sendRedirect("../jsp/TransferOk.jsp");
+            }
+            else {
+                logger.warn("Error in transfering srb object.\nError: "+result);
+                response.sendRedirect("../jsp/transferError.jsp?error="+buff.toString()+"&url="+url);
+             
+            }
+            //send it back to the browser
+            //BufferedInputStream buffread = new BufferedInputStream(input);
+             
+             
               /*  ServletOutputStream out = response.getOutputStream();
-               
-               
+             
+             
                 BufferedOutputStream buffout = new BufferedOutputStream(out);
-               
+             
                 byte[] buffer = new byte[65536];
                 int c=0;
-               
+             
                 while ((c=buffread.read(buffer)) > -1) {
                     buffout.write(buffer,0,c);
                 }
-               
+             
                 buffout.flush();
                 buffout.close();
                 buffread.close();
                 out.close();*/
-                
-                
-                //response.sendRedirect("servlet/TransferCOPServlet?cred='"+save+"'&from="+url+"&to="+urlTo+"&passwd=dpu()3^");
-            }
-            catch(Exception e){
-                //Syste catch(Exception e){
-                //System.out.println(e);
-                logger.warn("Unable to transfer file collection",e);
-                
-                response.sendRedirect("../jsp/error.jsp");
-                
-                return;
-            }
+            
+            
+            //response.sendRedirect("servlet/TransferCOPServlet?cred='"+save+"'&from="+url+"&to="+urlTo+"&passwd=dpu()3^");
+        /*}
+        catch(Exception e){
+            //Syste catch(Exception e){
+            //System.out.println(e);
+            logger.warn("Unable to transfer file collection",e);
+         
+            response.sendRedirect("../jsp/error.jsp");
+         
+            return;
+        }*/
             
             
             ////////////////////END CHEATING////////////////////////////

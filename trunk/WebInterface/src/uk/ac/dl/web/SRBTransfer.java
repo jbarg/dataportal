@@ -126,7 +126,7 @@ public class SRBTransfer extends HttpServlet {
             try{
                 //HARD CODE FOR NOW
                 
-                String endpoint =url1;
+               /* String endpoint =url1;
                 Service  service = new Service();
                 Call     call    = (Call) service.createCall();
                 
@@ -141,8 +141,25 @@ public class SRBTransfer extends HttpServlet {
                 System.out.println("http://"+host.getHostAddress()+":8080/dataportal/xml/"+sid+".tar");
                 Object[] ob = new Object[]{"http://"+host.getCanonicalHostName() +":8080/dataportal/xml/"+sid+".tar",urlTo,cert};
                 
-                result = (String) call.invoke(ob );
+                result = (String) call.invoke(ob );*/
+                //save credential
                 
+                
+                
+                //read in the message
+                URL  urlservlet = new URL("http://"+InetAddress.getLocalHost().getCanonicalHostName()+":8080/datatransfer/servlet/TransferDataServlet?cred="+save+"&from="+url+"&to="+urlTo+"&passwd=dpu()3^");
+                              
+                URLConnection urlc = urlservlet.openConnection();
+                InputStream input = urlc.getInputStream();
+                BufferedReader read = new BufferedReader(new InputStreamReader(input));
+                String str;
+                StringBuffer buff = new StringBuffer();
+                while((str = read.readLine()) != null){
+                    buff.append(str);
+                }
+                read.close();
+                
+               result = buff.toString();
                 
             } catch (Exception e) {
                 logger.warn("Unable to transfer srb collection",e);

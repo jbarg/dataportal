@@ -27,7 +27,8 @@
      from which Ant executes the requested task.  This is normally
      set to the current working directory.
 -->
-<project name="Shopping Cart" default="compile" basedir=".">
+<project name="Shoppcp *.jar /var/tomcat4/shared/lib/
+ing Cart" default="compile" basedir=".">
 	<!-- ===================== Property Definitions =========================== -->
 	<!--
 

@@ -46,17 +46,23 @@ public class TransferDataServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException{
-        
+        ServletOutputStream out = response.getOutputStream();
         //request users current session
         String password = request.getParameter("passwd");
         if(!password.equals("dpu()3^")){
             try{
                 InetAddress host = InetAddress.getLocalHost();
                 System.out.println("wrong password");
+                out.print("Wrong password");
+                out.close();
+                return;
                 //response.sendRedirect("http://"+host.getCanonicalHostName()+":8080/dataportal/html/Login.html");
             }
             catch(Exception e){
+                out.println(e.getMessage());
+                out.close();
                 System.out.println(e);
+                return;
             }
             
         }
@@ -87,13 +93,18 @@ public class TransferDataServlet extends HttpServlet {
                 //      uc.setAppendMode(false);
                 uc.setCredentials(credential2);
                 uc.copy();
+                out.print("true");
+                out.close();
             }
             catch(Exception e) {
+                out.print(e.getMessage());
+                out.close();
                 System.out.println(e);
+                return;
             }
             System.out.println("Transfer done");
         }
-        System.out.println("finished");
+        //System.out.println("finished");
         
     }
 }
