@@ -30,7 +30,7 @@ if [ ! -r /etc/masstab ]
 then
 	echo ""
 	echo "+=========================================================="
-	echo "| bman_adm: Oracle backup administration utility"
+	echo "| mass_adm: Oracle backup administration utility"
 	echo "| Version 3.0, G.Chapman January 2005"
 	echo "+=========================================================="
 	echo "| "
@@ -160,7 +160,7 @@ function add_tapelist()
 	fi
 	
 	## Loop around adding tapes to the list, any that don't exist in ADS we should create
-	count=0
+	num_lines=0
 	while [[ 1 ]]
 	do
 		show_tapelist $list_name
@@ -175,8 +175,7 @@ function add_tapelist()
 			break
 		fi
 		
-		tape_name[$count]=$new_tape_name
-		count=$(($count+1))		
+		num_lines=$(($num_lines+1))
 	done
 	
 	
@@ -217,14 +216,17 @@ function add_tape()
 			echo "Enter tape size (1-48GB):"
 			tput cup 23 0
 			read new_tape_size
-			new_tape_size=$new_tape_size"GB"
+			new_tape_size2=$new_tape_size"GB"
 		done
 		
 		## Now we have enough info to create the tape file
-		cmd_line="datastore create $TOWNER $new_tape_name $new_tape_size POOL $new_pool_name"
+		cmd_line="datastore create $TOWNER $new_tape_name $new_tape_size2 POOL $new_pool_name"
 		exec $cmd_line		
 	fi
-	
+	tape_name[$num_lines]=$new_tape_name
+	cmd_line="datastore query OWNER=$TOWNER NAME=$new_tape_name POOL"
+	new_pool_name=`$cmd_line | grep -vi pool`
+		
 }
 
 function manage_tapelists()
@@ -236,31 +238,36 @@ function manage_tapelists()
 	do
 		header
 		count=0
-		for f in `ls $MASS_HOME/ctl/*.idx`
+		for f in $MASS_HOME/ctl/*.idx
 		do
-			echo $f > $MASS_HOME/tmp/idx_name.tmp
-			list_names[$count]=`sed s,.*\/\(.*\)\.idx,\1, $MASS_HOME/tmp/idx_name.tmp`
-			echo $(($count+1))" ) "${list_names[$count]}
+			list_names[$count]=`basename $f .idx`
+			echo $(($count+1))") "${list_names[$count]}
 			count=$(($count+1))
 		done
-	
+			
 		tput cup 22 0
-		echo "1-"$(($count+1))") (A)dd (D)elete E(x)it:"
+		echo "Select (1-"$(($count))") (A)dd or E(x)it:"
 		read answer
 		
-		if [[ $answer -ge 1 && $answer -le $(($count+1)) ]]
+		if [[ $answer -ge 1 && $answer -le $(($count)) ]]
 		then
 			current_list=${list_names[$(($answer-1))]}
 			read_tapelist $current_list
-			show_tapelist
-		
+			show_tapelist $current_list
+			tput cup 22 0
+	
+		echo "Select (D)elete E(x)it:"
+		tput cup 23 0
+		read answer
+			
+			if [[ $answer == "d" || $answer == "D" ]]
+			then
+				del_tapelist
+			fi
+			
 		elif [[ $answer == "a" || $answer == "A" ]]
 		then
 			add_tapelist
-		
-		elif [[ $answer == "d" || $answer == "D" ]]
-		then
-			del_tapelist ${list_names[$(($answer-1))]}
 			
 		elif [[ $answer == "x" || $answer == "X" ]]
 		then
@@ -282,9 +289,9 @@ function read_tapelist()
 	header
 	count=0
 	
-	{ while read 	$tape_name[$count] \
-			$tape_size[$count] \
-			$tape_pool[$count]
+	{ while read 	tape_name[$count] \
+			tape_size[$count] \
+			tape_pool[$count]
 	do
 		count=$(($count+1))
 	done
@@ -442,7 +449,7 @@ function del_entry()
 		count=0
 		while [[ $count -lt $num_entries ]]
 		do
-			echo -en $(($count+1))" ) "
+			echo -en $(($count+1))") "
 			echo -en ${partition[$count]}"\t"${index[$count]}"\t"
 			echo -en ${day[$count]}"\t"${method[$count]}"\t"${active[$count]}"\t"
 			echo -e ${append[$count]}"\t"${leve[$count]}
@@ -591,7 +598,7 @@ function mod_entry()
 			do
 				mod_done=1
 				header
-				echo -en $(($count+1))" ) "
+				echo -en $(($count+1))") "
 				echo -en ${partition[$count]}"\t"${index[$count]}"\t"
 				echo -en ${day[$count]}"\t"${method[$count]}"\t"${active[$count]}"\t"
 				echo -e ${append[$count]}"\t"${leve[$count]}
@@ -662,7 +669,7 @@ function run_entry()
 		count=0
 		while [[ $count -lt $num_entries ]]
 		do
-			echo -en $(($count+1))" ) "
+			echo -en $(($count+1))") "
 			echo -en ${partition[$count]}"\t"${index[$count]}"\t"
 			echo -en ${day[$count]}"\t"${method[$count]}"\t"${active[$count]}"\t"
 			echo -e ${append[$count]}"\t"${leve[$count]}
