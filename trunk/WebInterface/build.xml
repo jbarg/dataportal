@@ -219,7 +219,7 @@
 			<!-- added in ,**/test/** -->
 			<fileset dir="${src.home}" excludes="**/*.java"/>
 		</copy>
-	<!--	<java classname="uk.ac.dl.web.Indexer" fork="false">
+		<!--	<java classname="uk.ac.dl.web.Indexer" fork="false">
 			<arg value="create"/>
 			<arg value="${basedir}/build/help/xml"/>
 			<arg value="${basedir}/build/help/xml/index"/>
@@ -228,7 +228,7 @@
 				<pathelement path="${basedir}/build/WEB-INF/classes"/>
 			</classpath>
 		</java>-->
-		<antcall target="index" />
+		<antcall target="index"/>
 	</target>
 	<!-- ==================== Dist Target ===================================== -->
 	<!--
@@ -423,7 +423,7 @@
 
     </copy> -->
 	</target>
-	<target name="index" description="Re-index's the help pages">
+	<target name="index" depends="postprepare" description="Re-index's the help pages">
 		<java classname="uk.ac.dl.web.Indexer" fork="false">
 			<arg value="create"/>
 			<arg value="${basedir}/build/help/xml"/>
@@ -434,6 +434,10 @@
 			</classpath>
 		</java>
 	</target>
+	
+	
+	
+	
 	<!--  This starts the server that listens for Log4j events, and then emails the message to a list of users in the log4jServer.conf file -->
 	<target name="start_log4jserver" depends="postprepare" description="Starts the log4j server">
 		<java classname="uk.ac.cclrc.log4j.Log4jServer" fork="true">
@@ -447,6 +451,10 @@
 			</classpath>
 		</java>
 	</target>
+	
+	
+	
+	
 	<!--  This confgiures the root cacerts file to import the UDDI root certifiacte so that UDDI information can be published. -->
 	<target name="import_uddi_cert" description=" This confgiures the root cacerts file to import the UDDI root certifiacte so that UDDI information can be published">
 		<!--	<property name="keystore.password" value="changeit"/>
