@@ -4,9 +4,9 @@
   <target name="wsdl"
    description="makes wsdl and server skeltons and client stubs">
 
-    <!-- need to generate the wsdl and the stubs & skeleton -->
-    <!-- EMIN: -->
-    <!-- 'single quotes' around values containing double quotes -->
+    <!-- need to generate the wsdl and the stubs & skeleton 
+    - EMIN: 
+    - 'single quotes' around values containing double quotes 
     <java classname="org.apache.axis.wsdl.Java2WSDL" 
           fork="true"
 	  failonerror="true">
@@ -31,7 +31,43 @@
        <classpath>
           <pathelement path="${java.class.path}"/>
        </classpath>
+    </java> -->
+
+    <!-- need to generate the wsdl and the stubs & skeleton -->
+    <!-- EMIN: -->
+    <!-- 'single quotes' around values containing double quotes -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='eminxmlw.wsdl'/>
+       <arg value='-l'/>
+       <arg value='http://localhost:8080/${app.name}/xmlwrapper_emin'/>
+       <arg value='-n'/>
+       <arg value='urn:xmlwrapper'/>
+       <arg value='-p'/>
+       <arg value='uk.ac.cclrc.xmlwrapper=urn:xmlwrapper'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperEMIN'/>
+       <classpath refid="compile.classpath"/>
     </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='.'/>
+       <arg value='-d'/>
+       <arg value='Session'/>
+       <arg value="-s"/>
+       <arg value='-p'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.ws.emin'/>
+       <arg value='eminxmlw.wsdl'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+
+  </target>
+
 
 
   </target>
