@@ -124,6 +124,7 @@ public class SRBTransfer extends HttpServlet {
             }
             String result = "";
             String error= "";
+            File savefile;
             try{
                 //HARD CODE FOR NOW
                 
@@ -145,14 +146,14 @@ public class SRBTransfer extends HttpServlet {
                 result = (String) call.invoke(ob );*/
                 //save credential
                 String save = wd+File.separator+"profiles"+File.separator+sid;
-                              
-                FileWriter w = new FileWriter(save);
+                savefile = new File(save);
+                FileWriter w = new FileWriter(savefile);
                 w.close();
                 
                 
                 //read in the message
                 URL  urlservlet = new URL("http://"+InetAddress.getLocalHost().getCanonicalHostName()+":8080/datatransfer/servlet/TransferDataServlet?cred="+save+"&from="+tarFile+"&to="+urlTo+"&passwd=dpu()3^");
-                              
+                
                 URLConnection urlc = urlservlet.openConnection();
                 InputStream input = urlc.getInputStream();
                 BufferedReader read = new BufferedReader(new InputStreamReader(input));
@@ -163,14 +164,17 @@ public class SRBTransfer extends HttpServlet {
                 }
                 read.close();
                 
-               result = buff.toString();
+                result = buff.toString();
                 
             } catch (Exception e) {
                 logger.warn("Unable to transfer srb collection",e);
+                tarFile.delete();
+                savefile.delete();
                 response.sendRedirect("../jsp/error.jsp");
                 isError = true;
                 return;
             }
+             savefile.delete();
             tarFile.delete();
             if(result.equals("true")) {
                 response.sendRedirect("../jsp/transferOk.jsp");
@@ -181,8 +185,7 @@ public class SRBTransfer extends HttpServlet {
                 response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+dir);
                 
             }
-            
-            
+                        
         }
     }
     

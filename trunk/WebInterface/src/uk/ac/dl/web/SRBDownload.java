@@ -48,8 +48,8 @@ public class SRBDownload extends HttpServlet {
         else{
             //get all the attributes needed
             File tarFile = null;
-            String dir = request.getParameter("url");
-            String urlTo = request.getParameter("urlTo");
+            String dir = request.getParameter("dir");
+           // String urlTo = request.getParameter("urlTo");
             String sid = (String)session.getAttribute("sessionid");
             try{
                 //locate the prop file.  Normal get this from web.xml file
@@ -65,6 +65,7 @@ public class SRBDownload extends HttpServlet {
                 
                 //need to add section to get the value from properties file.
                 URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password);
+                System.out.println(url);
                 URLConnection yc = url.openConnection();
                 InputStream p = yc.getInputStream();
                 
