@@ -502,7 +502,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
       while(size > 0)
       {
-         sbr.append(ind+"<Subject>\n") ;
+         sbr.append(ind+"</Subject>\n") ;
          ind = ind.substring(li.length()) ; 
          --size ;
       }  
@@ -584,7 +584,7 @@ public class ISISCsmdMapper implements CsmdMapper
       sbr.append(ii+li+li+li+"<Date>"+ start_date_date + "</Date>\n") ; 
       sbr.append(ii+li+li+li+"<Time>"+ start_date_time + "</Time>\n") ; 
       sbr.append(ii+li+li+"</StartDate>\n") ; 
-      sbr.append(ii+li+li+"</EndDate>\n") ; 
+      sbr.append(ii+li+li+"<EndDate>\n") ; 
       sbr.append(ii+li+li+li+"<Date>"+ start_date_date + "</Date>\n") ; 
       sbr.append(ii+li+li+li+"<Time>"+ start_date_time + "</Time>\n") ; 
       sbr.append(ii+li+li+"</EndDate>\n") ; 
@@ -593,6 +593,7 @@ public class ISISCsmdMapper implements CsmdMapper
       sbr.append(ii+li+li+"<Abstract>" + purpose + "</Abstract>\n")  ; 
       sbr.append(ii+li+"</Purpose>\n") ; 
       sbr.append(ii+li+"<Status>" + status + "</Status>\n") ; 
+      sbr.append(ii+"</StudyInformation>\n") ;
      
 
       return ;
@@ -633,7 +634,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
          //if data not present than data will be filled in with an empty string this may need changing
 
-         sbr.append(ii+"<StudyPerson\n") ;
+         sbr.append(ii+"<StudyPerson>\n") ;
          sbr.append(ii+li+"<Name>\n") ;
          sbr.append(ii+li+li+"<Surname>" + surname + "</Surname>\n") ;
          sbr.append(ii+li+li+"<MiddleInitials>" + middle_initials + "</MiddleInitials>\n") ;
@@ -644,7 +645,7 @@ public class ISISCsmdMapper implements CsmdMapper
          sbr.append(ii+li+li+"<Email>" + email + "</Email>\n") ;
          sbr.append(ii+li+"</ContactDetails>\n") ;
          sbr.append(ii+li+"<RoleInStudy>not available</RoleInStudy>\n") ;
-         sbr.append(ii+"</StudyPerson\n") ;
+         sbr.append(ii+"</StudyPerson>\n") ;
 
       }
       r.close() ;
@@ -754,11 +755,11 @@ public class ISISCsmdMapper implements CsmdMapper
             instrument_comments = sr.LitWithEnt(xt.makeValid(t_r.getString("COMMENTS") ));
          }
          // put in the resource/instrument used 
-         sbr.append(ii+li+"<Resources\n>") ; 
+         sbr.append(ii+li+"<Resources>\n>") ; 
          sbr.append(ii+li+li+"<Name>" + name + "</Name>\n") ;
          sbr.append(ii+li+li+"<ShortName>" + short_name + "</ShortName>\n") ;
          sbr.append(ii+li+li+"<Comments>" + instrument_comments + "</Comments>\n") ;
-         sbr.append(ii+li+"<Resources\n>") ; 
+         sbr.append(ii+li+"</Resources>\n>") ; 
 
          t_r.close() ;
 
@@ -771,6 +772,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
         //build data holding
         buildMDDataHolding(id, sbr, ii+li, true) ;
+        sbr.append(ii+"</Investigation>\n") ;
 
      } // all investigation for this study have now been processed
          
@@ -926,13 +928,16 @@ public class ISISCsmdMapper implements CsmdMapper
          while (t_t_r.next())
          {
             //HERE-need to iterate through all ados
-            buildMDAtomicDataObject(key, sbr, ii+li, null, true) ;
+            datafile_id = sr.LitWithEnt(xt.makeValid(t_t_r.getString("DATAFILE_ID") ));
+            buildMDAtomicDataObject(datafile_id, sbr, ii+li, null, true) ;
          }
          t_t_r.close() ;
          t_t_s.close() ;
 
          //won't need the recursive call for isis - but maybe in the future
          //buildMDDataCollection(key, sbr, ii+li, "datacollection", true) ;
+
+         sbr.append(ii+"</DataCollection>\n") ;
 
       }
 
@@ -962,13 +967,13 @@ public class ISISCsmdMapper implements CsmdMapper
          t_s=s ;
       }
       //
-      sbr.append("<AtomicDataObject>\n") ;
+      sbr.append(ii+"<AtomicDataObject>\n") ;
 
       buildMDDataDescription(key, sbr, ii+li, "ado" , true) ;
       buildMDADOLocator(key, sbr, ii+li, "ado" , true) ;
       buildMDRelatedReference(key, sbr, ii+li, "ado" , true) ;
       
-      sbr.append("</AtomicDataObject>\n") ;
+      sbr.append(ii+"</AtomicDataObject>\n") ;
 
       if(nested==true)
       {
@@ -1188,7 +1193,7 @@ public class ISISCsmdMapper implements CsmdMapper
          sbr.append(ii+li+"<DataName>"+name+"</DataName>\n") ;
          sbr.append(ii+li+"<Description>"+comments+"</Description>\n") ;
          sbr.append(ii+li+"<TypeOfData>"+datafile_type+"</TypeOfData>\n") ;
-         sbr.append(ii+"<DataDescription>\n") ;
+         sbr.append(ii+"</DataDescription>\n") ;
 
       }
         
@@ -1225,7 +1230,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
       if(type.compareTo("datacollection")==0)
       {
-         sbr.append(ii+"</LogicalDescription>\n") ;
+         sbr.append(ii+"<LogicalDescription>\n") ;
 
          buildMDParameters(key, sbr, ii+li, "datacollection", true) ;
          buildMDTimePeriod(key, sbr, ii+li, "datacollection", true) ;
@@ -1301,9 +1306,10 @@ public class ISISCsmdMapper implements CsmdMapper
 
          }
 
+         t_r.close() ;
+
       }// all done for ado
 
-      t_r.close() ;
       if(nested==true)
       {
          t_s.close() ;
@@ -1361,7 +1367,7 @@ public class ISISCsmdMapper implements CsmdMapper
       sbr.append(ii+li+"<DataName>" + name + "</DataName>\n") ;
       //is there a locator ?
       sbr.append(ii+li+"<Locator>" + "N/A" + "</Locator>\n") ;
-      sbr.append(ii+"<DataHoldingLocator>\n") ;
+      sbr.append(ii+"</DataHoldingLocator>\n") ;
 
       if(nested==true)
       {
