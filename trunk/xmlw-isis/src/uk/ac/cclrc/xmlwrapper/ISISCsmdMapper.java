@@ -326,7 +326,49 @@ public class ISISCsmdMapper implements CsmdMapper
    //
    //
 
-   // contact_type can be Investigator or DataManager
+   //Indexing 
+   void buildMDTopic(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDKeywords(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDSubjects(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   //Study/investigation information (keeping mainly leaf node level complexity)
+   void buildMDStudy(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDNameRole(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //some where you might use type as
+													   //you can have InstitutionRole and PersonRole
+   void buildMDContactDetails(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //similar to buildMDContact template
+   void buildMDStudyPerson(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //similar to buildMDContact template
+   void buildMDStudyInformation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   void buildMDRelatedReference(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDRelatedReferanceLocation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   void buildMDInvestigation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   void buildMDDataHolding(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDDataDescription(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDDataTopic(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //will use Keywords & Subjects above
+
+   void buildMDLogicalDescription(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDParameter(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDTimePeriod(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDFacilityUsed(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDDataHoldingLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   void buildMDCollectionLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDAtomicDataObject(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   void buildMDADOLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //definately need type here
+ 													     //files and selects
+
+   //all the Misc type information
+   void buildMDAccessConditions(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   void buildMDLegalNotice(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   void buildMDRelatedPublication(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   void buildMDOtherRelatedMaterial(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+
+   
 
    void buildMDContact(String key, StringBuffer sbr, int initial_indent, String contact_type) throws SQLException
    {
