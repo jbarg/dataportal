@@ -89,7 +89,7 @@ public class DataTransferModule {
         }
     }*/
 
-    public static void urlCopy(String fromURL, String toURL,String cert)
+    public static String urlCopy(String fromURL, String toURL,String cert)
     throws Exception {
         try {
 
@@ -133,12 +133,14 @@ public class DataTransferModule {
             //      uc.setAppendMode(false);
             uc.setCredentials(credential2);
             uc.copy();
+            return "true";
         }
         catch (Exception e) {
             System.err.println("DataTransferModule.transferFile error: " +
-            e.getMessage());
-            e.printStackTrace();
-            throw e;
+            e);
+            return e.getMessage();
+            
+           
         }
     }
 
