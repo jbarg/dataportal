@@ -67,6 +67,15 @@
        uk.ac.dl.web.emineralsServlet
 
     </servlet-class>
+    </servlet>
+    <servlet>
+		<servlet-name>SessionListener</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.emineralsServlet
+
+    </servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>HelpSearch1</servlet-name>
@@ -257,6 +266,11 @@
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
 		<url-pattern>/servlet/LoginServlet</url-pattern>
+	</servlet-mapping>
+        
+        <servlet-mapping>
+		<servlet-name>SessionListener</servlet-name>
+		<url-pattern>/servlet/SessionListener</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>TransferServlet</servlet-name>
