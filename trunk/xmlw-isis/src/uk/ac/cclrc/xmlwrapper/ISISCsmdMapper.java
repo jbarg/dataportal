@@ -528,7 +528,7 @@ public class ISISCsmdMapper implements CsmdMapper
          notes = sr.LitWithEnt(xt.makeValid(r.getString("NOTES") ));
       }
       r.close() ;
-      sbr.append(ii + "<Study StudyID=\"" + key + "\">\n") ;
+      sbr.append(ii + "<Study StudyID=\"study_" + key + "\">\n") ;
       sbr.append(ii + li + "<StudyName>" + studyname + "</StudyName>\n") ;
 
       buildMDStudyInstitution(key, sbr, ii+li, null) ;  
@@ -657,10 +657,10 @@ public class ISISCsmdMapper implements CsmdMapper
       //there is no such info in the ISIS ICAT yet so essentially putting in a meaningful place holder
       log.debug("En:buildMDStudyInstitution") ;
 
-      sbr.append(ii + "<StudyInsitution>\n");
+      sbr.append(ii + "<StudyInstitution>\n");
       sbr.append(ii + li + "<Name institutiontype=\"research\">ISIS, RAL</Name>\n") ;
       sbr.append(ii + li + "<Role>Facility</Role>\n") ;
-      sbr.append(ii + "</StudyInsitution>\n");
+      sbr.append(ii + "</StudyInstitution>\n");
 
       return ;
    }
@@ -755,11 +755,11 @@ public class ISISCsmdMapper implements CsmdMapper
             instrument_comments = sr.LitWithEnt(xt.makeValid(t_r.getString("COMMENTS") ));
          }
          // put in the resource/instrument used 
-         sbr.append(ii+li+"<Resources>\n>") ; 
+         sbr.append(ii+li+"<Resources>\n") ; 
          sbr.append(ii+li+li+"<Name>" + name + "</Name>\n") ;
          sbr.append(ii+li+li+"<ShortName>" + short_name + "</ShortName>\n") ;
          sbr.append(ii+li+li+"<Comments>" + instrument_comments + "</Comments>\n") ;
-         sbr.append(ii+li+"</Resources>\n>") ; 
+         sbr.append(ii+li+"</Resources>\n") ; 
 
          t_r.close() ;
 
@@ -861,7 +861,7 @@ public class ISISCsmdMapper implements CsmdMapper
       //the key should be the key not of the study but of the investigation - as each dataholding is associated to
       //an investigation
 
-      sbr.append(ii+"<DataHolding InvestigationID=\"" + key + "\">\n") ;
+      sbr.append(ii+"<DataHolding InvestigationID=\"investigation_" + key + "\">\n") ;
 
       buildMDDataDescription(key, sbr, ii+li, "dataholding", true) ;
       buildMDDataHoldingLocator(key, sbr, ii+li, "dataholding", true) ;
@@ -911,7 +911,7 @@ public class ISISCsmdMapper implements CsmdMapper
          dataset_status = sr.LitWithEnt(xt.makeValid(t_r.getString("DATASET_STATUS") ));
          description = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
 
-         sbr.append(ii+"<DataCollection dataid=\""+dataset_id+"\">\n") ;
+         sbr.append(ii+"<DataCollection dataid=\"datacollection_"+dataset_id+"\">\n") ;
          //HERE - remember dataholding->ado call needs revisit
          //atomic do - needs a recursive call more temp statement handles perhaps
          buildMDDataDescription(dataset_id, sbr, ii+li, "datacollection" , true) ;
@@ -1524,8 +1524,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
       // li is of type String and it is the number of spaces in the indentation when going to a more nested level 
       //MetadataRecord starts
-      sbr.append(li + "<MetadataRecord metadataID=\"" + ss.getWrapperName() + "-" + key + "\"" +
-                             " facility=\"" + ss.getWrapperName()+ "\">\n");
+      sbr.append(li + "<MetadataRecord MetadataID=\"" + ss.getWrapperName() + "-" + key + "\"" +
+                             " Facility=\"" + ss.getWrapperName()+ "\">\n");
 
       //Topic
       buildMDTopic(key, sbr, (li+li), null) ;
