@@ -10,7 +10,7 @@ import org.apache.log4j.*;
 
 
 public class ShopCart {
-       
+    
     //set static log for the class
     static Logger logger = Logger.getLogger(ShopCart.class);
     
@@ -50,7 +50,7 @@ public class ShopCart {
             logger.warn("Error with the shopping cart",e);
             throw e;
         }
-         catch(Exception e){
+        catch(Exception e){
             logger.warn("Error with the shopping cart",e);
             throw e;
         }
@@ -140,7 +140,7 @@ public class ShopCart {
             logger.warn("Error with the shopping cart",e);
             throw e;
         }
-       
+        
         
         
         
@@ -211,7 +211,7 @@ public class ShopCart {
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
         
-        String[] ret = new String [2];
+        String[] ret = new String [5];
         
         Document doc=null;
         try{
@@ -239,6 +239,18 @@ public class ShopCart {
                         ret[0] =  el2.getText();
                         Element el4 = el.getChild("name");
                         ret[1] = el4.getText();
+                        
+                        //now get the query
+                        Element query = el.getChild("query");
+                        
+                        Element fac = query.getChild("facility");
+                        ret[2] = fac.getText();
+                        Element dis = query.getChild("discipline");
+                        ret[3] = dis.getText();
+                        Element wait = query.getChild("wait");
+                        ret[4] = wait.getText();
+                        
+                        
                         // System.out.println("name for see notes is "+el4.getText());
                         //Element el3 = el.getChild("url");
                         //System.out.println("url for see notes is "+el3.getText());
@@ -255,7 +267,7 @@ public class ShopCart {
             logger.warn("Error with the shopping cart",e);
             throw e;
         }
-         catch(Exception e){
+        catch(Exception e){
             logger.warn("Error with the shopping cart",e);
             throw e;
         }
@@ -311,7 +323,7 @@ public class ShopCart {
             logger.warn("Error with the shopping cart",e);
             throw e;
         }
-         catch(Exception e){
+        catch(Exception e){
             logger.warn("Error with the shopping cart",e);
             throw e;
         }
