@@ -75,7 +75,7 @@ public class FileTransfer extends HttpServlet {
                 Object[] ob1 = new Object[]{sid};
                 
                 cert = (String) call1.invoke(ob1 );
-                String save = wd+File.separator+"profiles"+File.separator+sid;
+                /*String save = wd+File.separator+"profiles"+File.separator+sid;
                 cred = new FileWriter(save);
                 cred.write(cert);
                 cred.close();
@@ -87,7 +87,7 @@ public class FileTransfer extends HttpServlet {
                     else h1.append(save.charAt(i));
                 }
                 save = h1.toString();
-                
+                */
                 Service  service = new Service();
                 Call  call    = (Call) service.createCall();
                 
@@ -98,7 +98,7 @@ public class FileTransfer extends HttpServlet {
                 call.addParameter( "cert", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.XSD_STRING );
                 
-                Object[] ob = new Object[]{url,urlTo,save};
+                Object[] ob = new Object[]{url,urlTo,cert};
                 
                 result = (String) call.invoke(ob );
                 
