@@ -1,1 +1,10 @@
 Data Portal Project ver 3.0 November 25
+
+Dataportal-3-5-1 December 9th 2003
+----------------------------------
+
+Session Manager, Query And Reply, Web Interface, ACM (acmematn), Authentication all changed to incorporate 
+new Authorisation architecture.
+Only XmlWrapper and Query And Reply need to be changed to send the Attribute Certificate to the 
+xml wrappers.
+All globus and axis jars taken out of local applications and put into common/lib
