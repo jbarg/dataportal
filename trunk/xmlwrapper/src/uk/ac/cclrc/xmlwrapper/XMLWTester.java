@@ -12,7 +12,11 @@ import java.io.*;
 
 
 public class XMLWTester {
-  public static void main(String [] args) {
+
+   void test(String endpoint_url,
+	     String query,
+	     String file_name) 
+   {
 
     try
     {
@@ -33,20 +37,21 @@ public class XMLWTester {
         //String endpoint = 
         //             "http://escvig2.dl.ac.uk:8080/axis/services/xmlwrapper_badc"; 
  
-        String endpoint = 
-                     "http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc"; 
+        //String endpoint = 
+        //             "http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc"; 
 
         Service  service = new Service(); 
         Call     call    = (Call) service.createCall(); 
  
-        call.setTargetEndpointAddress( new java.net.URL(endpoint) ); 
+        call.setTargetEndpointAddress( new java.net.URL(endpoint_url) ); 
         call.setOperationName( "getXML" ); 
         call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN ); 
  
         call.setReturnType( XMLType.SOAP_ELEMENT ); 
  
         org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( 
-	      new Object [] {"'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'"});
+	      new Object [] {query});
+	      //new Object [] {"'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'"});
 
        //////////
 
@@ -59,7 +64,7 @@ public class XMLWTester {
        org.jdom.Element el = buildert.build(ret);
        org.jdom.Document doc1  =new org.jdom.Document(el);
 	 
-       Saver.save(doc1, new File("saved.xml"));
+       Saver.save(doc1, new File(file_name));
     }
 
 
@@ -79,5 +84,21 @@ public class XMLWTester {
 
 	 return ;
    }
+
+   public static void main(String [] args) 
+   {
+      XMLWTester xmlwt = new XMLWTester() ;
+
+      xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc",
+           "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'",
+           "saved_badc.xml") ;
+		     
+      xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_mpim",
+           "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'",
+           "saved_mpim.xml") ;
+
+      return ;
+   }
+		     
 }
 

@@ -169,12 +169,15 @@ public class XmlWrapperMPIM
       Integer entry_id = null ;
 
       boolean cache_updated = false ;
-
-      while (st.hasMoreTokens())
+      
+      int count = 0 ;
+      while (st.hasMoreTokens() && count < 1)
       {
+
          if(repeat_last == false)
          {
             tmp_tok = st.nextToken() ;
+	    count++ ;
          }
          else
          {
