@@ -5,27 +5,53 @@
 
 <title>CLRC Data Portal - Help Pages</title>
 <!--<link rel="stylesheet" href="../style/main.css">-->
-<style>
+<style type="text/css"> 
+
+.menuhr { color: grey ; height: 2px; }
+
+
+.menu:link, .menu:visited {
+  color: blue;
+  text-decoration: none;
+  font-family: tahoma, verdana, sans-serif;
+  font-size: 14px;
+}
+.menu:hover {
+  color: blue;
+text-decoration: none;
+  font-family: tahoma, verdana, sans-serif;
+  font-size: 15px;
+}
+
+#headmenu {
+font-family: times,tahoma, verdana, sans-serif;
+  font-size: 17px;
+color: black;
+
+}
+
+#headmenu2 {
+font-family: times,tahoma, verdana, sans-serif;
+  font-size: 17px;
+
+
+}
+
+a:link 		{ color: BLUE; text-decoration: none; }
 
 
 
-a:link 		{ text-decoration: none;  }
+a:visited 	{ color: #0000FF; text-decoration: none;  }
 
 
 
-a:visited 	{ text-decoration: none;  }
+a:hover		{ color: #999999; text-decoration: underline;  }
 
 
 
-a:hover		{  text-decoration: underline; f }
+a:active 	{ color: #9999CC; text-decoration: underline;  }
 
 
-
-a:active 	{ text-decoration: underline; }
-body { font-family: Trebuchet, Arial, sans-serif;   }
-
-#button		{height:40px; width:100px; }
-.button {height:40px; width:100px; }
 </style>
 
 <script>
@@ -89,9 +115,9 @@ document.onmousedown=click*/
 <br />
 <input type="button" class="button" value="Close" onclick="parent.close();" />
 </form>-->
-<a href="Dataportal.html" target="footer" > Help</a>
+<a href="Dataportal.html" target="footer" id="headmenu2" > Help</a>
 <br />
-<a href="#" onclick="parent.close();"/>Close</a> 
+<a href="#" onclick="parent.close();" id="headmenu2"/>Close</a> 
 
 <!--
 <form name="search_help" action="../servlet/HelpSearch1" target="footer" method="post">
@@ -113,10 +139,11 @@ document.onmousedown=click*/
 </form>
 -->
 <form name="search" method="post" onsubmit="return check();" action="../servlet/HelpSearch1">
-<font size="3"><b>Type in keyword(s)</b></font>
+<span id="headmenu">Type in keyword(s)</span>
 <br />
  <%
  String text = (String)session.getAttribute("text");
+text = text.replaceAll("\"","'");
  if(text == null) text = "";
 %>
 <input name="search_string" type="text" value="<%=text%>" size="23"/>
@@ -140,11 +167,13 @@ document.onmousedown=click*/
     System.out.println(hits.length());
 %>        
 
-<h4>Select topic to display</h4>
+<span id="headmenu">Select topic to display</span>
+<br />
+<br />
 <table>
 <tr>
-   <td width="100">Title</td>
-       <td>Rank</td>
+   <td width="100" id="headmemu">Title</td>
+       <td id="headmemu">Rank</td>
 	
 </tr>
 <%
@@ -174,9 +203,9 @@ document.onmousedown=click*/
                 rank    = Float.parseFloat(floatS);
                 number = floatS.substring(2,3);
             }
-            System.out.println("Score is "+rank);
-            System.out.println("number is "+number);
-            System.out.println("name is "+name);
+            //System.out.println("Score is "+rank);
+           /// System.out.println("number is "+number);
+           // System.out.println("name is "+name);
 
             //add %20 to spaces
              int no1 = name.length();
@@ -191,11 +220,11 @@ document.onmousedown=click*/
             
             out.println("<tr><td>");
             if(hits.doc(i).get("type").equals("xml")){
-                out.println("<a  href='../jsp/help2.jsp?page="+name2+"' target='footer'>"+name+"</a></td>");
+                out.println("<a class=\"menu\" href='../jsp/help2.jsp?page="+name2+"' target='footer'>"+name+"</a></td>");
                 out.println("<td><img src=\"../img/"+number+"0.gif\" width=\"40\" height=\"10\"/></td></tr>");
             }
             else{
-                out.println("<a  href='xml/"+name2+".html' target='footer'>"+name+"</a></td>");
+                out.println("<a class=\"menu\" href='xml/"+name2+".html' target='footer'>"+name+"</a></td>");
                 out.println("<td><img src=\"../img/"+number+"0.gif\" width=\"40\" height=\"10\"/></td></tr>");
            }
         }
