@@ -9,7 +9,7 @@ import java.io.*;
  */
 public class DbAccess {
     
-    public final String SERVER = "//escpc12.esc.rl.ac.uk"; //currently my computer
+    public final String SERVER = "//localhost"; //currently my computer
     public final String PORT = "5432";
     private Connection conn;
 
@@ -21,7 +21,7 @@ public class DbAccess {
             //                               "sa",                    // username
             //                               "");                     // password
             Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql:" + SERVER +":"+ PORT+"/auth" ,
+            conn = DriverManager.getConnection("jdbc:postgresql:" + SERVER +":"+ PORT+"/test" ,
             "dpuser",                    // username
             "dp4all");               // password
             

@@ -9,6 +9,7 @@ import java.sql.*;
 import javax.xml.parsers.*;
 import org.jdom.*;
 import org.jdom.output.*;
+import org.jdom.input.*;
 import java.lang.*;
 import uk.ac.clrc.dataportal.authent.lookupclient.*;
 
@@ -20,6 +21,7 @@ import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 
+import org.apache.axis.utils.XMLUtils;
 
 // We somehow recive a username and password in SOAP format. Need to work this out
 
@@ -27,9 +29,9 @@ public class AuthCtl {
     
     public int login( String userName, String password ) throws Exception {
         
-        
         String[] facilityEndPoints;
-        Element facilityAccess;
+        //--        String[] facilityEndPoints = { "http://escvig3.dl.ac.uk:8080/axis/services/ACM" };
+        org.w3c.dom.Element facilityAccess;
         int sessionId;
         
         
@@ -37,6 +39,10 @@ public class AuthCtl {
             sessionId = -1;
         else {
             facilityEndPoints = lookupFacility();
+            System.out.println(facilityEndPoints.length);
+            if (facilityEndPoints.length > 0) {
+                System.out.println(facilityEndPoints[0]);
+            }
             facilityAccess = buildAccess( userName, facilityEndPoints );
             sessionId = getSessionId( userName, facilityAccess );
         }
@@ -52,12 +58,12 @@ public class AuthCtl {
         try {
             
             DbAccess db = new DbAccess();
-            ResultSet myResults = db.query("SELECT password from dpusers WHERE username = '"+userName+"'");
+            ResultSet myResults = db.query("SELECT dp_password from dp_users WHERE dp_user = '"+userName+"'");
             
             //de-ecrypt password
             while (myResults.next() ) {
                 
-                if( userPassword == myResults.getString(1))
+                if( userPassword.equals(myResults.getString(1)))
                     loggedIn = true;
                 else
                     loggedIn = false;
@@ -79,44 +85,56 @@ public class AuthCtl {
         return faciltyEndPoints;
     }
     
-    private Element buildAccess( String userName, String[] facilityEndPoints ) throws Exception {
+    private org.w3c.dom.Element buildAccess( String userName, String[] facilityEndPoints ) throws Exception {
         Element accessRights = new Element("UserAccessPrivilege");
         Element userElement = new Element("User");
         userElement.setText(userName);
         accessRights.addContent(userElement);
         
+        DOMBuilder domBuilder = new DOMBuilder();
+        DOMOutputter domOut = new DOMOutputter();
+        
         Service  service = new Service();
-        Call     call    = (Call) service.createCall();
         
         for (int i  = 0 ; i < facilityEndPoints.length ; i++){
             
-            try {
+            if ( facilityEndPoints[i] != null ) {
                 
-                call.setTargetEndpointAddress( new java.net.URL(facilityEndPoints[i]) );
-                call.setOperationName("getAccessInW3CElement");
-                call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
-                call.setReturnType( XMLType.SOAP_ELEMENT);
-                
-                Element ret = (Element)call.invoke( new Object[] {userName});
-                
-                accessRights.addContent(ret.getChild("Facility"));
-                //                System.out.println(" Name of The Root element "+ ret.getNodeName());
-            } catch (Exception e) {
-                System.err.println(e.toString());
+                try {
+                    Call     call    = (Call) service.createCall();
+                    call.setTargetEndpointAddress( new java.net.URL(facilityEndPoints[i]) );
+                    call.setOperationName("getAccessInW3CElement");
+                    call.addParameter( "userId", XMLType.XSD_STRING, ParameterMode.IN );
+                    call.setReturnType( XMLType.SOAP_ELEMENT);
+                    org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( new Object[] {userName});
+                    
+                    Element retJdom = domBuilder.build(ret);
+                    
+                    //System.out.println(XMLUtils.ElementToString(ret));
+                    Element facElement = (Element) retJdom.getChild("Facility").clone();
+                    accessRights.addContent(facElement);
+                    
+                    
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+        org.w3c.dom.Element accessRightsDOM = domOut.output(accessRights);
+//        System.out.println(XMLUtils.ElementToString(accessRightsDOM));
         
-        return accessRights;
+        return accessRightsDOM;
         
     }
     
     
-    private int getSessionId( String userName, Element facilityAccess ) throws Exception {
+    private int getSessionId( String userName, org.w3c.dom.Element facilityAccess ) throws Exception {
         
         // need to define endpoint or call lookup module
         // below is a fix
         // use String[] lookupEndpoint(String[] facilityList, String serviceType) with "dataportal" and "session"
-        String endpoint = "somtheing";
+        String endpoint = "http://escvig1.dl.ac.uk:8080/axis/services/SessionManager";
         
         Service service = new Service();
         Call call = (Call) service.createCall();
@@ -129,6 +147,15 @@ public class AuthCtl {
         Integer ret = (Integer) call.invoke( new Object [] {userName, facilityAccess});
         System.out.println("Results: " + ret);
         return ret.intValue();
+    }
+    
+    public static void main(String[] args) throws Exception {
+        
+        AuthCtl auth = new AuthCtl();
+        
+        int loggedin = auth.login("mike","letmein");
+        
+        System.out.println("Result: " + Integer.toString(loggedin));
     }
     
 }
