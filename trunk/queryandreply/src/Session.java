@@ -1,27 +1,18 @@
-/*
- * Session.java
- *
- * Created on 13 December 2002, 14:49
- */
-
-/**
- *
- * @author  ljb53
- */
 import org.apache.log4j.Logger;
+import java.io.*;
+import java.util.*;
+
+// Web services
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
 import javax.xml.rpc.ParameterMode;
 import java.rmi.RemoteException;
-import java.io.*;
-import java.util.*;
+
+// Common
+import uk.ac.cclrc.config.Config;
 
 public class Session {
-    //DUMMY
-    String endpoint = "http://esc3.dl.ac.uk:8080/sessionmanager/services/SessionManager";
-    //LIVE
-    //
     String sid;
     
     static Logger logger = Logger.getLogger(Session.class);
@@ -30,11 +21,12 @@ public class Session {
         this.sid = sid;
     }
     
-    public org.w3c.dom.Element isValid() throws Exception {
-        /*
-         * Ask Session Manager if session ok and get permissions
-         */
-        //lookup sessionmanagers endpoint
+    /*
+     * Ask Session Manager if session ok and get permissions
+     */
+    public String[][] getPermissions() throws Exception {
+        
+        // lookup sessionmanagers endpoint
         String session_url = lookup();
         
         Service service = new Service();
@@ -42,11 +34,11 @@ public class Session {
         call.setTargetEndpointAddress( new java.net.URL(session_url) );
         call.setOperationName("getPermissions");
         call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
-        call.setReturnType( XMLType.SOAP_ELEMENT );
+        call.setReturnType(new javax.xml.namespace.QName("", "ArrayOfArrayOf_xsd_string"), java.lang.String[][].class);
         
         // Call service
-        org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( new Object [] {sid});
-        logger.info("Permissions: " +ret);
+        String[][] ret = (String[][]) call.invoke( new Object [] {sid});
+        
         return ret;
     }
     

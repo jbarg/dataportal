@@ -1,7 +1,11 @@
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import java.util.Properties;
+import java.io.FileInputStream;
+import java.io.IOException;
 
+// Common
+import uk.ac.cclrc.config.Config;
 /**
  * QueryAndReply web service
  * created by ljb53 Jan 2003
@@ -12,12 +16,18 @@ public class QueryAndReply {
     static Logger logger = Logger.getLogger(QueryAndReply.class);
     static Properties prop = new Properties();
     
-    public QueryAndReply() {
-        //locate the prop file
-        //PropertyConfigurator.configure("../qr.log.properties");
+    public QueryAndReply() throws Exception {
         
         logger.info("STARTING QueryAndReply SERVICE");
-        
+
+        // Load the properties file
+        try {
+            prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
+            
+        } catch (IOException e) {
+            logger.fatal("Cannot load qr.conf", e);
+            throw e;
+        }
     }
     
     /*
@@ -33,13 +43,19 @@ public class QueryAndReply {
         
         // Check if session is valid and current
         Session s = new Session(sid);
-        org.w3c.dom.Element permissions = s.isValid();
-        Permissions p = new Permissions(permissions);
+        String[][] p = s.getPermissions();
         
         // Get query results
-        Query q = new Query(facilities, topic, p, timeoutSecs);
+        Query q = new Query(facilities, topic, p, timeoutSecs.intValue());
         return q.execute();
     }
     
+    public static void main(String[] args) throws Exception {
+        QueryAndReply qr = new QueryAndReply();
+        String[] facList = {"BADC","SRD"};
+        String topic = "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'";
+
+        qr.doBasicQuery("4c6568fc-266b-11d8-ab48-c915b2368155", facList,topic,new Integer(30000));
+    }
 }
 
