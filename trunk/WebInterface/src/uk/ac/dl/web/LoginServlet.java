@@ -200,7 +200,7 @@ public class LoginServlet extends HttpServlet {
                    // serializer.output(mydoc, System.out);
                   //  Saver.save(mydoc,new File("c:/mydoc.cxml"));
                   //  System.out.println("this is dir of the file "+workingDir+File.separator+"xml"+File.separator+"emin"+sessionid);
-                    Saver.save(mydoc,new File(workingDir+File.separator+"xml"+File.separator+"emat"+sessionid));
+                    Saver.save(mydoc,new File(workingDir+File.separator+"profiles"+File.separator+"emat"+sessionid));
                     //hard code list fac
                     ArrayList facs1  = new ArrayList();
                     facs1.add("EMAT");
