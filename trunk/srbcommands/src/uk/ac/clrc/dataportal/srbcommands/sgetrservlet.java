@@ -101,9 +101,9 @@ public class sgetrservlet extends HttpServlet {
             //check password
             String password = props.getProperty("srb_passwd");
             String exe = request.getParameter("format");
-          
+            
             if(exe == null ) exe  ="tar";
-           
+            
             //String executable = props.getProperty("tarHome");
             //if(exe.equals("tar")) executable = props.getProperty("tarHome")+" -cvf";
             //else if(exe.equals("zip")) executable = props.getProperty("zipHome");
@@ -147,8 +147,8 @@ public class sgetrservlet extends HttpServlet {
             String dir = request.getParameter("dir");
             String filename = dir.substring(dir.lastIndexOf("/") + 1);
             filename = filename.replace('.','_');
-           
-           
+            
+            
             response.setHeader("Content-disposition","attachment; filename="+filename+"."+exe);
             
             //this is the one that is working with the whole collection
@@ -181,18 +181,23 @@ public class sgetrservlet extends HttpServlet {
                 LaunchProcess.runCommand( props.getProperty("tarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             }
             else if(exe.equals("zip")){
-                LaunchProcess.runCommand( props.getProperty("zipHome")+" -rvj -b "+props.getProperty("srbDest") +" "+ request.getSession().getId() + ".zip  "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+File.separator+"*");
-        
+                LaunchProcess.runCommand( props.getProperty("zipHome")+" -rvj -b ~ "+ request.getSession().getId() + ".zip  "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+File.separator+"*");
+                
             }
             else if(exe.equals("jar")){
                 LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".jar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
-        
+                
             }
             else{
                 LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             }
-            
-            File myFileIn = new File(props.getProperty("srbDest")+File.separator + request.getSession().getId() + "."+exe);
+            File myFileIn = null;
+            if(exe.equals("zip")){
+                myFileIn = new File(System.getProperty("user.home")+File.separator + request.getSession().getId() + "."+exe);
+            }
+            else if(exe.equals("tar") || exe.equals("jar")){
+                myFileIn = new File(props.getProperty("srbDest")+File.separator + request.getSession().getId() + "."+exe);
+            }
             FileInputStream myFileInputStream = new FileInputStream(myFileIn);
             BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
             
