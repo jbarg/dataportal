@@ -3,7 +3,7 @@
  *
  * Created on 06 May 2004, 16:06
  */
-package uk.ac.cclrc.log4j;
+package dataportal.commonClasses.src.uk.ac.cclrc.log4j;
 
 import java.net.*;
 import java.io.*;
@@ -118,7 +118,16 @@ public class Log4jServer {
                         break;
                     }
                     catch(Exception io){
-                        log.error(io);
+                       log.error(io);
+                        //
+                        try{
+                            log.warn("Waiting for 2 minutes... then will try to reconnect...");
+                            input.close();
+                            socket.close();
+                            Thread.sleep(120000);
+                        }
+                        catch(Exception ignore){}
+                        break;
                     }
                 }while(true);
             }
