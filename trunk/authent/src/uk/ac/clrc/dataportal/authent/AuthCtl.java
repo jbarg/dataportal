@@ -11,10 +11,11 @@ import javax.xml.parsers.*;
 import org.jdom.*;
 import org.jdom.output.*;
 import org.jdom.input.*;
-import java.lang.*;
+
 import uk.ac.clrc.dataportal.authent.lookupclient.*;
 
-import org.globus.security.GlobusProxy;
+import org.ietf.jgss.*;
+import org.gridforum.jgss.*;
 import java.security.cert.X509Certificate;
 
 //web axis stuff
@@ -42,7 +43,7 @@ public class AuthCtl {
     public static String caCertFilename = null;
     public static String uDDILookUpService = null;
     public static String defaultid = null;
-    public static String[] facilities = null;
+    public static String[] facilities;
     
     // class method here
     public static void getMyConfig() throws     Exception {
@@ -58,11 +59,15 @@ public class AuthCtl {
             AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service");
             AuthCtl.defaultid = config.getProperty("defaultid");
             String facility = config.getProperty("facilities");
+            
             AuthCtl.facilities =facility.split(" ");
+            
             for(int i = 0; i<AuthCtl.facilities.length;i++){
                 facilities[i] =   facilities[i].trim();
                 
             }
+            
+            
             
         } catch ( Exception e ) {
             System.out.println( "---> Error: Cannot read config file" );
@@ -75,14 +80,14 @@ public class AuthCtl {
         //org.w3c.dom.Element facilityAccess;
         String sessionId = "-1";
         AuthCtl.getMyConfig();
-        GlobusProxy userCert = idCheck( userName, password, lifetime );
+        GSSCredential userCert = idCheck( userName, password, lifetime );
         //        S
         //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
         //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
         
         if ( userCert == null )
             sessionId = "-1";
-        else if(userCert.getTimeLeft() == -1)
+        else if(userCert.getRemainingLifetime() == -1)
             sessionId = "-1";
         else {
             facilityEndPoints = lookupFacility();
@@ -142,14 +147,14 @@ public class AuthCtl {
     }
     
     // new version of idCheck that uses MyProxy and GSI certificates
-    private GlobusProxy idCheck( String userName, String userPassword,Integer lifetime ) throws Exception {
+    private GSSCredential idCheck( String userName, String userPassword,Integer lifetime ) throws Exception {
         //users password and name from database
         boolean loggedIn = false;
-        GlobusProxy portalProxy = null;
+        GSSCredential portalProxy = null;
         X509Certificate userCert = null;
         
         try {
-            portalProxy = PortalProxy.getPortalProxy();
+            portalProxy = PortalCredential.getPortalProxy();
             
             
         }
@@ -158,15 +163,15 @@ public class AuthCtl {
             //System.exit( -1 );
         }
         
-        GlobusProxy delegateUserProxy = null;
+        GSSCredential delegateUserProxy = null;
         
         try {
-            delegateUserProxy = DelegateProxy.getProxy( userName, userPassword,lifetime, portalProxy );
+            delegateUserProxy = DelegateCredential.getProxy( userName, userPassword,lifetime, portalProxy );
             /*FileOutputStream out = new FileOutputStream("c:/myproxy.txt");
             delegateUserProxy.save(out);
             out.close();*/
             //            System.out.println( "Successfully retrieved proxy" );
-            userCert = delegateUserProxy.getUserCert();
+            //userCert = delegateUserProxy.getUserCert();
             loggedIn = true;
         }
         catch( Exception e ) {
@@ -177,8 +182,11 @@ public class AuthCtl {
     }
     
     private String[] lookupFacility() throws Exception {
+        if(facilities == null) return null;
+        if(facilities.length == 0) return facilities;
         
-        /*LookUpModuleService service = new LookUpModuleServiceLocator();
+        /*LookUpM if(facilities == null) return null;
+        oduleService service = new LookUpModuleServiceLocator();
         LookUpModule port = service.getLookUpService();
         String[] facilities = port.getFacilities();
         String[] faciltyEndPoints = port.lookupEndpoint(facilities, "ACM");*/
@@ -190,7 +198,7 @@ public class AuthCtl {
         call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY );
-       // String[] name = {facilities};
+        // String[] name = {facilities};
         Object[] ob = new Object[]{facilities,"ACM"};
         
         String[] faciltyEndPoints = (String[]) call.invoke(ob );
@@ -276,7 +284,7 @@ public class AuthCtl {
     
     
     
-    private String getSessionId( GlobusProxy proxy, String[][] facilityAccess ) throws Exception {
+    private String getSessionId( GSSCredential proxy, String[][] facilityAccess ) throws Exception {
         
         // need to define endpoint or call lookup module
         // below is a fix
@@ -322,13 +330,20 @@ public class AuthCtl {
         return ret;
     }
     
-    private static synchronized String turnintoString(GlobusProxy cred)throws Exception{
+    private static synchronized String turnintoString(GSSCredential cred) throws Exception{
         
+        // File file = new File(Config.getContextPath()+"globuscred.txt");
+        //FileOutputStream out = new FileOutputStream(file);
+        
+        ExtendedGSSCredential extendcred = (ExtendedGSSCredential)cred;
+        byte [] data = extendcred.export(ExtendedGSSCredential.IMPEXP_OPAQUE);
         File file = new File(Config.getContextPath()+"globuscred.txt");
         FileOutputStream out = new FileOutputStream(file);
-        
-        cred.save(out);
+        out.write(data);
         out.close();
+        
+        //cred.save(out);
+        //out.close();
         //turn proxy into string
         URL url1  = new URL("file:///"+file.getAbsolutePath());
         // System.out.println(url);
@@ -350,7 +365,7 @@ public class AuthCtl {
         
         
         file.delete();
-        System.out.println(cert);
+        //System.out.println(cert);
         return cert.toString();
         
     }

@@ -1,4 +1,4 @@
-package uk.ac.clrc.dataportal.authent;
+/*package uk.ac.clrc.dataportal.authent;
 //***************************************************************************
 // Class to retrieve delegate proxy retrieved from MyProxy Server           *
 //                                                                          *
@@ -43,6 +43,6 @@ public abstract class DelegateProxy
         return delegateUserProxy;
     }
 }
-
+*/
 //*********************************************************************
 
