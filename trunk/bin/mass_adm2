@@ -1,0 +1,584 @@
+#!/bin/bash
+#
+# mass_adm control script
+# stored in $MASS_HOME/bin/mass_adm
+#
+# Credits
+# -------
+#
+# M.Doherty 	25/07/2003	V2.0
+# G.Chapman 	18/01/2005	V3.0	For RMAN Recovery Catalog and RAC
+# R.Downing	01/02/2005	V3.1
+#
+# Change History
+# --------------
+#
+#  07-02-05  RD  Rewrite for maintainability
+#  01-02-05  RD  Removed 15 lines limitation by providing dynamic menu of databases
+#  05-01-04  GC  Maintain RMAN Script (proc) instead of File Destination (fdst)
+#                Remove placekeepers for uncoded function
+#                Debug immediate backup function
+#                Allow editing of more than one instruction per database
+#
+# # INITIALISATIONS # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+#
+#     Set up environment variables
+#
+#     Read the config file for host-specified variables
+#
+if [ ! -r /etc/masstab ]
+then
+	echo ""
+	echo "+=========================================================="
+	echo "| bman_adm: Oracle backup administration utility"
+	echo "| Version 3.0, G.Chapman January 2005"
+	echo "+=========================================================="
+	echo "| "
+	echo "| MASS CRITICAL FAILURE: NO CONFIG FILE"
+	echo "| "
+	echo "+----------------------------------------------------------"
+	exit
+fi
+
+{ while read bmanvar bmanval
+do
+	export $bmanvar=$bmanval
+done 
+} < /etc/masstab
+#
+#      Pickup other variables 
+#
+MASS_CTL=$MASS_HOME/ctl/control.dat
+MASS_BCTL=$MASS_HOME/ctl/control.bck
+#
+bold=`tput smso`
+offbold=`tput rmso`
+
+## Declare our global arrays that will hold all the information
+declare -a partition
+declare -a day
+declare -a active
+declare -a index
+declare -a method
+declare -a append
+declare -a level
+declare -a tape_name
+declare -a tape_pool
+declare -a tape_size
+
+
+## Declare our global variables
+num_entries=0 	# Number of lines in the control.dat
+num_tapes=0
+
+
+function header()
+{
+	## Prints a nice header on a new page
+	clear
+	echo -e "\n\tMASS: Backup management\n"
+}
+
+function read_ctrl()
+{
+	## Reads the control.dat file into a set of global arrays for all the other functions to work on
+	num_entries=0
+	
+	if [[ -r $MASS_CTL ]]
+	then
+		{ while read \
+			partition[$num_entries] \
+			index[$num_entries] 	\
+			day[$num_entries] 	\
+			method[$num_entries] 	\
+			active[$num_entries] 	\
+			append[$num_entries] 	\
+			level[$num_entries]
+		do
+			num_entries=$(($num_entries+1))
+		done
+		} < $MASS_CTL
+	else
+		touch $MASS_CTL
+	fi	
+}
+
+function write_ctrl()
+{
+	## Dumps the control.dat file back out to disk
+	## Back up the existing one first
+	cp -f $MASS_CTL $MASS_BCTL
+	
+	count=0
+	{ while [[ $count -lt $num_entries ]]
+	do
+		echo -en ${partition[$count]}"\t"${index[$count]}"\t"${day[$count]}"\t"${method[$count]}"\t"
+		echo -e ${active[$count]}"\t"${append[$count]}"\t"${level[$count]}
+		count=$(($count+1))
+	done
+	} > $MASS_CTL
+}
+
+function show_ctrl()
+{
+	header
+	## Display the control.dat file contents as they exist in memory
+
+	echo -e "PARTITION\tINDEX\t\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
+
+	if [[ $num_entries -eq 0 ]]
+	then
+		return
+	fi
+	
+	count=0
+	while [[ $count -lt $num_entries ]]
+	do
+		echo -en ${partition[$count]}"\t"${index[$count]}"\t"${day[$count]}"\t"${method[$count]}"\t"
+		echo -e ${active[$count]}"\t"${append[$count]}"\t"${level[$count]}
+		count=$(($count+1))
+	done
+}
+
+function add_entry()
+{	
+	## Adds an MASS backup schedule for a particular partition
+	temp_num=$num_entries
+	num_entries=$(($num_entries+1))
+	
+	header
+	show_ctrl
+	tput cup 22 0
+	echo "Enter partition or directory for backup:"
+	tput cup 23 0
+	read partition[$temp_num]
+	
+	header
+	show_ctrl
+	tput cup 22 0
+	echo "Enter tape index:"
+	tput cup 23 0
+	
+	read new_index
+	if [[ ! -r $MASS_HOME/ctl/$new_index.idx ]]
+	then
+		add_index
+	fi
+	
+	index[$temp_num]=$new_index
+	
+	header
+	show_ctrl
+	tput cup 22 0
+	echo "Enter day: "
+	tput cup 23 0
+	
+	choose_day
+	day[$temp_num]=$new_day
+	
+	## Get backup method
+	## TAR / OTAR /DUMP (with a specified level)
+	header
+	show_ctrl
+	tput cup 22 0
+	echo "Enter method (TAR/OTAR/DUMP):"
+	
+	set_method
+	method[$temp_num]=$new_method
+	if [[ -n $new_dump ]]
+	then
+		level[$temp_num]=$new_dump
+	fi
+		
+	## Get whether or not to make the entry active
+	header
+	show_ctrl
+	tput cup 22 0
+	echo "Make this entry active (y/n)?"
+	tput cup 23 0
+	
+	set_active
+	active[$temp_num]=$new_active
+	
+	## Get whether or not to append to the tapes
+	header
+	show_ctrl
+	tput cup 22 0
+	echo "Append to tape (y/n)?"
+	tput cup 23 0
+	
+	set_append
+	append[$temp_num]=$new_append
+	
+}
+
+
+function set_method()
+{
+	## Get backup method
+	## TAR / OTAR /DUMP (with a specified level)
+	method_ok=0
+	while [[ $method_ok -eq 0 ]]
+	do
+		method_ok=1
+		header
+		show_ctrl
+		tput cup 22 0
+		echo "Enter backup method (TAR/OTAR/DUMP):"
+		tput cup 23 0
+		read new_method
+		case $new_method in
+		tar* | TAR* )
+			new_method="TAR"
+			;;
+		otar* | OTAR* )
+			new_method="OTAR"
+			;;
+		dump | DUMP* )
+			new_method="DUMP"
+			echo "Enter the DUMP level (0-9)"
+			new_dump=-1
+			until [[ $new_dump -ge 0 && $new_dump -le 9 ]]
+			do
+				read new_dump
+			done
+			;;
+		* )
+			method_ok=0
+			;;
+		esac
+	done
+}
+
+function del_entry()
+{
+	## Deletes an entry
+	while [[ 1 ]]
+	do
+		header
+		echo -e "PARTITION\tINDEX\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
+
+		count=0
+		while [[ $count -lt $num_entries ]]
+		do
+			echo -en $(($count+1))" ) "
+			echo -en ${partition[$count]}"\t"${index[$count]}"\t"
+			echo -en ${day[$count]}"\t"${method[$count]}"\t"${active[$count]}"\t"
+			echo -e ${append[$count]}"\t"${leve[$count]}
+			count=$(($count+1))
+		done
+	
+		tput cup 22 0
+		echo -e "Choose an entry to delete or 'c' to cancel:"
+		tput cup 23 0
+
+		read answer
+		if [[ $answer == "c" || $answer == "C" ]]
+		then
+			break
+		elif [[ $answer -ge 1 && $answer -le $(($count+1)) ]]
+		then
+
+			while [[ $answer -le $num_entries ]]
+			do
+				partition[$answer]=${partition[$(($answer+1))]}
+				index[$answer]=${index[$(($answer+1))]}
+				day[$answer]=${day[$(($answer+1))]}
+				method[$answer]=${method[$(($answer+1))]}
+				active[$answer]=${active[$(($answer+1))]}
+				append[$answer]=${append[$(($answer+1))]}
+				level[$answer]=${level[$(($answer+1))]}
+			done
+			num_entries=$(($num_entries-1))
+			break
+		fi
+	done
+}
+
+function choose_day()
+{
+	## Function that makes sure user gives us a valid day entry	
+	dayok=0
+	while [[ $dayok -eq 0 ]]
+	do
+		dayok=1
+		read new_day
+		case $new_day in
+		mon* | MON* )
+			new_day="MON"
+			;;
+		tue* | TUE* )
+			new_day="TUE"
+			;;
+		wed* | WED* )
+			new_day="WED"
+			;;
+		thu* | THU* )
+			new_day="THU"
+			;;
+		fri* | FRI* )
+			new_day="FRI"
+			;;
+		sat* | SAT* )
+			new_day="SAT"
+			;;
+		sun* | SUN* )
+			new_day="SUN"
+			;;
+		all* | ALL* )
+			new_day="ALL"
+			;;
+		* )
+			dayok=0
+			;;
+		esac
+	done
+}
+
+function set_active()
+{
+	active_ok=0
+	while [[ $active_ok -eq 0 ]]
+	do
+		active_ok=1
+		read new_active
+		case $new_active in
+		y | Y )
+			new_active="Y"
+			;;
+		n | N )
+			new_active="N"
+			;;
+		* )
+			active_ok=0
+			;;
+		esac
+	done
+}
+
+function set_append()
+{
+	append_ok=0
+	while [[ $append_ok -eq 0 ]]
+	do
+		append_ok=1
+		read new_append
+		case $new_append in
+		y | Y )
+			new_append="Y"
+			;;
+		n | N )
+			new_append="N"
+			;;
+		* )
+			append_ok=0
+			;;
+		esac
+	done
+}
+
+function mod_entry()
+{
+	## Modifies an existing entry
+	while [[ 1 ]]
+	do
+		header
+		echo -e "PARTITION\tINDEX\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
+
+		count=0
+		while [[ $count -lt $num_entries ]]
+		do
+			echo -en $(($count+1))" ) "
+			echo -en ${partition[$count]}"\t"${index[$count]}"\t"
+			echo -en ${day[$count]}"\t"${method[$count]}"\t"${active[$count]}"\t"
+			echo -e ${append[$count]}"\t"${leve[$count]}
+			count=$(($count+1))
+		done
+	
+		tput cup 22 0
+		echo -e "Choose an entry to modify or 'c' to cancel:"
+		tput cup 23 0
+
+		read answer
+		if [[ $answer == "c" || $answer == "C" ]]
+		then
+			break
+		elif [[ $answer -ge 1 && $answer -le $(($count+1)) ]]
+		then
+			mod_done=0
+			while [[ $mod_done -eq 0 ]]
+			do
+				mod_done=1
+				header
+				echo -en $(($count+1))" ) "
+				echo -en ${partition[$count]}"\t"${index[$count]}"\t"
+				echo -en ${day[$count]}"\t"${method[$count]}"\t"${active[$count]}"\t"
+				echo -e ${append[$count]}"\t"${leve[$count]}
+				
+				tput cup 22 0
+				echo "Modify (P)artition,(I)ndex,(D)ay,(M)ethod,(A)ctive,Appe(N)d or 'x' to finish:"
+				tput cup 23 0
+				
+				read choice
+				case $choice in
+				d* | D* )
+					echo "Enter day: "
+					tput cup 24 0
+					choose_day
+					day[$(($answer-1))]=$new_day
+					;;
+				a* | A* )
+					echo "Make this entry active (y/n)?"
+					tput cup 24 0
+					set_active
+					active[$(($answer-1))]=$new_active
+					;;
+				i* | I* )
+					echo "Enter tape index:"
+					tput cup 24 0
+					read new_index
+					if [[ ! -r $MASS_HOME/ctl/$new_index.idx ]]
+					then
+						add_index
+					else
+						index[$(($answer-1))]=$new_index
+					fi
+					;;
+				m* | M* )
+					echo "Enter method:"
+					tput cup 24 0
+					set_method
+					method[$(($answer-1))]=$new_method
+					dump[$(($answer-1))]=$new_dump
+					;;
+				n* | N* )
+					echo "Append to tape (y/n)?"
+					tput cup 23 0
+					set_append
+					append[$(($answer-1))]=$new_append
+					;;
+				x* | X* )
+					mod_done=1
+					;;
+				* )
+					;;
+				esac
+			done
+			break
+		fi
+	done
+	
+}
+
+function run_entry()
+{
+	## Actually execute the chosen backup entry
+	while [[ 1 ]]
+	do
+		header
+		echo -e "PARTITION\tINDEX\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
+
+		count=0
+		while [[ $count -lt $num_entries ]]
+		do
+			echo -en $(($count+1))" ) "
+			echo -en ${partition[$count]}"\t"${index[$count]}"\t"
+			echo -en ${day[$count]}"\t"${method[$count]}"\t"${active[$count]}"\t"
+			echo -e ${append[$count]}"\t"${leve[$count]}
+			count=$(($count+1))
+		done
+			
+		tput cup 22 0
+		echo -e "Choose an entry to run or 'x' to exit:"
+		tput cup 23 0
+
+		read answer
+		if [[ $answer == "x" || $answer == "X" ]]
+		then
+			break
+		elif [[ $answer -ge 1 && $answer -le $(($count+1)) ]]
+		then
+			imd_file=$MASS_HOME/tmp/control.imd
+			
+			{ echo -en ${partition[$(($answer-1))]}"\t"${index[$(($answer-1))]}"\t"
+			echo -en ${day[$(($answer-1))]}"\t"${method[$(($answer-1))]}"\t"${active[$(($answer-1))]}"\t"
+			echo -e ${append[$(($answer-1))]}"\t"${leve[$(($answer-1))]}
+			} > $imd_file
+			
+			cmd_line=$MASS_HOME/bin/mass_ctl $imd_file
+			
+			output=$MASS_HOME/tmp/mail.tmf
+			immed=`date +\%a_\%j_\%k_\%M_\%S`
+			subject="${partition[$(($answer-1))]} immediate backup results"
+			exec $cmd_line >& $MASS_HOME/log/bman_${immed}.log
+
+			clear
+			echo -e "Log files for last MASS activity follow...\n" > $output
+			cat $MASS_HOME/log/bman_${immed}.log >> $output
+			
+			mail -s "${subject}"  $MASS_ADMINS < $output
+			echo -e "\nPress any key to continue"
+			read pause
+		fi
+	done
+}
+			
+function show_menu()
+{
+	## Places a menu on screen so the user can choose what to do
+	tput cup 22 0
+	echo "Option: (A)Add (D)Delete (M)Modify (I)Immediate Execution (X)Exit:"
+	tput cup 23 0
+}
+
+## Actual program execution
+
+## Load the control.dat file
+read_ctrl
+
+quit=0
+until [[ $quit -eq 1 ]]
+do
+	## Show list of entries
+	show_ctrl
+
+	## Prompt for user input
+	show_menu
+
+	## Collect user input!
+	read choice
+
+	case $choice in
+	a | A )
+		add_entry
+		;;
+
+	d | D )
+		del_entry
+		;;
+		
+	m | M )
+		mod_entry
+		;;
+	
+	i | I )
+		run_entry
+		;;
+	
+	x | X )
+		quit=1
+		;;
+
+	* )
+		;;
+	esac
+done
+
+tput cup 23 0
+echo "Save changes (y/n)?"
+tput cup 24 0
+read save
+if [[ $save == "y" || $save == "Y" ]]
+then
+	write_ctrl
+fi
