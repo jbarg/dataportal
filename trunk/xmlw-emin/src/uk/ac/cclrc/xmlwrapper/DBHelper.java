@@ -12,7 +12,7 @@ import org.apache.log4j.* ;
 
 public class DBHelper
 {
-   boolean driver_loaded = false ;
+   //boolean driver_loaded = false ;
 
    void connectToDB()
    {
@@ -24,20 +24,17 @@ public class DBHelper
 
 
       //load the driver if it has not been done already
-      if (driver_loaded == false)
+      //if (driver_loaded == false)
+      //Load the Oracle JDBC Driver and register it. - as this will be needed for the duration
+      //of the servlets execution - for intents and purposes
+      try 
       {
-         //Load the Oracle JDBC Driver and register it. - as this will be needed for the duration
-         //of the servlets execution - for intents and purposes
-         try 
-	 {
-            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-	    driver_loaded = true ;
-         } 
-	 catch (SQLException sqle) 
-	 {
-            sqle.printStackTrace() ;
-         }
-
+         DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+         //driver_loaded = true ;
+      }
+      catch (SQLException sqle)
+      {
+         sqle.printStackTrace() ;
       }
 
       

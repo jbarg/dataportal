@@ -222,6 +222,7 @@ public class XmlWrapperEMIN
               se.printStackTrace() ;
 	      log.debug(sbr.toString()) ;
               repeat_last = true ;
+              dbh.connectToDB() ;
             }
         
             if(repeat_last == false)
@@ -238,10 +239,7 @@ public class XmlWrapperEMIN
 
 	       result.append(entry_xml) ;
             }
-            else //exception occured and currenlty just try to reconnect
-            {
-               dbh.connectToDB() ;
-            }
+            //else //exception occured and currenlty just try to reconnect
          }
          else
          { // have to put in else block in case we just reconnected
