@@ -162,7 +162,7 @@ public class XMLWBuilderTester {
       //           "Discipline='Geochemistry/Crystallography'",
       //           "saved_emin5.xml") ;
 
-      xmlwt.test_builder("http://escdmg.dl.ac.uk:9090/xmlw-ng/services/xmlwrapper_builder",
+      xmlwt.test_builder("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_builder",
                      "Go for it !!",
                      "did_it_work.txt") ;
 
