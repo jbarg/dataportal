@@ -1,0 +1,163 @@
+<!-- A "project" describes a set of targets that may be requested
+     when Ant is executed.  The "default" attribute defines the
+     target which is executed if no specific target is requested,
+     and the "basedir" attribute defines the current working directory
+     from which Ant executes the requested task.  This is normally
+     set to the current working directory.
+-->
+<project name="Data Portal Build" default="start_tomcat" basedir=".">
+	<!-- ===================== Property Definitions =========================== -->
+	<!--
+
+  Each of the following properties are used in the build script.
+  Values for these properties are set by the first place they are
+  defined, from the following list:
+
+  * Definitions on the "ant" command line (ant -Dfoo=bar compile).
+
+  * Definitions from a "build.properties" file in the top level
+    source directory of this application.
+
+  * Definitions from a "build.properties" file in the developer's
+    home directory.
+
+  * Default definitions in this build.xml file.
+
+  You will note below that property values can be composed based on the
+  contents of previously defined properties.  This is a powerful technique
+  that helps you minimize the number of changes required when your development
+  environment is modified.  Note that property composition is allowed within
+  "build.properties" files as well as in the "build.xml" script.
+
+-->
+	<property file="build.properties"/>
+	<!--<property file="${user.home}/build.properties"/>-->
+	<!-- ==================== File and Directory Names ======================== -->
+	
+        <property name="dataportal.home" value="${basedir}/dataportal"/>
+         <property name="common.tomcat.lib" value="${basedir}/dataportal/common/shared"/>
+         <property name="common.lib" value="${basedir}/dataportal/common/lib"/>
+         
+               <property name="args" value="true"/>
+                 
+ <target name="installmodules" description="redirects ant call to all dataportal modules">
+		
+        
+        <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath refid="compile.classpath"/>
+           
+			<arg line="facility '${basedir}/dataportal/facility/build' '${catalina.home}/conf/Catalina/localhost/facility.xml'" />
+			</java>
+                      
+          
+           
+             <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath refid="compile.classpath"/>
+           
+			<arg line="dataportal '${basedir}/dataportal/WebInterface/build' '${catalina.home}/conf/Catalina/localhost/dataportal.xml'" />
+			</java>
+                      
+         
+           
+               <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath refid="compile.classpath"/>
+			<arg line="shopcart '${basedir}/dataportal/ShoppingCart/build' '${catalina.home}/conf/Catalina/localhost/shopcart.xml'" />
+			</java>
+                      
+   
+           
+               <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath refid="compile.classpath"/>
+           
+			<arg line="datatransfer '${basedir}/dataportal/datatransfer/build' '${catalina.home}/conf/Catalina/localhost/datatransfer.xml'" />
+			</java>
+                      
+         
+            <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath refid="compile.classpath"/>
+           
+			<arg line="lookup '${basedir}/dataportal/uddilookup/build' '${catalina.home}/conf/Catalina/localhost/lookup.xml'" />
+                        			</java>
+                    
+      <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath refid="compile.classpath"/>
+           
+			<arg line="authent '${basedir}/dataportal/authent/build' '${catalina.home}/conf/Catalina/localhost/authent.xml'" />
+                        			</java>
+                      
+         
+           
+                 <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath refid="compile.classpath"/>
+           
+			<arg line="sessionmanager '${basedir}/dataportal/sessionmanager/build' '${catalina.home}/conf/Catalina/localhost/sessionmanager.xml'" />
+                        			</java>
+                      
+          
+                 <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath refid="compile.classpath"/>
+           
+			<arg line="queryandreply '${basedir}/dataportal/queryandreply/build' '${catalina.home}/conf/Catalina/localhost/queryandreply.xml'" />
+                        			</java>
+                      
+           <echo message="installed the dataportal modules ok"/>
+
+   </target>
+   
+   
+   <path id="compile.classpath">
+		
+		
+		<fileset dir="${common.tomcat.lib}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${common.lib}">
+			<include name="*.jar"/>
+		</fileset>
+		
+	</path>
+   
+    <!-- the following targer is called to process all subprojects -->
+			
+			   <target name="do" description="redirects ant call to all dataportal modules">
+			   
+			    <ant antfile="${dataportal.home}/WebInterface/build.xml" target="${target}" inheritAll="true">  
+			   	         <property name="basedir" value="${dataportal.home}/WebInterface"/>
+			      </ant> 	      
+			
+			    <ant antfile="${dataportal.home}/datatransfer/build.xml" target="${target}" inheritAll="true">
+			         <property name="basedir" value="${dataportal.home}/datatransfer"/>
+			         <!--<property name="catalina.home" value="${catalina.home}" />-->
+			         
+			      </ant>
+			
+			      <ant antfile="${dataportal.home}/ShoppingCart/build.xml" target="${target}" inheritAll="true"> 
+			         <property name="basedir" value="${dataportal.home}/ShoppingCart"/>
+			      </ant>
+			
+			     				 
+					
+			      <ant antfile="${dataportal.home}/uddilookup/build.xml" target="${target}" inheritAll="true"> 
+			         <property name="basedir" value="${dataportal.home}/uddilookup"/>
+			      </ant>
+			
+			     <ant antfile="${dataportal.home}/facility/build.xml" target="${target}" inheritAll="true"> 
+			         <property name="basedir" value="${dataportal.home}/facility"/>
+			      </ant>		     
+			      
+			      <ant antfile="${dataportal.home}/authent/build.xml" target="${target}" inheritAll="true"> 
+			         <property name="basedir" value="${dataportal.home}/authent"/>
+			      </ant>
+			
+			    <ant antfile="${dataportal.home}/sessionmanager/build.xml" target="${target}" inheritAll="true"> 
+			         <property name="basedir" value="${dataportal.home}/sessionmanager"/>
+			      </ant>
+			
+			      <ant antfile="${dataportal.home}/queryandreply/build.xml" target="${target}" inheritAll="true"> 
+			         <property name="basedir" value="${dataportal.home}/queryandreply"/>
+			      </ant>	  
+			 
+   	</target>
+   
+   
+</project>
