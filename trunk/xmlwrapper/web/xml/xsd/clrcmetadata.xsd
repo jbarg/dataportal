@@ -1,31 +1,220 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsd:schema targetNamespace="http://www.escience.clrc.ac.uk/schemas/scientific"
+<xsd:schema targetNamespace="http://www.escience.cclrc.ac.uk/schemas/scientific"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:cmd="http://www.escience.clrc.ac.uk/schemas/scientific"
+            xmlns:cmd="http://www.escience.cclrc.ac.uk/schemas/scientific"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified">
 
    <xsd:annotation>
       <xsd:documentation xml:lang="en">
          CCLRC Scientific Metadata Model Version 2 - XML Schema implementation 
-         for CCLRC e-Science core funded DataPortal Project, author: Shoaib Sufi.
+         for CCLRC e-Science DataPortal Project (http://www.e-science.cclrc.ac.uk/web/projects/dataportal), author: Shoaib Sufi.
       </xsd:documentation>
    </xsd:annotation>
 
-<!-- maybe the class type definitions should go here -->
+<!-- enumerations defined : -->
+
+   <xsd:simpleType name="AccessControlSystemTypes">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="On Application"/>
+         <xsd:enumeration value="Digital Access Control System"/>
+         <xsd:enumeration value="Other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
 
 
+   <xsd:simpleType name="InvestigationTypes">
+     <xsd:restriction base="xsd:string">
+	<xsd:enumeration value="Experiment"/>
+	<xsd:enumeration value="experiment"/>
+        <xsd:enumeration value="Measurement"/>
+        <xsd:enumeration value="measurement"/>
+	<xsd:enumeration value="Simulation"/>
+	<xsd:enumeration value="simulation"/>
+        <xsd:enumeration value="other"/>
+     </xsd:restriction>
+   </xsd:simpleType>
 
-<!-- defining the actual elements in the document -->
 
-   <xsd:element name="CLRCMetadata" type="cmd:CLRCMetadataType"/>
-  
-   <xsd:complexType name="CLRCMetadataType">
+   <xsd:simpleType name="institutionTypes">
+     <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="academic"/>
+        <xsd:enumeration value="research"/>
+        <xsd:enumeration value="government"/>
+        <xsd:enumeration value="military"/>
+        <xsd:enumeration value="commercial"/>
+        <xsd:enumeration value="nonprofit"/>
+        <xsd:enumeration value="other"/>
+     </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:simpleType name="TitleTypes">
+     <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="professor"/>
+        <xsd:enumeration value="Professor"/>
+        <xsd:enumeration value="Prof"/>
+	<xsd:enumeration value="doctor"/>
+	<xsd:enumeration value="Doctor"/>
+	<xsd:enumeration value="Dr"/>
+	<xsd:enumeration value="Mr"/>
+	<xsd:enumeration value="Mrs"/>
+	<xsd:enumeration value="Ms"/>
+        <xsd:enumeration value="other"/>
+     </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:simpleType name="StudyRoleTypes">
+     <xsd:restriction base="xsd:string">
+	<xsd:enumeration value="Post Doctoral Research Assistant"/>
+	<xsd:enumeration value="pdra"/>
+	<xsd:enumeration value="PDRA"/>
+	<xsd:enumeration value="PI"/>
+	<xsd:enumeration value="Principal Investigator"/>
+	<xsd:enumeration value="Co-Investigator"/>
+	<xsd:enumeration value="Data Holder"/>
+	<xsd:enumeration value="Data Manager"/>
+        <xsd:enumeration value="other"/>
+     </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:simpleType name="InstitutionRoleTypes">
+     <xsd:restriction base="xsd:string">
+	<xsd:enumeration value="Professor"/>
+	<xsd:enumeration value="Senior Lecturer"/>
+	<xsd:enumeration value="Lecturer"/>
+	<xsd:enumeration value="PDRA"/>
+	<xsd:enumeration value="Post Doctoral Research Assistant"/>
+	<xsd:enumeration value="PG"/>
+	<xsd:enumeration value="Post Graduate"/>
+	<xsd:enumeration value="Undergraduate"/>
+        <xsd:enumeration value="other"/>
+     </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:simpleType name="PathTypes">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="absolute"/>
+         <xsd:enumeration value="file_absolute"/>
+         <xsd:enumeration value="relative"/>
+         <xsd:enumeration value="file_relative"/>
+         <xsd:enumeration value="database"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:simpleType name="FormatSystems">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="MIME"/>
+         <xsd:enumeration value="custom"/>
+         <xsd:enumeration value="database"/>
+         <xsd:enumeration value="file"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:simpleType name="AuthorTypes">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="primary"/>
+         <xsd:enumeration value="co"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:simpleType name="UniqueIdentifierSystem">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="ISBN"/>
+         <xsd:enumeration value="SAN"/>
+         <xsd:enumeration value="ISMN"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:simpleType name="DerivationTypes">
+      <xsd:restriction base="xsd:string">
+	 <!-- i.e. experimental conditions e.g. date, location : -->
+	 <xsd:enumeration value="condition"/>
+	 <!-- i.e. what was actually measured e.g. temperature : -->
+	 <xsd:enumeration value="measured"/>
+	 <!-- i.e. a derived parameter from measured/fixed ones e.g. average temperature : -->
+	 <xsd:enumeration value="calculated"/>
+	 <!-- i.e. a characteristic of the environment e.g. compiler version  -->
+	 <xsd:enumeration value="environment"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+         
+   <xsd:simpleType name="boundTypes">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="upper"/>
+	 <xsd:enumeration value="lower"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="TypesOfData">
+      <xsd:restriction base="xsd:string">
+	 <xsd:enumeration value="Collection"/>
+	 <xsd:enumeration value="File"/>
+	 <xsd:enumeration value="BLOB"/>
+	 <xsd:enumeration value="Database Select"/>
+	 <xsd:enumeration value="Named Select"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="LegalNoticeTypes">
+      <xsd:restriction base="xsd:string">
+	 <xsd:enumeration value="License"/>
+	 <xsd:enumeration value="Copyright"/>
+	 <xsd:enumeration value="Intellectual Property"/>
+	 <xsd:enumeration value="IP"/>
+	 <xsd:enumeration value="Patent"/>
+         <xsd:enumeration value="Licensee"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="SoftwareTypes">
+      <xsd:restriction base="xsd:string">
+	 <xsd:enumeration value="Production"/>
+	 <xsd:enumeration value="Analysis"/>
+	 <xsd:enumeration value="Conversion"/>
+	 <xsd:enumeration value="Visualisation"/>
+	 <xsd:enumeration value="MultiPurpose"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+   <xsd:simpleType name="ParamClassTypes">
+      <xsd:restriction base="xsd:string">
+	 <xsd:enumeration value="Quantitative"/>
+	 <xsd:enumeration value="Qualitative"/>
+	 <xsd:enumeration value="other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+
+<!-- complex types defined : -->
+
+
+   <xsd:element name="CCLRCMetadata" type="cmd:CCLRCMetadataType"/>
+
+
+   <xsd:complexType name="CCLRCMetadataType">
       <xsd:sequence>
          <xsd:element ref="cmd:MetadataRecord" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
+
 
    <xsd:element name="MetadataRecord" type="cmd:MetadataRecordType"/>
 
@@ -43,32 +232,26 @@
                </xsd:simpleContent>
             </xsd:complexType>
          </xsd:element>
+         <xsd:element name="LegalNotice" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                     <xsd:attribute name="legalnoticetype" type="cmd:LegalNoticeTypes"/>
+                  </xsd:extension>
+               </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
 	 <xsd:element name="RelatedPublication" type="cmd:PublicationType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="OtherRelatedMaterial" type="cmd:RelatedMaterialTypes" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
-      <xsd:attribute name="MetadataID" type="cmd:metadataIDKeyType" use="required"/>
+      <xsd:attribute name="MetadataID" type="xsd:ID" use="required"/>
       <xsd:attribute name="Facility" type="xsd:string" use="required"/>
    </xsd:complexType>
 
-   <xsd:simpleType name="AccessControlSystemTypes">
-      <xsd:restriction base="xsd:string">
-         <xsd:enumeration value="On Application"/>
-         <xsd:enumeration value="Digital Access Control System"/>
-         <xsd:enumeration value="Other"/>
-      </xsd:restriction>
-   </xsd:simpleType>
 
-   <!-- metadataID uniquely identified one record - logicaly it consists of the -->
+   <!-- MetadataID uniquely identified one record - logicaly it consists of the -->
    <!-- name of the data archive (which has to be unique in the dataportal )    -->
    <!-- and something which identies unique records in the data archive         -->
-
-   <xsd:simpleType name="metadataIDKeyType">
-      <xsd:restriction base="xsd:ID">
-	 <!-- read: any number of letter and numbers followed by a '-' followed -->
-	 <!-- by any sequence of numbers and letters -->
-	 <xsd:pattern value="[0-9A-Za-z]*-[0-9A-Za-z]*"/>
-     </xsd:restriction>
-  </xsd:simpleType>
 
    
    <xsd:complexType name="TopicType">
@@ -78,7 +261,9 @@
       </xsd:sequence>
    </xsd:complexType> 
 
+
    <!-- perhaps there is a cleverer way to do this by restriction but for now to control optionality we just use another top level element -->
+
 
    <xsd:complexType name="DataTopicType">
       <xsd:sequence>
@@ -95,6 +280,7 @@
 	 <xsd:element name="Keyword" type="xsd:string" maxOccurs="unbounded" />
       </xsd:sequence>
    </xsd:complexType>
+
 
    <xsd:complexType name="SubjectsType">
       <xsd:sequence>
@@ -113,7 +299,6 @@
    </xsd:complexType>
 
          
-   
    <xsd:complexType name="StudyType">
       <xsd:sequence>
          <xsd:element name="StudyName"        type="xsd:string"/>
@@ -123,20 +308,17 @@
          <xsd:element name="Notes"            type="xsd:string" minOccurs="0" maxOccurs="1"/>
 	 <!-- contains a link to related studies etc -->
          <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
-	 <!-- sc -->
 	 <xsd:element name="Investigation"    type="cmd:InvestigationType" minOccurs="1" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="StudyID" type="xsd:ID" use="required"/>
    </xsd:complexType>
 
+
    <xsd:complexType name="InvestigationType">
       <xsd:sequence>
          <xsd:element name="Name" type="xsd:string"/>
-	 <!-- removed the cmd: infront of InvestigationTypes and in the definition of the simple type -->
-	 <!-- I wonder why one has to done that - the latter is what it xmlspy5 was complaining about -->
 	 <xsd:element name="InvestigationType" type="cmd:InvestigationTypes"/>
 	 <xsd:element name="Abstract" type="xsd:string"/>
-	 <!-- perhaps this should be at dataset and dataobject level also -->
 	 <xsd:element name="Resources" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="DataHolding" type="cmd:DataHoldingType" minOccurs="0"/>
@@ -144,33 +326,14 @@
       <xsd:attribute name="InvestigationID" type="xsd:ID" use="required"/>
    </xsd:complexType>
 
-   <xsd:simpleType name="InvestigationTypes">
-     <xsd:restriction base="xsd:string">
-	<xsd:enumeration value="Experiment"/>
-	<xsd:enumeration value="experiment"/>
-        <xsd:enumeration value="Measurement"/>
-        <xsd:enumeration value="measurement"/>
-	<xsd:enumeration value="Simulation"/>
-	<xsd:enumeration value="simulation"/>
-        <xsd:enumeration value="other"/>
-     </xsd:restriction>
-  </xsd:simpleType>
-
-<!-- detail all the things in StudyType before we start inheriting from it -->
-<!-- wonder if it matters -->
-
+ 
    <xsd:complexType name="InstitutionType">
       <xsd:sequence>
-<!--     <xsd:element name="Institution" type="xsd:string" minOccurs="0" maxOccurs="1"> -->
-<!-- above line is incorrect file would not validate - we have to extend the type   -->
-<!-- to add some attributes -->
          <xsd:element name="Name" minOccurs="0" maxOccurs="1">
          <!-- adding attributes to an element -->
             <xsd:complexType>
                <xsd:simpleContent>
                   <xsd:extension base="xsd:string">
-                  <!-- the following type should be CDATA but can't seem to -->
-                  <!-- find the equivelent in XMLSchema to this DTD construct -->
                      <xsd:attribute name="institutionID" type="xsd:string" use="optional"/>
                      <xsd:attribute name="institutiontype" type="cmd:institutionTypes" use="required"/>
                   </xsd:extension>
@@ -181,20 +344,6 @@
       </xsd:sequence>
    </xsd:complexType>
 
-<!-- turn the attribute choices into a type -->
-
-  <xsd:simpleType name="institutionTypes">
-     <xsd:restriction base="xsd:string">
-        <xsd:enumeration value="academic"/>
-        <xsd:enumeration value="government"/>
-        <xsd:enumeration value="military"/>
-        <xsd:enumeration value="commercial"/>
-        <xsd:enumeration value="nonprofit"/>
-        <xsd:enumeration value="other"/>
-     </xsd:restriction>
-  </xsd:simpleType>
-
-<!-- example of a list type - not used yet -->
  
    <xsd:simpleType name="institutionsType">
       <xsd:list itemType="cmd:institutionTypes"/>
@@ -202,6 +351,7 @@
 
  
   <!-- started to get into some 'inheritace' now - i.e cmd:PersonType and cmd:InvestigatorType -->
+
 
   <xsd:complexType name="PersonType">
      <xsd:sequence>
@@ -211,50 +361,6 @@
      </xsd:sequence>
   </xsd:complexType>
 
-  <xsd:simpleType name="TitleTypes">
-     <xsd:restriction base="xsd:string">
-        <xsd:enumeration value="professor"/>
-        <xsd:enumeration value="Professor"/>
-        <xsd:enumeration value="Prof"/>
-	<xsd:enumeration value="doctor"/>
-	<xsd:enumeration value="Doctor"/>
-	<xsd:enumeration value="Dr"/>
-	<xsd:enumeration value="Mr"/>
-	<xsd:enumeration value="Mrs"/>
-	<xsd:enumeration value="Ms"/>
-        <xsd:enumeration value="other"/>
-     </xsd:restriction>
-  </xsd:simpleType>
-
-
-<xsd:simpleType name="StudyRoleTypes">
-     <xsd:restriction base="xsd:string">
-	<xsd:enumeration value="Post Doctoral Research Assistant"/>
-	<xsd:enumeration value="pdra"/>
-	<xsd:enumeration value="PDRA"/>
-	<xsd:enumeration value="PI"/>
-	<xsd:enumeration value="Principal Investigator"/>
-	<xsd:enumeration value="Co-Investigator"/>
-	<xsd:enumeration value="Data Holder"/>
-	<xsd:enumeration value="Data Manager"/>
-        <xsd:enumeration value="other"/>
-     </xsd:restriction>
-  </xsd:simpleType>
-
-<xsd:simpleType name="InstitutionRoleTypes">
-     <xsd:restriction base="xsd:string">
-	<xsd:enumeration value="Professor"/>
-	<xsd:enumeration value="Senior Lecturer"/>
-	<xsd:enumeration value="Lecturer"/>
-	<xsd:enumeration value="PDRA"/>
-	<xsd:enumeration value="PGRA Investigator"/>
-	<xsd:enumeration value="Undergraduate"/>
-        <xsd:enumeration value="other"/>
-     </xsd:restriction>
-  </xsd:simpleType>
-
-
-<!-- some of the contact details in the DTD hinted at being overkill -->
 
   <xsd:complexType name="StudyPersonType">
      <xsd:complexContent>
@@ -277,16 +383,18 @@
      </xsd:sequence>
   </xsd:complexType>
 
+
   <xsd:complexType name="ContactDetailsType">
      <xsd:sequence>
         <xsd:element name="Address"   type="cmd:AddressType"/>
-        <xsd:element name="DirectLine" type="xsd:string"/>
+        <xsd:element name="DirectLine" type="xsd:string" minOccurs="0"/>
         <xsd:element name="Switchboard" type="xsd:string"/>
         <xsd:element name="Fax"       type="xsd:string" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="Email"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="WebPage"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
      </xsd:sequence>
   </xsd:complexType>
+
 
   <xsd:complexType name="AddressType">
      <xsd:sequence>
@@ -298,13 +406,10 @@
         <xsd:element name="Region"       type="xsd:string" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="Postcode"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="Country">
-<!-- again we don't mention the type above as we have to extend it -->
            <xsd:complexType>
               <xsd:simpleContent>
                  <xsd:extension base="xsd:string">
-                 <!-- again in the following can't find an XMLSchema equiv for #CDATA  -->
-                 <!-- also perhaps we should make a type with all country codes in it  -->
-                 <!-- this could even be placed in a different file and included --> 
+		    <!-- country abbreviation candidate for enumeration perhaps -->
                     <xsd:attribute name="countryabbrev" type="xsd:string" use="optional"/>
                  </xsd:extension>
               </xsd:simpleContent>
@@ -314,15 +419,14 @@
   </xsd:complexType>
 
 
-<!-- expanding on the study information type -->
+  <!-- expanding on the study information type -->
+
 
    <xsd:complexType name="StudyInformationType">
       <xsd:sequence>
          <xsd:element name="Funding" type="xsd:string" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="TimePeriod" type="cmd:TimePeriodType"/>
          <xsd:element name="Purpose" type="cmd:PurposeType"/>
-<!-- perhaps the following should be an enumerated list - even held in a different file -->
-<!-- and included here - note taken from the DTD -->
          <xsd:element name="StudyStatus" type="xsd:string"/>
          <xsd:element name="Resources" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
@@ -337,62 +441,36 @@
    </xsd:complexType>
 
 
-<!-- no equivelent to this following type in DTD - as you can't constrain the contents -->
-<!-- of the element in this way in a DTD -->
-
    <xsd:complexType name="DateTimeType">
       <xsd:sequence>
-<!-- note however rather than the dd/mm/ccyy reresentation mentioned in the DTD -->
 <!-- this format will be CCYY-MM-DD as this is the lexical format for the 'date' -->
-<!-- datatype in XMLSchema - not sure if this is going to be a problem otherwise -->
-<!-- we could just use a string and validate it ourselves - perhaps ? -->
-<!-- the 'date' type also supports an optional timezone component - not sure -->
-<!-- how useful this would be - apparently the 'date' type adheres to the ISO8601 -->
+<!-- datatype in XMLSchema  -->
+<!-- the 'date' type also supports an optional timezone component  -->
+<!-- the 'date' type adheres to the ISO8601 -->
 <!-- standard on representing dates- however the right-truncated format of the date -->
 <!-- appears to be only a subset of what is allowable in ISO8601 --> 
          <xsd:element name="Date" type="xsd:date"/>
-<!-- the format of the time attribute is hh:mm:ss.sss with an optional timezone information -->
-<!-- section - the DTD states a preference for hh:mm:ss -->
-<!-- might be worth just using our own standard and holding them in string - depends if -->
-<!-- the XML Schema forms get in the way - then again date validation if more thoroughly -->
-<!-- enforced using the schema -->
+<!-- the format of the time attribute is hh:mm:ss.sss with an optional timezone information section -->
          <xsd:element name="Time" type="xsd:time" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
 
+
    <xsd:complexType name="PurposeType">
       <xsd:sequence>
-<!-- note in the DTD that maybe we should accept HTML -->
          <xsd:element name="Abstract" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-<!-- again perhaps the following should be an enumerated type -->
       </xsd:sequence>
    </xsd:complexType>
 
-
-<!-- e.g. of the enumeration - perhaps the DTD has more flexibility - as you can have -->
-<!-- a PCDATA as well as any of the choices ? -->
-<!--
-
-   <xsd:simpleType name="StudyTypes">
-      <xsd:restriction base="xsd:string">
-         <xsd:enumeration value="COMPLETE"/>
-         <xsd:enumeration value="INPROGRESS"/>
-         <xsd:enumeration value="PENDING"/>
-      </xsd:restriction>
-   </xsd:simpleType>
-
-                                                 -->
 
    <xsd:complexType name="DataHoldingType">
       <xsd:sequence>
          <xsd:element name="DataDescription"    type="cmd:DataDescriptionType"/>
          <xsd:element name="DataHoldingLocator" type="cmd:CollectionLocatorType"/>
-         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="DataCollection"            type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
-	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="RelatedReference"   type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="DataCollection"     type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
+	 <xsd:element name="AtomicDataObject"   type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
-<!-- again following attribute type should really be a CDATA equivelent -->
-<!-- but can't seem to find it -->
       <xsd:attribute name="InvestigationID" type="xsd:IDREF" use="required"/>
    </xsd:complexType>
 
@@ -400,13 +478,17 @@
    <xsd:complexType name="ParameterType">
       <xsd:sequence>
          <xsd:element name="ParamName" type="xsd:string"/>
+         <xsd:element name="ParamRefId" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="ParamClass" type="cmd:ParamClassTypes" minOccurs="0"/>
 	 <xsd:element name="Derivation" type="cmd:DerivationTypes"/>
          <xsd:element name="Units" type="cmd:UnitsType" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="ParamValue" type="xsd:string" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="Range" type="cmd:RangeType" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="Parameter" type="cmd:ParameterType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
+      <xsd:attribute name="paramid" type="xsd:string" use="optional"/>
    </xsd:complexType>
+
 
    <xsd:complexType name="UnitsType">
       <xsd:sequence>
@@ -416,21 +498,7 @@
 	 <xsd:element name="UnitFormat" type ="xsd:string" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
-	
 
-   <xsd:simpleType name="DerivationTypes">
-      <xsd:restriction base="xsd:string">
-	 <!-- i.e. experimental conditions e.g. date, location : -->
-	 <xsd:enumeration value="condition"/>
-	 <!-- i.e. what was actually measured e.g. temperature : -->
-	 <xsd:enumeration value="measured"/>
-	 <!-- i.e. a derived parameter from measured/fixed ones e.g. average temperature : -->
-	 <xsd:enumeration value="calculated"/>
-	 <!-- i.e. a characteristic of the environment e.g. compiler version  -->
-	 <xsd:enumeration value="environment"/>
-         <xsd:enumeration value="other"/>
-      </xsd:restriction>
-   </xsd:simpleType>
    
    <xsd:complexType name="RangeType">
       <xsd:sequence>
@@ -443,23 +511,13 @@
                </xsd:simpleContent>
             </xsd:complexType>
 	 </xsd:element>
-	 <xsd:element name="MarginOfError" type="xsd:string"/>
+	 <xsd:element name="MarginOfError" type="xsd:string" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
             
-         
-   <xsd:simpleType name="boundTypes">
-      <xsd:restriction base="xsd:string">
-         <xsd:enumeration value="upper"/>
-	 <xsd:enumeration value="lower"/>
-         <xsd:enumeration value="other"/>
-      </xsd:restriction>
-   </xsd:simpleType>
-
 
    <xsd:complexType name="LogicalDescriptionTypes">
       <xsd:sequence>
-	 <!-- even coverage information stored in Parameters now -->
          <xsd:element name="Parameter" type="cmd:ParameterType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="TimePeriod" type="cmd:TimePeriodType" minOccurs="0"/>
 	 <xsd:element name="Description" type="xsd:string" minOccurs="0"/>
@@ -467,37 +525,27 @@
       </xsd:sequence>
    </xsd:complexType>
 
+
    <xsd:complexType name="FacilityType">
       <xsd:sequence>
          <xsd:element name="FacilityName" type="xsd:string" />
-         <xsd:element name="Resource" type="xsd:string" maxOccurs="unbounded"/>
+         <xsd:element name="Resource" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
       
-
 
    <xsd:complexType name="DataDescriptionType">
       <xsd:sequence>
          <xsd:element name="DataName"   type="xsd:string"/>
 	 <xsd:element name="TypeOfData" type="cmd:TypesOfData" minOccurs="0" />
          <xsd:element name="Status"     type="xsd:string" minOccurs="0" />
+         <xsd:element name="Quality"     type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataTopic"  type="cmd:DataTopicType" minOccurs="0" />
-<!-- need to use a union type as LogicalDescription can be of one or more type -->
          <xsd:element name="LogicalDescription" type="cmd:LogicalDescriptionTypes" minOccurs="0" />
-	 <xsd:element name="Software" type="cmd:SoftwareType" minOccurs="0" />
+	 <xsd:element name="Software" type="cmd:ProgramType" minOccurs="0" maxOccurs="unbounded" />
       </xsd:sequence>
    </xsd:complexType>
 
-   <xsd:complexType name="SoftwareType">
-      <xsd:sequence>
-         <xsd:element name="Production" type="cmd:ProgramType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="Anlaysis" type="cmd:ProgramType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="Conversion" type="cmd:ProgramType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="Visualisation" type="cmd:ProgramType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="MultiPurpose" type="cmd:ProgramType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="other" type="cmd:ProgramType" minOccurs="0" maxOccurs="unbounded"/>
-      </xsd:sequence>
-   </xsd:complexType>
 
    <xsd:complexType name="ProgramType">
       <xsd:sequence>
@@ -510,18 +558,8 @@
          <xsd:element name="OperatingSystemVersion" type="xsd:string" minOccurs="0" />
          <xsd:element name="Architecture" type="xsd:string" minOccurs="0"/>
       </xsd:sequence>
+      <xsd:attribute name="softwaretype" type="cmd:SoftwareTypes" use="optional"/>
    </xsd:complexType> 
-
-   <xsd:simpleType name="TypesOfData">
-      <xsd:restriction base="xsd:string">
-	 <xsd:enumeration value="Collection"/>
-	 <xsd:enumeration value="File"/>
-	 <xsd:enumeration value="BLOB"/>
-	 <xsd:enumeration value="Database Select"/>
-         <xsd:enumeration value="other"/>
-         <xsd:enumeration value="other"/>
-      </xsd:restriction>
-   </xsd:simpleType>
 
  
    <xsd:complexType name="DataCollectionType">
@@ -532,7 +570,6 @@
 	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataCollection"           type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
-<!-- again the following is stated as a CDATA type in the original DTD -->
       <xsd:attribute name="dataid" type="xsd:ID" use="required"/>
    </xsd:complexType>
 
@@ -547,7 +584,8 @@
       </xsd:sequence>
    </xsd:complexType>
 
-<!--service oriented reference location resolution-->
+
+   <!--service oriented reference location resolution-->
    <xsd:complexType name="ReferenceLocationType">
       <xsd:sequence>
          <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
@@ -576,7 +614,6 @@
       </xsd:sequence>
    </xsd:complexType>
 
-   
 
    <xsd:complexType name="ADOType">
       <xsd:sequence>
@@ -586,6 +623,7 @@
       </xsd:sequence>
       <xsd:attribute name="dataid" type="xsd:ID" use="required"/>
    </xsd:complexType>
+
 
       <!-- how to use the specialisation parent/child class/subclass 'feature' : -->
       <!--
@@ -614,7 +652,8 @@
       </xsd:complexContent>
    </xsd:complexType>
 
-   <xsd:complexType name="SelectNamedADOL">
+   
+   <xsd:complexType name="NamedSelectADOL">
       <xsd:complexContent>
          <xsd:extension base="cmd:ADOLocatorType">
             <xsd:sequence>
@@ -626,33 +665,21 @@
 	       <xsd:element name="Database" type="xsd:string"/>
 	       <xsd:element name="Port" type="xsd:string" minOccurs="0"/>
 	       <xsd:element name="Query" type="xsd:string"/>
-	       <xsd:element name="Encoding" type="xsd:string"/>
-	       <xsd:element name="DataFormat" type="xsd:string"/>
-	       <xsd:element name="ResultSchema" type="xsd:string"/>
+	       <xsd:element name="Encoding" type="xsd:string" minOccurs="0"/>
+	       <xsd:element name="DataFormat" minOccurs="0" maxOccurs="unbounded">
+                  <xsd:complexType>
+                     <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                           <xsd:attribute name="formatsystem" type="cmd:FormatSystems" use="optional"/>
+                        </xsd:extension>
+                     </xsd:simpleContent>
+                  </xsd:complexType>
+               </xsd:element>
+	       <xsd:element name="ResultSchema" type="xsd:string" minOccurs="0"/>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-
-
-<!--  in the following the compact syntax works because a complex type defined without -->
-<!--  any simpleContent or complexContent is interpreted as shorthand for complex      -->
-<!--  content that restricts anyType -->
-
-
-<!--   <xsd:complexType name="RelatedStudyType">
-      <xsd:sequence>
-         <xsd:element name="StudyRef">
-            <xsd:complexType>
-               <xsd:attribute name="studyref" type="xsd:IDREF" use="required"/>
-            </xsd:complexType>
-         </xsd:element>
-         <xsd:element name="RelationType" type="xsd:string"/>
-      </xsd:sequence>
-   </xsd:complexType> -->
-
-
-   <!-- The DataLocationTypes  -->
 
 
    <xsd:complexType name="CollectionLocatorType">
@@ -671,17 +698,6 @@
    </xsd:complexType>
 
 
-   <xsd:simpleType name="PathTypes">
-      <xsd:restriction base="xsd:string">
-         <xsd:enumeration value="absolute"/>
-         <xsd:enumeration value="file_absolute"/>
-         <xsd:enumeration value="relative"/>
-         <xsd:enumeration value="file_relative"/>
-         <xsd:enumeration value="database"/>
-         <xsd:enumeration value="other"/>
-      </xsd:restriction>
-   </xsd:simpleType>
-
    <xsd:complexType name="ADOLocatorType">
       <xsd:sequence>
          <xsd:element name="Locator" minOccurs="0" maxOccurs="unbounded">
@@ -693,29 +709,20 @@
                </xsd:simpleContent>
             </xsd:complexType>
          </xsd:element>
-	 <xsd:element name="AccessMethod" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="AccessMethod" minOccurs="0" maxOccurs="unbounded">
+	    <xsd:complexType>
+               <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                     <xsd:attribute name="authenticationtype" type="xsd:string"/>
+                  </xsd:extension>
+               </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
 	 <xsd:element name="Size" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="offset"  type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="length"  type="xsd:string" minOccurs="0"/>
       </xsd:sequence>
-<!-- type of this attribute should really be a CDATA - no equivelent in XMLSchema -->
    </xsd:complexType>
-
-   <xsd:simpleType name="AuthorTypes">
-      <xsd:restriction base="xsd:string">
-         <xsd:enumeration value="primary"/>
-         <xsd:enumeration value="co"/>
-         <xsd:enumeration value="other"/>
-      </xsd:restriction>
-   </xsd:simpleType>
-
-   <xsd:simpleType name="UniqueIdentifierSystem">
-      <xsd:restriction base="xsd:string">
-         <xsd:enumeration value="ISBN"/>
-         <xsd:enumeration value="SAN"/>
-         <xsd:enumeration value="ISMN"/>
-      </xsd:restriction>
-   </xsd:simpleType>
 
 
    <xsd:complexType name="PublicationType">
@@ -745,10 +752,12 @@
 
 
   <!-- Related Materials as a type  -->
-   
+
+
    <xsd:simpleType name="References">
       <xsd:restriction base="xsd:string"/>
    </xsd:simpleType>
+
 
    <xsd:simpleType name="CommunityInformation">
       <xsd:restriction base="xsd:string"/>
