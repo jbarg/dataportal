@@ -78,7 +78,7 @@ document.onmousedown=click*/
 
 
 
-<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" width="70" height="90" alt="CLRC logo" border="0"></a>
+<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif"  alt="CCLRC logo" border="0"></a>
 
 <br />&nbsp;<br /><br />
 
