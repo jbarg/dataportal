@@ -770,43 +770,37 @@ public class ISISCsmdMapper implements CsmdMapper
          investigation_id = sr.LitWithEnt(xt.makeValid(r.getString("INVESTIGATION_ID") ));
 
          sbr.append(ii+"<RelatedReference>\n") ;
-         sbr.append(ii+li"<Type>" + "prior" + "</Type>\n") ; 
+         sbr.append(ii+li"<Type>" + "previous" + "</Type>\n") ; 
          sbr.append(ii+li"<ReferredToItem>" + "Experiment" + "</ReferredToItem>\n") ; 
-      }
+      
 
-      t_r.close() ;
+         t_r.close() ;
 
-      t_r = t_s.executeQuery("select study.name \"STUDYNAME\", study.id \"STUDY_ID\" from study where study.id in " +
+         t_r = t_s.executeQuery("select study.name \"STUDYNAME\", study.id \"STUDY_ID\" from study where study.id in " +
                              "(select distinct(study_id) from investigation_list where investigation_id in " +
                              "(select investigation.id from invetigation where title='" + title + "'))") ;
 
-      if(t_r.next())
-      {
-         studyname = sr.LitWithEnt(xt.makeValid(r.getString("STUDYNAME") )); 
-         study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") )); 
-      }
+         if(t_r.next())
+         {
+            studyname = sr.LitWithEnt(xt.makeValid(r.getString("STUDYNAME") )); 
+            study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") )); 
+         }
 
-      t_r.close() ;
+         t_r.close() ;
     
 
 
-      sbr.append(ii+li"<ReferenceLocation>\n") ; 
-      abr.append(ii+li+li"<Archive>"+"isis"+"</Archive>\n") ;
+         sbr.append(ii+li"<ReferenceLocation>\n") ; 
+         sbr.append(ii+li+li"<Archive>"+"isis"+"</Archive>\n") ;
+         sbr.append(ii+li+li"<StudyName>"+studyname+"</StudyName>\n") ;
+         sbr.append(ii+li+li"<StudyId>"+study_id+"</StudyId>\n") ;
+         sbr.append(ii+li+li"<InvestigationName>"+title+"</InvestigationName>\n") ;
+         sbr.append(ii+li+li"<InvestigationId>"+investigation_id+"</InvestigationId>\n") ;
+         sbr.append(ii+li"</ReferenceLocation>\n") ; 
+     
+         sbr.append(ii+"<RelatedReference>\n") ;
+      } //as you want it all filled in or all returning nothing
 
-      /*for related referenace we need the following info
-	element			value(e.g.)
-	type			???????????
-	direction		from
-	ReferredToItem		experiment
-        method			derived (?)
-        ReferanceLocation
-		archive			isis
-		StudyName		<name>
-		investigationName	experiment name
-
-	---> this should give us enough info to find the linked item
-     */
-      
 
       return ;
    }
