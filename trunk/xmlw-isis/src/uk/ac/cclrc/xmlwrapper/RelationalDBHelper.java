@@ -14,7 +14,7 @@ public class RelationalDBHelper implements DBHelper
 {
    //boolean driver_loaded = false ;
 
-   void connectToDB()
+   public void connectToDB()
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
       ResultSet r = ss.getResultSet() ;
@@ -71,16 +71,16 @@ public class RelationalDBHelper implements DBHelper
             //<db connect string>, is a Net8 name-value, denoting the TNSNAMES entry
 
            //Form the database connect string(TNSNAMES entry) as a name-value pair
-           String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+ss.getHost()+")"+
-                                    "(PROTOCOL=tcp)(PORT="+ss.getPort()+"))"+
-                                    "(CONNECT_DATA=(SID="+ss.getSid()+")))";
+           String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+ss.getDBHost()+")"+
+                                    "(PROTOCOL=tcp)(PORT="+ss.getDBPort()+"))"+
+                                    "(CONNECT_DATA=(SID="+ss.getDBSid()+")))";
 
 	    //classic pointer to pointer type problem
 	    //only the class holding the reference which is referred to can
 	    //actually change the value of the reference - i.e. changing a value
 	    //of a reference here will not change it in the SessionSingleton class
 	    //and the correct value will this not propagate throughout the system
-            ss.setConnection(DriverManager.getConnection("jdbc:oracle:thin:@"+dbConnectString, ss.getUser(), ss.getPass()));
+            ss.setConnection(DriverManager.getConnection("jdbc:oracle:thin:@"+dbConnectString, ss.getDBUser(), ss.getDBPass()));
             c = ss.getConnection() ;
 
 
