@@ -109,6 +109,63 @@ public class XMLWSelectorTester {
    }
 
    ////////////////////////////////
+   String getAuthToken(String proxy_cred)
+   {
+      String ret = "" ;
+
+      try
+      {
+         //URL url1 = new URL("file:////tmp/glen.cred");                // System.out.println(url); -- proxy certificate
+         //URLConnection con = url1.openConnection();
+         //InputStream in2 = con.getInputStream();
+         //BufferedReader in = new BufferedReader(new InputStreamReader(in2));
+         //String inputLine;
+         //StringBuffer cert = new StringBuffer();
+         //while ((inputLine = in.readLine()) != null)
+         //{
+         //   //  System.out.println(inputLine);
+         //   cert.append(inputLine);
+         //   cert.append("\n");
+         //   // if(!inputLine.equals("-----END CERTIFICATE-----"))  cert.append("\n");
+         //}
+
+         //in.close();
+         //String cert3 = cert.toString();
+
+         //sends proxy cred to the AC server on volga and return the proxy credential
+         String endpoint =   "http://volga/acmemat/services/ACServer";
+         Service  service = new Service();
+         Call     call    = (Call) service.createCall();
+
+         call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+         call.setOperationName( "getAuthorisationTokenInXMLString" );
+         call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
+         //call.addParameter( "op2", XMLType.XSD_STRING, ParameterMode.IN );
+         call.setReturnType(XMLType.XSD_STRING);
+
+         Object[] ob = new Object[]{ proxy_cred };
+
+         ret = (String) call.invoke(ob );
+         //org.jdom.input.DOMBuilder buildert = new org.jdom.input.DOMBuilder();
+         //org.jdom.Element el = buildert.build(ret);
+         //Document d = new Document(el);
+         //Saver.save(d,new File("c:/ws.cred"));
+         //FileWriter e = new FileWriter("c:/ws.cred");
+         //FileWriter e = new FileWriter("/home/sas27/cert/ws.cred"); //where you save you attribute cert/token
+         //e.write(ret);
+         //e.close();
+         //System.out.println(ret);
+      }
+      catch(Exception e)
+      {
+         System.out.println(e);
+      }
+
+      return ret ;
+   }
+
+
+   ////////////////////////////////
 
    void test_selector(String endpoint_url,
                  String query,
@@ -171,8 +228,28 @@ public class XMLWSelectorTester {
                                           "</body>\n" +
                                     "</html>" ;
 
-      String proxy_cert = "" ;
-      String auth_token = "" ;
+
+      //read in the time limited proxy assuming that it is in the cwd
+      StringBuffer pc = new StringBuffer();
+
+      try
+      {
+         BufferedReader in = new BufferedReader (new FileReader("proxy.cred")) ;
+         String str ;
+         while ((str = in.readLine()) != null)
+         {
+            pc.append(str) ;
+            pc.append("\n") ;
+         }
+         in.close() ; 
+      }
+      catch (IOException ioe)
+      {
+         ioe.printStackTrace() ;
+      }
+
+      String proxy_cert = pc.toString() ;
+      String auth_token = xmlwt.getAuthToken(proxy_cert) ;
 
 
       xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
