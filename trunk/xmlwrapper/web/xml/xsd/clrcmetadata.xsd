@@ -449,10 +449,11 @@
          <xsd:element name="DataDescription" type="cmd:DataDescriptionType"/>
 	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataCollection"           type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="RelatedDataCollectionRef" type="cmd:RelatedDataCollectionRefType" minOccurs="0"/>
+         <xsd:element name="RelatedDataCollectionRef" type="cmd:RelatedDataCollectionRefType" minOccurs="0" maxOccurs="unbounded"/>
 	 <!--         <xsd:element name="ParentDataCollectionRef"  type="xsd:string" minOccurs="0" maxOccurs="1"/> -->
 	 <!-- <xsd:element name="ChildDataCollectionRef"   type="xsd:string" minOccurs="0"/> -->
-         <xsd:element name="DerivedFromDataCollectionRef" type="cmd:DerivedFromDataCollectionRefType" minOccurs="0"/>
+         <xsd:element name="DerivedFromDataCollectionRef" type="cmd:DerivedFromDataCollectionRefType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="UsedByDataCollectionRef" type="cmd:UsedByDataCollectionRefType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataCollectionLocator"    type="cmd:DataCollectionLocatorType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
 <!-- again the following is stated as a CDATA type in the original DTD -->
@@ -464,9 +465,17 @@
       <xsd:sequence>
          <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="DataCollectionRef"     type="xsd:string"/>
+         <xsd:element name="DerivationType"     type="xsd:string" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
 
+   <xsd:complexType name="UsedByDataCollectionRefType">
+      <xsd:sequence>
+         <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="DataCollectionRef"     type="xsd:string"/>
+         <xsd:element name="UsageType"     type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
 
    <xsd:complexType name="RelatedDataCollectionRefType">
       <xsd:sequence>
@@ -546,6 +555,16 @@
          <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="DataCollectionRef"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="ADORef"        type="xsd:string" />
+         <xsd:element name="DerivationType"    type="xsd:string" minOccurs="0" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="UsedByADORefType">
+      <xsd:sequence>
+         <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="DataCollectionRef"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="ADORef"        type="xsd:string" />
+         <xsd:element name="UsageType"    type="xsd:string" minOccurs="0" />
       </xsd:sequence>
    </xsd:complexType>
 
