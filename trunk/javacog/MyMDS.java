@@ -22,7 +22,7 @@ public class MyMDS {
      */
     public static void main(String args[]) {
 	//Just a quick test so no interactivity...
-	MDS mds = new MDS("tcs10.dl.ac.uk", "2136", "o=Grid");
+	MDS mds = new MDS("ginfo.rl.ac.uk", "2136", "o=Grid");
 	try {
 	    mds.connect();
 	    Hashtable mdsResult = mds.search("(&(objectclass=GlobusServiceJobManager))",
