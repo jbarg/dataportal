@@ -115,7 +115,7 @@ public class FileTransfer extends HttpServlet {
                 
                 return;
             }
-            if(result == null) esponse.sendRedirect("../jsp/error.jsp");
+            if(result == null) response.sendRedirect("../jsp/error.jsp");
             else if(result.equals("true")) {
                 response.sendRedirect("../jsp/transferOk.jsp");
                 
