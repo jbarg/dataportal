@@ -34,7 +34,7 @@ public class AuthentConfig {
         filewriter.close();*/
         Properties prop = new Properties();
         prop.setProperty("portal_private_key_filename", args[1]);
-        prop.setProperty("portal_private_cert_filename", args[2]);
+        prop.setProperty("portal_cert_filename", args[2]);
         prop.store(new FileOutputStream(file),"Globus configuration");
 
     }
