@@ -1,0 +1,233 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Daniel Hanlon">
+   <meta name="GENERATOR" content="Mozilla/4.6 [en] (WinNT; I) [Netscape]">
+   <title>Crystal Display 3D</title>
+</head>
+<body>
+
+<center>
+<h2>
+<a NAME="contents"></a><font color="#993300"><font size=+4>C</font><font size=+2>RYSTAL</font><font size=+4>D</font><font size=+2>ISPLAY</font><font size=+4>3D</font></font></h2></center>
+
+<h2>
+
+<hr WIDTH="100%">Contents:
+<hr WIDTH="100%"></h2>
+
+<ol>
+<li>
+<font size=+1><a href="#what">What is it?</a></font></li>
+
+<li>
+<font size=+1><a href="#how">What do I need to run it?</a></font></li>
+
+<li>
+<font size=+1><a href="#install">Installation instructions.</a></font></li>
+
+<li>
+<font size=+1><a href="#userguide">User guide</a></font></li>
+
+<li>
+<font size=+1><a href="nio.html">NiO</a></font></li>
+
+<li>
+<font size=+1><a href="niospin.html">NiO spin</a></font></li>
+
+<li>
+<font size=+1><a href="tio2.html">TiO2</a></font></li>
+
+<li>
+<font size=+1><a href="ktio2.html">KTiO2</a></font></li>
+
+<li>
+<font size=+1><a href="chabazite.html">Chabazite</a></font></li>
+</ol>
+
+<h2>
+
+<hr WIDTH="100%"><a NAME="what"></a>What is it?
+<hr WIDTH="100%"></h2>
+
+<blockquote>&nbsp;
+<br><font color="#000000"><font size=+1>CrystalDisplay3D is a small application
+written in Java for the visualization and manipulation of data files related
+to crystalline structure and electron charge density.</font></font>
+<p><font size=+1>Amongst other things, Java is a platform independent language
+so CrystalDisplay3D will run on any platform supporting the required Java
+implementation.</font>
+<div align=right><i><a href="#contents">Back to top.</a></i></div>
+</blockquote>
+
+<h2>
+
+<hr WIDTH="100%"><a NAME="how"></a>What do I need to run it?
+<hr WIDTH="100%"></h2>
+
+<blockquote><font size=+1>This application has been designed to be based
+on a web-page and run from there on whichever machine the user happens
+to have. The only caveat to this, is that the platform must support <a href="http://java.sun.com/products/jdk/1.2/">Java
+2</a> and the standard 3D extension library known as <a href="http://sun.com/desktop/java3d/">Java3D</a>.</font>
+<p><font size=+1><a href="http://sun.com/desktop/java3d/">Java3D</a> provides
+a complete API for developing complex three dimensional scenes in the Java
+language. Due to the nature of the calculations involved in 3D displays
+it was decided that the Java3D should be implemented by providing an interface
+to an underlying platform dependent 3D rendering engine.</font>
+<p><font size=+1>Java3D effectively extends the procedures of the standard
+virtual machine, when dealing with functionality that is intrinsically
+hardware dependent, to the domain of 3D graphics. By doing so, the programmer
+is able to work with a standard interface which additionally provides an
+extra layer of abstraction from the rendering engine to allow scenes to
+be programmed with a higher level description. The Java3D run-time environment
+automatically makes use of the 3D processing capabilities present on the
+client machine. A graphics card that is capable of intercepting <a href="http://www.opengl.org">OpenGL</a>
+calls to provide hardware acceleration is automatically employed by Java3D
+as on that machine the OpenGL version should be installed and the run-time
+environment would itself be making the calls to OpenGL.</font>
+<p><font size=+1>On the Windows/x86 platform, neither of the most popular
+web-browsers ( Netscape &amp; Internet Explorer ) provide a complete implementation
+of the Java 2 standard so it is necessary to use the <a href="http://java.sun.com/products/plugin/">Java
+Plug-In</a> which may be downloaded at no charge. The following steps are
+recommended to provide support for CrystalDisplay3D.</font>
+<div align=right><i><a href="#contents">Back to top.</a></i></div>
+</blockquote>
+
+<h2>
+
+<hr WIDTH="100%"><a NAME="install"></a>Installation Instructions.
+<hr WIDTH="100%"></h2>
+<b><i><font color="#000000"><font size=+1>Windows/Solaris</font></font></i></b>
+<ul>
+<ul>
+<li>
+<font color="#000000"><font size=+1>Download the Java plug-in version 1.2.2
+from
+<a href="http://developer.java.sun.com/developer/earlyAccess/j2sdk122/index.html">here.</a></font></font></li>
+
+<ul><font color="#000000">This is the latest release version and it fixes
+some bugs which greatly complicated the installation process. It is currently,
+however, only available following free registration with the Java Developers
+Connection (<a href="http://java.sun.com/jdc/">JDC</a>).</font></ul>
+
+<li>
+<font color="#000000"><font size=+1>Download the Java3D run-time environment
+from <a href="http://java.sun.com/products/java-media/3D/index.html">here.</a></font></font></li>
+
+<ul><font color="#000000">For Windows versions are available which use
+either OpenGL or DirectX as the native rendering engine. The OpenGL version
+is a later release and should be used unless hardware acceleration for
+DirectX is present on your machine.</font></ul>
+
+<li>
+<font size=+1>Install the Java plug-in.</font></li>
+
+<li>
+<font size=+1>Install the Java 3D run-time environment into the directory
+within the plug-in.</font></li>
+
+<ul><font color="#000000"><font size=+1>e.g., if the plug-in has been installed
+to</font></font>
+<br><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+C:\Program Files\JavaSoft\JRE\1.2</font></font>
+<br><font color="#000000"><font size=+1>this directory should also be used
+as the installation path for Java3D.</font></font></ul>
+
+<li>
+<font color="#000000"><font size=+1>Point your browser at the <a href="file://c:/Inetpub/wwwroot/cd3d/examples.html">examples</a>
+web-page.</font></font></li>
+
+<li>
+<font color="#000000"><font size=+1>The plug-in will request privileges
+to be granted to the applet - this is to allow it to utilise the native
+code involved with the 3D rendering. Agreeing to this will allow the applet
+to proceed.</font></font></li>
+</ul>
+</ul>
+<b><i><font color="#000000"><font size=+1>Other operating systems.</font></font></i></b>
+<br>&nbsp;
+<blockquote><font color="#000000"><font size=+1>The status of ports to
+other platforms is continuously changing but implementations of Java 2
+(also know as 1.2) and the Java 3D runtime environment are being produced
+for most environments. In particular first release versions of both pieces
+of software for Linux are available from <a href="http://www.blackdown.org">http://www.blackdown.org</a>
+and SGI has release versions of <a href="http://www.sgi.com/developers/devtools/languages/java.html">Java
+2</a> and has recently announced that it is soon to distribute an Irix
+version of the Java3D runtime environment.</font></font>
+<p><font color="#000000"><font size=+1>Sun maintains a list of ports of
+the Java environment at <a href="http://java.sun.com/cgi-bin/java-ports.cgi">http://java.sun.com/cgi-bin/java-ports.cgi</a></font></font>
+<p><font size=+1>Many of the links to ports of the Java virtual machine
+for other operating systems also contain information regarding the status
+or existence of implementations of Java3D on those platforms.</font>
+<div align=right><i><a href="#contents">Back to top.</a></i></div>
+</blockquote>
+
+<h2>
+
+<hr WIDTH="100%"><a NAME="userguide"></a>User guide.
+<hr WIDTH="100%"></h2>
+
+<blockquote><font size=+1>The application presents itself as a button in
+a web page simliar to the one shown below.</font>
+<center>
+<p><img SRC="button2.gif" height=23 width=227></center>
+
+<p><font size=+1>Clicking on this button leads to the main application
+starting. Depending on the speed of the internet</font>
+<br><font size=+1>connection being used, a delay will be experienced before
+the applet window opens.</font>
+<center>
+<p><img SRC="display3.gif" height=402 width=409></center>
+
+<p><font size=+1>The initial features shown depends on the files loaded
+by the applet.</font><font size=+1></font>
+<p><font size=+1>The display may be manipulated by using the mouse to achieve
+the following:</font>
+<br><font size=+1></font>&nbsp;
+<ul>
+<li>
+<font size=+1><b>Rotate<br>
+</b>Clicking in the display window with the first button and dragging the
+mouse causes the scene to be rotated.</font></li>
+
+<li>
+<font size=+1><b>Translate<br>
+</b>Clicking with the second (or third on platforms with three buttons)
+and dragging causes the scene to be translated.</font></li>
+
+<li>
+<font size=+1><b>Scale<br>
+</b>Holding down the ALT key (or the equivalent) whilst clicking with the
+first button and dragging causes the display to be scaled. By moving the
+mouse upwards the display is magnified, and conversley by moving it downwards,
+it is reduced.</font></li>
+</ul>
+<font size=+1></font>
+<p><br><font size=+1>At the top of this window the menus allow the user
+to alter the display as required.</font><font size=+1></font>
+<p><b><font size=+1>Add</font></b><font size=+1></font>
+<p><font size=+1>This menu contains sub-menus referring to whichever files
+have been loaded for display.</font>
+<br><font size=+1>Each sub-menu contains a list of the features from that
+file which may be displayed. Clicking upon the feature leads to its initialisation,
+display and it's options being added to the Option menu.</font><font size=+1></font>
+<p><font size=+1><b>Option</b>.</font><font size=+1></font>
+<p><font size=+1>As wuth the Add menu, each loaded file has it's own sub-menu.
+The sub-menus contain the features currently displayed. Choosing a feature
+produces a dialog box for that feature allowing display choices to be made.</font><font size=+1></font>
+<center>
+<p><img SRC="dialog2.gif" scale 50 50 height=309 width=215></center>
+
+<p><br>
+<p><font size=+1>The dialog box above shows the choices that may be made
+regarding the surface type for a data file iso-value surface representation.</font><font size=+1></font>
+<p><font size=+1>Choices may also be made regarding other aspects of a
+feature's appearance such as the colour and transparency. This dialog also
+contains the option to remove the feature from the display.</font><font size=+1></font>
+<div align=right>
+<p><i><a href="#contents">Back to top.</a></i></div>
+</blockquote>
+
+</body>
+</html>

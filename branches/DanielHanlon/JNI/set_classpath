@@ -1,0 +1,5 @@
+CLASSPATH=.
+for i in $(ls $COG_INSTALL_PATH/lib/*.jar) ; do
+	CLASSPATH=$CLASSPATH:$i ;
+done
+export CLASSPATH
