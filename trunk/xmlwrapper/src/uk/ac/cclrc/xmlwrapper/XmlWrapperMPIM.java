@@ -171,7 +171,7 @@ public class XmlWrapperMPIM
       boolean cache_updated = false ;
       
       int count = 0 ;
-      while (st.hasMoreTokens() && count < 1)
+      while (st.hasMoreTokens() && count < 5)
       {
 
          if(repeat_last == false)
