@@ -56,11 +56,27 @@
    
    <xsd:complexType name="TopicType">
       <xsd:sequence>
-         <xsd:element name="Discipline" type="xsd:string" minOccurs="0" maxOccurs="1" />
-         <xsd:element name="Source"     type="xsd:string" minOccurs="0" maxOccurs="1" />
-	 <xsd:element name="Subject"    type="cmd:SubjectType" minOccurs="1" />
+         <xsd:element name="Keywords" type="cmd:KeywordsType" minOccurs="0" maxOccurs="unbounded" />
+	 <xsd:element name="Subjects"    type="cmd:SubjectsType" minOccurs="1" maxOccurs="unbounded" />
       </xsd:sequence>
    </xsd:complexType> 
+
+   <xsd:complexType name="KeywordsType">
+      <xsd:sequence>
+	 <xsd:element name="Discipline" type="xsd:string"/>
+	 <xsd:element name="KeywordSource" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="Keyword" type="xsd:string" />
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="SubjectsType">
+      <xsd:sequence>
+	 <xsd:element name="Discipline" type="xsd:string" />
+	 <xsd:element name="SubjectSource" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="Subject" type="cmd:SubjectType" />
+      </xsd:sequence>
+   </xsd:complexType>
+   
 
    <xsd:complexType name="SubjectType">
       <xsd:sequence>
