@@ -2,3 +2,4 @@ srbHome=/opt/srb/SRB2/utilities/bin
 srbDest=/tmp/srbtemp
 tarHome=/bin/tar
 rmHome=/bin/rm
+srb_passwd=dp()u5er4em@a^
