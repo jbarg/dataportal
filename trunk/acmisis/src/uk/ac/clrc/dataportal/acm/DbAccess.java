@@ -31,7 +31,7 @@ public class DbAccess {
             prop.load(new FileInputStream(getPropertiesFile()));
             facilityName = prop.getProperty("FACILITYNAME");
             Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql:" + prop.getProperty("SERVER") +":"+ prop.getProperty("PORT")+"/"+prop.getProperty("DATABASENAME")+" ",
+            conn = DriverManager.getConnection("jdbc:postgresql:" + prop.getProperty("SERVER") +":"+ prop.getProperty("PORT")+"/"+prop.getProperty("DATABASENAME")+"",
             prop.getProperty("USERNAME"), // username
             prop.getProperty("PASSWORD")); // password
             
