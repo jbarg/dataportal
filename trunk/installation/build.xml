@@ -335,10 +335,10 @@
 				<include name="**/*.jar"/>
                               	</fileset>                            
 		        </classpath>
-                     <arg line="'${dataportal.home}/authent/web/WEB-INF/authent.conf' '${globusKey}' '${globusCert}'" />
+                     <arg line="'${dataportal.home}/authent/web/WEB-INF/authent.conf' '${globusKey}' '${globusCert}' '${userCaCert}' '${myProxyCaCert}'" />
 			
 			</java>
-                     <echo message="${dataportal.home}/authent/web/WEB-INF/authent.conf ${globusKey} ${globusCert}" />
+                     <echo message="${dataportal.home}/authent/web/WEB-INF/authent.conf ${globusKey} ${globusCert} ${userCaCert} ${myProxyCaCert}" />
          </target>
         
          
