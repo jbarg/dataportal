@@ -79,10 +79,10 @@ public class Query {
                     // sleep 1 second
                     Thread.sleep(oneSec);
                     current+= 1000;
-                    logger.info("Waited "+current+" seconds so far");
+                    //logger.info("Waited "+current+" seconds so far");
                 }
                 catch(Exception e) {
-                    System.out.println(e);
+                    logger.error("Error",e);
                 }
                 
                 if (current > maxWait) {
