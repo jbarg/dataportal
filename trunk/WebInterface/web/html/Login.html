@@ -1,12 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
-
 <html>
-
 <head>
-<script>
-    var javawsInstalled = 0;
+<title>e-Materials Data Portal</title>
+<script language="JavaScript">
+
+    /*var javawsInstalled = 0;
     isIE = "false";
 
     if (navigator.mimeTypes && navigator.mimeTypes.length)
@@ -18,31 +17,68 @@
     {
         isIE = "true";
         javawsInstalled = 1;
-    }
+    }*/
+
+var javawsInstalled = 0; 
+var javaws12Installed = 0; 
+var javaws142Installed=0; 
+isIE = "false"; 
+if (navigator.mimeTypes && navigator.mimeTypes.length) { 
+   x = navigator.mimeTypes['application/x-java-jnlp-file'];  
+  if (x) { 
+      javawsInstalled = 1; 
+      javaws12Installed=1;      
+      javaws142Installed=1; 
+   }
+ }
+ else {    isIE = "true"; } 
+
+
+</script>
+<script language="VBScript">
+
+If isIE = "true" Then
+  If Not(IsObject(CreateObject("JavaWebStart.isInstalled"))) Then
+     javawsInstalled = 0
+  Else
+     javawsInstalled = 1
+  End If
+  If Not(IsObject(CreateObject("JavaWebStart.isInstalled.2"))) Then
+     javaws12Installed = 0
+  Else
+     javaws12Installed = 1
+  End If
+  If Not(IsObject(CreateObject("JavaWebStart.isInstalled.1.4.2.0"))) Then
+     javaws142Installed = 0
+  Else
+     javaws142Installed = 1
+  End If  
+End If
+</script>
+
+<script language="JavaScript">
+
 
     function insertLink(url, name)
-    {
-        if (javawsInstalled)
-        {
+    {   
 
-            document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
-            document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start");
-	   // document.write("<p align=center><img align=center border=0 alt=Icon height=15 width=15 src=http://www.clrc.ac.uk//img/DefaultIcon.gif> Download and install the latest version of <a href=http://www.java.sun.com/products/javawebstart>Java Web Start</a></p>");
-            //document.write("<p align=center><img align=center border=0 alt=Icon height=15 width=15 src=http://www.clrc.ac.uk//img/DefaultIcon.gif> Launch <a href=" + url + ">" + name + "</a> via Java Web Start</p>");
+    
+    /* Note that the logic below always launches the JNLP application *if the browser is Gecko based. This is because it is not possible *to detect MIME type application/x-java-jnlp-file on Gecko-based browsers.  */
+    if (javawsInstalled || (navigator.userAgent.indexOf("Gecko") !=-1)) {
+                document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
+                 //
+              document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start.");
+                          
+    } else {
+        document.write("Click ");
+        document.write("<a href=http://java.sun.com/PluginBrowserCheck?pass=download.html&fail=http://java.sun.com/j2se/1.4.2/download.html>here</a> ");
 
-            //document.write("<ul><li>Download and install the latest version of <a href=http://www.java.sun.com/products/javawebstart>Java Web Start</a></li></ul>");
-	    //document.writeln("<ul><li>Launch <a href=" + url + ">" + name + "</a> via Java Web Start</ul></li>");
-        }
-        else
-        {
-
-
-            document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
-	    document.write("<br />Java Webstart is not detected on your machine !");
-            document.write("<br />Download and install the latest version of <a href=http://www.java.sun.com/products/javawebstart>Java Web Start</a>");
-           // document.writeln("Launch <a href=" + url + ">" + name + "</a> via Java Web Start");
-        }
+        document.write("to download and install JRE 1.4.2 and the application.");
     }
+}
+
+
+     
 
 function check(){
 
@@ -50,12 +86,12 @@ var username = document.logon.username.value;
 var password = document.logon.password.value;
 var lifetime = document.logon.lifetime.value;
 
-if(username == "" ||password == ""||lifetime == ""){ 
+if(username == "" ||password == ""||lifetime == ""){
     alert("Please enter a username, password and/or lifetime");
     return false;
 
 }
-else if(parseInt(lifetime) && lifetime>0){  
+else if(parseInt(lifetime) && lifetime>0){
 
 return true;
 }
@@ -63,7 +99,6 @@ else{
 alert("Enter a number for the lifetime");
 return false;}
 }
-
 
 function openHelp(){
     window.open("../help/Help.jsp","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
@@ -148,11 +183,14 @@ Or download the application:&nbsp;
 <a
 href="proxy/Proxy.zip">Proxy.zip</a>
 <br />
+
+   <a href='installation.html'>Installation notes</a>.
+  <br />
 <br />
 <a href="#" onclick="openHelp();">Help pages</a>.
 <br />
 
-<a href="../index.html">Home page</a>.
+<a href="../">Home page</a>.
 <br />
 
 <div id="footer" align="right"> <a href="http://validator.w3.org/check/referer"><img
