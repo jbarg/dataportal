@@ -41,8 +41,8 @@ public class LaunchProcess {
             }
         }
         
-        System.out.println("Executing command " + arg);
-        
+        System.out.println("Executing command from Launch process: " + arg);
+        System.out.println("");
         Process p = Runtime.getRuntime().exec(arg);
         
         //Thread o = new Thread(new Threader(p.getInputStream()));
@@ -56,8 +56,11 @@ public class LaunchProcess {
         te.start();
         p.waitFor();
         
+        
         //check if there is a error
         boolean isError = e.isError;
+        System.out.println("Error is "+isError);
+        
         if(isError) return e.getError();
         else return "true";
     }

@@ -47,44 +47,54 @@ public class SRBTransfer extends HttpServlet {
         HttpSession session = request.getSession(false);
         if(session == null){
             response.sendRedirect("../html/Login.html");
+            return;
         }
         else{
-            //locate the prop file.  Normal get this from web.xml file
-            String wd =  (String)session.getAttribute("wd");
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-            //load properties
-            Properties props = new Properties();
-            props.load(new FileInputStream(wd+File.separator+"WEB-INF"+File.separator+"webserviceslocation.conf"));
-            String srb_location = props.getProperty("srb_location");
-            String srb_password = props.getProperty("srb_password");
             
-            //get all the attributes needed
-            String dir = request.getParameter("url");
-            String urlTo = request.getParameter("urlTo");
-            String sid = (String)session.getAttribute("sessionid");
-            
-            //need to add section to get the value from properties file.
-            URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password);
-            URLConnection yc = url.openConnection();
-            InputStream p = yc.getInputStream();
-            
-            File tarFile = new File(wd+File.separator+"xml"+File.separator+sid+".tar");
-            BufferedInputStream myBufferedInputStream = new BufferedInputStream(p);
-            
-            BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(new FileOutputStream(tarFile));
-            
-            byte[] buffer = new byte[65536];
-            int c=0;
-            
-            while ((c=myBufferedInputStream.read(buffer)) > -1) {
-                myBufferedOutputStream.write(buffer,0,c);
+            try{
+                //locate the prop file.  Normal get this from web.xml file
+                String wd =  (String)session.getAttribute("wd");
+                PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
+                //load properties
+                Properties props = new Properties();
+                props.load(new FileInputStream(wd+File.separator+"WEB-INF"+File.separator+"webserviceslocation.conf"));
+                String srb_location = props.getProperty("srb_location");
+                String srb_password = props.getProperty("srb_password");
+                
+                //get all the attributes needed
+                String dir = request.getParameter("url");
+                String urlTo = request.getParameter("urlTo");
+                String sid = (String)session.getAttribute("sessionid");
+                
+                //need to add section to get the value from properties file.
+                URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password);
+                URLConnection yc = url.openConnection();
+                InputStream p = yc.getInputStream();
+                
+                File tarFile = new File(wd+File.separator+"xml"+File.separator+sid+".tar");
+                BufferedInputStream myBufferedInputStream = new BufferedInputStream(p);
+                
+                BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(new FileOutputStream(tarFile));
+                
+                byte[] buffer = new byte[65536];
+                int c=0;
+                
+                while ((c=myBufferedInputStream.read(buffer)) > -1) {
+                    myBufferedOutputStream.write(buffer,0,c);
+                }
+                
+                myBufferedOutputStream.flush();
+                myBufferedOutputStream.close();
+                myBufferedInputStream.close();
+                p.close();
             }
-            
-            myBufferedOutputStream.flush();
-            myBufferedOutputStream.close();
-            myBufferedInputStream.close();
-            p.close();
-            
+            catch(Exception e){
+                logger.warn("Error in downloading srb collection ",e);
+                response.sendRedirect("../jsp/error.jsp");
+                return;
+                
+                
+            }
             //use datatransfer module
             Properties prop = (Properties)session.getAttribute("props");
             String url1 = prop.getProperty("DTS");
