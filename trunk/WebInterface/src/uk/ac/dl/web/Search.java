@@ -78,8 +78,8 @@ public class Search {
                         String name  = e.getName();
                         if(name == null) name= "null";
                         System.out.println(res[(i-1)]);
-                        if(res[(i-1)])
-                        res[(i-1)].add(name);
+                        if(res[(i-1)]==null){}
+                        else                         res[(i-1)].add(name);
                     }
                 }
             }
