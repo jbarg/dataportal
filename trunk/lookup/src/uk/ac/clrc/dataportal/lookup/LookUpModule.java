@@ -38,7 +38,7 @@ import org.apache.commons.logging.Log;
 
 public class LookUpModule
 {
-    static Log log = LogFactory.getLog(LookUpModule.class.getName());
+    Log log = LogFactory.getLog(this.getClass().getName());
     
     private UDDIProxy getUDDIProxy()
     {

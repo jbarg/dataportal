@@ -10,7 +10,7 @@ package uk.ac.clrc.dataportal.lookup.client;
 public class LookUpModuleServiceLocator extends org.apache.axis.client.Service implements uk.ac.clrc.dataportal.lookup.client.LookUpModuleService {
 
     // Use to get a proxy class for LookUpService
-    private final java.lang.String LookUpService_address = "http://escpc10:8080/lookup/services/LookUpService";
+    private final java.lang.String LookUpService_address = "http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService";
 
     public java.lang.String getLookUpServiceAddress() {
         return LookUpService_address;
