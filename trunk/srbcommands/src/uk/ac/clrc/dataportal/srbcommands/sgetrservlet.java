@@ -12,8 +12,9 @@ import javax.servlet.http.*;
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 
-import java.util.Properties;
+import java.util.*;
 import java.io.*;
+import java.lang.StringBuffer;
 
 /**
  *
@@ -90,7 +91,7 @@ public class sgetrservlet extends HttpServlet {
             
             //does file /tmp/srbtemp exist
             File srbtemp = new File("/tmp/srbtemp");
-            if(srbtemp.exists()) srbtemp.mkdir();            
+            if(!srbtemp.exists()) srbtemp.mkdir();            
             
             response.setContentType("application/download");
             response.setBufferSize(65536);
@@ -98,7 +99,20 @@ public class sgetrservlet extends HttpServlet {
             String filename = dir.substring(dir.lastIndexOf("/") + 1);
             filename = filename.replace('.','_');
             response.setHeader("Content-disposition","attachment; filename=" + filename + ".zip");
-            LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sget -r " + dir + " /tmp/srbtemp/" + request.getSession().getId());
+            //this is the one that is working with the whole collection
+            //LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sget -r " + dir + " /tmp/srbtemp/" + request.getSession().getId());
+            
+            //this is my one with the single files
+            LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sls -C " + dir + " > /tmp/srbtemp/" + request.getSession().getId()+"conf");
+            Vector files = ReaderRights.ReaderRights("glen",request.getSession().getId()+"conf");
+            StringBuffer filenames = new StringBuffer();
+            for(int i = 0; i < files.size();i++){
+                filenames.append(" "+files.get(i));
+            }
+            
+            LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sget  " + filenames.toString() + " /tmp/srbtemp/" + request.getSession().getId());
+            
+            
             // Even though this works when typed into a shell it doesn't work from here!!  More work needed.....
             //LaunchProcess.runCommand( "/bin/sh -c \"cd /tmp/srbtemp/" + request.getSession().getId() + ";/usr/bin/zip -mr /tmp/srbtemp/" + request.getSession().getId() + ".zip .\"");
             
@@ -125,7 +139,7 @@ public class sgetrservlet extends HttpServlet {
             out.close();
             LaunchProcess.runCommand( "/bin/rm /tmp/srbtemp/" + request.getSession().getId() + ".zip");
         }
-        catch (java.lang.Exception e) {
+        catch (jafileconfva.lang.Exception e) {
             
             // Better error handling is required for when things go wrong.....
             
