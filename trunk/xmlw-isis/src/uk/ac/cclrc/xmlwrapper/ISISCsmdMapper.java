@@ -731,7 +731,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
          if(prev_experiment_number.compareTo("")!=0)
          {
-            buildMDRelatedReferance(id, sbr, ii+li, "investigation", true) ;
+            buildMDRelatedReferance(prev_experiment_number, sbr, ii+li, "investigation", true) ;
          }
 
         //build data holding
@@ -757,12 +757,41 @@ public class ISISCsmdMapper implements CsmdMapper
       {
          t_s=s ;
       }
+ 
+      //variables needed
+      String title = place_holder ;
+      String investigation_id = place_holder ;
       
-      t_r=t_s.executeQuery("select * from investigation where experiment_number = '" + key + "'") ;
+      t_r=t_s.executeQuery("select TITLE, investigation.id \"INVESTIGATION_ID\" from investigation where experiment_number = '" + key + "'") ;
 
       if(t_r.next())
       {
-            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+         title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+         investigation_id = sr.LitWithEnt(xt.makeValid(r.getString("INVESTIGATION_ID") ));
+
+         sbr.append(ii+"<RelatedReference>\n") ;
+         sbr.append(ii+li"<Type>" + "prior" + "</Type>\n") ; 
+         sbr.append(ii+li"<ReferredToItem>" + "Experiment" + "</ReferredToItem>\n") ; 
+      }
+
+      t_r.close() ;
+
+      t_r = t_s.executeQuery("select study.name \"STUDYNAME\", study.id \"STUDY_ID\" from study where study.id in " +
+                             "(select distinct(study_id) from investigation_list where investigation_id in " +
+                             "(select investigation.id from invetigation where title='" + title + "'))") ;
+
+      if(t_r.next())
+      {
+         studyname = sr.LitWithEnt(xt.makeValid(r.getString("STUDYNAME") )); 
+         study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") )); 
+      }
+
+      t_r.close() ;
+    
+
+
+      sbr.append(ii+li"<ReferenceLocation>\n") ; 
+      abr.append(ii+li+li"<Archive>"+"isis"+"</Archive>\n") ;
 
       /*for related referenace we need the following info
 	element			value(e.g.)
