@@ -4,6 +4,7 @@ import org.jdom.*;
 import java.net.*;
 import java.io.*;
 import org.apache.log4j.*;
+import java.util.*;
 
 /** This return a xml Element from the ISIS. This class is used as a web
  * service and therefore has to return a org.dom.Element because of
@@ -39,7 +40,7 @@ public class WebServiceISIS {
             //if starts with chemistry ot biology return something
             if(query.startsWith("Discipline='chemistry") || query.startsWith("Discipline='biology")) cheating = "chemistry";
 
-            URL url = new URL(isis_url+"?where=%20Discipline%20like%27%"+cheating+"%27%20and%20DMInstitutionName%20like'%ISIS%';UserID=dpuser;");
+            URL url = new URL(isis+"?where=%20Discipline%20like%27%"+cheating+"%27%20and%20DMInstitutionName%20like'%ISIS%';UserID=dpuser;");
             //URL url = new URL("http://sas27vig.dl.ac.uk:8080/badc/xmlwrapper_badc?where=Discipline=" +query+"&DMInstitutionName=BADC&Person=&");
             URLConnection yc = url.openConnection();
             //get a inputstream
