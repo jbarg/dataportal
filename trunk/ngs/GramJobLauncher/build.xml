@@ -1,182 +1,81 @@
-<?xml version="1.0"?>
-    
-<project name="xportlets-gramjoblauncher" default="help" basedir=".">
+<project name="ngsportal-gramjoblauncher" default="usage" basedir=".">
+  <property file="build.properties"> </property>
+  <property name="src" value="src"/>
+  <property name="lib" value="lib"/>
+  <property name="build" value="build"/>
+  <property name="classes" value="${build}/classes"/>
 
-	<property file="build.properties"> </property>
-	<property environment="env"> </property>
-	<property name="distname" value="xportlets-gramjoblauncher"/>
+  <path id="classes">
+    <fileset dir="${jars}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="${module-mgrid}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="${chef-src.home}/dist/lib">
+      <include name="core*.jar"/>
+      <include name="chef*.jar"/>
+    </fileset>
+  </path>
 
-	<target name="help">
-    <echo message="Re-run with arg -projecthelp to find out available targets."> </echo>
-	</target>
+  <target name="usage">
+    <echo>
+    The following targets are available:
 
-  <target name="alliance-set" unless="alliance.home">
-    <fail message="You must set alliance.home in the build.properties file"> </fail>
+    build   - compiles the source code into the directory build
+    clean   - cleans out class files
+    deploy  - deploys the portlet into CHEF
+    </echo>
   </target>
 
-	<!-- Parent source directory -->
-	<property name="src" value="src"> </property>
-	
-	<!-- Lib directory -->
-	<property name="lib" value="lib"> </property>
+  <target name="set-chef-portal" unless="chef-portal.home">
+    <fail message="You must set chef-portal.home in the build.properties file"> </fail>
+  </target>
 
-	<!-- jar files -->
-	<property name="jars" value="/opt/xportlets/lib"> </property>
-	
-	<!-- Build directory -->
-	<property name="build" value="build"> </property>
-	
-	<!-- Libraries to include in classpath -->
-	<path id="libraries">
-		<fileset dir="${jars}">
-			<include name="**/*.jar"> </include>
-		</fileset>
-		<pathelement path="${build}"> </pathelement>
-	</path>
+  <target name="set-chef-src" unless="chef-src.home">
+    <fail message="You must set chef-src.home in the build.properties file"> </fail>
+  </target>
 
-	<property name="path_libraries"  refid="libraries"> </property>
+  <target name="set-jars" unless="jars">
+    <fail message="You must set jars in the build.properties file"> </fail>
+  </target>
 
-	<!-- Initialization stuff -->
-	<target name="init">
-		<!-- Create the time stamp -->
-		<tstamp> </tstamp>
-		<echo message="Project: ${ant.project.name}"> </echo>
-		<echo message="Ant version: ${ant.version}"> </echo>
-		<echo message="JAVA Home: ${env.JAVA_HOME}"> </echo>
-		<echo message="Java version: ${ant.java.version}"> </echo>
-		<echo message="alliance.home: ${alliance.home}"> </echo>
-        <echo message="libraries: ${lib}"/>
-		<mkdir dir="${build}"> </mkdir>
-	</target>
+  <target name="set-module-mgrid" unless="module-mgrid">
+    <fail message="You must set module-mgrid in the build.properties file"> </fail>
+  </target>
 
+  <target name="prepare"
+	depends="set-chef-portal, set-chef-src, set-module-mgrid, set-jars">
+    <mkdir dir="${build}"/>
+    <mkdir dir="${classes}"/>
+  </target>
 
-	<!-- Compile the source to build -->
-	<target name="build" depends="init">
-		<!-- Compile the java code from ${src} into ${build} -->
-		<javac srcdir="${src}" destdir="${build}" debug="on">
-			<classpath refid="libraries"> </classpath>
-		</javac>
-	</target>
+  <target name="clean" >
+    <delete dir="${build}"/>
+  </target>
 
-	<target name="deploy" depends="build, alliance-set">
-		<copy overwrite="yes" todir="${alliance.home}/WEB-INF/classes">
-      <fileset dir="${basedir}/build">
-        <include name="**/*"> </include>
+  <target name="build" depends="prepare">
+    <javac deprecation="yes" srcdir="${src}" destdir="${classes}"> 
+     <classpath refid="classes"/>
+    </javac>
+  </target>
+
+  <target name="deploy" depends="build">
+    <copy overwrite="Yes" todir="${chef-portal.home}/WEB-INF/classes">
+      <fileset dir="${basedir}/build/classes">
+        <include name="**/*"/>
       </fileset>
     </copy>
-
-		<copy overwrite="yes" todir="${alliance.home}/WEB-INF/conf">
+    <copy overwrite="Yes" todir="${chef-portal.home}/WEB-INF/conf">
       <fileset dir="${basedir}/conf">
-        <include name="*.xreg"> </include>
+	<include name="*.xreg"/>
       </fileset>
     </copy>
-
-    <copy overwrite="yes" todir="${alliance.home}/WEB-INF/templates/vm/portlets/html">
+    <copy overwrite="Yes" todir="${chef-portal.home}/WEB-INF/templates/vm/portlets/html">
       <fileset dir="${basedir}/templates">
-        <include name="*.vm"> </include>
+	<include name="*.vm"/>
       </fileset>
     </copy>
-	</target>
-
-	<target name="all" depends="deploy, copylibs">
-	</target>
-	
-	<target name="copylibs">
-		
-    <copy overwrite="yes" todir="${alliance.home}/WEB-INF/lib">
-      <fileset dir="${lib}/jetspeed">
-        <include name="**/*.jar"> </include>
-			</fileset>
-    </copy>
-		
-    <copy overwrite="yes" todir="${alliance.home}/WEB-INF/lib">
-      <fileset dir="${lib}/velocity">
-        <include name="**/*.jar"> </include>
-      </fileset>
-    </copy>
-		
-    <copy overwrite="yes" todir="${alliance.home}/WEB-INF/lib">
-      <fileset dir="${lib}/turbine">
-        <include name="**/*.jar"> </include>
-      </fileset>
-    </copy>
-
-    <copy overwrite="yes" todir="${alliance.home}/WEB-INF/lib">
-      <fileset dir="${lib}/log4j">
-        <include name="**/*.jar"> </include>
-      </fileset>
-    </copy>
-
-		<copy overwrite="yes" todir="${alliance.home}/WEB-INF/lib">
-      <fileset dir="${lib}/servlet">
-        <include name="**/*.jar"> </include>
-      </fileset>
-    </copy>
-
-		<copy overwrite="yes" todir="${alliance.home}/WEB-INF/lib">
-      <fileset dir="${lib}/cog">
-        <include name="**/*.jar"> </include>
-      </fileset>
-    </copy>
-
-		<copy overwrite="yes" todir="${alliance.home}/WEB-INF/lib">
-      <fileset dir="${lib}/proxymanager">
-        <include name="**/*.jar"> </include>
-      </fileset>
-    </copy>
-
-	</target>
-
-  <target name="srcdist" depends="clean" description="creates a source distribution of this package">
-    <loadproperties srcFile="VERSION"/>
-    <property name="srcdistname" value="${distname}-${version}-src"/>
-    <property name="srcdistdir" value="${srcdistname}/${srcdistname}"/>
-    <mkdir dir="${srcdistdir}"/>
-    <copy todir="${srcdistdir}">
-      <fileset dir="${basedir}">
-				<include name="src/**"/>
-				<include name="conf/**"/>
-				<include name="docs/**"/>
-				<include name="lib/**"/>
-				<include name="templates/**"/>
-				<include name="INSTALL"/>
-				<include name="README"/>
-				<include name="build.xml"/>
-      </fileset>
-    </copy>
-    <replace file="${srcdistdir}/README" token="VERSION" 
-             value="${version}"/>
-    <tar tarfile="${srcdistdir}.tar" basedir="${srcdistname}"/>
-    <gzip zipfile="${srcdistname}.tar.gz" src="${srcdistdir}.tar"/>
-    <delete dir="${srcdistname}"/>
   </target>
-		
-	<!-- Clean up -->
-	<target name="clean">
-		<!-- Delete the ${build} directory trees -->
-		<delete dir="${build}"> </delete>
-		<delete>
-			<fileset dir="${src}" defaultexcludes="no">
-				<include name="**/*~"> </include>
-			</fileset>
-		</delete>
-	</target>
-</project>
 
-<!-- Keep this comment at the end of the file
-Local variables:
-mode: xml
-sgml-omittag:nil
-sgml-shorttag:nil
-sgml-namecase-general:nil
-sgml-general-insert-case:lower
-sgml-minimize-attributes:nil
-sgml-always-quote-attributes:t
-sgml-indent-step:2
-sgml-indent-data:t
-sgml-parent-document:nil
-sgml-exposed-tags:nil
-sgml-local-catalogs:nil
-sgml-local-ecat-files:nil
-End:
--->
+</project>

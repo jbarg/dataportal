@@ -1,0 +1,35 @@
+File Transfer Tool for NGS portal installation guide
+====================================================
+
+REQUIRED TOOLS (OUR WORKING VERSION)
+------------------------------------
+ o J2SE SDK with JNDI (v1.4.2_05), http://java.sun.com/j2se
+ o Jakarta Ant (1.6.2), http://ant.apache.org/
+ o Java CoG (1.1), http://www-unix.globus.org/cog/java/
+ o Jakarta Tomcat (5.0.27), http://jakarta.apache.org/tomcat
+ o CHEF (1.2.10), http://collab.sakaiproject.org/portal
+ o CHEF GridService module (org.chefproject.service.GridService)
+
+INSTALL
+-------
+ o Set parameters in "build.properties"
+   "chef-portal.home" -- where CHEF is deployed
+   "chef-src.home" -- where CHEF source exists with the library in dist/lib
+   "jars" -- all libary files needed including Java CoG library
+   "module-mgrid" -- where module GridService libary exists
+ o Execute "ant build" to build
+ o Shutdown Tomcat if it is running
+ o Execute "ant build" to build
+ o Execute "ant deploy" to deploy, you also need all libraries defined by
+   "chef-portal.home", "chef-src.home", "jars" and "module-mgrid" copied to CHEF
+ o Add it as a tool in your CHEF
+ o You may need to set ~/.globus/cog.proterties on your web server for whom
+   Tomcat is running if you have firewall protecting your web server
+        cacert=/etc/grid-security/certificates/01621954.0
+        tcp.port.range=65000,65255
+        ip=your_web_server_ip_address
+ o Restart Tomcat
+
+
+CCLRC e-Science Centre
+http://www.e-science.clrc.ac.uk/
