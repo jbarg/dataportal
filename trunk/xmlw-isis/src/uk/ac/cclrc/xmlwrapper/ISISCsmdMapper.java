@@ -935,6 +935,9 @@ public class ISISCsmdMapper implements CsmdMapper
          sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
          sbr.append(ii+li+"<TypeOfData>"+dataset_type+"</TypeOfData>\n") ;
          sbr.append(ii+li+"<Status>"+dataset_status+"</Status>\n") ;
+
+         buildMDLogicalDescription(key, sbr, ii+li, "datacollection", true) ;
+         
          sbr.append(ii+"</DataDescription>\n") ;
 
       }
@@ -956,8 +959,25 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDLogicalDescription(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
 
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+
+      if(type.compareTo("datacollection")==0)
+      {
+         //HERE
+         buildMDParemeters(
+         buildMDTimePeriod(
+         buildMDFacilityUsed(
       return ;
    }
    void buildMDParameter(String key, StringBuffer sbr, String ii, String type) throws SQLException
