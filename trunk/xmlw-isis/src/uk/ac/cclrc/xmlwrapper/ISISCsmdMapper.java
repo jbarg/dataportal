@@ -665,7 +665,6 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDInvestigation(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-////////////      
       //following needed as some calls from nested context:
       //as this is called from a nested context
       Connection c = ss.getConnection() ;
@@ -706,7 +705,7 @@ public class ISISCsmdMapper implements CsmdMapper
          bcat_inv_str = sr.LitWithEnt(xt.makeValid(r.getString("BCAT_INV_STR") ));
          comments = sr.LitWithEnt(xt.makeValid(r.getString("COMMENTS") ));
 
-         sbr.append(ii+"<Investigation>\n") ;
+         sbr.append(ii+"<Investigation InvestigationID=\"investigation_" + id + "\">\n") ;
          sbr.append(ii+li+"<Name>"+title+"</Name>\n") ;
          sbr.append(ii+li+"<InvestigationType>"+investigation_type+"</InvestigationType") ; 
          sbr.append(ii+li+"<Abstract>"+inv_abstract+"</Abstract>\n") ;
@@ -729,10 +728,58 @@ public class ISISCsmdMapper implements CsmdMapper
          t_r.close() ;
 
          //getting the related information/experimens
+
+         if(prev_experiment_number.compareTo("")!=0)
+         {
+            buildMDRelatedReferance(id, sbr, ii+li, "investigation", true) ;
+         }
+
+        //build data holding
+        buildMDDataHolding(id, sbr, ii+li, null) ;
+
+     } // all investigation for this study have now been processed
          
 
       return ;
-/////////////
+   }
+
+   void buildMDRelatedReferance(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
+   {
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
+
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+      
+      t_r=t_s.executeQuery("select * from investigation where experiment_number = '" + key + "'") ;
+
+      if(t_r.next())
+      {
+            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+
+      /*for related referenace we need the following info
+	element			value(e.g.)
+	type			???????????
+	direction		from
+	ReferredToItem		experiment
+        method			derived (?)
+        ReferanceLocation
+		archive			isis
+		StudyName		<name>
+		investigationName	experiment name
+
+	---> this should give us enough info to find the linked item
+     */
+      
+
+      return ;
    }
 
    void buildMDDataHolding(String key, StringBuffer sbr, String ii, String type) throws SQLException
