@@ -211,7 +211,7 @@ public class ShopCart {
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
         
-        String[] ret = new String [5];
+        String[] ret = new String [6];
         
         Document doc=null;
         try{
@@ -250,6 +250,9 @@ public class ShopCart {
                         Element wait = query.getChild("wait");
                         ret[4] = wait.getText();
                         
+                        //get associated study
+                        Element assStudy = el.getChild("assStudy");
+                        ret[6] = assStudy.getText();
                         
                         // System.out.println("name for see notes is "+el4.getText());
                         //Element el3 = el.getChild("url");
