@@ -78,6 +78,29 @@ function selectAll(formID, fieldName, value)
   return null;
 }
 
+//checks that all items are not selected
+function checkall1(formID, fieldName){
+
+var oneNotChecked = false;
+
+var elements = document.forms[formID].elements;
+
+ for (i = 0; i < elements.length; i++) {
+    
+    if (elements[i].name && elements[i].name.indexOf(fieldName) > -1  && (elements[i].checked == false)) {
+      oneNotChecked = true;
+    //alert(elements[i].checked +" name  " + elements[i].name);
+    }
+ }
+ if(!oneNotChecked){
+    var temp = window.confirm("Are you sure you want to clear all of your shopping cart?");
+
+    if(temp == true) return true;
+    else return false;
+ }
+ else return true;
+
+}
 //-->
 </script>
 </head>
@@ -133,7 +156,7 @@ html/netscape.html file from the content root.-->
    }
 %>
 
-<form name="deleteSelected" action="../servlet/DeleteSelectedWS" method="post">
+<form name="deleteSelected" onsubmit="return checkall1('deleteSelected','delete');" action="../servlet/DeleteSelectedWS" method="post">
 
 <c:choose>
 <c:when test="<%=checkout.isEmpty()%>">
