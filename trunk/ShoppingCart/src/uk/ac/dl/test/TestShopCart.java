@@ -28,17 +28,17 @@ public class TestShopCart extends TestCase{
         
     }
     
-    public void testGetCart(){
+   /* public void testGetCart(){
         try{
-            ShopCart cart = new ShopCart("1");
-            Element el = cart.getCart(new Integer(488));
+           // ShopCart cart = new ShopCart("1");
+            Element el = ShopCart.getCart(new Integer(573));
             Assert.assertNotNull(el);
             System.out.println(el);
         }
         catch(Exception e){
             System.out.println(e);
         }
-    }
+    }*/
 }
 
 

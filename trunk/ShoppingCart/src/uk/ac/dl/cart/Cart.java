@@ -26,7 +26,7 @@ public class Cart {
     //set static log for the class
     static Logger logger = Logger.getLogger(Cart.class);
     
-    public static void insertDoc(Integer sid,Document doc) throws IOException,ClassNotFoundException,SQLException,Exception {
+    public static void insertDoc(String sid,Document doc) throws IOException,ClassNotFoundException,SQLException,Exception {
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
         
@@ -62,7 +62,7 @@ public class Cart {
             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
             call.setOperationName( method );
             
-            call.addParameter( "op1", XMLType.XSD_INT, ParameterMode.IN );
+            call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
             
             call.setReturnType( XMLType.XSD_STRING );
             
@@ -152,7 +152,7 @@ public class Cart {
     }
     
     
-    public static Document getDoc(Integer sid) throws IOException,ClassNotFoundException,SQLException,Exception{
+    public static Document getDoc(String sid) throws IOException,ClassNotFoundException,SQLException,Exception{
         
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
@@ -178,7 +178,7 @@ public class Cart {
             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
             call.setOperationName( method );
             
-            call.addParameter( "op1", XMLType.XSD_INT, ParameterMode.IN );
+            call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
             
             call.setReturnType( XMLType.XSD_STRING );
             
