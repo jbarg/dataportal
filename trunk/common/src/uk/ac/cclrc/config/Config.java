@@ -19,9 +19,11 @@ public class Config  {
     //set static log for the class
     static Logger logger = Logger.getLogger(Config.class);
     
-    
     public static String getContextPath(){
-        String propertiesFileName;
+        
+        // Default path - change as you like (overwritten during 
+        String path = "C:\\Working\\dataportal\\queryandreply\\web\\";
+        
         MessageContext messageContext = MessageContext.getCurrentContext();
         if (messageContext != null) {
             // Get the servlet request
@@ -29,7 +31,7 @@ public class Config  {
             
             // Strip off the web service name off the end of the path
             // and append our properties file path
-            propertiesFileName = request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(File.separator));
+            String propertiesFileName = request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(File.separator));
             path = propertiesFileName + File.separator + "WEB-INF" + File.separator;
         }
         return path;
