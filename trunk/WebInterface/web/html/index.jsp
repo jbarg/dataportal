@@ -47,6 +47,10 @@ facilities,E-minerals, data, search, Glen Drinkwater, Synchrotron Radiation,Brit
 <br />
 
 <br />
+<a href="http://eminerals.org"><img src="../img/emin7.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
+<br />
+
+<br />
 <a href="http://eminerals.org"><img src="../img/emin6.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 
 
