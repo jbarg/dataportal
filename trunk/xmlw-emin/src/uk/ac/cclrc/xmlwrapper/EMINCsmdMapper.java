@@ -54,17 +54,18 @@ public class EMINCsmdMapper implements CsmdMapper
 	 if(discipline.compareTo("") != 0)
          {
             // for some reason jdbc did not like  brackets around the following - strange.
-            temp_str = ("SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID IN " +
-                        "(SELECT ENTRY_ID FROM " + dbs + "PARAMETER WHERE TOPIC_ID IN " +
-                        "(SELECT TOPIC_ID FROM " + dbs + "TOPIC WHERE lower(TOPIC_NAME) LIKE '%" + discipline + "%'))") ;
+            temp_str = ("SELECT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
+                        "(SELECT STUDY_ID FROM " + dbs + "STUDY_TOPICS WHERE TOPIC_ID IN " +
+                        "(SELECT TOPIC_ID FROM " + dbs + "TOPICS WHERE lower(TOPIC) LIKE '%" + discipline + "%'))") ;
 	    discipline = temp_str ;
 	 }
 
 	 if(subject.compareTo("") != 0)
          {
-            temp_str = ("SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID IN " +
-                        "(SELECT ENTRY_ID FROM " + dbs + "LOCATION_CONNECT WHERE LOCATION_ID IN " +
-                        "(SELECT LOCATION_ID FROM " + dbs + "LOCATION WHERE lower(LOCATION_NAME) LIKE '%" + subject + "%'))") ;
+            temp_str = ("SELECT DISTINCT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
+                        "(SELECT STUDY_ID FROM " + dbs + "INVESTIGATION WHERE INVESTIGATION_ID IN " +
+                        "(SELECT INVESTIFGATION_ID FROM " + dbs + "DATA WHERE DATA_ID IN " +
+                        "(SELECT DATA_ID FROM " + dbs + "PARAMETERS WHERE lower(NAME) LIKE '%" + subject + "%')))") ;
 	    subject = temp_str ;
 	 }
 
@@ -86,12 +87,8 @@ public class EMINCsmdMapper implements CsmdMapper
 	       dis_cp = st.nextToken() ;
 	    }
             
-	    temp_str = ("(SELECT ENTRY_ID FROM " + dbs + "ENTRY " +
-		        "WHERE lower(ENTRY_NAME) LIKE '%" + studyname + "%' " +
-			 "UNION " +
-                         "SELECT ENTRY_ID FROM " + dbs + "CAMPAIGN WHERE PROJECT_ID IN " +
-                          "(SELECT PROJECT_ID FROM " + dbs + "PROJECT WHERE lower(PROJECT_NAME) LIKE '%" + studyname + "%') " +
-			")") ;
+	    temp_str = ("SELECT STUDY_ID FROM " + dbs + "STUDY " +
+		        "WHERE lower(NAME) LIKE '%" + studyname + "%' ") ; 
 
 	    studyname = temp_str ;
 	 }
@@ -99,20 +96,16 @@ public class EMINCsmdMapper implements CsmdMapper
 	 if(studyid.compareTo("") != 0)
          {
             // as above note - should this have 2 versions
-            temp_str = ("(SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE lower(ENTRY_ACRONYM) LIKE '%" + studyid + "%' " +
-			 "UNION " +
-                         "SELECT ENTRY_ID FROM " + dbs + "CAMPAIGN WHERE PROJECT_ID IN " +
-                          "(SELECT PROJECT_ID FROM " + dbs + "PROJECT WHERE lower(PROJECT_ACRONYM) LIKE '%" + studyid + "%') " +
-			")") ;
+            temp_str = ("SELECT STUDY_ID FROM " + dbs + "STUDY WHERE lower(ENTRY_ACRONYM) LIKE '%" + studyid + "%' ") ; 
 
 	    studyid = temp_str ;
 	 }
 
 	 if(dminstitution.compareTo("") != 0)
          {
-            temp_str = ("SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID IN " +
-                        "(SELECT ENTRY_ID FROM " + dbs + "CONTACT WHERE INSTITUTE_ID IN " +
-                       "(SELECT INSTITUTE_ID FROM " + dbs + "INSTITUTE WHERE lower(INSTITUTE_NAME) LIKE '%" + dminstitution + "%'))") ;
+            temp_str = ("SELECT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
+                        "(SELECT STUDY_ID FROM " + dbs + "STUDY_INSTITUTION WHERE INSTITUTE_ID IN " +
+                       "(SELECT INSTITUTE_ID FROM " + dbs + "INSTITUTION WHERE lower(NAME) LIKE '%" + dminstitution + "%'))") ;
 	    dminstitution = temp_str ;
 	 }
 
@@ -121,19 +114,14 @@ public class EMINCsmdMapper implements CsmdMapper
 
 	 if(startdate.compareTo("") != 0)
          {
-            temp_str = ("SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID IN " +
-                        "(SELECT ENTRY_ID FROM " + dbs + "COVERAGE WHERE TEMPORAL_COVERAGE_ID IN " +
-                        "(SELECT TEMPORAL_COVERAGE_ID FROM " + dbs + "TEMPORAL_COVERAGE " +
-			"WHERE (START_YEAR||lpad(START_MONTH,2,0)||START_DAY) LIKE '%" + startdate.substring(0,6) + "%'))") ;
+            // may have to mod this based on timezone info and nls_date_format/timstamp issues
+            temp_str = ("SELECT START_DATE FROM " + dbs + "STUDY WHERE START_DATE LIKE '%" + startdate.substring(0,6) + "%'"); 
 	    startdate = temp_str ;
 	 }
 
 	 if(enddate.compareTo("") != 0)
          {
-            temp_str = ("SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID IN " +
-                        "(SELECT ENTRY_ID FROM " + dbs + "COVERAGE WHERE TEMPORAL_COVERAGE_ID IN " +
-                        "(SELECT TEMPORAL_COVERAGE_ID FROM " + dbs + "TEMPORAL_COVERAGE " +
-			"WHERE (STOP_YEAR||lpad(STOP_MONTH,2,0)||STOP_DAY) LIKE '%" + enddate.substring(0,6) + "%'))") ;
+            temp_str = ("SELECT END_DATE FROM " + dbs + "STUDY WHERE END_DATE LIKE '%" + enddate.substring(0,6) + "%'"); 
 	    enddate = temp_str ;
 	 }
 
@@ -235,18 +223,8 @@ public class EMINCsmdMapper implements CsmdMapper
       }
       else
       {
-         sql.append("SELECT ENTRY_ID FROM " + dbs + "ENTRY") ;
-         //sql.append("SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID IN ('20144')") ;
+         sql.append("SELECT STUDY_ID FROM " + dbs + "STUDY") ;
       }
-
-      //remove the entries that we do not need - i.e. the ones refering to Grib messages
-      //now we only want entries whic are complete Studys back up the hierarchy I guess
-
-      sql.append(" minus select entry_id from " + dbs + "entry where entry_type_id in " +
-                 " (select entry_type_id from " + dbs + "entry_type where entry_type not like '%experiment%')") ;
-
-      //now for the actual selection of values and building up the comma
-      //space separated list of valid entry_id's
 
       // now apply the sql to get the qualifying entries	 
 
@@ -271,7 +249,7 @@ public class EMINCsmdMapper implements CsmdMapper
             while(r.next())
             {
                r.getRow() ;
-               sb.append(r.getInt("ENTRY_ID")) ;
+               sb.append(r.getInt("STUDY_ID")) ;
                sb.append(", ") ;
             }
 
@@ -294,80 +272,149 @@ public class EMINCsmdMapper implements CsmdMapper
 
       } // end of while 
 
-      //
-      //now do the same again but for datasets and then find the parent experiments of these
-      //datasets and add them to the list of valid experiments returned containing these topics
-      //
-
-      sql.delete(sql.length()-15, sql.length()) ;
-      sql.append("'%dataset%')") ;
-
-      StringBuffer sbex = new StringBuffer() ;
-      StringBuffer sqlec = new StringBuffer() ;
-
-      entries_extracted = false ;
-
-      while(entries_extracted == false)
-      {
-
-         if(sbex.length() != 0 )
-         {
-            sbex.delete(0,sbex.length()) ;
-         }
-	 if(sqlec.length() != 0)
-	 {
-	    sqlec.delete(0, sqlec.length()) ;
-	 }
-
-         try
-         {
-
-	    sqlec.append("SELECT DISTINCT GEN_ENTRY_ID FROM ") ;
-	    sqlec.append(dbs) ;
-	    sqlec.append("ENTRY_CONNECT WHERE SPEC_ENTRY_ID IN (") ;
-	    sqlec.append(sql.toString()) ;
-	    sqlec.append(")") ;
-		 
-            log.debug("Here is the SQL:\n" + sql.toString()) ;
-
-            r = s.executeQuery(sqlec.toString()) ;
-
-            while(r.next())
-            {
-               r.getRow() ;
-               sbex.append(r.getInt("GEN_ENTRY_ID")) ;
-               sbex.append(", ") ;
-            }
-
-            r.close() ;
- 
-            entries_extracted = true ;
-         }
-         catch (SQLException se)
-         {
-            se.printStackTrace() ;
-            entries_extracted = false ;
-         }
-
-         if(entries_extracted == false)
-         {
-            dbh.connectToDB() ;
-         }
-
-      } // end of while
-
-      //
-      //find all experiments from qualifying datasets
-      //
-      
-      //append the two strings
-      sb.append(sbex.toString()) ;
             
       log.debug("contents:\t" + sb.toString()) ;
 
       return sb.toString() ;
     
    }
+
+   //
+   //
+   // 
+   //
+
+   String indentToStr(indent int)
+   {
+      StringBuffer sbr = new StringBuffer() ;
+     
+      for(int i = 0; i < indent ; i++)
+      {
+         sbr.append(" ") ;
+      }
+
+      return sbr.toString() ;
+   }
+   //
+   //
+   //
+   //
+
+   // contact_type can be Investigator or DataManager
+
+   void buildMDContact(String key, StringBuffer sbr, initial_indent int, String contact_type) throws SQLException
+   {
+      //get local values needed from SessionSingleton
+      SessionSingleton ss = SessionSingleton.getInstance() ;
+
+      StringReplace sr=ss.getStringReplace() ;
+      XmlText xt=ss.getXmlText() ;
+
+      Logger log = ss.getLogger() ;
+
+      Statement s = ss.getStatement() ;
+      ResultSet r = ss.getResultSet() ;
+
+      String place_holder = ss.place_holder ;
+      int i_place_holder = ss.i_place_holder ;
+      int indent = ss.indent ;
+
+      String ii = indentToStr(initial_indent) ;
+      String ti = indentToStr(indent) ;
+
+      //retrieve the database name
+      String dbs = ss.getDbs() ;
+
+      r = s.executeQuery("select institution.name, institution_id address_line_1, address_line_2, town, region, postcode, country, " +
+                         "title, forename, surname, middle_initials, telephone, email, fax from " + dbs +
+                         "person, " + dbs + "institution where institution_id in " +
+                         "(select institution_id from study_institution where study_id in " +
+                         "(select study_id from " + dbs + "study_person where study_id='" + key + "' and role like '%" + contact_type + "%')) " ) ;
+
+      int institute_id = i_place_holder ;
+      String institute_name = place_holder ;
+      String i_street = place_holder ;
+      String i_place = place_holder ;
+      String i_pobox_postal_code = place_holder ;
+      String i_country = place_holder ;
+      String last_name = place_holder ;
+      String first_name = place_holder ;
+      String second_name = place_holder ;
+      String title = place_holder ;
+      String telephone = place_holder ;
+      String fax = place_holder ;
+      String email = place_holder ;
+
+      if(r.next())
+      {
+         r.getRow() ;
+         institute_name = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTION.NAME") ));
+         institute_id = r.getInt("INSTITUTION_ID") ;
+         i_street = sr.LitWithEnt(xt.makeValid(r.getString("ADDRESS_LINE_1") ));
+         i_place = sr.LitWithEnt(xt.makeValid(r.getString("TOWN") ));
+         i_pobox_postal_code = sr.LitWithEnt(xt.makeValid(r.getString("POSTCODE") ));
+         i_country = sr.LitWithEnt(xt.makeValid(r.getString("COUNTRY") ));
+         last_name = sr.LitWithEnt(xt.makeValid(r.getString("SURNAME") ));
+         first_name = sr.LitWithEnt(xt.makeValid(r.getString("FORENAME") ));
+         second_name = sr.LitWithEnt(xt.makeValid(r.getString("MIDDLE_INITIALS") ));
+         title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+         telephone = sr.LitWithEnt(xt.makeValid(r.getString("TELEPHONE") ));
+         fax = sr.LitWithEnt(xt.makeValid(r.getString("FAX") ));
+         email = sr.LitWithEnt(xt.makeValid(r.getString("EMAIL") ));
+      }
+ 
+      r.close
+
+      if(contact_type.compareToIgnoreCase("Investigator") == 0 )
+      {
+         sbr.append(ii + "<Investigator>\n") ;
+      }
+      else if ( contact_type.compareToIgnoreCase("DataManager") == 0 )
+      {
+         sbr.append(ii + "<DataManager>\n") ;
+      }
+      else
+      {
+         log.info("unrecognised contact type:\t" + contact_type) ;
+      }
+
+         sbr.append(ii + ti + "<Name>\n") ;
+         sbr.append(ii + ti + ti + "<Surname>" + last_name + "</Surname>\n") ;
+         sbr.append(ii + ti + ti + "<Initials>" + first_name + " " + second_name + "</Initials>\n") ;
+         sbr.append(ii + ti + "</Name>\n") ;
+         sbr.append(ii + ti + "<Status>" + "inhouse" + "</Status>\n") ;
+         sbr.append(ii + ti + "<Institution>" + institute_name + "</Institution>\n") ;
+         sbr.append(ii + ti + "<ContactDetails>\n") ;
+         sbr.append(ii + ti + ti +"<Address>\n") ;
+         sbr.append(ii + ti + ti + ti + "<Addressline1>" + i_street + "</Addressline1>\n") ;
+         sbr.append(ii + ti + ti + ti + "<Town>" + i_place + "</Town>\n") ;
+         sbr.append(ii + ti + ti + ti + "<Country>" + i_country + "</Country>\n") ;
+         sbr.append(ii + ti + ti + "</Address>\n") ;
+         sbr.append(ii + ti + ti + "<Telephone>" + telephone + "</Telephone>\n") ;
+         sbr.append(ii + ti + ti + "<Email>" + email + "</Email>\n") ;
+         sbr.append(ii + ti + ti + "<Fax>" + fax + "</Fax>\n") ;
+         sbr.append(ii + ti + "</ContactDetails>\n") ;
+         sbr.append(ii + ti + "<Role>" + contact_type + "</Role>\n") ;
+         sbr.append(ii + "</Investigator>\n") ;
+
+      if(contact_type.compareToIgnoreCase("Investigator") == 0 )
+      {
+         sbr.append(ii + "</Investigator>\n") ;
+      }
+      else if ( contact_type.compareToIgnoreCase("DataManager") == 0 )
+      {
+         sbr.append(ii + "</DataManager>\n") ;
+      }
+      else
+      {
+         log.info("unrecognised contact type:\t" + contact_type) ;
+      }
+
+      return ;
+
+   }
+
+      
 
    //
    //
@@ -407,50 +454,59 @@ public class EMINCsmdMapper implements CsmdMapper
       
       //using an indent of 3
 
-      //Entry specific processing will be done based on what type of entry this is
-      //therefore the entry_type is extracted now
-      
-      String entry_type = place_holder ;
-      
-      r = s.executeQuery("select entry_type from " + dbs + "entry_type where entry_type_id in " +
-	                 "(select entry_type_id from " + dbs + "entry where key = '" + key + "')") ;
+      //all elements of the study need extracting as will be used later ;
+      String study_id = place_holder ;
+      String study_name = place_holder ;
+      String funding = place_holder ;
+      String start_date = place_holder ;
+      String end_date = place_holder ;
+      String access_conditions = place_holder ;
+      String purpose = place_holder ;
+      String status = place_holder ;
+      String resources = place_holder ;
+      String notes = place_holder ;
+      String related_study = place_holder ;
+      String relation_type = place_holder ;
+
+      r = s.executeQuery("select study_id, name, funding, start_date, end_date, access_conditions, " +
+                         "purpose, status, resources, notes, related_study, relation_type from " + 
+                          dbs + "study where study_id = '" + key + "'") ;
       if(r.next())
       {
 	 r.getRow() ;
-	 entry_type = sr.LitWithEnt(xt.makeValid(r.getString("ENTRY_TYPE") ));
+	 study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") ));
+	 study_name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+	 funding = sr.LitWithEnt(xt.makeValid(r.getString("FUNDING") ));
+	 start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
+	 end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
+	 access_conditions = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_CONDITIONS") ));
+	 purpose = sr.LitWithEnt(xt.makeValid(r.getString("PURPOSE") ));
+	 status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
+	 resources = sr.LitWithEnt(xt.makeValid(r.getString("RESOURCES") ));
+	 notes = sr.LitWithEnt(xt.makeValid(r.getString("NOTES") ));
+	 related_study = sr.LitWithEnt(xt.makeValid(r.getString("RELATED_STUDY") ));
+	 relation_type = sr.LitWithEnt(xt.makeValid(r.getString("RELATION_TYPE") ));
       }
 
-      String entry_acronym = place_holder ;
-
-      r = s.executeQuery("select entry_acronym from " + dbs + "entry where key = '" + key + "'") ;
-      if(r.next())
-      {
-	 r.getRow() ;
-	 entry_acronym = sr.LitWithEnt(xt.makeValid(r.getString("ENTRY_ACRONYM") ));
-      }
-
-      //sbr.append("   <MetadataRecord metadataID=\"badc" + key + "\">\n");
-      sbr.append("   <MetadataRecord metadataID=\"" + entry_acronym + "\">\n");
+      sbr.append("   <MetadataRecord metadataID=\"" + ss.getWrapperName() + "-" + key + "\">\n");
 
       r.close() ;
 
-      // lookup Topic
+      // lookup Topic - at the moment only one leaf topic per study perhaps something like:
+      // gptopic/ptopic/topic, gptopic/ptopic/topic is needed
 
       sbr.append("      <Topic>\n") ;
 
-      r = s.executeQuery("select topic_name from " + dbs + "topic where topic_id in" +
-                        "(select distinct topic_id  from " + dbs + "parameter where key='" + key + "')" ) ;
+      r = s.executeQuery("select topic from " + dbs + "topics where topic_id in" +
+                        "(select distinct topic_id  from " + dbs + "study_topics where study_id='" + key + "')" ) ;
      
-      // I hate strings - but should one make this more verbose and messy ?
-      // as this won't go out of scope (eligible for garbage collection) and then we can map multiple
-      // references to this one instance
 
       String topic_name = place_holder ;
 
       if(r.next())
       {
          r.getRow() ;
-         topic_name = sr.LitWithEnt(xt.makeValid(r.getString("TOPIC_NAME") ));
+         topic_name = sr.LitWithEnt(xt.makeValid(r.getString("TOPIC") ));
       }
 
       sbr.append("         <Discipline>" + topic_name + "</Discipline>\n") ;
@@ -459,19 +515,19 @@ public class EMINCsmdMapper implements CsmdMapper
       // following should the resultset handle
       r.close() ;
 
-      r = s.executeQuery("SELECT GENERAL_KEY FROM " + dbs + "GENERAL_KEY WHERE GENERAL_KEY_ID IN " +
-                        "(SELECT DISTINCT GENERAL_KEY_ID FROM " + dbs + "KEY_CONNECT WHERE " +
-                        " ENTRY_ID='" + key + "' )") ;
+      r = s.executeQuery("SELECT KEYWORD FROM " + dbs + "KEYWORDS WHERE KEYWORD_ID IN " +
+                        "(SELECT DISTINCT KEYWORD_ID FROM " + dbs + "STUDY_KEYWORDS WHERE " +
+                        " STUDY_ID='" + key + "' )") ;
 
-      //as there can be multiple ones (note sure about in CERA though)
+      //as there can be multiple ones - i.e. Keywords - 
 
       String subject = place_holder ;
 
       while(r.next())
       {
          r.getRow() ;
-         subject = sr.LitWithEnt(xt.makeValid(r.getString("GENERAL_KEY") ));
-         sbr.append("         <Subject>" + sr.LitWithEnt(xt.makeValid(r.getString("GENERAL_KEY"))) + "</Subject>\n") ;
+         subject = sr.LitWithEnt(xt.makeValid(r.getString("KEYWORD") ));
+         sbr.append("         <Subject>" + sr.LitWithEnt(xt.makeValid(subject)) + "</Subject>\n") ;
       }
 
       // duplication needed as there maybe multiple values
@@ -486,86 +542,27 @@ public class EMINCsmdMapper implements CsmdMapper
 
       // end of Topic
 
-      // start of measurement - now Experiment
-
-      // needed here as entry_names are a bit funny
-
-      r = s.executeQuery("SELECT PROJECT_NAME FROM " + dbs + "PROJECT WHERE PROJECT_ID "+
-                       " IN ( SELECT PROJECT_ID FROM " + dbs + "CAMPAIGN WHERE ENTRY_ID='" + key + "' )") ;
-
-      String project_name = place_holder ;
-
-      if(r.next())
-      {
-         project_name = sr.LitWithEnt(xt.makeValid(r.getString("PROJECT_NAME") ));
-      }
- 
-      r.close() ;
+      // start of Investigation (Experiment)
 
       sbr.append("      <Experiment>\n") ;
 
-      r = s.executeQuery("SELECT ENTRY_NAME, CREATION_DATE FROM " + dbs + "ENTRY WHERE ENTRY_ID='" + key + "'") ;
+      // may need to link this with role in study_person as we have the concept of
+      //The investigator could be one of: investigator, inhouse or originator
+      //The data manager could be one of: distributor or owner
 
-      String entry_name = place_holder ;
-      String creation_date = place_holder ;
-
-      if(r.next())
-      {
-         r.getRow() ;
-         entry_name = sr.LitWithEnt(xt.makeValid(r.getString("ENTRY_NAME") ));
-         creation_date = r.getTimestamp("CREATION_DATE").toString() ;
-      }
-
-      // - no need for this after re-load on 10/01/02 entry_name = project_name + key ;
-      // - i.e strange characters removed
       
-
-      r.close() ;
-
-      // as need to capture the result of this select before we can do another query
-      // maybe we coud use two statement handles but this should do the job
-
-      r.close() ;
-
-      r = s.executeQuery("SELECT STREET, PLACE, POBOX_POSTAL_CODE, COUNTRY, " +
-                       "INSTITUTE_NAME, INSTITUTE_ID FROM " + dbs + "INSTITUTE WHERE INSTITUTE_ID IN " +
-                       "(SELECT INSTITUTE_ID FROM " + dbs + "CONTACT WHERE ENTRY_ID='" + key + "'" +
-                           " AND CONTACT_TYPE_ID IN ( SELECT CONTACT_TYPE_ID FROM " + dbs + "CONTACT_TYPE " +
-                           " WHERE CONTACT_TYPE like '%inhouse%' or CONTACT_TYPE like '%investigator%' " +
-		           "or CONTACT_TYPE like '%originator%') )" ) ;
-
-      int institute_id = i_place_holder ;
-      String institute_name = place_holder ;
-      String i_street = place_holder ;
-      String i_place = place_holder ;
-      String i_pobox_postal_code = place_holder ;
-      String i_country = place_holder ;
-
-      if(r.next())
-      {
-         r.getRow() ;   
-         institute_name = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTE_NAME") ));
-         institute_id = r.getInt("INSTITUTE_ID") ;
-         i_street = sr.LitWithEnt(xt.makeValid(r.getString("STREET") ));
-         i_place = sr.LitWithEnt(xt.makeValid(r.getString("PLACE") ));
-         i_pobox_postal_code = sr.LitWithEnt(xt.makeValid(r.getString("POBOX_POSTAL_CODE") ));
-         i_country = sr.LitWithEnt(xt.makeValid(r.getString("COUNTRY") ));
-      }
-
-      //sbr.append("         <StudyName>" + entry_name + "." + topic_name + ".cera" + key + "</StudyName>\n" ) ;
-      
-      sbr.append("         <StudyName>" + entry_name + "</StudyName>\n" ) ;
+      sbr.append("         <StudyName>" + study_name + "</StudyName>\n" ) ;
      
 
       if(project_name.compareTo(place_holder) != 0 )
       {
          if(institute_name.compareTo(place_holder) != 0)
          {
-            sbr.append("         <StudyID studyid=\"" + entry_acronym + "\" institutionref=\"I" + institute_id + "\"/>\n") ;
+            sbr.append("         <StudyID studyid=\"" + study_name + "\" institutionref=\"I" + institute_id + "\"/>\n") ;
          }
          else
          {
-            sbr.append("         <StudyID studyid=\"" + entry_acronym + "\"/>\n") ;
+            sbr.append("         <StudyID studyid=\"" + study_name + "\"/>\n") ;
          }
       }
       else
@@ -576,221 +573,41 @@ public class EMINCsmdMapper implements CsmdMapper
       r.close() ;
 
       //Investigator
-
-      sbr.append("         <Investigator>\n") ;
-
-      //will look for the investigator
-      r = s.executeQuery("SELECT TITLE, FIRST_NAME, SECOND_NAME, LAST_NAME, " +
-                       "TELEPHONE, EMAIL, FAX FROM " + dbs + "PERSON WHERE" +
-                       " PERSON_ID IN ( SELECT PERSON_ID FROM " + dbs + "CONTACT WHERE ENTRY_ID='" + key + "'" +
-                       " AND CONTACT_TYPE_ID IN (SELECT CONTACT_TYPE_ID FROM " + dbs + "CONTACT_TYPE WHERE " +
-                       "CONTACT_TYPE like '%inhouse%' or CONTACT_TYPE like '%investigator%' " +
-		       "or CONTACT_TYPE like '%originator%') )") ;
-
-      //The investigator could be one of: investigator, inhouse or originator
-      //The data manager could be one of: distributor or owner
-
-      String last_name = place_holder ;
-      String first_name = place_holder ;
-      String second_name = place_holder ;
-      String title = place_holder ;
-      String telephone = place_holder ;
-      String fax = place_holder ;
-      String email = place_holder ;
-
-      // read the values in and then pop the xml
-
-      if(r.next())
-      {
-         r.getRow() ;
-
-         last_name = sr.LitWithEnt(xt.makeValid(r.getString("LAST_NAME") ));
-         first_name = sr.LitWithEnt(xt.makeValid(r.getString("FIRST_NAME") ));
-         second_name = sr.LitWithEnt(xt.makeValid(r.getString("SECOND_NAME") ));
-         title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
-         telephone = sr.LitWithEnt(xt.makeValid(r.getString("TELEPHONE") ));
-         fax = sr.LitWithEnt(xt.makeValid(r.getString("FAX") ));
-         email = sr.LitWithEnt(xt.makeValid(r.getString("EMAIL") ));
-      }
-
-      sbr.append("            <Name>\n") ;
-      sbr.append("               <Surname>" + last_name + "</Surname>\n") ;
-      sbr.append("               <Initials>" + first_name + " " + second_name +
-                                  "</Initials>\n") ;
-      sbr.append("             </Name>\n") ;
-      //perhaps not - sbr.append("             <Status>" + title + "</Status>\n") ;
-      sbr.append("             <Status>" + "inhouse" + "</Status>\n") ;
-      sbr.append("             <Institution>" + institute_name + "</Institution>\n") ;
-
-      sbr.append("             <ContactDetails>\n") ;
-      sbr.append("                <Address>\n") ;
-      sbr.append("                   <Addressline1>" + i_street + "</Addressline1>\n") ;
-      sbr.append("                   <Town>" + i_place + "</Town>\n") ;
-      sbr.append("                   <Country>" + i_country + "</Country>\n") ;
-      sbr.append("                </Address>\n") ; 
-      sbr.append("                <Telephone>" + telephone + "</Telephone>\n") ;
-      sbr.append("                <Email>" + email + "</Email>\n") ;
-      sbr.append("                <Fax>" + fax + "</Fax>\n") ;
-      sbr.append("             </ContactDetails>\n") ;
-       
-      r.close() ;
-
-      // The Role
-      r = s.executeQuery("SELECT CONTACT_TYPE FROM " + dbs + "CONTACT_TYPE WHERE CONTACT_TYPE_ID IN " +
-                        "(SELECT CONTACT_TYPE_ID FROM " + dbs + "CONTACT WHERE ENTRY_ID='" + key + "')" ) ;
-  
-      String contact_type = place_holder ;
-
-      if(r.next())
-      {
-         r.getRow() ;
-         contact_type = sr.LitWithEnt(xt.makeValid(r.getString("CONTACT_TYPE") ));
-      }
-
-      sbr.append("             <Role>" + contact_type + "</Role>\n") ;
-
-      r.close() ;
-
-      sbr.append("          </Investigator>\n") ;
+      buildMDContact(key, sbr, 3*indent, "Investigator") ;
 
       // onto the StudyInformation
       // may have to fill a section in with place holders
 
       sbr.append("          <StudyInformation>\n") ;
-      sbr.append("             <Funding>" + place_holder + "</Funding>\n") ;
+      sbr.append("             <Funding>" + funding + "</Funding>\n") ;
       sbr.append("             <TimePeriod>\n") ;
       sbr.append("                <StartDate>\n") ;
-      sbr.append("                   <Date>"+ creation_date + "</Date>\n") ;
+      sbr.append("                   <Date>"+ start_date + "</Date>\n") ;
       sbr.append("                </StartDate>\n") ;
       sbr.append("             </TimePeriod>\n") ;
       sbr.append("             <Purpose>\n") ;
-      
-      String summary = place_holder ;
-      r = s.executeQuery("SELECT SUMMARY FROM " + dbs + "SUMMARY WHERE SUMMARY_ID IN " +
-	                 "(SELECT SUMMARY_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID='" + key + "')" ) ;
-      if(r.next()) 
-      {
-	 r.getRow() ;
-	 summary = sr.LitWithEnt(xt.makeValid(r.getString("SUMMARY") ));
-      }
-      r.close() ;
-      
-      sbr.append("                <Abstract>" + summary + "</Abstract>\n") ;
-      
+      sbr.append("                <Abstract>" + purpose + "</Abstract>\n") ;
       sbr.append("             </Purpose>\n") ;
-      sbr.append("             <StudyStatus>" + place_holder + "</StudyStatus>\n") ;
-      sbr.append("             <Resources>"+ place_holder + "</Resources>\n") ;
+      sbr.append("             <StudyStatus>" + status + "</StudyStatus>\n") ;
+      sbr.append("             <Resources>"+ resources + "</Resources>\n") ;
       sbr.append("          </StudyInformation>\n") ;
 
-      // where the CONTACT_TYPE is "inhouse" this is the researcher
-      // where the CONTACT_TYPE is "distributor" this is the data manager effectively
-
       //DataManager 
- 
-      //will look for the distributor i.e. datamanager
-      r = s.executeQuery("SELECT TITLE, FIRST_NAME, SECOND_NAME, LAST_NAME, " +
-                         "TELEPHONE, EMAIL, FAX FROM " + dbs + "PERSON WHERE" +
-                         " PERSON_ID IN ( SELECT PERSON_ID FROM " + dbs + "CONTACT WHERE ENTRY_ID='" + key + "'" +
-                         " AND CONTACT_TYPE_ID IN (SELECT CONTACT_TYPE_ID FROM " + dbs + "CONTACT_TYPE WHERE " +
-                         "CONTACT_TYPE like '%distributor%' or CONTACT_TYPE like '%owner%') )") ;
-
-      last_name = place_holder ;
-      first_name = place_holder ;
-      second_name = place_holder ;
-      title = place_holder ;
-      telephone = place_holder ;
-      fax = place_holder ;
-      email = place_holder ;
-
-      // need to read the values in and then pop the xml
-
-      if(r.next())
-      {
-         r.getRow() ;
-
-         last_name = sr.LitWithEnt(xt.makeValid(r.getString("LAST_NAME") ));
-         first_name = sr.LitWithEnt(xt.makeValid(r.getString("FIRST_NAME") ));
-         second_name = sr.LitWithEnt(xt.makeValid(r.getString("SECOND_NAME") ));
-         title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
-         telephone = sr.LitWithEnt(xt.makeValid(r.getString("TELEPHONE") ));
-         fax = sr.LitWithEnt(xt.makeValid(r.getString("FAX") ));
-         email = sr.LitWithEnt(xt.makeValid(r.getString("EMAIL") ));
-      }
-
-      r.close() ;
-
-      sbr.append("          <DataManager>\n") ;
-      sbr.append("             <Institution>" + place_holder + "</Institution>\n") ; // need to lookup
-                                                                                    // via contact type
-      sbr.append("             <Contact>\n") ;
-      sbr.append("                <Name>\n") ;
-      sbr.append("                   <Surname>" +  last_name + "</Surname>\n") ;
-      sbr.append("                   <Initials>" + first_name + " " + second_name + "</Initials>\n") ;
-      sbr.append("                </Name>\n") ;
-      sbr.append("                <Status>" + "data distributor" + "</Status>\n") ;
-      // following seems like a repeat - perhaps used elsewhere
-      sbr.append("                <Institution>" + place_holder + "</Institution>\n") ; 
-    
-    
-      r = s.executeQuery("SELECT STREET, PLACE, POBOX_POSTAL_CODE, COUNTRY, " +
-                         "INSTITUTE_NAME, INSTITUTE_ID FROM " + dbs + "INSTITUTE WHERE INSTITUTE_ID IN " +
-                         "(SELECT INSTITUTE_ID FROM " + dbs + "CONTACT WHERE ENTRY_ID='" + key + "'" +
-                           " AND CONTACT_TYPE_ID IN ( SELECT CONTACT_TYPE_ID FROM " + dbs + "CONTACT_TYPE " +
-                           " WHERE CONTACT_TYPE like '%distributor%' or CONTACT_TYPE like '%owner%') )" ) ;
-
-      institute_id = i_place_holder ;
-      institute_name = place_holder ;
-      i_street = place_holder ;
-      i_place = place_holder ;
-      i_pobox_postal_code = place_holder ;
-      i_country = place_holder ;
-
-      if(r.next())
-      {
-         r.getRow() ;   
-         institute_name = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTE_NAME") ));
-         institute_id = r.getInt("INSTITUTE_ID") ;
-         i_street = sr.LitWithEnt(xt.makeValid(r.getString("STREET") ));
-         i_place = sr.LitWithEnt(xt.makeValid(r.getString("PLACE") ));
-         i_pobox_postal_code = sr.LitWithEnt(xt.makeValid(r.getString("POBOX_POSTAL_CODE") ));
-         i_country = sr.LitWithEnt(xt.makeValid(r.getString("COUNTRY") ));
-      }
-
-      r.close() ;
-     
-      sbr.append("                <ContactDetails>\n") ;
-      sbr.append("                   <Address>\n") ;
-      sbr.append("                      <Addressline1>" + i_street + "</Addressline1>\n") ;
-      sbr.append("                      <Town>" + i_place + "</Town>\n") ;
-      sbr.append("                      <Country>" + i_country + "</Country>\n") ;
-      sbr.append("                   </Address>\n") ;
-      sbr.append("                   <Telephone>" + telephone + "</Telephone>\n") ;
-      sbr.append("                </ContactDetails>\n") ;
-      sbr.append("             </Contact>\n") ;
-      sbr.append("          </DataManager>\n") ;
+       buildMDContact(key, sbr, 3*indent, "DataManager") ;
 
       //Instrument
 
       sbr.append("          <Instrument>" + place_holder + "</Instrument>\n") ;
 
-      appendConditionsForEntry(key, 9, sbr) ; // 9 = 3 spaces per level - and 3 level 3x3
+      appendConditionsForEntry(key, 3*indent , sbr) ; // 9 = 3 spaces per level - and 3 level 3x3
 
  
       // end of measurement now measurement
       sbr.append("       </Experiment>\n") ;
 
-      String access_cond = place_holder ;
+      //access_conditions
 
-      r = s.executeQuery("SELECT CONSTRAINT_DESCR FROM " + dbs + " ACCESS_CONSTRAINT WHERE ACCESS_CONSTRAINT_ID IN " +
-                           "(SELECT ACCESS_CONSTRAINT_ID FROM " + dbs + "DISTRIBUTION WHERE ENTRY_ID='" + key + "')") ;
-
-      if(r.next())
-      {
-         r.getRow() ;
-         access_cond = sr.LitWithEnt(xt.makeValid(r.getString("CONSTRAINT_DESCR") ));
-      }
-
-      sbr.append("       <AccessConditions>" + access_cond + "</AccessConditions>\n") ;
+      sbr.append("       <AccessConditions>" + access_conditions + "</AccessConditions>\n") ;
 
       //DataHolding
 
@@ -802,25 +619,13 @@ public class EMINCsmdMapper implements CsmdMapper
       List datasets = new LinkedList() ;
       List datafiles = new LinkedList() ;
       
-      //List rascollections = new LinkedList() ;
-
-      //r = s.executeQuery("SELECT DISTINCT SPEC_ENTRY_ID FROM " + dbs + "ENTRY_CONNECT WHERE GEN_ENTRY_ID = '" + key +
-      //                 "' INTERSECT SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_TYPE_ID IN " +
-      //		 "(SELECT ENTRY_TYPE_ID FROM " + dbs + "ENTRY_TYPE WHERE ENTRY_TYPE LIKE '%EXPERIMENT%')") ;
-
-      //as the entry is the experiment we will just add the key to the following list of experiment
-
-      //while(r.next())
-      //{
-      //   r.getRow() ;
-      //   experiments.add(Integer.toString(r.getInt("SPEC_ENTRY_ID"))) ;
-      //}
+      //as the dtd and this version of the model only support one investigation for one study
+      // the experiment in this case is the study
         
       experiments.add(key) ;
 
-      //r.close() ;
 
-      //and now for each entry
+      //and now for each investigation
 
       Iterator e = experiments.iterator() ;
 
@@ -830,277 +635,149 @@ public class EMINCsmdMapper implements CsmdMapper
       {
 	 exp_id = (String) e.next() ;
 
-	 String dataid = place_holder ;
-	 String dataname = place_holder ;
 	 String typeofdata = "EXPERIMENT" ; //could replace with a search
 
-	 r = s.executeQuery("SELECT ENTRY_NAME, ENTRY_ACRONYM FROM " + dbs + "ENTRY WHERE ENTRY_ID = '" + exp_id + "'") ;
-	 if(r.next())
-	 {
-	    r.getRow() ;
-	    dataid = sr.LitWithEnt(xt.makeValid(r.getString("ENTRY_ACRONYM") ));
-	    dataname = sr.LitWithEnt(xt.makeValid(r.getString("ENTRY_NAME") ));
-	 }
-	 r.close() ;
-	 
-         sbr.append("       <DataHolding dataid=\"" + dataid + "\">\n") ;
-	 sbr.append("          <DataName>" + dataname + "</DataName>\n") ;
+         sbr.append("       <DataHolding dataid=\"" + study_id + "\">\n") ;
+	 sbr.append("          <DataName>" + study_name + "</DataName>\n") ;
 	 sbr.append("          <TypeOfData>" + typeofdata + "</TypeOfData>\n") ;
-
-	 // the following is a candidate for functionisation
-
-	 r = s.executeQuery("SELECT PROGRESS_DESCR FROM " + dbs + "PROGRESS WHERE PROGRESS_ID IN " +
-                           "(SELECT PROGRESS_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID='" + exp_id + "')") ;
-
-         String progress = place_holder;
-	 
-         if(r.next())
-         {
-            r.getRow() ;
-            progress = sr.LitWithEnt(xt.makeValid(r.getString("PROGRESS_DESCR") ));
-         }
-         r.close() ;
-
 	 sbr.append("          <Status>" + progress + "</Status>\n") ;
 
 	 // fill in the dataholdinglocation details - save uneccessary calls later
 	 //////
 
-	 sbr_dhl.append("      <DataHoldingLocator dataidref=\"" + dataid + "\">\n") ;
-         sbr_dhl.append("         <DataName>" + dataname + "</DataName>\n") ;
+	 sbr_dhl.append("      <DataHoldingLocator dataidref=\"" + study_id + "\">\n") ;
+         sbr_dhl.append("         <DataName>" + study_name + "</DataName>\n") ;
 	 sbr_dhl.append("         <Locator type=\"absolute\">\n") ;
          sbr_dhl.append("            <URL>" + getStoragePath(exp_id, 1) + "</URL>\n") ;
-
-         String data_access_cond = place_holder ;
-         r = s.executeQuery("SELECT CONSTRAINT_DESCR FROM " + dbs + " ACCESS_CONSTRAINT WHERE ACCESS_CONSTRAINT_ID IN " +
-                           "(SELECT ACCESS_CONSTRAINT_ID FROM " + dbs + "DISTRIBUTION WHERE ENTRY_ID='" + exp_id + "')") ;
-         if(r.next())
-         {
-            r.getRow() ;
-            data_access_cond = sr.LitWithEnt(xt.makeValid(r.getString("CONSTRAINT_DESCR") ));
-         }
-         sbr_dhl.append("            <DataSourceAccess>" + data_access_cond + "</DataSourceAccess>\n") ;
+         sbr_dhl.append("            <DataSourceAccess>" + access_conditions + "</DataSourceAccess>\n") ;
 	 sbr_dhl.append("         </Locator>\n") ;
 	 
          //////
 	 // now select the datasets associated with this experiment
 
-	 log.debug("ENTRY_ID at this point is: " + exp_id) ;
+	 log.debug("STUDY_ID at this point is: " + study_id) ;
 
-         r = s.executeQuery("SELECT DISTINCT SPEC_ENTRY_ID FROM " + dbs + "ENTRY_CONNECT WHERE GEN_ENTRY_ID = '" + exp_id +
-	                    "' INTERSECT SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_TYPE_ID IN " +
-	  		    "(SELECT ENTRY_TYPE_ID FROM " + dbs + "ENTRY_TYPE WHERE ENTRY_TYPE LIKE '%dataset%')") ;
+         r = s.executeQuery("SELECT DATASET_ID FROM " + dbs + "DATASET WHERE STUDY_ID = '" + exp_id + "'") ;
 
          while(r.next())
          {
-	    r.getRow() ;
-	    datasets.add(Integer.toString(r.getInt("SPEC_ENTRY_ID"))) ;
+	    datasets.add(Integer.toString(r.getInt("DATASET_ID"))) ;
          }
          r.close() ;
 
-	 //now will in the rascollection list for this experiment
-	 //perhaps this should be done on a per dataset basis (depending on the insertion method) 
-	 //but here we use the experiment/dataholding as the unit for which these things are selected
-	 // now below 
-
-         //and now for each entry
+         //and now for each dataset
          Iterator g = datasets.iterator() ;
          String dataset_key = place_holder ;
+
+         //create object references outside of the loop
+         String dataset_name = place_holder ;
+         String dataset_description = place_holder ;
+         String resources = place_holder ;
+         String dataset_uri = place_holder ;
+         String access_method = place_holder ;
+         String start_date = place_holder ;
+         String end_date = place_holder ;
       
          while(g.hasNext())
          {
-	    dataset_key = (String) g.next() ;
-
-	    // fill in the ras_collection from this list
-            //r = s.executeQuery("SELECT DISTINCT RAS_COLLECTION FROM " + dbs + "RAS_CONNECT WHERE ENTRY_ID = '" 
-	    //                    + dataset_key + "'") ;
-	    //while(r.next())
-	    //{
-	    //   r.getRow() ;
-	    //   rascollections.add(sr.LitWithEnt(xt.makeValid(r.getString("RAS_COLLECTION")) ));
-            //}
-	    //r.close() ;
-	    //
-
-	    dataid = place_holder ;
-	    dataname = place_holder ;
+	    dataset_id = (String) g.next() ;
 	    typeofdata = "DATA_SET" ; //could replace with a search
 
-	    r = s.executeQuery("SELECT ENTRY_NAME, ENTRY_ACRONYM FROM " + dbs + "ENTRY WHERE ENTRY_ID = '" + dataset_key + "'") ;
+	    r = s.executeQuery("SELECT DATASET_NAME, DESCRIPTION, RESOURCES, URI, " +
+                               "ACCESS_METHOD, START_DATE, END_DATE FROM " + dbs + "DATASET WHERE DATASET_ID  = '" + dataset_id + "'") ;
 	    if(r.next())
 	    {
-	       r.getRow() ;
-	       dataid = sr.LitWithEnt(xt.makeValid(r.getString("ENTRY_ACRONYM") ));
-	       dataname = sr.LitWithEnt(xt.makeValid(r.getString("ENTRY_NAME") ));
+	       dataset_name = sr.LitWithEnt(xt.makeValid(r.getString("DATASET_NAME") ));
+	       dataset_description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
+	       resources = sr.LitWithEnt(xt.makeValid(r.getString("RESOURCES") ));
+	       dataset_uri = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
+	       access_method = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_METHOD") ));
+	       start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
+	       end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
 	    }
 	    r.close() ;
 	 
-            sbr.append("          <DataSet dataid=\"" + dataid + "\">\n") ;
-	    sbr.append("             <DataName>" + dataname + "</DataName>\n") ;
+            sbr.append("          <DataSet dataid=\"" + dataset_id + "\">\n") ;
+	    sbr.append("             <DataName>" + dataset_name + "</DataName>\n") ;
 	    sbr.append("             <TypeOfData>" + typeofdata + "</TypeOfData>\n") ;
-
-	    // the following is a candidate for functionisation
-
-	    r = s.executeQuery("SELECT PROGRESS_DESCR FROM " + dbs + "PROGRESS WHERE PROGRESS_ID IN " +
-                              "(SELECT PROGRESS_ID FROM " + dbs + "ENTRY WHERE ENTRY_ID='" + dataset_key + "')") ;
-
-            progress = place_holder;
-	 
-            if(r.next())
-            {
-               r.getRow() ;
-               progress = sr.LitWithEnt(xt.makeValid(r.getString("PROGRESS_DESCR") ));
-            }
-            r.close() ;
-
 	    sbr.append("             <Status>" + progress + "</Status>\n") ;
-
 	    sbr.append("             <LogicalDescription>\n") ;
-
-            appendConditionsForEntry(dataset_key, 15, sbr) ; // 5 levels in
-
+            appendConditionsForEntry(dataset_key, 5*indent, sbr) ; // 5 levels in
 	    sbr.append("             </LogicalDescription>\n") ;
+
+            //a fair place to populate the DataHoldingLocator
+            sbr_dhl.append("         <DataSetLocator dataidref=\"" + dataset_id + "\">\n") ;
+            sbr_dhl.append("            <DataName>" + dataset_name + "</DataName>\n") ;
+            sbr_dhl.append("            <Locator type=\"absolute\">\n") ;
+            sbr_dhl.append("               <URL>" + dateset_uri + "</URL>\n") ;
+            sbr_dhl.append("            </Locator>\n") ;
+            sbr_dhl.append("         </DataSetLocator>\n") ;
 
 
 	    // now select the data_files associated with this data_set
-
-
-            r = s.executeQuery("SELECT DISTINCT SPEC_ENTRY_ID FROM " + dbs + "ENTRY_CONNECT WHERE GEN_ENTRY_ID = '" + dataset_key +
-	                    "' INTERSECT SELECT ENTRY_ID FROM " + dbs + "ENTRY WHERE ENTRY_TYPE_ID IN " +
-	  		    "(SELECT ENTRY_TYPE_ID FROM " + dbs + "ENTRY_TYPE WHERE ENTRY_TYPE LIKE '%DATA_FILE%')") ;
-
+            r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATA_SET_ID = '" + dataset_id + "'") ;
             while(r.next())
             {
 	       r.getRow() ;
-	       datafiles.add(Integer.toString(r.getInt("SPEC_ENTRY_ID"))) ;
+	       datafiles.add(Integer.toString(r.getInt("DATA_ID"))) ;
             }
             r.close() ;
 
             //and now for each entry
             Iterator ro = datafiles.iterator() ;
-            String datafile_key = place_holder ;
-
-	    String data_file_entry_name = place_holder ;
+            String data_id = place_holder ;
       
 	    //put in the child references for files
+
+            //object references here
+            String data_name = place_holder ;
+            String data_format = place_holder ;
+            String status = place_holder ;
+            String data_description = place_holder ;
+            String producing_facility = place_holder ;
+            String data_uri = place_holder ;
+            String access_method = place_holder ;
+            String data_start_date = place_holder ;
+            String data_end_date = place_holder ;
+
             while(ro.hasNext())
             {
 	       datafile_key = (String) ro.next() ;
 	       
-	       r = s.executeQuery("SELECT ENTRY_NAME FROM " + dbs + "ENTRY WHERE ENTRY_ID = '" + datafile_key + "'") ;
+	       r = s.executeQuery("SELECT DATA_NAME, DATA_FORMAT, STATUS, DESCRIPTION, PRODUCING_FACILITY, " +
+                                  "URI, ACCESS_METHOD, START_DATE, END_DATE FROM " + dbs + "DATA WHERE DATA_ID = '" + data_id + "'") ;
 	       if(r.next())
 	       {
-		  r.getRow() ;
-		  data_file_entry_name = sr.LitWithEnt(xt.makeValid(r.getString("ENTRY_NAME") ));
+		  data_name = sr.LitWithEnt(xt.makeValid(r.getString("DATA_NAME") ));
+		  data_format = sr.LitWithEnt(xt.makeValid(r.getString("DATA_FORMAT") ));
+		  status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
+		  description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
+		  producing_facility = sr.LitWithEnt(xt.makeValid(r.getString("PRODUCING_FACILITY") ));
+		  data_uri = sr.LitWithEnt(xt.makeValid(r.getString("DATA_URI") ));
+		  access_method = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_METHOD") ));
+		  data_start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
+		  data_end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
 	       }
 	       r.close() ;
 
-	       sbr.append("            <File dataid=\"" + data_file_entry_name + "\">\n") ;
-	       sbr.append("               <DataName>" + data_file_entry_name + "</DataName>\n") ;
-	       //sbr.append("               <URI>" + getStoragePath(datafile_key, 3) + "</URI>\n") ;
-	       sbr.append("               <URI>" + data_file_entry_name + "</URI>\n") ;
+	       sbr.append("            <File dataid=\"" + data_id + "\">\n") ;
+	       sbr.append("               <DataName>" + data_name + "</DataName>\n") ;
+	       sbr.append("               <URI>" + data_name + "</URI>\n") ;
 	       sbr.append("            </File>\n") ;
 
 	       //add dataholdinglocation info to sbr_dhl
 	       //////
-	       sbr_dhl_files.append("         <FileLocator dataidref=\"" + data_file_entry_name + "\">\n") ;
-               sbr_dhl_files.append("            <URI>" + data_file_entry_name + "</URI>\n") ;
+	       sbr_dhl_files.append("         <FileLocator dataidref=\"" + data_id + "\">\n") ;
+               sbr_dhl_files.append("            <URI>" + data_name + "</URI>\n") ;
 	       sbr_dhl_files.append("            <Locator type=\"absolute\">\n") ;
-               sbr_dhl_files.append("               <URL>" + getStoragePath(datafile_key, 3) + "</URL>\n") ;
+               sbr_dhl_files.append("               <URL>" + data_uri + "</URL>\n") ;
 	       sbr_dhl_files.append("            </Locator>\n") ;
 	       sbr_dhl_files.append("         </FileLocator>\n") ;
 	       //////
 	    }
 
-	    //put in child references for ras_collections
-	    //Iterator i = rascollections.iterator() ;
-	    //while(i.hasNext())
-	    //{
-	    //   sbr.append("            <ChildDataSetRef>" + (String) i.next() + "</ChildDataSetRef>\n") ;
-	    //}   
 
 	    sbr.append("            </DataSet>\n") ;
-
-	    // catch the dataholdinglocator information for datasets also
-	    //////
-            sbr_dhl.append("         <DataSetLocator dataidref=\"" + dataname + "\">\n") ;
-            sbr_dhl.append("            <DataName>" + dataname + "</DataName>\n") ;
-	    sbr_dhl.append("            <Locator type=\"absolute\">\n") ;
-	    //log.debug("We are populating the data sets e_name= " + e_name + " e_id= " + e_id ) ;
-            sbr_dhl.append("               <URL>" + getStoragePath(dataset_key, 3) + "</URL>\n") ;
-	    sbr_dhl.append("            </Locator>\n") ;
-	    sbr_dhl.append("         </DataSetLocator>\n") ;
-	    //////
-
-	    //put in the RAS_COLLECTIONS
-	    //i = rascollections.iterator() ;
-	    //String ras_col = place_holder ;
-
-	    //topic_name = place_holder ;
-	    //String unit_name = place_holder ;
-
-	    //while(i.hasNext())
-	    //{
-	    //   ras_col = (String)i.next() ;
-
-            //   sbr.append("            <DataSet dataid=\"" + ras_col + "\">\n") ;
-	    //   sbr.append("               <DataName>" + ras_col + "</DataName>\n") ;
-
-	       //extract the topic_name for this rasdaman collection
-            //   r = s.executeQuery("select distinct topic_name from " + dbs + "topic where topic_id in " + 
-            //                      "(select topic_id from " + dbs + "parameter where key in " +
-            //                      "(select key from " + dbs + "entry where entry_type_id in " + 
-            //                      "(select entry_type_id from " + dbs + "entry_type where entry_type like '%Grib message%') " + 
-            //                      "intersect " +
-            //                      "select distinct key from " + dbs + "ras_connect where " +
-	    //			  "ras_collection like '%" + ras_col + "%') )" ) ;
-	    //   if(r.next())
-	    //   {
-	    //	  r.getRow() ;
-	    //	  topic_name = sr.LitWithEnt(xt.makeValid(r.getString("TOPIC_NAME") ));
-	    //   }
-	    //   r.close() ;
-
-	       //extract the units for the parameter stored in this rasdaman collection
-	    //   r = s.executeQuery("select distinct unit_acronym from " + dbs + "unit where unit_id in " + 
-            //                      "(select unit_id from " + dbs + "parameter where key in " +
-            //                      "(select key from " + dbs + "entry where entry_type_id in " + 
-            //                      "(select entry_type_id from " + dbs + "entry_type where entry_type like '%Grib message%') " + 
-            //                      "intersect " +
-            //                      "select distinct key from " + dbs + "ras_connect where " +
-	    //			  "ras_collection like '%" + ras_col + "%') )" ) ;
-	    //   if(r.next())
-	    //   {
-	    //	  r.getRow() ;
-	    //	  unit_name = sr.LitWithEnt(xt.makeValid(r.getString("UNIT_ACRONYM") ));
-	    //   }
-	    //   r.close() ;
-	       
-	    //   sbr.append("               <TypeOfData>RasDaMan-Collection(MDD)</TypeOfData>\n") ;
-	    //   sbr.append("               <Status>complete</Status>\n") ;
-	    //   sbr.append("               <LogicalDescription>\n") ;
-	    //   sbr.append("                  <Parameter>\n") ;
-	    //   sbr.append("                     <ParamName>" + topic_name + "</ParamName>\n") ;
-	    //   sbr.append("                     <Units>" + unit_name + "</Units>\n") ;
-	    //   sbr.append("                  </Parameter>\n") ;
-	    //   sbr.append("               </LogicalDescription>\n") ;
-	    //   sbr.append("               <File dataid=\"" + ras_col + "\">\n") ;
-	    //   sbr.append("                  <DataName>" + ras_col + "</DataName>\n") ;
-	    //   sbr.append("                  <URI>" + getRasPath(ras_col) + "</URI>\n") ;
-	    //   sbr.append("               </File>\n") ;
-	    //   sbr.append("               <ParentDataSetRef>" + dataname + "</ParentDataSetRef>\n") ;
-	    //   sbr.append("            </DataSet>\n") ;
-
-	       // fill in the dataholdinglocation information for the ras collections
-               //////
-	    //   sbr_dhl.append("         <DataSetLocator dataidref=\"" + ras_col + "\">\n") ;
-            //   sbr_dhl.append("         <DataName>" + ras_col + "</DataName>\n") ;
-            //   sbr_dhl.append("         <Locator type=\"absolute\">\n") ;
-            //   sbr_dhl.append("            <URL>" + getRasPath(ras_col) + "</URL>\n") ;
-            //   sbr_dhl.append("         </Locator>\n") ;
-            //   sbr_dhl.append("         </DataSetLocator>\n") ; 
-               //////
-	    //} //filled in the ras collections
 
 	 } //filled in the data sets
 
@@ -1108,26 +785,7 @@ public class EMINCsmdMapper implements CsmdMapper
 
       } //filled in the experiments
 
-      // and now for the datalocations - need to have an overall location and
-      // then the different dataset - aka directory names
-
-      //changed for equality with ISIS&SR to DataHoldingLocator
-      //sbr.append("      <DataLocation>\n") ;
-      //This is a HERE limitation as we can now only have one
-      //experiment (i.e. dataholding) per study whereas we need multiple
-      //dataholding for the MPIM as this is essentially one per experiment
-      //with many experiments in one project
-
-      //experiments now in sbr_dhl
-
-      //data sets now in sbr_dhl
-      
-      //rasdaman collections now in sbr_dhl
-      //for(Iterator i = rascollections.iterator() ; i.hasNext() ; ras_col = (String)i.next())
-      
-      //data files now in sbr_dhl
-
-      ////////////// - following moved to experiments bit so get the id attribute
+      // - following moved to experiments bit so get the id attribute
       //sbr.append("      <DataHoldingLocator>\n") ;
 
       //add collected holding location data
@@ -1135,32 +793,8 @@ public class EMINCsmdMapper implements CsmdMapper
       //as FileLocators needed after DataSetLocatos
       sbr.append(sbr_dhl_files.toString()) ; 
       sbr.append("      </DataHoldingLocator>\n") ;
-      //////////////
-      
-
-      //fill out the child dataset (which are really just going to contain one file (or perhaps the file and)
-      //the rascollection with they are in - or perhaps that should be in a datalocation
-	         	 
-      ///////////////////////////////////////////////////////////////////
-      //////////  HERE above added some below may need changing ///////////////
-      ///////////////////////////////////////////////////////////////////
-
-
-      //The Grib datafile
       //
-      //sbr.append("          <DataSet dataid=\"grib" + key + "\">\n") ;
-      //sbr.append("             <DataName>" + entry_name + ".cera" + key + "</DataName>\n") ;
-      //sbr.append("             <TypeOfData>GRIB-File</TypeOfData>\n") ;
-      //sbr.append("             <Status>" + progress + "</Status>\n") ;
-      //sbr.append("          </DataSet>\n") ; 
       
-      //The RasDaMan DataSet
-                 
-      //sbr.append("          <DataSet dataid=\"rasdaman" + key + "\">\n") ;
-      //sbr.append("             <DataName>" + ras_collection + ".cera" + key + "</DataName>\n") ;
-      //sbr.append("             <TypeOfData>RasDaMan:RAS_COLLECTION</TypeOfData>\n") ;
-      //sbr.append("             <Status>" + progress + "</Status>\n") ;
-      //sbr.append("          </DataSet>\n") ; 
 
       sbr.append("   </MetadataRecord>\n") ;
 
@@ -1171,7 +805,7 @@ public class EMINCsmdMapper implements CsmdMapper
    //
    //
 
-   void appendConditionsForEntry(String entry_id, int num_spaces, StringBuffer sbr) throws SQLException
+   void appendConditionsForEntry(String id, int num_spaces, boolean dataset, StringBuffer sbr) throws SQLException
    {
       //
       //set session variables
@@ -1205,270 +839,62 @@ public class EMINCsmdMapper implements CsmdMapper
       }
 
       String spaces = spcs.toString() ;
-      
-      //Condition
 
-      // FIrstly setting the names
 
-      String min_lat_n = "MIN_LAT" ;
-      String max_lat_n = "MAX_LAT" ;
-      String min_lon_n = "MIN_LON" ;
-      String max_lon_n = "MAX_LON" ;
-      String max_alt_n = "MAX_ALTITUDE" ;
-      String min_alt_n = "MIN_ALTITUDE" ;
-      String start_year_n = "START_YEAR" ;
-      String start_month_n = "START_MONTH" ;
-      String start_day_n = "START_DAY" ;
-      String stop_year_n = "STOP_YEAR" ;
-      String stop_month_n = "STOP_MONTH" ;
-      String stop_day_n = "STOP_DAY" ;
+      /////
+      String in_list = place_holder ;
 
-      // Secondly getting there values
- 
-      r = s.executeQuery("SELECT MIN_LAT, MAX_LAT, MIN_LON, MAX_LON, MIN_ALTITUDE, MAX_ALTITUDE " +
-                         "FROM " + dbs + "SPATIAL_COVERAGE WHERE SPATIAL_COVERAGE_ID IN " +
-                         "(SELECT SPATIAL_COVERAGE_ID FROM " + dbs + "COVERAGE WHERE ENTRY_ID='" + entry_id + "')") ;
+      if (dataset == true)
+      {
+         List data = new LinkedList() ;
 
-      float min_lat = f_place_holder ;
-      float max_lat = f_place_holder ;
-      float min_lon = f_place_holder ;
-      float max_lon = f_place_holder ;
-      float min_alt = f_place_holder ;
-      float max_alt = f_place_holder ;
-      
-      //HERE 
-
-      try {
-
-         if(r.next())
+         r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATASET_ID = '" + id + "'") ;
+         while(r.next())
          {
-            r.getRow() ;
+            data.add(Integer.toString(r.getInt("DATA_ID"))) ;
+         }
+         r.close ;
 
-            min_lat = r.getFloat("MIN_LAT") ;
-            max_lat = r.getFloat("MAX_LAT") ;
-            min_lon = r.getFloat("MIN_LON") ;
-            max_lon = r.getFloat("MAX_LON") ;
-            min_alt = r.getFloat("MIN_ALTITUDE") ;
-            max_alt = r.getFloat("MAX_ALTITUDE") ;
+         Iterator e = data.iterator() ;
+         StringBuffer tmpsb ;
+
+         tmp_sb.append("(") ;
+
+         while(e.hasNext())
+         {
+            tmp_sb.append(((String) e.next())) ;
+            tmp_sb.append(",") ;
          }
 
-         r.close() ;
+         tmp_sb.delete(tmp_sb.length()-1, tmp_sb.length()) ;
+       
+         in_list = tmp_sb.toString() ;
+
       }
-      catch (Exception e) {
-	      log.debug(sbr.toString()) ;
-      }
-
-      r = s.executeQuery("SELECT START_YEAR, START_MONTH, START_DAY, STOP_YEAR, STOP_MONTH, STOP_DAY " +
-                         "FROM " + dbs + "TEMPORAL_COVERAGE WHERE TEMPORAL_COVERAGE_ID IN " +
-                         "(SELECT TEMPORAL_COVERAGE_ID FROM " + dbs + "COVERAGE WHERE ENTRY_ID='" + entry_id + "')") ;
-
-      int start_year  = i_place_holder ;
-      int start_month = i_place_holder ;
-      int start_day   = i_place_holder ;
-      int stop_year   = i_place_holder ;
-      int stop_month  = i_place_holder ;
-      int stop_day    = i_place_holder ;
-
-      if(r.next())
+      else //this is just a data object
       {
-         r.getRow() ;
-
-         start_year = r.getInt("START_YEAR") ;
-         start_month = r.getInt("START_MONTH") ;
-         start_day = r.getInt("START_DAY") ;
-         stop_year = r.getInt("STOP_YEAR") ;
-         stop_month = r.getInt("STOP_MONTH") ;
-         stop_day = r.getInt("STOP_DAY") ;
+        in_list = "("+ id + ")" 
       }
 
-      r.close() ;
+      //get the date for all the rows of conditions infromation for this dataset or file
+      String param_name = place_holder ;
+      String param_unit = place_holder ;
+      String param_value = place_holder ; 
 
-      //Thirdly we need to get the Units of the values in the conditions
+      r = s.executeQuery("SELECT NAME, UNIT, VALUE FROM " + dbs + "PARAMETER WHERE DATA_ID IN (" + in_list + ")") ;
 
-      //some are not set in CERA and some are hence some by query and others
-      //are set constant
-
-      String min_alt_unit = place_holder ;
-      String max_alt_unit = place_holder ;
-
-      //String long_lat = "DEGREES" ;
-      String long_lat = "MILLIDEGREES" ;
-      String year = "YEARS" ;
-      String month = "MONTHS" ;
-      String day = "DAYS" ;
-
-      r = s.executeQuery("SELECT UNIT_NAME FROM " + dbs + "UNIT WHERE UNIT_ID IN " +
-                         "(SELECT MIN_ALT_UNIT_ID FROM " + dbs + "SPATIAL_COVERAGE WHERE SPATIAL_COVERAGE_ID IN " +
-                            "(SELECT SPATIAL_COVERAGE_ID FROM " + dbs + "COVERAGE WHERE ENTRY_ID='" + entry_id + "')" +
-                         ")") ;
-
-      if(r.next())
+      while(r.next())
       {
-         r.getRow() ;
-         min_alt_unit = sr.LitWithEnt(xt.makeValid(r.getString("UNIT_NAME") ));
+         param_name = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_NAME") ));
+         param_unit = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_UNIT") ));
+         param_value = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_VALUE") ));
+
+         sbr.append(spaces + "<Condition>\n") ;
+         sbr.append(spaces + "   <ParamName>" + param_name + "</ParamName>\n") ;
+         sbr.append(spaces + "   <Units>" + param_unit + "</Units>\n") ;
+         sbr.append(spaces + "   <ParamValue>" + param_value + "</ParamValue>\n") ;
+         sbr.append(spaces + "</Condition>\n") ;
       }
-
-      r.close() ;
-
-      r = s.executeQuery("SELECT UNIT_NAME FROM " + dbs + "UNIT WHERE UNIT_ID IN " +
-                       "(SELECT MAX_ALT_UNIT_ID FROM " + dbs + "SPATIAL_COVERAGE WHERE SPATIAL_COVERAGE_ID IN " +
-                          "(SELECT SPATIAL_COVERAGE_ID FROM " + dbs + "COVERAGE WHERE ENTRY_ID='" + entry_id + "')" +
-                       ")") ;
-
-      if(r.next())
-      {
-         r.getRow() ;
-         max_alt_unit = sr.LitWithEnt(xt.makeValid(r.getString("UNIT_NAME") ));
-      }
-
-      r.close() ;
-
-      // v- value, n- name
-      String location_name_v = place_holder ;
-      String location_name_n = "LOCATION_NAME" ;
-
-      r = s.executeQuery("SELECT LOCATION_NAME FROM " + dbs + "LOCATION WHERE LOCATION_ID IN " +
-                         "(SELECT LOCATION_ID FROM " + dbs + "LOCATION_CONNECT WHERE ENTRY_ID='" + entry_id + "')") ;
-      if(r.next())
-      {
-         r.getRow() ;
-         location_name_v = sr.LitWithEnt(xt.makeValid(r.getString("LOCATION_NAME") ));
-      }
-      r.close() ;
-
-      //CLRC-MD note - see no reason why all paramter triples cant be enclosed inside
-      // a just one <Condition/> block - perhaps change name to Conditions
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + min_lat_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + long_lat + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + min_lat + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + max_lat_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + long_lat + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + max_lat + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + min_lon_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + long_lat + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + min_lon + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + max_lon_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + long_lat + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + max_lon + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + min_alt_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + min_alt_unit + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + min_alt + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + max_alt_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + max_alt_unit + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + max_alt + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + location_name_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + location_name_v + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + start_year_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + year + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + start_year + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + start_month_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + month + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + start_month + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + start_day_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + day + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + start_day + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + stop_year_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + year + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + stop_year + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-  
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + stop_month_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + month + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + stop_month + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>" + stop_day_n + "</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>" + day + "</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + stop_day + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
-
-      
-
-      // addtional information that is not in the normal module that is in
-      // ERA Module DATA_ORGANIZATION, Version 1.3
-      // additional item is the time that the reading was taken
-
-      r = s.executeQuery("select year||lpad(month,2,0)||lpad(day,2,0)||lpad(hour,2,0)||" +
-                         "lpad(minute,2,0)||lpad(second,2,0) \"TIME\", UTC_DIFF_HOURS \"TZ\" " +
-                         "from " + dbs + "moment where moment_id in " +
-                         "(select moment_id from " + dbs + "time_connect where time_id in " +
-                         "(select time_id from " + dbs + "data_org where data_org_id in " +
-                         "(select data_org_id from " + dbs + "parameter where entry_id='" + entry_id + "') ) ) ") ;
-
-      String mtime = place_holder ;
-      int mtz = i_place_holder ;
-      StringBuffer tr = new StringBuffer() ;
-
-      if(r.next())
-      {
-         r.getRow() ;
-         mtime = sr.LitWithEnt(xt.makeValid(r.getString("TIME") ));
-         mtz = r.getInt("TZ") ;
-      }
-
-      tr.append(mtime) ;
-
-      if(mtz < 0 )
-      {
-         tr.append("-") ;
-         if(mtz > -10 )
-         {
-            tr.append("0") ;
-         }
-
-         // remove the leading - sign
-         tr.append(Math.abs(mtz)) ;
-      }
-      else
-      {
-         tr.append("+") ;
-         if(mtz < 10)
-         {
-            tr.append("0") ;
-         }
-         
-         tr.append(mtz) ;
-      }
-
-      sbr.append(spaces + "<Condition>\n") ;
-      sbr.append(spaces + "   <ParamName>MOMENT</ParamName>\n") ;
-      sbr.append(spaces + "   <Units>YYYYMMDD24HHMISSTTT</Units>\n") ;
-      sbr.append(spaces + "   <ParamValue>" + tr.toString() + "</ParamValue>\n") ;
-      sbr.append(spaces + "</Condition>\n") ;
 
       return ;
    }
@@ -1477,130 +903,5 @@ public class EMINCsmdMapper implements CsmdMapper
    //
    //
 
-   String getStoragePath(String entry_id, int path_depth) throws SQLException
-   {
-      //queries the storage table for this particular entry 
-      //retrieving the required number of items
-      //1 - storage1
-      //2 - storage 1 & 2
-      //3 - storage 1 & 2 & 3
-      //4 - storage 1 & 2 & 3 & 4
-      //note the items are concatenated together
-
-      SessionSingleton ss = SessionSingleton.getInstance() ;
-      Logger log = ss.getLogger() ;
-      int i_place_holder = ss.i_place_holder ;
-      String place_holder = ss.place_holder ;
-
-      Statement s = ss.getStatement() ;
-      ResultSet r = ss.getResultSet() ;
-
-      StringReplace sr = ss.getStringReplace() ;
-      XmlText xt = ss.getXmlText() ;
-
-      //retrieve the database name
-      String dbs = ss.getDbs() ;
-
-      log.debug("in the beginning the path_depth = " + path_depth) ;
-      
-      StringBuffer result = new StringBuffer() ;
-      
-
-      //The 4 storage id need specifying as the dataset held in the dataholding
-
-      r = s.executeQuery("SELECT STORAGE1_ID, STORAGE2_ID, STORAGE3_ID, STORAGE4_ID FROM " + dbs + "DATA_ACCESS " +
-                         " WHERE DATA_ACCESS_ID IN (SELECT DATA_ACCESS_ID FROM " + dbs + "PARAMETER WHERE " + 
-                           "ENTRY_ID='" + entry_id + "')") ;
-
-      int stor1 = i_place_holder ;
-      int stor2 = i_place_holder ;
-      int stor3 = i_place_holder ;
-      int stor4 = i_place_holder ;
-
-      if(r.next())
-      {
-         r.getRow() ;
-         stor1 = r.getInt("STORAGE1_ID") ;
-         stor2 = r.getInt("STORAGE2_ID") ;
-         stor3 = r.getInt("STORAGE3_ID") ;
-         stor4 = r.getInt("STORAGE4_ID") ;
-      }
- 
-      r.close() ;
-
-      //get the names
-
-      String stor1_n = place_holder ;
-      String stor2_n = place_holder ;
-      String stor3_n = place_holder ;
-      String stor4_n = place_holder ;
-      String ras_collection = place_holder ;
-
-      r = s.executeQuery("SELECT STORAGE_NAME FROM " + dbs + "STORAGE WHERE STORAGE_ID='" + stor1 + "'") ;
-      if(r.next())
-      {
-         r.getRow() ;
-         stor1_n = sr.LitWithEnt(xt.makeValid(r.getString("STORAGE_NAME") ));
-      }
-      r.close() ;
-
-      r = s.executeQuery("SELECT STORAGE_NAME FROM " + dbs + "STORAGE WHERE STORAGE_ID='" + stor2 + "'") ;
-      if(r.next())
-      {
-         r.getRow() ;
-         stor2_n = sr.LitWithEnt(xt.makeValid(r.getString("STORAGE_NAME") ));
-      }
-      r.close() ;
-
-      r = s.executeQuery("SELECT STORAGE_NAME FROM " + dbs + "STORAGE WHERE STORAGE_ID='" + stor3 + "'") ;
-      if(r.next())
-      {
-         r.getRow() ;
-         stor3_n = sr.LitWithEnt(xt.makeValid(r.getString("STORAGE_NAME") ));
-      }
-      r.close() ;
-                                                
-      r = s.executeQuery("SELECT STORAGE_NAME FROM " + dbs + "STORAGE WHERE STORAGE_ID='" + stor4 + "'") ;
-      if(r.next())
-      {
-         r.getRow() ;
-         stor4_n = sr.LitWithEnt(xt.makeValid(r.getString("STORAGE_NAME") ));
-      }
-      r.close() ;
-
-      if(path_depth > 0)
-      {
-	 //result.append("http://www.") ;
-	 result.append(stor1_n) ;
-      }
-      
-      if(path_depth > 1)
-      {
-	 result.append(":") ;
-	 result.append(stor2_n) ;
-      }
-      
-      log.debug("entry_id = " + entry_id +  "; path_depth = " + path_depth) ;
-
-      if(path_depth > 2)
-      {
-	 //result.append("/") ;
-	 result.append(":") ;
-	 result.append(stor3_n) ;
-      }
-
-      if(path_depth > 3)
-      {
-	 result.append(":") ;
-	 result.append(stor4_n) ;
-      }
-  
-      return result.toString() ;
-   }
-
-  //
-  //
-  //
-  //
 
 }
