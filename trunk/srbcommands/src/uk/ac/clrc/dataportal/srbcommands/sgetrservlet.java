@@ -180,11 +180,11 @@ public class sgetrservlet extends HttpServlet {
         
             }
             else if(exe.equals("jar")){
-                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".zip -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
+                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".jar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
         
             }
             else{
-                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".jar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
+                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             }
             
             File myFileIn = new File(props.getProperty("srbDest")+File.separator + request.getSession().getId() + "."+exe);
