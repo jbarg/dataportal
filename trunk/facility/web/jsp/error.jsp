@@ -1,5 +1,8 @@
 <%@page contentType="text/html" %>
 <%@page import="uk.ac.clrc.dataportal.facility.*"%>
+<% response.setHeader("pragma","no-cache");
+
+ response.setHeader("cache-control","no-store"); %>
 <%@ include file="loggedin.jsp" %>
 
 <%@ include file="logger.jsp" %>
@@ -37,7 +40,6 @@ return true;
 <!--&nbsp;&nbsp;<a class="menu" href="create.jsp">Create Facility</a><br/>-->
 &nbsp;&nbsp;<a class="menu" href="deleteFacility.jsp">List </a><br />
 &nbsp;&nbsp;<a class="menu" href="logoff.jsp">Log Off</a><br />
-
 &nbsp;</td></tr>
 
 
@@ -46,11 +48,11 @@ return true;
 
 </td>
 <td valign="top">
-<p id="topheader">Change password</p>
+<p id="topheader">Error</p>
 <br /><br /><br /><br />
 <hr />
 <br />
-This page is not ready yet.
+Facility <%=request.getParameter("facility")%> already exist in the UDDI.  Try <a href="createFacility.jsp">adding</a> a different name.
 <br />
 
 

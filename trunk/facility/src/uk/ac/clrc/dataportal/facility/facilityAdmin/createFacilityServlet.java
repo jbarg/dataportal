@@ -23,11 +23,13 @@ import uk.ac.clrc.dataportal.facility.*;
 public class createFacilityServlet extends HttpServlet {
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(uk.ac.clrc.dataportal.facility.facilityAdmin.createFacilityServlet.class);
+    Logger log = Logger.getLogger(this.getClass().getName());
     
     /** Initializes the servlet.
      */
     public void init(ServletConfig config) throws ServletException {
+        //PropertyConfigurator.configure(Config.getContextPath()+"log4j.properties");
+        
         super.init(config);
         
     }
@@ -38,35 +40,67 @@ public class createFacilityServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        System.out.println("ia am fucking here");
+        
         //get session, see if user is logged on
         HttpSession session = request.getSession(true);
         if(session == null){
             response.sendRedirect("../html/SessionTimedOut.html");
             return;
         }
-        else{
-            //get facility info
-            String fac_id = request.getParameter("fac_id");
-            String xmlw = request.getParameter("xmlw");
-            String xmlw_wsdl = request.getParameter("xmlw_wsdl");
-            String acm = request.getParameter("acm");
-            String acm_wsdl = request.getParameter("acm_wsdl");
+        
+        
+        //get facility info
+        String fac_id = request.getParameter("fac_id");
+        if(fac_id.equalsIgnoreCase("dataportal")) {
+            response.sendRedirect("../jsp/deleteFacility.jsp");
+            return;
+        }
+        //check if dac_id is already in the UDDI
+        //List all the facilities with the Data Portal
+        try{
+            UDDIHelper uddi = new UDDIHelper();
+            org.jdom.Element[] elements = uddi.findFacility("%");
             
-            System.out.println(fac_id+"       "+xmlw+"   "+xmlw_wsdl+"   " +acm+"  "+acm_wsdl);
             
-            try{
-                String business = buildXML(fac_id,xmlw,xmlw_wsdl,acm,acm_wsdl);
-                if(business == null) business ="j2";
-                System.out.println(business);
-                response.getWriter().print("<html><body>sucess "+business+"</body></html>");
+            //check if dataportal already exists
+            boolean isalreadythere = false;
+            for(int i = 0; i < elements.length;i++){
+                org.jdom.Element el = (org.jdom.Element)elements[i];
+                String facilityName = el.getText();
+                if(facilityName.equalsIgnoreCase(fac_id)) isalreadythere = true;
             }
-            catch(Exception e) {System.out.println(e);
-            e.printStackTrace();}
+            //now check if name already exists
+            if(isalreadythere){
+                log.warn("Facility "+fac_id+" already exists in the UDDI");
+                response.sendRedirect("../jsp/error.jsp?facility="+fac_id);
+                return;
+            }
+        }
+        catch(Exception e){
+            log.error("Uable to list then check the facilities in the UDDI",e);
+            response.sendRedirect("../jsp/deleteFacility.jsp");
+            return;
             
         }
+        String xmlw = request.getParameter("xmlw");
+        String xmlw_wsdl = request.getParameter("xmlw_wsdl");
+        String acm = request.getParameter("acm");
+        String acm_wsdl = request.getParameter("acm_wsdl");
         
+        log.debug(fac_id+"   "+xmlw+"   "+xmlw_wsdl+"   " +acm+"  "+acm_wsdl);
         
+        try{
+            String business = buildXML(fac_id,xmlw,xmlw_wsdl,acm,acm_wsdl);
+            if(business == null) business ="j2";
+            log.debug("Business key is "+business);
+            
+            response.sendRedirect("../jsp/deleteFacility.jsp");
+        }
+        catch(Exception e) {
+            log.error("Unable to create a facility in the UDDI",e);
+            response.sendRedirect("../jsp/deleteFacility.jsp");
+            
+        }
     }
     
     
@@ -107,7 +141,7 @@ public class createFacilityServlet extends HttpServlet {
             throw new FacilityException("You cannot create a facility name starting with DATAPORTAL!");
         }
         String businessKey = uddi.createFacility(cfb);
-        if(businessKey != null) System.out.println("key ius  "+businessKey);
+        //if(businessKey != null) //log.debug("key is  "+businessKey);
         return businessKey;
         
         
