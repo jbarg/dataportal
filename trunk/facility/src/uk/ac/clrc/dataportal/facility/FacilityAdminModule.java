@@ -34,6 +34,7 @@ public class FacilityAdminModule
     // Input and Output are org.w3c.dom.Element types (for Axis) but these are converted to/from JDOM for ease
     // Input messages should really be validated at some point too....
     {
+       
         
         // DOM Response array - will only have one element anyway....
         org.w3c.dom.Element[] responseSBE = new org.w3c.dom.Element[requestSBE.length];
@@ -64,7 +65,7 @@ public class FacilityAdminModule
                 {
                     command = (Element) request.getChildren().get(0);
                 }
-                
+                System.out.println("this is the element "+command);
                 UDDIHelper uddi = new UDDIHelper();
                 Element returnElement = new Element(command.getName());
                 
@@ -171,7 +172,7 @@ public class FacilityAdminModule
                 {
                     // Create vector to hold service keys
                     Vector serviceKeysVector = new Vector();
-                    
+                    System.out.println("Delete services activated");
                     // Loop through all service tags
                     List params = command.getChildren();
                     Iterator iterator = params.iterator();
