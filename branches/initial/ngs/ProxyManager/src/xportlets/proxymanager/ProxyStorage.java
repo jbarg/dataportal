@@ -217,4 +217,13 @@ public class ProxyStorage
       return expiredProxies;
   }
 
+  //
+  // Xiaobo Yang, CCLRC e-Science Centre, 14 December 2004
+  // Returns (String) default_proxy
+  //
+  public String getDefaultProxyString() {
+    return default_proxy;
+
+  }
+
 }

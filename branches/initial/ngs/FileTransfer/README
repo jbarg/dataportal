@@ -1,70 +1,12 @@
---------------------------------------------------------------------------------
-                              Grid FTP Client Portlet 
+File Transfer Tool for NGS Portal
+=================================
 
-			      Version VERSION
---------------------------------------------------------------------------------
-
-The Grid FTP Client portlet has the basic functions of Grid FTP client, 
-such as uploading, downloading, third party transferring, and a tree-like 
-directory browsing interface.
-
-PREREQUISITES:
---------------
-
-1. GNU tar (or ensure that your tar can handle paths longer than 100
-   characters long)
-
-2. Jakarta Ant (we use version 1.5 but it will probably work with most earlier
-   versions too) - http://jakarta.apache.org/ant
-
-INSTALL:
---------
-
-To install the Grid FTP Client portlet into your Jetspeed portal, you'll need
-to: 
-
-1.  Untar and unzip xportlets-gridftpclient-VERSION-[src,bin].tar.gz.
-
-2.  Define alliance.home in file build.properties. "alliance.home" is your
-    alliance portal installation.
-
-2.  For binary distribution, execute:
-
-      ant deploy
-
-    For source distribution, execute:
-
-      ant build deploy
-
-3.  You have to insert the following text into ${CATALINA_HOME}/webapps/jetspeed/web.xml
-    You may also find them in servlet-entries.xml and servlet-mapping.xml.
-
-    <web-app> 
-      ...
-        <servlet>
-            <servlet-name>
-                    GridFTPDownload
-            </servlet-name>
-            <servlet-class>
-                    xportlets/gridftp/GridFTPDownload
-            </servlet-class>
-        </servlet>
-      ...
-        <servlet-mapping>
-            <servlet-name>
-               GridFTPDownload
-            </servlet-name>
-            <url-pattern>
-                /gfd
-            </url-pattern>
-        </servlet-mapping>
-      ...
-    </web-app>
- 
-4.  Restart your portal (GridFTPClient portlet will be available in the portlet
-    listing).
+File Transfer Tool for NGS Portal is based on gridftpclient xportlet from the
+Extreme! Computing Lab (http://www.extreme.indiana.edu). It is now re-designed
+as a CHEF tool to perform uploading, downloading, third party transferring,
+deleting for both files and directories. For third party transferring, all files
+larger than 1 MB will be transferred in parallel mode for better performance.
 
 
---------------------------------------------------------------------------------
-                           Extreme! Computing Lab
-                       http://www.extreme.indiana.edu
+CCLRC e-Science Centre
+http://www.e-science.clrc.ac.uk/

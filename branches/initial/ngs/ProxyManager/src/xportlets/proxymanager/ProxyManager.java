@@ -275,5 +275,32 @@ public class ProxyManager {
 
 	return tb;
     }
+
+  //
+  // Xiaobo Yang, CCLRC e-Science Centre, 14 December 2004
+  // Returns (String) default_proxy of ProxyStorage class
+  //
+  public static String getDefaultProxyString(HttpSession session) {
+    if (session==null) {
+      return null;
+    }
+
+    ProxyStorage storage = (ProxyStorage)session.getAttribute(Constants.PROXYSTORAGE);
+    if (storage==null) {
+      return null;
+    }
+
+/*    try {
+      storage.load(session);
+    }
+    catch (ProxyStorageException pse) {
+      pse.printStackTrace();
+      return null;
+    }
+
+    return storage.getDefault(); */
+    return storage.getDefaultProxyString();
+
+  }
     
 }
