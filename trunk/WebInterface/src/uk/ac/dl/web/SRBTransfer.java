@@ -146,7 +146,7 @@ public class SRBTransfer extends HttpServlet {
             }
             else {
                 logger.warn("Error in transfering srb object.\nError: "+result);
-                response.sendRedirect("../jsp/transferError.jsp?error="+result);
+                response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+dir);
                 
             }
             
