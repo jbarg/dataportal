@@ -144,21 +144,24 @@ public class SessionSingleton
 
    String getDTDLocation()
    {
-      String ret_val = "http://escvig2.dl.ac.uk:8080/xmlwrapper/xml/dtd/clrcmetadata.dtd" ;
+      String ret_val ;
 
-      StringBuffer sb = new StringBuffer(getReadPath()) ;
-   
-      sb.reverse() ;
+      String context = "/xmlw" ;
 
-      StringTokenizer st = new StringTokenizer(sb.toString(), File.separator);
-
-      if (st.hasMoreTokens())
+      MessageContext messageContext = MessageContext.getCurrentContext();
+      if (messageContext != null)
       {
-         StringBuffer con = new StringBuffer(st.nextToken()) ;
-         con.reverse() ;
+         // Get the servlet request
+         HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
 
-         ret_val = "http://" + server_port + "/" + con.toString() + "/xml/dtd/clrcmetadata.dtd" ;
+         // Strip off the web service name off the end of the path
+         // and append our properties file path
+         context  = request.getContextPath() ;
       }
+
+      ret_val = "http://" + server_port + context  + "/xml/dtd/clrcmetadata.dtd" ;
+
+      //////
 
       return ret_val ;
    }
