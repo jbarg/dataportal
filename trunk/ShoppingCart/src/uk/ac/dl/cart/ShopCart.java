@@ -252,7 +252,7 @@ public class ShopCart {
                         
                         //get associated study
                         Element assStudy = el.getChild("assStudy");
-                        ret[6] = assStudy.getText();
+                        ret[5] = assStudy.getText();
                         
                         // System.out.println("name for see notes is "+el4.getText());
                         //Element el3 = el.getChild("url");
