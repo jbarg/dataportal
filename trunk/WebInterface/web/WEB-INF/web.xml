@@ -332,8 +332,12 @@
 		<welcome-file>index.jws</welcome-file>
 	</welcome-file-list>
 	<error-page>
-		<error-code>uk.ac.dl.web.SessionTimedOutException</error-code>
+		<exception-type>uk.ac.dl.web.SessionTimedOutException</exception-type>
 		<location>/html/SessionTimedOut.html</location>
+	</error-page>
+        <error-page>
+		<error-code>500</error-code>
+		<location>/jsp/error.jsp</location>
 	</error-page>
 	<taglib>
 		<taglib-uri>/tldweb</taglib-uri>
