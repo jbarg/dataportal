@@ -31,7 +31,15 @@ public class sgetrservlet extends HttpServlet {
         scon = config;
         super.init(config);
         try {
-            
+            ServletContext sc = scon.getServletContext();
+            String workingDir = sc.getRealPath("");
+            try{
+                props = getProps(workingDir);
+            }
+            catch(Exception e){
+                log.warn(e);
+                throw new IOException("Unable to load properties file");
+            }
             this.Sinit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,15 +97,7 @@ public class sgetrservlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, java.io.IOException {
         
-        ServletContext sc = scon.getServletContext();
-        String workingDir = sc.getRealPath("");
-        try{
-            props = getProps(workingDir);
-        }
-        catch(Exception e){
-            log.warn(e);
-            throw new IOException("Unable to load properties file");
-        }
+        
         ServletOutputStream out = response.getOutputStream();
         
         try {
