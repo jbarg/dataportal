@@ -202,11 +202,11 @@ public class LoginServlet extends HttpServlet {
                   //  System.out.println("this is dir of the file "+workingDir+File.separator+"xml"+File.separator+"emin"+sessionid);
                     Saver.save(mydoc,new File(workingDir+File.separator+"profiles"+File.separator+"emat"+sessionid));
                     //hard code list fac
-                    ArrayList facs1  = new ArrayList();
+                    /*ArrayList facs1  = new ArrayList();
                     facs1.add("EMAT");
                     session.removeAttribute("facs");
                     //System.out.println("removing facs and adding emin");
-                    session.setAttribute("facs",facs1);
+                    session.setAttribute("facs",facs1);*/
                    // if(new File(workingDir+File.separator+"xml"+File.separator+"emin"+sessionid).exists()) System.out.println("file here");
                 }
                 catch(Exception e){
