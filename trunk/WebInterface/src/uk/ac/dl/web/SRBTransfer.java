@@ -54,7 +54,16 @@ public class SRBTransfer extends HttpServlet {
             File tarFile = null;
             String dir = request.getParameter("url");
             String urldir = dir.replaceFirst("srb","http");
-            URL srburl= new URL(urldir);
+            URL srburl= null;
+            try{
+                 srburl= new URL(urldir);
+            }
+            catch(Exception srb){
+                logger.warn("Error with srb url",srb);
+                response.sendRedirect("../jsp/transferError.jsp?error="+srb.getMessage()+"&url="+dir);
+                return;
+                
+            }
             dir = srburl.getFile();
             String urlTo = request.getParameter("urlTo");
             String sid = (String)session.getAttribute("sessionid");

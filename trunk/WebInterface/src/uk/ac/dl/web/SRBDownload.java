@@ -51,10 +51,19 @@ public class SRBDownload extends HttpServlet {
             String dir = request.getParameter("dir");
             //this is a srb url.  Need to parse to get dir out
             String urldir = dir.replaceFirst("srb","http");
-            URL srburl= new URL(urldir);
+            URL srburl= null;
+            try{
+                srburl= new URL(urldir);
+            }
+            catch(Exception srb){
+                logger.warn("Error with srb url",srb);
+                response.sendRedirect("../jsp/transferError.jsp?error="+srb.getMessage()+"&url="+dir);
+                return;
+                
+            }
             dir = srburl.getFile();
             
-           // String urlTo = request.getParameter("urlTo");
+            // String urlTo = request.getParameter("urlTo");
             String sid = (String)session.getAttribute("sessionid");
             try{
                 //locate the prop file.  Normal get this from web.xml file
