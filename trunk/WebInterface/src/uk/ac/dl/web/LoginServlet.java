@@ -95,13 +95,13 @@ public class LoginServlet extends HttpServlet {
         //get user input values
         String reName = request.getParameter("username");
         String rePass = request.getParameter("password");
-        //seconds  :  1hour  = 60*60 
+        //seconds  :  1hour  = 60*60
         lifetime = request.getParameter("lifetime");
         int lifetime_int = Integer.parseInt(lifetime)*60*60;
         lifetime = String.valueOf(lifetime_int);
         //set login status as false
         boolean loggedin = false;
-       
+        
         //end of added section
         Properties locations = null;
         Properties prop = null;
@@ -113,7 +113,7 @@ public class LoginServlet extends HttpServlet {
             if(reName.equals("")|| rePass.equals("")){}
             else{
                 
-                 prop = new Properties();
+                prop = new Properties();
                 prop.load(new FileInputStream(workingDir+File.separator+"WEB-INF"+File.separator+"webserviceslocation.conf"));
                 lookup = prop.getProperty("LookupWebService");
                 
@@ -122,15 +122,15 @@ public class LoginServlet extends HttpServlet {
                 //hard code for now
                 //String shopcart= prop.getProperty("sc_url");
                 // rasgrib= prop.getProperty("ras_url");
-               //String transfer = prop.getProperty("trans_url");
+                //String transfer = prop.getProperty("trans_url");
                 String proxy = prop.getProperty("proxy_server_url");
                 locations.put("proxy_server_url",proxy);
                 //.put("sc_url",shopcart);
                 //locations.put("ras_url",rasgrib);
                 //locations.put("trans_url",transfer);
                 session.setAttribute("props",locations);
-               
-                 sessionid = loginOn( session,reName,rePass,lifetime,locations);
+                
+                sessionid = loginOn( session,reName,rePass,lifetime,locations);
                 // int sessionID = sessionid.intValue();
                 session.setAttribute("sessionid",sessionid);
                 
@@ -138,21 +138,21 @@ public class LoginServlet extends HttpServlet {
             }
         }
         catch(Exception e){
-           // System.out.println("not logged in");
+            // System.out.println("not logged in");
             logger.fatal("could not update sessionmanager",e);
             //response.sendRedirect("../jsp/error.jsp");
         }
         //now check if user has passes
         
         if(loggedin) {
-           
+            
             //logger.warn("User "+reName+" has logged on", new Exception("this"));
-          
+            
             //if correct add info to the thier session
             session.setAttribute("username", reName);
             session.setAttribute("passphrase", rePass);
             session.setAttribute("LOGIN_STATUS", new Boolean(true));
-           session.setMaxInactiveInterval(Integer.parseInt(lifetime));
+            session.setMaxInactiveInterval(Integer.parseInt(lifetime));
             //get HPC info out of the prop file
             String isHPC  = prop.getProperty("isHPC");
             String HPC_url = prop.getProperty("HPC_url");
@@ -181,7 +181,7 @@ public class LoginServlet extends HttpServlet {
                 logger.fatal("Could not locate permissions for the user",e);
                 //response.sendRedirect("../jsp/error.jsp");
             }
-              //add logging section
+            //add logging section
             if(prop.getProperty("logging") == null || !(prop.getProperty("logging").equals("true"))){
                 
             }
@@ -505,11 +505,11 @@ public class LoginServlet extends HttpServlet {
             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
             
             call.setOperationName( "login" );
-                        
+            
             call.addParameter( "userName", XMLType.XSD_STRING, ParameterMode.IN );
             call.addParameter( "password", XMLType.XSD_STRING, ParameterMode.IN );
             call.addParameter( "lifetime", XMLType.XSD_INT, ParameterMode.IN );
-         
+            
             call.setReturnType( XMLType.XSD_STRING );
             
             
@@ -579,7 +579,7 @@ public class LoginServlet extends HttpServlet {
             org.jdom.input.DOMBuilder buildert = new org.jdom.input.DOMBuilder();
             
             org.jdom.Element el = buildert.build(ret);
-                       
+            
             //org.jdom.Document doc  = new org.jdom.Document(el);
             //Saver.save(doc,"c:/per.xml" );
             //Element root = doc.getRootElement();
@@ -617,7 +617,7 @@ public class LoginServlet extends HttpServlet {
         catch(Exception e){
             // System.out.println(e);
             throw e;
-           
+            
         }
         
     }
@@ -658,7 +658,7 @@ public class LoginServlet extends HttpServlet {
         
     }
     
-          public synchronized void logUser(String sessionid,String session_url,Properties prop) throws Exception{
+    public synchronized void logUser(String sessionid,String session_url,Properties prop) throws Exception{
         
         //get the dn from the session manager
         Service  service = new Service();
