@@ -182,7 +182,7 @@
   <xsd:complexType name="PersonType">
      <xsd:sequence>
         <xsd:element name="Name"           type="cmd:NameType"/>
-        <xsd:element name="Institution"    type="cmd:InstitutionType"/>
+        <xsd:element name="InstitutionId"    type="xsd:string"/>
         <xsd:element name="ContactDetails" type="cmd:ContactDetailsType"/>
      </xsd:sequence>
   </xsd:complexType>
@@ -362,6 +362,7 @@
          <xsd:element name="Units" type="cmd:UnitsType" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="ParamValue" type="xsd:string" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="Range" type="cmd:RangeType" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="Parameter" type="cmd:ParameterType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
 
