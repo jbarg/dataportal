@@ -44,7 +44,7 @@ public class ResendQuery extends HttpServlet{
         
         
         String sid = (String)session.getAttribute("sessionid");
-        Object[] object = new Object[]{sid,facilities,discipline,wait};
+        Object[] object = new Object[]{sid,facilities,discipline,max};
         session.setAttribute("query", object);
        
         try{
