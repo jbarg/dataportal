@@ -62,6 +62,8 @@
 	<xsd:enumeration value="Mrs"/>
 	<xsd:enumeration value="Ms"/>
         <xsd:enumeration value="other"/>
+	<xsd:enumeration value="not available"/>
+        <xsd:enumeration value=""/>
      </xsd:restriction>
    </xsd:simpleType>
 
@@ -76,6 +78,7 @@
 	<xsd:enumeration value="Co-Investigator"/>
 	<xsd:enumeration value="Data Holder"/>
 	<xsd:enumeration value="Data Manager"/>
+	<xsd:enumeration value="not available"/>
         <xsd:enumeration value="other"/>
      </xsd:restriction>
    </xsd:simpleType>
@@ -91,6 +94,7 @@
 	<xsd:enumeration value="PG"/>
 	<xsd:enumeration value="Post Graduate"/>
 	<xsd:enumeration value="Undergraduate"/>
+	<xsd:enumeration value="not available"/>
         <xsd:enumeration value="other"/>
      </xsd:restriction>
    </xsd:simpleType>
@@ -160,7 +164,11 @@
       </xsd:restriction>
    </xsd:simpleType>
 
-   <xsd:simpleType name="TypesOfData">
+ <!-- although the original meaning was the data organisation unit -->
+ <!-- this has changed for ISIS to data type as seen by the facility -->
+ <!-- e.g. raw, processed, final etc -->
+
+ <!--  <xsd:simpleType name="TypesOfData">
       <xsd:restriction base="xsd:string">
 	 <xsd:enumeration value="Collection"/>
 	 <xsd:enumeration value="File"/>
@@ -169,7 +177,7 @@
 	 <xsd:enumeration value="Named Select"/>
          <xsd:enumeration value="other"/>
       </xsd:restriction>
-   </xsd:simpleType>
+   </xsd:simpleType> -->
 
    <xsd:simpleType name="LegalNoticeTypes">
       <xsd:restriction base="xsd:string">
@@ -433,7 +441,7 @@
          <xsd:element name="Funding" type="xsd:string" minOccurs="0" maxOccurs="1"/>
          <xsd:element name="TimePeriod" type="cmd:TimePeriodType"/>
          <xsd:element name="Purpose" type="cmd:PurposeType"/>
-         <xsd:element name="StudyStatus" type="xsd:string"/>
+         <xsd:element name="Status" type="xsd:string"/>
          <xsd:element name="Resources" type="cmd:ResourceType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
@@ -543,7 +551,9 @@
    <xsd:complexType name="DataDescriptionType">
       <xsd:sequence>
          <xsd:element name="DataName"   type="xsd:string"/>
-	 <xsd:element name="TypeOfData" type="cmd:TypesOfData" minOccurs="0" />
+         <xsd:element name="Description" type="xsd:string" minOccurs="0" />
+	 <!-- <xsd:element name="TypeOfData" type="cmd:TypesOfData" minOccurs="0" /> see notes at TypesOfData -->
+	 <xsd:element name="TypeOfData" type="xsd:string" minOccurs="0" />
          <xsd:element name="Status"     type="xsd:string" minOccurs="0" />
          <xsd:element name="Quality"     type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataTopic"  type="cmd:DataTopicType" minOccurs="0" />
