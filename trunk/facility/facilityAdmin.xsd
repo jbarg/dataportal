@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v5 rel. 2 U (http://www.xmlspy.com) by Mark Williams (CCLRC) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="facilityAdmin">
+		<xs:annotation>
+			<xs:documentation>Facility Administration Root Element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element name="createFacility">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="facilityName"/>
+							<xs:element name="facilityDescription"/>
+							<xs:element name="service" type="serviceType" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="deleteFacility" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="facilityID" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="createServices">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="service" type="serviceType" maxOccurs="unbounded"/>
+						</xs:sequence>
+						<xs:attribute name="facilityID" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="deleteServices">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="service" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="serviceID" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="findFacility"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="serviceType">
+		<xs:sequence>
+			<xs:element name="serviceName"/>
+			<xs:element name="serviceDescription"/>
+			<xs:element name="serviceType"/>
+			<xs:element name="serviceEndpoint"/>
+			<xs:element name="serviceWSDL"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
