@@ -122,10 +122,10 @@ public class FileDownload extends HttpServlet {
                 response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+url);
              
             }*/
-           
+             ServletOutputStream out = response.getOutputStream();
             try{
                 //now download the file to the user.
-                 ServletOutputStream out = response.getOutputStream();
+               
             response.setContentType("application/download");
             response.setBufferSize(65536);
             
