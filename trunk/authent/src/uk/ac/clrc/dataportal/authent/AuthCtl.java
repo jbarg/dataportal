@@ -22,6 +22,7 @@ import org.apache.axis.client.Call;
 import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
+import java.io.*;
 
 import org.apache.axis.utils.XMLUtils;
 
@@ -29,16 +30,30 @@ import org.apache.axis.utils.XMLUtils;
 
 public class AuthCtl {
     
+    public static Properties config = new Properties();
+    public static String proxyServerName = null;
+    
+    // class method here
+    public static void getMyConfig() throws IOException {
+        try {
+            config.load(new FileInputStream(Config.getContextPath()+"authent.conf"));
+            String proxyServerName = config.getProperty("proxy_server_name");
+        } catch ( IOException e ) {
+            System.out.println( "---> Error: Cannot read config file" );
+            throw e;
+        }
+    }
     public int login( String userName, String password ) throws Exception {
         
         String[] facilityEndPoints;
-        //--        String[] facilityEndPoints = { "http://escvig3.dl.ac.uk:8080/axis/services/ACM" };
         org.w3c.dom.Element facilityAccess;
         int sessionId;
         X509Certificate userCert = idCheck( userName, password );
-        //        System.out.println( "---> User:     " + userCert.getSubjectDN() );
+        //        S
         //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
         //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
+        
+        getMyConfig();
         
         if ( userCert == null )
             sessionId = -1;
@@ -114,7 +129,7 @@ public class AuthCtl {
         }
         
         
-
+        
         
         
         return ( userCert );
