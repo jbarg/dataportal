@@ -8,8 +8,8 @@
 
    <xsd:annotation>
       <xsd:documentation xml:lang="en">
-         General Scientific Meta-Data Format Schema 
-         for eScience Data Portal.
+         CCLRC Scientific Metadata Model Version 2 - XML Schema implementation 
+         for CCLRC e-Science core funded DataPortal Project, author: Shoaib Sufi.
       </xsd:documentation>
    </xsd:annotation>
 
@@ -420,9 +420,17 @@
          <xsd:element name="Parameter" type="cmd:ParameterType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="TimePeriod" type="cmd:TimePeriodType" minOccurs="0"/>
 	 <xsd:element name="Description" type="xsd:string" minOccurs="0"/>
-	 <xsd:element name="FacilityUsed" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="FacilityUsed" type="cmd:FacilityType" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
+
+   <xsd:complexType name="FacilityType">
+      <xsd:sequence>
+         <xsd:element name="FacilityName" type="xsd:string" />
+         <xsd:element name="Resource" type="xsd:string" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+      
 
 
    <xsd:complexType name="DataDescriptionType">
@@ -512,7 +520,7 @@
 
       -->
 
-   <xsd:complexType name="FileLocator">
+   <xsd:complexType name="FileADOL">
       <xsd:complexContent>
          <xsd:extension base="cmd:ADOLocatorType">
             <xsd:sequence>
@@ -523,19 +531,21 @@
       </xsd:complexContent>
    </xsd:complexType>
 
-   <xsd:complexType name="BLOBLocator">
+   <xsd:complexType name="SelectNamedADOL">
       <xsd:complexContent>
          <xsd:extension base="cmd:ADOLocatorType">
             <xsd:sequence>
 	       <xsd:element name="DatabaseType" type="xsd:string"/>
-	       <xsd:element name="DatabaseVersion" type="xsd:string"/>
+	       <xsd:element name="DatabaseProductName" type="xsd:string"/>
+	       <xsd:element name="DatabaseProductVersion" type="xsd:string"/>
 	       <xsd:element name="Host" type="xsd:string"/>
 	       <xsd:element name="Instance" type="xsd:string" minOccurs="0"/>
 	       <xsd:element name="Database" type="xsd:string"/>
 	       <xsd:element name="Port" type="xsd:string" minOccurs="0"/>
-	       <xsd:element name="Table" type="xsd:string"/>
-	       <xsd:element name="Column" type="xsd:string"/>
+	       <xsd:element name="Query" type="xsd:string"/>
+	       <xsd:element name="Encoding" type="xsd:string"/>
 	       <xsd:element name="DataFormat" type="xsd:string"/>
+	       <xsd:element name="ResultSchema" type="xsd:string"/>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
