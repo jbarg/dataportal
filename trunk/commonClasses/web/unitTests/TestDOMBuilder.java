@@ -1,4 +1,4 @@
-import ac.dl.xml.*;
+import uk.ac.dl.xml.*;
 import java.io.*;
 import org.jdom.*;
 import junit.framework.*;

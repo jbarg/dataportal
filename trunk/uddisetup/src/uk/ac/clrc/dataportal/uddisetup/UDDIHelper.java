@@ -90,6 +90,7 @@ public class UDDIHelper {
     private AuthToken getAuthToken(UDDIProxy proxy) throws UDDIException {
         AuthToken authToken = null;
         try {
+            System.out.println("user name "+UDDIProps.getProperty("uddi_user")+"  password "+UDDIProps.getProperty("uddi_password"));
             authToken = proxy.get_authToken(UDDIProps.getProperty("uddi_user"), UDDIProps.getProperty("uddi_password"));        }
         catch (UDDIException ue) {
             throw ue;
@@ -148,13 +149,15 @@ public class UDDIHelper {
             }
             
             // Now write the TModels into UDDI
-            TModelDetail tmDetail = proxy.save_tModel(authToken.getAuthInfoString(),tModels);
+          TModelDetail tmDetail = proxy.save_tModel(authToken.getAuthInfoString(),tModels);
+           
             
             Vector tmVector = tmDetail.getTModelVector();
             for (Enumeration e=tmVector.elements();e.hasMoreElements();) {
                 TModel insertedTModel = (TModel) e.nextElement();
                 tmKeyProps.setProperty(insertedTModel.getNameString(),insertedTModel.getTModelKey());
             }
+            System.out.println("created tmodels");
         }
         catch (UDDIException ue) {
             throw ue;
