@@ -155,7 +155,7 @@ Once logged in you should have no access to facilities because there are no faci
 10)  Once installed and running, to start the Data Portal when everything is shutdown:
 
 i) ant start_dbs
-ii) start tomcat ($CATALINA_HOME/bin/startup.sh(bat))
+ii) start tomcat instance ($CATALINA_HOME/bin/startup.sh(bat))
 
 
 Configuration of the Data Portal 
