@@ -181,7 +181,7 @@ public class sgetrservlet extends HttpServlet {
                 LaunchProcess.runCommand( props.getProperty("tarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             }
             else if(exe.equals("zip")){
-                LaunchProcess.runCommand("cd"+ props.getProperty("srbDest");
+                LaunchProcess.runCommand("cd"+ props.getProperty("srbDest"));
                 LaunchProcess.runCommand( props.getProperty("zipHome")+" -rvj "+ request.getSession().getId() + ".zip  "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+File.separator+"*");
                 
             }
