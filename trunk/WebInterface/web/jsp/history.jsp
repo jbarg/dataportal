@@ -81,7 +81,7 @@ html/netscape.html file from the content root.-->
 <div align="right"><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
 
 <br />
-<table border="1"  width="95%" cellspacing="0" cellpadding="1">
+<table border="1"  width="100%" cellspacing="0" cellpadding="1">
 <tr bgcolor="#ADD8E6">
 <td width="15%"><b>Facility(s)</b></td>
 <td width="33%"><b>Discipline</b></td>

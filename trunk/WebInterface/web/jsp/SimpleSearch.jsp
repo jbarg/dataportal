@@ -92,15 +92,17 @@ html/netscape.html file from the content root.--%>
     //try and use tag libs
     String sxml = null;
     String sxsl = null;
+
+    String path = request.getContextPath();
     //sxml = workingDir+File.separator+"profiles"+File.separator+username+File.separator+"users.xml";
-    sxml = "http://localhost:8080/dataportal/profiles/"+sid+"1.xml";
+    sxml = "http://localhost:8080"+path+"/profiles/"+sid+"1.xml";
     //sxml = "file:"+File.separator+File.separator+workingDir+File.separator+"profiles"+File.separator+sid+"1.xml";
     xml =  new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
     if(!xml.exists()){
        response.sendRedirect("../jsp/BasicSearch.jsp");
        return;
     }
-    sxsl = "http://localhost:8080/dataportal/xsl/simpleresulttableDOM4J.xsl";
+    sxsl = "http://localhost:8080"+path+"/xsl/simpleresulttableDOM4J.xsl";
     //sxsl="file:"+File.separator+File.separator+workingDir+File.separator+"xsl"+File.separator+"simpleresulttableDOM4J.xsl";
 %>
 <%
