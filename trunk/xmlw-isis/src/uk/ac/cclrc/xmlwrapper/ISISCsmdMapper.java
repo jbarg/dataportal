@@ -814,6 +814,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
       buildMDDataDescription(key, sbr, ii+li, "dataholding", true) ;
       buildMDDataHoldingLocator(key, sbr, ii+li, "dataholding", true) ;
+      //HERE - what does related reference get the info from
       buildMDRelatedReferance(key, sbr, ii+li, null) ;
       buildMDDataCollection(key, sbr, ii+li, null) ;
       buildMDAtomicDataObject(key, sbr, ii+li, null) ;
