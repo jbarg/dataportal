@@ -1,0 +1,49 @@
+/*
+ * FacilityAdminClient.java
+ *
+ * Created on 15 January 2003, 08:37
+ */
+
+package uk.ac.clrc.dataportal.srbcommands;
+
+import org.apache.axis.AxisFault;
+import org.apache.axis.client.Service;
+import org.apache.axis.client.Call;
+import org.apache.axis.message.SOAPBodyElement;
+import org.apache.axis.utils.XMLUtils;
+
+import org.apache.axis.encoding.XMLType;
+import javax.xml.rpc.ParameterMode;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.Vector;
+
+public class TestClient {
+
+  public static void main(String [] args) throws Exception {
+
+    try {
+        
+      String endpointURL = "http://dmgdev1.esc.rl.ac.uk:8080/srbcommands/services/SRBService";
+
+      Service service = new Service();
+      Call call = (Call) service.createCall();
+      call.setTargetEndpointAddress(new URL(endpointURL));
+      call.setOperationName("Sls");
+      
+      String ret = (String) call.invoke(new Object[] {"/home/srbadm.matrix"});
+
+      System.out.println(ret);
+
+    }
+    catch (AxisFault fault) {
+      System.err.println("\nService Fault received:");
+      System.err.println("Fault actor:   " + fault.getFaultActor());
+      System.err.println("Fault code:    " + fault.getFaultCode());
+      System.err.println("Fault string:\n" + fault.getFaultString());
+    }
+  }
+}

@@ -1,0 +1,42 @@
+-------
+
+classes12.jar	-	Oracle 9 thin JDBC driver
+
+-------
+
+log4j-1.2.7.jar	-	log4j logger jar file
+
+-------
+
+xml-dl.1.3.jar	-	glens xml utils jar file
+
+-------
+
+axis.jar	-	all of these needed to have web service in your
+			own context - as well as server-config.wsdd in 
+			WEB-INF and axis like web.xml under WEB-INF
+			and calling you service url with:
+			http://<server>[:<port>]/<context>/services/<service name>
+
+axis-ant.jar
+commons-discovery.jar
+commonds-logging.jar
+jaxrpc.jar
+saaj.jar
+wsdl4j.jar
+xmlsec.jar
+
+<note jar files taken from release 1.0>
+
+
+-------
+11/02/03
+
+jdom.jar
+Shop.jar
+
+
+-------
+16/04/03
+
+jars moved to dataportal/common/lib and build.xml updated

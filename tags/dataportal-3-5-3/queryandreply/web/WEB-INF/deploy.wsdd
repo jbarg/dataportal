@@ -1,0 +1,9 @@
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+ <service name="QueryAndReply" provider="java:RPC">
+  <parameter name="className" value="QueryAndReply"/>
+  <parameter name="allowedMethods" value="*"/>
+ </service>
+
+</deployment>
