@@ -138,11 +138,14 @@ public class XMLWSelectorTester {
       xmlwt.test_builder("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
                          "<result>\n" +
                          "{\n" +
-                         "let $data_i := document(\"metadata.xml\")\n" +
-	                 "for $b in $data_i/MetadataRecord\n" +
+                         //"let $data_i := document(\"metadata.xml\")\n" + this is a qexo line
+                         "let $data_i := input()\n" +
+	                 "for $b in $data_i//MetadataRecord\n" +
 	                 "return\n" +
-	                 "<metadata id={$b/@metadataID}>\n" +
-		         "{$b/Experiment/StudyName}\n" +
+	                 //"<metadata id=\"{$b/@metadataID}>\n" + this line needed to test arbitary return data not just well
+                         // formed xml
+	                 "<metadata id=\"{$b/@metadataID}\">\n" +
+		         "{$b//StudyName}\n" +
 	                 "</metadata>\n" +
                          "}\n" +
                          "</result>",

@@ -8,20 +8,42 @@ import org.w3c.dom.* ;
 
 import org.apache.log4j.* ;
 
-import javax.xml.parsers.* ; //for jaxp DocumentBuilderFactory etc.
+//for jaxp DocumentBuilderFactory etc.
+import javax.xml.parsers.* ; 
 
-import org.xml.sax.* ; //for InputSource
-
-//this should be removed once the saxon stuff works
-import gnu.xquery.lang.* ; //for the XQuery processing
-
-import org.xmldb.api.base.*; //for xindice
+//for xindice
+import org.xmldb.api.base.*; 
 import org.xmldb.api.modules.*;
 import org.xmldb.api.*;
 
-import net.sf.saxon.* ; // for XQuery processing by saxon
-import org.xml.sax.* ;
-import javax.xml.transform.* ;
+
+//needed for XQuery processing (some may not be - using saxon e.g.)
+import net.sf.saxon.Configuration;
+import net.sf.saxon.event.Builder;
+import net.sf.saxon.instruct.TerminationException;
+import net.sf.saxon.om.DocumentInfo;
+import net.sf.saxon.om.NamePool;
+import net.sf.saxon.om.SequenceIterator;
+import net.sf.saxon.om.Item;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.query.DynamicQueryContext;
+import net.sf.saxon.query.QueryProcessor;
+import net.sf.saxon.query.QueryResult;
+import net.sf.saxon.query.StaticQueryContext;
+import net.sf.saxon.query.XQueryExpression;
+import net.sf.saxon.value.StringValue;
+import net.sf.saxon.value.Type;
+import net.sf.saxon.xpath.XPathException;
+import net.sf.saxon.trace.SimpleTraceListener;
+import org.xml.sax.InputSource;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
 
 
 public class XmlWrapperDocSelector
@@ -118,7 +140,7 @@ public class XmlWrapperDocSelector
    // equivelent to 'main' function
    //
 
-   public String queryMetaData(String xquery) 
+   public String queryMetaData(String external_xquery) throws TransformerException 
    {
 
       //get necessary session attributes
@@ -140,14 +162,16 @@ public class XmlWrapperDocSelector
       DynamicQueryContext dynamic_env = new DynamicQueryContext();
       //some configuration - perhaps the following is default but seems set in example
       config.setTreeModel(Builder.TINY_TREE) ;
-      Source sourceInput = null
+      Source sourceInput = null ;
+
+      //output properties for the result of the xquery
+      Properties outputProps = new Properties();
+       outputProps.setProperty(OutputKeys.INDENT, "yes");
 
       //find all keys in map and then pull all values out
       //validate and place in xml doc repository
 
       Iterator e = al.iterator() ;
-
-      XQuery xq = new XQuery();
 
       //clear stringbuffer for re-use
       if(result.length() != 0)
@@ -181,11 +205,14 @@ public class XmlWrapperDocSelector
          //query processing object and parsed query object(perhaps this need putting in a LRU cache to save re-parsing)
          QueryProcessor xquery = new QueryProcessor(config, static_env);
 
-         XQueryExpression exp;
+         //excuse the naff initialisation - getting around compiler problems
+         //XQueryExpression exp = (XQueryExpression) new Object() ;
+         XQueryExpression exp = null ;
+ 
 
          try {
                 //use default context or input() as the reference to the document in the query
-                exp = xquery.compileQuery(new StringReader(query)) ;
+                exp = xquery.compileQuery(new StringReader(external_xquery)) ;
 
          }
           catch (XPathException err) 
@@ -202,9 +229,15 @@ public class XmlWrapperDocSelector
              }
                 throw new TransformerException(err);
           }
+          catch (java.io.IOException ioe)
+          {
+             ioe.printStackTrace()  ;
+          }
+
+         SequenceIterator results ;
 
          try { // The next line actually executes the query
-            SequenceIterator results = exp.iterator(dynamicEnv);
+            results = exp.iterator(dynamic_env);
          }
          catch (TerminationException err) 
          {
@@ -215,7 +248,7 @@ public class XmlWrapperDocSelector
          }
 
          //actually reading the results of the query in 
-         OutputStream dest = new ByteArrayOutputSteam(10000) ;
+         OutputStream dest = new ByteArrayOutputStream(10000) ;
          PrintWriter writer = new PrintWriter(dest);
 
          while (results.hasNext()) 
