@@ -3,8 +3,8 @@
  *
  * Created on 04 February 2003, 16:57
  */
-package uk.ac.clrc.dataportal.authent;
-
+//package uk.ac.clrc.dataportal.authent;
+package dataportal.authent.src.uk.ac.clrc.dataportal.authent;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
@@ -16,15 +16,14 @@ public class AuthClient {
     
     /** Creates a new instance of AcmClient */
     public AuthClient() {
-    }
+        }
     
     public static void main(String [] args) throws Exception {
         
+        //String endPoint = "http://gjd37vig.dl.ac.uk:" + 8080 +        "/authent/services/AUTH";
+        String endPoint = "http://dmgdev1.esc.rl.ac.uk:" + 8080 + "/authent/services/AUTH";
         
-        String endPoint = "http://escpc12.esc.rl.ac.uk:" + 8080 +
-        "/axis/services/AUTH";
-        
-        if (args == null || args.length != 2) {
+        if (args == null || args.length != 3) {
             System.err.println("Usage: AuthClinet <userId> <password>");
             return;
         }
@@ -38,9 +37,10 @@ public class AuthClient {
         call.setOperationName("login");
         call.addParameter( "userName", XMLType.XSD_STRING, ParameterMode.IN );
         call.addParameter( "password", XMLType.XSD_STRING, ParameterMode.IN );
+        call.addParameter( "lifetime", XMLType.XSD_INTEGER, ParameterMode.IN );
         // Enable this call return type if using method getAccessInXMLString
-        call.setReturnType( XMLType.XSD_INT );
-        Integer ret = (Integer) call.invoke( new Object [] {userName, password});
+        call.setReturnType( XMLType.XSD_STRING );
+        String ret = (String) call.invoke( new Object [] {userName, password, new Integer(args[2])});
         System.out.println("Results: " + ret);
     }
 }

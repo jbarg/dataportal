@@ -43,7 +43,7 @@ public class SaveCartServlet extends HttpServlet{
                 //String sid  = 
                 endSession((String)session.getAttribute("sessionid"),session_url );
                 
-                
+                deleteFile((String)session.getAttribute("sessionid"),(String)session.getAttribute("wd"));
                 
                 //workingDir = (String)session.getAttribute("wd");
                 //logger.warn("Error with logging off",e);
@@ -84,6 +84,13 @@ public class SaveCartServlet extends HttpServlet{
             logger.warn("Unable to end session "+sid,e);
             throw e;
         }
+    }
+    
+    public void deleteFile(String sid, String wd){
+        
+        File file = new File(wd+File.separator+"xml"+File.separator+"emin"+sid);
+        file.delete();
+        
     }
     
 }

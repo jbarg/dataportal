@@ -179,11 +179,11 @@ public class AuthCtl {
         call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"BADC-EMIN","SRD-EMIN","ISIS-EMIN","MPIM-EMIN"};
+        String[] name = {"BADC","SRD","ISIS","MPIM"};
         Object[] ob = new Object[]{name,"ACM"};
         
         String[] faciltyEndPoints = (String[]) call.invoke(ob );
-               
+              
                 return faciltyEndPoints;
     }
     
@@ -199,9 +199,9 @@ public class AuthCtl {
         Service  service = new Service();
         
         //hard coded section
-        ///String[] facilityEndPointsHC = {"http://localhost:8080/acmbadc/services/acm","http://localhost:8080/acmmpim/services/acm","http://localhost:8080/acmsrd/services/acm","http://localhost:8080/acmisis/services/acm"};
+        String[] facilityEndPointsHC = {"http://localhost:8080/acmbadc/services/acm","http://localhost:8080/acmmpim/services/acm","http://localhost:8080/acmsrd/services/acm","http://localhost:8080/acmisis/services/acm"};
         
-        //facilityEndPoints = facilityEndPointsHC;
+        facilityEndPoints = facilityEndPointsHC;
         //System.out.println("AUTH: access urls are "+facilityEndPoints);
         for (int i  = 0 ; i < facilityEndPoints.length ; i++){
             
@@ -257,7 +257,7 @@ public class AuthCtl {
         call1.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call1.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call1.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"Dataportal-EMIN"};
+        String[] name = {"Dataportal"};
         Object[] ob = new Object[]{name,"SESSION"};
         
         String[] sessionendpoint = (String[]) call1.invoke(ob );

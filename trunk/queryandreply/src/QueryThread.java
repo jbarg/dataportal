@@ -98,7 +98,7 @@ public class QueryThread extends Thread {
          * NB lookup currently requires facility in an array and returns an array of
          * facility addresses
          */
-        String[] facilityList = {getFacilityName()+"-EMIN"};
+        String[] facilityList = {getFacilityName()};
         String[] result = (String[]) call.invoke( new Object [] {facilityList, "XMLW"});
         
         logger.info(getFacilityName()+":"+"address of wrapper is "+result[0]);

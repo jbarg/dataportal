@@ -4,7 +4,7 @@ import ac.dl.xml.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 //dataportal classes
-
+import org.jdom.*;
 import java.io.*;
 import java.util.*;
 //security classes
@@ -24,6 +24,7 @@ import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 import org.apache.axis.AxisFault;
+import uk.ac.dl.topicmanager.*;
 
 //
 //  Dont like the lay out of this servlet. Possible concurrancy issues??!?
@@ -52,7 +53,7 @@ public class LoginServlet extends HttpServlet {
     
     //set static log for the class
     
-    private static Logger logger = Logger.getLogger(emineralsServlet.class);
+    private  Logger logger = Logger.getLogger(this.getClass().getName());
     
     //get context path
     private ServletConfig scon = null ;
@@ -106,7 +107,7 @@ public class LoginServlet extends HttpServlet {
             else{
                 
                 prop = new Properties();
-                prop.load(new FileInputStream(workingDir+File.separator+"WEB-INF"+File.separator+"webserviceslocation.conf"));
+                prop.load(new FileInputStream(workingDir+File.separator+"WEB-INF"+File.separator+"web.conf"));
                 lookup = prop.getProperty("LookupWebService");
                 
                 locations = getLocations(lookup);
@@ -185,7 +186,38 @@ public class LoginServlet extends HttpServlet {
                     logger.fatal("Could not update users logging",e);
                 }
             }
-            response.sendRedirect("../jsp/BasicSearch.jsp");
+            if(prop.getProperty("topics").equals("true")){
+                //get the topics
+                try{
+                    String meta_url = prop.getProperty("meta_url");
+                    String meta_passwd = prop.getProperty("meta_passwd");
+                    String meta_username = prop.getProperty("meta_username");
+                    //Document mydoc = TopicManager.buildTopics("jdbc:oracle:thin:@elektra.dl.ac.uk:1521:emat1","emat","tame");
+                    Document mydoc = TopicManager.buildTopics(meta_url,meta_username,meta_passwd);
+                  //  org.jdom.output.XMLOutputter serializer = new org.jdom.output.XMLOutputter();
+                   // serializer.setIndent("  "); // use two space indent
+                   // serializer.setNewlines(true);
+                   // serializer.output(mydoc, System.out);
+                  //  Saver.save(mydoc,new File("c:/mydoc.cxml"));
+                  //  System.out.println("this is dir of the file "+workingDir+File.separator+"xml"+File.separator+"emin"+sessionid);
+                    Saver.save(mydoc,new File(workingDir+File.separator+"xml"+File.separator+"emin"+sessionid));
+                    //hard code list fac
+                    ArrayList facs1  = new ArrayList();
+                    facs1.add("EMIN");
+                    session.removeAttribute("facs");
+                    //System.out.println("removing facs and adding emin");
+                    session.setAttribute("facs",facs1);
+                   // if(new File(workingDir+File.separator+"xml"+File.separator+"emin"+sessionid).exists()) System.out.println("file here");
+                }
+                catch(Exception e){
+                    logger.warn("Unable to get the topics",e);
+                    System.out.println(e);
+                }
+                response.sendRedirect("../jsp/BasicSearcht.jsp");
+            }
+            else{
+                response.sendRedirect("../jsp/BasicSearch.jsp");
+            }
         }
         //send to .. if not logged in
         
@@ -193,7 +225,7 @@ public class LoginServlet extends HttpServlet {
         
     }
     
- 
+    
     
     /** Uses the request header to determine the browser type and version
      *
@@ -407,7 +439,7 @@ public class LoginServlet extends HttpServlet {
                 call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
                 call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.SOAP_ARRAY );
-                String[] name = {"Dataportal-EMIN"};
+                String[] name = {"Dataportal"};
                 Object[] ob = new Object[]{name,serviceTypes[i]};
                 
                 String[] url = (String[]) call.invoke(ob );
