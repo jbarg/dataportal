@@ -100,6 +100,7 @@ public class LoginServlet extends HttpServlet {
         Properties locations = null;
         Properties prop = null;
         String sessionid = null;
+        boolean eminerals=  false;
         try{
             String lookup = null;
             //System.out.println("name is "+reName);
@@ -111,6 +112,9 @@ public class LoginServlet extends HttpServlet {
                 prop.load(new FileInputStream(workingDir+File.separator+"WEB-INF"+File.separator+"web.conf"));
                 lookup = prop.getProperty("LookupWebService");
                 String id = prop.getProperty("defaultid");
+                String emineralsS = prop.getProperty("eminerals");
+                if(emineralsS == null || !emineralsS.equalsIgnoreCase("true")|| !emineralsS.equalsIgnoreCase("false")) emineralsS = "false";
+                eminerals = new Boolean(emineralsS).booleanValue();
                 locations = getLocations(lookup,id);
                 
                 //hard code for now
@@ -221,11 +225,13 @@ public class LoginServlet extends HttpServlet {
                     logger.warn("Unable to get the topics",e);
                     System.out.println(e);
                 }
-                response.sendRedirect("../jsp/BasicSearch.jsp");
+                if(eminerals) response.sendRedirect("../html/index.jsp");
+                else response.sendRedirect("../jsp/BasicSearch.jsp");
             }
             else{
                 session.removeAttribute("topics");
-                response.sendRedirect("../jsp/BasicSearch.jsp");
+                if(eminerals) response.sendRedirect("../html/index.jsp");
+                else response.sendRedirect("../jsp/BasicSearch.jsp");
             }
         }
         //send to .. if not logged in
