@@ -112,27 +112,11 @@
          <property name="basedir" value="${basedir}/facility"/>
       </ant>
 
-      <ant antfile="acmbadc/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/acmbadc"/>
+      <ant antfile="acmematn/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/acmematn"/>
       </ant>
 
-      <ant antfile="acmisis/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/acmisis"/>
-      </ant>
-
-      <ant antfile="acmpim/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/acmpim"/>
-      </ant>
-
-      <ant antfile="acmsrd/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/acmsrd"/>
-      </ant>
       
-      <ant antfile="acmemin/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/acmemin"/>
-      </ant>
-
-
       <ant antfile="authent/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/authent"/>
       </ant>
@@ -152,9 +136,7 @@
          <property name="basedir" value="${basedir}/srbcommands"/>
       </ant>
 
-  <ant antfile="transferServlet/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/transferServlet"/>
-      </ant>
+  
    </target>
 	
 </project>
