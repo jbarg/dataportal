@@ -89,13 +89,17 @@ public class XMLWTester {
    {
       XMLWTester xmlwt = new XMLWTester() ;
 
-      xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc",
+      System.out.println("Starting to contact badc") ;
+
+      xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc",
            "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'",
            "saved_badc.xml") ;
 		     
-      xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_mpim",
-           "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'",
-           "saved_mpim.xml") ;
+      System.out.println("contaction badc worked") ;
+
+      //xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw/services/xmlwrapper_mpim",
+      //     "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'",
+      //     "saved_mpim.xml") ;
 
       return ;
    }

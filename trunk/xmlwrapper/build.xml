@@ -589,6 +589,34 @@
     <ant antfile="${src.home}/wsdlbuild.xml" dir="${src.home}" target="undeploy" inheritRefs="true"/>
   </target>
 
+<!-- ==================== test web services Target =================================== -->
+
+ <target name="test"
+   description="test xmlwrapper web services">
+   <!--  <property name="basedir" value="${basedir}/build/WEB-INF/classes"/> -->
+
+    <java classname="uk.ac.cclrc.xmlwrapper.XMLWTester">
+         <classpath>
+           <pathelement path="${build.home}/WEB-INF/classes"/>
+           <fileset dir="${web.home}/WEB-INF/lib">
+             <include name="*.jar"/>
+           </fileset>
+         </classpath>
+    </java>
+
+  </target>
+
   
 
 </project>
+
+
+
+
+
+
+
+
+
+
+
