@@ -36,7 +36,7 @@ public class Search {
         try{
             //add the exra string to the dis
             //take of the Disoc= from the dis
-            String Discipline = "Discipline="+discipline;
+            String Discipline = "Discipline='"+discipline+"'";
             
             Service  service = new Service();
             Call  call    = (Call) service.createCall();
