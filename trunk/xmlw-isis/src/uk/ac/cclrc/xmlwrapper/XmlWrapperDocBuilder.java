@@ -258,6 +258,51 @@ public class XmlWrapperDocBuilder
 
   }
 
+  public static int void main (String  args[])
+  {
+     XmlWrapperDocBuilder xwdb = new XmlWrapperDocBuilder() ;     
+
+     //for test version
+     
+     //get variable from session singleton
+
+     //get representative key out of <key>.txt file
+
+     //build csmd v2 file from database entry
+
+     //serialise to file <output>.xml
+
+     //check to see if file if correctly formatted
+
+     //perhpas look at keeping an update key-list:date generated that can be checked from the db - do all inserts first
+     //then worry about updates - java app independent of web services as does not need to be - perhaps web services
+     //interface for remote monitoring to see what it is currently doing but that at the moment should be a wibni
+
+   }
 
 
-} //end of XmlWrapperBADC
+
+
+} //end of XmlWrapperDocBuilder
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

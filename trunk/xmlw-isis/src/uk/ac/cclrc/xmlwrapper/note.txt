@@ -1,0 +1,3 @@
+best-prac for ctags(should change):
+
+ctags --extra=+q *.java
