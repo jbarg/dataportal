@@ -194,12 +194,12 @@ public class SRBTransfer extends HttpServlet {
             //savefile.delete();
             tarFile.delete();
             if(result.equals("true")) {
-                response.sendRedirect("../jsp/transferOk.jsp");
+                response.sendRedirect("../jsp/transferSRB.jsp?url="+request.getParameter("url"));
                 
             }
             else {
                 logger.warn("Error in transfering srb object.\nError: "+result);
-                response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+dir);
+                response.sendRedirect("../jsp/transferSRBError.jsp?error="+result+"&url="+request.getParameter("url"));
                 
             }
             
