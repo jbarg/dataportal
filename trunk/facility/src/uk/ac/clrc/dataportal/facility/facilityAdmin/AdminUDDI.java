@@ -19,8 +19,12 @@ import uk.ac.clrc.dataportal.facility.*;
 public class AdminUDDI {
     
     //set static log for the class
-    static Logger log = Logger.getLogger(AdminUDDI.class);
+    Logger log = Logger.getLogger(this.getClass().getName());
     
+    public AdminUDDI(){
+      //  PropertyConfigurator.configure(Config.getContextPath()+"log4j.properties");
+        
+    }
     
     /** Creates a new instance of AdminUDDI */
     public org.w3c.dom.Element createFacility(org.w3c.dom.Element requestSBE) throws Exception{
@@ -136,7 +140,7 @@ public class AdminUDDI {
         
         // Create vector to hold service keys
         Vector serviceKeysVector = new Vector();
-        System.out.println("Delete services activated");
+        
         // Loop through all service tags
         List params = command.getChildren();
         Iterator iterator = params.iterator();
@@ -231,7 +235,7 @@ public class AdminUDDI {
         
         if (!request.getName().equalsIgnoreCase("facilityAdmin")) {
             log.error("Unsupported SOAP Body Element: " + request.getName());
-          
+            
         } else {
             command = (Element) request.getChildren().get(0);
         }

@@ -1,8 +1,6 @@
 <%@page contentType="text/html" %>
 <%@page import="uk.ac.clrc.dataportal.facility.*"%>
-<%@ include file="loggedin.jsp" %>
-
-<%@ include file="logger.jsp" %>
+<% session.invalidate();%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -34,9 +32,9 @@ return true;
 
 <tr><td id="headmenu">Facility</td><tr><td>
 <hr class="menuhr" />
-<!--&nbsp;&nbsp;<a class="menu" href="create.jsp">Create Facility</a><br/>-->
-&nbsp;&nbsp;<a class="menu" href="deleteFacility.jsp">List </a><br />
-&nbsp;&nbsp;<a class="menu" href="logoff.jsp">Log Off</a><br />
+<!--&nbsp;&nbsp;<a class="menu" href="create.jsp">Create Facility</a><br/>
+&nbsp;&nbsp;<a class="menu" href="deleteFacility.jsp">List </a><br />-->
+&nbsp;&nbsp;<a class="menu" href="../">Log In</a><br />
 
 &nbsp;</td></tr>
 
@@ -46,11 +44,11 @@ return true;
 
 </td>
 <td valign="top">
-<p id="topheader">Change password</p>
+<p id="topheader">Logged Off</p>
 <br /><br /><br /><br />
 <hr />
 <br />
-This page is not ready yet.
+Tbank you for using the Facility Manager Tool.
 <br />
 
 

@@ -7,6 +7,7 @@
 package uk.ac.clrc.dataportal.facility;
 
 import org.apache.axis.AxisFault;
+import org.apache.log4j.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -24,17 +25,18 @@ import org.apache.axis.utils.XMLUtils;
 import org.jdom.input.SAXBuilder;
 /**
  *
- * @author  Mark Williams
+ * @author  Glen Drinkwater
  */
 public class FacilityAdminModule
 {
-    Log log = LogFactory.getLog(this.getClass().getName());
+    //set static log for the class
+    private Logger log = Logger.getLogger(this.getClass().getName());
     
     public org.w3c.dom.Element[] facilityAdmin(org.w3c.dom.Element[] requestSBE) throws AxisFault
     // Input and Output are org.w3c.dom.Element types (for Axis) but these are converted to/from JDOM for ease
     // Input messages should really be validated at some point too....
     {
-       
+        if(Config.getContextPath() != null) PropertyConfigurator.configure(Config.getContextPath()+"log4j.properties");
         
         // DOM Response array - will only have one element anyway....
         org.w3c.dom.Element[] responseSBE = new org.w3c.dom.Element[requestSBE.length];
@@ -65,7 +67,7 @@ public class FacilityAdminModule
                 {
                     command = (Element) request.getChildren().get(0);
                 }
-                System.out.println("this is the element "+command);
+                
                 UDDIHelper uddi = new UDDIHelper();
                 Element returnElement = new Element(command.getName());
                 
@@ -172,7 +174,7 @@ public class FacilityAdminModule
                 {
                     // Create vector to hold service keys
                     Vector serviceKeysVector = new Vector();
-                    System.out.println("Delete services activated");
+                    
                     // Loop through all service tags
                     List params = command.getChildren();
                     Iterator iterator = params.iterator();
@@ -223,7 +225,7 @@ public class FacilityAdminModule
         
 //        String inputFile = args[0]; // "/home/tomcat4/from_cvs/dataportal/facility/dataportal.xml";
         String inputFile = "C:/CygWin/home/maw24/dataportal/facility/isis.xml";
-        System.out.println(inputFile);
+       // System.out.println(inputFile);
         SAXBuilder builder = new SAXBuilder();
         
         try
