@@ -14,21 +14,22 @@ import org.apache.log4j.BasicConfigurator;
  */
 public class CLI
 {
-    public static void main(String args[])
+    public static void main(String args[]) throws Exception
     {
+        try {
         LookUpModule lum = new LookUpModule();
         String[] results;
         String[] facs =
-        { "BADC", "DataPortal", "MPIM", "ISIS", "SRD", "MAWTEST"};
+        { "DataPortal", "MPIM", "BADC"};
         
         System.out.println("Running lookupEndpoint()");
-        showResults(lum.lookupEndpoint(facs,"acm"));
+        showResults(lum.lookupEndpoint(facs,"QNR"));
         
         System.out.println("\nRunning lookupWSDL()");
-        showResults(lum.lookupWSDL(facs,"acm"));
+        showResults(lum.lookupWSDL(facs,"LOOKUP"));
         
         System.out.println("\nRunning getServices()");
-        showResults(lum.getServices("BADC"));
+        showResults(lum.getServices("DataPortal"));
         
         System.out.println("\nRunning getServiceTypes()");
         showResults(lum.getServiceTypes());
@@ -36,6 +37,14 @@ public class CLI
         System.out.println("\nRunning getFacilities()");
         showResults(lum.getFacilities());
         
+        System.out.println("\nRunning getFacilitiesForID()");
+        showResults(lum.getFacilitiesForID("TEST"));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
     }
     private static void showResults(String[] results)
     {
