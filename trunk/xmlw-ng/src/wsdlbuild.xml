@@ -1,0 +1,147 @@
+<project name="Dataportal XmlWrappers: wsdl part" default="compile" basedir=".">
+
+
+  <target name="wsdl"
+   description="makes wsdl and server skeltons and client stubs">
+
+    <!-- need to generate the wsdl and the stubs & skeleton 
+    - EMIN: 
+    - 'single quotes' around values containing double quotes 
+    <java classname="org.apache.axis.wsdl.Java2WSDL" 
+          fork="true"
+	  failonerror="true">
+       <arg value='-o"eminxmlw.wsdl"'/> 
+       <arg value='-l"http://localhost:8080/${app.name}/xmlwrapper_emin"'/>
+       <arg value='-n"urn:xmlwrapper"'/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperEMIN'/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java" 
+          fork="true"
+          failonerror="true">
+       <arg value='-o"."'/>
+       <arg value='-d"Session"'/>
+       <arg value="-s"/> 
+       <arg value='-p"uk.ac.cclrc.xmlwrapper.ws.emin"'/>
+       <arg value='eminxmlw.wsdl'/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java> -->
+
+    <!-- need to generate the wsdl and the stubs & skeleton -->
+    <!-- EMIN: -->
+    <!-- 'single quotes' around values containing double quotes -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='eminxmlw.wsdl'/>
+       <arg value='-l'/>
+       <arg value='http://localhost:8080/${app.name}/xmlwrapper_emin'/>
+       <arg value='-n'/>
+       <arg value='urn:xmlwrapper'/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperEMIN'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='.'/>
+       <arg value='-d'/>
+       <arg value='Session'/>
+       <arg value="-s"/>
+       <arg value='-p'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.ws.emin'/>
+       <arg value='eminxmlw.wsdl'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+    <!-- need to generate the wsdl and the stubs & skeleton -->
+    <!-- EMAT: -->
+    <!-- 'single quotes' around values containing double quotes -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='ematxmlw.wsdl'/>
+       <arg value='-l'/>
+       <arg value='http://localhost:8080/${app.name}/xmlwrapper_emat'/>
+       <arg value='-n'/>
+       <arg value='urn:xmlwrapper'/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperEMAT'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='.'/>
+       <arg value='-d'/>
+       <arg value='Session'/>
+       <arg value="-s"/>
+       <arg value='-p'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.ws.emat'/>
+       <arg value='ematxmlw.wsdl'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+
+  </target>
+  <!-- -->
+  
+  <target name="deploy"
+	  description="deploy xmlwrapper web services">
+
+	  <!-- EMIN: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/emin/deploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+
+	  <!-- EMAT: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/emat/deploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+
+  </target>
+
+  <target name="undeploy"
+	  description="deploy xmlwrapper web services">
+
+	  <!-- EMIN: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/emin/undeploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+	  <!-- EMAT: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/emat/undeploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+  </target>
+
+	
+</project>
