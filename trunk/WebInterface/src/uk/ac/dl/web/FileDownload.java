@@ -52,7 +52,7 @@ public class FileDownload extends HttpServlet {
             
             
             //get all the attributes needed
-            String url = request.getParameter("url");
+            String url = request.getParameter("dir");
             String urlTo = request.getParameter("urlTo");
             // String username = (String)session.getAttribute("username");
             String sid = (String)session.getAttribute("sessionid");
