@@ -1,9 +1,13 @@
 package uk.ac.cclrc.xmlwrapper ;
 
 import java.util.* ;
-import java.sql.* ;
 
 import org.apache.log4j.* ;
+
+import org.xmldb.api.base.*;
+import org.xmldb.api.modules.*;
+import org.xmldb.api.*;
+
 
 //class depends upon valid SessionSingleton if not then it creates the things that are needed
 //perhaps could have DBHelper as an interface and a factory to contain different type of
@@ -17,24 +21,27 @@ public class DBHelper
    void connectToDB()
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
-      ResultSet r = ss.getResultSet() ;
-      Statement s = ss.getStatement() ;
-      Connection c = ss.getConnection() ;
+
+      //get Xindice connection information
+      Collection col = ss.getCollection() ;
+      XPathQueryService  xqs = ss.getXPathQueryService();
+      ResourceSet res  = ss.getResourceSet() ;
+
       Logger log = ss.getLogger() ;
 
 
       //load the driver if it has not been done already
-      //if (driver_loaded == false)
-      //Load the Oracle JDBC Driver and register it. - as this will be needed for the duration
-      //of the servlets execution - for intents and purposes
       try 
       {
-         DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-         //driver_loaded = true ;
+         String driver = "org.apache.xindice.client.xmldb.DatabaseImpl";
+         Class c = Class.forName(driver);
+
+         Database database = (Database) c.newInstance();
+         DatabaseManager.registerDatabase(database);
+
       }
-      catch (SQLException sqle)
-      {
-         sqle.printStackTrace() ;
+      catch (XMLDBException e) {
+         System.err.println("XML:DB Exception occured " + e.errorCode);
       }
 
       
@@ -46,49 +53,23 @@ public class DBHelper
          try {
 
             // clearing up handles - for when an exception occurs
-            //close resultset, statement and connection handles
 
-            if(r != null)
+            if(col != null)
             {
-               r.close() ;
+               col.close() ;
             }
 
-            if(s != null)
-            {
-               s.close() ;
-            }
-
-            if(c != null)
-            {
-               c.close() ;
-            }
-
-            //The following statement creates a database connection object
-            //using the DriverManager.getConnection method. 
-            //The URL syntax is as follows:
-            //"jdbc:oracle:<driver>:@<db connection string>"
-            //<driver>, can be 'thin' or 'oci8'
-            //<db connect string>, is a Net8 name-value, denoting the TNSNAMES entry
-
-           //Form the database connect string(TNSNAMES entry) as a name-value pair
-           String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+ss.getHost()+")"+
-                                    "(PROTOCOL=tcp)(PORT="+ss.getPort()+"))"+
-                                    "(CONNECT_DATA=(SID="+ss.getSid()+")))";
-
-	    //classic pointer to pointer type problem
-	    //only the class holding the reference which is referred to can
-	    //actually change the value of the reference - i.e. changing a value
-	    //of a reference here will not change it in the SessionSingleton class
-	    //and the correct value will this not propagate throughout the system
-            ss.setConnection(DriverManager.getConnection("jdbc:oracle:thin:@"+dbConnectString, ss.getUser(), ss.getPass()));
-            c = ss.getConnection() ;
+            //e.g. of full connect string xindice://escdmg.dl.ac.uk:4080/db/cclrcmetadata
+            ss.setCollection(DatabaseManager.getCollection(ss.getPrefix+ss.getHost+ss.getPort+ss.getCollection);
+            col = ss.getCollection() ;
 
 
             //need to create the statement handle here also
-            //open JDBC connection handles as they will be used
-            //extensively
-            ss.setStatement(c.createStatement()) ;
-            s = ss.getStatement() ;
+            ss.setXPathQueryService((XPathQueryService) col.getService("XPathQueryService", "1.0"));
+            xqs = ss.getXPathQueryService() ;
+
+            //needed for inserts
+            ss.setXMLResource(XMLResource document = (XMLResource) col.createResource(null, "XMLResource"));
 
             connected = true ;
 
@@ -97,8 +78,8 @@ public class DBHelper
                log.info("Now reconnected") ;
             }
 
-         } catch (SQLException sqle) {
-             sqle.printStackTrace() ;
+         catch (XMLDBException e) {
+         System.err.println("XML:DB Exception occured " + e.errorCode);
          }
 
          if(connected == false)
