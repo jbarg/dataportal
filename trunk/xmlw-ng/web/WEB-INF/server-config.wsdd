@@ -52,15 +52,15 @@
   <parameter name="className" value="org.apache.axis.Version"/>
  </service>
 
- <!-- put added services here -->
+ <!-- put added services here - hmm need to change these by hand -->
 
-   <!-- EMIN -->
-   <service name="xmlwrapper_emin" provider="java:RPC">
+   <!-- DocBuilder -->
+   <service name="xmlwrapper_builder" provider="java:RPC">
       <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
-      <parameter name="wsdlServiceElement" value="XmlWrapperEMINService"/>
-      <parameter name="wsdlServicePort" value="xmlwrapper_emin"/>
-      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.emin.Xmlwrapper_EminSoapBindingImpl"/>
-      <parameter name="wsdlPortType" value="XmlWrapperEMIN"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperDocBuilderService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_builder"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.builder.Xmlwrapper_EminSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperDocBuilder"/>
       <operation name="getXML" qname="operNS:getXML" xmlns:operNS="urn:xmlwrapper" returnQName="getXMLReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
         <parameter name="query" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
@@ -69,13 +69,13 @@
 
   </service>
 
-  <!--EMAT-->
-  <service name="xmlwrapper_emat" provider="java:RPC">
+  <!--DocSelector-->
+  <service name="xmlwrapper_selector" provider="java:RPC">
       <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
-      <parameter name="wsdlServiceElement" value="XmlWrapperEMATService"/>
-      <parameter name="wsdlServicePort" value="xmlwrapper_emat"/>
-      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.emat.Xmlwrapper_EmatSoapBindingImpl"/>
-      <parameter name="wsdlPortType" value="XmlWrapperEMAT"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperDocSelectorService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_selector"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.selector.Xmlwrapper_EmatSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperDocSelector"/>
       <operation name="getXML" qname="operNS:getXML" xmlns:operNS="urn:xmlwrapper" returnQName="getXMLReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
         <parameter name="query" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
