@@ -64,7 +64,7 @@ public class Search {
             Saver.save(doc1, new File(workingDir+File.separator+"profiles"+File.separator+sid+"1.xml"));
             
                         
-            ArrayList[] res= new ArrayList[2];
+            ArrayList[] res= new ArrayList[3];
             for(int i = 1; i<el.length;i++){
                 Element build = builder.build(el[i]);
                 List list = build.getContent();
