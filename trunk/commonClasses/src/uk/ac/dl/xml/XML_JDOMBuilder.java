@@ -1,4 +1,4 @@
-package ac.dl.xml;
+package uk.ac.dl.xml;
 /*
  * XML_DOMBuilder.java
  *

@@ -1,4 +1,4 @@
-package ac.dl.xml;
+package uk.ac.dl.xml;
 
 import java.io.*;
 import org.apache.log4j.*;
