@@ -8,5 +8,5 @@
 package uk.ac.cclrc.xmlwrapper.ws.selector;
 
 public interface XmlWrapperDocSelector extends java.rmi.Remote {
-    public org.w3c.dom.Element queryMetaData(java.lang.String external_Xquery, java.lang.String result_Formatter) throws java.rmi.RemoteException;
+    public org.w3c.dom.Element queryMetaData(java.lang.String external_Xquery, java.lang.String result_Formatter, java.lang.String proxy_Cert, java.lang.String auth_Token) throws java.rmi.RemoteException;
 }
