@@ -24,7 +24,7 @@ public class QueryAndReply {
      * Query from WEB INTERFACE or OUTSIDE SERVICE - has already authenticated so
      * includes SID
      */
-    public org.w3c.dom.Element doBasicQuery(String sid, String[] facilities, String topic, Integer timeoutSecs) throws Exception {
+    public org.w3c.dom.Element[] doBasicQuery(String sid, String[] facilities, String topic, Integer timeoutSecs) throws Exception {
         
         logger.info("doBasicQuery SERVICE activated: sid="+sid+
         " number of facilities="+facilities.length+

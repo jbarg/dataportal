@@ -30,6 +30,8 @@ public class Query {
     Permissions p;
     Permissions getPermissions() {return p;};
     org.w3c.dom.Element result;
+    org.w3c.dom.Element noConn;
+    org.w3c.dom.Element noRes;
     void setResult(org.w3c.dom.Element result) { this.result = result; }
     public org.w3c.dom.Element getResult() { return result; };
     
@@ -41,7 +43,7 @@ public class Query {
         this.maxWait = timeoutSecs.intValue();
     }
     
-    public org.w3c.dom.Element execute() throws JDOMException {
+    public org.w3c.dom.Element[] execute() throws JDOMException {
         
         QueryThread[] qThread = new QueryThread[10]; //temp solution
         
@@ -97,23 +99,68 @@ public class Query {
         Document newdoc = new Document(new Element("CLRCMetadata"));
         Element root = newdoc.getRootElement();
         
+        //no connection element
+        Document noConn = new Document(new Element("NoConn"));
+        Element noConnRoot = noConn.getRootElement();
+        //no connection element
+        Document noRes = new Document(new Element("NoRes"));
+        Element noResRoot = noRes.getRootElement();
+        
+        Document timedOut = new Document(new Element("TimedOut"));
+        Element timedOutRoot = timedOut.getRootElement();
+        
         // Loop through results and put them in one XML document
         for (int i  = 0 ; i < getFacilities().length ; i++) {
-            if (qThread[i].gotReply()) {
-                while(qThread[i].getIterator().hasNext()){
-                    Object o = qThread[i].getIterator().next();
-                    if(o instanceof Element){
-                        Element w = (Element)o;
-                        qThread[i].getIterator().remove();
-                        root.addContent(w);
-                    }
-                    else if(o instanceof Text){
-                        Text t = (Text)o;
-                        qThread[i].getIterator().remove();
-                        root.addContent(t);
+            if(!qThread[i].gotReply()) {
+                System.out.println("timed out");
+                timedOutRoot.addContent(new Element(qThread[i].getFacilityName()));
+            }
+            else if (qThread[i].gotReply()) {
+                
+                //dont need this i think
+                if(!qThread[i].getIterator().hasNext()){
+                    System.out.println(qThread[i].getFacilityName()+" no results");
+                    noResRoot.addContent(new Element(qThread[i].getFacilityName()));
+                }
+                
+                else{
+                    while(qThread[i].getIterator().hasNext()){
+                        Object o = qThread[i].getIterator().next();
+                        
+                        if(o instanceof Element){
+                            Element w = (Element)o;
+                            
+                            //check the contents of the element
+                            String error = w.getAttributeValue("error");
+                            if(error != null){
+                                //add to elements for no connection
+                                
+                                if(error.equals("Connection Refused")){
+                                    noConnRoot.addContent(new Element(qThread[i].getFacilityName()));
+                                    System.out.println(qThread[i].getFacilityName()+" Connection Refused");
+                                    
+                                }
+                                else if(error.equals("No Results")){
+                                    System.out.println(qThread[i].getFacilityName()+" No results");
+                                    noResRoot.addContent(new Element(qThread[i].getFacilityName()));
+                                }
+                            }
+                            else{
+                                qThread[i].getIterator().remove();
+                                root.addContent(w);
+                            }
+                        }
+                        else if(o instanceof Text){
+                            
+                            Text t = (Text)o;
+                            
+                            qThread[i].getIterator().remove();
+                            root.addContent(t);
+                        }
                     }
                 }
             }
+            
         }
         for(int j =0;j<getFacilities().length;j++){
             qThread[j].stop();
@@ -122,7 +169,11 @@ public class Query {
         
         
         org.w3c.dom.Document d = Converter.JDOMtoDOM(newdoc);
+        org.w3c.dom.Document d2 = Converter.JDOMtoDOM(noConn);
+        org.w3c.dom.Document d3 = Converter.JDOMtoDOM(noRes);
+        org.w3c.dom.Document d4 = Converter.JDOMtoDOM(timedOut);
+        org.w3c.dom.Element[]  elements = {d.getDocumentElement(),d2.getDocumentElement(),d3.getDocumentElement(),d4.getDocumentElement()};
         logger.info("RESULTS COLLATED");
-        return(d.getDocumentElement());
+        return(elements);
     }
 }

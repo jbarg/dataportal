@@ -1,4 +1,4 @@
-//package dataportal.queryandreply.src;
+package src;
 
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
@@ -20,7 +20,7 @@ public class TestClient {
         Options options = new Options(args);
         
         // TEST SERVICE
-        String endpoint = "http://esc3.dl.ac.uk:8080/queryandreply/services/QueryAndReply";
+        String endpoint = "http://gjd37vig.dl.ac.uk:8080/queryandreply/services/QueryAndReply";
         // LIVE SERVICE
         
         
@@ -30,7 +30,7 @@ public class TestClient {
         
         Integer timeoutSecs = new Integer(args[2]);
         String topic = args[3];
-        String[] facility = {args[4]};
+        String[] facility = {"MPIM","SRD"};
         
         Service service = new Service();
         Call call = (Call) service.createCall();
@@ -41,17 +41,59 @@ public class TestClient {
         call.addParameter( "facility", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "topic", XMLType.XSD_STRING, ParameterMode.IN );
         call.addParameter( "timeoutSecs", XMLType.XSD_INTEGER, ParameterMode.IN );
-        call.setReturnType( XMLType.SOAP_ELEMENT );
+        call.setReturnType( XMLType.SOAP_ARRAY);
         
-        org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( new Object [] {args[1], facility, topic, timeoutSecs});
+        org.w3c.dom.Element[] ret = (org.w3c.dom.Element[]) call.invoke( new Object [] {args[1], facility, topic, timeoutSecs});
         
         org.jdom.input.DOMBuilder builder = new org.jdom.input.DOMBuilder();
-        org.jdom.Element el = builder.build(ret);
+        //one
+        org.jdom.Element el = builder.build(ret[0]);
         el.detach();
         org.jdom.Document doc1 = new org.jdom.Document(el);
         
-        File fileName = new File("c:/temp/final.xml");
+        File fileName = new File("c:/tmp/final.xml");
         Saver.save(doc1, fileName);
+        
+        //two
+        org.jdom.Element el1 = builder.build(ret[1]);
+        el1.detach();
+        org.jdom.Document doc11 = new org.jdom.Document(el1);
+        
+        File fileName1 = new File("c:/tmp/final1.xml");
+        Saver.save(doc11, fileName1);
+        
+        //three
+        org.jdom.Element el2 = builder.build(ret[2]);
+        el2.detach();
+        org.jdom.Document doc12 = new org.jdom.Document(el2);
+        
+        File fileName2 = new File("c:/tmp/final2.xml");
+        Saver.save(doc12, fileName2);
+        
+        //four
+        org.jdom.Element el3 = builder.build(ret[3]);
+        el3.detach();
+        org.jdom.Document doc13 = new org.jdom.Document(el3);
+        
+        File fileName3 = new File("c:/tmp/final3.xml");
+        Saver.save(doc13, fileName3);
+        
+        //this is for connections timed out
+        List list = doc13.getRootElement().getContent();
+        Iterator it = list.iterator();
+       
+        while(it.hasNext()){
+            Object o = it.next();
+            
+            if(o instanceof org.jdom.Element){
+        
+                org.jdom.Element e = (org.jdom.Element)o;
+                System.out.println(e.getName());
+            }
+        }
+        
+        
+        
         
         System.out.println("Saved results");
     }
