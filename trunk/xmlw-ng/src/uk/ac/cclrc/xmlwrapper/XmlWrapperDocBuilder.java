@@ -151,12 +151,6 @@ public class XmlWrapperDocBuilder
       DBHelper dbh = ss.getDBHelper() ;
       
       StringBuffer result = new StringBuffer(1000000) ;
-      StringBuffer sbr = new StringBuffer(1000000) ;
-
-      result.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") ;
-      result.append("<!DOCTYPE CLRCMetadata PUBLIC \"-//W3C//DTD CLRC-MD 1.0 Strict//EN\" " +
-                    "\"" + ss.getDTDLocation() + "\">\n") ;
-      result.append("<CLRCMetadata>\n") ;
 
       //find all keys in map and then pull all values out
       //validate and place in xml doc repository
@@ -164,13 +158,20 @@ public class XmlWrapperDocBuilder
       Set se = m.entrySet() ;
       Iterator e = se.iterator() ;
 
+      Map.Entry me = null ;
+      String entry = null ;
+      int hash_code = 0 ;
+      Integer key = null ;
+
       while(e.hasNext())
       {
          //clear stringbuffer for re-use
          if(result.length() != 0)
          {
-            result.delete(0, sbr.length()) ;
+            result.delete(0, result.length()) ;
          }
+
+         log.info("location of dtd is:\t" + ss.getDTDLocation()) ;
 
          //need to delete the contents of stringbuffer first
          result.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") ;
@@ -178,10 +179,23 @@ public class XmlWrapperDocBuilder
                     "\"" + ss.getDTDLocation() + "\">\n") ;
          result.append("<CLRCMetadata>\n") ;
 
+         //get the key and the entry ;
+         me = (Map.Entry) e.next() ;
+
+         entry = (String) me.getValue() ;
+
+         hash_code = me.hashCode() ;
+
+         key = (Integer) me.getKey() ;
+
+     
+
          //pull the entry out of the map
-         result.append(StringZip.decompress((String)e.next()));
+         result.append(StringZip.decompress(entry));
     
          result.append("</CLRCMetadata>") ;
+
+         log.info("Entry being processed:\t" + key ) ;
 
          org.w3c.dom.Element el = null ;
          try
@@ -210,8 +224,19 @@ public class XmlWrapperDocBuilder
          }
          
          //get the xindice handles needed for insert
-          org.xmldb.api.base.Collection col = ss.getXMLCollection() ;
-         XMLResource xmlr = ss.getXMLResource() ;
+         org.xmldb.api.base.Collection col = ss.getXMLCollection() ;
+         //XMLResource xmlr = ss.getXMLResource() ;
+         XMLResource xmlr = null ;
+
+         try
+         {
+            // following needed to specify unique key per document added
+            xmlr = (XMLResource) col.createResource((String)("MPIM-"+ key), "XMLResource"); 
+         }
+         catch ( XMLDBException xmldbe)
+         {
+            xmldbe.printStackTrace() ;
+         }
 
          try
          {
