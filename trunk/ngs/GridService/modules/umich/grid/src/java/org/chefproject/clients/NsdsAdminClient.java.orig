@@ -1,0 +1,483 @@
+/*
+Globus Toolkit Public License (GTPL)
+
+Copyright (c) 1999 University of Chicago and The University of
+Southern California. All Rights Reserved.
+
+ 1) The "Software", below, refers to the Globus Toolkit (in either
+    source-code, or binary form and accompanying documentation) and a
+    "work based on the Software" means a work based on either the
+    Software, on part of the Software, or on any derivative work of
+    the Software under copyright law: that is, a work containing all
+    or a portion of the Software either verbatim or with
+    modifications.  Each licensee is addressed as "you" or "Licensee."
+
+ 2) The University of Southern California and the University of
+    Chicago as Operator of Argonne National Laboratory are copyright
+    holders in the Software.  The copyright holders and their third
+    party licensors hereby grant Licensee a royalty-free nonexclusive
+    license, subject to the limitations stated herein and
+    U.S. Government license rights.
+
+ 3) A copy or copies of the Software may be given to others, if you
+    meet the following conditions:
+
+    a) Copies in source code must include the copyright notice and
+       this license.
+
+    b) Copies in binary form must include the copyright notice and
+       this license in the documentation and/or other materials
+       provided with the copy.
+
+ 4) All advertising materials, journal articles and documentation
+    mentioning features derived from or use of the Software must
+    display the following acknowledgement:
+
+    "This product includes software developed by and/or derived from
+    the Globus project (http://www.globus.org/)."
+
+    In the event that the product being advertised includes an intact
+    Globus distribution (with copyright and license included) then
+    this clause is waived.
+
+ 5) You are encouraged to package modifications to the Software
+    separately, as patches to the Software.
+
+ 6) You may make modifications to the Software, however, if you
+    modify a copy or copies of the Software or any portion of it,
+    thus forming a work based on the Software, and give a copy or
+    copies of such work to others, either in source code or binary
+    form, you must meet the following conditions:
+
+    a) The Software must carry prominent notices stating that you
+       changed specified portions of the Software.
+
+    b) The Software must display the following acknowledgement:
+
+       "This product includes software developed by and/or derived
+        from the Globus Project (http://www.globus.org/) to which the
+        U.S. Government retains certain rights."
+
+ 7) You may incorporate the Software or a modified version of the
+    Software into a commercial product, if you meet the following
+    conditions:
+
+    a) The commercial product or accompanying documentation must
+       display the following acknowledgment:
+
+       "This product includes software developed by and/or derived
+        from the Globus Project (http://www.globus.org/) to which the
+        U.S. Government retains a paid-up, nonexclusive, irrevocable
+        worldwide license to reproduce, prepare derivative works, and
+        perform publicly and display publicly."
+
+    b) The user of the commercial product must be given the following
+       notice:
+
+       "[Commercial product] was prepared, in part, as an account of
+        work sponsored by an agency of the United States Government.
+        Neither the United States, nor the University of Chicago, nor
+        University of Southern California, nor any contributors to
+        the Globus Project or Globus Toolkit nor any of their employees,
+        makes any warranty express or implied, or assumes any legal
+        liability or responsibility for the accuracy, completeness, or
+        usefulness of any information, apparatus, product, or process
+        disclosed, or represents that its use would not infringe
+        privately owned rights.
+
+        IN NO EVENT WILL THE UNITED STATES, THE UNIVERSITY OF CHICAGO
+        OR THE UNIVERSITY OF SOUTHERN CALIFORNIA OR ANY CONTRIBUTORS
+        TO THE GLOBUS PROJECT OR GLOBUS TOOLKIT BE LIABLE FOR ANY
+        DAMAGES, INCLUDING DIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL
+        DAMAGES RESULTING FROM EXERCISE OF THIS LICENSE AGREEMENT OR
+        THE USE OF THE [COMMERCIAL PRODUCT]."
+
+ 8) LICENSEE AGREES THAT THE EXPORT OF GOODS AND/OR TECHNICAL DATA
+    FROM THE UNITED STATES MAY REQUIRE SOME FORM OF EXPORT CONTROL
+    LICENSE FROM THE U.S. GOVERNMENT AND THAT FAILURE TO OBTAIN SUCH
+    EXPORT CONTROL LICENSE MAY RESULT IN CRIMINAL LIABILITY UNDER U.S.
+    LAWS.
+
+ 9) Portions of the Software resulted from work developed under a
+    U.S. Government contract and are subject to the following license:
+    the Government is granted for itself and others acting on its
+    behalf a paid-up, nonexclusive, irrevocable worldwide license in
+    this computer software to reproduce, prepare derivative works, and
+    perform publicly and display publicly.
+
+10) The Software was prepared, in part, as an account of work
+    sponsored by an agency of the United States Government.  Neither
+    the United States, nor the University of Chicago, nor The
+    University of Southern California, nor any contributors to the
+    Globus Project or Globus Toolkit, nor any of their employees,
+    makes any warranty express or implied, or assumes any legal
+    liability or responsibility for the accuracy, completeness, or
+    usefulness of any information, apparatus, product, or process
+    disclosed, or represents that its use would not infringe privately
+    owned rights.
+
+11) IN NO EVENT WILL THE UNITED STATES, THE UNIVERSITY OF CHICAGO OR
+    THE UNIVERSITY OF SOUTHERN CALIFORNIA OR ANY CONTRIBUTORS TO THE
+    GLOBUS PROJECT OR GLOBUS TOOLKIT BE LIABLE FOR ANY DAMAGES,
+    INCLUDING DIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES
+    RESULTING FROM EXERCISE OF THIS LICENSE AGREEMENT OR THE USE OF
+    THE SOFTWARE.
+*/
+
+package org.nees.nsds.examples.client;
+
+/**
+ * <p>Title: NSDS Client</p>
+ * <p>Description: Basic client to test Nsds Service</p>
+ * <p>Copyright: Copyright (c) 2003</p>
+ * <p>Company: ISI/USC</p>
+ * @author Gaurang Mehta (gmehta@isi.edu)
+ * @author Robert Lau (rlau@isi.edu)
+ * @version 1.0
+ */
+
+
+import org.globus.axis.gsi.GSIConstants;
+import org.globus.gsi.gssapi.auth.NoAuthorization;
+import org.globus.gsi.gssapi.auth.HostAuthorization;
+import org.globus.ogsa.utils.GSIUtils;
+import org.nees.nsds.nsdsServer.service.NsdsServerServiceLocator;
+import org.nees.nsds.nsdsServer.NsdsPortType;
+import java.net.URL;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
+import javax.xml.rpc.Stub;
+import org.globus.ogsa.impl.security.authentication.Constants;
+
+public class NsdsAdminClient {
+    private String daq_port = new String();
+    private String experiment = new String();
+    private String sensor = new String();
+    private String drivername = new String();
+    private String uri = new String();
+    private int command = 0;
+    private String authorization = new String("host");
+
+    public static void main (String[] args) {
+	NsdsAdminClient nclient = new NsdsAdminClient();
+	nclient.executeCommand(args);
+    }
+
+    //
+    // This function makes out calls to the correct methods to invoke
+    // depending on the command line parameters.
+    //
+
+    public void executeCommand(String[] args) {
+	if (args.length < 2) {
+	    printLongVersion();
+	    System.exit(0);
+	}
+
+	uri = args[0];
+	LongOpt[] longOptions = generateValidOptions();
+
+	Getopt g = new Getopt("NsdsAdminClient", args, ":", longOptions, true);
+
+	int option = 0 ;
+	int noOfOptions = 0;
+
+	while ((option = g.getopt()) != -1) {
+	    //      System.out.println("Option tag " + option);
+	    switch (option) {
+	    case 'a': // Add trial option
+		noOfOptions++;
+		command = 1;
+		break;
+
+	    case 'r': // Remove trial option
+		noOfOptions++;
+		command = 2;
+		break;
+
+	    case 't': // Flush trial option
+		noOfOptions++;
+		command = 3;
+		break;
+
+	    case 'f': // Flush option
+		noOfOptions++;
+		command = 4;
+		break;
+
+	    case 'p': // daq_port option
+		noOfOptions++;
+		daq_port = g.getOptarg();
+		break;
+
+	    case 'e': // experiment option
+		noOfOptions++;
+		experiment = g.getOptarg();
+		break;
+
+	    case 's': // sensor option
+		noOfOptions++;
+		sensor = g.getOptarg();
+		break;
+
+	    case 'd': // drivername option
+		noOfOptions++;
+		drivername = g.getOptarg();
+		break;
+
+	    case 'h': // help option
+		printLongVersion();
+		System.exit(0);
+		break;
+
+	    case 'x': // drivername option
+		noOfOptions++;
+		authorization = g.getOptarg();
+		break;
+	    }
+	}
+
+	switch (command) {
+	case 1: // add Trial
+	    if ((noOfOptions < 5) || (noOfOptions > 6)) {
+		printShortVersion();
+	    } else {
+		addTrial(experiment, sensor, drivername, daq_port);
+	    }
+	    break;
+
+	case 2: // remove Trial
+	    if ((noOfOptions < 3) || (noOfOptions > 4)) {
+		printShortVersion();
+	    } else {
+		removeTrial(experiment, sensor);
+	    }
+	    break;
+
+	case 3: // Flush trial
+	    if ((noOfOptions < 2) || (noOfOptions > 3)) {
+		printShortVersion();
+	    } else {
+		flushTrial(experiment);
+	    }
+	    break;
+
+	case 4: // Flush
+	    if ((noOfOptions < 1) || (noOfOptions > 2)) {
+		printShortVersion();
+	    } else {
+		flushFile();
+	    }
+	    break;
+	}
+    }
+
+
+    //
+    // Adds a trial info from the nsds service driver configuration file
+    //
+
+    private void addTrial(String experiment, String sensor, String drivername, String daq_port) {
+	try {
+	    NsdsServerServiceLocator locator = new NsdsServerServiceLocator();
+	    NsdsPortType nsds = locator.getnsdsServerPort(new URL(uri));
+
+	    // sets gsi mode
+	    if (new URL(uri).getProtocol().equals("httpg")) {
+		GSIUtils.setDefaultGSIProperties( (Stub)nsds,new URL(uri));
+		
+		// use nsds certs rather then host certs
+		((Stub)nsds)._setProperty(GSIConstants.GSI_AUTHORIZATION, new HostAuthorization(authorization));
+		((Stub)nsds)._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);
+	    } else {
+		// error here to tell that only httpg mode is supported
+		System.err.println("NO HTTPG");
+	    }
+
+	    // this code will be in if loop when only secure mode to be supported.
+	    boolean addflag = nsds.addTrial(experiment, sensor, drivername, daq_port);
+	    if (addflag) {
+		System.out.println("Add trial succeeded");
+	    } else {
+		System.err.println("Add trial failed");
+	    }
+	} catch (Exception e) {
+	    System.err.println("!!!Error trying to add trial!!!");
+	    e.printStackTrace();
+	}
+    }
+
+
+    //
+    // Removes a trial info from the nsds service driver configuration file
+    //
+
+    private void removeTrial(String experiment, String sensor) {
+	try {
+	    NsdsServerServiceLocator locator = new NsdsServerServiceLocator();
+	    NsdsPortType nsds = locator.getnsdsServerPort(new URL(uri));
+
+	    // sets gsi mode
+	    if (new URL(uri).getProtocol().equals("httpg")) {
+		GSIUtils.setDefaultGSIProperties( (Stub)nsds,new URL(uri));
+		// use nsds certs rather then host certs
+		((Stub)nsds)._setProperty(GSIConstants.GSI_AUTHORIZATION, new HostAuthorization(authorization));
+		((Stub)nsds)._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);
+	    } else {
+		// error here to tell that only httpg mode is supported
+	    }
+
+	    // this code will be in if loop when only secure mode to be supported.
+
+	    boolean removeflag = nsds.removeTrial(experiment,sensor);
+	    if (removeflag) {
+		System.out.println("Remove trial succeeded");
+	    } else {
+		System.err.println("Remove trial failed");
+	    }
+	} catch (Exception e) {
+	    System.err.println("!!!Error trying to execute remove trial!!!");
+	    e.printStackTrace();
+	}
+    }
+
+
+    //
+    // Flush the entire trial info from the nsds driver conf file.
+    //
+
+    private void flushTrial(String experiment) {
+	try {
+	    NsdsServerServiceLocator locator = new NsdsServerServiceLocator();
+	    NsdsPortType nsds = locator.getnsdsServerPort(new URL(uri));
+		
+	    // sets gsi mode
+	    if (new URL(uri).getProtocol().equals("httpg")) {
+		GSIUtils.setDefaultGSIProperties( (Stub)nsds, new URL(uri));
+		// use nsds certs rather then host certs
+		((Stub)nsds)._setProperty(GSIConstants.GSI_AUTHORIZATION, new HostAuthorization(authorization));
+		((Stub)nsds)._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);
+	    } else {
+		// error here to tell that only httpg mode is supported
+	    }
+
+	    // this code will be in if loop when only secure mode to be supported.
+
+	    boolean flushtrialflag = nsds.flushTrial(experiment);
+	    if (flushtrialflag) {
+		System.out.println("Flush trial succeeded");
+	    } else {
+		System.err.println("Flush trial failed");
+	    }
+	} catch (Exception e) {
+	    System.err.println("!!!Error trying to execute flush trial !!!");
+	    e.printStackTrace();
+	}
+    }
+
+    //
+    // closes a client channel
+    //
+
+    private void flushFile() {
+	try {
+	    NsdsServerServiceLocator locator = new NsdsServerServiceLocator();
+	    NsdsPortType nsds = locator.getnsdsServerPort(new URL(uri));
+
+	    // sets gsi mode
+	    if (new URL(uri).getProtocol().equals("httpg")) {
+		GSIUtils.setDefaultGSIProperties( (Stub)nsds, new URL(uri));
+		// use nsds certs rather then host certs
+		((Stub)nsds)._setProperty(GSIConstants.GSI_AUTHORIZATION, new HostAuthorization(authorization));
+		((Stub)nsds)._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);
+	    } else {
+		// error here to tell that only httpg mode is supported
+	    }
+
+	    // this code will be in if loop when only secure mode to be supported.
+	    boolean flushfileflag = nsds.flushFile();
+	    if (flushfileflag) {
+		System.out.println("Flush file succeeded");
+	    } else {
+		System.err.println("Flush file failed");
+	    }
+	} catch (Exception e) {
+	    System.err.println("!!!Error trying to execute flush file!!!");
+	    e.printStackTrace();
+	}
+    }
+
+
+    //
+    // Generates an array of valid <code>LongOpt</code> objects
+    // which contain all the valid options to the Executable
+    //
+
+    public LongOpt[] generateValidOptions() {
+	LongOpt[] longopts = new LongOpt[10];
+
+	longopts[0] = new LongOpt("add", LongOpt.NO_ARGUMENT, null, 'a');
+	longopts[1] = new LongOpt("remove", LongOpt.NO_ARGUMENT, null, 'r');
+	longopts[2] = new LongOpt("flush", LongOpt.NO_ARGUMENT, null, 't');
+	longopts[3] = new LongOpt("flushfile", LongOpt.NO_ARGUMENT, null, 'f');
+	longopts[4] = new LongOpt("exp", LongOpt.REQUIRED_ARGUMENT, null, 'e');
+	longopts[5] = new LongOpt("sensor", LongOpt.REQUIRED_ARGUMENT, null, 's');
+	longopts[6] = new LongOpt("daq_port", LongOpt.REQUIRED_ARGUMENT, null, 'p');
+	longopts[7] = new LongOpt("driver", LongOpt.REQUIRED_ARGUMENT, null, 'd');
+	longopts[8] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h');
+	longopts[9] = new LongOpt("auth", LongOpt.REQUIRED_ARGUMENT, null, 'x');
+
+	return longopts;
+    }
+
+
+    //
+    // This method is used to print the long version of the command
+    //
+
+    public void printLongVersion() {
+	System.out.println("NsdsClient - A basic admin client used to populate the driver info in the Nsds Web Service.");
+	System.out.println("usage: java NsdsAdminClient <nsds service handle> <operation> [arguments]..");
+	System.out.println("");
+	System.out.println("--add --exp <experiment> --sensor <sensor> --driver <drivername> --daq_port <hardware port #>");
+	System.out.println("  Add an experiment and sensor mapping to driver and port to the nsds-service");
+	System.out.println("  driver file.");
+	System.out.println("    experiment is the experiment name");
+	System.out.println("    sensor is the sensor name");
+	System.out.println("    drivername is the unique driver id");
+	System.out.println("    daq_port is the hardware daq port number");
+	System.out.println("");
+	System.out.println("--remove --exp <experiment> --sensor <sensor>");
+	System.out.println("  Remove an experiment and sensor mapping from the nsds-service driver file.");
+	System.out.println("    experiment is the experiment name");
+	System.out.println("    sensor is the sensor name");
+	System.out.println("");
+	System.out.println("--flush --exp <experiment>");
+	System.out.println("  Flush all experiments from the nsds-service driver file.");
+	System.out.println("    experiment is the experiment name");
+	System.out.println("");
+	System.out.println("--flushfile");
+	System.out.println("  Erase an entire nsds-service driver file");
+	System.out.println("");
+	System.out.println("--help");
+	System.out.println("  Displays this message");
+	System.out.println("");
+	System.out.println("--auth <cert>");
+	System.out.println("  This is an optional argument that can be used in conjunction with other");
+	System.out.println("  commands.  If not specified, the client uses host cert authorization.");
+	System.out.println("");
+	System.out.println("Example usage");
+	System.out.println("  java NsdsAdminClient http://smarty.isi.edu:8080/ogsa/services/samples/nsds/NsdsWebService/test \\");
+	System.out.println("    --add --exp earthquake-sim-1 --sensor straingauge --driver daq-lv-neeslabview2.mcs.anl.gov --daq_port 234");
+    }
+
+    //
+    // This is used to print the short version of the command
+    //
+
+    public void printShortVersion() {
+	System.out.println("NsdsAdminClient - A basic admin client used to populate the drive info in the Nsds Web Service.");
+	System.out.println("usage: java NsdsAdminClient <nsds service handle> <operation> [arguments]..");
+	System.out.println("run 'java NsdsAdminClient --help' for a detailed options list");
+    }
+}

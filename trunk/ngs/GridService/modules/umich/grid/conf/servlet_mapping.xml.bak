@@ -1,0 +1,12 @@
+
+    <!-- The mapping for the urlsrv servlet -->
+    <servlet-mapping>
+      <servlet-name>
+        urlsrv
+      </servlet-name>
+      <url-pattern>
+        /urlsrv/*
+      </url-pattern>
+    </servlet-mapping>
+
+

@@ -1,0 +1,125 @@
+/**********************************************************************************
+ *
+ * $Header$
+ *
+ ***********************************************************************************
+ *
+ * COPYRIGHT © 2002,2003
+ * THE REGENTS OF THE UNIVERSITY OF MICHIGAN
+ * ALL RIGHTS RESERVED
+ *
+ ***********************************************************************************
+ *
+ *  For information concerning commercial application of this software, contact the
+ *  CHEF software group, School of Information + Media Union, University of Michigan
+ *                      mailto:chef-software@umich.edu
+ *
+ **********************************************************************************/
+
+// package
+package org.chefproject.actions;
+
+// imports
+
+import org.apache.turbine.util.Log;
+import org.apache.turbine.util.RunData;
+import org.apache.velocity.context.Context;
+import org.apache.jetspeed.portal.portlets.VelocityPortlet;
+import org.apache.jetspeed.services.rundata.JetspeedRunData;
+import org.apache.jetspeed.services.statemanager.SessionState;
+
+import org.chefproject.service.GridService;
+
+import org.chefproject.exception.*;
+
+import org.globus.security.*;
+import org.globus.myproxy.*;
+
+import org.nees.nsds.nsdsServer.service.NsdsServerServiceLocator;
+import org.nees.nsds.nsdsServer.NsdsPortType;
+
+import java.net.URL;
+
+
+/**
+ * <p>NSDSAction is a simple demo call to NSDS</p>
+ *
+ * @author University of Michigan, CHEF Software Development Team
+ * @version $Revision$
+ */
+public class NSDSTestAction
+extends VelocityPortletStateAction
+{
+
+	private final String STATE_MODE = "NSDSAction.mode";
+
+  	/**
+   	* creates a new channel name for a client applet
+   	*
+   	*/
+  	private String createChannel()
+  	{
+    		String uri = "http://core.isi.edu:8080/ogsa/services/NsdsFactoryService/nsds";
+    		// String uri = "httpg://core.isi.edu:8443/ogsa/services/NsdsFactoryService/nsds";
+		String retval;
+		
+		retval = "Creating channel:\n" + uri + "\n";
+    		try
+    		{
+
+			System.out.println("Creating channel " + uri);
+			NsdsServerServiceLocator locator = new NsdsServerServiceLocator();
+			System.out.println("ServiceLocator Created");
+			NsdsPortType nsds = locator.getnsdsServerPort(new URL(uri));
+			System.out.println("NSDS Port Created");
+      			String channel = nsds.createChannel();
+      			System.out.println("Channelname created :"+channel);
+			retval = retval + "Channel created:" + channel;
+    		}
+    		catch (Exception e)
+    		{
+      			System.out.println("!!!Error trying to execute create channel!!!");
+			System.out.println("Error " + e.getMessage());
+			retval = retval + "Exception thrown:" + e.getMessage();
+      			// e.printStackTrace(System.out);
+    		}
+    		catch( Throwable t ) {
+			System.out.println("Threw "+t.getMessage());
+			retval = retval + "Throwable error:" + t.getMessage();
+    		}
+		return retval;
+  	}
+
+	/**
+	 * Build the context for normal display
+	 * @param portlet The velocity portlet object
+	 * @param context The context object
+	 * @param runData The RunData object
+	 */
+	protected void buildNormalContext (	VelocityPortlet portlet,
+						Context context,
+						RunData runData )
+	{
+		GlobusProxy proxy = null;
+
+		if (Log.getLogger("chef").isDebugEnabled())
+			Log.debug ("chef", "NSDSAction.buildNormalContext gets called. ");
+		
+		System.out.println(this + " NSDSAction.buildNormalContext gets called. ");
+
+		SessionState state = ((JetspeedRunData)runData).getPortletSessionState(portlet.getID());
+
+		// Make this call to retrieve the proxy
+
+		System.out.println("m_Grid.getCurrentUserGlobusProxy()");
+		proxy = GridService.getCurrentUserGlobusProxy();
+		System.out.println("Globus Proxy:\n"+GridService.toStringDetailed(proxy));
+
+		// Create the channel for MDS - For now, it does not need the proxy
+		System.out.println("Calling createChannel()");
+		context.put ("channelDebug", createChannel());
+		System.out.println("After create channel");
+
+	}
+
+}
