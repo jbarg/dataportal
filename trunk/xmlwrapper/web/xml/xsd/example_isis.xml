@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CLRCMetadata xmlns="http://www.escience.clrc.ac.uk/schemas/scientific" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.escience.clrc.ac.uk/schemas/scientific
 E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\xsd\clrcmetadata.xsd">
-<MetadataRecord metadataID="ISIS-637" facility="ISIS">
+<MetadataRecord metadataID="ISIS-SXD1009" facility="ISIS">
 		<Topic>
-			<Keywords>
-				<Discipline>String</Discipline>
-				<KeywordSource>String</KeywordSource>
-				<Keyword>String</Keyword>
-			</Keywords>
-			<Keywords>
-				<Discipline>String</Discipline>
-				<KeywordSource>String</KeywordSource>
-				<Keyword>String</Keyword>
-			</Keywords>
 			<Subjects>
-				<Discipline>String</Discipline>
-				<SubjectSource>String</SubjectSource>
-				<Subject>
-					<SubjectName>String</SubjectName>
-				</Subject>
-			</Subjects>
-			<Subjects>
-				<Discipline>String</Discipline>
-				<SubjectSource>String</SubjectSource>
+				<Discipline>Chemistry</Discipline>
 				<Subject>
 					<SubjectName>String</SubjectName>
 				</Subject>
