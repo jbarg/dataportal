@@ -5,12 +5,12 @@ import java.util.Properties;
 //import org.gridforum.jgss.*;
 import java.sql.*;
 import java.io.*;
-import ac.dl.xml.Converter;
-import org.globus.security.GlobusProxy;
-//import org.globus.gsi.GlobusCredential;
-//import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
-//import org.globus.gsi.gssapi.*;
-//import org.ietf.jgss.GSSCredential;
+import ac.dl.xml.Converter;//
+//import org.globus.security.GlobusProxy;
+import org.globus.gsi.*;
+import org.globus.gsi.gssapi.*;
+import org.globus.gsi.gssapi.*;
+import org.ietf.jgss.*;
 import org.jdom.Element;
 
 
@@ -102,16 +102,17 @@ public class SessionManager {
         //GlobusProxy cred = GlobusProxy.load(data,System.getProperty("user.home")+File.separator+".globus"+File.separator+"certificates"+File.separator+"01621954.0");
         //if(cred.getTimeLeft() == 0 || cred.getTimeLeft() == -1) throw new Exception("Credential has expired");
         
-        GlobusProxy cred = null;
+        GSSCredential cred = null;
+        //GlobusProxy cred = null;
         // Get the session id
         Connection myConn = null;
         PreparedStatement pstmt1 = null;
         Statement sqlStmt = null;
         try{
             //GlobusProxy.
-            cred = GlobusProxy.load(data,caCertLocation);
-            //GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
-            //cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
+            //cred = GlobusProxy.load(data,caCertLocation);
+            GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
+            cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
             //if(cred.getRemainingLifetime() == 0 || cred.getRemainingLifetime() == -1) throw new org.ietf.jgss.GSSException(GSSException.FAILURE,
             // GlobusGSSException.BAD_NAME,
             // "Credential has expired");
@@ -125,7 +126,7 @@ public class SessionManager {
             //need to generate uuid here
             //sid = (sid ==null) ? String.valueOf(System.currentTimeMillis()) : sid;
             sid = (sid ==null) ? uuidgen.generateTimeBasedUUID().toString() : sid;
-            String dn = cred.getUserCert().getSubjectDN().getName();
+            String dn = cred.getName().toString();
             //String dn = cred.getName().toString();
             //String dn = cred.getSubject();
             
@@ -262,7 +263,8 @@ public class SessionManager {
         Statement sqlStmt = null;  // Or PreparedStatement if needed
         String sql = null;
         ResultSet myRs2 = null;
-        GlobusProxy cred =null;
+       GSSCredential cred = null;
+        //GlobusProxy cred =null;
         long lifetime = 0;
         try{
             myConn = DriverManager.getConnection(odbcdbUrl, username, password);
@@ -287,11 +289,11 @@ public class SessionManager {
                 String certstring = (String)result1;
                 byte[] data = certstring.getBytes();
                 
-                cred = GlobusProxy.load(data,caCertLocation);
-                lifetime = cred.getTimeLeft();
-                // GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
-                //cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
-                // lifetime = cred.getRemainingLifetime();
+                //cred = GlobusProxy.load(data,caCertLocation);
+               // lifetime = cred.getTimeLeft();
+                 GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
+                cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
+                 lifetime = cred.getRemainingLifetime();
                 
                 if(lifetime == 0 || lifetime == -1){
                     logger.info("certificate "+sid+" has timed out");
@@ -329,11 +331,11 @@ public class SessionManager {
                     String certstring = (String)result1;
                     byte[] data = certstring.getBytes();
                     
-                    cred = GlobusProxy.load(data,caCertLocation);
-                    lifetime = cred.getTimeLeft();
-                    // GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
-                    // cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
-                    // lifetime = cred.getRemainingLifetime();
+                    //cred = GlobusProxy.load(data,caCertLocation);
+                    //lifetime = cred.getTimeLeft();
+                     GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
+                     cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
+                     lifetime = cred.getRemainingLifetime();
                     
                     //System.out.println("lifetime left is "+lifetime/60 +" minutes");
                     //int lifetime = 0;
@@ -414,14 +416,14 @@ public class SessionManager {
                 String certstring = (String)result1;
                 
                 byte[] data = certstring.getBytes();
-                GlobusProxy cred = GlobusProxy.load(data,caCertLocation);
+                //GlobusProxy cred = GlobusProxy.load(data,caCertLocation);
                 // ExtendedGSSManager manager = (ExtendedGSSManager)ExtendedGSSManager.getInstance();
-                // GSSCredential cred =manager.createCredential(certbytes, ExtendedGSSCredential.IMPEXP_OPAQUE, GSSCredential.DEFAULT_LIFETIME, null, GSSCredential.ACCEPT_ONLY);
+                //GSSCredential cred =manager.createCredential(certbytes, ExtendedGSSCredential.IMPEXP_OPAQUE, GSSCredential.DEFAULT_LIFETIME, null, GSSCredential.ACCEPT_ONLY);
                 // long lifetime = cred.getTimeLeft();
                 //System.out.println("time left is "+lifetime);
-                //GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
-                //GSSCredential cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
-                long lifetime = cred.getTimeLeft();
+                GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
+                GSSCredential cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
+                long lifetime = cred.getRemainingLifetime();
                 //int lifetime = 0;
                 if(lifetime == 0 || lifetime == -1){
                     logger.info("certificate "+sid+" has timed out");
@@ -662,17 +664,17 @@ public class SessionManager {
             //ExtendedGSSManager manager = (ExtendedGSSManager)ExtendedGSSManager.getInstance();
             //GSSCredential cred = manager.createCredential(data,ExtendedGSSCredential.IMPEXP_OPAQUE,GSSCredential.DEFAULT_LIFETIME,null,GSSCredential.ACCEPT_ONLY);
             
-            GlobusProxy cred = GlobusProxy.load(data,caCertLocation);
+            //GlobusProxy cred = GlobusProxy.load(data,caCertLocation);
             //System.out.println(cred.getIssuer());
             //if(cred.getTimeLeft() == 0 || cred.getTimeLeft() == -1) throw new Exception("Credential has expired");
-            //GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
-            //GSSCredential cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
-            long lifetime = cred.getTimeLeft();
+            GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
+            GSSCredential cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
+            long lifetime = cred.getRemainingLifetime();
             
             // System.out.println("Credential ok..");
             // String dn = cred.getName().toString();
             //org.w3c.dom.Element el  = getAccessRights(cred.getName().toString());
-            org.w3c.dom.Element el  = getAccessRights(cred.getUserCert().getSubjectDN().getName());
+            org.w3c.dom.Element el  = getAccessRights(cred.getName().toString());
             startSession(stringCreds,el,sid);
             return new Boolean(true);
         }
@@ -720,10 +722,10 @@ public class SessionManager {
                 // ExtendedGSSManager manager = (ExtendedGSSManager)ExtendedGSSManager.getInstance();
                 // GSSCredential cred =manager.createCredential(certbytes, ExtendedGSSCredential.IMPEXP_OPAQUE, GSSCredential.DEFAULT_LIFETIME, null, GSSCredential.ACCEPT_ONLY);
                 //long lifetime = cred.getTimeLeft();
-                //GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
-                //GSSCredential cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
-                GlobusProxy cred = GlobusProxy.load(data,caCertLocation);
-                long lifetime = cred.getTimeLeft();
+                GlobusCredential globusCredential = new GlobusCredential(new ByteArrayInputStream(data));
+                GSSCredential cred = new GlobusGSSCredentialImpl(globusCredential, GSSCredential.INITIATE_AND_ACCEPT);
+                //GlobusProxy cred = GlobusProxy.load(data,caCertLocation);
+                long lifetime = cred.getRemainingLifetime();
                 
                 //System.out.println("time left is "+lifetime);
                 
