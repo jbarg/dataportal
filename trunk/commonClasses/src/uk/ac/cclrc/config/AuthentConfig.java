@@ -14,6 +14,7 @@ import java.util.*;
  */
 public class AuthentConfig {
     
+    
     /** Creates a new instance of AuthentConfig */
     public AuthentConfig() {
     }

@@ -102,7 +102,9 @@ onsubmit="return check();">
 <br />
 <br />
 <a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top">&copy;
-2004 CCLRC Data Portal</a></div>
+<script language="JavaScript"><!--
+document.write(new Date().getYear());
+//--></script> CCLRC Data Portal</a></div>
 </td>
 </tr>
 </table>
