@@ -111,6 +111,8 @@ public class BasicSearch extends HttpServlet {
                 
                 //System.out.println(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
                 Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
+                logHistoryFile(object, (String)session.getAttribute("dn"),wd);
+                
                 response.sendRedirect("../jsp/SimpleSearch.jsp");
             }
             catch(Exception a){
@@ -122,6 +124,43 @@ public class BasicSearch extends HttpServlet {
                 }
                 else response.sendRedirect("../jsp/error.jsp");
             }
+            
         }
     }
+    
+    private void logHistoryFile(Object[] query,String dn, String wd){
+        FileWriter wr = null;
+        try{
+            String[] facs = (String[])query[1];
+            StringBuffer buff = new StringBuffer();
+            for(int i =0;i<facs.length;i++){
+                buff.append(facs[i]+" ");
+            }
+             StringBuffer buff2 = new StringBuffer();
+            for(int i =0;i<facs.length;i++){
+                buff2.append("&facs="+facs[i]);
+            }
+            
+            wr = new FileWriter(wd+File.separator+"profiles"+File.separator+"history"+File.separator+dn,true);
+            wr.write("<tr><td>"+buff.toString()+" </td>");
+            wr.write("<td>"+query[2]+"</td>");
+            wr.write("<td>"+new java.util.Date()+"</td>");
+            wr.write("<td>"+query[3]+"</td>");
+            wr.write("<td><a href='../servlet/ResendQuery?discipline="+query[2]+"&wait="+query[3]+""+buff2.toString()+"'>Resend Query</a></td></tr>");
+            wr.close();
+        }
+        catch(Exception e){
+            logger.warn("Coulld not update history file",e);
+            
+            wr.close();
+        }
+        
+        
+        
+        
+    }
+    
+    
+    
+    
 }

@@ -249,7 +249,7 @@ public class LoginServlet extends HttpServlet {
             /*gets the actual name of the browser, because Mircosoft used to
              hide their browser name.*/
         if(browser.indexOf("MSIE 6")>=0){
-            browsertype = "IEsid+"1.xml);6";
+            browsertype = "IE6";
             
         }
         
