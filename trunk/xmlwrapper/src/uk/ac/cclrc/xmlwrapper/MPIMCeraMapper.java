@@ -439,7 +439,7 @@ public class MPIMCeraMapper implements CeraMapper
       sbr.append("      <Topic>\n") ;
 
       r = s.executeQuery("select topic_name from " + dbs + "topic where topic_id in" +
-                        "(select distinct topic_id  from " + dbs + "parameter where key='" + key + "')" ) ;
+                        "(select distinct topic_id  from " + dbs + "parameter where entry_id='" + key + "')" ) ;
      
       // I hate strings - but should one make this more verbose and messy ?
       // as this won't go out of scope (eligible for garbage collection) and then we can map multiple
