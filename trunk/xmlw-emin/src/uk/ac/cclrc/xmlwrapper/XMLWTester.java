@@ -93,29 +93,34 @@ public class XMLWTester {
      //      "Discipline='/earth sciences/atmosphere/atmospheric temperature/Temperature'",
      //      "saved_badc.xml") ;
 		     
-      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-                 "Discipline='All'",
-                 "saved_emin.xml") ;
+     // xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
+     //            "Discipline='All'",
+     //            "saved_emin.xml") ;
 
-      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emat",
+      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emat",
+     //            "Discipline='All'",
+      //           "saved_emat.xml") ;
+
+      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
+       //          "Discipline='Agriculture/Soils/Soil Minerology/Weathering'",
+        //         "saved_emin2.xml") ;
+      
+      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
+      //           "Discipline='Geology/Minerals/Silicates'",
+      //           "saved_emin3.xml") ;
+ 
+      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
+      //           "Discipline='Chemistry/Inorganic/Structure'",
+      //           "saved_emin4.xml") ;
+
+      //xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
+      //           "Discipline='Geochemistry/Crystallography'",
+      //           "saved_emin5.xml") ;
+
+      xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-em/services/xmlwrapper_emat",
                  "Discipline='All'",
                  "saved_emat.xml") ;
 
-      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-                 "Discipline='Agriculture/Soils/Soil Minerology/Weathering'",
-                 "saved_emin2.xml") ;
-      
-      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-                 "Discipline='Geology/Minerals/Silicates'",
-                 "saved_emin3.xml") ;
- 
-      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-                 "Discipline='Chemistry/Inorganic/Structure'",
-                 "saved_emin4.xml") ;
-
-      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
-                 "Discipline='Geochemistry/Crystallography'",
-                 "saved_emin5.xml") ;
 
 
       return ;

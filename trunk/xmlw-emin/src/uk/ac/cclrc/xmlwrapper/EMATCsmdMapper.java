@@ -325,11 +325,10 @@ public class EMATCsmdMapper implements CsmdMapper
       //retrieve the database name
       String dbs = ss.getDbs() ;
 
-      r = s.executeQuery("select institution.name, institution.institution_id address_line_1, address_line_2, town, region, postcode, country, " +
+      r = s.executeQuery("select institution.name, institution.institution_id address_1, address_2, town, region, postcode, country, " +
                          "title, forename, surname, other_initials, telephone, email, fax from " + dbs +
-                         "person, " + dbs + "institution where institution.institution_id = person.institution_id and institution.institution_id in " +
-                         "(select institution_id from study_institution where study_id in " +
-                         "(select study_id from " + dbs + "study_person where study_id='" + key + "' and role like '%" + contact_type + "%')) " ) ;
+                         "person, " + dbs + "institution where institution.institution_id = person.institution_id and person_id in " +
+                         "(select person_id from "+dbs+"study_person where study_id='" + key + "' and role like '%" + contact_type + "%') " ) ;
 
       int institute_id = i_place_holder ;
       String institute_name = place_holder ;
@@ -349,7 +348,7 @@ public class EMATCsmdMapper implements CsmdMapper
       {
          institute_name = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTION.NAME") ));
          institute_id = r.getInt("INSTITUTION_ID") ;
-         i_street = sr.LitWithEnt(xt.makeValid(r.getString("ADDRESS_LINE_1") ));
+         i_street = sr.LitWithEnt(xt.makeValid(r.getString("ADDRESS_1") ));
          i_place = sr.LitWithEnt(xt.makeValid(r.getString("TOWN") ));
          i_pobox_postal_code = sr.LitWithEnt(xt.makeValid(r.getString("POSTCODE") ));
          i_country = sr.LitWithEnt(xt.makeValid(r.getString("COUNTRY") ));
@@ -554,8 +553,10 @@ public class EMATCsmdMapper implements CsmdMapper
       String institution_id = place_holder ;
       String institution_name = place_holder ;
 
-      r = s.executeQuery("SELECT INSTITUTION_ID, NAME FROM " + dbs + "INSTITUTION WHERE INSTITUTION_ID IN " +
-                         "(SELECT INSTITUTION_ID FROM " + dbs + "STUDY_INSTITUTION WHERE STUDY_ID='" + key + "' )") ;
+      r = s.executeQuery("select institution_id, name from " + dbs + "institution where institution_id in " +
+                         "(select institution_id from " + dbs + "person where person_id in " +
+                         "(select person_id from " + dbs + "study_person where study_id = '" + key + "'))" ) ; 
+
       while(r.next())
       {
          institution_id = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTION_ID") ));
