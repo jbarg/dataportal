@@ -64,7 +64,7 @@ public class BasicSearch extends HttpServlet {
             
             //get the max number of minutes user wishes to wait of results
             String Smax_wait = request.getParameter("max_wait");
-		if(Smax_wait == null) Smax_wait = "15";
+            if(Smax_wait == null) Smax_wait = "15";
             String no_max = request.getParameter("no_max");
             //System.out.println("max wait is "+Smax_wait);
             //1 min = 60sec
@@ -78,7 +78,9 @@ public class BasicSearch extends HttpServlet {
             //System.out.print("sessionid is");
             //get username
             String sid = (String)session.getAttribute("sessionid");
-           //System.out.println(sid);
+            Object[] object = new Object[]{sid,fac,Discipline,max2};
+            session.setAttribute("query", object);
+            //System.out.println(sid);
             //got the fac, waiting time and discipline
             //call the query and reply web service
             try{
@@ -100,13 +102,13 @@ public class BasicSearch extends HttpServlet {
                 Object[] ob = new Object[]{sid,fac,Discipline,max2};
                 
                 org.w3c.dom.Element el = (org.w3c.dom.Element) call.invoke(ob );
-               
+                
                 //build the file
                 org.jdom.input.DOMBuilder builder = new org.jdom.input.DOMBuilder();
                 Element el1 = builder.build(el);
                 el1.detach();
                 Document doc1  = new org.jdom.Document(el1);
-                 
+                
                 //System.out.println(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
                 Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
                 response.sendRedirect("../jsp/SimpleSearch.jsp");
