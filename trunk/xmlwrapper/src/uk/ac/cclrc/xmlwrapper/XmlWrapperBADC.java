@@ -153,7 +153,7 @@ public class XmlWrapperBADC
 
       result.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") ;
       result.append("<!DOCTYPE CLRCMetadata PUBLIC \"-//W3C//DTD CLRC-MD 1.0 Strict//EN\" " +
-                   "\"http://escvig2.dl.ac.uk:8080/xmlwrapper/xml/dtd/clrcmetadata.dtd\">\n") ;
+                    "\"" + ss.getDTDLocation() + "\">\n") ;
       result.append("<CLRCMetadata>\n") ;
 
       log.debug(query) ;
