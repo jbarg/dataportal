@@ -30,7 +30,7 @@
      set to the current working directory.
 -->
 
-<project name="My Project" default="compile" basedir=".">
+<project name="Dataportal XmlWrappers" default="compile" basedir=".">
 
 
 
@@ -109,14 +109,16 @@
 
 -->
 
-  <property name="app.name"      value="myapp"/>
+  <property name="app.name"      value="xmlw"/>
   <property name="app.path"      value="/${app.name}"/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
-  <property name="catalina.home" value="../../../.."/> <!-- UPDATE THIS! -->
+  <property name="catalina.home" value="C:\tomcat4.1.12"/> <!-- UPDATE THIS! -->
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/docs"/>
+  <property name="manager.username"   value="admin"/>
   <property name="manager.url"   value="http://localhost:8080/manager"/>
+  <property name="manager.password"   value="admin"/>
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/web"/>
 
@@ -189,11 +191,12 @@
 
 -->
 
-<!-- Dummy external dependency -->
-<!--
-  <property name="foo.jar"
-           value="/path/to/foo.jar"/>
--->
+<!-- external dependencys -->
+
+  <property name="classes.jar"
+           value="${basedir}/web/WEB-INF/lib/classes12.jar"/>
+  <property name="log4j.jar"
+           value="${basedir}/web/WEB-INF/lib/log4j-1.2.7.jar"/>
 
 
 <!-- ==================== Compilation Classpath =========================== -->
@@ -216,6 +219,8 @@
 <!--
     <pathelement location="${foo.jar}"/>
 -->
+    <pathelement location="${classes.jar}"/>
+    <pathelement location="${log4j.jar}"/>
 
     <!-- Include all elements that Tomcat exposes to applications -->
     <pathelement location="${catalina.home}/common/classes"/>
@@ -229,6 +234,9 @@
     <fileset dir="${catalina.home}/shared/lib">
       <include name="*.jar"/>
     </fileset>
+
+    <!-- included those that are in web/WEB-INF/lib so they go into -->
+    <!-- build/web/WEB-INF/lib - as keeping jars needed by module with each module -->
 
   </path>
 
@@ -444,6 +452,8 @@
 <!--
     <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
 -->
+    <copy todir="${build.home}/WEB-INF/lib" file="${classes.jar}"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${log4j.jar}"/>
 
     <!-- Copy static files from external dependencies as needed -->
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
