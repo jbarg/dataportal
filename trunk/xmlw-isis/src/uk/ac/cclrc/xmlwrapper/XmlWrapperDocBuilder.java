@@ -146,11 +146,14 @@ public class XmlWrapperDocBuilder
 
       Logger log = ss.getLogger() ;
 
-      Map m = ss.getMap() ;
-
-      DBHelper dbh = ss.getDBHelper() ;
+      DBHelper dbh = ss.getRelDBHelper() ;
       
-      StringBuffer result = new StringBuffer(1000000) ;
+      StringBuffer result = new StringBuffer(1000000) ; //final document result
+      StringBuffer sbr = new StringBuffer(1000000) ; //single metdata record
+ 
+      //get the mapper instance - could use facility from .properties file but
+      //that would perhaps obfuscate things
+      CsmdMapper cm = CsmdMapperFactory.create("isis") ;
 
       //find all keys in map and then pull all values out
       //validate and place in xml doc repository
@@ -180,8 +183,10 @@ public class XmlWrapperDocBuilder
          result.append("xsi:schemaLocation=\"http://www.escience.clrc.ac.uk/schemas/scientific\" \"" + ss.getSchemaLocation + "\">\n") ; 
 
          //build metadata record
-     
-
+         cm.buildMetadataRecord(sid,sbr) ;
+    
+         result.append(sbr) ;
+         result.append("\n") ;
     
          result.append("</CCLRCMetadata>") ;
 

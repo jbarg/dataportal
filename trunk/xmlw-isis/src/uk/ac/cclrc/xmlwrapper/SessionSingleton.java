@@ -76,7 +76,10 @@ public class SessionSingleton
    public final float f_place_holder = -999.00f ;
    public final int indent = 3 ;
 
-   //database name
+   //facility name
+   public String facility  = "" ;
+
+   //database name (for use when you can't make synonym from object from a different schema
    public String dbs = "" ;
 
    //path to read log config file from and read/write <x>map.data to
@@ -214,6 +217,9 @@ public class SessionSingleton
          this.dest_port = config.getProperty("dest_xml_port");
          this.dest_collection =  config.getProperty("dest_xml_collection");
          this.dest_prefix = config.getProperty("dest_xml_connection_prefix");
+
+         //for remote Facility details
+         this.facility = config.getProperty("facility") ;
          
       }
       catch (IOException e)
@@ -482,6 +488,19 @@ public class SessionSingleton
    //
    //
 
+   void setFacility(String facility)
+   {
+      this.facility = facility ;
+      return ;
+   }
+
+   String getFacility()
+   {
+      return facility ;
+   }
+
+   //
+
    void setDbs(String dbs)
    {
       this.dbs = dbs ;
@@ -492,9 +511,6 @@ public class SessionSingleton
    {
       return dbs ;
    }
-
-   //
-
    
 }
   
