@@ -34,7 +34,7 @@ public class AuthCtl {
     public static String myProxyServerName = null;
     public static String myProxyServerDN = null;
     public static int myProxyServerPort = 0;
-        // Data specific to delegate proxy
+    // Data specific to delegate proxy
     public static int delegateProxyLifetime = 0; // seconds?
     public static String portalCertFilename = null;
     public static String portalPrivateKeyFilename = null;
@@ -52,7 +52,7 @@ public class AuthCtl {
             AuthCtl.portalCertFilename = config.getProperty("portal_cert_filename");
             AuthCtl.portalPrivateKeyFilename = config.getProperty("portal_private_key_filename");
             AuthCtl.caCertFilename = config.getProperty("ca_cert_filename");
-            AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service"); 
+            AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service");
         } catch ( IOException e ) {
             System.out.println( "---> Error: Cannot read config file" );
             throw e;
@@ -63,12 +63,13 @@ public class AuthCtl {
         String[] facilityEndPoints;
         org.w3c.dom.Element facilityAccess;
         int sessionId;
+        AuthCtl.getMyConfig();
         X509Certificate userCert = idCheck( userName, password );
         //        S
         //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
         //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
         
-        getMyConfig();
+        
         
         if ( userCert == null )
             sessionId = -1;
