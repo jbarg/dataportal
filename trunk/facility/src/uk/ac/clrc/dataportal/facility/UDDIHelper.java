@@ -45,7 +45,7 @@ public class UDDIHelper
     private AuthToken authToken;
     private Properties UDDIProps;
 
-    UDDIHelper() throws Exception
+public UDDIHelper() throws Exception
     {
         try
         {
@@ -78,7 +78,7 @@ public class UDDIHelper
         // Load UDDI Properties from file - need to change this to include context path
         Properties UDDIProps = null;
         // This is hardcoded for testing outside of Axis - when running in Axis it gets overwritten by the context path below
-        String propertiesFileName = "C:/cygwin/home/maw24/dataportal/facility/web/WEB-INF/uddi.properties";
+        String propertiesFileName = "C:/Documents and Settings/gjd37/My Documents/theDataPortal/dataportalcvs/dataportal/facility/web/WEB-INF/uddi.properties";
 
         // We can only get the context path when deployed within Axis
         MessageContext messageContext = MessageContext.getCurrentContext();
@@ -152,6 +152,8 @@ public class UDDIHelper
         AuthToken authToken = null;
         try
         {
+            System.out.println(UDDIProps.getProperty("uddi_user"));
+            System.out.println(UDDIProps.getProperty("uddi_password"));
             //authToken = proxy.get_authToken("dataportal","p0rt4l");
             authToken = proxy.get_authToken(UDDIProps.getProperty("uddi_user"), UDDIProps.getProperty("uddi_password"));
         }
@@ -184,7 +186,7 @@ public class UDDIHelper
             // Create the Business Entity based on the Facility info.
             // BusinessKey of "" must be used with WASP UDDI server to create entry.
             // "en" is the ISO3166 language code for "English" which is also required.
-            BusinessEntity business = new BusinessEntity("", cfb.getFacilityName() + "-" + dataPortalID, "en");
+            BusinessEntity business = new BusinessEntity("", cfb.getFacilityName() , "en");
 
             // If a Facility description is supplied set this to the Business Entity default description
             // It is possible in UDDI to have more than one description but we'll only use one
@@ -255,15 +257,19 @@ public class UDDIHelper
             BusinessDetail bd = proxy.save_business(authToken.getAuthInfo().getText(), businesses);
             Vector bev = bd.getBusinessEntityVector();
             BusinessEntity be = (BusinessEntity)(bev.elementAt(0));
+              System.out.println("bunessasas ");
             businessKey = be.getBusinessKey();
-
+  System.out.println("bunessasas "+businessKey);
             if (!cfb.getFacilityName().equalsIgnoreCase("DataPortal")) {
+                System.out.println(dataPortalID);
                 setPublisherAssertion(dataPortalID, businessKey);
             }
         }
         catch (UDDIException ue)
         {
             log.fatal("UDDI Exception caught", ue);
+             System.out.println(ue);
+            ue.printStackTrace();
             throw ue;
         }
         catch (FacilityException e)
@@ -274,7 +280,10 @@ public class UDDIHelper
         catch (Exception e)
         {
             log.error("Exception caught", e);
+            System.out.println(e);
+            e.printStackTrace();
         }
+      
         return businessKey;
     }
 
@@ -484,7 +493,8 @@ public class UDDIHelper
             Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
 
             if (businessInfoVector.size() > 1) {
-                throw new UDDIException();
+               // throw new UDDIException();
+                 log.error("There is more than one DataPortal in the UUDI Registry.  There should be only one.  Using the first for the setPublisherAssertion", e);
             }
 
             BusinessInfo businessInfo = (BusinessInfo)businessInfoVector.elementAt(0);
@@ -578,7 +588,8 @@ public class UDDIHelper
 
 
         KeyedReference keyedRef = new KeyedReference("relationship", "parent-child", getTModelKey("uddi-org:relationships"));
-        String dataPortalKey = getFacilityID("DataPortal-" + dataPortalID);
+        String dataPortalKey = getFacilityID(dataPortalID);
+       //  String dataPortalKey = getFacilityID("DataPortal");
         // String facilityKey = getFacilityID(facilityID);
         log.info("Setting Publisher Relationship from " + dataPortalKey + " to " + facilityKey);
         PublisherAssertion publisherAssertion = new PublisherAssertion(dataPortalKey, facilityKey, keyedRef);
