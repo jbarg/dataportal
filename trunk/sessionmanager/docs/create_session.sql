@@ -1,6 +1,6 @@
 CREATE TABLE session (
-    sid             int,
+    sid             varchar(200),
     user_id         varchar(200),
-    certificate     varchar(500),
+    certificate     bytea,
     last_accessed   timestamp
 );
