@@ -758,49 +758,52 @@ public class ISISCsmdMapper implements CsmdMapper
          t_s=s ;
       }
  
-      //variables needed
-      String title = place_holder ;
-      String investigation_id = place_holder ;
+      if ((type.compareTo("dataholding")==0) || (type.compareTo("investigation")==0)) 
+      {//variables needed
+
+         String title = place_holder ;
+         String investigation_id = place_holder ;
       
-      t_r=t_s.executeQuery("select TITLE, investigation.id \"INVESTIGATION_ID\" from investigation where experiment_number = '" + key + "'") ;
-
-      if(t_r.next())
-      {
-         title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
-         investigation_id = sr.LitWithEnt(xt.makeValid(r.getString("INVESTIGATION_ID") ));
-
-         sbr.append(ii+"<RelatedReference>\n") ;
-         sbr.append(ii+li"<Type>" + "previous" + "</Type>\n") ; 
-         sbr.append(ii+li"<ReferredToItem>" + "Experiment" + "</ReferredToItem>\n") ; 
-      
-
-         t_r.close() ;
-
-         t_r = t_s.executeQuery("select study.name \"STUDYNAME\", study.id \"STUDY_ID\" from study where study.id in " +
-                             "(select distinct(study_id) from investigation_list where investigation_id in " +
-                             "(select investigation.id from invetigation where title='" + title + "'))") ;
+         t_r=t_s.executeQuery("select TITLE, investigation.id \"INVESTIGATION_ID\" from investigation where experiment_number = '" + key + "'") ;
 
          if(t_r.next())
          {
-            studyname = sr.LitWithEnt(xt.makeValid(r.getString("STUDYNAME") )); 
-            study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") )); 
-         }
+            title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+            investigation_id = sr.LitWithEnt(xt.makeValid(r.getString("INVESTIGATION_ID") ));
 
-         t_r.close() ;
+            sbr.append(ii+"<RelatedReference>\n") ;
+            sbr.append(ii+li"<Type>" + "previous" + "</Type>\n") ; 
+            sbr.append(ii+li"<ReferredToItem>" + "Experiment" + "</ReferredToItem>\n") ; 
+      
+
+            t_r.close() ;
+
+            t_r = t_s.executeQuery("select study.name \"STUDYNAME\", study.id \"STUDY_ID\" from study where study.id in " +
+                             "(select distinct(study_id) from investigation_list where investigation_id in " +
+                             "(select investigation.id from invetigation where title='" + title + "'))") ;
+
+            if(t_r.next())
+            {
+               studyname = sr.LitWithEnt(xt.makeValid(r.getString("STUDYNAME") )); 
+               study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") )); 
+            }
+
+            t_r.close() ;
     
 
 
-         sbr.append(ii+li"<ReferenceLocation>\n") ; 
-         sbr.append(ii+li+li"<Archive>"+"isis"+"</Archive>\n") ;
-         sbr.append(ii+li+li"<StudyName>"+studyname+"</StudyName>\n") ;
-         sbr.append(ii+li+li"<StudyId>"+study_id+"</StudyId>\n") ;
-         sbr.append(ii+li+li"<InvestigationName>"+title+"</InvestigationName>\n") ;
-         sbr.append(ii+li+li"<InvestigationId>"+investigation_id+"</InvestigationId>\n") ;
-         sbr.append(ii+li"</ReferenceLocation>\n") ; 
+            sbr.append(ii+li"<ReferenceLocation>\n") ; 
+            sbr.append(ii+li+li"<Archive>"+"isis"+"</Archive>\n") ;
+            sbr.append(ii+li+li"<StudyName>"+studyname+"</StudyName>\n") ;
+            sbr.append(ii+li+li"<StudyId>"+study_id+"</StudyId>\n") ;
+            sbr.append(ii+li+li"<InvestigationName>"+title+"</InvestigationName>\n") ;
+            sbr.append(ii+li+li"<InvestigationId>"+investigation_id+"</InvestigationId>\n") ;
+            sbr.append(ii+li"</ReferenceLocation>\n") ; 
      
-         sbr.append(ii+"<RelatedReference>\n") ;
-      } //as you want it all filled in or all returning nothing
+            sbr.append(ii+"<RelatedReference>\n") ;
+         } //as you want it all filled in or all returning nothing
 
+      t_s.close() ;
 
       return ;
    }
@@ -814,8 +817,9 @@ public class ISISCsmdMapper implements CsmdMapper
 
       buildMDDataDescription(key, sbr, ii+li, "dataholding", true) ;
       buildMDDataHoldingLocator(key, sbr, ii+li, "dataholding", true) ;
-      //HERE - what does related reference get the info from
-      buildMDRelatedReferance(key, sbr, ii+li, null) ;
+      //HERE - what does related reference get the info from - note essentially redundant as investigation and dataholding are
+      //synonymous - but put in here at the moment anyway - as may change
+      buildMDRelatedReferance(key, sbr, ii+li, "dataholding", true) ;
       buildMDDataCollection(key, sbr, ii+li, null) ;
       buildMDAtomicDataObject(key, sbr, ii+li, null) ;
 
