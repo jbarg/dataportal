@@ -168,7 +168,7 @@ public class XmlWrapperEMIN
       //get the keys in the archive for the valid studies
       String entries = cm.getKeys(query) ;
 
-      log.info("the valid keys are \t:" + entries") ;
+      log.info("the valid keys are \t:" + entries) ;
 
       StringTokenizer st = new StringTokenizer(entries, ", ") ;
 
