@@ -1,4 +1,4 @@
-//package uk.ac.cclrc.xmlwrapper ;
+package uk.ac.cclrc.xmlwrapper ;
 
 import java.util.* ;
 
@@ -446,7 +446,7 @@ public class ISISCsmdMapper implements CsmdMapper
       //recursion would have been better - but writing that stuff hurts my head !!
       while(level > 0) 
       {
-         t_r = t_s.execute("select name, parent_id, level from topic where topic_id = '" + topic_id +") ;
+         t_r = t_s.execute("select name, parent_id, level from topic where topic_id = '" + topic_id +"'") ;
  
          if(t_r.next())
          {
@@ -477,7 +477,7 @@ public class ISISCsmdMapper implements CsmdMapper
       while(size > 0)
       {
          sbr.append(ind+"<Subject>\n") ;
-         sbr.append(ind+li"<SubjectName>" + (String)listy.get(--size) + "</SubjectName>\n") ;
+         sbr.append(ind+li+"<SubjectName>" + (String)listy.get(--size) + "</SubjectName>\n") ;
          ind = ind+li ;
       }
 
@@ -511,7 +511,7 @@ public class ISISCsmdMapper implements CsmdMapper
          notes = sr.LitWithEnt(xt.makeValid(r.getString("NOTES") ));
       }
       r.close() ;
-      sbr.append(ii + "<Study StudyID=\"" + key "\">\n") ;
+      sbr.append(ii + "<Study StudyID=\"" + key + "\">\n") ;
       sbr.append(ii + li + "<StudyName>" + studyname + "</StudyName>\n") ;
 
       buildMDStudyInstitution(key, sbr, ii+li, null) ;  
@@ -530,11 +530,6 @@ public class ISISCsmdMapper implements CsmdMapper
    }
        
 
-
-
-      return ;
-   }
-
    void buildMDStudyInformation(String key, StringBuffer sbr, String ii, String type) throws SQLException //some where you might use type as
    {
       String start_date_date = place_holder ;
@@ -548,7 +543,7 @@ public class ISISCsmdMapper implements CsmdMapper
       r = s.executeQuery("select funding_info, purpose, status, to_char(start_date, 'YYYY-MM-DD') \"SDD\", " +
                          "to_char(start_date, 'HH24:MI:SS') \"SDT\", " +
 	                 "to_char(end_date, 'YYYY-MM-DD') \"EDD\", " +
-	                 "to_char(end_date, 'HH24:MI:SS') \"EDT\" "
+	                 "to_char(end_date, 'HH24:MI:SS') \"EDT\" " +
 	                 "from study where id='" + key + "'") ;
 
       if(r.next())
@@ -561,19 +556,19 @@ public class ISISCsmdMapper implements CsmdMapper
          purpose = sr.LitWithEnt(xt.makeValid(r.getString("PURPOSE") ));
          status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
       }
-      r.close()
+      r.close() ;
   
       sbr.append(ii+"<StudyInformation>\n") ;
       sbr.append(ii+li+"<Funding>" + funding + "</Funding>\n") ;
       sbr.append(ii+li+"<TimePeriod>\n") ; 
-      sbr.append(ii+li+li"<StartDate>\n") ; 
-      sbr.append(ii+li+li+li"<Date>"+ start_date_date + "</Date>\n") ; 
-      sbr.append(ii+li+li+li"<Time>"+ start_date_time + "</Time>\n") ; 
-      sbr.append(ii+li+li"</StartDate>\n") ; 
-      sbr.append(ii+li+li"</EndDate>\n") ; 
-      sbr.append(ii+li+li+li"<Date>"+ start_date_date + "</Date>\n") ; 
-      sbr.append(ii+li+li+li"<Time>"+ start_date_time + "</Time>\n") ; 
-      sbr.append(ii+li+li"</EndDate>\n") ; 
+      sbr.append(ii+li+li+"<StartDate>\n") ; 
+      sbr.append(ii+li+li+li+"<Date>"+ start_date_date + "</Date>\n") ; 
+      sbr.append(ii+li+li+li+"<Time>"+ start_date_time + "</Time>\n") ; 
+      sbr.append(ii+li+li+"</StartDate>\n") ; 
+      sbr.append(ii+li+li+"</EndDate>\n") ; 
+      sbr.append(ii+li+li+li+"<Date>"+ start_date_date + "</Date>\n") ; 
+      sbr.append(ii+li+li+li+"<Time>"+ start_date_time + "</Time>\n") ; 
+      sbr.append(ii+li+li+"</EndDate>\n") ; 
       sbr.append(ii+li+"</TimePeriod>\n") ; 
       sbr.append(ii+li+"<Purpose>\n") ; 
       sbr.append(ii+li+li+"<Abstract>" + purpose + "</Abstract>\n")  ; 
@@ -586,14 +581,11 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDNameRole(String key, StringBuffer sbr, String ii, String type) throws SQLException //some where you might use type as
    {
-      String ii = indentToStr(initial_indent) ;
-
       return ;
    }
 													   //you can have InstitutionRole and PersonRole
    void buildMDContactDetails(String key, StringBuffer sbr, String ii, String type) throws SQLException //similar to buildMDContact template
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
@@ -621,16 +613,16 @@ public class ISISCsmdMapper implements CsmdMapper
          //if data not present than data will be filled in with an empty string this may need changing
 
          sbr.append(ii+"<StudyPerson\n") ;
-         sbr.append(ii+li"<Name>\n") ;
-         sbr.append(ii+li+li"<Surname>" + surname + "</Surname>\n") ;
-         sbr.append(ii+li+li"<MiddleInitials>" + middle_initials + "</MiddleInitials>\n") ;
-         sbr.append(ii+li+li"<Forename>" + forename + "</Forename>\n") ;
-         sbr.append(ii+li+li"<Title>" + title + "</Title>\n") ;
-         sbr.append(ii+li"</Name>\n") ;
-         sbr.append(ii+li"<ContactDetails>\n") ;
-         sbr.append(ii+li+li"<Email>" + email + "</Email>\n") ;
-         sbr.append(ii+li"</ContactDetails>\n") ;
-         sbr.append(ii+li"<RoleInStudy>not available</RoleInStudy>\n") ;
+         sbr.append(ii+li+"<Name>\n") ;
+         sbr.append(ii+li+li+"<Surname>" + surname + "</Surname>\n") ;
+         sbr.append(ii+li+li+"<MiddleInitials>" + middle_initials + "</MiddleInitials>\n") ;
+         sbr.append(ii+li+li+"<Forename>" + forename + "</Forename>\n") ;
+         sbr.append(ii+li+li+"<Title>" + title + "</Title>\n") ;
+         sbr.append(ii+li+"</Name>\n") ;
+         sbr.append(ii+li+"<ContactDetails>\n") ;
+         sbr.append(ii+li+li+"<Email>" + email + "</Email>\n") ;
+         sbr.append(ii+li+"</ContactDetails>\n") ;
+         sbr.append(ii+li+"<RoleInStudy>not available</RoleInStudy>\n") ;
          sbr.append(ii+"</StudyPerson\n") ;
 
       }
@@ -643,16 +635,34 @@ public class ISISCsmdMapper implements CsmdMapper
       //there is no such info in the ISIS ICAT yet so essentially putting in a meaningful place holder
 
       sbr.append(ii + "<StudyInsitution>\n");
-      sbr.append(ii + li + "<Name institutiontype=\"research\">ISIS, RAL</Name>\n") 
+      sbr.append(ii + li + "<Name institutiontype=\"research\">ISIS, RAL</Name>\n") ;
       sbr.append(ii + li + "<Role>Facility</Role>\n") ;
       sbr.append(ii + "</StudyInsitution>\n");
 
       return ;
    }
 
-   void buildMDRelatedReference(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   void buildMDRelatedReference(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+      //this can be done for datafile-ado however not populated yet and something to come back to
+
+      //Connection c = ss.getConnection() ;
+      //Statement t_s = null ;
+      //Resultset t_r = null ;
+
+      //if(nested == true)
+      //{
+      //   t_s=c.createStatement() ;
+      //}
+      //else
+      //{
+      //   t_s=s ;
+      //}
+      //
+      //if ((type.compareTo("ado")==0) 
+      //{
+      // 
+      //}
 
       return ;
    }
@@ -721,9 +731,9 @@ public class ISISCsmdMapper implements CsmdMapper
          }
          // put in the resource/instrument used 
          sbr.append(ii+li+"<Resources\n>") ; 
-         sbr.append(ii+li+li"<Name"> + name + "</Name>\n") ;
-         sbr.append(ii+li+li"<ShortName"> + short_name + "</ShortName">) ;
-         sbr.append(ii+li+li"<Comments"> + instrument_comments + "</Comments>\n") ;
+         sbr.append(ii+li+li+"<Name"> + name + "</Name>\n") ;
+         sbr.append(ii+li+li+"<ShortName"> + short_name + "</ShortName>\n") ;
+         sbr.append(ii+li+li+"<Comments"> + instrument_comments + "</Comments>\n") ;
          sbr.append(ii+li+"<Resources\n>") ; 
 
          t_r.close() ;
@@ -773,8 +783,8 @@ public class ISISCsmdMapper implements CsmdMapper
             investigation_id = sr.LitWithEnt(xt.makeValid(r.getString("INVESTIGATION_ID") ));
 
             sbr.append(ii+"<RelatedReference>\n") ;
-            sbr.append(ii+li"<Type>" + "previous" + "</Type>\n") ; 
-            sbr.append(ii+li"<ReferredToItem>" + "Experiment" + "</ReferredToItem>\n") ; 
+            sbr.append(ii+li+"<Type>" + "previous" + "</Type>\n") ; 
+            sbr.append(ii+li+"<ReferredToItem>" + "Experiment" + "</ReferredToItem>\n") ; 
       
 
             t_r.close() ;
@@ -793,18 +803,23 @@ public class ISISCsmdMapper implements CsmdMapper
     
 
 
-            sbr.append(ii+li"<ReferenceLocation>\n") ; 
-            sbr.append(ii+li+li"<Archive>"+"isis"+"</Archive>\n") ;
-            sbr.append(ii+li+li"<StudyName>"+studyname+"</StudyName>\n") ;
-            sbr.append(ii+li+li"<StudyId>"+study_id+"</StudyId>\n") ;
-            sbr.append(ii+li+li"<InvestigationName>"+title+"</InvestigationName>\n") ;
-            sbr.append(ii+li+li"<InvestigationId>"+investigation_id+"</InvestigationId>\n") ;
-            sbr.append(ii+li"</ReferenceLocation>\n") ; 
+            sbr.append(ii+li+"<ReferenceLocation>\n") ; 
+            sbr.append(ii+li+li+"<Archive>"+"isis"+"</Archive>\n") ;
+            sbr.append(ii+li+li+"<StudyName>"+studyname+"</StudyName>\n") ;
+            sbr.append(ii+li+li+"<StudyId>"+study_id+"</StudyId>\n") ;
+            sbr.append(ii+li+li+"<InvestigationName>"+title+"</InvestigationName>\n") ;
+            sbr.append(ii+li+li+"<InvestigationId>"+investigation_id+"</InvestigationId>\n") ;
+            sbr.append(ii+li+"</ReferenceLocation>\n") ; 
      
             sbr.append(ii+"<RelatedReference>\n") ;
          } //as you want it all filled in or all returning nothing
 
-      t_s.close() ;
+      }
+
+      if(nested==true)
+      {//as don't want to close global statement handle
+         t_s.close() ;
+      }
 
       return ;
    }
@@ -852,7 +867,7 @@ public class ISISCsmdMapper implements CsmdMapper
       String name = place_holder ;
 
       t_r = t_s.exectuteQuery("select dataset.id \"DATASETID\", name, dataset_type, dataset_status, description from dataset where "+
-                              "dataset.id in (select datasetid from dataset_list where investigationid ='" + key "')") ;
+                              "dataset.id in (select datasetid from dataset_list where investigationid ='" + key + "')") ;
 
       while(t_r.next()) 
       {
@@ -890,7 +905,10 @@ public class ISISCsmdMapper implements CsmdMapper
       }
 
       t_r.close() ;
-      t_s.close() ;
+      if(nested==true)
+      {
+         t_s.close() ;
+      }
 
       return ;
    }
@@ -918,6 +936,12 @@ public class ISISCsmdMapper implements CsmdMapper
       
       sbr.append("</AtomicDataObject>\n") ;
 
+      if(nested==true)
+      {
+         t_s.close() ;
+      }
+
+
       //
       return ;
    }
@@ -941,7 +965,7 @@ public class ISISCsmdMapper implements CsmdMapper
       String uri = place_holder ;
       String datafile_format = place_holder ;
 
-      t_r=t_s.executeQuery("select uri, datafile_format from datafile where id='"+key"'") ;
+      t_r=t_s.executeQuery("select uri, datafile_format from datafile where id='"+key+"'") ;
 
       if(t_r.next())
       {
@@ -956,8 +980,8 @@ public class ISISCsmdMapper implements CsmdMapper
       }
       //need to put some NS stuff here when doing checking vs the schema 
       sbr.append(ii+"<ADOLocator>\n") ; 
-      sbr.append(ii+li"<Locator>"+uri+"</Locator>\n") ; 
-      sbr.append(ii+li"<Filetype>"+datafile_format+"</Filetype>\n") ; 
+      sbr.append(ii+li+"<Locator>"+uri+"</Locator>\n") ; 
+      sbr.append(ii+li+"<Filetype>"+datafile_format+"</Filetype>\n") ; 
       sbr.append(ii+"</ADOLocator>\n") ; 
          
       return ;
@@ -984,7 +1008,7 @@ public class ISISCsmdMapper implements CsmdMapper
       String locator = place_holder ;
       String id = place_holder ;
 
-      t_r=t_s.executeQuery("select name from dataset where id = '"+key"'") ;
+      t_r=t_s.executeQuery("select name from dataset where id = '"+key+"'") ;
       if(t_r.next())
       {
          name=sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
@@ -1028,7 +1052,10 @@ public class ISISCsmdMapper implements CsmdMapper
       sbr.append(ii+"</DataCollectionLocator>\n") ; 
 
       t_r.close() ;
-      t_s.close() ;
+      if(nested==true)
+      {
+         t_s.close() ;
+      }
 
       return ;
 
@@ -1057,7 +1084,7 @@ public class ISISCsmdMapper implements CsmdMapper
       {
          String name=place_holder ;
 
-         t_r=t_s.executeQuery("Select title from investigation where id='" + key "'") ;
+         t_r=t_s.executeQuery("Select title from investigation where id='" + key + "'") ;
 
          if(t_r.next())
          {
@@ -1125,17 +1152,16 @@ public class ISISCsmdMapper implements CsmdMapper
 
       }
         
-      t_s.close() ;   
+      if(nested==true)
+      {
+         t_s.close() ;
+      }
 
       return ;
    }
 
-
-      return ;
-   }
    void buildMDDataTopic(String key, StringBuffer sbr, String ii, String type) throws SQLException //will use Keywords & Subjects above
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
@@ -1166,8 +1192,15 @@ public class ISISCsmdMapper implements CsmdMapper
          sbr.append(ii+"</LogicalDescription>\n") ;
       }
 
+      if(nested==true)
+      {
+         t_s.close() ;
+      }
+
+
       return ;
    }
+   //
    void buildMDParameters(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
 
@@ -1227,7 +1260,10 @@ public class ISISCsmdMapper implements CsmdMapper
       }// all done for ado
 
       t_r.close() ;
-      t_s.close() ;
+      if(nested==true)
+      {
+         t_s.close() ;
+      }
 
       return ;
    }
@@ -1281,55 +1317,37 @@ public class ISISCsmdMapper implements CsmdMapper
       sbr.append(ii+li+"<Locator>" + "N/A" + "</Locator>\n") ;
       sbr.append(ii+"<DataHoldingLocator>\n") ;
 
+      if(nested==true)
+      {
+         t_s.close() ;
+      }
+
 
       return ;
    }
 
-   void buildMDCollectionLocator(String key, StringBuffer sbr, String ii, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDAtomicDataObject(String key, StringBuffer sbr, String ii, String type) throws SQLException
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
-   void buildMDADOLocator(String key, StringBuffer sbr, String ii, String type) throws SQLException //definately need type here
-   {
-      String ii = indentToStr(initial_indent) ;
-
-      return ;
-   }
- 													     //files and selects
 
    //all the Misc type information
    void buildMDAccessConditions(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 
    void buildMDLegalNotice(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 
    void buildMDRelatedPublication(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
 
    void buildMDOtherRelatedMaterial(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
 
       return ;
    }
@@ -1470,7 +1488,7 @@ public class ISISCsmdMapper implements CsmdMapper
       buildMDOtherRelatedMaterial(key, sbr, (li+li), null) ;
 
       //MetadataRecord ends
-      sbr.append(indentToStr(level_indent) + "</MetadataRecord>\n");
+      sbr.append(li + "</MetadataRecord>\n");
 
       return ;
 
@@ -1635,7 +1653,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
       try
       {
-         icm.buildMetadataRecord(key, sbr) throws SQLException
+         icm.buildMetadataRecord(key, sbr) ;
       }
       catch (SQLExceltion sqle)
       {
