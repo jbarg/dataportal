@@ -197,10 +197,26 @@
 		  <!-- <delete dir="${dataportal.home}/WebInterface/build"/>-->
 		  <!--  instead of deleting, call and clean -->
 		      
-		    <antcall target="clean" />
+		  <ant antfile="installation.xml" target="clean" inheritAll="false">  
+		  		   
+		  </ant> 	
 		    
 		    </target>
         
+         <!-- ==================== jar DP =========================== -->
+			<!--
+			    Copies all directories from dataportal home and then cleans them.
+			    
+			    -->
+			    <target name="jar" description="jars all of the directories to the dataportal">
+			    <jar destfile="dp3.6.1.1.jar" >
+
+			 			 <fileset dir="../installation" excludes="**/dp*.jar, **/dataportal.xml"/>
+			       			
+			</jar>
+			<!--<arg line="build.properties build.xml installation.xml INSTALLATION_TOMCAT.txt modules.xml uddi\ sql\ dataportal\" />-->			
+			    
+			    </target>
         
 
 <!-- ==================== delete DP =========================== -->
