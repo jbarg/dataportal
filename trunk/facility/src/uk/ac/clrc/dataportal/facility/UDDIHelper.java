@@ -172,7 +172,7 @@ public class UDDIHelper {
             // Create the Business Entity based on the Facility info.
             // BusinessKey of "" must be used with WASP UDDI server to create entry.
             // "en" is the ISO3166 language code for "English" which is also required.
-            BusinessEntity business = new BusinessEntity("", cfb.getFacilityName() , "en");
+            BusinessEntity business = new BusinessEntity("", cfb.getFacilityName() );
             
             // If a Facility description is supplied set this to the Business Entity default description
             // It is possible in UDDI to have more than one description but we'll only use one
@@ -237,16 +237,16 @@ public class UDDIHelper {
             businesses.addElement(business);
             
             // Save Business Entity to UDDI and obtain the Business Key it was created with
-            BusinessDetail bd = proxy.save_business(authToken.getAuthInfo().getText(), businesses);
+            BusinessDetail bd = proxy.save_business(authToken.getAuthInfoString(), businesses);
             Vector bev = bd.getBusinessEntityVector();
             BusinessEntity be = (BusinessEntity)(bev.elementAt(0));
             
             businessKey = be.getBusinessKey();
             
-            if (!cfb.getFacilityName().equalsIgnoreCase("DataPortal")) {
+           // if (!cfb.getFacilityName().equalsIgnoreCase("DataPortal")) {
                 
-                setPublisherAssertion(dataPortalID, businessKey);
-            }
+           //     setPublisherAssertion(dataPortalID, businessKey);
+           // }
         }
         catch (UDDIException ue) {
             log.fatal("UDDI Exception caught", ue);
@@ -254,10 +254,7 @@ public class UDDIHelper {
             
             throw ue;
         }
-        catch (FacilityException e) {
-            log.error("Facility Exception caught", e);
-            throw e;
-        }
+        
         catch (Exception e) {
             log.error("Exception caught", e);
             throw e;
