@@ -100,6 +100,7 @@ public class Search {
                 StringBuffer h = new StringBuffer();
                 for(int i = 0; i<n; i++){
                     if( dn.charAt(i) == '/') h.append("_");
+                    else  if( dn.charAt(i) == ' ') h.append("_");
                     else h.append(dn.charAt(i));
                 }
                 dn = h.toString();
@@ -111,10 +112,12 @@ public class Search {
                 StringBuffer bu = new StringBuffer();
                 for(int i = 0; i<l; i++){
                     if( discipline.charAt(i) == ' ') bu.append("%20");
+                    
                     else bu.append(discipline.charAt(i));
                 }
                 discipline = bu.toString();
-                
+                File history  = new  File(workingDir+File.separator+"profiles"+File.separator+"history");
+                if(!history.exists()) history.mkdir();
                 wr = new FileWriter(workingDir+File.separator+"profiles"+File.separator+"history"+File.separator+dn,true);
                 wr.write("<tr><td>"+buff.toString()+" </td>");
                 wr.write("<td>"+dis+"</td>");

@@ -16,6 +16,8 @@
     ArrayList facs = (ArrayList)session.getAttribute("facs");
     String facility = null;
     if(facs == null) facility = "No_Access";
+
+  else if(facs.size() ==  0) facility = "No_Access";
     else{ facility = (String)facs.get(0);}
    
 
