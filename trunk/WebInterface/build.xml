@@ -221,6 +221,17 @@
 			<!-- added in ,**/test/** -->
 			<fileset dir="${src.home}" excludes="**/*.java"/>
 		</copy>
+                
+               <java classname="uk.ac.dl.web.Indexer" fork="false">
+        <arg value="create" />
+     
+         <arg value="${basedir}/build/help/xml" />
+        <arg value="${basedir}/build/help/xml/index" />
+        <classpath refid="compile.classpath"/>
+        <classpath>
+        <pathelement path="${basedir}/build/WEB-INF/classes"/>
+        </classpath>
+    </java>
 	</target>
 	<!-- ==================== Dist Target ===================================== -->
 	<!--
@@ -439,7 +450,7 @@
   </target>
   
   
-  <target name="index" depends="compile" description="Re-index's the help pages">
+  <target name="index"  description="Re-index's the help pages">
     <java classname="uk.ac.dl.web.Indexer" fork="false">
         <arg value="create" />
      
