@@ -178,9 +178,9 @@ public class XmlWrapperDocBuilder
 
          //need to delete the contents of stringbuffer first
          result.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") ;
-         result.append("<CCLRCMetadata xmlns=\"http://www.escience.clrc.ac.uk/schemas/scientific\" ");
+         result.append("<CCLRCMetadata xmlns=\"http://www.escience.cclrc.ac.uk/schemas/scientific\" ");
          result.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ") ;
-         result.append("xsi:schemaLocation=\"http://www.escience.clrc.ac.uk/schemas/scientific\" \"" + ss.getSchemaLocation() + "\">\n") ; 
+         result.append("xsi:schemaLocation=\"http://www.escience.cclrc.ac.uk/schemas/scientific\" \"" + ss.getSchemaLocation() + "\">\n") ; 
 
          //build metadata record
          try 
