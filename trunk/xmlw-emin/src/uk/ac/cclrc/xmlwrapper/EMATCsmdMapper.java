@@ -325,7 +325,7 @@ public class EMATCsmdMapper implements CsmdMapper
       //retrieve the database name
       String dbs = ss.getDbs() ;
 
-      r = s.executeQuery("select institution.name, institution.institution_id address_1, address_2, town, region, postcode, country, " +
+      r = s.executeQuery("select institution.name, institution.institution_id, address_1, address_2, town, region, postcode, country, " +
                          "title, forename, surname, other_initials, telephone, email, fax from " + dbs +
                          "person, " + dbs + "institution where institution.institution_id = person.institution_id and person_id in " +
                          "(select person_id from "+dbs+"study_person where study_id='" + key + "' and role like '%" + contact_type + "%') " ) ;
@@ -346,7 +346,7 @@ public class EMATCsmdMapper implements CsmdMapper
 
       if(r.next())
       {
-         institute_name = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTION.NAME") ));
+         institute_name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
          institute_id = r.getInt("INSTITUTION_ID") ;
          i_street = sr.LitWithEnt(xt.makeValid(r.getString("ADDRESS_1") ));
          i_place = sr.LitWithEnt(xt.makeValid(r.getString("TOWN") ));
@@ -354,7 +354,7 @@ public class EMATCsmdMapper implements CsmdMapper
          i_country = sr.LitWithEnt(xt.makeValid(r.getString("COUNTRY") ));
          last_name = sr.LitWithEnt(xt.makeValid(r.getString("SURNAME") ));
          first_name = sr.LitWithEnt(xt.makeValid(r.getString("FORENAME") ));
-         second_name = sr.LitWithEnt(xt.makeValid(r.getString("MIDDLE_INITIALS") ));
+         second_name = sr.LitWithEnt(xt.makeValid(r.getString("OTHER_INITIALS") ));
          title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
          telephone = sr.LitWithEnt(xt.makeValid(r.getString("TELEPHONE") ));
          fax = sr.LitWithEnt(xt.makeValid(r.getString("FAX") ));

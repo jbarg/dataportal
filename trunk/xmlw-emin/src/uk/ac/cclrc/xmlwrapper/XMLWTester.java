@@ -121,6 +121,10 @@ public class XMLWTester {
                  "Discipline='All'",
                  "saved_emat.xml") ;
 
+      xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-em/services/xmlwrapper_emat",
+                 "Discipline='/Chemistry/Computational/Solid State/Organic/Crystal Structure Prediction/Aspirin'",
+                 "saved_emat2.xml") ;
+
 
 
       return ;
