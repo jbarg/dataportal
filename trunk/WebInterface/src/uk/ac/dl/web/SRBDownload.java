@@ -62,7 +62,7 @@ public class SRBDownload extends HttpServlet {
                 PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
                 //load properties
                 Properties props = new Properties();
-                props.load(new FileInputStream(wd+File.separator+"WEB-INF"+File.separator+"webserviceslocation.conf"));
+                props.load(new FileInputStream(wd+File.separator+"WEB-INF"+File.separator+"web.conf"));
                 String srb_location = props.getProperty("srb_location");
                 String srb_password = props.getProperty("srb_password");
                 
