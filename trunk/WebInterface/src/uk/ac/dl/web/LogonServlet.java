@@ -9,7 +9,7 @@ package uk.ac.dl.web;
 import ac.dl.xml.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-
+import java.sql.*;
 //dataportal classes
 import java.io.*;
 import java.util.*;
@@ -67,7 +67,7 @@ public class LogonServlet extends HttpServlet{
         
         String reName = null;
         String rePass = null;
-        Integer sessionid = null;
+        String sessionid = null;
         //now try to log the user in
         //set login status as false
         boolean loggedin = false;
@@ -134,7 +134,15 @@ public class LogonServlet extends HttpServlet{
                 browser = "IE5";
                 logger.warn("Exception with get browser",e);
             }
-            
+              //add logging section
+            if(prop.getProperty("logging").equals("true")){
+                try{
+                    logUser(sessionid,locations.getProperty("SESSION"));
+                }
+                catch(Exception e){
+                    logger.fatal("Could not update users logging",e);
+                }
+            }
             //logger.info("Browser is "+browser +".  Header is "+req_header+" ,with user "+reName);
             session.setAttribute("browser",browser);
             try{
@@ -146,6 +154,8 @@ public class LogonServlet extends HttpServlet{
                 logger.fatal("Could not locate permissions for the user",e);
                 response.sendRedirect("../jsp/ErrorLogin.jsp");
             }
+            
+           
             
         }
         else response.sendRedirect("../jsp/ErrorLogin.jsp");
@@ -246,7 +256,7 @@ public class LogonServlet extends HttpServlet{
      * @return sessionid, integer.
      * @throws Exception If the web service throw an exception
      */    
-    private Integer loginOn(String username,String passphrase,Properties locations) throws Exception{
+    private String loginOn(String username,String passphrase,Properties locations) throws Exception{
         try{
             String endpoint = locations.getProperty("AUTH");
             //System.out.println("authent url "+endpoint);
@@ -256,11 +266,11 @@ public class LogonServlet extends HttpServlet{
             call.setOperationName( "login" );
             call.addParameter( "userName", XMLType.XSD_STRING, ParameterMode.IN );
             call.addParameter( "password", XMLType.XSD_STRING, ParameterMode.IN );
-            call.setReturnType( XMLType.XSD_INT );
+            call.setReturnType( XMLType.XSD_STRING );
             
             Object[] ob = new Object[]{username,passphrase};
             
-            Integer sid = (Integer) call.invoke(ob );
+            String sid = (String) call.invoke(ob );
             return sid;
         }
         catch(Exception e){
@@ -277,7 +287,7 @@ public class LogonServlet extends HttpServlet{
      * @throws Exception If the web service throws an exception
      * @return ArrayList of the facilites that the user is able to query
      */
-    private  ArrayList getFacilities(Integer sid,Properties locations)throws Exception{
+    private  ArrayList getFacilities(String sid,Properties locations)throws Exception{
         
         try{
             String endpoint = locations.getProperty("SESSION");
@@ -286,7 +296,7 @@ public class LogonServlet extends HttpServlet{
             Call  call    = (Call) service.createCall();
             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
             call.setOperationName( "getPermissions" );
-            call.addParameter( "sid", XMLType.XSD_INT, ParameterMode.IN );
+            call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
             call.setReturnType( XMLType.SOAP_ELEMENT );
             Object[] ob = new Object[]{sid};
             org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke(ob );
@@ -359,5 +369,79 @@ public class LogonServlet extends HttpServlet{
         return prop;
         
     }
-    
+      public synchronized void logUser(String sessionid,String session_url) throws Exception{
+        
+        //get the dn from the session manager
+        Service  service = new Service();
+        Call  call    = (Call) service.createCall();
+        
+        call.setTargetEndpointAddress( new java.net.URL(session_url) );
+        call.setOperationName( "getDN" );
+        call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
+        
+        call.setReturnType( XMLType.XSD_STRING);
+        
+        Object[] ob = new Object[]{sessionid};
+        
+        String dn = (String) call.invoke(ob );
+        //got dn
+        
+        //put into database
+        Connection myConn = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        try{
+            //System.out.println("from cart in shop driver is "+prop.getProperty("db_driver"));
+            Class.forName(prop.getProperty("db_driver"));
+            
+            myConn = DriverManager.getConnection(prop.getProperty("db_url")+"/"+prop.getProperty("db_name"),prop.getProperty("db_user"),prop.getProperty("db_password"));
+            
+            String table = prop.getProperty("db_table_name");
+            
+            //first check if user has cart
+            stat = myConn.createStatement();
+            rs = stat.executeQuery("select * from "+table+" where dn = '"+dn+"' ");
+            
+            if(rs.next()){
+                int hits =  rs.getInt("hits");
+                hits++;
+                stat.executeUpdate("update "+table+" set hits="+new Integer(hits)+" where dn='"+dn+"'");
+                
+            }
+            else{
+                stat.executeQuery("insert into "+table+" values ('"+dn+"',1)");
+                
+            }
+            
+            rs.close();
+            rs = null;
+            
+            stat.close();
+            stat =null;
+            
+            myConn.close();
+            myConn = null;
+        }
+        catch(Exception e){
+            throw e;
+        }
+        finally {
+            // Always make sure result sets and statements are closed,
+            // and the connection is returned to the pool
+            if (rs != null) {
+                try { rs.close(); } catch (SQLException e) { ; }
+                rs = null;
+            }
+            if (stat != null) {
+                try { stat.close(); } catch (SQLException e) { ; }
+                stat = null;
+            }
+            if (myConn != null) {
+                try { myConn.close(); } catch (SQLException e) {
+                    logger.warn("Connection unable to be closed",e);  }
+                myConn = null;
+            }
+        }
+        
+    }
 }
