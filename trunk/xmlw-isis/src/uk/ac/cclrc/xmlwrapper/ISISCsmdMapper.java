@@ -813,7 +813,7 @@ public class ISISCsmdMapper implements CsmdMapper
       sbr.append(ii+"<DataHolding InvestigationID=\"" + key + "\">\n") ;
 
       buildMDDataDescription(key, sbr, ii+li, "dataholding", true) ;
-      buildMDDataHoldingLocator(key, sbr, ii+li, null) ;
+      buildMDDataHoldingLocator(key, sbr, ii+li, "dataholding", true) ;
       buildMDRelatedReferance(key, sbr, ii+li, null) ;
       buildMDDataCollection(key, sbr, ii+li, null) ;
       buildMDAtomicDataObject(key, sbr, ii+li, null) ;
@@ -894,9 +894,36 @@ public class ISISCsmdMapper implements CsmdMapper
 
       return ;
    }
-   void buildMDDataHoldingLocator(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   void buildMDDataHoldingLocator(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
+
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+ 
+      String name=place_holder ;
+
+      t_r=t_s.executeQuery("select title from experiment where id ='" + key + "'") ;
+      if(t_r.next())
+      {
+         name = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+      }
+      t_r.close() ;
+
+      sbr.append(ii+"<DataHoldingLocator>\n") ;
+      sbr.append(ii+li+"<DataName>" + name + "</DataName>\n") ;
+      //is there a locator ?
+      sbr.append(ii+li+"<Locator>" + "N/A" + "</Locator>\n") ;
+      sbr.append(ii+"<DataHoldingLocator>\n") ;
+
 
       return ;
    }
