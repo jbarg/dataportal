@@ -1,3 +1,4 @@
+/*
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
@@ -11,10 +12,10 @@ import java.sql.*;
 import java.net.URL;
 import java.net.URLConnection;
 
-
+*/
 // Test client for the Session Manager web service
 public class TestClient {
-    
+/*    
     private static String endpoint = "http://localhost:8080/sessionmanager/services/SessionManager";
     private static String sid = null;
     private static final String proxy = "file:///E:/cog-1.1/build/cog-1.1/bin/x509up_36855.pem";
@@ -119,7 +120,7 @@ public class TestClient {
         
         sm.endSession(sid);
     }
-    
+*/    
     public static void main(String [] args) throws Exception {
         
         
@@ -128,14 +129,14 @@ public class TestClient {
         // logon from HPCPortal
         //tc.putCredentials();
         // logon from web interface
-        tc.startSession();
+        //tc.startSession();
         
-        tc.getPermissions();
-        tc.getDName();
-        tc.getLifetime();
-        tc.getPermissions();
+        //tc.getPermissions();
+        //tc.getDName();
+        //tc.getLifetime();
+        //tc.getPermissions();
         
-        tc.endSession();
+        //tc.endSession();
     }
     
 }
