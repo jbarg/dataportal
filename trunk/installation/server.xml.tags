@@ -1,0 +1,58 @@
+For section 4)
+--------------
+
+
+<!--  Used to connect to the HSQL database for the dataportal -->
+<Resource name="jdbc/dataportalDB" auth="Container" type="javax.sql.DataSource"/>
+      <ResourceParams name="jdbc/dataportalDB">
+      <parameter>
+		   <name>factory</name>
+		   <value>org.apache.commons.dbcp.BasicDataSourceFactory</value>
+		</parameter>
+		<parameter><name>maxActive</name><value>20</value></parameter>
+		<parameter><name>maxIdle</name><value>10</value></parameter>
+		<parameter><name>maxWait</name><value>15000</value></parameter>
+		<parameter><name>username</name><value>dataportal</value></parameter>
+		<parameter><name>password</name><value>datap0rt4l</value></parameter>
+		<parameter>
+			 <name>logAbandoned</name>
+			 <value>true</value>
+		       </parameter>
+
+		 <parameter>
+			 <name>removeAbandoned</name>
+			 <value>true</value>
+		       </parameter>
+
+		<parameter>
+		   <name>driverClassName</name>
+
+	  <value>org.hsqldb.jdbcDriver</value>
+
+		</parameter>
+
+		<parameter>
+		   <name>url</name>
+		   <value>jdbc:hsqldb:hsql://localhost:9002/dpdb</value>
+	</parameter>
+
+	<parameter>
+	  <name>validationQuery</name>
+	  <value>select count(*) from CART</value>
+	</parameter>
+                 
+ </ResourceParams>
+ 
+ 
+ 
+ 
+ For section 5)
+ --------------
+
+ 
+  <DefaultContext>
+    <ResourceLink 
+      name="jdbc/dataportalDB"
+      global="jdbc/dataportalDB"
+      type="javax.sql.DataSource" />
+ </DefaultContext>

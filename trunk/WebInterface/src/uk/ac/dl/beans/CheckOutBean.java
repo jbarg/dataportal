@@ -12,8 +12,8 @@ import javax.xml.rpc.ParameterMode;
 import org.apache.axis.client.Call;
 import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
-import javax.xml.namespace.QName;
-import org.apache.axis.AxisFault;
+
+
 import org.jdom.*;
 import org.jdom.input.*;
 import java.io.*;
