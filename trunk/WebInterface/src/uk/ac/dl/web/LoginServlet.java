@@ -144,10 +144,10 @@ public class LoginServlet extends HttpServlet {
             
             //if correct add info to the thier session
             String dn = getDN(sessionid, locations.getProperty("SESSION"));
-            session.setAttribute("dn", dn); 
+            session.setAttribute("dn", dn);
             
-            session.setAttribute("username", reName);
-            session.setAttribute("passphrase", rePass);
+            //session.setAttribute("username", reName);
+            //session.setAttribute("passphrase", rePass);
             session.setAttribute("LOGIN_STATUS", new Boolean(true));
             session.setMaxInactiveInterval(Integer.parseInt(lifetime));
             //get HPC info out of the prop file
@@ -170,6 +170,8 @@ public class LoginServlet extends HttpServlet {
             
             //logger.info("Browser is "+browser +".  Header is "+req_header+" ,with user "+reName);
             session.setAttribute("browser",browser);
+            
+            //no permissions now
             try{
                 ArrayList facs = getFacilities(session,locations);
                 session.setAttribute("facs",facs);
@@ -178,6 +180,7 @@ public class LoginServlet extends HttpServlet {
                 logger.fatal("Could not locate permissions for the user",e);
                 //response.sendRedirect("../jsp/error.jsp");
             }
+            
             //add logging section
             if(prop.getProperty("logging") == null || !(prop.getProperty("logging").equals("true"))){
                 
@@ -377,7 +380,7 @@ public class LoginServlet extends HttpServlet {
     }
     
     
-    private  ArrayList getFacilities(HttpSession session,Properties locations)throws Exception{
+    private ArrayList getFacilities(HttpSession session,Properties locations)throws Exception{
         
         try{
             String endpoint = locations.getProperty("SESSION");
@@ -389,36 +392,21 @@ public class LoginServlet extends HttpServlet {
             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
             call.setOperationName( "getPermissions" );
             call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
-            call.setReturnType( XMLType.XSD_ANY );
+            call.setReturnType(new javax.xml.namespace.QName("", "ArrayOfArrayOf_xsd_string"), java.lang.String[][].class);
+            
             
             Object[] ob = new Object[]{sid};
             
             
-            org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke(ob );
-            org.jdom.input.DOMBuilder buildert = new org.jdom.input.DOMBuilder();
-            org.jdom.Element el = buildert.build(ret);
-            //org.jdom.Document doc  = new org.jdom.Document(el);
-            //Saver.save(doc,"c:/per.xml" );
-            //Element root = doc.getRootElement();
+            String[][] ret = (String[][]) call.invoke(ob );
+            ArrayList arraylist = new ArrayList();
             
-            List list = el.getChildren("Facility");
-            Iterator it = list.iterator();
-            
-            ArrayList facs = new ArrayList();
-            
-            while(it.hasNext()){
-                Element el2 = (Element)it.next();
-                //System.out.println(el2.getChild("Data").getText());
-                //if(el2.getChild("Data").getText().equals("t")) facs.add(el2.getAttribute("name").getValue().toUpperCase());
-                //System.out.println("acces string is "+el2.getAttribute("access"));
-                if(el2.getAttribute("access").getValue().equals("t")) {
-                    facs.add(el2.getAttribute("name").getValue().toUpperCase());
-                    //System.out.println(el2.getAttribute("name").getValue().toUpperCase());
-                }
+            for(int i =0; i < ret.length;i++){
+                arraylist.add(ret[i][1]);
+                
             }
-            //System.out.println("facs is +"+ facs);
             
-            return facs;
+            return arraylist;
         }
         
         catch(Exception e){
