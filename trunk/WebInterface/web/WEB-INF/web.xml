@@ -1,508 +1,323 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
     "http://java.sun.com/dtd/web-app_2_3.dtd">
-
 <web-app>
-
 	<display-name>Apache-Axis</display-name>
-
 	<servlet>
-
 		<servlet-name>AxisServlet</servlet-name>
-
 		<display-name>Apache-Axis Servlet</display-name>
-
 		<servlet-class>
 
         org.apache.axis.transport.http.AxisServlet
 
     </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>AdminServlet</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
         org.apache.axis.transport.http.AdminServlet
 
     </servlet-class>
-
 		<load-on-startup>100</load-on-startup>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>AddNote</servlet-name>
-
 		<display-name>AddNote</display-name>
-
 		<servlet-class>
 
        uk.ac.dl.web.AddNote
 
     </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>LoginServlet</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
        uk.ac.dl.web.LoginServlet
 
     </servlet-class>
+    </servlet>
+    <servlet>
+		<servlet-name>SRBTransfer</servlet-name>
+		<display-name>SRBTransfer</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.SRBTransfer
+    </servlet-class>
 
 	</servlet>
-
-        
-        <servlet>
-
+	<servlet>
 		<servlet-name>emineralsServlet</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
        uk.ac.dl.web.emineralsServlet
 
     </servlet-class>
-
 	</servlet>
-
-          <servlet>
-
+	<servlet>
 		<servlet-name>HelpSearch1</servlet-name>
-
 		<display-name>HelpSearch</display-name>
-
 		<servlet-class>
 
        uk.ac.dl.web.HelpSearch1
 
     </servlet-class>
-
 	</servlet>
-        
 	<servlet>
-
 		<servlet-name>AdvancedStudyServlet</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
 	       uk.ac.dl.web.AdvancedStudyServlet
 
 	    </servlet-class>
-
 	</servlet>
-<servlet>
-
+	<servlet>
 		<servlet-name>Transfer</servlet-name>
-
 		<display-name>Transfer Servlet</display-name>
-
 		<servlet-class>
 
 	       uk.ac.dl.web.Transfer
 
 	    </servlet-class>
-
 	</servlet>
-	
 	<servlet>
-	
-			<servlet-name>TestTransfer</servlet-name>
-	
-			<display-name>Transfer Servlet</display-name>
-	
-			<servlet-class>
+		<servlet-name>TestTransfer</servlet-name>
+		<display-name>Transfer Servlet</display-name>
+		<servlet-class>
 	
 		       uk.ac.dl.web.TestTransfer
 	
 		    </servlet-class>
-	
 	</servlet>
-        <servlet>
-	
-			<servlet-name>TransferDataSet</servlet-name>
-	
-			<display-name>Transfer DataSet</display-name>
-	
-			<servlet-class>
+	<servlet>
+		<servlet-name>TransferDataSet</servlet-name>
+		<display-name>Transfer DataSet</display-name>
+		<servlet-class>
 	
 		       uk.ac.dl.web.TransferDataSet
 	
 		    </servlet-class>
-	
 	</servlet>
-        
-        
 	<servlet>
-
+		<servlet-name>TransferServlet</servlet-name>
+		<display-name>Transfer Servlett</display-name>
+		<servlet-class>
+	
+		       uk.ac.dl.web.TransferServlet
+	
+		    </servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>DeleteSelectedWS</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
 	       uk.ac.dl.web.DeleteSelectedWS
 
 	    </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>SaveCartServlet</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
 		       uk.ac.dl.web.SaveCartServlet
 
 		    </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>HelpSearchPage</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
        uk.ac.dl.web.HelpSearchPage
 
     </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>AddToCart</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
        uk.ac.dl.web.AddToCart
 
     </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>DeleteCart</servlet-name>
-
 		<display-name>DeleteCart</display-name>
-
 		<servlet-class>
 
        uk.ac.dl.web.DeleteCart
 
     </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>HelpSearch</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
          uk.ac.dl.web.HelpSearch
 
       </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>Explore</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
          uk.ac.dl.web.Explore
 
       </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>BasicSearch</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
        uk.ac.dl.web.BasicSearch
 
     </servlet-class>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>ExpandResultsServlet</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
          uk.ac.dl.web.ExpandResultsServlet
 
       </servlet-class>
-
 	</servlet>
-<servlet>
-
+	<servlet>
 		<servlet-name>LogonHPC</servlet-name>
-
 		<display-name>Axis Admin Servlet</display-name>
-
 		<servlet-class>
 
          uk.ac.dl.web.LogonHPC
 
       </servlet-class>
-
 	</servlet>
-        
-        
-        
 	<servlet>
-
 		<servlet-name>SOAPMonitorService</servlet-name>
-
 		<display-name>SOAPMonitorService</display-name>
-
 		<servlet-class>
 
         org.apache.axis.monitor.SOAPMonitorService
 
     </servlet-class>
-
 		<init-param>
-
 			<param-name>SOAPMonitorPort</param-name>
-
 			<param-value>5001</param-value>
-
 		</init-param>
-
 		<load-on-startup>100</load-on-startup>
-
 	</servlet>
-
 	<servlet>
-
 		<servlet-name>fghfghg</servlet-name>
-
 		<servlet-class>uk.ac.dl.web.BasicSearch</servlet-class>
-
 	</servlet>
-
 	<servlet-mapping>
-
 		<servlet-name>AxisServlet</servlet-name>
-
 		<url-pattern>/servlet/AxisServlet</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>LoginServlet</servlet-name>
-
 		<url-pattern>/servlet/LoginServlet</url-pattern>
-
 	</servlet-mapping>
-
-        <servlet-mapping>
-
+	<servlet-mapping>
+		<servlet-name>TransferServlet</servlet-name>
+		<url-pattern>/servlet/TransferServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>HelpSearch1</servlet-name>
-
 		<url-pattern>/servlet/HelpSearch1</url-pattern>
-
 	</servlet-mapping>
-
-        
 	<servlet-mapping>
-
 		<servlet-name>DeleteCart</servlet-name>
-
 		<url-pattern>/servlet/DeleteCart</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>AddNote</servlet-name>
-
 		<url-pattern>/servlet/AddNote</url-pattern>
-
 	</servlet-mapping>
-        
-        <servlet-mapping>
-
+	<servlet-mapping>
 		<servlet-name>emineralsServlet</servlet-name>
-
 		<url-pattern>/servlet/emineralsServlet</url-pattern>
-
 	</servlet-mapping>
-        
-        
-        <servlet-mapping>
-
+	<servlet-mapping>
 		<servlet-name>LogonHPC</servlet-name>
-
 		<url-pattern>/servlet/LogonHPC</url-pattern>
-
 	</servlet-mapping>
-        
-        <servlet-mapping>
-
+	<servlet-mapping>
 		<servlet-name>TransferDataSet</servlet-name>
-
 		<url-pattern>/servlet/TransferDataSet</url-pattern>
-
 	</servlet-mapping>
-        
-        
-
 	<servlet-mapping>
-
+		<servlet-name>SRBTransfer</servlet-name>
+		<url-pattern>/servlet/SRBTransfer</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>HelpSearchPage</servlet-name>
-
 		<url-pattern>/servlet/HelpSearchPage</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>AdvancedStudyServlet</servlet-name>
-
 		<url-pattern>/servlet/AdvancedStudyServlet</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>ExpandResultsServlet</servlet-name>
-
 		<url-pattern>/servlet/ExpandResultsServlet</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>AddToCart</servlet-name>
-
 		<url-pattern>/servlet/AddToCart</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>SaveCartServlet</servlet-name>
-
 		<url-pattern>/servlet/SaveCartServlet</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>HelpSearch</servlet-name>
-
 		<url-pattern>/servlet/HelpSearch</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>DeleteSelectedWS</servlet-name>
-
 		<url-pattern>/servlet/DeleteSelectedWS</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>Explore</servlet-name>
-
 		<url-pattern>/servlet/Explore</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>BasicSearch</servlet-name>
-
 		<url-pattern>/servlet/BasicSearch</url-pattern>
-
 	</servlet-mapping>
-<servlet-mapping>
-
+	<servlet-mapping>
 		<servlet-name>Transfer</servlet-name>
-
 		<url-pattern>/servlet/Transfer</url-pattern>
-
-	</servlet-mapping>
-	
-	<servlet-mapping>
-	
-			<servlet-name>TestTransfer</servlet-name>
-	
-			<url-pattern>/servlet/TestTransfer</url-pattern>
-	
 	</servlet-mapping>
 	<servlet-mapping>
-
+		<servlet-name>TestTransfer</servlet-name>
+		<url-pattern>/servlet/TestTransfer</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>AxisServlet</servlet-name>
-
 		<url-pattern>*.jws</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>AxisServlet</servlet-name>
-
 		<url-pattern>/services/*</url-pattern>
-
 	</servlet-mapping>
-
 	<servlet-mapping>
-
 		<servlet-name>SOAPMonitorService</servlet-name>
-
 		<url-pattern>/SOAPMonitor</url-pattern>
-
 	</servlet-mapping>
-
 	<!-- uncomment this if you want the admin servlet -->
-
 	<!--
 
   <servlet-mapping>
@@ -514,32 +329,17 @@
   </servlet-mapping>
 
  -->
-
 	<servlet-mapping>
-
 		<servlet-name>fghfghg</servlet-name>
-
 		<url-pattern>/servlet/uk.ac.dl.web.fghfghg</url-pattern>
-
 	</servlet-mapping>
-
 	<welcome-file-list id="WelcomeFileList_1">
-
-		<welcome-file>eminerals.html</welcome-file>
-
+		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
-
 		<welcome-file>index.jws</welcome-file>
-
 	</welcome-file-list>
-
 	<taglib>
-
 		<taglib-uri>/tldweb</taglib-uri>
-
 		<taglib-location>/tld/glen.tld</taglib-location>
-
 	</taglib>
-
 </web-app>
-
