@@ -177,10 +177,11 @@ public class XmlWrapperDocBuilder
          log.info("location of xsd is:\t" + ss.getSchemaLocation()) ;
 
          //need to delete the contents of stringbuffer first
-         result.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") ;
+         //result.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") ;
+         result.append("<?xml version=\"1.0\"?>\n") ;
          result.append("<CCLRCMetadata xmlns=\"http://www.escience.cclrc.ac.uk/schemas/scientific\" ");
          result.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ") ;
-         result.append("xsi:schemaLocation=\"http://www.escience.cclrc.ac.uk/schemas/scientific\" \"" + ss.getSchemaLocation() + "\">\n") ; 
+         result.append("xsi:schemaLocation=\"http://www.escience.cclrc.ac.uk/schemas/scientific " + ss.getSchemaLocation() + "\">\n") ; 
 
          //build metadata record
          try 
@@ -200,6 +201,7 @@ public class XmlWrapperDocBuilder
          result.append("</CCLRCMetadata>") ;
 
          log.info("Entry being processed:\t" + sid ) ;
+         log.debug("XML-Record:\t" + result.toString() ) ;
 
          org.w3c.dom.Element el = null ;
          try
