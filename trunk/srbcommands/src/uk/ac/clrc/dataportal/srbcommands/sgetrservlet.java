@@ -87,6 +87,11 @@ public class sgetrservlet extends HttpServlet {
         ServletOutputStream out = response.getOutputStream();
         
         try {
+            
+            //does file /tmp/srbtemp exist
+            File srbtemp = new File("/tmp/srbtemp");
+            if(srbtemp.exists()) srbtemp.mkdir();            
+            
             response.setContentType("application/download");
             response.setBufferSize(65536);
             String dir = request.getParameter("dir");
