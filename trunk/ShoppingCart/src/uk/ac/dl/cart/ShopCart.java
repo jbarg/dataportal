@@ -10,14 +10,11 @@ import org.apache.log4j.*;
 
 
 public class ShopCart {
-    
-    public ShopCart(String name){
        
-    }
     //set static log for the class
     static Logger logger = Logger.getLogger(ShopCart.class);
     
-    public org.w3c.dom.Element getCart(Integer sid) throws Exception{
+    public org.w3c.dom.Element getCart(String sid) throws Exception{
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
         //System.out.println("path given is  "+Config.getContextPath());
@@ -63,7 +60,7 @@ public class ShopCart {
     }
     
     /** Creates a new instance of AddToCart */
-    public Boolean addToCart(Integer sid, org.w3c.dom.Element element)throws Exception {
+    public Boolean addToCart(String sid, org.w3c.dom.Element element)throws Exception {
         
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
@@ -153,7 +150,7 @@ public class ShopCart {
     }
     
     /** Creates a new instance of RemoveFromCart */
-    public Boolean removeFromCart(Integer sid,String[] url) throws Exception{
+    public Boolean removeFromCart(String sid,String[] url) throws Exception{
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
         
@@ -210,7 +207,7 @@ public class ShopCart {
     }
     
     /** Creates a new instance of GetNotes */
-    public String[] getNote(String url,Integer sid) throws Exception{
+    public String[] getNote(String url,String sid) throws Exception{
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
         
@@ -269,7 +266,7 @@ public class ShopCart {
     }
     
     /** Creates a new instance of AddNote */
-    public Boolean addNote(Integer sid,String notes,String url)throws Exception{
+    public Boolean addNote(String sid,String notes,String url)throws Exception{
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
         
