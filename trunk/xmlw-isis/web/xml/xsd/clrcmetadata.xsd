@@ -211,12 +211,9 @@
 
    <xsd:complexType name="CCLRCMetadataType">
       <xsd:sequence>
-         <xsd:element ref="cmd:MetadataRecord" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="MetadataRecord" type="cmd:MetadataRecordType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
-
-
-   <xsd:element name="MetadataRecord" type="cmd:MetadataRecordType"/>
 
 
    <xsd:complexType name="MetadataRecordType">
@@ -287,7 +284,7 @@
       <xsd:sequence>
 	 <xsd:element name="Discipline" type="xsd:string" />
 	 <xsd:element name="SubjectSource" type="xsd:string" minOccurs="0"/>
-	 <xsd:element name="Subject" type="cmd:SubjectType" />
+	 <xsd:element name="Subject" type="cmd:SubjectType" minOccurs="1" maxOccurs="unbounded" />
       </xsd:sequence>
    </xsd:complexType>
    
@@ -320,11 +317,19 @@
          <xsd:element name="Name" type="xsd:string"/>
 	 <xsd:element name="InvestigationType" type="cmd:InvestigationTypes"/>
 	 <xsd:element name="Abstract" type="xsd:string"/>
-	 <xsd:element name="Resources" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+	 <xsd:element name="Resources" type="cmd:ResourceType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="DataHolding" type="cmd:DataHoldingType" minOccurs="0"/>
       </xsd:sequence>
       <xsd:attribute name="InvestigationID" type="xsd:ID" use="required"/>
+   </xsd:complexType>
+
+   <xsd:complexType name="ResourceType">
+      <xsd:sequence>
+         <xsd:element name="Name" type="xsd:string"/>
+	 <xsd:element name="ShortName" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="Comments" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
    </xsd:complexType>
 
  
@@ -429,7 +434,7 @@
          <xsd:element name="TimePeriod" type="cmd:TimePeriodType"/>
          <xsd:element name="Purpose" type="cmd:PurposeType"/>
          <xsd:element name="StudyStatus" type="xsd:string"/>
-         <xsd:element name="Resources" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="Resources" type="cmd:ResourceType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
 
@@ -580,7 +585,7 @@
          <xsd:element name="Type" type="xsd:string"/>
 	 <xsd:element name="Direction" type="xsd:string" minOccurs="0" />
 	 <xsd:element name="ReferredToItem" type="xsd:string"/>
-	 <xsd:element name="Method" type="xsd:string"/>
+	 <xsd:element name="Method" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="ReferenceLocation" type="cmd:ReferenceLocationType" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
