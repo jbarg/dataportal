@@ -113,12 +113,12 @@
   <property name="app.path"      value="/${app.name}"/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
-  <property name="catalina.home" value="/var/tomcat4"/> <!-- UPDATE THIS! -->
+  <property name="catalina.home" value="C:\tomcat4.1.12"/> <!-- UPDATE THIS! -->
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/docs"/>
-  <property name="manager.username"   value="manager"/> <!-- UPDATE THIS! -->
+  <property name="manager.username"   value="admin"/>
   <property name="manager.url"   value="http://localhost:8080/manager"/>
-  <property name="manager.password"   value="tomcat"/> <!-- UPDATE THIS! -->
+  <property name="manager.password"   value="admin"/>
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/web"/>
 
@@ -236,12 +236,6 @@
       <include name="*.jar"/>
     </fileset>
 
-    <!-- thought did not need to do this - but seemed to need to -->
-    <fileset dir="${web.home}/WEB-INF/lib">
-      <include name="*.jar"/>
-    </fileset>
-
-
     <!-- included those that are in web/WEB-INF/lib so they go into -->
     <!-- build/web/WEB-INF/lib - as keeping jars needed by module with each module -->
 
@@ -333,7 +327,7 @@
    description="Create binary distribution">
 
     <!-- Copy documentation subdirectories -->
-    <mkdir   dir="${dist.home}/docs"/>
+    <mkdir   todir="${dist.home}/docs"/>
     <copy    todir="${dist.home}/docs">
       <fileset dir="${docs.home}"/>
     </copy>
@@ -589,36 +583,6 @@
     <ant antfile="${src.home}/wsdlbuild.xml" dir="${src.home}" target="undeploy" inheritRefs="true"/>
   </target>
 
-<!-- ==================== test web services Target =================================== -->
-
- <target name="test"
-   description="test xmlwrapper web services">
-   <!--  <property name="basedir" value="${basedir}/build/WEB-INF/classes"/> -->
-
-    <java classname="uk.ac.cclrc.xmlwrapper.XMLWTester">
-         <classpath>
-           <pathelement path="${java.home}/lib/rt.jar"/>
-           <pathelement path="${build.home}/WEB-INF/classes"/>
-           <pathelement path="${catalina.home}/common/lib/servlet.jar"/>
-           <fileset dir="${web.home}/WEB-INF/lib">
-             <include name="*.jar"/>
-           </fileset>
-         </classpath>
-    </java>
-
-  </target>
-
   
 
 </project>
-
-
-
-
-
-
-
-
-
-
-

@@ -226,3 +226,35 @@ http://escvig2.dl.ac.uk:8080/xmlwrapper/xmlwrapper_badc?where=%27Discipline%3D/e
 e.g. of valid where clause:
 
 'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'
+
+
+------------------------------
+
+http://sas27vig.dl.ac.uk:8080/dataportal/xmlwrapper_badc?where=%20Discipline%20like%20%27%25/earth%20sciences/atmosphere/atmospheric%20temperature/temperature%25%27%20
+                                                                and%20DMInstitutionName%20like%20%27%25BADC%25%27%20
+                                                                and%20StartDate%20like%20%27%2520001103%25%27%20
+                                                                and%20EndDate%20like%20%27%2520001104%25%27%20
+                                                                and%20StudyName%20like%20%27%25lipr00010100.Temperature.cera16%25%27;UserID=dpuser
+
+
+%20	-	space
+%25	-	%	
+%27	-	'
+%3D	-	=
+
+(basically %<hexadecimal ascii code>)
+
+
+ Discipline like '%/earth sciences/atmosphere/atmospheric temperature/temperature%'and DMInstitutionName like '%BADC%'and StartDate like '%20001103%' and EndDate like '%20001104%' and StudyName like '%lipr00010100.Temperature.cera16%'
+
+
+
+columns selectable in sql like where clause:
+
+Discipline
+Subject
+StudyName
+StudyID
+StartDate
+EndDate
+DMInstitutionName
