@@ -26,6 +26,17 @@ function openwindow(page){
   //  window.open("../style/help.html","Help", "width=900, height=600, toolbar=0, status=1, location=0,directories=0,menubar=1,resizable=1, scrollbars=1,left=0, top=0");
 
 }
+// sets all checkboxes
+function selectAll(formID, fieldName, value)
+{
+  var elements = document.forms[formID].elements;
+  for (i = 0; i < elements.length; i++) {
+    if (elements[i].name && elements[i].name.indexOf(fieldName) > -1) {
+      elements[i].checked = value; 
+    }
+  }
+  return null;
+}
 
 //-->
 
