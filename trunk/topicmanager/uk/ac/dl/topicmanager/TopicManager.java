@@ -3,7 +3,7 @@
  *
  * Created on 24 September 2003, 15:59
  */
-package  dataportal.topicmanager.uk.ac.dl.topicmanager;
+package uk.ac.dl.topicmanager;
 
 // Database classes
 import java.sql.*;
