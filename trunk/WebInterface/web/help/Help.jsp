@@ -13,7 +13,7 @@ session.removeAttribute("xmldocs");
 
 
 <html>
-    <title>CLRC Data Portal/Estedi - Basic Search</title>
+    <title>CCLRC Data Portal - Help Pages</title>
     <link rel="stylesheet" href="../style/main.css">
 
     <frameset border="0" frameborder="0" bgcolor="white" bordercolor="black" cols="230,*">
