@@ -27,6 +27,7 @@ import javax.xml.namespace.QName;
 import org.apache.axis.AxisFault;
 import uk.ac.dl.topicmanager.*;
 
+
 //
 //  Dont like the lay out of this servlet. Possible concurrancy issues??!?
 //  I Keep adding things to servlet, needs rewritten.
@@ -153,7 +154,11 @@ public class LoginServlet extends HttpServlet {
             //session.setAttribute("username", reName);
             //session.setAttribute("passphrase", rePass);
             session.setAttribute("LOGIN_STATUS", new Boolean(true));
-            session.setMaxInactiveInterval(Integer.parseInt(lifetime));
+            session.setMaxInactiveInterval(Integer.parseInt(lifetime)-300);
+            
+            ClockBean clock =new ClockBean(Integer.parseInt(lifetime)-300);
+            session.setAttribute("clockbean", clock);
+            //set clock
             //get HPC info out of the prop file
             String isHPC  = prop.getProperty("isHPC");
             String HPC_url = prop.getProperty("HPC_url");
