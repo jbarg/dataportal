@@ -50,7 +50,8 @@ public class XmlWrapperEMIN
       }
 
       //set database name
-      ss.setDbs("CERA2.") ;
+      //ss.setDbs("CERA2.") ;
+      ss.setDbs("") ;
 
       //connect to the database
       DBHelper dbh = ss.getDBHelper() ;
