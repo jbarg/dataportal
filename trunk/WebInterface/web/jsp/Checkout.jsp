@@ -178,7 +178,7 @@ html/netscape.html file from the content root.-->
 </c:otherwise>
 </c:choose>
 
-=
+
 
 <c:choose>
 <c:when test="<%=!checkout.isEmpty()%>" >
