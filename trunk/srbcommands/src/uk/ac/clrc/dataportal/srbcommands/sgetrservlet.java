@@ -96,11 +96,39 @@ public class sgetrservlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, java.io.IOException {
-        
-        
         ServletOutputStream out = response.getOutputStream();
-        
         try {
+            //check password
+            String password = props.getProperty("srb_passwd");
+            if(!password.equals("dp()u5er4em@a^")){
+                
+                response.flushBuffer();
+                response.setContentType("text/html");
+                response.setHeader("Content-disposition",null);
+                
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Servlet</title>");
+                out.println("</head>");
+                out.println("<h1>Wrong password!</h1>");
+                out.println("<body>");
+                out.println("</body>");
+                out.println("</html>");
+                out.close();
+                
+                String ip = request.getRemoteAddr();
+                String time = new java.util.Date().toString();
+                String query = request.getQueryString();
+                System.out.println("----------------");
+                System.out.println("WRONG PASSWORD: ");
+                System.out.println("----------------");
+                System.out.println("ip address: "+ip);
+                System.out.println("time: "+time);
+                System.out.println("query string: "+query);
+                System.out.println("----------------");
+                return;
+            }
+            
             
             //does file /tmp/srbtemp exist
             File srbtemp = new File(props.getProperty("srbDest"));
