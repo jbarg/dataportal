@@ -38,10 +38,7 @@ function seenoteWS(page){
     }
     else{
         win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note","toolbar=no, width=385, height=360");
-    }<div align="right">
-    <input type="button" value="Select All" onclick="selectAll('mess','selected',true);"/>
-    </div>
-<br />
+    }
 }
 
 function addnote(page){
