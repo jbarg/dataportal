@@ -6,13 +6,13 @@
 
 package uk.ac.clrc.dataportal.transfer;
 
-import org.apache.axis.client.Call;
+//import org.apache.axis.client.Call;
 import java.io.*;
 import java.net.*;
 
-import org.apache.axis.encoding.XMLType;
+//import org.apache.axis.encoding.XMLType;
 
-import javax.xml.rpc.ParameterMode;
+//import javax.xml.rpc.ParameterMode;
 import org.globus.io.urlcopy.UrlCopy;
 import org.globus.util.GlobusURL;
 import org.globus.myproxy.MyProxy;
