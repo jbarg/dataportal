@@ -99,8 +99,6 @@
       <ant antfile="xmlwrapper/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/xmlwrapper"/>
       </ant>
-
-      <!-- 
 		
       <ant antfile="lookup/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/lookup"/>
@@ -108,7 +106,7 @@
 
       <ant antfile="facility/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/facility"/>
-      </ant> -->
+      </ant> 
 
       <ant antfile="acmbadc/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/acmbadc"/>
