@@ -13,12 +13,12 @@
             hidden="false" cachedOnName="true" cachedOnValue="true"/>
         <parameter name="action" value="xportlets.ProxyManagerAction"
             hidden="false" cachedOnName="true" cachedOnValue="true"/>
-        <parameter name="hostname" value="myproxy.grid-support.ac.uk"
+<!--        <parameter name="hostname" value="myproxy.grid-support.ac.uk"
             hidden="false" cachedOnName="true" cachedOnValue="true"/>
         <parameter name="port" value="7512" hidden="false"
             cachedOnName="true" cachedOnValue="true"/>
         <parameter name="lifetime" value="2" hidden="false"
-            cachedOnName="true" cachedOnValue="true"/>
+            cachedOnName="true" cachedOnValue="true"/> -->
         <media-type ref="html"/>
         <url cachedOnURL="true"/>
         <category group="Jetspeed">CHEF</category>

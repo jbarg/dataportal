@@ -8,6 +8,7 @@ REQUIRED TOOLS (OUR WORKING VERSION)
  o Java CoG (1.1), http://www-unix.globus.org/cog/java/
  o Jakarta Tomcat (5.0.27), http://jakarta.apache.org/tomcat
  o CHEF (1.2.10), http://collab.sakaiproject.org/portal
+ o ProxyManager Tool for NGS Portal, (1.0)
  o CHEF GridService module (org.chefproject.service.GridService)
 
 INSTALL

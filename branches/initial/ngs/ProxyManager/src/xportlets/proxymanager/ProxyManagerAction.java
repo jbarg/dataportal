@@ -1,6 +1,11 @@
+/*
+ * Xiaobo Yang, CCLRC e-Science Centre, 14 December 2004
+ *
+ */
+
 package org.apache.jetspeed.modules.actions.xportlets;
 
-import org.apache.jetspeed.modules.actions.portlets.VelocityPortletAction;
+//import org.apache.jetspeed.modules.actions.portlets.VelocityPortletAction;
 
 // Turbine
 import org.apache.turbine.util.RunData;
@@ -35,6 +40,13 @@ import java.io.*;
 import java.util.*;
 import javax.servlet.http.*;
 
+import org.chefproject.service.GridService;
+
+import org.chefproject.actions.VelocityPortletPaneledAction;
+import org.chefproject.util.Menu;
+import org.apache.jetspeed.services.statemanager.SessionState;
+
+
 /**
 * This class implements the Proxy Manager portlet which is a subclass
 * of VelocityPortletAction.  This allows a user to load any number of proxies
@@ -53,138 +65,99 @@ import javax.servlet.http.*;
 * All Velocity templates used by this portlet are stored in 
 * WEB-INF/templates/vm/portlets/html and prefixed by 'xportlets-proxymanager'.
 */
-public class ProxyManagerAction extends VelocityPortletAction
-{
-  private String HOSTNAME      = "hostname";
-  private String PORT          = "port";
-  private String USERNAME      = "username";
-  private String PASSWORD      = "password";
-  private String LIFETIME      = "lifetime";
-  private String PORTLET       = "portlet";
-  private String ERROR         = "error";
-  private String SUCCESS       = "success";
-  private String STATUS        = "status";
-  private String PROXY_HASH    = "proxy";
-  private String PROXY_ID      = "proxies";
-  private String DEFAULT_PROXY = "default_proxy";
-  private String TIME_LEFT     = "time_left";
-  private String SESSION_ONLY  = "session_only";
-  private String CHECKED       = "checked";
-  private String UNCHECKED     = "";
-  private String START         = "xportlets.proxymanager.start";
-  private int SECS_PER_HOUR    = 3600; 
-  private int SECS_PER_MIN     = 60; 
+public class ProxyManagerAction extends VelocityPortletPaneledAction {
+  final private String HOSTNAME      = "hostname";
+  final private String PORT          = "port";
+  final private String USERNAME      = "username";
+  final private String PASSWORD      = "password";
+  final private String LIFETIME      = "lifetime";
+  final private String PORTLET       = "portlet";
+//  final private String ERROR         = "error";
+  final private String ERROR         = "alertMessage";
+  final private String SUCCESS       = "success";
+  final private String STATUS        = "status";
+  final private String PROXY_HASH    = "proxy";
+  final private String PROXY_ID      = "proxies";
+  final private String DEFAULT_PROXY = "default_proxy";
+  final private String TIME_LEFT     = "time_left";
+  final private String SESSION_ONLY  = "session_only";
+  final private String CHECKED       = "checked";
+  final private String UNCHECKED     = "";
+  final private String START         = "xportlets.proxymanager.start";
+  final private int SECS_PER_HOUR    = 3600; 
+  final private int SECS_PER_MIN     = 60; 
 
-  /**
-  * Will be called when user clicks on 'Customize Portlet' button (little
-  * pencil icon in top right corner).  This allows a user to customize
-  * the defaults specified in the user's psml file.  Will first grab the
-  * parameters in the psml file and then propagate those to the 
-  * xportlets-proxymanager-customize.vm file.  In the 
-  * xportlets-proxymanager-customize.vm file, the parameters will be passed
-  * to doCustomize function. 
-  */ 
-  public void buildConfigureContext( VelocityPortlet aPortlet,
-                                     Context aContext,
-				     RunData runData )
-  {
-      String start = (String)runData.getUser().getPerm(START, "false"); 
-      if(start.equals("false")) {
-	  Parameters params = getDefaultParameters( runData, aContext );
-	  setTemplate(runData, "xportlets-proxymanager-customize");
- 
-	  Log.info(" (xportlets.ProxyManager) first time called ... getting default parameters");
-      }
-      else {
-	  Parameters params = getSavedParameters( runData, aContext );
-	  setTemplate(runData, "xportlets-proxymanager-customize");
-	  
-	  Log.info(" (xportlets.ProxyManager) called ... getting parameters");
-      }
+  final private String TOOLMODE = "toolmode";
+  final private String VIEW_PROXY = "view_proxy";
+  final private String GET_PROXY_SCREEN = "get_proxy_screen";
+  final private String GET_PROXY = "get_proxy";
+//  final private String DESTROY_PROXY = "destroy_proxy";
+//  final private String REMOVE = "remove";
+  final private String SET_DEFAULT_PROXY = "set_default_proxy";
+
+
+  public String buildMainPanelContext(VelocityPortlet portlet,
+			Context context, RunData rundata, SessionState state) {
+    String template = null;
+
+    // put $action into context for menus, forms and links
+    context.put(Menu.CONTEXT_ACTION, state.getAttribute(STATE_ACTION));
+
+    String toolmode = (String)state.getAttribute(TOOLMODE);
+    if (toolmode!=null && toolmode.equals(VIEW_PROXY)) { // toolmode==null is the first time
+      template = buildViewproxyContext(state, context);
+    }
+    else if (toolmode!=null && toolmode.equals(GET_PROXY_SCREEN)) {
+      return "xportlets-proxymanager-getproxy";
+    }
+    else if (toolmode!=null && toolmode.equals(GET_PROXY)) {
+      loadProxies(rundata, context);
+      template = buildGetproxyContext(state, context);
+    }
+    else if (toolmode!=null && toolmode.equals(SET_DEFAULT_PROXY)) {
+      loadProxies(rundata, context);
+      template = buildSetdefaultproxyContext(state, context);
+    }
+    else {
+      loadProxies(rundata, context);
+      template = "xportlets-proxymanager";
+    }
+
+    context.put(ERROR, state.getAttribute(ERROR));
+
+    return template;
 
   }
 
-  /**
-  * Will be called when user loads portlet for the first time.  Grabs 
-  * default parameter values from user's psml file.  Passes them to
-  * xportlets-proxymanager.vm file.
-  */
-  public void buildNormalContext( VelocityPortlet aPortlet,
-                                  Context aContext,
-				  RunData runData )
-  {
-    loadProxies( runData, aContext ); 
+  private String buildViewproxyContext(SessionState state, Context context) {
+    context.put(PROXY_HASH, state.getAttribute(PROXY_HASH));
+    context.put(TIME_LEFT, state.getAttribute(TIME_LEFT));
+//    context.put(ERROR, state.getAttribute(ERROR));
+
+    return "xportlets-proxymanager-view";
+
   }
 
-
-  /**
-  * Called when user presses 'Customize' button on 
-  * xportlets-proxymanager-customize.vm file.  Will grab parameters from
-  * runData and then set them in the user's psml file. Will also load
-  * proxies and pass them back through to xportlets-proxymanager.vm file.
-  */
-  public void doCustomize( RunData runData, Context aContext )
-  {
-    VelocityPortlet portlet = (VelocityPortlet)aContext.get( PORTLET );
-
-    Parameters params = getParameters( runData, aContext );
-
-    if ( params.hostname !=null ) {
-      portlet.setAttribute( HOSTNAME, params.hostname, runData); 
-      runData.getUser().setPerm( HOSTNAME, params.hostname );
-    } 
-
-    if ( params.port !=null ) {
-      portlet.setAttribute( PORT, params.port, runData );
-      runData.getUser().setPerm( PORT, params.port );
+  private String buildGetproxyContext(SessionState state, Context context) {
+    context.put(PROXY_HASH, state.getAttribute(PROXY_HASH));
+    context.put(TIME_LEFT, state.getAttribute(TIME_LEFT));
+//    context.put(ERROR, state.getAttribute(ERROR));
+    String error = (String)state.getAttribute(ERROR);
+    if (error!=null && !error.equals("")) {
+      return "xportlets-proxymanager-getproxy";
+    }
+    else {
+      return "xportlets-proxymanager";
     }
 
-    if ( params.username !=null ) {
-      portlet.setAttribute( USERNAME, params.username, runData );
-      runData.getUser().setPerm( USERNAME, params.username );
-    }
-
-    if ( params.lifetime !=null ) {
-      portlet.setAttribute( LIFETIME, params.lifetime, runData );
-      runData.getUser().setPerm( LIFETIME, params.lifetime );
-    }
-
-    if ( params.session_only !=null ) {
-      portlet.setAttribute( SESSION_ONLY, CHECKED, runData );
-      runData.getUser().setPerm( SESSION_ONLY, CHECKED );
-    } else {
-      portlet.setAttribute( SESSION_ONLY, UNCHECKED, runData );
-      runData.getUser().setPerm( SESSION_ONLY, UNCHECKED );
-    }
-
-    runData.getUser().setPerm(START, "true");
-
-    loadProxies( runData, aContext ); 
   }
 
-  /**
-  * Called when user clicks 'Get New Proxy' from main screen (i.e.,
-  * xportlets-proxymanager.vm).  Will grab defaults from user's psml
-  * file and then display them in xportlets-proxymanager-getproxy.vm.
-  */
-  public void doGet_proxy_screen( RunData runData, Context aContext )
-  {
-      //    Parameters params = getDefaultParameters( runData, aContext );
-      //    setTemplate(runData, "xportlets-proxymanager-getproxy");
+  private String buildSetdefaultproxyContext(SessionState state,
+							Context context) {
+    context.put(DEFAULT_PROXY, state.getAttribute(DEFAULT_PROXY));
 
-      String start = (String)runData.getUser().getPerm(START, "false"); 
-      if(start.equals("false")) {
-	  Parameters params = getDefaultParameters( runData, aContext );
-	  setTemplate(runData, "xportlets-proxymanager-getproxy");
- 
-	  Log.info(" (xportlets.ProxyManager) first time called ... getting default parameters");
-      }
-      else {
-	  Parameters params = getSavedParameters( runData, aContext );
-	  setTemplate(runData, "xportlets-proxymanager-getproxy");
-	  
-	  Log.info(" (xportlets.ProxyManager) called ... getting parameters");
-      }
+    return "xportlets-proxymanager";
+
   }
 
   /**
@@ -193,9 +166,11 @@ public class ProxyManagerAction extends VelocityPortletAction
   * the hash value of the certificate and then grab the proxy from permanent
   * storage and then display the details.
   */
-  public void doView_proxy( RunData runData, Context aContext )
-  {
-    String hash = runData.getParameters().getString( PROXY_HASH );
+  public void doViewproxy(RunData runData, Context aContext) {
+    SessionState state = ((JetspeedRunData)runData).getPortletSessionState(((JetspeedRunData)runData).getJs_peid());
+    state.setAttribute(TOOLMODE, VIEW_PROXY);
+
+    String hash = runData.getParameters().getString(PROXY_HASH);
 //      JetspeedUser user = ((JetspeedRunData)runData).getJetspeedUser();
 //      ProxyTable proxies = new ProxyTable();
 //      try {
@@ -209,22 +184,22 @@ public class ProxyManagerAction extends VelocityPortletAction
     GSSCredential proxy;
     HttpSession session = runData.getSession();
     try {
-	proxy = ProxyManager.getProxy(session, hash);
+      proxy = ProxyManager.getProxy(session, hash);
     }
-    catch( ProxyStorageException e ) {
-	aContext.put( ERROR, e.getMessage() );
-	return;
+    catch (ProxyStorageException e) {
+//	aContext.put( ERROR, e.getMessage() );
+      state.setAttribute(ERROR, e.getMessage());
+      return;
     }
 
     GlobusCredential globusCred = null;
-    if(proxy instanceof GlobusGSSCredentialImpl)
-    {
-	globusCred = ((GlobusGSSCredentialImpl)proxy).getGlobusCredential();
-		
+    if (proxy instanceof GlobusGSSCredentialImpl) {
+      globusCred = ((GlobusGSSCredentialImpl)proxy).getGlobusCredential();
     }
     else {
-	aContext.put( ERROR, "not a Globus GSSCredential!" );
-	return;
+//	aContext.put( ERROR, "not a Globus GSSCredential!" );
+      state.setAttribute(ERROR, "not a Globus GSSCredential!");
+      return;
     }
 
     long seconds = globusCred.getTimeLeft();
@@ -235,9 +210,34 @@ public class ProxyManagerAction extends VelocityPortletAction
     String time_left = String.valueOf(hours) + " hour(s) " +
                        String.valueOf(minutes) + " minute(s) " + 
 		       String.valueOf(seconds) + " second(s)"; 
-    aContext.put( TIME_LEFT, time_left );
-    aContext.put( PROXY_HASH, globusCred); 
-    setTemplate(runData, "xportlets-proxymanager-view");
+//    aContext.put( TIME_LEFT, time_left );
+//    aContext.put( PROXY_HASH, globusCred); 
+//    setTemplate(runData, "xportlets-proxymanager-view");
+    state.setAttribute(TIME_LEFT, time_left);
+    state.setAttribute(PROXY_HASH, globusCred);
+
+  }
+
+  /**
+  * Called when user clicks 'Get New Proxy' from main screen (i.e.,
+  * xportlets-proxymanager.vm).  Will grab defaults from user's psml
+  * file and then display them in xportlets-proxymanager-getproxy.vm.
+  */
+  public void doGetproxyscreen(RunData rundata, Context context) {
+    SessionState state = ((JetspeedRunData)rundata).getPortletSessionState(((JetspeedRunData)rundata).getJs_peid());
+    state.setAttribute(TOOLMODE, GET_PROXY_SCREEN);
+
+  }
+
+  /**
+  * Called when user clicks 'Get New Proxy' from main screen (i.e.,
+  * xportlets-proxymanager.vm).  Will grab defaults from user's psml
+  * file and then display them in xportlets-proxymanager-getproxy.vm.
+  */
+  public void doReturn(RunData rundata, Context context) {
+    SessionState state = ((JetspeedRunData)rundata).getPortletSessionState(((JetspeedRunData)rundata).getJs_peid());
+    state.removeAttribute(TOOLMODE);
+
   }
 
   /**
@@ -246,9 +246,13 @@ public class ProxyManagerAction extends VelocityPortletAction
   * the hash value of the certificate and then remove the proxy.
   * Also load proxies for call to xportlets-proxymanager.vm.
   */
-  public void doDestroy_proxy( RunData runData, Context aContext )
-  {
-    String hash = runData.getParameters().getString( PROXY_HASH );
+  public void doDestroyproxy(RunData runData, Context aContext) {
+    SessionState state = ((JetspeedRunData)runData).getPortletSessionState(((JetspeedRunData)runData).getJs_peid());
+//    state.setAttribute(TOOLMODE, DESTROY_PROXY);
+    state.removeAttribute(TOOLMODE);
+    state.removeAttribute(ERROR);
+
+    String hash = runData.getParameters().getString(PROXY_HASH);
 //      JetspeedUser user = ((JetspeedRunData)runData).getJetspeedUser();
 //      ProxyTable proxies = new ProxyTable();
 //      try {
@@ -264,13 +268,46 @@ public class ProxyManagerAction extends VelocityPortletAction
     
     HttpSession session = runData.getSession();
     try {
-	ProxyManager.removeProxy(session, hash);
+      ProxyManager.removeProxy(session, hash);
     }
     catch (ProxyStorageException pme) {
-	aContext.put( ERROR, pme.getMessage() );
+//	aContext.put( ERROR, pme.getMessage() );
+      state.setAttribute(ERROR, pme.getMessage());
     }
     
-    loadProxies( runData, aContext ); 
+//    loadProxies(runData, aContext); 
+
+  }
+
+  /**
+  * Set default proxy variable.
+  */
+  public void doSetdefaultproxy(RunData runData, Context aContext) {
+    SessionState state = ((JetspeedRunData)runData).getPortletSessionState(((JetspeedRunData)runData).getJs_peid());
+    state.setAttribute(TOOLMODE, SET_DEFAULT_PROXY);
+    state.removeAttribute(ERROR);
+
+    String default_proxy = runData.getParameters().getString(PROXY_HASH);
+//      JetspeedUser user = ((JetspeedRunData)runData).getJetspeedUser();
+//      try {
+//        ProxyTable.setDefault( default_proxy, user );
+//      } catch ( ProxyTableException e ) {
+//        aContext.put( ERROR, "Error: " + e.getMessage() );
+//      }
+
+    HttpSession session = runData.getSession();
+    try {
+      ProxyManager.setDefaultProxy(session, default_proxy);
+    }
+    catch (ProxyStorageException pse) {
+//	aContext.put( ERROR, "Error: " + pse.getMessage() );
+      state.setAttribute(ERROR, "Error: " + pse.getMessage());
+    }
+
+//    loadProxies( runData, aContext ); 
+    state.setAttribute(DEFAULT_PROXY,
+				ProxyManager.getDefaultProxyString(session));
+
   }
 
   /**
@@ -279,15 +316,19 @@ public class ProxyManagerAction extends VelocityPortletAction
   * hash symbol in the ProxyTable and will be available from other portlets.
   * Also, load proxies into xportlet-proxymanager.vm.
   */
-  public void doGet_proxy( RunData runData, Context aContext ) 
-  {
-    Parameters params = getParameters( runData, aContext );
-    String missing = checkParameters( params );
-    if ( missing != "" ) {
-      aContext.put( ERROR, "Error, unable to complete request.  Missing the following parameters: " + missing );
+  public void doGetproxy(RunData runData, Context aContext) {
+    SessionState state = ((JetspeedRunData)runData).getPortletSessionState(((JetspeedRunData)runData).getJs_peid());
+    state.setAttribute(TOOLMODE, GET_PROXY);
+    state.removeAttribute(ERROR);
+
+    Parameters params = getParameters(runData, aContext);
+    String missing = checkParameters(params);
+    if (missing!="") {
+//      aContext.put( ERROR, "Error, unable to complete request.  Missing the following parameters: " + missing );
+      state.setAttribute(ERROR, "Error, unable to complete request. Missing the following parameters: " + missing);
       return;
     }
- 
+/* 
     if ( params.hostname !=null ) {
 	runData.getUser().setPerm( HOSTNAME, params.hostname );
     }
@@ -303,11 +344,12 @@ public class ProxyManagerAction extends VelocityPortletAction
     if ( params.lifetime !=null ) {
 	runData.getUser().setPerm( LIFETIME, params.lifetime );
     }
- 
-    if ( params.session_only !=null ) {
-	runData.getUser().setPerm( SESSION_ONLY, CHECKED );
-    } else {
-	runData.getUser().setPerm( SESSION_ONLY, UNCHECKED );
+*/
+    if (params.session_only!=null) {
+      runData.getUser().setPerm(SESSION_ONLY, CHECKED);
+    }
+    else {
+      runData.getUser().setPerm(SESSION_ONLY, UNCHECKED);
     }
     
 //      JetspeedUser user = ((JetspeedRunData)runData).getJetspeedUser();
@@ -321,8 +363,8 @@ public class ProxyManagerAction extends VelocityPortletAction
     try {
       GSSCredential proxy = null;
       int port = Integer.parseInt(params.port);
-      MyProxy myproxy = new MyProxy( params.hostname, port );
-      int lifetime = Integer.parseInt( params.lifetime ) * SECS_PER_HOUR;
+      MyProxy myproxy = new MyProxy(params.hostname, port);
+      int lifetime = Integer.parseInt(params.lifetime) * SECS_PER_HOUR;
 
       // Load UK eScience credentials
       // Create proxy credentials to authenticate against myproxy server
@@ -332,13 +374,14 @@ public class ProxyManagerAction extends VelocityPortletAction
       GSSCredential hostproxy = null;
 
       try {
-         hostproxy = PortalCredential.getPortalProxy();
+        hostproxy = PortalCredential.getPortalProxy();
       }
       catch (Exception ex) {
-         throw new Exception(ex.getMessage());
+        throw new Exception(ex.getMessage());
       }
 
-      proxy = myproxy.get(hostproxy, params.username, params.password, lifetime);
+      proxy = myproxy.get(hostproxy, params.username, params.password,
+								lifetime);
       Log.info("User proxy retrieved...");
 
       // proxy = myproxy.get(params.username, params.password, lifetime);
@@ -355,114 +398,77 @@ public class ProxyManagerAction extends VelocityPortletAction
       HttpSession session = runData.getSession();
       //      session.setAttribute("proxymanager.globusproxy", proxy);
       try {
-	  ProxyManager.addProxy(session, proxy);
+        ProxyManager.addProxy(session, proxy);
       }
-      catch(ProxyStorageException pse) {
-	  throw new Exception(pse.getMessage());
+      catch (ProxyStorageException pse) {
+        throw new Exception(pse.getMessage());
       }
 
-    } catch ( Exception e ) {
-      aContext.put( ERROR, "Error: " + e.getMessage() );
+    }
+    catch (Exception e) {
+//      aContext.put( ERROR, "Error: " + e.getMessage() );
+      state.setAttribute(ERROR, "Error: " + e.getMessage());
       //aContext.put( ERROR, "Error: " + getStackTrace(e) );
     }
 
-    runData.getUser().setPerm(START, "true");
+//    runData.getUser().setPerm(START, "true");
+//
+//    loadProxies(runData, aContext);
 
-    loadProxies( runData, aContext ); 
   }
+/*
+  private String getStackTrace(Exception e) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    e.printStackTrace(pw);
 
-  private String getStackTrace(Exception e)
-  {
-	StringWriter sw = new StringWriter();
-	PrintWriter pw = new PrintWriter(sw);
-	e.printStackTrace(pw);
-	return sw.toString();
+    return sw.toString();
+
   }
-
-  /**
-  * Set default proxy variable.
-  */
-  public void doSet_default( RunData runData, Context aContext ) 
-  {
-    String default_proxy = runData.getParameters().getString( PROXY_HASH );
-//      JetspeedUser user = ((JetspeedRunData)runData).getJetspeedUser();
-//      try {
-//        ProxyTable.setDefault( default_proxy, user );
-//      } catch ( ProxyTableException e ) {
-//        aContext.put( ERROR, "Error: " + e.getMessage() );
-//      }
-
-    HttpSession session = runData.getSession();
-    try {
-	ProxyManager.setDefaultProxy(session, default_proxy);
-    }
-    catch(ProxyStorageException pse) {
-	aContext.put( ERROR, "Error: " + pse.getMessage() );
-    }
-
-    loadProxies( runData, aContext ); 
-  }
-
+*/
   /**
   * Load proxies from user's context and then pass it through to
   * servlet context.  Also checks for expired credentials and removes them.
   * It places a message in the status variable reporting the proxy DNs that
   * were removed.  Usually called for xportlet-proxymanager.vm. 
   */
-  public void loadProxies( RunData runData, Context aContext ) 
-  {
-      JetspeedRunData data = (JetspeedRunData)runData;
-      JetspeedUser user = data.getJetspeedUser();
-//      ProxyTable proxies = new ProxyTable();
-//      try {
-//        proxies.load( user );
-//        Hashtable expired = new Hashtable();
-//        proxies.removeExpired( expired );
-//        if ( expired.size() != 0 ) {
-//          String msg = "<p>The following credentials have expired:</p><br>";
-//          Enumeration expired_hashes = expired.keys();
-//          while ( expired_hashes.hasMoreElements() ) {
-//            String expired_hash = (String)expired_hashes.nextElement();
-//            GSSCredential proxy = (GSSCredential)expired.get(expired_hash);
-//  	  try {
-//            	msg += proxy.getName() + "<br>"; 
-//  	  } catch (GSSException gsse) {}
-//          }
-//          msg += "<br>"; 
-//          aContext.put( STATUS, msg ); 
-//        }
-//      } catch ( ProxyTableException pte ) {
-//        aContext.put( ERROR, pte.getMessage() );
-//      }
-//       catch ( GSSException gsse ) {
-//        aContext.put( ERROR, gsse.getMessage() );
-//      }
+  public void loadProxies(RunData runData, Context aContext) {
+//      JetspeedRunData data = (JetspeedRunData)runData;
+//      JetspeedUser user = data.getJetspeedUser();
 
     HttpSession session = runData.getSession();
     try {
-	Hashtable expired = ProxyManager.removeExpiredProxies(session);
-	if ( expired.size() != 0 ) {
-	    String msg = "<p>The following credentials have expired:</p><br>";
-	    Enumeration expired_hashes = expired.keys();
-	    while ( expired_hashes.hasMoreElements() ) {
-		String expired_hash = (String)expired_hashes.nextElement();
-		GSSCredential proxy = (GSSCredential)expired.get(expired_hash);
-		try {
-		    msg += proxy.getName() + "<br>";
-		} catch (GSSException gsse) {}
-	    }
-	    msg += "<br>";
-	    aContext.put( STATUS, msg );
-	}
-	
-	aContext.put( PROXY_ID, ProxyManager.getAllProxies(session) ); 
+      //
+      // check gridservice first to retrieve a proxy
+      // Xiaobo Yang, 30 November 2004
+      //
+      GSSCredential gsproxy = GridService.getCurrentUserGSSCredential();
+      ProxyManager.addProxy(session, gsproxy);
 
+      Hashtable expired = ProxyManager.removeExpiredProxies(session);
+      if (expired.size()!=0) {
+        String msg = "<p>The following credentials have expired:</p><br>";
+        Enumeration expired_hashes = expired.keys();
+        while (expired_hashes.hasMoreElements()) {
+          String expired_hash = (String)expired_hashes.nextElement();
+          GSSCredential proxy = (GSSCredential)expired.get(expired_hash);
+          try {
+            msg += proxy.getName() + "<br>";
+          }
+          catch (GSSException gsse) {}
+        }
+        msg += "<br>";
+        aContext.put(STATUS, msg);
+      }
+      aContext.put(PROXY_ID, ProxyManager.getAllProxies(session));    
     }
-    catch(ProxyStorageException pse) {
-	aContext.put( ERROR, pse.getMessage() );
+    catch (ProxyStorageException pse) {
+    	aContext.put( ERROR, pse.getMessage() );
     }
-    String default_proxy = (String)user.getPerm( DEFAULT_PROXY );
-    aContext.put( DEFAULT_PROXY, default_proxy );
+
+//    String default_proxy = (String)user.getPerm(DEFAULT_PROXY);
+//    aContext.put(DEFAULT_PROXY, default_proxy);
+    
   }
 
   /**
@@ -470,53 +476,52 @@ public class ProxyManagerAction extends VelocityPortletAction
   * are missing in the string.  session_only can be missing because that
   * means false (i.e., store permanently).
   */
-  private String checkParameters( Parameters theParams )
-  {
+  private String checkParameters(Parameters theParams) {
     String missing = "";
 
-    if ( theParams.hostname == null || theParams.hostname.equals("") ) {
+    if (theParams.hostname==null || theParams.hostname.equals("")) {
       missing += " " + HOSTNAME;
     }
-    if ( theParams.port == null || theParams.port.equals("") ) {
+    if (theParams.port==null || theParams.port.equals("")) {
       missing += " " + PORT;
     }
-    if ( theParams.username == null || theParams.username.equals("") ) {
+    if (theParams.username==null || theParams.username.equals("")) {
       missing += " " + USERNAME;
     } 
-    if ( theParams.password == null || theParams.password.equals("") ) {
+    if (theParams.password==null || theParams.password.equals("")) {
       missing += " " + PASSWORD;
     }
-    if ( theParams.lifetime == null || theParams.lifetime.equals("") ) {
+    if (theParams.lifetime==null || theParams.lifetime.equals("")) {
       missing += " " + LIFETIME;
     }
 
     return missing;
+
   }
 
   /**
   * Retrieve parameters from the servlet context and place them in 
   * structure Parameters.
   */
-  private Parameters getParameters( RunData runData, Context aContext )
-  {
+  private Parameters getParameters(RunData runData, Context aContext)  {
     Parameters params = new Parameters();
 
-    params.hostname = runData.getParameters().getString( HOSTNAME );
-    params.port = runData.getParameters().getString( PORT );
-    params.username = runData.getParameters().getString( USERNAME );
-    params.password = runData.getParameters().getString( PASSWORD );
-    params.lifetime = runData.getParameters().getString( LIFETIME );
-    params.session_only = runData.getParameters().getString( SESSION_ONLY );
+    params.hostname = runData.getParameters().getString(HOSTNAME);
+    params.port = runData.getParameters().getString(PORT);
+    params.username = runData.getParameters().getString(USERNAME);
+    params.password = runData.getParameters().getString(PASSWORD);
+    params.lifetime = runData.getParameters().getString(LIFETIME);
+    params.session_only = runData.getParameters().getString(SESSION_ONLY);
 
     return params;
+
   }
 
   /**
   * Retrieve parameters from persistency and place them in 
   * structure Parameters.
   */
-  private Parameters getSavedParameters( RunData runData, Context aContext )
-  {
+/*  private Parameters getSavedParameters(RunData runData, Context aContext) {
     Parameters params = new Parameters();
 
     params.hostname = (String)runData.getUser().getPerm( HOSTNAME );
@@ -550,14 +555,14 @@ public class ProxyManagerAction extends VelocityPortletAction
     }
 
     return params;
-  }
 
+  }
+*/
   /**
   *  Get parameters from user's psml file and place them in structure
   *  Parameters.
   */
-  private Parameters getDefaultParameters( RunData runData, Context aContext )
-  {
+/*  private Parameters getDefaultParameters(RunData runData, Context aContext) {
     VelocityPortlet portlet = (VelocityPortlet)aContext.get( PORTLET );
     PortletConfig config = portlet.getPortletConfig();
 
@@ -590,7 +595,9 @@ public class ProxyManagerAction extends VelocityPortletAction
     }
     
     return params;
+
   }
+*/
 
   /**
   * Wrapper class for storing parameters of this portlet.
@@ -602,6 +609,7 @@ public class ProxyManagerAction extends VelocityPortletAction
     public String password = null;
     public String lifetime = null;
     public String session_only = null;
+
   }
 
 }

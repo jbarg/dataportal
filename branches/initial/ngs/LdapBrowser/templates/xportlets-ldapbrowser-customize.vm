@@ -1,38 +1,69 @@
-#if (!$ldaphostport)
-  #set ( $ldaphostport="389" )
-#end
-
-<table>
-<tr>
-<td>
-<center>
-  <table border=5 bgcolor="$!{skin.Color}">
-    <tr>
-      <th class="title">
-        LDAP Browser
-      </th>
-    </tr>
-  </table>
-</center>
-</td>
-</tr>
-<tr>
-<td>
-&nbsp<p/>
-<form action="$jslink.Template" method="post">
-  <font color="$!{skin.Color}">
-    LDAP Server Name:
-    <input type=text name=ldaphostname value="$!{ldaphostname}" size="32">
-    Port:
-    <input type=text name=ldaphostport value="$!{ldaphostport}" size="5"><br/><br/>
-    Base DN:
-    <input type=text name=ldapbasedn value="$!{ldapbasedn}" size="48"><br/>
-    Your base DN may look like: dc=cs,dc=indiana,dc=edu<br/>
-    <input type=hidden name=mode value="node" size="4">
-    <br/><br/>
-    <input type="submit" name="eventSubmit_doCustomize" value="Enter"/>
-  </font>
-</form>
-</td>
-</tr>
-</table>
+## Xiaobo Yang, CCLRC e-Science Centre, 14 December 2004
+##
+<div class="chefPortletContainer">
+  #if ($menu)
+    #toolbar($menu)
+  #end
+  <div class="chefPortletContent">
+    #if ($alertMessage)
+      <div class="chefAlertBox">
+        Alert: $validator.escapeHtml($alertMessage)
+      </div>
+    #end
+    <div class="chefPageviewTitle">
+      Set LDAP query parameters.
+    </div>
+##
+## default parameters now defined in the registration file
+## Xiaobo Yang, 20 December 2004
+##
+##    #if (!$ldaphostname)
+##      #set ( $ldaphostname="ngsinfo.grid-support.ac.uk" )
+##    #end
+##
+##    #if (!$ldaphostport)
+##      #set ( $ldaphostport="2135" )
+##    #end
+##
+##    #if (!$ldapbasedn)
+##      #set ( $ldapbasedn="Mds-Vo-name=ngsinfo, o=grid" )
+##    #end
+##
+    <form name="$form-name" id="$form-name" action="#toolForm("$action")" method="post">
+      <fieldset>
+        <legend>Query Settings</legend>
+        <table class="chefEditItem" summary="Setting LDAP server parameters">
+          <tr>
+            <td class="chefLabel">
+              <label for="ldaphostname">LDAP Server Name:</label>
+            </td>
+            <td>
+              <input type="text" name="ldaphostname" id="ldaphostname" size="32" value="$!{ldaphostname}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class="chefLabel">
+              <label for="ldaphostport">LDAP Port Number:</label>
+            </td>
+            <td>
+              <input type="text" name="ldaphostport" id="ldaphostport" size="5" value="$!{ldaphostport}"/>
+            </td>
+          </tr>
+          <tr>
+            <td class="chefLabel">
+              <label for="ldapbasedn">LDAP Base DN:</label>
+            </td>
+            <td>
+              <input type="text" name="ldapbasedn" id="ldapbasedn" size="32" value="$!{ldapbasedn}"/>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+##
+      <div class="chefButtonRow">
+        <input type="submit" name="eventSubmit_doGetldapinfo" value="Query"/>
+      </div>
+##
+    </form>
+  </div>
+</div>

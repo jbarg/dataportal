@@ -1,44 +1,11 @@
---------------------------------------------------------------------------------
-                              Ldap Browser Portlet 
+LDAP Browser Tool for NGS Portal
+================================
 
-			      Version VERSION
---------------------------------------------------------------------------------
-
-The Ldap Browser portlet provides an interface for browsing the content of 
-Ldap server in Jetspeed.
-
-PREREQUISITES:
---------------
-
-1. GNU tar (or ensure that your tar can handle paths longer than 100
-   characters long)
-
-2. Jakarta Ant (we use version 1.5 but it will probably work with most earlier
-   versions too) - http://jakarta.apache.org/ant
-
-INSTALL:
---------
-
-To install the LdapBrowser portlet into your Jetspeed portal, you'll need
-to: 
-
-1.  Untar and unzip xportlets-ldapbrowser-VERSION-[src,bin].tar.gz.
-
-2.  Define alliance.home in file build.properties. "alliance.home" is your
-    alliance portal installation.
-
-3.  For binary distribution, execute:
-
-      ant deploy
-
-    For source distribution, execute:
-
-      ant build deploy
-
-4.  Restart your portal (LdapBrowser will be available in the portlet
-    listing).
+LDAP Browser Tool for NGS Portal is based on ldapbrowser xportlet from the
+Extreme! Computing Lab (http://www.extreme.indiana.edu). It is now re-designed
+as a CHEF tool to provide an interface for browsing the content of a LDAP
+server.
 
 
---------------------------------------------------------------------------------
-                           Extreme! Computing Lab
-                       http://www.extreme.indiana.edu
+CCLRC e-Science Centre
+http://www.e-science.clrc.ac.uk/
