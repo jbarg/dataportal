@@ -4,7 +4,7 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
 	<display-name>Web Interface</display-name>
-<!--	<listener>
+	<!--	<listener>
 		<listener-class>SessionListener</listener-class>
 	</listener>-->
 	<servlet>
@@ -225,7 +225,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>TransferServlet</servlet-name>
-		<url-pattern>/servlet/TransferServlet</url-pattern>
+		<url-pattern>/servlet/.SessioTransferServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>HelpSearch1</servlet-name>
@@ -326,12 +326,15 @@
 
   </servlet-mapping>
 -->
- 
 	<welcome-file-list id="WelcomeFileList_1">
 		<welcome-file>ematerials.html</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>index.jws</welcome-file>
 	</welcome-file-list>
+	<error-page>
+		<error-code>uk.ac.dl.web.SessionTimedOutException</error-code>
+		<location>/html/SessionTimedOut.html</location>
+	</error-page>
 	<taglib>
 		<taglib-uri>/tldweb</taglib-uri>
 		<taglib-location>/tld/glen.tld</taglib-location>
