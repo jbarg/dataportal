@@ -1,0 +1,311 @@
+<!-- ************************************************************** -->
+<!--  clrcmetadata.dtd                                    -->
+<!--  v.1.3.2                                              -->
+<!--  15/05/02                                            -->
+<!--                                                      -->
+<!-- A DTD to represent the CLRC Scientific               -->
+<!-- Metadata format.                                     -->
+<!--                                                      -->
+<!-- (changes made by Shoaib Sufi, E-Science)             -->
+<!-- Brian Matthews                                       -->
+<!-- Data Portal Project                                  -->
+<!-- ITD-CLRC                                             -->
+<!--                                                      -->
+<!-- Based on the first draft CLRC Metadata               -->
+<!-- November 2000.                                       -->
+<!--                                                      -->
+<!-- This represents a first pass to provide a common     -->
+<!-- understanding and initial implementation.            -->
+<!-- This is not likely to prove the best approach and    -->
+<!-- a move to XML Schema and/or RDF is more suitable     -->
+<!-- for the design of the metadata model.                -->
+<!--                                                      -->
+<!-- CHANGE HISTORY                                       -->
+<!-- Created: 29/11/00                                    -->
+<!-- 27/01/01 - StudyID missing in Study - added.         -->
+<!-- 31/01/01                                             -->
+<!--          - DataHolder changed to DataManager.  
+               - DataManager Moved to Investigation
+
+               - studyref attribute type changed to IDREF 
+
+               - StudyID changed from #PCDATA to studyid attribute
+               - optional Institution added to StudyID
+               - StudyID source attribute changed to institutionref
+
+	        - CLRCMetadata changed to MetadataEntry 
+	        - new top level CLRCMetadata element - groups a list of MetadataEntry elements.
+	
+		- element Calibration removed.
+		
+		- elements Parameter and Condition given a structure of triples
+		                (ParamName, Units, Value).
+		- Units taken out of LogicalDescription - subsumed into Parameter
+		
+		- Role moved from PersonClass to Investigator
+		
+		- added Time, Date, TimeRange and more structure to TimePeriod.
+		- added TimePeriod to LogicalDescription.
+	
+-->
+<!-- 06/02/01                                             -->
+<!--           - MetadataRecord changed from optional %DataDescriptionClass; 
+                 to optional DataHolding
+	       - dataid attribute added to DataDescription elements,
+	         dataidref attribute added to DataLocation elements.
+-->
+<!-- 13/02/01	- v.1.3.0										-->
+<!--        - Topic under Purpose removed - just have top-level topic 
+                to remove confusion
+             - Range moved to be an optional value on a Parameter.
+             - Limit elements, with possible top and bottom attributes
+               added explicitly to range.
+		- ChildDataSetRef added.
+		- DerivedFromDataSetRef added.
+		- ParentFileRef changed to DerivedFromFileRef
+		- Optional DataSetRef and DataHolding (should it be Study - yes?) added to 
+		  DerivedFromFileRef
+		- Optional DataHolding  (should it be Study - yes?)  added to Derived from
+		  data set.  ParentDataSet does not need this as has to be in same data holding.
+		- added Condition to LogicalDescription.
+-->
+<!-- 21/02/01	- v.1.3.1										-->
+<!--		- Timeperiod changed to give start and optional end date - no 
+             - infinite regress.
+-->
+
+<!-- 15/05/02	-v.1.3.2 some changes made for easier integration of -->
+<!--             XMLWrappers -->
+<!--                                                      -->
+<!-- ****************************************************************  -->
+<!-- Entity definitions to "represent" the OO model -->
+<!ENTITY % InvestigationClass 'Experiment | Measurement | Simulation'>
+<!ENTITY % StudyClass '(Programme | %InvestigationClass;)'>
+<!ENTITY % Study 'StudyName, StudyID*, Investigator+, StudyInformation, Notes?'>
+<!ENTITY % Studyatts ''>
+<!ENTITY % Investigation '%Study;, DataManager'>
+<!-- associated refer to other CLRCMetadata element IDs. -->
+<!ENTITY % Investigationatts "%Studyatts;  associated IDREFS #IMPLIED">
+<!--  Top Level -->
+<!ELEMENT CLRCMetadata (MetadataRecord*)>
+<!ELEMENT MetadataRecord (Topic, %StudyClass;, AccessConditions, DataHolding?, DataHoldingLocator?, RelatedMaterial?)>
+<!ATTLIST MetadataRecord
+	metadataID ID #REQUIRED
+>
+<!--  Topic categorisation -->
+<!ELEMENT Topic (Discipline?, Source?, Subject+)*>
+<!ELEMENT Discipline (#PCDATA)>
+<!ELEMENT Subject (#PCDATA)>
+<!ELEMENT Source (#PCDATA)>
+<!-- Then these entities are used like this to build the class hierarchy. -->
+<!-- subStudies refer to other CLRCMetadata element IDs. -->
+<!ELEMENT Programme (%Study;)>
+<!ATTLIST Programme
+	%Studyatts; 
+	subStudies IDREFS #IMPLIED
+>
+<!-- There will be further subtypes of both Experiment and Simulation -->
+<!-- but for the central repository, where these are fixed, we can ignore them, and stick to this DTD -->
+<!ELEMENT Experiment (%Investigation;, Instrument, Condition*, Parameter*)>
+<!ATTLIST Experiment
+	%Investigationatts; 
+>
+<!-- Measurement currently the same as Experiment - probably shouldn't be -->
+<!ELEMENT Measurement (%Investigation;, Instrument, Condition*, Parameter*)>
+<!ATTLIST Measurement
+	%Investigationatts; 
+>
+<!ELEMENT Simulation (%Investigation;, Machine, Program, Parameter*, Data?)>
+<!ATTLIST Simulation
+	%Investigationatts; 
+>
+<!-- Breakdown of the study information -->
+<!ELEMENT StudyName (#PCDATA)>
+<!ELEMENT StudyID (Institution?)>
+<!-- studyid - the identifier given by the institution -->
+<!-- institutionref - a reference to an institution - should be a reference to a key -->
+<!-- XML Schema should be able to do better here -->
+<!ATTLIST StudyID
+	studyid CDATA #REQUIRED
+	institutionref CDATA #IMPLIED
+>
+<!-- Investigator - it may be going into too much detail -->
+<!-- we have fixed a person to have one instJIUHBitution - this may cause problems in future -->
+<!ENTITY % PersonClass "Name, Status, Institution, ContactDetails">
+<!-- an Investigator has a Role in this study. -->
+<!ELEMENT Investigator (%PersonClass;, Role)>
+<!ELEMENT Name (Surname, Initials, Forename*, PersonTitle?)>
+<!ELEMENT Surname (#PCDATA)>
+<!ELEMENT Initials (#PCDATA)>
+<!ELEMENT Forename (#PCDATA)>
+<!ELEMENT PersonTitle (#PCDATA)>
+<!ELEMENT Role (#PCDATA)>
+<!ELEMENT Status (#PCDATA)>
+<!ELEMENT Institution (#PCDATA)>
+<!ATTLIST Institution
+	institutionID CDATA #IMPLIED
+	institutiontype (academic | government | military | commercial | nonprofit | other) #IMPLIED
+>
+<!-- institutiontype is a bit of an "extra",  might miss out -->
+<!ELEMENT ContactDetails (Address, Telephone, Email?, Fax?)>
+<!-- breaking this contact detail down like this is likely to be too much -->
+<!-- detail for the purpose of metadata searching -->
+<!ELEMENT Address (Addressline1, Addressline2?, Town, Region?, Postcode?, Country)>
+<!ELEMENT Addressline1 (#PCDATA)>
+<!ELEMENT Addressline2 (#PCDATA)>
+<!ELEMENT Town (#PCDATA)>
+<!ELEMENT Region (#PCDATA)>
+<!ELEMENT Country (#PCDATA)>
+<!-- from ISO Standard country codes -->
+<!ATTLIST Country
+	countryabbrev CDATA ""
+>
+<!ELEMENT Postcode (#PCDATA)>
+<!ELEMENT Telephone (#PCDATA)>
+<!ELEMENT Email (#PCDATA)>
+<!ELEMENT Fax (#PCDATA)>
+<!-- Study Information -->
+<!ELEMENT StudyInformation (Funding, TimePeriod, Purpose, StudyStatus, Resources?)>
+<!ELEMENT Funding (#PCDATA)>
+<!-- Time point or range over which the study was undertaken. -->
+<!-- Do we want to put time information onto individual data items?-->
+<!ELEMENT TimePeriod (StartDate, EndDate?)>
+<!ELEMENT StartDate (Date, Time?)>
+<!ELEMENT EndDate (Date, Time?)>
+<!ELEMENT Date (#PCDATA)>
+<!-- expect this to be in dd/mm/yyyy format-->
+<!ELEMENT Time (#PCDATA)>
+<!-- expect this to be in hh:mm:ss format -->
+<!-- Purpose 
+     An abstract, study type and any other information.
+     Topic keywords also form part of this, but are kept in the top-level topic  to
+     avoid confusion.
+-->
+<!ELEMENT Purpose (Abstract?, StudyType?)>
+<!ELEMENT Abstract (#PCDATA)>
+<!-- should we accept HTML? At the moment, treat as free text -->
+<!ELEMENT StudyType (#PCDATA)>
+<!-- should some be enumerated? -->
+<!ELEMENT StudyStatus (#PCDATA)>
+<!-- should some be enumerated? 
+  e.g. 
+<! ELEMENT StudyStatus (#PCDATA | COMPLETE | INPROGRESS | PENDING) >
+<! ELEMENT COMPLETE EMPTY > 
+<! ELEMENT INPROGRESS EMPTY >
+<! ELEMENT PENDING EMPTY>
+-->
+<!ELEMENT Resources (#PCDATA)>
+<!-- Data Holder -->
+<!ELEMENT DataManager (%PersonClass;, Role)>
+<!-- Note the reuse of the person class entity i.e. datamanager specified same way as investigator -->
+<!-- different types of datamanager perhaps - distributer/curator ? -->
+<!-- Notes -->
+<!ELEMENT Notes (#PCDATA)>
+<!-- Fields of Experiment -->
+<!-- Parameters and Conditions - essentially similar. -->
+<!-- these are proposed to be triples formed of:
+        (Name, Units, Value)
+        e.g. (Temperature, K, 150)
+               (Pressure, Bar, 300)
+
+       units and value are optional - this allows the name to be set and the 
+       other entries to be given later.
+-->
+<!ENTITY % ParameterType "ParamName, Units?, ParamValue?, Range?">
+<!ELEMENT Instrument (#PCDATA)>
+<!-- should this have a hierarchical structure? -->
+<!ELEMENT Condition (%ParameterType;)>
+<!ELEMENT Parameter (%ParameterType;)>
+<!ELEMENT ParamValue (#PCDATA)>
+<!ELEMENT Units (#PCDATA)>
+<!ELEMENT ParamName (#PCDATA)>
+<!-- Fields of Simulation -->
+<!-- Currently, I have no more information about these than that they are free text -->
+<!-- This will probably have to do for the prototype, but will not be satisfactory in the future. -->
+<!ELEMENT Program (#PCDATA)>
+<!ELEMENT Machine (#PCDATA)>
+<!ELEMENT Data (#PCDATA)>
+<!-- Access Conditions -->
+<!-- At the moment, not much more than free text - but will require more. -->
+<!ELEMENT AccessConditions (#PCDATA)>
+<!-- Data Location -->
+<!ENTITY % locationatts 'dataidref CDATA #REQUIRED'>
+<!-- should be an IDREF -->
+<!--<!ELEMENT DataHoldingLocator (DataHoldingLocator, DataSetLocator*, FileLocator*)>-->
+<!ELEMENT DataHoldingLocator (DataName, Locator*, DataSetLocator*, FileLocator*)>
+<!ATTLIST DataHoldingLocator
+	%locationatts; 
+>
+<!ELEMENT DataSetLocator (DataName, Locator*)>
+<!ATTLIST DataSetLocator
+	%locationatts; 
+>
+<!ELEMENT FileLocator (URI, Locator*)>
+<!ATTLIST FileLocator
+	%locationatts; 
+>
+<!ELEMENT Locator (URL, DataSourceType?, DataSourceAccess?)>
+<!ATTLIST Locator
+	type (absolute | relative) "absolute"
+>
+<!ELEMENT URL (#PCDATA)>
+<!ELEMENT DataSourceType (#PCDATA)>
+<!ELEMENT DataSourceAccess (#PCDATA)>
+<!-- Data Description entities -->
+<!ENTITY % DataDescriptionClass 'DataHolding | DataSet | File'>
+<!ENTITY % DataDescription 'DataName, TypeOfData?, Status?, LogicalDescription?, FileFormat?'>
+<!ENTITY % datadescatts 'dataid CDATA #REQUIRED'>
+<!-- should be an ID -->
+<!-- Data Description elements -->
+<!ELEMENT DataHolding (%DataDescription;, DataSet*, RelatedStudy*)>
+<!ATTLIST DataHolding
+	%datadescatts; 
+>
+<!ELEMENT RelatedStudy (StudyRef, RelationType)>
+<!ELEMENT StudyRef EMPTY>
+<!-- StudyRef refers to a metadataID -->
+<!ATTLIST StudyRef
+	studyref IDREF #REQUIRED
+>
+<!-- should refer to the id of a study -->
+<!ELEMENT RelationType (#PCDATA)>
+<!-- Data sets -->
+<!ELEMENT DataSet (%DataDescription;, File*, RelatedDataSetRef*, ParentDataSetRef?, ChildDataSetRef*, DerivedFromDataSetRef*)>
+<!ATTLIST DataSet
+	%datadescatts; 
+>
+<!ELEMENT RelatedDataSetRef (DataSetRef, RelationType)>
+<!ELEMENT ParentDataSetRef (#PCDATA)>
+<!ELEMENT ChildDataSetRef (#PCDATA)>
+<!ELEMENT DerivedFromDataSetRef (DataHoldingRef?, DataSetRef)>
+<!ELEMENT DataSetRef (#PCDATA)>
+<!ELEMENT DataHoldingRef (#PCDATA)>
+<!-- Should point to a named data set in a named study -->
+<!ELEMENT File (%DataDescription;, URI, RelatedFileRef*, DerivedFromFileRef*)>
+<!ATTLIST File
+	%datadescatts; 
+>
+<!ELEMENT URI (#PCDATA)>
+<!ELEMENT RelatedFileRef (FileRef, RelationType)>
+<!ELEMENT DerivedFromFileRef (DataHoldingRef?, DataSetRef?, FileRef)>
+<!ELEMENT FileRef (#PCDATA)>
+<!-- Should point to a named data set in a named study -->
+<!ELEMENT DataName (#PCDATA)>
+<!ELEMENT TypeOfData (#PCDATA)>
+<!ELEMENT LogicalDescription (#PCDATA | Parameter | Condition | Coverage | TimePeriod)*>
+<!-- expect just one time period -->
+<!-- this is an arbitrary list - will change -->
+<!ELEMENT Range (Limit)+>
+<!ELEMENT Limit (#PCDATA)>
+<!ATTLIST Limit
+	bound (top | bottom | other) #IMPLIED
+>
+<!ELEMENT Coverage (#PCDATA)>
+<!ELEMENT FileFormat (#PCDATA)>
+<!-- keep as a single lump at the moment - may make more detailed -->
+<!-- Related Materials -->
+<!ELEMENT RelatedMaterial (#PCDATA | Publications | References | RelatedInvestigations | CommunityInformation)*>
+<!ELEMENT Publications (#PCDATA)>
+<!ELEMENT References (#PCDATA)>
+<!ELEMENT RelatedInvestigations (#PCDATA)>
+<!ELEMENT CommunityInformation (#PCDATA)>

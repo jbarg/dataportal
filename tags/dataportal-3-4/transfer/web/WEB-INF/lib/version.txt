@@ -1,0 +1,7 @@
+PureTLS (custom): 0.9b3 
+
+JNDI: 1.2.1
+
+LDAP provider: 1.2.3
+
+JUnit version: 3.7

@@ -1,0 +1,165 @@
+
+
+<html>
+	<body>
+		<table border="0" cellspacing="0" cellpadding="2" width="100%">
+			<tr>
+				<td bgcolor="#525D76">
+					<font color="#ffffff" face="arial,helvetica,sanserif">
+						<a name="Term Modifiers">
+							<strong>Whats needed before you can log on to the Dataportal</strong>
+						</a>
+					</font>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<blockquote>
+						<p>The Dataportal uses PKI for the security within the Dataportal.
+</p>
+						<table border="0" cellspacing="0" cellpadding="2" width="100%">
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="Wildcard Searches">
+											<strong>Certificate</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+									<p>You need to get an UK e-Science grid certificate or a certificate that is accepted by the UK e-science
+Certification Authority (CA). If you are based in the UK you can get a certificate following the guidelines
+outlined at the UK Grid Support Centre web pages under: http://www.grid-support.ac.uk/ca/ca.htm. If you are
+based outside the UK please contact the UK Grid Support Centre for advise under: 0044 (0)1235 446822 or email
+to support@grid-support.ac.uk</p>
+
+<p>When you initially download your personal certificate it is stored within your browser. If you are using your
+browser to identify yourself you need not do anything more. However if you wish to be able to use your
+certificate for other purposes (e.g. for the e-Minerals Mini Grid) you must first export it. Instructions on how to
+export from Netscape can be found under http://www.grid-support.ac.uk/ca/userdocumentation/
+NetExportCert.html.</p>
+<p>
+
+</p>
+<p></p>
+<p></p>
+			</blockquote>
+															</td>
+							</tr>
+
+						</table>
+						<table border="0" cellspacing="0" cellpadding="2" width="100%">
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="Wildcard Searches">
+											<strong>Correct format</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+									<p>To use your certificate with our Portals and any other Globus based programmes, you will have to convert the
+exported certificate to a different format. We assume you are using UNIX and have OpenSSL (if you do not
+have it you can download it here http://www.openssl.org/), and that the openssl command is in your path. We
+also assume you have stored your key pair in the file "mykey.p12". You will have to type your passphrase (the
+one that protects your key pair) while running these commands.
+</p>
+
+<p>For personal certificates:</p>
+<ul>
+	<li>openssl pkcs12 -in mykey.p12 -clcerts -nokeys -out usercert.pem</li>
+	<li>openssl pkcs12 -in mykey.p12 -nocerts -out userkey.pem</li>
+</ul>
+<p>If you converted a personal certificate openssl will ask you to type a (possibly different) passphrase - since your
+private key is exported now, you will have to provide a passphrase here to protect it. You must type it twice to
+ensure that you haven't made a mistake. If this is successful, you now have your certificate in the file
+"usercert.pem" and your private key in "userkey.pem". If you want to use them with Globus, put them in your
+~/.globus directory. (Make sure that there aren't any userkey.pem and usercert.pem in your ~/.globus directory
+already - if you overwrite them, make sure you know what you're doing.)</p>
+<p>You should also do the following:</p>
+<ul>
+	<li>chmod 400 userkey.pem</li>
+	<li>chmod 444 usercert.pem</li>
+</ul>
+<p>You can now also copy them back to any other system (e.g. PC) which you usually use for your work.
+Before you leave the UNIX system, please extract your distinguished Name (DN) from your certificate and
+make a note of it. It can be extracted by:</p>
+<ul>
+	<li>openssl x509 -in usercert.pem -subject</li>
+</ul>
+			</blockquote>
+															</td>
+							</tr>
+
+						</table>
+					<table border="0" cellspacing="0" cellpadding="2" width="100%">
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="Wildcard Searches">
+											<strong>Register to level 2 grid</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+									<p>Now that you have all relevant certificates in the correct format you can decide which of the data and compute
+resources available on the e-Minerals Mini Grid you would like to use (please find complete up-to-date listing
+under <not yet available – contact CCLRC>). For access to sites on the Level 2 UK e-Science Grid simply fill
+out the registration forms for all machines you are interested in, the online forms can be found under
+http://www.grid-support.ac.uk/etf/escience.html. Sites where you already have a conventional account only
+need to be notified of your intend to use them in addition through a web interface. Please send them your DN
+(see previous section), which can be found in your certificate through an openssl command or can be
+reconstructed from the settings in your Browser. Otherwise please contact rik.tyer@dl.ac.uk and ask where to
+apply for access.
+</p>
+<p></p>
+<p></p>
+			</blockquote>
+															</td>
+							</tr>
+
+						</table>
+				<table border="0" cellspacing="0" cellpadding="2" width="100%">
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="Wildcard Searches">
+											<strong>Upload into a MyProxy server</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+
+<p>
+Finally please load your personal certificate into a proxy server. There are a range of proxy servers around the
+world that will hold your certificate accessible from anywhere in the world. The benefit is not just availability
+(you do not need to take your certificate with you when you travel a lot), but more importantly security as the
+proxy server will only pass on a subset of your credentials (proxy certificate) to the requesting services, therefore
+your credentials are safe. You can use our own proxy server to store your certificate available for upload under:
+http://wk-pc1.dl.ac.uk:8080/dataportal/html/eminerals_login.html  </p>
+<p>You will now need to go to the <a href="Logging%20On.html">next section</a> on uploading your certificate to the MyProxy server.</p>
+<p></p>
+			</blockquote>
+															</td>
+							</tr>
+
+						</table>
+
+					</blockquote>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

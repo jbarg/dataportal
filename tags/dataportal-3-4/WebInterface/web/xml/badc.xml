@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Created by gjd37 on 22 April 2002, 15:28 -->
+
+<!--<!DOCTYPE active SYSTEM "http://gjd37vig.dl.ac.uk/xml/active_topics.dtd">-->
+
+<active value="start">
+
+	<level1 canSubmit="false" value="earth sciences" final="">
+
+		<level2 value="atmosphere" canSubmit="false" final="earth sciences/">
+
+			<level3 canSubmit="false" value="atmospheric temperature" final="earth sciences/atmosphere/">
+
+				<level4 canSubmit="false" value="temperature" final="earth sciences/atmosphere/atmospheric temperature/">
+
+					<level5 canSubmit="true" value="submit" final="earth sciences/atmosphere/atmospheric temperature/temperature"/>
+
+				</level4>
+
+			</level3>
+
+			<!--  This does not work at the moment -->
+
+			<!--<level3 canSubmit="false" value="water vapour" final="earth sciences/atmosphere/">
+
+				<level4 value="submit" canSubmit="true" final="earth sciences/atmosphere/water vapour"/>
+
+			</level3>-->
+
+			<level3 canSubmit="false" value="atmospheric winds" final="earth sciences/atmosphere/">
+
+				<level4 value="submit" canSubmit="true" final="earth sciences/atmosphere/atmospheric winds"/>
+
+			</level3>
+
+		</level2>
+
+		<level2 canSubmit="false" value="oceans" final="earth sciences/">
+
+			<level3 canSubmit="false" value="ocean circulation" final="earth sciences/oceans/">
+
+				<level4 canSubmit="false" value="u-velocity" final="earth sciences/oceans/ocean circulation/">
+
+					<level5 value="submit" canSubmit="true" final="earth sciences/oceans/ocean circulation/u-velocity"/>
+
+				</level4>
+
+				<level4 canSubmit="false" value="v-velocity" final="earth sciences/oceans/ocean circulation/">
+
+					<level5 value="submit" canSubmit="true" final="earth sciences/oceans/ocean circulation/v-velocity"/>
+
+				</level4>
+
+			</level3>
+
+		</level2>
+
+	</level1>
+
+</active>
+
