@@ -1,0 +1,117 @@
+/*
+ * SRBService.java
+ *
+ * Created on 11 August, 2003
+ */
+
+package uk.ac.clrc.dataportal.srbcommands;
+
+/**
+ * @author  Mark Williams
+ *
+ * Wraps SRB Scommands as a web service
+ * Implement a method for each Scommand so that we stay in control of what gets executed on the system otherwise clients could execute anything!
+ */
+
+import javax.servlet.http.HttpServletRequest;
+import org.apache.axis.MessageContext;
+import org.apache.axis.transport.http.HTTPConstants;
+
+import java.util.Properties;
+import java.io.FileInputStream;
+
+import org.apache.axis.components.logger.LogFactory;
+import org.apache.commons.logging.Log;
+
+
+public class SRBService {
+    
+    Log log = LogFactory.getLog(this.getClass().getName());
+    private boolean sinitdone = true;
+    private Properties props = null;
+    
+    SRBService() {
+        log.info("Instantiated SRBService!");
+        try {
+            props = getProps();
+            this.Sinit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void Sinit() throws Exception {
+        // Log on to SRB - we could have made this a general purpose login so that clients could use this web service to interact with any SRB server
+        // but for now just have it so that the Web Service is configured locally and connects to just one SRB server / domain
+        if (! sinitdone) {
+            log.info("Logged on to SRB");
+            LaunchProcess.runScommand(null, props.getProperty("srbHome") + "/Sinit");
+        }
+        sinitdone = true;
+    }
+    
+    public void Sexit() throws Exception {
+        // For completeness include a logout method
+        if (sinitdone) {
+            log.info("Logged out from SRB");
+            LaunchProcess.runScommand(null, props.getProperty("srbHome") + "/Sexit");
+        }
+        sinitdone = false;
+    }
+    
+    public void finalize() throws Throwable {
+        try {
+            this.Sexit();
+        }
+        finally {
+            super.finalize();
+        }
+    }
+    
+    public void Sls(java.io.PrintWriter out, String dir) throws Exception {
+        LaunchProcess.runScommand(out, props.getProperty("srbHome") + "/Sls " + dir);
+    }
+    
+    public Properties getProps() throws Exception {
+        
+        // This is hardcoded for testing outside of Axis - when running in Axis it gets overwritten by the context path below
+        String propertiesFileName = "C:/cygwin/home/maw24/dataportal/srbcommands/web/WEB-INF/srb.properties";
+        propertiesFileName = "/home/maw24/srb.properties";
+        
+        // We can only get the context path when deployed within Axis
+        MessageContext messageContext = MessageContext.getCurrentContext();
+        if (messageContext != null) {
+            HttpServletRequest request = (HttpServletRequest) messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+            String fileSeparator = System.getProperty("file.separator");
+            propertiesFileName = request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(fileSeparator));
+            propertiesFileName = propertiesFileName + fileSeparator + "WEB-INF" + fileSeparator + "srb.properties";
+        }
+        
+        try {
+            log.info("Loading SRB properties from " + propertiesFileName);
+            props = new Properties();
+            FileInputStream in = new FileInputStream(propertiesFileName);
+            props.load(in);
+            in.close();
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        
+        return props;
+    }
+    
+    public void mawtest(String dir)
+    {
+        System.out.println("Testing 1 2 3");
+    }
+    
+    public static void main(String[] args) {
+        try {
+            SRBService srb = new SRBService();
+            srb.Sls("/home/srbadm.matrix");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
