@@ -2,15 +2,21 @@
 <%@ page errorPage="error.jsp" import="ac.dl.xml.*,org.apache.log4j.*,java.util.*,org.jdom.filter.*,java.util.*, java.io.*,org.jdom.*,org.jdom.input.*"%>
 <% response.setHeader("pragma","no-cache");
  response.setHeader("cache-control","no-store"); %>
-<%@ include file="loggedin.jsp" %>
 <%@ taglib uri="/tldweb" prefix="xtags" %>
 <%@ taglib uri="/tld/taglibs-xtags.tld" prefix="xtags1" %>
+
+<%@ include file="loggedin.jsp" %>
+
+
+<%@ include file="logger.jsp" %>
 <%
- Logger logger = Logger.getLogger("Manipulate3.jsp");
+/* Logger logger = Logger.getLogger("Manipulate3.jsp");
 
 	 String wd = (String )session.getAttribute("wd");
          //locate the prop file.  Normal get this from web.xml file
          PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
+*/
+
 %>
 <html>
 <head>
@@ -43,8 +49,8 @@ function openwindow(page){
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /><br />
 
-<!-- out puts the content if the browser is not netsacpe 4.  If so out puts
-html/netscape.html file from the content root.-->
+<%-- out puts the content if the browser is not netsacpe 4.  If so out puts
+html/netscape.html file from the content root.--%>
 <xtags:menu netscapefile="html/netscape.html" iefile="html/ie.html">
 </xtags:menu>
 <!--<xtags:HPC /> -->
@@ -63,7 +69,7 @@ html/netscape.html file from the content root.-->
 <form class="mess" name="simpleresult" action="../servlet/ExpandResultsServlet" method="post">
 <%
     
-   String workingDir = (String)session.getAttribute("wd");
+   //String workingDir = (String)session.getAttribute("wd");
     String sid =(String)session.getAttribute("sessionid");
 
     //get what the type of study the user wants
@@ -72,25 +78,19 @@ html/netscape.html file from the content root.-->
     File xml = null;
 
     //try and use tag libs
-
     String sxml = null;
     String sxsl = null;
-
-
-        //sxml = workingDir+File.separator+"profiles"+File.separator+username+File.separator+"users.xml";
-        sxml = "http://localhost:8080/dataportal/profiles/"+sid+"1.xml";
-        //sxml = "file:"+File.separator+File.separator+workingDir+File.separator+"profiles"+File.separator+sid+"1.xml";
-
-        xml =  new File(workingDir+File.separator+"profiles"+File.separator+sid+"1.xml");
-         if(!xml.exists()){
-                    response.sendRedirect("../jsp/BasicSearch.jsp");
-                    return;
-                }
-  
-        sxsl = "http://localhost:8080/dataportal/xsl/simpleresulttableDOM4J.xsl";
+    //sxml = workingDir+File.separator+"profiles"+File.separator+username+File.separator+"users.xml";
+    sxml = "http://localhost:8080/dataportal/profiles/"+sid+"1.xml";
+    //sxml = "file:"+File.separator+File.separator+workingDir+File.separator+"profiles"+File.separator+sid+"1.xml";
+    xml =  new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
+    if(!xml.exists()){
+       response.sendRedirect("../jsp/BasicSearch.jsp");
+       return;
+    }
+    sxsl = "http://localhost:8080/dataportal/xsl/simpleresulttableDOM4J.xsl";
     //sxsl="file:"+File.separator+File.separator+workingDir+File.separator+"xsl"+File.separator+"simpleresulttableDOM4J.xsl";
-
-    %>
+%>
 <%
     //get the position of the list to be presented
     String list = request.getParameter("from");
@@ -121,61 +121,11 @@ if(current<max){
 
 </form>
 <br />
-<!--  pulls out the list of facilities that have no results from the following
-request.  This is stored in the session attribute NoRes-->
-<%
-   
-    /*ArrayList list1 = (ArrayList)session.getAttribute("noRes");
-    if(list1.isEmpty()){}
-    else{
-    out.println("No results from: ");
-    for(int i= 0; i< list1.size();i++){
-        out.print(list1.get(i));
-         if(i == (list1.size()-1)){
-            out.print(".");
-         }
-         else out.print(", ");
-    }
-    out.println("<br />");
-}*/
-%>
-<!--  pulls out the list of facilities that have no connection from the following
-request within the set time.  This is stored in the session attribute NoCon-->
-<%
- /*   ArrayList noConn = (ArrayList)session.getAttribute("noConn");
-     if(noConn.isEmpty()){}
-    else{
-    out.println("No connections to: ");
-    for(int i= 0; i< noConn.size();i++){
-        out.print(noConn.get(i));
-        if(i == (noConn.size()-1)){
-          out.print(".");
-      }
-        else out.print(", ");
-    }
-    out.println("<br />");
-}*/
-%>
-<%
-    
-    /*ArrayList timed = (ArrayList)session.getAttribute("timedOut");
-     if(timed.isEmpty()){}
-    else{
-    out.println("Results timed out from: ");
-    for(int i= 0; i< timed.size();i++){
-        out.print(timed.get(i));
-        if(i == (timed.size()-1)){
-          out.print(".");
-        }
-        else out.print(", ");
-    }
-    out.println("<br />");
-}*/
-%>
-
-<xtags:query name="noConn" send="yes" project="eminerals" message="No connections to: " host="exchange06.dl.ac.uk" />
+<%--  pulls out the list of facilities that have no results from the following
+request.  This is stored in the session attribute NoRes--%>
+<xtags:query name="noConn" send="no" project="eminerals" message="No connections to: " host="exchange06.dl.ac.uk" />
 <xtags:query name="noRes" send="no" project="eminerals" message="No results from: " host="exchange06.dl.ac.uk" />
-<xtags:query name="timedOut" send="yes" project="eminerals" message="Results timed out from: " host="exchange06.dl.ac.uk" />
+<xtags:query name="timedOut" send="no" project="eminerals" message="Results timed out from: " host="exchange06.dl.ac.uk" />
 <br />
 <hr />
 <p class="footer" align="right"><a href="http://validator.w3.org/check/referer"><img

@@ -1,7 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-
-
 <%@ page errorPage="error.jsp" import="org.apache.log4j.*,ac.dl.xml.*,java.util.*, java.io.*,org.jdom.input.*,org.jdom.*" %>
 
 <% response.setHeader("pragma","no-cache");
@@ -10,6 +7,7 @@
 
 <%@ include file="loggedin.jsp" %>
 
+<%@ include file="logger.jsp" %>
 <%@ taglib uri="/tldweb" prefix="xtags" %>
 
 <html>
@@ -94,24 +92,20 @@ html/netscape.html file from the content root.-->
 
    	//set static log for the class
 
-	 Logger logger = Logger.getLogger("Expand.jsp");
-         String wd = (String)session.getAttribute("wd");
-	//locate the prop file.  Normal get this from web.xml file
-	PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
 	if(loggedIn){
 
             String sid = (String)session.getAttribute("sessionid");
-            String workingDir = (String)session.getAttribute("wd");
+      
             //Document xml = null;
             //transfomr xml 
             File xml = null;
-            xml =  new File(workingDir+File.separator+"profiles"+File.separator+sid+"2.xml");
+            xml =  new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml");
             if(!xml.exists()){
                  response.sendRedirect("../jsp/BasicSearch.jsp");
                  return;
             }
             try{
-                 XSLTransformer.transformFiletoWriter(xml,  new File(workingDir+File.separator+"xsl","fullstudydesctable.xsl"), out);
+                 XSLTransformer.transformFiletoWriter(xml,  new File(wd+File.separator+"xsl","fullstudydesctable.xsl"), out);
             }
             catch(Exception e){
                  logger.fatal("Could not transform xml",e);
