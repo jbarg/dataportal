@@ -12,9 +12,7 @@
 /* Logger logger = Logger.getLogger("Manipulate3.jsp");
 
 	 String wd = (String )session.getAttribute("wd");
-         //locate the prop file.  Normal get this from web.xml file
-         PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-*/
+        */
 
 %>
 <html>

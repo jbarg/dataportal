@@ -22,8 +22,8 @@ import org.jdom.input.*;
 public class Explore extends HttpServlet{
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(Explore.class);
-    
+  Logger logger = Logger.getLogger(this.getClass().getName());
+     
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
@@ -37,8 +37,6 @@ public class Explore extends HttpServlet{
         }
         else{
             String wd = (String)session.getAttribute("wd");
-            //locate the prop file.  Normal get this from web.xml file
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
             //get the vales of the users request
             String values[] = request.getParameterValues("select");
             File temp = null;

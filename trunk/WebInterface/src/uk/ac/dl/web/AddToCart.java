@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
 public class AddToCart extends HttpServlet{
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(AddToCart.class);
+   Logger logger = Logger.getLogger(this.getClass().getName());
     
     
     
@@ -42,8 +42,6 @@ public class AddToCart extends HttpServlet{
         
         //get working directories
         String workingDir = (String)session.getAttribute("wd");
-        //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure(workingDir+File.separator+"WEB-INF"+File.separator+"logger.properties");
         
         String sid = (String )session.getAttribute("sessionid");
         Properties prop = (Properties)session.getAttribute("props");

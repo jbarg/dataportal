@@ -18,17 +18,15 @@ import ac.dl.xml.*;
 public class HelpSearchPage extends HttpServlet{
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(HelpSearchPage.class);
-    String workingDir = null;
+     Logger logger = Logger.getLogger(this.getClass().getName());
+        String workingDir = null;
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
         
         HttpSession session = request.getSession(false);
         String wd = (String )session.getAttribute("wd");
-        //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-        
+          
         if(session == null){
             response.sendRedirect("../html/SessionTimedOut.html");
             return;

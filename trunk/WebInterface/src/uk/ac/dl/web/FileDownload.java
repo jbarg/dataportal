@@ -31,6 +31,8 @@ import org.apache.axis.AxisFault;
  */
 public class FileDownload extends HttpServlet {
     
+      Logger logger = Logger.getLogger(this.getClass().getName());
+      
     /** Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
@@ -40,7 +42,6 @@ public class FileDownload extends HttpServlet {
     throws ServletException, IOException {
         //set static log for the class
         
-        Logger logger = Logger.getLogger(this.getClass().getName());
         HttpSession session = request.getSession(false);
         if(session == null){
          response.sendRedirect("../html/SessionTimedOut.html");
@@ -49,8 +50,7 @@ public class FileDownload extends HttpServlet {
         else{
             //locate the prop file.  Normal get this from web.xml file
             String wd =  (String)session.getAttribute("wd");
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-            
+             
             
             //get all the attributes needed
             String url = request.getParameter("dir");

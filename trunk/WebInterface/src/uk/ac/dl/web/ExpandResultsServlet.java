@@ -31,8 +31,8 @@ import org.jdom.input.*;
 
 public class ExpandResultsServlet extends HttpServlet{
     //set static log for the class
-    static Logger logger = Logger.getLogger(ExpandResultsServlet.class);
-    
+    Logger logger = Logger.getLogger(this.getClass().getName());
+     
     /** Called by the service method
      * @param response
      * @param request
@@ -54,8 +54,6 @@ public class ExpandResultsServlet extends HttpServlet{
         else{
             //get working dir
             String wd = (String )session.getAttribute("wd");
-            //locate the prop file.  Normal get this from web.xml file
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
             
             String submit =  request.getParameter("this_one");
             //if next ten, add one to the current stylesheet and add the current choosen valeus to session

@@ -7,42 +7,27 @@
 package uk.ac.dl.web;
 
 import java.io.*;
-
 import java.util.*;
-
 import javax.servlet.*;
-
 import javax.servlet.http.*;
-
 import java.net.*;
-
 import javax.xml.parsers.*;
-
 import org.w3c.dom.*;
-
 //jar file for shopping cart classes and user record
-
 import org.jdom.input.*;
-
 import ac.dl.xml.*;
-
 //log classes
 
 import org.apache.log4j.*;
 
 
 
-/** Takes the value for a study name and creates a url to call the xml wrapper to
- *
- * return a study. The returned xml is saved into the users userRecord class and
- *
- * added to the session.
- *
+/** Takes the value for a study name and creates a url to call the xml wrapper to 
+ * return a study. The returned xml is saved into the users userRecord class and 
+ * added to the session. 
  * @author Glen Drinkwater
- *
- * @version 1.0
- *
- * @date 12/03/02
+  * @version 1.0
+  * @date 12/03/02
  *
  */
 
@@ -58,14 +43,10 @@ public class AdvancedStudyServlet extends HttpServlet{
     
     /**
      *
-     * @param request
-     *
-     * @param response
-     *
-     * @throws IOException
-     *
-     * @throws ServletException
-     *
+     * @param request     
+     * @param response   
+     * @throws IOException   
+     * @throws ServletException    
      */
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)

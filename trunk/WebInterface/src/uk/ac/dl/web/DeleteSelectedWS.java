@@ -22,7 +22,7 @@ import java.util.Properties;
 public class DeleteSelectedWS extends HttpServlet {
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(DeleteSelectedWS.class);
+   Logger logger = Logger.getLogger(this.getClass().getName());
     
     /** Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -41,8 +41,7 @@ public class DeleteSelectedWS extends HttpServlet {
         }
         String sid = (String )session.getAttribute("sessionid");
         String wd = (String )session.getAttribute("wd");
-         //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
+       
         //the current sorting arrangement of the user
         String by = null;
         //get the list of parameters the user wants to delete

@@ -42,16 +42,16 @@ public class SeeNoteBean {
     
     /** Creates a new instance of SeeNoteBean */
     public SeeNoteBean(String sid, String url,Properties prop) {
-        logger = Logger.getLogger(uk.ac.dl.beans.SeeNoteBean.class);
-        this.sid = sid;
+          logger = Logger.getLogger(this.getClass().getName());
+    this.sid = sid;
         this.url = url;
         this.prop = prop;
         this.sid = sid;
     }
     
     public SeeNoteBean(){
-        logger = Logger.getLogger(uk.ac.dl.beans.SeeNoteBean.class);
-       // BasicConfigurator.configure();
+          logger = Logger.getLogger(this.getClass().getName());
+    // BasicConfigurator.configure();
     }
     
     public void getCart() throws Exception{

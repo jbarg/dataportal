@@ -21,8 +21,8 @@ import uk.ac.dl.beans.*;
 public class SaveCartServlet extends HttpServlet{
 
     //set static log for the class
-    static Logger logger = Logger.getLogger(SaveCartServlet.class);
-
+  Logger logger = Logger.getLogger(this.getClass().getName());
+      
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // String workingDir = workingDir = (String)session.getAttribute("wd");;
         //username

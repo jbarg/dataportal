@@ -27,8 +27,9 @@ public class Cleanup {
     private static Logger logger;
     
     static {
-        logger = Logger.getLogger(uk.ac.dl.beans.Cleanup.class);
-       // BasicConfigurator.configure();
+        
+        logger = Logger.getLogger(Cleanup.class);
+    // BasicConfigurator.configure();
     }
     
     public static void session(HttpSession session) throws Exception{

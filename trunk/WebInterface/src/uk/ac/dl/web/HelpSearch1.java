@@ -26,8 +26,8 @@ import org.apache.log4j.*;
 public class HelpSearch1 extends HttpServlet{
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(HelpSearch1.class);
-    String wd = null;
+     Logger logger = Logger.getLogger(this.getClass().getName());
+       String wd = null;
     private ServletConfig scon = null ;
     
     public void init(ServletConfig config) throws ServletException {
@@ -109,8 +109,7 @@ public class HelpSearch1 extends HttpServlet{
         
         //end of added section
         
-        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-        
+         
         if(session == null){
             response.sendRedirect("../Login.html");
         }

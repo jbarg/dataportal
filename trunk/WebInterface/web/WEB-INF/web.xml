@@ -24,6 +24,7 @@
        uk.ac.dl.web.LoginServlet
 
     </servlet-class>
+     <load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>SRBTransfer</servlet-name>

@@ -66,12 +66,17 @@ public class LoginServlet extends HttpServlet {
     private  Logger logger = Logger.getLogger(this.getClass().getName());
 
     //get context path
-    private ServletConfig scon = null ;
+   // private ServletConfig scon = null ;
     private String workingDir = null;
 
     public void init(ServletConfig config) throws ServletException {
-
-        scon = config ;
+ //get and set the working dir
+        ServletContext sc = config.getServletContext();
+        workingDir = sc.getRealPath("");
+        //set the log4j properties file for the whole web application
+        PropertyConfigurator.configure(workingDir+File.separator+"WEB-INF"+File.separator+"log4j.properties");
+        
+      
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -94,14 +99,9 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        //get and set the working dir
-        ServletContext sc = scon.getServletContext();
-        workingDir = sc.getRealPath("");
+        //get and set the working dir        
         session.setAttribute("wd",workingDir);
-
-        //locate the prop file.  Normally get this from web.xml file
-        PropertyConfigurator.configure(workingDir+File.separator+"WEB-INF"+File.separator+"logger.properties");
-
+        
         //get user input values
         String reName = request.getParameter("username");
         String rePass = request.getParameter("password");
@@ -449,8 +449,7 @@ public class LoginServlet extends HttpServlet {
 
         //locate the prop file.  Normally get this from web.xml file
 
-        PropertyConfigurator.configure(workingDir+File.separator+"WEB-INF"+File.separator+"logger.properties");
-
+       
         try{
             for(int i =0;i<serviceTypes.length;i++){
                 Service  service = new Service();
