@@ -54,10 +54,7 @@ public class deleteFacilityServlet extends HttpServlet {
             response.sendRedirect("../html/SessionTimedOut.html");
             return;
         }
-        String wd = (String)session.getAttribute("wd");
-        //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"log4j.properties");
-        
+          
         try{
             
             

@@ -86,14 +86,11 @@ public class UDDIHelper {
             propertiesFileName = request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(fileSeparator));
             propertiesFileName = propertiesFileName + File.separator + "WEB-INF" + File.separator ;
         
-            //If invoked by a web service then configure log. If not then use
-            //configuration by the class that called it
-            PropertyConfigurator.configure(propertiesFileName+"log4j.properties");
-        }
+              }
         
         try {
             //set up the logging
-               log.info("Loading properties from " + propertiesFileName+"uddi.properties");
+            log.info("Loading properties from " + propertiesFileName+"uddi.properties");
             UDDIProps = new Properties();
             FileInputStream in = new FileInputStream(propertiesFileName+"uddi.properties");
             UDDIProps.load(in);
@@ -161,7 +158,7 @@ public class UDDIHelper {
         return authToken;
     }
     
-    public String createFacility(FacilityBean cfb) throws UDDIException, FacilityException {
+    public String createFacility(FacilityBean cfb) throws UDDIException, FacilityException, Exception {
         String businessKey = null;
         try {
             Vector businesses = new Vector();

@@ -27,15 +27,17 @@ public class LoginServlet extends HttpServlet {
     Logger log = Logger.getLogger(this.getClass().getName());
     
     //get context path
-    private ServletConfig scon = null ;
+    
     private String workingDir = null;
     
     /** Initializes the servlet.
      */
     public void init(ServletConfig config) throws ServletException {
-        //PropertyConfigurator.configure(Config.getContextPath()+"log4j.properties");
-        
-        scon = config;
+        //get and set the working dir
+        ServletContext sc = config.getServletContext();
+        workingDir = sc.getRealPath("");
+        //set the log4j properties file for the whole web application
+        PropertyConfigurator.configure(workingDir+File.separator+"WEB-INF"+File.separator+"log4j.properties");
         
     }
     
@@ -56,14 +58,9 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
         
         try{
-            //get and set the working dir
-            ServletContext sc = scon.getServletContext();
-            workingDir = sc.getRealPath("");
+            
             session.setAttribute("wd",workingDir);
-            
-            //locate the prop file.  Normally get this from web.xml file
-            PropertyConfigurator.configure(workingDir+File.separator+"WEB-INF"+File.separator+"log4j.properties");
-            
+                      
             //get user input values
             String reName = request.getParameter("username");
             String rePass = request.getParameter("password");

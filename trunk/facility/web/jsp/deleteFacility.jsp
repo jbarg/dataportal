@@ -3,6 +3,7 @@
 <% response.setHeader("pragma","no-cache");
  response.setHeader("cache-control","no-store");
  %>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <%@ include file="loggedin.jsp" %>
 
 <%@ include file="logger.jsp" %>
@@ -101,7 +102,9 @@ return true;
 <%
     //check if dataportal exists    
     if(!isDataPortal) { %> <input type="button" value="Create Data Portal" onclick="location.href='createDataPortal.jsp'"/>&nbsp;&nbsp;&nbsp;&nbsp;<font color="red" size="3">A Data Portal instance needs to be created before you can add facilities</font><%}%>
-
+    <c:if test="${param.error != null}">
+        <br /><font color="red">${param.error}</font>
+    </c:if>
 
 
 <br />
