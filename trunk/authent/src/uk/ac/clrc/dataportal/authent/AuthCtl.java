@@ -40,19 +40,6 @@ public class AuthCtl {
     public static String portalPrivateKeyFilename = null;
     public static String caCertFilename = null;
     public static String uDDILookUpService = null;
-
-    
-    
-/*    private static final String myProxyServerName = "wk-ibm1.dl.ac.uk";
-    private static final String myProxyServerDN = "/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/wk-ibm1.dl.ac.uk";
-    private static final int myProxyServerPort = 7512;
-        // Data specific to delegate proxy
-    private static final int delegateProxyLifetime = 3600; // seconds?
-    private static final String privateKeyPassPhrase = "portaltest";
-    private static final String portalCertFilename = "/home/tomcat4/.globus/portalcert.pem";
-    private static final String portalPrivateKeyFilename = "/home/tomcat4/.globus/portalkey.pem";
-    private static final String caCertFilename = "/etc/grid-security/certificates/01621954.0";
- */
     
     // class method here
     public static void getMyConfig() throws IOException {
