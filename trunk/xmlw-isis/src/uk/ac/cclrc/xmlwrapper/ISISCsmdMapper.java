@@ -25,6 +25,7 @@ public class ISISCsmdMapper implements CsmdMapper
    int i_place_holder = 0 ;
    //indentation level for layout reasons (ti - tree indent - indent level for subtrees)
    String ti = null ;
+   int    token_indent = 0 ;
    //retrieve the database schema name if their is a need to prepend this before the table names
    String dbs = null ;
 
@@ -45,6 +46,7 @@ public class ISISCsmdMapper implements CsmdMapper
       this.place_holder = ss.place_holder ;
       this.i_place_holder = ss.i_place_holder ;
       this.ti = indentToStr(ss.indent) ;
+      this.token_indent = ss.indent ;
       //retrieve the database name
       this.dbs = ss.getDbs() ;
 
@@ -364,45 +366,182 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       String ii = indentToStr(initial_indent) ;
 
+      sbr.append(ii +  "<Topic>\n") ;
+
+      buildMDKeywords(key, sbr, (initial_indent+token_indent), null) ;
+      //following will have to list all distinct subjects related to study
+      buildMDSubject(key, sbr, (initial_indent+token_indent), null) ;
+
+      sbr.append(ii +  "</Topic>\n") ;
+
+      return ;
+   }
+
    void buildMDKeywords(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
+
    void buildMDSubjects(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    //Study/investigation information (keeping mainly leaf node level complexity)
    void buildMDStudy(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDNameRole(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //some where you might use type as
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 													   //you can have InstitutionRole and PersonRole
    void buildMDContactDetails(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //similar to buildMDContact template
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDStudyPerson(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //similar to buildMDContact template
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDStudyInformation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    void buildMDRelatedReference(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDRelatedReferanceLocation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    void buildMDInvestigation(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    void buildMDDataHolding(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDDataDescription(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDDataTopic(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //will use Keywords & Subjects above
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    void buildMDLogicalDescription(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDParameter(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDTimePeriod(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDFacilityUsed(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDDataHoldingLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    void buildMDCollectionLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDAtomicDataObject(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
    void buildMDADOLocator(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException //definately need type here
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
  													     //files and selects
 
    //all the Misc type information
    void buildMDAccessConditions(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    void buildMDLegalNotice(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    void buildMDRelatedPublication(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    void buildMDOtherRelatedMaterial(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
+      return ;
+   }
 
    
 
