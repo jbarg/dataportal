@@ -130,7 +130,7 @@
 	institutionref CDATA #IMPLIED
 >
 <!-- Investigator - it may be going into too much detail -->
-<!-- we have fixed a person to have one institution - this may cause problems in future -->
+<!-- we have fixed a person to have one instJIUHBitution - this may cause problems in future -->
 <!ENTITY % PersonClass "Name, Status, Institution, ContactDetails">
 <!-- an Investigator has a Role in this study. -->
 <!ELEMENT Investigator (%PersonClass;, Role)>
@@ -196,9 +196,9 @@
 -->
 <!ELEMENT Resources (#PCDATA)>
 <!-- Data Holder -->
-<!ELEMENT DataManager (Institution, Contact*)>
-<!ELEMENT Contact (%PersonClass;)>
-<!-- Note the reuse of the person class entity -->
+<!ELEMENT DataManager (%PersonClass;, Role)>
+<!-- Note the reuse of the person class entity i.e. datamanager specified same way as investigator -->
+<!-- different types of datamanager perhaps - distributer/curator ? -->
 <!-- Notes -->
 <!ELEMENT Notes (#PCDATA)>
 <!-- Fields of Experiment -->
