@@ -155,7 +155,7 @@ public class sgetrservlet extends HttpServlet {
             filename = filename.replace('.','_');
             
             
-            response.setHeader("Content-disposition","attachment; filename="+filename+exe+"."+exe);
+            response.setHeader("Content-disposition","attachment; filename="+filename+"."+exe);
             
             //this is the one that is working with the whole collection
             File srbtempdir = new File(props.getProperty("srbDest"));
