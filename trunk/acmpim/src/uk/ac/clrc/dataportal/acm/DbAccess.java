@@ -110,7 +110,6 @@ public class DbAccess {
         
         // Retrieve Data from Result Set
         try {
-            rs.next();
             userid =rs.getString(1);
             facility=rs.getString(2);
             metadata=rs.getString(3);
@@ -162,7 +161,6 @@ public class DbAccess {
         
         // Retrieve Data from Result Set
         try {
-            rs.next();
             userid =rs.getString(1);
             facility=rs.getString(2);
             metadata=rs.getString(3);
