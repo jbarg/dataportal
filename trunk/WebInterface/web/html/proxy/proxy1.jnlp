@@ -2,7 +2,7 @@
 <!-- JNLP File for MDS Query Application --> 
 <jnlp 
   spec="1.0+" 
-   codebase="http://localhost/dataportal/html/proxy"
+   codebase="http://gjd37vig.dl.ac.uk:8080/dataportal/html/proxy"
   href="proxy1.jnlp"> 
 
   <information> 
