@@ -27,7 +27,7 @@
      from which Ant executes the requested task.  This is normally
      set to the current working directory.
 -->
-<project name="Shopping Cart" default="compile" basedir=".">
+<project name="Web Interface" default="compile" basedir=".">
 	<!-- ===================== Property Definitions =========================== -->
 	<!--
 
@@ -219,7 +219,7 @@
 			<!-- added in ,**/test/** -->
 			<fileset dir="${src.home}" excludes="**/*.java"/>
 		</copy>
-		<java classname="uk.ac.dl.web.Indexer" fork="false">
+	<!--	<java classname="uk.ac.dl.web.Indexer" fork="false">
 			<arg value="create"/>
 			<arg value="${basedir}/build/help/xml"/>
 			<arg value="${basedir}/build/help/xml/index"/>
@@ -227,7 +227,8 @@
 			<classpath>
 				<pathelement path="${basedir}/build/WEB-INF/classes"/>
 			</classpath>
-		</java>
+		</java>-->
+		<antcall target="index" />
 	</target>
 	<!-- ==================== Dist Target ===================================== -->
 	<!--
@@ -271,7 +272,7 @@
   NOTE:  This is the logical opposite of the "remove" target.
 
 -->
-	<target name="install" depends="compile,index" description="Install application to servlet container">
+	<target name="install" depends="compile" description="Install application to servlet container">
 		<install url="${manager.url}" username="${manager.username}" password="${manager.password}" path="${app.path}" war="file://${build.home}"/>
 	</target>
 	<!-- ==================== Javadoc Target ================================== -->
@@ -392,10 +393,10 @@
 		<mkdir dir="${build.home}/WEB-INF/classes"/>
 		<mkdir dir="${build.home}/WEB-INF/lib"/>
 		<!-- copy common.lib jar first so any in ${web.homea/}lib can overwrite them -->
-		<!--<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/axis.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>-->
+		<!--<copy todir="${web.home}/WEB-INF/lib" file="${common.lib}/axis.jar"/>
+    <copy todir="${web.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
+    <copy todir="${web.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
+    <copy todir="${web.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>-->
 		<!-- Copy static content of this web application -->
 		<copy todir="${build.home}">
 			<fileset dir="${web.home}"/>
@@ -446,21 +447,19 @@
 			</classpath>
 		</java>
 	</target>
-	
 	<!--  This confgiures the root cacerts file to import the UDDI root certifiacte so that UDDI information can be published. -->
 	<target name="import_uddi_cert" description=" This confgiures the root cacerts file to import the UDDI root certifiacte so that UDDI information can be published">
-	<!--	<property name="keystore.password" value="changeit"/>
+		<!--	<property name="keystore.password" value="changeit"/>
 		<echo message="${java.home}"/>-->
-		<input message="Enter keystore password:"   addproperty="keystore.password" />
+		<input message="Enter keystore password:" addproperty="keystore.password"/>
 		<condition property="do.abort">
- 			   <equals arg1="${keystore.password}" arg2=""/>
- 		 </condition>
-  		<fail if="do.abort">Build aborted by user.  Keystore requires a password.</fail >
+			<equals arg1="${keystore.password}" arg2=""/>
+		</condition>
+		<fail if="do.abort">Build aborted by user.  Keystore requires a password.</fail>
 		<echo message="-import -noprompt  -trustcacerts -alias localhost -file C:/waspuddi.crt -keystore ${java.home}/../jre/lib/security/cacert -storepass ${keystore.password} "/>
-	
 		<exec dir="${java.home}" executable="keytool">
 			<arg line="-import -noprompt  -trustcacerts -alias localhost -file C:/waspuddi.crt -keystore ${java.home}/../jre/lib/security/cacert -storepass ${keystore.password} "/>
-		<!--
+			<!--
 			<arg value="-import"/>
 			<arg value="-alias"/>
 			<arg value="localhost"/>
@@ -472,7 +471,6 @@
 			<arg value="-storepass"/>
 			<arg value="${keystore.password}"/>
 -->
-
 		</exec>
 	</target>
 </project>
