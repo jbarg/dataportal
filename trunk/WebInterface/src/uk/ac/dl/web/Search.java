@@ -31,7 +31,7 @@ public class Search {
     public Search() {
     }
     
-    public void doBasicSearch(String sid, String[] facs, String discipline,Integer waiting, String url,String workingDir,String dn, boolean doLog) throws Exception{
+    public static void doBasicSearch(String sid, String[] facs, String discipline,Integer waiting, String url,String workingDir,String dn, boolean doLog) throws Exception{
         FileWriter wr = null;
         try{
             Service  service = new Service();

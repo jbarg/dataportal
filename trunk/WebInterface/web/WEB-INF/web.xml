@@ -330,8 +330,8 @@
 		<url-pattern>/servlet/FileDownload</url-pattern>
 	</servlet-mapping>
           <servlet-mapping>
-		<servlet-name>RedoBasicSerach</servlet-name>
-		<url-pattern>/servlet/RedoBasicSerach</url-pattern>
+		<servlet-name>RedoBasicSearch</servlet-name>
+		<url-pattern>/servlet/RedoBasicSearch</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>SRBTransfer</servlet-name>

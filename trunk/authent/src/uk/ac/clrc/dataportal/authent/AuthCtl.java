@@ -41,6 +41,7 @@ public class AuthCtl {
     public static String portalPrivateKeyFilename = null;
     public static String caCertFilename = null;
     public static String uDDILookUpService = null;
+    public static String defaultid = null;
     
     // class method here
     public static void getMyConfig() throws IOException {
@@ -54,6 +55,7 @@ public class AuthCtl {
             AuthCtl.portalPrivateKeyFilename = config.getProperty("portal_private_key_filename");
             AuthCtl.caCertFilename = config.getProperty("ca_cert_filename");
             AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service");
+             AuthCtl.defaultid = config.getProperty("defaultid");
         } catch ( IOException e ) {
             System.out.println( "---> Error: Cannot read config file" );
             throw e;
@@ -259,7 +261,7 @@ public class AuthCtl {
         call1.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call1.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call1.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"Dataportal"};
+        String[] name = {"Dataportal"+defaultid};
         Object[] ob = new Object[]{name,"SESSION"};
         
         String[] sessionendpoint = (String[]) call1.invoke(ob );

@@ -54,6 +54,7 @@ public class Session {
         Properties prop = new Properties();
         prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
         String lookup_url = prop.getProperty("lookup_module_url");
+        String defaultid = prop.getProperty("defaultid");
         String[] serviceTypes = {"SESSION"};
         
         Service  service = new Service();
@@ -64,7 +65,7 @@ public class Session {
         call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"Dataportal"};
+        String[] name = {"Dataportal"+defaultid};
         Object[] ob = new Object[]{name,serviceTypes[0]};
         
         String[] url = (String[]) call.invoke(ob );

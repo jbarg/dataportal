@@ -38,6 +38,9 @@ public class ResendQuery extends HttpServlet{
         String discipline = request.getParameter("discipline");
         String[] facilities = request.getParameterValues("facs");
         String wait = request.getParameter("wait");
+        if(wait ==null) wait = "20000000";
+        Integer max = Integer.getInteger(wait);
+        
         
         String sid = (String)session.getAttribute("sessionid");
         Object[] object = new Object[]{sid,facilities,discipline,wait};
@@ -74,7 +77,7 @@ public class ResendQuery extends HttpServlet{
             logHistoryFile(object, (String)session.getAttribute("dn"),wd);
             */
             
-            Search.doBasicSearh(sid,facilities,discipline, wait,endpoint,wd,(String)session.getAttribute("dn"), true);
+            Search.doBasicSearch(sid,facilities,discipline, max,endpoint,wd,(String)session.getAttribute("dn"), true);
             
             
             response.sendRedirect("../jsp/SimpleSearch.jsp");
@@ -92,7 +95,7 @@ public class ResendQuery extends HttpServlet{
     }
     
     private void logHistoryFile(Object[] query,String dn, String wd){
-        FileWriter wr = null;
+     /*   FileWriter wr = null;
         try{
             String[] facs = (String[])query[1];
             StringBuffer buff = new StringBuffer();
@@ -116,14 +119,8 @@ public class ResendQuery extends HttpServlet{
             logger.warn("Coulld not update history file",e);
             
             wr.close();
-        }
+        }*/
     }
-    
-    
-    
-    
-    
-    
     
     
 }
