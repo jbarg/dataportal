@@ -1,56 +1,54 @@
-#**
- LDAP Browser Portlet
-@author <a href="mailto:lifang@extreme.indiana.edu">Liang Fang</a>
-**#
-
-<b><font style="font-size:16">LDAP Server URL: $ldaphostname:$ldaphostport </font></b>
-<br/>
-<i>
-#if($dn)
-  #if($entries)
-    <font style="font-size:16"><b>Current Node: $dn</b> </font>
-  #else
-    <font style="font-size:16"><b>Current Directory: $dn</b> </font>
+## Xiaobo Yang, CCLRC e-Science Centre, 14 December 2004
+##
+<div class="chefPortletContainer">
+  #if ($menu)
+    #toolbar($menu)
   #end
-#else
-  <font style="font-size:16">No Directory specified!</font>
-#end
-</i>
+  <div class="chefPortletContent">
+    #if ($alertMessage)
+      <div class="chefAlertBox">
+        Alert: $validator.escapeHtml($alertMessage)
+      </div>
+    #end
 
-#if($errmsg)
-  <font style="color:red; font-size:14"> Error:  </font><br/>
-  <font style="color:red; font-size:12"> $errmsg </font>
-  <p/>
-#end
-<br/>
+    <div class="chefPageviewTitle">
+      <b>LDAP Server URL: $ldaphostname:$ldaphostport</b>
+      <br/>
+      <i>
+      #if($dn)
+        #if($entries)
+          <b>Current Node: $dn</b>
+        #else
+          <b>Current Directory: $dn</b>
+        #end
+      #else
+        No Directory specified!
+      #end
+      <br/>
+      </i>
+    </div>
+
+##<br/>
+###if($errmsg)
+##  <font style="color:red; font-size:14"> Error:  </font><br/>
+##  <font style="color:red; font-size:12"> $errmsg </font>
+##  <p/>
+###end
 
 #if($links)
-  <table>
-    #if($parent)
-    <tr><td width=40px>
-      #set ($link=$jslink.addQueryData("ldaphostname", $ldaphostname).addQueryData("ldaphostport",$ldaphostport).addQueryData("dn", $parent).setAction("xportlets.LdapBrowserAction"))
-      <a href='$link'><img src=${ctxpath}/images/xportlets/back.gif alt=parent border="0"></a><br/>
-    </td><td></td></tr>
-    #end
-  #foreach ($alink in $links)
-    <tr>
-    #set ($link=$jslink.addQueryData("ldaphostname", $ldaphostname).addQueryData("ldaphostport",$ldaphostport).addQueryData("dn", $alink.Link).setAction("xportlets.LdapBrowserAction"))
-    #set ($llink=$link.addQueryData("mode","leaf"))
-    <td width=40px>
-      <a style="font-size:12" href='$llink'><img src=${ctxpath}/images/xportlets/file.gif  alt=leaf border="0"></a>
-      #if(!($alink.Leaflag=="1"))
-        #set ($link=$jslink.addQueryData("ldaphostname", $ldaphostname).addQueryData("ldaphostport",$ldaphostport).addQueryData("dn", $alink.Link).setAction("xportlets.LdapBrowserAction"))
-        <a href='$link'><img src=$alink.Piclink alt=folder border="0"></a>
-      #end
-    </td>
-    #if(!($alink.Leaflag=="1"))
-      <td><a href='$link'>$alink.Name</a></td>
-    #else
-      <td><a href='$llink'>$alink.Name</a></td>
-    #end
-    </tr>
+  #if($parent)
+    <a href="#toolLink("$action" "doGetldapinfo")&ldaphostname=$validator.escapeUrl($ldaphostname)&ldaphostport=$validator.escapeUrl($ldaphostport)&dn=$validator.escapeUrl($parent)"><img src=${ctxpath}/images/xportlets/back.gif alt=parent border="0"></a>
+    <br/>
   #end
-  </table>
+  #foreach ($alink in $links)
+    #if(!($alink.Leaflag=="1"))
+      <a href="#toolLink("$action" "doGetldapinfo")&ldaphostname=$validator.escapeUrl($ldaphostname)&ldaphostport=$validator.escapeUrl($ldaphostport)&dn=$validator.escapeUrl($alink.Link)"><img src=$alink.Piclink alt=folder border="0"></a>
+    #else
+      <img src=$alink.Piclink alt=node border="0">
+    #end
+    <a href="#toolLink("$action" "doGetldapinfo")&ldaphostname=$validator.escapeUrl($ldaphostname)&ldaphostport=$validator.escapeUrl($ldaphostport)&dn=$validator.escapeUrl($alink.Link)&mode=$validator.escapeUrl("leaf")">$alink.Name</a>
+    <br/>
+  #end
 #end
 
 #if($entries)
@@ -71,20 +69,19 @@
   </table>
   <p/>
 
-  #if($service!="") 
-    <form action=$jslink.Template method="post">
-      Choose a method:<br/>
-      #foreach ($method in $methods)
-        <input type=radio name=method value=$method>$method<br/>
-      #end
-      <input type=hidden name=service value=$service> 
-      <input type="submit" name="eventSubmit_doGotoservice" value="Go to ${service}" style="font-size:10; background-color: $skin.getTitleBackgroundColor()"> 
-    </form>
-  #end
-  <p/>
+##  #if($service!="") 
+##    <form action=$jslink.Template method="post">
+##      Choose a method:<br/>
+##      #foreach ($method in $methods)
+##        <input type=radio name=method value=$method>$method<br/>
+##      #end
+##      <input type=hidden name=service value=$service> 
+##      <input type="submit" name="eventSubmit_doGotoservice" value="Go to ${service}" style="font-size:10; background-color: $skin.getTitleBackgroundColor()"> 
+##    </form>
+##  #end
+##  <p/>
 
-#set ($backlink=$jslink.addQueryData("ldaphostname", $ldaphostname).addQueryData("ldaphostport",$ldaphostport).addQueryData("dn", $parent).setAction("xportlets.LdapBrowserAction"))
-<a href="$backlink">Back to Directory</a>
+  <a href="#toolLink("$action" "doGetldapinfo")&ldaphostname=$validator.escapeUrl($ldaphostname)&ldaphostport=$validator.escapeUrl($ldaphostport)&dn=$validator.escapeUrl($parent)">Back to Directory</a>
 #end
 
 
@@ -92,16 +89,10 @@
 <font style="font-size:14"><b>Direction:</b></font><br/>
 
 <font style="font-size:12">
-Click <img src=${ctxpath}/images/xportlets/folder.gif alt=dir> to get the subdirectory or <img src=${ctxpath}/images/xportlets/file.gif alt=leaf> to get the attributes of the node, either a leaf or a subdirectory. Click <img src=${ctxpath}/images/xportlets/back.gif alt=parent> to return to the upper level.
-<p/>
-If a leaf is a service, a "Go to service" button will show under the attribute table with all available methods for choice. Choose one of the choices and click the button. On the next page show all the required parameters. Enter all the parameters and click "Invoke" button, you will get the result on the next page.
+Click <img src=${ctxpath}/images/xportlets/folder.gif alt=dir> to get the subdirectory. <img src=${ctxpath}/images/xportlets/file.gif alt=leaf> represents a leaf node of LDAP directory. Since a leaf does not have any child, <img src=${ctxpath}/images/xportlets/file.gif alt=leaf> cannon be clicked. To get the attributes of a node, click the link with its name, no matter it has any child or not, say <font style="color:blue; font-size:12"><u>o=xmessages</u></font>, or <font style="color:blue; font-size:12"><u>cn=Manager</u></font>. Click <img src=${ctxpath}/images/xportlets/back.gif alt=parent> to return to the upper level.
+##<p/>
+##If a leaf is a service, a "Go to service" button will show under the attribute table with all available methods for choice. Choose one of the choices and click the button. On the next page show all the required parameters. Enter all the parameters and click "Invoke" button, you will get the result on the next page.
 </font>
 
-
-
-
-
-
-
-
-
+  </div>
+</div>

@@ -20,7 +20,7 @@ To build a binary distribution:
   ant bindist
 
   Note that if you want to change the version number you'll need to update the 
-  VERSION file.  
+  0.99 file.  
 
 --------------------------------------------------------------------------------
                            Extreme! Computing Lab

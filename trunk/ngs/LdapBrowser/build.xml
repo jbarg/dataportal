@@ -2,12 +2,14 @@
   <property file="build.properties"/>
   <property name="distname" value="xportlets-ldapbrowser"/>
   <property name="src" value="src"/>
-  <property name="lib" value="lib"/>
-  <property name="jars" value="/opt/xportlets/lib"/>
+<!--  <property name="lib" value="lib"/> -->
   <property name="build" value="build"/>
   <property name="classes" value="${build}/classes"/>
   <property name="portal_home" value="${alliance.home}"/>
-  
+  <property name="jars" value="/opt/xportlets/lib"/>
+
+  <property name="chef.home" value="/home/xyg/chef_1-2-10"/>
+
   <target name="usage">
     <echo>
     The following targets are available:
@@ -23,7 +25,7 @@
     </echo>
   </target>
 
-  <target name="clean" >
+  <target name="clean">
     <delete dir="${build}"/>
   </target>
 
@@ -36,26 +38,15 @@
     <mkdir dir="${classes}"/>
   </target>
 
-  <target name="all" depends="build,deploy,copylib"/>
-
-  <target name="copylib" depends="alliance-set">
-    <copy overwrite="Yes" todir="${portal_home}/WEB-INF/lib">
-       <fileset dir="${jars}/xsoap">
-        <include name="*.jar"> </include>
-       </fileset>
-       <fileset dir="${jars}/xmlutil">
-        <include name="*.jar"> </include>
-       </fileset>
-    </copy>
-  </target>
+  <target name="all" depends="build,deploy"/>
 
   <target name="build" depends="prepare">
-    <javac deprecation="no" srcdir="${src}" destdir="${classes}" debug="on"> 
+    <javac deprecation="yes" srcdir="${src}" destdir="${classes}" debug="on"> 
      <classpath refid="classes"/>
     </javac>
   </target>
 
-  <target name="deploy">
+  <target name="deploy" depends="build">
     <copy overwrite="Yes" todir="${portal_home}/WEB-INF/classes">
       <fileset dir="${basedir}/build/classes">
         <include name="**/*"/>
@@ -76,6 +67,15 @@
 	<include name="*.gif"/>
       </fileset>
     </copy>
+    <copy overwrite="Yes" todir="${portal_home}/WEB-INF/lib">
+       <fileset dir="${basedir}/lib/xsoap">
+        <include name="*.jar"> </include>
+       </fileset>
+       <fileset dir="${basedir}/lib/xmlutil">
+        <include name="*.jar"> </include>
+       </fileset>
+    </copy>
+
   </target>
 
   <target name="srcdist" depends="clean">
@@ -95,7 +95,7 @@
 	<include name="INSTALL"/>
 	<include name="README"/>
 	<include name="build.xml"/>
-	<include name="build.properties.template"/>
+	<include name="build.properties"/>
       </fileset>
     </copy>
     <replace file="${srcdistdir}/INSTALL" token="VERSION" 
@@ -123,7 +123,7 @@
 	<include name="INSTALL"/>
 	<include name="README"/>
 	<include name="build.xml"/>
-	<include name="build.properties.template"/>
+	<include name="build.properties"/>
       </fileset>
     </copy>
     <replace file="${bindistdir}/INSTALL" token="VERSION" 
@@ -135,9 +135,15 @@
   </target>
 
   <path id="classes">
+		<fileset dir="${chef.home}/dist/lib">
+			<include name="core*.jar"/>
+		</fileset>
     <fileset dir="${jars}">
       <include name="**/*.jar"/>
     </fileset>
+<!--    <fileset dir="${lib}">
+      <include name="**/*.jar"/>
+    </fileset> -->
   </path>
 
 </project>
