@@ -33,7 +33,7 @@ public class sgetrservlet extends HttpServlet {
         super.init(config);
         try {
             ServletContext sc = scon.getServletContext();
-             workingDir = sc.getRealPath("");
+            workingDir = sc.getRealPath("");
             try{
                 props = getProps(workingDir);
             }
@@ -98,6 +98,7 @@ public class sgetrservlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, java.io.IOException {
         ServletOutputStream out = response.getOutputStream();
+        Filenlist = null;
         try {
             //check password
             String password = props.getProperty("srb_passwd");
@@ -142,7 +143,7 @@ public class sgetrservlet extends HttpServlet {
             //does file /tmp/srbtemp exist
             File srbtemp = new File(props.getProperty("srbDest"));
             if(!srbtemp.exists()) srbtemp.mkdir();
-           
+            
             response.setContentType("application/download");
             
             //add not cacheing etc
@@ -161,7 +162,7 @@ public class sgetrservlet extends HttpServlet {
             File cre = new File(props.getProperty("srbDest")+File.separator+request.getSession().getId());
             cre.mkdir();
             
-            LaunchProcess.runCommand( props.getProperty("srbHome") + File.separator+"Sget -r " + dir + File.separator+"*.* "+props.getProperty("srbDest") + File.separator+request.getSession().getId());
+            LaunchProcess.runCommand( props.getProperty("srbHome") + File.separator+"Sget -r " + dir + "+props.getProperty("srbDest") + File.separator+request.getSession().getId());
             
             //this is my one with the single files
             // LaunchProcess.runCommand("/bin/sh -c \""+ props.getProperty("srbHome") + "/Sls -C " + dir + " > /tmp/srbtemp/" + request.getSession().getId()+"conf\"");
@@ -182,12 +183,12 @@ public class sgetrservlet extends HttpServlet {
             String listing = "/bin/ls -ltr "+props.getProperty("srbDest")+File.separator+"$1 | grep -v '^d' | grep -v total | awk '{print $9}' > "+props.getProperty("srbDest")+File.separator+"$1.list";
             //execute cammand.  List the files in the directory and prints it out to file
             //LaunchProcess.runCommand("ls -ltr "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" | grep -v '^d' | grep -v total | awk '{print $9}' > "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+".list");
-            String newFile = workingDir+File.separator+"run.sh"; 
+            String newFile = workingDir+File.separator+"run.sh";
             LaunchProcess.runCommand(newFile + " "+request.getSession().getId());
             
             
             //read in file and add all the files to a buffer
-            File list = new File(props.getProperty("srbDest") +File.separator+ request.getSession().getId()+".list");
+             list = new File(props.getProperty("srbDest") +File.separator+ request.getSession().getId()+".list");
             BufferedReader buff = new BufferedReader(new FileReader(list));
             String str;
             StringBuffer b = new StringBuffer();
@@ -242,6 +243,12 @@ public class sgetrservlet extends HttpServlet {
         catch (java.lang.Exception e) {
             
             // Better error handling is required for when things go wrong.....
+            try{
+                list.delete();
+                LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + "."+exe);
+                LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() );
+            }
+            catch(Exception ignore){}
             
             response.flushBuffer();
             response.setContentType("text/html");
