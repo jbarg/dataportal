@@ -105,7 +105,7 @@ public class HelpSearch1 extends HttpServlet{
         //added, take out later
        // session = request.getSession();
       //  wd = "C:\\Documents and Settings\\gjd37\\My Documents\\theDataPortal\\dataportalcvs\\dataportal\\WebInterface\\build";
-        System.out.println("wd is "+wd);
+        //System.out.println("wd is "+wd);
         
         //end of added section
         
