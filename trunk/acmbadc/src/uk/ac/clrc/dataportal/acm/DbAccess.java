@@ -11,6 +11,11 @@ import org.jdom.*;
 import org.jdom.output.*;
 import java.io.*;
 import ac.dl.xml.*;
+import org.apache.axis.MessageContext;
+import org.apache.axis.transport.http.HTTPConstants;
+import java.util.*;
+import javax.servlet.http.*;
+
 
 /**
  *
@@ -21,11 +26,15 @@ public class DbAccess {
     /** Creates a new instance of DbAccess */
     public DbAccess() throws Exception{
         try {
+            
+            Properties prop = new Properties();
+            prop.load(new FileInputStream(getPropertiesFile()));
+            facilityName = prop.getProperty(FACILITYNAME);
             Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql:" + SERVER +":"+ PORT+"/acm" ,
-                                           "dpuser",                    // username
-                                           "dp4all");               // password
-           
+            conn = DriverManager.getConnection("jdbc:postgresql:" + prop.getProperty(SERVER) +":"+ prop.getProperty(PORT)+"/acm" ,
+            prop.getProperty(USERNAME), // username
+            prop.getProperty(PASSWORD)); // password
+            
         }catch (ClassNotFoundException e) {
             System.out.println("possible classpath problem");
             throw e; // need to modify it
@@ -33,6 +42,24 @@ public class DbAccess {
             System.out.println("db naming problem");
             throw e; // need to modify it
         }
+    }
+    
+    /** method to read properties file */
+    private static String getPropertiesFile(){
+        String fileSeparator = System.getProperty("file.separator");
+        String propertiesFileName = null;
+        MessageContext messageContext = MessageContext.getCurrentContext();
+        if (messageContext != null) {
+            // Get the servlet request
+            HttpServletRequest request = (HttpServletRequest) messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+            
+            // Strip off the web service name off the end of the path
+          //  and append our properties file path
+            propertiesFileName =
+            request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(fileSeparator));
+            propertiesFileName = propertiesFileName + fileSeparator + "WEB-INF" + fileSeparator + "acm.properties";
+        }
+         return propertiesFileName;
     }
     
     public void shutdown() throws SQLException {
@@ -43,8 +70,8 @@ public class DbAccess {
     public synchronized ResultSet query(String expression) throws SQLException {
         Statement st = null;
         ResultSet rs = null;
-
-        st = conn.createStatement();            
+        
+        st = conn.createStatement();
         rs = st.executeQuery(expression);       // run the query
         return rs;
     }
@@ -59,14 +86,14 @@ public class DbAccess {
     
     //use for SQL command DROP, INSERT and UPDATE
     public synchronized boolean update(String expression) throws SQLException {
-
+        
         Statement st = null;
         st = conn.createStatement();
         int i =  st.executeUpdate(expression);
         
-        if (i == -1) 
+        if (i == -1)
             return false;
-        else 
+        else
             return true;
     }
     
@@ -183,9 +210,6 @@ public class DbAccess {
         }
         
     }
-    
-    public final String SERVER = "//esc3.dl.ac.uk"; //currently my computer
-    public final String PORT = "5432";
-    private final String facilityName="BADC";
+    private String facilityName="";
     private Connection conn;
 }
