@@ -45,12 +45,20 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+//needed for JDOM manipulation and result processing
+import org.jdom.Document ;
+import org.jdom.Element ;
+import org.jdom.input.SAXBuilder ;
+import org.jdom.output.DOMOutputter ;
+
 
 public class XmlWrapperDocSelector
 {
    //
    // variables
    //
+
+   String the_xml = null ;
    
 
    //
@@ -85,6 +93,9 @@ public class XmlWrapperDocSelector
 
       //load the cache from the xml repository (coherancy will need dealing with some day)
       loadCache() ;
+
+      //setup the big_xml_string
+      //buildBigXmlString() ;
 
    }
 
@@ -135,12 +146,64 @@ public class XmlWrapperDocSelector
    }
 
    //
+   //
+   //void buildBigXmlString()
+   //{
+   //   SessionSingleton ss = SessionSingleton.getInstance() ;
+   //   Logger log = ss.getLogger() ;
+   //   ArrayList al = (ArrayList) ss.getContainer() ;
+
+   //   StringBuffer tmp_bx = new StringBuffer(1000000000) ;
+   //   String stp = null ;
+   //   String red_str = null ;
+   //   String clrc_removed = null ;
+
+   //   String start_str = "<CLRCMetadata>" ;
+   //   String end_str = "</CLRCMetadata>" ;
+
+   //   int start = 0 ;
+   //   int end   = 0 ;
+
+   //   Iterator e = al.iterator() ;
+
+   //   tmp_bx.append("<CLRCMetaData>\n") ;
+
+   //   boolean have_we_printed_one = false ;
+
+   //   while(e.hasNext())
+   //   {
+   //      stp = StringZip.decompress((String)e.next()) ;
+   //      //remove all the dtd information
+   //      red_str = stp.substring(stp.indexOf(start_str), stp.length()) ;
+
+   //      start = start_str.length();
+   //      end   = red_str.indexOf(end_str) ;
+
+   //      clrc_removed = red_str.substring(start, end) ;
+
+   //      if(have_we_printed_one == false)
+   //      {
+   //         log.info(clrc_removed) ;
+   //         have_we_printed_one = true ;
+   //      } 
+
+   //      tmp_bx.append(clrc_removed) ;
+   //   }
+   //   tmp_bx.append("</CLRCMetadata>\n") ;
+
+   //   the_xml=tmp_bx.toString() ;
+   //} //ouch big memory eating function - but necessary
+
+      
+
+   //
+   //
 
    //
    // equivelent to 'main' function
    //
 
-   public String queryMetaData(String external_xquery) throws TransformerException 
+   public org.w3c.dom.Element queryMetaData(String external_xquery) throws TransformerException 
    {
 
       //get necessary session attributes
@@ -151,6 +214,7 @@ public class XmlWrapperDocSelector
       ArrayList al = (ArrayList) ss.getContainer() ;
       
       StringBuffer result = new StringBuffer(1000000) ;
+
 
       //stuff needed for XQuery processing by saxon
       //configure the saxon environment 
@@ -166,7 +230,7 @@ public class XmlWrapperDocSelector
 
       //output properties for the result of the xquery
       Properties outputProps = new Properties();
-       outputProps.setProperty(OutputKeys.INDENT, "yes");
+      outputProps.setProperty(OutputKeys.INDENT, "yes");
 
       //find all keys in map and then pull all values out
       //validate and place in xml doc repository
@@ -182,16 +246,24 @@ public class XmlWrapperDocSelector
       String stp ;
       String proc_str ;
 
+      boolean got_root = false ;
+
+      //create a new JDOM document to add the results to
+      //create a new document to add things to
+      SAXBuilder sax = new SAXBuilder();
+      org.jdom.Document res_doc = new Document() ;
+      org.jdom.Document tmp_doc = null ;
 
       while(e.hasNext())
       {
+
          stp = StringZip.decompress((String)e.next()) ;
        
          //remove all the xml/dtd garbage infront just to process the root elements
          //as validation would have occured at the time data was put into the archive
          proc_str = stp.substring(stp.indexOf("<CLRCMetadata>"), stp.length()) ;
 
-         //reading in the xml file
+         //reading in the xml string
          InputSource eis = new InputSource(new StringReader(proc_str)) ;
 
          //log.info(proc_str) ;
@@ -208,6 +280,7 @@ public class XmlWrapperDocSelector
          //excuse the naff initialisation - getting around compiler problems
          //XQueryExpression exp = (XQueryExpression) new Object() ;
          XQueryExpression exp = null ;
+
  
 
          try {
@@ -235,6 +308,10 @@ public class XmlWrapperDocSelector
           }
 
          SequenceIterator results ;
+
+         //putting in the xml to query
+         DocumentInfo doc = xquery.buildDocument(sourceInput);
+         dynamic_env.setContextNode(doc);
 
          try { // The next line actually executes the query
             results = exp.iterator(dynamic_env);
@@ -271,20 +348,60 @@ public class XmlWrapperDocSelector
          writer.close();
 
 
-         //actually writing the string in the result to be returned
+         //now we have the result in an output
+         //get the root from document and build up result in jdom
+
          try
          {
-            result.append(dest.toString());
+            tmp_doc = sax.build(new StringReader(dest.toString()));
          }
-         catch (Throwable thr)
+         catch (org.jdom.JDOMException jdome)
          {
-            thr.printStackTrace() ;
+            jdome.printStackTrace() ;
          }
+
+         org.jdom.Element tmp_root = tmp_doc.getRootElement() ;
+
+         if(got_root == false)
+         {
+            res_doc.setRootElement(new Element(tmp_root.getName())) ;
+            got_root = true ;
+         }
+         org.jdom.Element res_root = res_doc.getRootElement() ;
+
+         List children = tmp_root.getChildren() ;
+
+         Iterator itr = children.iterator();
+         Element el = null ;
+         while(itr.hasNext())
+         {
+            //see jdom faq for why not to use the Element.detach() method for this
+            //modifies list and document at the same time leads to concurrentmodification exception
+            el = (Element)itr.next() ;
+            itr.remove() ;
+            res_root.addContent(el);
+         }
+
+      } //end of while processed all documents
+
+
+      //perhaps need to write output as org.w3d.dom.Element to make the interface richer ?
+
+      DOMOutputter dom_out = new DOMOutputter() ;
+      org.w3c.dom.Document result_dom = null ;
+      try
+      {
+         result_dom = dom_out.output(res_doc) ;
+      }
+      catch (org.jdom.JDOMException jdome)
+      {
+         jdome.printStackTrace() ;
       }
 
-
+      org.w3c.dom.Element result_element = result_dom.getDocumentElement();
+      
       //perhaps need some pre-processing if special characters need escaping
-      return result.toString() ;
+      return result_element ;
 
    }
 
