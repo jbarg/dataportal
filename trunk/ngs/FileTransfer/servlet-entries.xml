@@ -1,9 +1,0 @@
-  <!-- servlet entries -->
-      <servlet>
-          <servlet-name>
-                  GridFTPDownload
-          </servlet-name>
-          <servlet-class>
-                  xportlets.gridftp.GridFTPDownload
-          </servlet-class>
-      </servlet>
