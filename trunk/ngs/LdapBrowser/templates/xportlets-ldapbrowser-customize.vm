@@ -1,0 +1,38 @@
+#if (!$ldaphostport)
+  #set ( $ldaphostport="389" )
+#end
+
+<table>
+<tr>
+<td>
+<center>
+  <table border=5 bgcolor="$!{skin.Color}">
+    <tr>
+      <th class="title">
+        LDAP Browser
+      </th>
+    </tr>
+  </table>
+</center>
+</td>
+</tr>
+<tr>
+<td>
+&nbsp<p/>
+<form action="$jslink.Template" method="post">
+  <font color="$!{skin.Color}">
+    LDAP Server Name:
+    <input type=text name=ldaphostname value="$!{ldaphostname}" size="32">
+    Port:
+    <input type=text name=ldaphostport value="$!{ldaphostport}" size="5"><br/><br/>
+    Base DN:
+    <input type=text name=ldapbasedn value="$!{ldapbasedn}" size="48"><br/>
+    Your base DN may look like: dc=cs,dc=indiana,dc=edu<br/>
+    <input type=hidden name=mode value="node" size="4">
+    <br/><br/>
+    <input type="submit" name="eventSubmit_doCustomize" value="Enter"/>
+  </font>
+</form>
+</td>
+</tr>
+</table>

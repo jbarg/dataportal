@@ -1,0 +1,158 @@
+<project name="xportlets-proxymanager" default="help" basedir=".">
+  <description>
+  ProxyManager - Extreme! Computing Lab
+
+  Portlet which manages proxy credentials using MyProxy.  See the INSTALL file
+  for more details or http://www.extreme.indiana.edu/xportlets. 
+  </description>
+  
+  <property file="build.properties"/>
+
+  <property name="distname" value="xportlets-proxymanager"/>
+  <property name="src" value="src"/>
+  <property name="lib" value="lib"/>
+  <property name="jars" value="/opt/xportlets/lib"/>
+  <property name="build" value="build"/>
+  <property name="classes" value="${build}/classes"/>
+  <property name="javadoc" value="docs/api"/>
+  <property name="jetspeed" value="${alliance.home}"/>
+  
+  <target name="help" description="redirects user to -projecthelp">
+    <echo>
+    Run with -projecthelp to find out available targets.
+    </echo>
+  </target>
+
+  <target name="alliance-set" unless="alliance.home">
+    <fail message="You must set alliance.home in the build.properties file"> </fail>
+  </target>
+
+  <target name="clean" 
+          description="cleans out class files and generated javadoc API pages">
+    <delete dir="${build}"/>
+    <delete dir="${javadoc}"/>
+  </target>
+
+  <target name="prepare" depends="alliance-set">
+    <mkdir dir="${build}"/>
+    <mkdir dir="${classes}"/>
+    <mkdir dir="${javadoc}"/>
+  </target>
+
+  <target name="all" depends="build,deploy,copylib"/>
+
+  <target name="copylib" depends="alliance-set">
+    <copy overwrite="yes" todir="${jetspeed}/WEB-INF/lib">
+      <fileset dir="${lib}/cog">
+	<include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+ 
+  <target name="doc" depends="prepare"
+          description="generates ProxyTable API documentation">
+    <javadoc destdir="${javadoc}" 
+             Windowtitle="xportlets's Proxy Manager portlet API">
+      <fileset dir="${src}"> 
+        <include name="**/ProxyTable*.java"/>
+      </fileset>
+     <classpath refid="classes"/>
+     <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+    </javadoc>
+  </target>
+
+  <target name="build" depends="prepare"
+          description="compiles the source code into the directory build">
+    <javac deprecation="yes" srcdir="${src}" destdir="${classes}"> 
+     <classpath refid="classes"/>
+    </javac>
+  </target>
+
+  <target name="makejar" depends="build"
+          description="make proxymanager jar file">
+    <loadproperties srcFile="VERSION"/>
+    <echo message="Making jar file '${version}'"/>
+    <jar destfile="${lib}/proxymanager/${distname}-${version}.jar"
+       basedir="${classes}"
+    />
+  </target>
+
+  <target name="deploy" description="deploys the portlet into Jetspeed">
+    <copy overwrite="yes" todir="${jetspeed}/WEB-INF/classes">
+      <fileset dir="${basedir}/build/classes">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
+    <copy overwrite="yes" todir="${jetspeed}/WEB-INF/conf">
+      <fileset dir="${basedir}/conf">
+	<include name="*.xreg"/>
+      </fileset>
+    </copy>
+    <copy overwrite="yes" todir="${jetspeed}/WEB-INF/templates/vm/portlets/html">
+      <fileset dir="${basedir}/templates">
+	<include name="*.vm"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="srcdist" depends="clean"
+          description="creates a source distribution of this package">
+    <loadproperties srcFile="VERSION"/>
+    <echo message="Making source distribution '${version}'"/>
+    <property name="srcdistname" value="${distname}-${version}-src"/>
+    <property name="srcdistdir" value="${srcdistname}/${srcdistname}"/>
+    <mkdir dir="${srcdistdir}"/>
+    <copy todir="${srcdistdir}">
+      <fileset dir="${basedir}">
+	<include name="src/**"/>
+	<include name="conf/**"/>
+	<include name="docs/**"/>
+	<include name="lib/**"/>
+	<include name="templates/**"/>
+	<include name="INSTALL"/>
+	<include name="README"/>
+	<include name="build.xml"/>
+	<include name="build.properties.template"/>
+      </fileset>
+    </copy>
+    <replace file="${srcdistdir}/INSTALL" token="VERSION" 
+             value="${version}"/>
+    <tar tarfile="${srcdistdir}.tar" basedir="${srcdistname}"/>
+    <gzip zipfile="${srcdistname}.tar.gz" src="${srcdistdir}.tar"/>
+    <delete dir="${srcdistname}"/>
+    <echo message="Created gzipped tarball ${srcdistname}.tar.gz"/>
+  </target>
+
+  <target name="bindist" depends="build,doc"
+          description="creates a binary distribution of this project">
+    <loadproperties srcFile="VERSION"/>
+    <echo message="Making binary distribution '${version}'"/>
+    <property name="bindistname" value="${distname}-${version}-bin"/>
+    <property name="bindistdir" value="${bindistname}/${bindistname}"/>
+    <mkdir dir="${bindistdir}"/>
+    <copy todir="${bindistdir}">
+      <fileset dir="${basedir}">
+	<include name="build/**"/>
+	<include name="docs/**"/>
+	<include name="conf/**"/>
+	<include name="lib/**"/>
+	<include name="templates/**"/>
+	<include name="INSTALL"/>
+	<include name="build.xml"/>
+      </fileset>
+    </copy>
+    <replace file="${bindistdir}/INSTALL" token="VERSION" 
+             value="${version}"/>
+    <tar tarfile="${bindistdir}.tar" basedir="${bindistname}"/>
+    <gzip zipfile="${bindistname}.tar.gz" src="${bindistdir}.tar"/>
+    <delete dir="${bindistname}"/>
+    <echo message="Created gzipped tarball ${bindistname}.tar.gz"/>
+  </target>
+
+  <path id="classes">
+    <fileset dir="${jars}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+</project>

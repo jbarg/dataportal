@@ -1,0 +1,26 @@
+
+#if($errmsg)
+  <font style="color:red; font-size:14"> Error:  </font><br/>
+  <font style="color:red; font-size:12"> $errmsg </font>
+  <p/>
+  <a href="javascript:history.back()">Back</a>
+#else
+  #if($results)
+    <font style="color:black; font-size:14">Result: $results </font><br/>
+  <p/>
+
+  #set ($link=$jslink.addQueryData("ldaphostname", $ldaphostname).addQueryData("ldaphostport",$ldaphostport).addQueryData("dn", $dn).setAction("xportlets.LdapBrowserAction"))
+  <a href='$link'>Home</a>
+
+  #else
+  $service:<br/>
+  <form action=$jslink.Template method="post">
+    #foreach($param in $params)
+      ${param.Name}(${param.TypeName}) <input name=${param.Name} value="" size=32><br/>
+    #end
+    <input type="submit" name="eventSubmit_doInvoke" value="Invoke"  style="font-size:10; background-color: $skin.getTitleBackgroundColor()">
+  </form>
+  <p/>
+  <a href="javascript:history.back()">Back</a>
+  #end
+#end

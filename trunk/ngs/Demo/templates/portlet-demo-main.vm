@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title>NGS Portal Demo</title>
+</head>
+
+<body>
+<font face="Arial">
+
+#if ($error)
+  <font style="color: red">$error</font>
+#end
+
+<center><h2>New User Registration Form<center></h2>
+ 
+<form action=$jslink.Template method="post" enctype="application/x-www-form-urlencoded">
+<table width="40%" height="10%" cellspacing="10%">
+<tr>
+       <td align="right"><b>Name:</b></td>
+       <td><input align="left" checked maxlength="255" name="name" size="30" src="" type="text" value=""></td>
+</tr>
+<tr>
+       <td align="right"><b>Instituition:</b></td>
+       <td><input align="left" checked maxlength="255" name="instituition" size="30" src="" type="text" value=""></td>
+</tr>
+<tr>
+       <td align="right"><b>Email:</b></td>
+       <td><input align="left" checked maxlength="255" name="email" size="30" src="" type="text" value=""></td>
+</tr>
+<tr>
+       <td align="right"><input align="" name="eventSubmit_doReset" size="" src="" type="reset" value="Reset"></td>
+	   <td align="left"><input align="" name="eventSubmit_doGet_screen" size="" src="" type="submit" value="Submit"></td>
+       <td></td>
+</tr>
+<tr>
+       <td></td>
+       <td></td>
+</tr>
+
+</table>
+</form>
+</body>
+</html>

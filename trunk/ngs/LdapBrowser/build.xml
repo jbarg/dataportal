@@ -1,0 +1,143 @@
+<project name="xportlets-ldapbrowser" default="usage" basedir=".">
+  <property file="build.properties"/>
+  <property name="distname" value="xportlets-ldapbrowser"/>
+  <property name="src" value="src"/>
+  <property name="lib" value="lib"/>
+  <property name="jars" value="/opt/xportlets/lib"/>
+  <property name="build" value="build"/>
+  <property name="classes" value="${build}/classes"/>
+  <property name="portal_home" value="${alliance.home}"/>
+  
+  <target name="usage">
+    <echo>
+    The following targets are available:
+
+    bindist - creates a binary distribution of ${distname}
+    build   - compiles the source code into the directory build
+    clean   - cleans out class files and generated javadoc API pages
+    deploy  - deploys the portlet into Jetspeed
+    srcdist - creates a source distribution of ${distname}
+    
+    Env parameters:
+    JETSPEED: ${portal_home}
+    </echo>
+  </target>
+
+  <target name="clean" >
+    <delete dir="${build}"/>
+  </target>
+
+  <target name="alliance-set" unless="alliance.home">
+    <fail message="You must set alliance.home in the build.properties file"> </fail>
+  </target>
+
+  <target name="prepare" depends="alliance-set">
+    <mkdir dir="${build}"/>
+    <mkdir dir="${classes}"/>
+  </target>
+
+  <target name="all" depends="build,deploy,copylib"/>
+
+  <target name="copylib" depends="alliance-set">
+    <copy overwrite="Yes" todir="${portal_home}/WEB-INF/lib">
+       <fileset dir="${jars}/xsoap">
+        <include name="*.jar"> </include>
+       </fileset>
+       <fileset dir="${jars}/xmlutil">
+        <include name="*.jar"> </include>
+       </fileset>
+    </copy>
+  </target>
+
+  <target name="build" depends="prepare">
+    <javac deprecation="no" srcdir="${src}" destdir="${classes}" debug="on"> 
+     <classpath refid="classes"/>
+    </javac>
+  </target>
+
+  <target name="deploy">
+    <copy overwrite="Yes" todir="${portal_home}/WEB-INF/classes">
+      <fileset dir="${basedir}/build/classes">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
+    <copy overwrite="Yes" todir="${portal_home}/WEB-INF/conf">
+      <fileset dir="${basedir}/conf">
+	<include name="*.xreg"/>
+      </fileset>
+    </copy>
+    <copy overwrite="Yes" todir="${portal_home}/WEB-INF/templates/vm/portlets/html">
+      <fileset dir="${basedir}/templates">
+	<include name="*.vm"/>
+      </fileset>
+    </copy>
+    <copy overwrite="Yes" todir="${portal_home}/images/xportlets">
+      <fileset dir="${basedir}/images/xportlets">
+	<include name="*.gif"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="srcdist" depends="clean">
+    <loadproperties srcFile="VERSION"/>
+    <echo message="Making source distribution '${version}'"/>
+    <property name="srcdistname" value="${distname}-${version}-src"/>
+    <property name="srcdistdir" value="${srcdistname}/${srcdistname}"/>
+    <mkdir dir="${srcdistdir}"/>
+    <copy todir="${srcdistdir}">
+      <fileset dir="${basedir}">
+	<include name="src/**"/>
+	<include name="conf/**"/>
+	<include name="docs/**"/>
+	<include name="lib/**"/>
+	<include name="images/**"/>
+	<include name="templates/**"/>
+	<include name="INSTALL"/>
+	<include name="README"/>
+	<include name="build.xml"/>
+	<include name="build.properties.template"/>
+      </fileset>
+    </copy>
+    <replace file="${srcdistdir}/INSTALL" token="VERSION" 
+             value="${version}"/>
+    <tar tarfile="${srcdistdir}.tar" basedir="${srcdistname}"/>
+    <gzip zipfile="${srcdistname}.tar.gz" src="${srcdistdir}.tar"/>
+    <delete dir="${srcdistname}"/>
+    <echo message="Created gzipped tarball ${srcdistname}.tar.gz"/>
+  </target>
+
+  <target name="bindist" depends="build">
+    <loadproperties srcFile="VERSION"/>
+    <echo message="Making binary distribution '${version}'"/>
+    <property name="bindistname" value="${distname}-${version}-bin"/>
+    <property name="bindistdir" value="${bindistname}/${bindistname}"/>
+    <mkdir dir="${bindistdir}"/>
+    <copy todir="${bindistdir}">
+      <fileset dir="${basedir}">
+	<include name="build/**"/>
+	<include name="docs/**"/>
+	<include name="conf/**"/>
+	<include name="lib/**"/>
+	<include name="templates/**"/>
+	<include name="images/**"/>
+	<include name="INSTALL"/>
+	<include name="README"/>
+	<include name="build.xml"/>
+	<include name="build.properties.template"/>
+      </fileset>
+    </copy>
+    <replace file="${bindistdir}/INSTALL" token="VERSION" 
+             value="${version}"/>
+    <tar tarfile="${bindistdir}.tar" basedir="${bindistname}"/>
+    <gzip zipfile="${bindistname}.tar.gz" src="${bindistdir}.tar"/>
+    <delete dir="${bindistname}"/>
+    <echo message="Created gzipped tarball ${bindistname}.tar.gz"/>
+  </target>
+
+  <path id="classes">
+    <fileset dir="${jars}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+</project>
