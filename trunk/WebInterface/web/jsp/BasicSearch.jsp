@@ -45,7 +45,7 @@
 
     <base target="_top" />
 
-    <frameset border="0" frameborder="0" bgcolor="white" bordercolor="black" cols="20%,*">
+    <frameset border="0" frameborder="0" bgcolor="white" bordercolor="black" cols="180,*">
 
   	<frame name="qinetiq_logo"  src="menu.jsp" scrolling="no" target="parent" />
 
