@@ -27,19 +27,19 @@ public class HelpSearch1 extends HttpServlet{
     
     //set static log for the class
     static Logger logger = Logger.getLogger(HelpSearch1.class);
-    String workingDir = null;
+    String wd = null;
     private ServletConfig scon = null ;
     
     public void init(ServletConfig config) throws ServletException {
         //add section here to allow no reindexing at start up
-     /*  System.out.println("reloading index's");
+       //System.out.println("reloading index's");
         
         scon = config ;
         ServletContext sc = scon.getServletContext();
-        workingDir = sc.getRealPath("");
+        wd = sc.getRealPath("");
         
         
-        try{
+       /* try{
             //try to delete lock in index
            /* File indexLock = new File(workingDir+File.separator+"help"+File.separator+"xml"+File.separator+"xml"+File.separator+"index"+File.separator+"write.lock");
             if(indexLock.exists()){
@@ -94,17 +94,17 @@ public class HelpSearch1 extends HttpServlet{
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
         
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
         if(session == null){
             response.sendRedirect("../Login.html");
             return;
         }
-        String wd = (String )session.getAttribute("wd");
+       // String wd = (String )session.getAttribute("wd");
         //locate the prop file.  Normal get this from web.xml file
         
         //added, take out later
-        session = request.getSession();
-        wd = "C:\\Documents and Settings\\gjd37\\My Documents\\theDataPortal\\dataportalcvs\\dataportal\\WebInterface\\build";
+       // session = request.getSession();
+      //  wd = "C:\\Documents and Settings\\gjd37\\My Documents\\theDataPortal\\dataportalcvs\\dataportal\\WebInterface\\build";
         System.out.println("wd is "+wd);
         
         //end of added section
