@@ -1,5 +1,3 @@
-package src;
-
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
@@ -16,34 +14,36 @@ import java.sql.*;
 // doBasicQuery 9 30 "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'" BADC MPIM ISIS SRD */
 
 public class TestClient {
+    
     public static void main(String [] args) throws Exception {
         Options options = new Options(args);
         
         // TEST SERVICE
-        String endpoint = "http://gjd37vig.dl.ac.uk:8080/queryandreply/services/QueryAndReply";
+        String endpoint = "http://localhost:8080/queryandreply/services/QueryAndReply";
         // LIVE SERVICE
         
+        String[] facList = {"BADC","SRD"};
+        String topic = "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'";
+        String sid = "4c6568fc-266b-11d8-ab48-c915b2368155";
         
         args = options.getRemainingArgs();
         
-        String method = args[0];
         
-        Integer timeoutSecs = new Integer(args[2]);
-        String topic = args[3];
+        Integer timeoutSecs = new Integer(30000);
         String[] facility = {"MPIM","SRD"};
         
         Service service = new Service();
         Call call = (Call) service.createCall();
         
         call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-        call.setOperationName( method );
+        call.setOperationName( "doBasicQuery" );
         call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
         call.addParameter( "facility", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "topic", XMLType.XSD_STRING, ParameterMode.IN );
         call.addParameter( "timeoutSecs", XMLType.XSD_INTEGER, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY);
         
-        org.w3c.dom.Element[] ret = (org.w3c.dom.Element[]) call.invoke( new Object [] {args[1], facility, topic, timeoutSecs});
+        org.w3c.dom.Element[] ret = (org.w3c.dom.Element[]) call.invoke( new Object [] {sid, facility, topic, timeoutSecs});
         
         org.jdom.input.DOMBuilder builder = new org.jdom.input.DOMBuilder();
         //one
@@ -81,12 +81,12 @@ public class TestClient {
         //this is for connections timed out
         List list = doc13.getRootElement().getContent();
         Iterator it = list.iterator();
-       
+        
         while(it.hasNext()){
             Object o = it.next();
             
             if(o instanceof org.jdom.Element){
-        
+                
                 org.jdom.Element e = (org.jdom.Element)o;
                 System.out.println(e.getName());
             }
