@@ -331,7 +331,7 @@
 			<!--
     <pathelement location="${foo.jar}"/>
 -->
-			<fileset dir="${basedir}/web/WEB-INF/lib">
+			<fileset dir="${build.home}/WEB-INF/lib">
 				<include name="*.jar"/>
 			</fileset>
 			<!-- Include all elements that Tomcat exposes to applications -->
