@@ -158,8 +158,11 @@ public class SRBTransfer extends HttpServlet {
                 call.addParameter( "cert", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.XSD_STRING );
                 InetAddress host = InetAddress.getLocalHost();
-                logger.info("http://"+host.getHostAddress()+":"+request.getServerPort()+request.getContextPath()+"/xml/"+sid+"."+format);
-                Object[] ob = new Object[]{"http://"+host.getHostAddress()+":"+request.getServerPort()+request.getContextPath()+"/xml/"+sid+"."+format,urlTo,cert};
+                //put file location for now as file instead of http
+                //logger.info("http://"+host.getHostAddress()+":8080"+request.getContextPath()+"/xml/"+sid+"."+format);
+                //Object[] ob = new Object[]{"http://"+host.getHostAddress()+":8080"+request.getContextPath()+"/xml/"+sid+"."+format,urlTo,cert};
+                logger.info("file:///"+wd+File.separator+"xml"+File.separator+sid+"."+format);
+                Object[] ob = new Object[]{"file:///"+wd+File.separator+"xml"+File.separator+sid+"."+format,urlTo,cert};
                 
                 result = (String) call.invoke(ob );
                 //save credential
