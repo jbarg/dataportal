@@ -30,7 +30,8 @@ public class HelpSearchPage extends HttpServlet{
         PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
         
         if(session == null){
-            response.sendRedirect("../Login.html");
+            response.sendRedirect("../html/SessionTimedOut.html");
+            return;
         }
         else{
             

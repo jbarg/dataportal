@@ -36,7 +36,7 @@ public class DeleteSelectedWS extends HttpServlet {
         HttpSession session = request.getSession(false);
         
         if(session == null){
-            response.sendRedirect("../Login.html");
+          response.sendRedirect("../html/SessionTimedOut.html");
             return;
         }
         String sid = (String )session.getAttribute("sessionid");
