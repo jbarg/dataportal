@@ -7,6 +7,8 @@
 
 package uk.ac.clrc.dataportal.authent.lookupclient;
 
+import uk.ac.clrc.dataportal.authent.AuthCtl;
+
 public class LookUpServiceSoapBindingStub extends org.apache.axis.client.Stub implements LookUpModule {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
@@ -38,7 +40,7 @@ public class LookUpServiceSoapBindingStub extends org.apache.axis.client.Stub im
             java.lang.Class arraydf = org.apache.axis.encoding.ser.ArrayDeserializerFactory.class;
             java.lang.Class simplesf = org.apache.axis.encoding.ser.SimpleSerializerFactory.class;
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string");
+            qName = new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string");
             cachedSerQNames.add(qName);
             cls = java.lang.String[].class;
             cachedSerClasses.add(cls);
@@ -110,13 +112,13 @@ public class LookUpServiceSoapBindingStub extends org.apache.axis.client.Stub im
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.addParameter(new javax.xml.namespace.QName("", "facilityList"), new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class, javax.xml.rpc.ParameterMode.IN);
+        _call.addParameter(new javax.xml.namespace.QName("", "facilityList"), new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class, javax.xml.rpc.ParameterMode.IN);
         _call.addParameter(new javax.xml.namespace.QName("", "serviceType"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class);
+        _call.setReturnType(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setOperationStyle("rpc");
-        _call.setOperationName(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "lookup"));
+        _call.setOperationName(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "lookup"));
 
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {facilityList, serviceType});
 
@@ -138,11 +140,11 @@ public class LookUpServiceSoapBindingStub extends org.apache.axis.client.Stub im
         }
         org.apache.axis.client.Call _call = createCall();
         _call.addParameter(new javax.xml.namespace.QName("", "facility"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class);
+        _call.setReturnType(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setOperationStyle("rpc");
-        _call.setOperationName(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "getServices"));
+        _call.setOperationName(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "getServices"));
 
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {facility});
 
@@ -163,13 +165,13 @@ public class LookUpServiceSoapBindingStub extends org.apache.axis.client.Stub im
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.addParameter(new javax.xml.namespace.QName("", "facilityList"), new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class, javax.xml.rpc.ParameterMode.IN);
+        _call.addParameter(new javax.xml.namespace.QName("", "facilityList"), new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class, javax.xml.rpc.ParameterMode.IN);
         _call.addParameter(new javax.xml.namespace.QName("", "serviceType"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class);
+        _call.setReturnType(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setOperationStyle("rpc");
-        _call.setOperationName(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "lookupWSDL"));
+        _call.setOperationName(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "lookupWSDL"));
 
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {facilityList, serviceType});
 
@@ -190,13 +192,13 @@ public class LookUpServiceSoapBindingStub extends org.apache.axis.client.Stub im
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.addParameter(new javax.xml.namespace.QName("", "facilityList"), new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class, javax.xml.rpc.ParameterMode.IN);
+        _call.addParameter(new javax.xml.namespace.QName("", "facilityList"), new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class, javax.xml.rpc.ParameterMode.IN);
         _call.addParameter(new javax.xml.namespace.QName("", "serviceType"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class);
+        _call.setReturnType(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setOperationStyle("rpc");
-        _call.setOperationName(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "lookupEndpoint"));
+        _call.setOperationName(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "lookupEndpoint"));
 
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {facilityList, serviceType});
 
@@ -217,11 +219,11 @@ public class LookUpServiceSoapBindingStub extends org.apache.axis.client.Stub im
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setReturnType(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class);
+        _call.setReturnType(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setOperationStyle("rpc");
-        _call.setOperationName(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "getServiceTypes"));
+        _call.setOperationName(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "getServiceTypes"));
 
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {});
 
@@ -242,11 +244,11 @@ public class LookUpServiceSoapBindingStub extends org.apache.axis.client.Stub im
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setReturnType(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "ArrayOf_xsd_string"), java.lang.String[].class);
+        _call.setReturnType(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "ArrayOf_xsd_string"), java.lang.String[].class);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setOperationStyle("rpc");
-        _call.setOperationName(new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "getFacilities"));
+        _call.setOperationName(new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "getFacilities"));
 
         java.lang.Object _resp = _call.invoke(new java.lang.Object[] {});
 

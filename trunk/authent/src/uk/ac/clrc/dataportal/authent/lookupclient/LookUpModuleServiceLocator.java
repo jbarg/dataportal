@@ -7,10 +7,12 @@
 
 package uk.ac.clrc.dataportal.authent.lookupclient;
 
+import uk.ac.clrc.dataportal.authent.AuthCtl;
+
 public class LookUpModuleServiceLocator extends org.apache.axis.client.Service implements LookUpModuleService {
 
     // Use to get a proxy class for LookUpService
-    private final java.lang.String LookUpService_address = "http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService";
+    private java.lang.String LookUpService_address = AuthCtl.uDDILookUpService;
 
     public java.lang.String getLookUpServiceAddress() {
         return LookUpService_address;
@@ -80,7 +82,7 @@ public class LookUpModuleServiceLocator extends org.apache.axis.client.Service i
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://escpc10.esc.rl.ac.uk:8080/axis/services/LookUpService", "LookUpModuleService");
+        return new javax.xml.namespace.QName(AuthCtl.uDDILookUpService, "LookUpModuleService");
     }
 
     private java.util.HashSet ports = null;

@@ -30,14 +30,42 @@ import org.apache.axis.utils.XMLUtils;
 
 public class AuthCtl {
     
-    public static Properties config = new Properties();
-    public static String proxyServerName = null;
+    private static Properties config = new Properties();
+    public static String myProxyServerName = null;
+    public static String myProxyServerDN = null;
+    public static int myProxyServerPort = 0;
+        // Data specific to delegate proxy
+    public static int delegateProxyLifetime = 0; // seconds?
+    public static String portalCertFilename = null;
+    public static String portalPrivateKeyFilename = null;
+    public static String caCertFilename = null;
+    public static String uDDILookUpService = null;
+
+    
+    
+/*    private static final String myProxyServerName = "wk-ibm1.dl.ac.uk";
+    private static final String myProxyServerDN = "/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/wk-ibm1.dl.ac.uk";
+    private static final int myProxyServerPort = 7512;
+        // Data specific to delegate proxy
+    private static final int delegateProxyLifetime = 3600; // seconds?
+    private static final String privateKeyPassPhrase = "portaltest";
+    private static final String portalCertFilename = "/home/tomcat4/.globus/portalcert.pem";
+    private static final String portalPrivateKeyFilename = "/home/tomcat4/.globus/portalkey.pem";
+    private static final String caCertFilename = "/etc/grid-security/certificates/01621954.0";
+ */
     
     // class method here
     public static void getMyConfig() throws IOException {
         try {
             config.load(new FileInputStream(Config.getContextPath()+"authent.conf"));
-            String proxyServerName = config.getProperty("proxy_server_name");
+            AuthCtl.myProxyServerName = config.getProperty("my_proxy_server_name");
+            AuthCtl.myProxyServerDN = config.getProperty("my_proxy_server_dn");
+            AuthCtl.myProxyServerPort = Integer.parseInt(config.getProperty("my_proxy_server_port"));
+            AuthCtl.delegateProxyLifetime = Integer.parseInt(config.getProperty("delegate_proxy_lifetime"));
+            AuthCtl.portalCertFilename = config.getProperty("portal_cert_filename");
+            AuthCtl.portalPrivateKeyFilename = config.getProperty("portal_private_key_filename");
+            AuthCtl.caCertFilename = config.getProperty("ca_cert_filename");
+            AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service"); 
         } catch ( IOException e ) {
             System.out.println( "---> Error: Cannot read config file" );
             throw e;

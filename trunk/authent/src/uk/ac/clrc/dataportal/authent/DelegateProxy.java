@@ -16,13 +16,6 @@ import org.globus.myproxy.MyProxyException;
 public abstract class DelegateProxy 
 {
 // Data specific to MyProxyServer
-    private static final String myProxyServerName = "wk-ibm1.dl.ac.uk";
-    private static final String myProxyServerDN = "/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/wk-ibm1.dl.ac.uk";
-    private static final int myProxyServerPort = 7512;
-
-// Data specific to delegate proxy
-    private static final int delegateProxyLifetime = 3600; // seconds?
-
 
     public static GlobusProxy getProxy( String aUsername, String aPassPhrase, GlobusProxy thePortalProxy ) 
                                               throws GlobusProxyException, MyProxyException
@@ -37,15 +30,15 @@ public abstract class DelegateProxy
             throw new GlobusProxyException( "Invalid portal proxy" );
         }
 
-        MyProxy proxy = new MyProxy( myProxyServerName, myProxyServerPort );
+        MyProxy proxy = new MyProxy( AuthCtl.myProxyServerName, AuthCtl.myProxyServerPort );
          
-        GlobusProxy delegateUserProxy = MyProxy.get( myProxyServerName, 
-                                                     myProxyServerPort,
+        GlobusProxy delegateUserProxy = MyProxy.get( AuthCtl.myProxyServerName, 
+                                                     AuthCtl.myProxyServerPort,
                                                      portalProxy, 
                                                      username,
                                                      userPassphrase,
-                                                     delegateProxyLifetime,
-                                                     myProxyServerDN );
+                                                     AuthCtl.delegateProxyLifetime,
+                                                     AuthCtl.myProxyServerDN );
 
         return delegateUserProxy;
     }
