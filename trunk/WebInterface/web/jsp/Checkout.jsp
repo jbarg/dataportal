@@ -66,6 +66,18 @@ function check(){
     else return false;
 }
 
+// sets all checkboxes
+function selectAll(formID, fieldName, value)
+{
+  var elements = document.forms[formID].elements;
+  for (i = 0; i < elements.length; i++) {
+    if (elements[i].name && elements[i].name.indexOf(fieldName) > -1) {
+      elements[i].checked = value; 
+    }
+  }
+  return null;
+}
+
 //-->
 </script>
 </head>
@@ -143,13 +155,26 @@ html/netscape.html file from the content root.-->
 </c:otherwise>
 </c:choose>
 
-<br />
+=
 
 <c:choose>
 <c:when test="<%=!checkout.isEmpty()%>" >
-    <div align="right">
-    <input type="submit" value="Delete" />
-    </div>
+    <table>
+    <tr>
+
+            <td width="70%" />
+           <td>
+    <input type="submit" value="Delete Selected" />
+    </td>
+            <td align="right">
+                    <input type="button" value="Select None" onclick="selectAll('deleteSelected','delete',false);"/>
+            </td>
+            <td align="right">
+                    <input type="button" value="Select All" onclick="selectAll('deleteSelected','delete',true);"/>
+            </td>
+    </tr>
+</table>
+
 </c:when>
 </c:choose>
 </form>
