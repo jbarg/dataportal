@@ -1,0 +1,21 @@
+--------------------------------------------------------------------------------
+README for Gram Job Launcher Version VERSION 
+--------------------------------------------------------------------------------
+
+To compile source:
+------------------
+
+ant all
+
+To install files into Jetspeed:
+-------------------------------
+
+ant deploy
+
+Note: 
+1. CATALINA_HOME must be predefined.
+2. If you want to change the version number you'll need to update the VERSION file.  
+
+--------------------------------------------------------------------------------
+                           Extreme! Computing Lab
+                       http://www.extreme.indiana.edu

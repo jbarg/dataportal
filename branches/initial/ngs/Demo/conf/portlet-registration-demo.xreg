@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registry>
+    <portlet-entry name="portlet:Demo" hidden="false"
+        type="ref" parent="chef.tool" application="false">
+        <meta-info>
+            <title>portlet : Demo</title>
+            <description>A Demo of how CHEF portlet works</description>
+        </meta-info>
+        <classname>org.apache.jetspeed.portal.portlets.CustomizerVelocityPortlet</classname>
+        <parameter name="template" value="portlet-demo-main" hidden="false"
+            cachedOnName="true" cachedOnValue="true"/>
+        <parameter name="action" value="portlet.DemoRegistrationAction"
+            hidden="false" cachedOnName="true" cachedOnValue="true"/>
+        <media-type ref="html"/>
+        <url cachedOnURL="true"/>
+        <category group="Jetspeed">CHEF</category>
+    </portlet-entry>
+</registry>

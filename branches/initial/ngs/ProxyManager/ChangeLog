@@ -1,0 +1,14 @@
+===========================================================================
+                      xportlet proxymanager change log
+===========================================================================
+
+0.1 - 08/03/2002
+
+  - initial release
+
+0.2 - 08/29/2002
+
+  - proxy credentials can now be store permanently so that they persist
+    beyond a user session.
+  - user's can now choose a "default" proxy
+  - ProxyTable API

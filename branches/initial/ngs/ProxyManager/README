@@ -1,0 +1,50 @@
+--------------------------------------------------------------------------------
+                              ProxyManager
+ 
+                              Version VERSION
+--------------------------------------------------------------------------------
+ 
+The ProxyManager portlet provides a interface for loading GSI proxy credentials
+into Jetpeed via MyProxy.  The proxies are stored into a hash table in the
+permanent storage area of the User structure under the key "proxies".  This
+means that proxies can survive a portlet reload but will be destroyed if the
+user logs out or the portal is restarted.
+ 
+For further information, please refer to the html documentation in the 'docs'
+directory.
+ 
+PREREQUISITES:
+--------------
+ 
+1. GNU tar (or ensure that your tar can handle paths longer than 100
+   characters long)
+ 
+2. Jakarta Ant 1.5 or later - http://jakarta.apache.org/ant
+ 
+3. Java CoG Kit version 1.1a - http://www.globus.org/cog/java
+ 
+INSTALL:
+
+To install the ProxyManager portlet into your Jetspeed portal, you'll need
+to:
+ 
+1.  Untar and unzip xportlets-proxymanager-VERSION-[src,bin].tar.gz.
+ 
+2.  Define alliance.home in file build.properties. "alliance.home" is your
+    alliance portal installation.
+ 
+3.  For binary distribution, execute:
+ 
+      ant deploy
+ 
+    For source distribution, execute:
+ 
+      ant build deploy
+ 
+4.  Restart your portal (ProxyManager will be available in the portlet
+    listing).
+ 
+ 
+--------------------------------------------------------------------------------
+                           Extreme! Computing Lab
+                       http://www.extreme.indiana.edu
