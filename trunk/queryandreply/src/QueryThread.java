@@ -82,6 +82,7 @@ public class QueryThread extends Thread {
       //  String endpoint = "http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService";
         Properties prop = new Properties();
         prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
+        String defaultid = prop.getProperty("defaultid");
         String lookup_url = prop.getProperty("lookup_module_url");
         logger.info(getFacilityName()+":"+"using lookup address "+lookup_url);
         
@@ -98,7 +99,7 @@ public class QueryThread extends Thread {
          * NB lookup currently requires facility in an array and returns an array of
          * facility addresses
          */
-        String[] facilityList = {getFacilityName()};
+        String[] facilityList = {getFacilityName()+defaultid};
         String[] result = (String[]) call.invoke( new Object [] {facilityList, "XMLW"});
         
         logger.info(getFacilityName()+":"+"address of wrapper is "+result[0]);
