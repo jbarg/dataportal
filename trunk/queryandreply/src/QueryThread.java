@@ -119,7 +119,7 @@ public class QueryThread extends Thread {
         call.setOperationName("getXML");
         call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ELEMENT );
-        
+        System.out.println("FROM WRAPPER -- SENT IS : "+topic);
         // Call service
         org.w3c.dom.Element domElem = (org.w3c.dom.Element) call.invoke( new Object [] {topic});
                 
