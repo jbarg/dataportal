@@ -49,22 +49,23 @@ public class MatrixClient {
     
     public static void main(String[] args) {
         
-        // First create our request
-        MatrixDataGridRequest request = new MatrixDataGridRequest();
-        Transaction tx = null;
-        
-        // Next create the transaction / operatiob we want to perform and attach it to the request
-        
-        //MatrixDownloadOp downloadOp = new MatrixDownloadOp();
-        //tx = downloadOp.createDownloadOpTransaction();
-        
-        MatrixListOp listOp = new MatrixListOp();
-        tx = listOp.createListOpTransaction();
-        
-        // Attach transaction to request
-        request.setTransaction(tx);
         
         try {
+            MatrixDataGridRequest request = new MatrixDataGridRequest();
+            Transaction tx = null;
+            
+            //MatrixDownloadOp downloadOp = new MatrixDownloadOp();
+            //tx = downloadOp.createDownloadOpTransaction();
+            
+            //MatrixListOp listOp = new MatrixListOp();
+            //tx = listOp.createListOpTransaction();
+            
+            MatrixIngestOp ingestOp = new MatrixIngestOp();
+            tx = ingestOp.createIngestOpTransaction();
+            
+            // Attach transaction to request
+            request.setTransaction(tx);
+            
             JAXBContext jc = JAXBContext.newInstance("edu.sdsc.matrix.srb.parser");
             unmarshaller = jc.createUnmarshaller();
             
@@ -74,10 +75,21 @@ public class MatrixClient {
             SOAPMessage msg = mf.createMessage();
             SOAPPart soapPart = msg.getSOAPPart();
             
-            // Attach file to be ingested to the SOAP message
-            //AttachmentPart attPart = msg.createAttachmentPart();
-            //attPart.setContent();
-            //msg.addAttachmentPart(attPart);
+            // Figure out what the transaction was..... use the step name for this as it's set to the op name
+            // Note that SDSC may fix this as some point!!
+            Step step = (Step) tx.getFlow().getSteps().get(0);
+            String stepName = step.getStepName();
+            
+            if (stepName.equals("ingestOp")) {
+                FileDataSource ds = new FileDataSource("ingest.txt");
+                DataHandler dh = new DataHandler(ds);
+                
+                // Attach file to be ingested to the SOAP message
+                // We can attach multiple files if specified in the DataGridRequest but let's just play with one for now...
+                AttachmentPart attPart = msg.createAttachmentPart(dh);
+                attPart.setContentId("INGESTFILE");
+                msg.addAttachmentPart(attPart);
+            }
             
             Source source = request.getSource();
             soapPart.setContent(source);
@@ -102,20 +114,16 @@ public class MatrixClient {
             soapPart = msg.getSOAPPart();
             source = request.getSource();
             soapPart.setContent(source);
-
+            
             System.out.println("Sending status query to endpoint : " + MatrixClient.ENDPOINT);
             reply = connection.call(msg, new URL(MatrixClient.ENDPOINT));
-            
-            // Figure out what the transaction was..... use the step name for this as it's set to the op name
-            // Note that SDSC may fix this as some point!!
-            Step step = (Step) tx.getFlow().getSteps().get(0);
-            String stepName = step.getStepName();
             
             if (stepName.equals("listOp")) {
                 System.out.println("List Op Response");
                 printReply(reply);
             } else if (stepName.equals("ingestOp")) {
                 System.out.println("Ingest Op processing.....");
+                printReply(reply);
             } else if (stepName.equals("downloadDataSetOp")) {
                 
                 // Status Codes are in edu/sdsc/matrix/srb/code/MatrixCodes.java
