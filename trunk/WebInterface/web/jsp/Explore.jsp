@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@ page errorPage="error.jsp" import="org.apache.log4j.*,java.util.*, java.io.*,org.jdom.input.*,org.jdom.*,ac.dl.xml.*"%>
+<%@ page errorPage="error.jsp" import="org.apache.log4j.*,java.util.*, java.io.*,uk.ac.dl.dn.Convert,uk.ac.dl.xml.*"%>
 
 <% response.setHeader("pragma","no-cache");
  response.setHeader("cache-control","no-store"); %>
@@ -81,9 +81,12 @@ html/netscape.html file from the content root.-->
         if(loggedIn){ 
                 String workingDirXml = (String)session.getAttribute("wdx");
                 String sid = (String)session.getAttribute("sessionid");
+                 String dn = (String)session.getAttribute("dn");
+                dn = Convert.removeSpaces(dn);
+            
                 File xml = null;
                                   //get username 
-                xml =  new File(wd+File.separator+"profiles"+File.separator+sid+"3.xml");
+                xml =  new File(wd+File.separator+"profiles"+File.separator+dn+"3.xml");
                  if(!xml.exists()){
                     response.sendRedirect("BasicSearch.jsp");
                     return;

@@ -2,7 +2,7 @@
 
 
 
-<%@ page errorPage="error.jsp" import="org.apache.log4j.*,ac.dl.xml.*,java.util.*, java.io.*,org.jdom.input.*,org.jdom.*" %>
+<%@ page errorPage="error.jsp" import="org.apache.log4j.*,java.util.*, java.io.*,uk.ac.dl.dn.Convert" %>
 
 <% response.setHeader("pragma","no-cache");
 
@@ -99,15 +99,9 @@ html/netscape.html file from the content root.-->
         if(loggedIn){
 
             String sid = (String)session.getAttribute("sessionid");
-             String dn = (String)session.getAttribute("dn");
-            int n = dn.length();
-            StringBuffer h = new StringBuffer();
-            for(int i = 0; i<n; i++){
-                if( dn.charAt(i) == '/') h.append("_");
-else if( dn.charAt(i) == ' ') h.append("_");
-                else h.append(dn.charAt(i));
-            }
-            dn = h.toString();
+            String dn = (String)session.getAttribute("dn");
+            dn = Convert.removeSpaces(dn);
+
             File historyDir = new File(wd+File.separator+"profiles"+File.separator+"history");
             if(!historyDir.exists()) historyDir.mkdir();
             File history = new File(wd+File.separator+"profiles"+File.separator+"history"+File.separator+dn);

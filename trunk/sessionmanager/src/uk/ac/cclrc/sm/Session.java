@@ -15,39 +15,49 @@ import uk.ac.cclrc.db.DBAccess;
 
 // Testing
 import java.net.URL;
+import java.util.*;
+
 /**
  *
  * @author  ljb53
  */
 public class Session {
     
-    static Logger logger = Logger.getLogger(Session.class);
+    static Logger logger;
+    
+    static {
+        logger = Logger.getLogger(Session.class);
+    }
     
     private String sid;
     private String dName;
     private Certificate cert;
     private String[][] p;
+    private Properties prop;
     
     public String getSid() { return sid; }
     public String getDName() { return dName; }
     public Certificate getCert() { return cert; }
     public String[][] getPermissions() { return p; }
     
-    public Session(String sid) throws Exception {
+    public Session(String sid,Properties prop) throws Exception {
         this.sid = sid;
+        this.prop = prop;
     }
     
-    public Session(Certificate cert, String[][] p) throws Exception {
+    public Session(Certificate cert, String[][] p,Properties prop) throws Exception {
         this.cert = cert;
         this.dName = cert.getDName();
         this.p = p;
+        this.prop = prop;
     }
     
-    public Session(String sid, Certificate cert, String[][] p) throws Exception {
+    public Session(String sid, Certificate cert, String[][] p,Properties prop) throws Exception {
         this.sid = sid;
         this.cert = cert;
         this.dName = cert.getDName();
         this.p = p;
+        this.prop = prop;
     }
     
     public String start() throws Exception {
@@ -61,12 +71,16 @@ public class Session {
         }
         
         // Save session to database
-        DBAccess db = new DBAccess(getClass());
+        // DBAccess db = new DBAccess(getClass());
+        //logger.debug(prop.getProperty("db_driver") +"  "+prop.getProperty("db_url") + "    "+prop.getProperty("db_user")+"   "+prop.getProperty("db_password"));
+        // Save session to database
+        //DBAccess db = new DBAccess(prop.getProperty("db_driver"),prop.getProperty("db_url"),prop.getProperty("db_user"),prop.getProperty("db_password"));
+        DBAccess db = new DBAccess("dataportalDB");
         db.connect();
         try {
             logger.info("Inserting new session in database: "+sid);
             
-            db.updateData("insert into session values('"+sid+"','"+dName+"','"+cert.toString()+"'::bytea,CURRENT_TIMESTAMP)");
+            db.updateData("insert into session values('"+sid+"','"+dName+"','"+cert.toString()+"','"+new java.util.Date().toString()+"')");
             for (int i=0; i < p.length; i++ ) {
                 
                 // add facility and user permissions for facility to DB
@@ -88,10 +102,11 @@ public class Session {
     public void getSession() throws Exception {
         
         ResultSet rs = null;
+        ResultSet no = null;
         this.sid = sid;
         
         // Check if session in database
-        DBAccess db = new DBAccess(getClass());
+        DBAccess db = new DBAccess("dataportalDB");
         db.connect();
         try {
             rs = db.getData("select * from session where sid = '"+sid+"'");
@@ -102,7 +117,7 @@ public class Session {
             }
             
             // Convert certificate to string
-            this.cert = new Certificate(rs.getBinaryStream("certificate"));
+            this.cert = new Certificate(rs.getString("certificate"));
             this.dName = rs.getString("user_id");
             
             
@@ -111,11 +126,12 @@ public class Session {
             // Get user's permissions - one row per facility
             rs = db.getData("select * from session_access_rights "+
             "where sid = '"+sid+"'");
-            
+            no = db.getData("select count(*) from session_access_rights "+
+            "where sid = '"+sid+"'");;
             // Find out how many rows from select hence number of facilities
-            rs.last();
-            int rowcount = rs.getRow();
-            rs.beforeFirst();
+            no.next();
+            int rowcount = no.getInt(1);
+            // rs.beforeFirst();
             
             p = new String[rowcount][2];
             
@@ -126,6 +142,7 @@ public class Session {
                 p[i][0] = rs.getString("permissions");
                 i++;
             }
+            
             
         }
         finally {
@@ -139,8 +156,8 @@ public class Session {
     public void end() throws Exception {
         
         logger.info("Ending session: "+this.sid);
-        DBAccess db = new DBAccess(getClass());
-        db.connect();
+         DBAccess db = new DBAccess("dataportalDB");
+         db.connect();
         try {
             db.updateData("delete from session where sid='"+this.sid+"'");
             db.updateData("delete from session_access_rights where sid='"+this.sid+"'");
@@ -193,9 +210,9 @@ public class Session {
         r.end();
          */
         
-        Session s = new Session("c548092e-2649-11d8-965c-9768792e49d2");
+      /*  Session s = new Session("c548092e-2649-11d8-965c-9768792e49d2");
         s.getSession();
-        prt(s);
+        prt(s);*/
         
     }
     

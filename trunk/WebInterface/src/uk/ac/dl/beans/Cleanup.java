@@ -9,6 +9,7 @@ package uk.ac.dl.beans;
 import org.apache.log4j.*;
 import java.io.*;
 import java.util.*;
+import uk.ac.dl.dn.Convert;
 import javax.servlet.http.HttpSession;
 
 //web axis stuff
@@ -29,7 +30,7 @@ public class Cleanup {
     static {
         
         logger = Logger.getLogger(Cleanup.class);
-    // BasicConfigurator.configure();
+        // BasicConfigurator.configure();
     }
     
     public static void session(HttpSession session) throws Exception{
@@ -41,11 +42,14 @@ public class Cleanup {
         try{
             sid = (String)session.getAttribute("sessionid");
             wd = (String)session.getAttribute("wd");
+            String dn = (String)session.getAttribute("dn");
+            dn = Convert.removeSpaces(dn);
+            
             prop   = (Properties)session.getAttribute("props");
             session_url = prop.getProperty("SESSION");
             
             for(int i = 1; i < 4;i++){
-                new File(wd+File.separator+"profiles"+File.separator+sid+i+".xml").delete();
+                new File(wd+File.separator+"profiles"+File.separator+dn+i+".xml").delete();
             }
             new File(wd+File.separator+"profiles"+File.separator+"emat"+sid).delete();
             

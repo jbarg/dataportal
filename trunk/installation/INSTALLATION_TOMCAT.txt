@@ -112,6 +112,9 @@ this...
 
 This installs the UDDI , Database and relevant libraries into your tomcat instance.
 
+NB: This process installs all the axis and jglobus jar files into $CATALINA_HOME/shared/lib
+It aslo puts dp_common.jar, hsqldb.jar, mail.jar, activation.jar, jdom.jar and the two files jstl.jar and standard.jar in there
+
 7)  ant start_dbs
 
 This starts up the databases.  These are needed for the UDDI registry and the data portal modules.
@@ -178,4 +181,12 @@ NB:  Since the metadata is test data, there is no data and therefore the data tr
 Information
 ------------
 
-1) Log files are written to the console from the Web Interface. All other modules and the Web Interface log their file in the $CATALINA_HOME/logs/dataportal.xml file.  This file is not really human readable.  It is in the format of Chainsaw.  To view this information download chainsaw at http://logging.apache.org/log4j/docs/chainsaw.html
+1) Log files are written to the console from the Web Interface. All other modules and the Web Interface log their file in the $CATALINA_HOME/logs/dataportal.xml file. 
+This file is not really human readable.  It is in the format of Chainsaw.  To view this information download chainsaw at http://logging.apache.org/log4j/docs/chainsaw.html
+
+2) Remove Data Portal from tomcat by 
+i)'ant -f installation remove'. 
+If that fails remove all the xml file related to the data portal in the $CATALINA_HOME/conf/Catalina/localhost directory.
+These should be dataportal, shopcart,facility, juddi, queryandreply,uddilookup,sessionmanager,authent and datatransfer .xml files
+ii) Remove juddi folder from   $CATALINA_HOME/webapps
+iii) Remove new jar files from  $CATALINA_HOME/shared/lib folder.

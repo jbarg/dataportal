@@ -16,7 +16,8 @@ import java.nio.channels.*;
 //log classes
 
 import org.apache.log4j.*;
-import ac.dl.xml.*;
+import uk.ac.dl.xml.*;
+import uk.ac.dl.dn.*;
 import org.jdom.input.*;
 /** This class takes the values selected  from the page invoking the
  * servlet and uses these to create a xsl that takes the current xml file
@@ -54,6 +55,8 @@ public class ExpandResultsServlet extends HttpServlet{
         else{
             //get working dir
             String wd = (String )session.getAttribute("wd");
+             String dn = (String)session.getAttribute("dn");
+            dn = Convert.removeSpaces(dn);
             
             String submit =  request.getParameter("this_one");
             //if next ten, add one to the current stylesheet and add the current choosen valeus to session
@@ -211,8 +214,8 @@ public class ExpandResultsServlet extends HttpServlet{
                     
                     //get users username
                     
-                    xml = new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
-                    File result = new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml");
+                    xml = new File(wd+File.separator+"profiles"+File.separator+dn+"1.xml");
+                    File result = new File(wd+File.separator+"profiles"+File.separator+dn+"2.xml");
                     XSLTransformer.transformFiletoFile(xml,temp,result);
                     
                     //attempt to delete the file
@@ -231,7 +234,7 @@ public class ExpandResultsServlet extends HttpServlet{
                             srcChannel = new FileInputStream(result).getChannel();
                             
                             // Create channel on the destination
-                            dstChannel = new FileOutputStream(new File(wd+File.separator+"profiles"+File.separator+sid+"3.xml")).getChannel();
+                            dstChannel = new FileOutputStream(new File(wd+File.separator+"profiles"+File.separator+dn+"3.xml")).getChannel();
                             
                             // Copy file contents from source to destination
                             dstChannel.transferFrom(srcChannel, 0, srcChannel.size());

@@ -16,6 +16,7 @@
    <target name="compile" description="Compile Java sources">
       <antcall target="do">
          <param name="target" value="compile"/>
+         <param name="file" value="build.xml"/>  
        </antcall>
    </target>
 
@@ -30,6 +31,7 @@
    <target name="clean" description="Delete old build and dist directories">
       <antcall target="do">
          <param name="target" value="clean"/>
+         <param name="file" value="build.xml"/>       
        </antcall>
    </target>
 
@@ -37,6 +39,7 @@
    <target name="dist" description="Create binary distribution">
       <antcall target="do">
          <param name="target" value="dist"/>
+<param name="file" value="build.xml"/>         
        </antcall>
    </target>
 
@@ -44,6 +47,7 @@
    <target name="install" description="Install application to servlet container">
       <antcall target="do">
          <param name="target" value="install"/>
+         <param name="file" value="tomcat.xml"/>
        </antcall>
    </target>
 
@@ -51,6 +55,7 @@
    <target name="javadoc" description="Create Javadoc API documentation">
       <antcall target="do">
          <param name="target" value="javadoc"/>
+         <param name="file" value="build.xml"/>
        </antcall>
    </target>
 
@@ -58,6 +63,7 @@
    <target name="list" description="List installed applications on servlet container">
       <antcall target="do">
          <param name="target" value="list"/>
+         <param name="file" value="tomcat.xml"/>
        </antcall>
    </target>
 
@@ -65,6 +71,7 @@
    <target name="reload" description="Reload application on servlet container">
       <antcall target="do">
          <param name="target" value="reload"/>
+         <param name="file" value="tomcat.xml"/>
        </antcall>
    </target>
 
@@ -72,6 +79,7 @@
    <target name="remove" description="Remove application on servlet container">
       <antcall target="do">
          <param name="target" value="remove"/>
+         <param name="file" value="tomcat.xml"/>
        </antcall>
    </target>
 
@@ -80,61 +88,55 @@
 
    <target name="do" description="redirects ant call to all dataportal modules">
 
-    <ant antfile="datatransfer/build.xml" target="${target}">
+    <ant antfile="datatransfer/${file}" target="${target}">
          <property name="basedir" value="${basedir}/datatransfer"/>
+         <!--<property name="catalina.home" value="${catalina.home}" />-->
+         
       </ant>
 
-      <ant antfile="ShoppingCart/build.xml" target="${target}"> 
+      <ant antfile="ShoppingCart/${file}" target="${target}"> 
          <property name="basedir" value="${basedir}/ShoppingCart"/>
       </ant>
 
-      <ant antfile="ISIS-SRD/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/ISIS-SRD"/>
-      </ant>
-
-      <ant antfile="RasGrib/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/RasGrib"/>
-      </ant>
-
-      <ant antfile="WebInterface/build.xml" target="${target}"> 
+      <ant antfile="WebInterface/${file}" target="${target}"> 
          <property name="basedir" value="${basedir}/WebInterface"/>
       </ant> 
 		
-      <ant antfile="xmlwrapper/build.xml" target="${target}"> 
+  <!--    <ant antfile="xmlwrapper/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/xmlwrapper"/>
-      </ant>
+      </ant>-->
 		
-      <ant antfile="uddilookup/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/uddilookup"/>
+      <ant antfile="uddilookup/${file}" target="${target}"> 
+              <property name="basedir" value="${basedir}/uddilookup"/>
       </ant>
 
-      <ant antfile="facility/build.xml" target="${target}"> 
+     <!-- <ant antfile="facility/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/facility"/>
       </ant>
 
-      <ant antfile="acmematn/build.xml" target="${target}"> 
+      <ant antfile="acmematn/${file}" target="${target}"> 
          <property name="basedir" value="${basedir}/acmematn"/>
-      </ant>
+      </ant>-->
 
       
-      <ant antfile="authent/build.xml" target="${target}"> 
+      <ant antfile="authent/${file}" target="${target}"> 
          <property name="basedir" value="${basedir}/authent"/>
       </ant>
 
-    <ant antfile="sessionmanager/build.xml" target="${target}"> 
+    <ant antfile="sessionmanager/${file}" target="${target}"> 
          <property name="basedir" value="${basedir}/sessionmanager"/>
       </ant>
 
-      <ant antfile="queryandreply/build.xml" target="${target}"> 
+      <ant antfile="queryandreply/${file}" target="${target}"> 
          <property name="basedir" value="${basedir}/queryandreply"/>
       </ant>
       
     <!--  <ant antfile="datainsertion/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/datainsertion"/>
       </ant>-->
- <ant antfile="srbcommands/build.xml" target="${target}"> 
+<!-- <ant antfile="srbcommands/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/srbcommands"/>
-      </ant>
+      </ant>-->
 
   
    </target>

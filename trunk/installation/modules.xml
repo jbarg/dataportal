@@ -35,23 +35,16 @@
 	<!-- ==================== File and Directory Names ======================== -->
 	
         <property name="dataportal.home" value="${basedir}/dataportal"/>
-        
+         <property name="common.tomcat.lib" value="${basedir}/dataportal/common/shared"/>
+         <property name="common.lib" value="${basedir}/dataportal/common/lib"/>
+         
                <property name="args" value="true"/>
                  
  <target name="installmodules" description="redirects ant call to all dataportal modules">
 		
         
         <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
-			<classpath>
-			 <fileset dir="${basedir}/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            <fileset dir="${basedir}/dataportal/common/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-		        </classpath>
+			<classpath refid="compile.classpath"/>
            
 			<arg line="facility '${basedir}/dataportal/facility/build' '${catalina.home}/conf/Catalina/localhost/facility.xml'" />
 			</java>
@@ -59,16 +52,7 @@
           
            
              <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
-			<classpath>
-			 <fileset dir="${basedir}/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            <fileset dir="${basedir}/dataportal/common/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-		        </classpath>
+			<classpath refid="compile.classpath"/>
            
 			<arg line="dataportal '${basedir}/dataportal/WebInterface/build' '${catalina.home}/conf/Catalina/localhost/dataportal.xml'" />
 			</java>
@@ -76,64 +60,27 @@
          
            
                <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
-			<classpath>
-			 <fileset dir="${basedir}/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            <fileset dir="${basedir}/dataportal/common/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-		        </classpath>
-           
+			<classpath refid="compile.classpath"/>
 			<arg line="shopcart '${basedir}/dataportal/ShoppingCart/build' '${catalina.home}/conf/Catalina/localhost/shopcart.xml'" />
 			</java>
                       
    
            
                <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
-			<classpath>
-			 <fileset dir="${basedir}/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            <fileset dir="${basedir}/dataportal/common/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-		        </classpath>
+			<classpath refid="compile.classpath"/>
            
 			<arg line="datatransfer '${basedir}/dataportal/datatransfer/build' '${catalina.home}/conf/Catalina/localhost/datatransfer.xml'" />
 			</java>
                       
          
             <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
-			<classpath>
-			 <fileset dir="${basedir}/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            <fileset dir="${basedir}/dataportal/common/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-		        </classpath>
+			<classpath refid="compile.classpath"/>
            
 			<arg line="lookup '${basedir}/dataportal/uddilookup/build' '${catalina.home}/conf/Catalina/localhost/lookup.xml'" />
                         			</java>
                     
       <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
-			<classpath>
-			 <fileset dir="${basedir}/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            <fileset dir="${basedir}/dataportal/common/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-		        </classpath>
+			<classpath refid="compile.classpath"/>
            
 			<arg line="authent '${basedir}/dataportal/authent/build' '${catalina.home}/conf/Catalina/localhost/authent.xml'" />
                         			</java>
@@ -141,33 +88,14 @@
          
            
                  <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
-			<classpath>
-			 <fileset dir="${basedir}/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            <fileset dir="${basedir}/dataportal/common/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            
-		        </classpath>
+			<classpath refid="compile.classpath"/>
            
 			<arg line="sessionmanager '${basedir}/dataportal/sessionmanager/build' '${catalina.home}/conf/Catalina/localhost/sessionmanager.xml'" />
                         			</java>
                       
           
                  <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
-			<classpath>
-			 <fileset dir="${basedir}/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-                            <fileset dir="${basedir}/dataportal/common/lib">
-				<include name="*.jar"/>
-                                
-			</fileset>
-		        </classpath>
+			<classpath refid="compile.classpath"/>
            
 			<arg line="queryandreply '${basedir}/dataportal/queryandreply/build' '${catalina.home}/conf/Catalina/localhost/queryandreply.xml'" />
                         			</java>
@@ -176,6 +104,18 @@
 
    </target>
    
+   
+   <path id="compile.classpath">
+		
+		
+		<fileset dir="${common.tomcat.lib}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${common.lib}">
+			<include name="*.jar"/>
+		</fileset>
+		
+	</path>
    
     <!-- the following targer is called to process all subprojects -->
 			

@@ -60,7 +60,7 @@ public class deleteFacilityServlet extends HttpServlet {
             
             String facilityID = (String)request.getParameter("id");
         
-            UDDIHelper uddi = new UDDIHelper();
+            UDDIHelper uddi = new UDDIHelper(null);
             uddi.deleteFacility(facilityID);
             response.sendRedirect("../jsp/deleteFacility.jsp");
         }

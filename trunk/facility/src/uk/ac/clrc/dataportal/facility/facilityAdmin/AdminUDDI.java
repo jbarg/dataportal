@@ -45,7 +45,7 @@ public class AdminUDDI {
             command = (Element) request.getChildren().get(0);
         }
         
-        UDDIHelper uddi = new UDDIHelper();
+        UDDIHelper uddi = new UDDIHelper("");
         Element returnElement = new Element(command.getName());
         
         
@@ -99,7 +99,7 @@ public class AdminUDDI {
             command = (Element) request.getChildren().get(0);
         }
         
-        UDDIHelper uddi = new UDDIHelper();
+        UDDIHelper uddi = new UDDIHelper("");
         Element returnElement = new Element(command.getName());
         
         
@@ -132,7 +132,7 @@ public class AdminUDDI {
             command = (Element) request.getChildren().get(0);
         }
         
-        UDDIHelper uddi = new UDDIHelper();
+        UDDIHelper uddi = new UDDIHelper("");
         Element returnElement = new Element(command.getName());
         
         
@@ -179,7 +179,7 @@ public class AdminUDDI {
             command = (Element) request.getChildren().get(0);
         }
         
-        UDDIHelper uddi = new UDDIHelper();
+        UDDIHelper uddi = new UDDIHelper("");
         Element returnElement = new Element(command.getName());
         // Create vector to hold service beans
         Vector serviceBeanVector = new Vector();
@@ -240,7 +240,7 @@ public class AdminUDDI {
             command = (Element) request.getChildren().get(0);
         }
         
-        UDDIHelper uddi = new UDDIHelper();
+        UDDIHelper uddi = new UDDIHelper("");
         Element returnElement = new Element(command.getName());
         
         // This is really the same as the createFacility operation

@@ -29,7 +29,8 @@ import javax.xml.namespace.QName;
 import org.apache.axis.AxisFault;
 import uk.ac.dl.topicmanager.*;
 import uk.ac.dl.beans.*;
-
+import uk.ac.cclrc.db.DBAccess;
+import uk.ac.dl.dn.Convert;
 
 
 //
@@ -108,7 +109,7 @@ public class LoginServlet extends HttpServlet {
         //get user input values
         String reName = request.getParameter("username");
         String rePass = request.getParameter("password");
-        String servername = request.getParameter("servername");        
+        String servername = request.getParameter("servername");
         String dn = request.getParameter("dn");
         int port = Integer.parseInt(request.getParameter("port"));
         
@@ -134,22 +135,13 @@ public class LoginServlet extends HttpServlet {
                 
                 prop = new Properties();
                 prop.load(new FileInputStream(workingDir+File.separator+"WEB-INF"+File.separator+"web.conf"));
-                lookup = prop.getProperty("LookupWebService");
-                String id = prop.getProperty("defaultid");
-                String emineralsS = prop.getProperty("eminerals");
-                if(emineralsS == null || !emineralsS.equalsIgnoreCase("true")) emineralsS = "false";
-                eminerals = new Boolean(emineralsS).booleanValue();
+                lookup = prop.getProperty("LookupWebService","http://localhost:8080/lookup/services/LookUpService");
+                String id = prop.getProperty("defaultid","DataPortal");
+                
+                
                 locations = getLocations(lookup,id);
                 
-                //hard code for now
-                //String shopcart= prop.getProperty("sc_url");
-                // rasgrib= prop.getProperty("ras_url");
-                //String transfer = prop.getProperty("trans_url");
-                String proxy = prop.getProperty("proxy_server_url");
-                locations.put("proxy_server_url",proxy);
-                //.put("sc_url",shopcart);
-                //locations.put("ras_url",rasgrib);
-                //locations.put("trans_url",transfer);
+                
                 session.setAttribute("props",locations);
                 
                 sessionid = loginOn( session,reName,rePass,lifetime,servername,dn,port,locations);
@@ -184,13 +176,6 @@ public class LoginServlet extends HttpServlet {
             //set clock
             //get HPC info out of the prop file
             
-            //NOT NEEDED ANYMORE
-          /*  String isHPC  = prop.getProperty("isHPC");
-            String HPC_url = prop.getProperty("HPC_url");
-            session.setAttribute("isHPC", isHPC);
-            session.setAttribute("HPC_url",HPC_url);*/
-            
-            
             //get browser type and version
             String browser = null;
             String req_header = request.getHeader("User-Agent");
@@ -198,7 +183,7 @@ public class LoginServlet extends HttpServlet {
                 browser = getBrowser(request);
             }
             catch(Exception e){
-                browser = "IE5";
+                browser = "IE6";
                 logger.warn("Exception with get browser",e);
             }
             
@@ -222,7 +207,7 @@ public class LoginServlet extends HttpServlet {
             }
             else if(prop.getProperty("logging").equals("true")){
                 try{
-                    logUser(sessionid,locations.getProperty("SESSION"),prop);
+                    logUser(sessionid,locations.getProperty("SESSION"),prop,userdn);
                 }
                 catch(Exception e){
                     logger.fatal("Could not update users logging",e);
@@ -243,13 +228,13 @@ public class LoginServlet extends HttpServlet {
                             String meta_topic = prop.getProperty((String)facs.get(i)+"_topic");
                             //Document mydoc = TopicManager.buildTopics("jdbc:oracle:thin:@elektra.dl.ac.uk:1521:emat1","emat","tame");
                             Document mydoc = TopicManager.buildTopics(meta_url,meta_username,meta_passwd, meta_topic);
-                            Saver.save(mydoc,new File(workingDir+File.separator+"profiles"+File.separator+facilityName.toLowerCase()+".xml"+sessionid));
+                            Saver.save(mydoc,new File(workingDir+File.separator+"profiles"+File.separator+facilityName.toLowerCase()+"_"+Convert.removeSpaces(userdn)+".xml"));
                         }
                         
                         
                         else{
                             File xmlfile = new File(workingDir+File.separator+"xml"+File.separator+(String)facs.get(i)+".xml");
-                            if(xmlfile.exists()) copyFile(xmlfile,new File(workingDir+File.separator+"profiles"+File.separator+facilityName.toLowerCase()+sessionid));
+                            if(xmlfile.exists()) copyFile(xmlfile,new File(workingDir+File.separator+"profiles"+File.separator+facilityName.toLowerCase()+"_"+Convert.removeSpaces(userdn)+".xml"));
                             else {
                                 logger.error("Unable to find the xml for "+xmlfile);
                                 facs.remove(i);
@@ -309,339 +294,294 @@ public class LoginServlet extends HttpServlet {
             
             response.sendRedirect("../jsp/ErrorLogin.jsp");
         }
-        }
+    }
+    
+    
+    
+    /** Uses the request header to determine the browser type and version
+     *
+     */
+    
+    public String getBrowser(HttpServletRequest request){
         
         
         
-        /** Uses the request header to determine the browser type and version
-         *
-         */
+        String browsertype = null;
+        String browser = request.getHeader("User-Agent");
+        String name = request.getParameter("username");
+        HttpSession session = request.getSession();
         
-        public String getBrowser(HttpServletRequest request){
-            
-            
-            
-            String browsertype = null;
-            String browser = request.getHeader("User-Agent");
-            String name = request.getParameter("username");
-            HttpSession session = request.getSession();
-            
-            
+        
             /*gets the actual name of the browser, because Mircosoft used to
              hide their browser name.*/
-            if(browser.indexOf("MSIE 6")>=0){
-                browsertype = "IE6";
-                
-            }
-            
-            else  if(browser.indexOf("MSIE 5")>=0){
-                browsertype = "IE5";
-                
-            }
-            
-            else if(browser.indexOf("Netscape/7")>=0){
-                browsertype = "N7";
-            }
-            
-            else if(browser.indexOf("Netscape6")>=0){
-                browsertype = "N6";
-                
-            }
-            
-            else if(browser.indexOf("Mozilla/4.")>=0){
-                browsertype= "N4";
-            }
-            
-            else if(browser.indexOf("Mozilla/3.")>=0){
-                
-                browsertype= "N3";
-            }
-            else if(browser.indexOf("Konqueror")>=0){
-                
-                browsertype= "Konqueror";
-            }
-            
-            else if(browser.indexOf("Opera")>=0){
-                browsertype= "Opera";
-                
-            }
-            else if(browser.indexOf("Mozilla/5")>=0){
-                
-                browsertype ="Mozilla";
-            }
-            
-            else browsertype = "other";
-            // logger.info("Browser is "+browsertype);
-            
-            
-            
-            //read in file
-            
-            String[] br = {"IE6","IE5","N7","N6","N4","N3","Konqueror","Opera","Mozilla","other"};
-            String wd = (String)session.getAttribute("wd");
-            try{
-                File fr = new File(wd+File.separator+"log"+File.separator+"browser.txt");
-                if(fr.exists()){
-                    
-                    FileReader file = new FileReader(fr);
-                    //
-                    
-                    BufferedReader buff = new BufferedReader(file);
-                    int[] res = new int[br.length];
-                    float[] f = new float[br.length];
-                    String line = null;
-                    
-                    int i  =0;
-                    while ((line = buff.readLine()) != null) {
-                        res[i] = Integer.parseInt(line);
-                        i++;
-                        
-                    }
-                    
-                    for(int i1 = 0; i1<br.length;i1++){
-                        if(browsertype.equals(br[i1])) res[i1] = res[i1]+1;
-                    }
-                    FileWriter wr = new FileWriter(fr);
-                    
-                    for(int p = 0;p < br.length ;p++){
-                        wr.write(String.valueOf(res[p])+"\n");
-                    }
-                    wr.close();
-                    
-                }
-            }
-            
-            catch(Exception e){
-                logger.error("unable to count the browser tyep",e);
-            }
-            
-            if(browsertype.equals("N4")) browsertype="Netscape 4.0";
-            
-            return browsertype;
+        if(browser.indexOf("MSIE 6")>=0){
+            browsertype = "IE6";
             
         }
         
-        
-        
-        
-        
-        
-        
-        //temp method to update the session managers number 9 last accessed time
-        
-        private String loginOn(HttpSession session,String username,String passphrase,String lifetime,String servername, String dn, int port ,Properties locations) throws Exception{
+        else  if(browser.indexOf("MSIE 5")>=0){
+            browsertype = "IE5";
             
-            try{
-                String endpoint = locations.getProperty("AUTH");
+        }
+        
+        else if(browser.indexOf("Netscape/7")>=0){
+            browsertype = "N7";
+        }
+        
+        else if(browser.indexOf("Netscape6")>=0){
+            browsertype = "N6";
+            
+        }
+        
+        else if(browser.indexOf("Mozilla/4.")>=0){
+            browsertype= "N4";
+        }
+        
+        else if(browser.indexOf("Mozilla/3.")>=0){
+            
+            browsertype= "N3";
+        }
+        else if(browser.indexOf("Konqueror")>=0){
+            
+            browsertype= "Konqueror";
+        }
+        
+        else if(browser.indexOf("Opera")>=0){
+            browsertype= "Opera";
+            
+        }
+        else if(browser.indexOf("Mozilla/5")>=0){
+            
+            browsertype ="Mozilla";
+        }
+        
+        else browsertype = "other";
+        // logger.info("Browser is "+browsertype);
+        
+        
+        
+        //read in file
+        
+        String[] br = {"IE6","IE5","N7","N6","N4","N3","Konqueror","Opera","Mozilla","other"};
+        String wd = (String)session.getAttribute("wd");
+        try{
+            File fr = new File(wd+File.separator+"log"+File.separator+"browser.txt");
+            if(fr.exists()){
                 
-                //System.out.println("authent url "+endpoint);
+                FileReader file = new FileReader(fr);
+                //
+                
+                BufferedReader buff = new BufferedReader(file);
+                int[] res = new int[br.length];
+                float[] f = new float[br.length];
+                String line = null;
+                
+                int i  =0;
+                while ((line = buff.readLine()) != null) {
+                    res[i] = Integer.parseInt(line);
+                    i++;
+                    
+                }
+                
+                for(int i1 = 0; i1<br.length;i1++){
+                    if(browsertype.equals(br[i1])) res[i1] = res[i1]+1;
+                }
+                FileWriter wr = new FileWriter(fr);
+                
+                for(int p = 0;p < br.length ;p++){
+                    wr.write(String.valueOf(res[p])+"\n");
+                }
+                wr.close();
+                
+            }
+        }
+        
+        catch(Exception e){
+            logger.error("unable to count the browser tyep",e);
+        }
+        
+        if(browsertype.equals("N4")) browsertype="Netscape 4.0";
+        
+        return browsertype;
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    //temp method to update the session managers number 9 last accessed time
+    
+    private String loginOn(HttpSession session,String username,String passphrase,String lifetime,String servername, String dn, int port ,Properties locations) throws Exception{
+        
+        try{
+            String endpoint = locations.getProperty("AUTH");
+            
+            //System.out.println("authent url "+endpoint);
+            Service  service = new Service();
+            Call  call    = (Call) service.createCall();
+            
+            call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+            call.setOperationName( "login" );
+            call.addParameter( "userName", XMLType.XSD_STRING, ParameterMode.IN );
+            call.addParameter( "password", XMLType.XSD_STRING, ParameterMode.IN );
+            call.addParameter( "lifetime", XMLType.XSD_INT, ParameterMode.IN );
+            call.addParameter( "servername", XMLType.XSD_STRING, ParameterMode.IN );
+            call.addParameter( "dn", XMLType.XSD_STRING, ParameterMode.IN );
+            call.addParameter( "port", XMLType.XSD_INT, ParameterMode.IN );
+            call.setReturnType( XMLType.XSD_STRING );
+            
+            Object[] ob = new Object[]{username,passphrase,Integer.valueOf(lifetime),servername,dn,new Integer(port)};
+            
+            String sid = (String) call.invoke(ob );
+            
+            return sid;
+        }
+        catch(Exception e){
+            throw e;
+        }
+    }
+    
+    
+    private ArrayList getFacilities(HttpSession session,Properties locations)throws Exception{
+        
+        try{
+            String endpoint = locations.getProperty("SESSION");
+            String sid = (String)session.getAttribute("sessionid");
+            
+            Service  service = new Service();
+            Call  call    = (Call) service.createCall();
+            
+            call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+            call.setOperationName( "getPermissions" );
+            call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
+            call.setReturnType(new javax.xml.namespace.QName("", "ArrayOfArrayOf_xsd_string"), java.lang.String[][].class);
+            
+            
+            Object[] ob = new Object[]{sid};
+            
+            
+            String[][] ret = (String[][]) call.invoke(ob );
+            ArrayList arraylist = new ArrayList();
+            
+            for(int i =0; i < ret.length;i++){
+                arraylist.add(ret[i][1]);
+                
+            }
+            
+            return arraylist;
+        }
+        
+        catch(Exception e){
+            // System.out.println(e);
+            throw e;
+        }
+    }
+    
+    private Properties getLocations(String lookup, String defaultid) throws Exception{
+        Properties prop = new Properties();
+        String[] serviceTypes = {"SESSION","QNR","AUTH","CART","DTS"};
+        
+        //locate the prop file.  Normally get this from web.xml file
+        
+        
+        try{
+            for(int i =0;i<serviceTypes.length;i++){
                 Service  service = new Service();
                 Call  call    = (Call) service.createCall();
                 
-                call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-                call.setOperationName( "login" );
-                call.addParameter( "userName", XMLType.XSD_STRING, ParameterMode.IN );
-                call.addParameter( "password", XMLType.XSD_STRING, ParameterMode.IN );
-                call.addParameter( "lifetime", XMLType.XSD_INT, ParameterMode.IN );
-                call.addParameter( "servername", XMLType.XSD_STRING, ParameterMode.IN );
-                call.addParameter( "dn", XMLType.XSD_STRING, ParameterMode.IN );
-                call.addParameter( "port", XMLType.XSD_INT, ParameterMode.IN );
-                call.setReturnType( XMLType.XSD_STRING );
+                call.setTargetEndpointAddress( new java.net.URL(lookup) );
+                call.setOperationName( "LookupEndpoint" );
+                call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
+                call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
+                call.setReturnType( XMLType.SOAP_ARRAY );
+                //defaultid is the name of the Dataportal in the UDDI
+                String[] name = {defaultid};
+                Object[] ob = new Object[]{name,serviceTypes[i]};
                 
-                Object[] ob = new Object[]{username,passphrase,Integer.valueOf(lifetime),servername,dn,new Integer(port)};
+                String[] url = (String[]) call.invoke(ob );
+                logger.info(url[0] + "   "+serviceTypes[i]);
                 
-                String sid = (String) call.invoke(ob );
-                
-                return sid;
-            }
-            catch(Exception e){
-                throw e;
+                prop.put(serviceTypes[i],url[0]);
             }
         }
+        catch(Exception e){
+            logger.warn("Unable to locate web service locations ",e);
+            throw e;
+        }
+        //add the ones that arent in the dataportal lookup
+        //prop.add("
+        return prop;
         
+    }
+    
+    public synchronized void logUser(String sessionid,String session_url,Properties prop,String userDn) throws Exception{
         
-        private ArrayList getFacilities(HttpSession session,Properties locations)throws Exception{
+        DBAccess db=  null;
+        try {
+            db = new DBAccess("dataportalDB");
+            db.connect();
+            ResultSet rs = db.getData("select * from userlog where dn = '"+userDn+"' ");
+            if(rs.next()){
+                int hits =  rs.getInt("hits");
+                hits++;
+                db.updateData("update userlog set hits="+new Integer(hits)+" where dn='"+userDn+"'");                
+            }
+            else{
+                 db.updateData("insert into userlog values ('"+userDn+"',1)");
+                
+            }
             
+        }
+        catch(Exception e){
+            logger.warn("Unable to update user database for user: "+userDn,e );
+        }
+        finally {
             try{
-                String endpoint = locations.getProperty("SESSION");
-                String sid = (String)session.getAttribute("sessionid");
-                
-                Service  service = new Service();
-                Call  call    = (Call) service.createCall();
-                
-                call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-                call.setOperationName( "getPermissions" );
-                call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
-                call.setReturnType(new javax.xml.namespace.QName("", "ArrayOfArrayOf_xsd_string"), java.lang.String[][].class);
-                
-                
-                Object[] ob = new Object[]{sid};
-                
-                
-                String[][] ret = (String[][]) call.invoke(ob );
-                ArrayList arraylist = new ArrayList();
-                
-                for(int i =0; i < ret.length;i++){
-                    arraylist.add(ret[i][1]);
-                    
-                }
-                
-                return arraylist;
-            }
-            
-            catch(Exception e){
-                // System.out.println(e);
-                throw e;
-            }
-        }
-        
-        private Properties getLocations(String lookup, String defaultid) throws Exception{
-            Properties prop = new Properties();
-            String[] serviceTypes = {"SESSION","QNR","AUTH","CART","DTS"};
-            
-            //locate the prop file.  Normally get this from web.xml file
-            
-            
-            try{
-                for(int i =0;i<serviceTypes.length;i++){
-                    Service  service = new Service();
-                    Call  call    = (Call) service.createCall();
-                    
-                    call.setTargetEndpointAddress( new java.net.URL(lookup) );
-                    call.setOperationName( "LookupEndpoint" );
-                    call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
-                    call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
-                    call.setReturnType( XMLType.SOAP_ARRAY );
-                    //defaultid is the name of the Dataportal in the UDDI
-                    String[] name = {defaultid};
-                    Object[] ob = new Object[]{name,serviceTypes[i]};
-                    
-                    String[] url = (String[]) call.invoke(ob );
-                    logger.info(url[0] + "   "+serviceTypes[i]);
-                    
-                    prop.put(serviceTypes[i],url[0]);
-                }
-            }
-            catch(Exception e){
-                logger.warn("Unable to locate web service locations ",e);
-                throw e;
-            }
-            //add the ones that arent in the dataportal lookup
-            //prop.add("
-            return prop;
+                db.disconnect();
+            }catch(Exception ignore){}
             
         }
         
-        public synchronized void logUser(String sessionid,String session_url,Properties prop) throws Exception{
-            
+        
+    }
+    
+    private String getDN(String sid,String sessionUrl){
+        try{
             //get the dn from the session manager
             Service  service = new Service();
             Call  call    = (Call) service.createCall();
             
-            call.setTargetEndpointAddress( new java.net.URL(session_url) );
+            call.setTargetEndpointAddress( new java.net.URL(sessionUrl) );
             call.setOperationName( "getDName" );
             call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
             
             call.setReturnType( XMLType.XSD_STRING);
             
-            Object[] ob = new Object[]{sessionid};
+            Object[] ob = new Object[]{sid};
             
             String dn = (String) call.invoke(ob );
-            //got dn
-            
-            //put into database
-            Connection myConn = null;
-            Statement stat = null;
-            ResultSet rs = null;
-            try{
-                //System.out.println("from cart in shop driver is "+prop.getProperty("db_driver"));
-                Class.forName(prop.getProperty("db_driver"));
-                
-                myConn = DriverManager.getConnection(prop.getProperty("db_url")+"/"+prop.getProperty("db_name"),prop.getProperty("db_user"),prop.getProperty("db_password"));
-                
-                String table = prop.getProperty("db_table_name");
-                
-                //first check if user has cart
-                stat = myConn.createStatement();
-                rs = stat.executeQuery("select * from "+table+" where dn = '"+dn+"' ");
-                
-                if(rs.next()){
-                    int hits =  rs.getInt("hits");
-                    hits++;
-                    stat.executeUpdate("update "+table+" set hits="+new Integer(hits)+" where dn='"+dn+"'");
-                    
-                }
-                else{
-                    stat.executeUpdate("insert into "+table+" values ('"+dn+"',1)");
-                    
-                }
-                
-                rs.close();
-                rs = null;
-                
-                stat.close();
-                stat =null;
-                
-                myConn.close();
-                myConn = null;
-            }
-            catch(Exception e){
-                throw e;
-            }
-            finally {
-                // Always make sure result sets and statements are closed,
-                // and the connection is returned to the pool
-                if (rs != null) {
-                    try { rs.close(); } catch (SQLException e) { ; }
-                    rs = null;
-                }
-                if (stat != null) {
-                    try { stat.close(); } catch (SQLException e) { ; }
-                    stat = null;
-                }
-                if (myConn != null) {
-                    try { myConn.close(); } catch (SQLException e) {
-                        logger.warn("Connection unable to be closed",e);  }
-                    myConn = null;
-                }
-            }
-            
+            return dn;
         }
-        
-        private String getDN(String sid,String sessionUrl){
-            try{
-                //get the dn from the session manager
-                Service  service = new Service();
-                Call  call    = (Call) service.createCall();
-                
-                call.setTargetEndpointAddress( new java.net.URL(sessionUrl) );
-                call.setOperationName( "getDName" );
-                call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
-                
-                call.setReturnType( XMLType.XSD_STRING);
-                
-                Object[] ob = new Object[]{sid};
-                
-                String dn = (String) call.invoke(ob );
-                return dn;
-            }
-            catch(Exception e){
-                logger.warn("Unable to get DN from sid",e);
-                return  "Unknown";
-            }
+        catch(Exception e){
+            logger.warn("Unable to get DN from sid",e);
+            return  "Unknown";
         }
-        
-        private void copyFile(File in, File out) throws Exception {
-            FileChannel sourceChannel = new
-            FileInputStream(in).getChannel();
-            FileChannel destinationChannel = new
-            FileOutputStream(out).getChannel();
-            sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
-            // or
-            //  destinationChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-            sourceChannel.close();
-            destinationChannel.close();
-            
-        }
+    }
+    
+    private void copyFile(File in, File out) throws Exception {
+        FileChannel sourceChannel = new
+        FileInputStream(in).getChannel();
+        FileChannel destinationChannel = new
+        FileOutputStream(out).getChannel();
+        sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
+        // or
+        //  destinationChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+        sourceChannel.close();
+        destinationChannel.close();
         
     }
+    
+}

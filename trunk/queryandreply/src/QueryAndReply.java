@@ -16,10 +16,15 @@ public class QueryAndReply {
     static Logger logger = Logger.getLogger(QueryAndReply.class);
     static Properties prop = new Properties();
     
+     static {
+         //locate the prop file.  Normal get this from web.xml file
+        PropertyConfigurator.configure(Config.getContextPath()+"log4j.properties");
+        
+    }
     public QueryAndReply() throws Exception {
         
         logger.info("STARTING QueryAndReply SERVICE");
-
+        
         // Load the properties file
         try {
             prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
@@ -54,7 +59,7 @@ public class QueryAndReply {
         QueryAndReply qr = new QueryAndReply();
         String[] facList = {"BADC","SRD"};
         String topic = "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'";
-
+        
         qr.doBasicQuery("4c6568fc-266b-11d8-ab48-c915b2368155", facList,topic,new Integer(30000));
     }
 }

@@ -16,7 +16,7 @@ public class Convert {
     public Convert() {
     }
     
-    static String removeSpaces(String string){
+public static String removeSpaces(String string){
         int n = string.length();
         StringBuffer h = new StringBuffer();
         for(int i = 0; i<n; i++){

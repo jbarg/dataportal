@@ -23,7 +23,9 @@ public final class Converter {
     /** Takes a JDOM document and converts it to a w3c DOM document
      * @param document JDOM document
      * @return w3c document
-     * @throws JDOMException When erro with parsing
+     * @throws JDOMException When error with parsing
+     *  @since 1.3
+     * 
      */
     public static org.w3c.dom.Document JDOMtoDOM(org.jdom.Document document) throws XMLException{
         

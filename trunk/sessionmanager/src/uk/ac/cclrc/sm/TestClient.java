@@ -1,6 +1,6 @@
 package src.uk.ac.cclrc.sm;
 
-/*
+
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
@@ -14,15 +14,14 @@ import java.sql.*;
 import java.net.URL;
 import java.net.URLConnection;
 
-*/
 // Test client for the Session Manager web service
 public class TestClient {
-/*    
+    
     private static String endpoint = "http://localhost:8080/sessionmanager/services/SessionManager";
     private static String sid = null;
-    private static final String proxy = "file:///E:/cog-1.1/build/cog-1.1/bin/x509up_36855.pem";
+    private static final String proxy = "file:///D:/glen.pem";
     
-    public void startSession() throws Exception {
+ /*   public void startSession() throws Exception {
         
         System.out.println("Testing startSession()");
         // path of proxy certificate

@@ -9,14 +9,39 @@ import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
 import org.apache.axis.utils.Options;
-
+import org.ietf.jgss.*;
+import org.gridforum.jgss.*;
+import java.security.cert.X509Certificate;
 import javax.xml.rpc.ParameterMode;
 
 public class AuthClient {
     
     /** Creates a new instance of AcmClient */
     public AuthClient() {
+        
+    /*    try{
+            GSSCredential portalProxy = null;
+            X509Certificate userCert = null;
+            
+            portalProxy = PortalCredential.getPortalProxy();
+            
+            org.globus.myproxy.MyProxy proxy = new org.globus.myproxy.MyProxy( "myproxy.grid-support.ac.uk", 7512);
+            
+            GSSCredential delegateUserProxy = proxy.get( "myproxy.grid-support.ac.uk",
+            7512,
+            portalProxy,
+            "glen",
+            "kkkkkk",
+            3600,
+            "/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/myproxy.grid-support.ac.uk/E=a.j.richards@dl.ac.uk" );
+            
+            
+            
         }
+        catch(Exception e){
+            System.out.println(e);
+        }*/
+    }
     
     public static void main(String [] args) throws Exception {
         

@@ -48,7 +48,7 @@
                        Defaults to "dist".
 -->
 	
-	<property name="dataportal.src" value="../dataportal"/>
+	<property name="dataportal.src" value="../"/>
 	<property name="dataportal.home" value="${basedir}/dataportal"/>
 	<!-- UPDATE THIS! -->
 	<property name="server.name" value="${server.name}"/>
@@ -108,9 +108,10 @@
     Copies all directories from dataportal home and then cleans them.
     
     -->
-    <target name="install_dp" description="Installs all of the directories to the dataportal">
-     <antcall target="copy_dp" />
-     <antcall target="clean_dp" />   
+    <target name="install_modules" description="Installs all of the directories to the dataportal">
+        <antcall target="delete_dp" /> 
+    <antcall target="copy_dp" />
+    
     
     </target>
         
@@ -120,8 +121,17 @@
 	    Copies all directories from dataportal home and then cleans them.
 	    
 	    -->
-	    <target name="copy_dp" description="Copies all of the directories to the dataportal">
-	   
+            
+           <target name="copy_dp" description="Copies all of the directories to the dataportal">
+               <antcall target="copy_modules" />
+               <antcall target="copy_libs" />   
+           
+           </target>  
+            
+	    <target name="copy_modules" description="">
+                
+             
+              
 	      <copy todir="${dataportal.home}/WebInterface">
 	        <fileset dir="${dataportal.src}/WebInterface"/>
 	         </copy>
@@ -141,19 +151,36 @@
 	        <fileset dir="${dataportal.src}/datatransfer"/>
 	     	      </copy>
 	        <copy todir="${dataportal.home}/facility">
-	    	 <fileset dir="${dataportal.src}/facility"/>
-	    	
-	       </copy>
-	     
+	    	 <fileset dir="${dataportal.src}/facility"/>	    	
+	       </copy>	     
 	      <copy todir="${dataportal.home}/uddilookup">
-	         <fileset dir="${dataportal.src}/uddilookup"/>
-	         
+	         <fileset dir="${dataportal.src}/uddilookup"/>	         
 	      </copy>
 	    
+               <ant antfile="installation.xml" target="clean" inheritAll="false">  
+		   
+		  </ant> 	      
+			
+              
 	    </target>
-        
-        
-        
+            
+            
+        <target name="copy_libs">
+         <mkdir dir="${dataportal.home}/common" />
+        <mkdir dir="${dataportal.home}/common/shared" />
+              <copy todir="${dataportal.home}/common/shared">
+              <fileset dir="${dataportal.src}/common/tomcat/shared">
+                 <include name="*.jar"/>
+            </fileset>
+              </copy>
+              
+              <mkdir dir="${dataportal.home}/common/lib" />
+              <copy todir="${dataportal.home}/common/lib">
+              <fileset dir="${dataportal.src}/common/lib">
+                 <include name="*.jar"/>
+            </fileset>
+              </copy>
+        </target>
         <!-- ==================== clean DP =========================== -->
 		<!--
 		    Copies all directories from dataportal home and then cleans them.
@@ -183,128 +210,12 @@
 		<delete dir="${dataportal.home}/datatransfer"/>
 		<delete dir="${dataportal.home}/uddilookup"/>
 		<delete dir="${dataportal.home}/facility"/>
+                <delete dir="${dataportal.home}/common/shared"/>
+                <delete dir="${dataportal.home}/common/lib"/>
 	
 	</target>
 	
 	
-        
-        
-        
-        
-              
-        
-        <!-- ========================   Not called directly ============================= -->
-			
-			
-			
-			
-		
-		<!-- ==================== compile Target =================================== -->
-		   <target name="compile" description="Compile Java sources">
-		      <antcall target="do">
-		         <param name="target" value="compile"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== all Target =================================== -->
-		   <target name="all" description="Clean build and dist directories, then compile">
-		      <antcall target="do">
-		         <param name="target" value="all"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== clean Target =================================== -->
-		   <target name="clean" description="Delete old build and dist directories">
-		      <antcall target="do">
-		         <param name="target" value="clean"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== dist Target =================================== -->
-		   <target name="dist" description="Create binary distribution">
-		      <antcall target="do">
-		         <param name="target" value="dist"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== install Target =================================== -->
-		   <target name="install" description="Install application to servlet container">
-		      <antcall target="do" inheritAll="true">
-		         <param name="target" value="install"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== javadoc Target =================================== -->
-		   <target name="javadoc" description="Create Javadoc API documentation">
-		      <antcall target="do">
-		         <param name="target" value="javadoc"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== list Target =================================== -->
-		   <target name="list" description="List installed applications on servlet container">
-		      <antcall target="do">
-		         <param name="target" value="list"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== reload Target =================================== -->
-		   <target name="reload" description="Reload application on servlet container">
-		      <antcall target="do">
-		         <param name="target" value="reload"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== remove Target =================================== -->
-		   <target name="remove" description="Remove application on servlet container">
-		      <antcall target="do">
-		         <param name="target" value="remove"/>
-		       </antcall>
-		   </target>
-		
-		        <!-- the following targer is called to process all subprojects -->
-			
-			   <target name="do" description="redirects ant call to all dataportal modules">
-			   
-			    <ant antfile="${dataportal.home}/WebInterface/build.xml" target="${target}" inheritAll="true">  
-			   	         <property name="basedir" value="${dataportal.home}/WebInterface"/>
-			      </ant> 	      
-			
-			    <ant antfile="${dataportal.home}/datatransfer/build.xml" target="${target}" inheritAll="false">
-			         <property name="basedir" value="${dataportal.home}/datatransfer"/>
-			         <!--<property name="catalina.home" value="${catalina.home}" />-->
-			         
-			      </ant>
-			
-			      <ant antfile="${dataportal.home}/ShoppingCart/build.xml" target="${target}" inheritAll="false"> 
-			         <property name="basedir" value="${dataportal.home}/ShoppingCart"/>
-			      </ant>
-			
-			     				 
-					
-			      <ant antfile="${dataportal.home}/uddilookup/build.xml" target="${target}" inheritAll="false"> 
-			         <property name="basedir" value="${dataportal.home}/uddilookup"/>
-			      </ant>
-			
-			     <ant antfile="${dataportal.home}/facility/build.xml" target="${target}" inheritAll="false"> 
-			         <property name="basedir" value="${dataportal.home}/facility"/>
-			      </ant>		     
-			      
-			      <ant antfile="${dataportal.home}/authent/build.xml" target="${target}" inheritAll="false"> 
-			         <property name="basedir" value="${dataportal.home}/authent"/>
-			      </ant>
-			
-			    <ant antfile="${dataportal.home}/sessionmanager/build.xml" target="${target}" inheritAll="false"> 
-			         <property name="basedir" value="${dataportal.home}/sessionmanager"/>
-			      </ant>
-			
-			      <ant antfile="${dataportal.home}/queryandreply/build.xml" target="${target}" inheritAll="false"> 
-			         <property name="basedir" value="${dataportal.home}/queryandreply"/>
-			      </ant>	  
-			 
-   	</target>
-	
-        
         
 </project>
 

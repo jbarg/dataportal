@@ -64,15 +64,15 @@ return true;
 <tr><td width="200">Name </td><td width="20">&nbsp;</td><td><font size="2">XML Wrapper</font></td></tr>
 <tr><td width="200">Type </td><td width="20">&nbsp;</td><td><font size="2">XMLW</font></td></tr>
 <!--<tr><td rows="3">&nbsp;</td></tr>-->
-<tr><td width="200">URL Endpoint</td><td width="20">&nbsp;</td><td><input type="text" name="xmlw" size="70" value="http://localhost:8080/wrappers/services/xml_wrapperISIS" /></td></tr>
-<tr><td width="200">WSDL Endpoint</td><td width="20">&nbsp;</td><td><input type="text" name="xmlw_wsdl" size="70" value="http://localhost:8080/wrappers/services/xml_wrapperISIS?wsdl" /></td></tr>
+<tr><td width="200">URL Endpoint</td><td width="20">&nbsp;</td><td><input type="text" name="xmlw" size="70" value="http://localhost:8080/wrappers/services/xml_wrapperSRD" /></td></tr>
+<tr><td width="200">WSDL Endpoint</td><td width="20">&nbsp;</td><td><input type="text" name="xmlw_wsdl" size="70" value="http://localhost:8080/wrappers/services/xml_wrapperSRD?wsdl" /></td></tr>
 <tr><td width="200">Description </td><td width="20">&nbsp;</td><td><font size="2">Returns XML data from remote database</font></td></tr>
 <tr><td rows="3">&nbsp;</td></tr>
 <tr><td width="200">Name </td><td width="20">&nbsp;</td><td><font size="2">Access and Control Module</font></td></tr>
 <tr><td width="200">Type </td><td width="20">&nbsp;</td><td><font size="2">ACM</font></td></tr>
 
-<tr><td width="200">URL Endpoint</td><td width="20">&nbsp;</td><td><input type="text" name="acm" size="70" value="http://localhost:8080/acmisis/services/acm" /></td></tr>
-<tr><td width="200">WSDL Endpoint</td><td width="20">&nbsp;</td><td><input type="text" name="acm_wsdl" size="70" value="http://localhost:8080/acmisis/services/acm?wsdl" /></td></tr>
+<tr><td width="200">URL Endpoint</td><td width="20">&nbsp;</td><td><input type="text" name="acm" size="70" value="http://localhost:8080/acmisis/services/ACServer" /></td></tr>
+<tr><td width="200">WSDL Endpoint</td><td width="20">&nbsp;</td><td><input type="text" name="acm_wsdl" size="70" value="http://localhost:8080/acmisis/services/ACServer?wsdl" /></td></tr>
 <tr><td width="200">Description </td><td width="20">&nbsp;</td><td><font size="2">Controls access to the metadata</font></td></tr>
 <tr><td rows="3">&nbsp;</td></tr>
 <tr><td rows="3"><input type="submit" value="Create Facilty"/></td></tr>

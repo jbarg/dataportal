@@ -31,17 +31,21 @@ import java.util.Vector;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.io.FileInputStream;
+import org.apache.log4j.*;
+import uk.ac.cclrc.config.*;
 
-import org.apache.axis.components.logger.LogFactory;
-import org.apache.commons.logging.Log;
 
-
-public class LookUpModule
-{
-    Log log = LogFactory.getLog(this.getClass().getName());
+public class LookUpModule {
+    //set static log for the class
+    Logger log = Logger.getLogger(this.getClass().getName());
     
-    private UDDIProxy getUDDIProxy()
-    {
+    static {
+        //locate the prop file.  Normal get this from web.xml file
+        PropertyConfigurator.configure(Config.getContextPath()+"log4j.properties");
+        
+    }
+    
+    private UDDIProxy getUDDIProxy() {
         
         // Create a UDDI proxy based on the Apache SOAP transport
         System.setProperty(TransportFactory.PROPERTY_NAME, "org.uddi4j.transport.ApacheSOAPTransport");
@@ -49,73 +53,63 @@ public class LookUpModule
         //System.setProperty("org.uddi4j.logEnabled", "true");
         
         UDDIProxy proxy = null;
-        try
-        {
+        try {
             // Get UDDI URL properties
             Properties uddiProps = getUDDIProps();
             proxy = new UDDIProxy(new URL(uddiProps.getProperty("uddi_inquiry")), null);
             log.info("Using UDDI Server at  " + uddiProps.getProperty("uddi_inquiry"));
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         return proxy;
     }
     
-    private Properties getUDDIProps() throws Exception
-    {
+    private Properties getUDDIProps() throws Exception {
         // Load UDDI Properties from file - need to change this to include context path
         Properties UDDIProps = null;
         // This is hardcoded for testing outside of Axis - when running in Axis it gets overwritten by the context path below
-        String propertiesFileName = "C:/cygwin/home/maw24/dataportal/lookup/web/WEB-INF/uddi.properties";
+        String propertiesFileName = "C:/tmp/uddi.properties";
         
         // We can only get the context path when deployed within Axis
         MessageContext messageContext = MessageContext.getCurrentContext();
-        if (messageContext != null)
-        {
+        if (messageContext != null) {
             HttpServletRequest request = (HttpServletRequest) messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
             String fileSeparator = System.getProperty("file.separator");
             propertiesFileName = request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(fileSeparator));
             propertiesFileName = propertiesFileName + fileSeparator + "WEB-INF" + fileSeparator + "uddi.properties";
         }
         
-        try
-        {
+        try {
             log.info("Loading properties from " + propertiesFileName);
             UDDIProps = new Properties();
             FileInputStream in = new FileInputStream(propertiesFileName);
             UDDIProps.load(in);
             in.close();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             throw e;
         }
         
         return UDDIProps;
     }
     
-    public String[] lookup(String[] facilityList, String serviceType)
-    {
+    public String[] lookup(String[] facilityList, String serviceType) {
         // Hook to call lookupWSDL for backwards compatibility
         return lookupImpl(facilityList, serviceType, "Endpoint");
     }
     
-    public String[] lookupWSDL(String[] facilityList, String serviceType)
-    {
+    public String[] lookupWSDL(String[] facilityList, String serviceType) {
         // Hook to call lookupImpl with WSDL parameter
         return lookupImpl(facilityList, serviceType, "WSDL");
     }
     
-    public String[] lookupEndpoint(String[] facilityList, String serviceType)
-    {
+    public String[] lookupEndpoint(String[] facilityList, String serviceType) {
         // Hook to call lookupImpl with EndPoint parameter
         return lookupImpl(facilityList, serviceType, "EndPoint");
     }
     
-    private String[] lookupImpl(String[] facilityList, String serviceType, String query)
-    {
+    private String[] lookupImpl(String[] facilityList, String serviceType, String query) {
         
         /*  Input:  String array containing list of Facilities to search against (e.g. BADC or Dataportal)
          *          Service type (e.g. XMLW or ACL)
@@ -128,8 +122,7 @@ public class LookUpModule
         
         UDDIProxy proxy = getUDDIProxy();
         
-        try
-        {
+        try {
             // Search for exact match (i.e. no default wildcard)
             FindQualifiers fqs = new FindQualifiers();
             FindQualifier fq = new FindQualifier();
@@ -140,14 +133,12 @@ public class LookUpModule
             TModelList tModelList = proxy.find_tModel(serviceType, null, null, fqs, 0);
             Vector tModelInfoVector = tModelList.getTModelInfos().getTModelInfoVector();
             
-            if (tModelInfoVector.size() > 0)
-            {
+            if (tModelInfoVector.size() > 0) {
                 // Create a TModelBag to restrict business search to the TModels already found
                 TModelBag tModelBag = new TModelBag();
                 TModelKey tModelKey = new TModelKey();
                 
-                for (int t = 0; t < tModelInfoVector.size(); t++)
-                {
+                for (int t = 0; t < tModelInfoVector.size(); t++) {
                     // Add the TModelKey to the TModelBag
                     TModelInfo tModelInfo = (TModelInfo)tModelInfoVector.elementAt(t);
                     tModelKey.setText(tModelInfo.getTModelKey());
@@ -158,23 +149,20 @@ public class LookUpModule
                 Vector names = new Vector();
                 
                 // Have to do this in a loop since the NAME vector crashes the API when more than 1 name exists!
-                for (int i=0;i<facilityList.length;i++)
-                {
+                for (int i=0;i<facilityList.length;i++) {
                     names.clear();
                     names.add((new Name(facilityList[i])));
                     
                     // Find businesses by name, restricted by TModel
                     BusinessList businessList = proxy.find_business(names, null, null, null ,tModelBag ,fqs, 0);
                     Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
-                    for (int b = 0; b < businessInfoVector.size(); b++)
-                    {
+                    for (int b = 0; b < businessInfoVector.size(); b++) {
                         BusinessInfo businessInfo = (BusinessInfo)businessInfoVector.elementAt(b);
                         
                         // Find the services
                         ServiceList serviceList = proxy.find_service(businessInfo.getBusinessKey(), null, null, tModelBag, null, 0);
                         Vector serviceInfoVector = serviceList.getServiceInfos().getServiceInfoVector();
-                        for (int s=0; s< serviceInfoVector.size();s++)
-                        {
+                        for (int s=0; s< serviceInfoVector.size();s++) {
                             ServiceInfo serviceInfo = (ServiceInfo)serviceInfoVector.elementAt(s);
                             
                             // Get the service detail and store the wsdl path in our array
@@ -184,13 +172,11 @@ public class LookUpModule
                             Vector bindingTemplateVector = businessService.getBindingTemplates().getBindingTemplateVector();
                             BindingTemplate bindingTemplate = (BindingTemplate)bindingTemplateVector.elementAt(0);
                             String resultString = null;
-                            if (query.equalsIgnoreCase("EndPoint"))
-                            {
+                            if (query.equalsIgnoreCase("EndPoint")) {
                                 AccessPoint accessPoint = bindingTemplate.getAccessPoint();
                                 resultString = accessPoint.getText();
                             }
-                            else if (query.equalsIgnoreCase("WSDL"))
-                            {
+                            else if (query.equalsIgnoreCase("WSDL")) {
                                 TModelInstanceDetails details = bindingTemplate.getTModelInstanceDetails();
                                 Vector instanceInfoVector = details.getTModelInstanceInfoVector();
                                 TModelInstanceInfo instanceInfo = (TModelInstanceInfo)details.getTModelInstanceInfoVector().elementAt(0);
@@ -198,8 +184,7 @@ public class LookUpModule
                                 OverviewDoc odoc = instanceDetails.getOverviewDoc();
                                 resultString = odoc.getOverviewURLString();
                             }
-                            if (resultString != null)
-                            {
+                            if (resultString != null) {
                                 results[i] = resultString;
                             }
                         }
@@ -207,15 +192,13 @@ public class LookUpModule
                 }
             }
             
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return results;
     }
     
-    public String[] getServices(String facility)
-    {
+    public String[] getServices(String facility) {
         /* INPUT:  Facility name e.g. "BADC" or "DataPortal" for internal services
          * OUTPUT: String array of service types offered by the facility
          */
@@ -224,8 +207,7 @@ public class LookUpModule
         return getServicesImpl(proxy, facility);
     }
     
-    private String[] getServicesImpl(UDDIProxy proxy, String facility)
-    {
+    private String[] getServicesImpl(UDDIProxy proxy, String facility) {
         /* INPUT:  Facility name e.g. "BADC" or "DataPortal" for internal services
          *         UDDI proxy object so that other public method can also use this service
          * OUTPUT: String array of service types offered by the facility
@@ -233,8 +215,7 @@ public class LookUpModule
         
         Vector resultsVector = new Vector();
         
-        try
-        {
+        try {
             // Search for exact match (i.e. no default wildcard)
             FindQualifiers fqs = new FindQualifiers();
             FindQualifier fq = new FindQualifier();
@@ -253,15 +234,13 @@ public class LookUpModule
             Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
             names.clear();
             names.add(new Name("%"));
-            for (int b = 0; b < businessInfoVector.size(); b++)
-            {
+            for (int b = 0; b < businessInfoVector.size(); b++) {
                 BusinessInfo businessInfo = (BusinessInfo)businessInfoVector.elementAt(b);
                 
                 // Find the services
                 ServiceList serviceList = proxy.find_service(businessInfo.getBusinessKey(), names, null, null, null, 0);
                 Vector serviceInfoVector = serviceList.getServiceInfos().getServiceInfoVector();
-                for (int s=0; s < serviceInfoVector.size();s++)
-                {
+                for (int s=0; s < serviceInfoVector.size();s++) {
                     ServiceInfo serviceInfo = (ServiceInfo)serviceInfoVector.elementAt(s);
                     
                     // Get the service detail and store the wsdl path in our array
@@ -270,13 +249,11 @@ public class LookUpModule
                     BusinessService businessService = (BusinessService)businessServiceVector.elementAt(0);
                     BindingTemplates bindingTemplates = businessService.getBindingTemplates();
                     Vector bindingTemplateVector = null;
-                    if (bindingTemplates != null)
-                    {
+                    if (bindingTemplates != null) {
                         bindingTemplateVector = bindingTemplates.getBindingTemplateVector();
                     }
                     
-                    if (bindingTemplateVector != null && bindingTemplateVector.size() > 0)
-                    {
+                    if (bindingTemplateVector != null && bindingTemplateVector.size() > 0) {
                         BindingTemplate bindingTemplate = (BindingTemplate)bindingTemplateVector.elementAt(0);
                         TModelInstanceDetails details = bindingTemplate.getTModelInstanceDetails();
                         
@@ -286,8 +263,7 @@ public class LookUpModule
                         TModel tModel = null;
                         CategoryBag catBag = null;
                         
-                        if (instanceInfoVector.size() > 0)
-                        {
+                        if (instanceInfoVector.size() > 0) {
                             instanceInfo = (TModelInstanceInfo)instanceInfoVector.elementAt(0);
                             tModelKey = instanceInfo.getTModelKey();
                             TModelDetail tModelDetail = proxy.get_tModelDetail(tModelKey);
@@ -295,46 +271,39 @@ public class LookUpModule
                             catBag = tModel.getCategoryBag();
                         }
                         
-                        if (catBag != null)
-                        {
+                        if (catBag != null) {
                             Vector keyedReferenceVector = catBag.getKeyedReferenceVector();
                             boolean found = false;
-                            for (Enumeration e = keyedReferenceVector.elements();e.hasMoreElements();)
-                            {
+                            for (Enumeration e = keyedReferenceVector.elements();e.hasMoreElements();) {
                                 KeyedReference kr = (KeyedReference) e.nextElement();
-                                if (kr.getTModelKey().equals(wsdlKey))
-                                {
+                                if (kr.getTModelKey().equals(wsdlKey)) {
                                     found = true;
                                     break;
                                 }
                             }
                             
-                            if (found)
-                            {
+                            if (found) {
                                 resultsVector.add(tModel.getName().getText());
                             }
                         }
                     }
                 }
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
         // Convert our vector into a String array to return (easier for SOAP)
         String results[] = new String[resultsVector.size()];
         Enumeration e = resultsVector.elements();
-        for (int i=0;e.hasMoreElements();i++)
-        {
+        for (int i=0;e.hasMoreElements();i++) {
             results[i] = (String)e.nextElement();
         }
         
         return results;
     }
     
-    public String[] getServiceTypes()
-    {
+    public String[] getServiceTypes() {
         /* INPUT:  Nothing
          * OUTPUT: List all types of services offered. e.g. XMLW, ACL etc.
          */
@@ -343,8 +312,7 @@ public class LookUpModule
         
         Vector resultsVector = new Vector();
         
-        try
-        {
+        try {
             // Create an Identifier bag to retrieve only wsdlSpec TModels
             CategoryBag catBag = new CategoryBag();
             KeyedReference keyref = new KeyedReference("UDDI Types", "wsdlSpec", getTModelKey(proxy,"uddi-org:types"));
@@ -352,30 +320,26 @@ public class LookUpModule
             
             TModelList tModelList = proxy.find_tModel(null, catBag, null, null,0);
             Vector tModelInfoVector = tModelList.getTModelInfos().getTModelInfoVector();
-            for (Enumeration e = tModelInfoVector.elements();e.hasMoreElements();)
-            {
+            for (Enumeration e = tModelInfoVector.elements();e.hasMoreElements();) {
                 TModelInfo tModelInfo = (TModelInfo) e.nextElement();
                 resultsVector.add(tModelInfo.getNameString());
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         
         // Convert our vector into a String array to return (easier for SOAP)
         String results[] = new String[resultsVector.size()];
         Enumeration e = resultsVector.elements();
-        for (int i=0;e.hasMoreElements();i++)
-        {
+        for (int i=0;e.hasMoreElements();i++) {
             results[i] = (String)e.nextElement();
         }
         
         return results;
     }
     
-    public String[] getFacilities()
-    {
+    public String[] getFacilities() {
         /* INPUT:  Nothing
          * OUTPUT: List off all facilities registered in the DataPortal with services to offer
          */
@@ -389,20 +353,17 @@ public class LookUpModule
         qualifier.add(new FindQualifier(FindQualifier.sortByNameAsc));
         findQualifiers.setFindQualifierVector(qualifier);
         
-        try
-        {
+        try {
             TModelBag tmBag = getTModelBag(proxy);
             // If there are no TModels of type wsdlSpec then there can't be any Facilities!
-            if (tmBag.size() > 0)
-            {
+            if (tmBag.size() > 0) {
                 BusinessList businessList = proxy.find_business(null, null, null, null, tmBag, findQualifiers, 0);
                 Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
                 
                 String results[] = new String[businessInfoVector.size()];
                 
                 int i=0;
-                for (Enumeration e = businessInfoVector.elements();e.hasMoreElements();)
-                {
+                for (Enumeration e = businessInfoVector.elements();e.hasMoreElements();) {
                     BusinessInfo businessInfo = (BusinessInfo) e.nextElement();
                     results[i++] = businessInfo.getNameString();
                 }
@@ -410,14 +371,57 @@ public class LookUpModule
                 return results;
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         
         // Only return null if nothing was found!
         return null;
     }
+    
+    
+    //gets all of the facilities excluing the Data Portal
+    public String[] getFacilities(String exclude) {
+        /* INPUT:  Nothing
+         * OUTPUT: List off all facilities registered in the DataPortal with services to offer
+         */
+        
+        UDDIProxy proxy = getUDDIProxy();
+        
+        // Create some find qualifiers so that Tmodel bag keys are or'd when applied
+        FindQualifiers findQualifiers = new FindQualifiers();
+        Vector qualifier = new Vector();
+        qualifier.add(new FindQualifier(FindQualifier.orAllKeys));
+        qualifier.add(new FindQualifier(FindQualifier.sortByNameAsc));
+        findQualifiers.setFindQualifierVector(qualifier);
+        
+        try {
+            TModelBag tmBag = getTModelBag(proxy);
+            // If there are no TModels of type wsdlSpec then there can't be any Facilities!
+            if (tmBag.size() > 0) {
+                BusinessList businessList = proxy.find_business(null, null, null, null, tmBag, findQualifiers, 0);
+                Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
+                
+                String results[] = new String[businessInfoVector.size()-1];
+                
+                int i=0;
+                for (Enumeration e = businessInfoVector.elements();e.hasMoreElements();) {
+                    BusinessInfo businessInfo = (BusinessInfo) e.nextElement();
+                    if(!businessInfo.getNameString().equals(exclude))  results[i++] = businessInfo.getNameString();
+                }
+                
+                return results;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        // Only return null if nothing was found!
+        return null;
+    }
+    
+    
     private String getTModelKey(UDDIProxy proxy, String serviceType) throws UDDIException
     // Returns the TModel Key for our service type (e.g. XMLW or ACL etc)
     {
@@ -429,22 +433,18 @@ public class LookUpModule
         qualifier.add(new FindQualifier(FindQualifier.exactNameMatch));
         findQualifiers.setFindQualifierVector(qualifier);
         
-        try
-        {
+        try {
             TModelList tModelList = proxy.find_tModel(serviceType, null, null, findQualifiers, 1);
             Vector tModelInfoVector = tModelList.getTModelInfos().getTModelInfoVector();
-            if (!tModelInfoVector.isEmpty())
-            {
+            if (!tModelInfoVector.isEmpty()) {
                 TModelInfo tModelInfo = (TModelInfo) tModelInfoVector.elementAt(0);
                 tModelKey = tModelInfo.getTModelKey();
             }
         }
-        catch (UDDIException ue)
-        {
+        catch (UDDIException ue) {
             throw ue;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         return tModelKey;
@@ -460,23 +460,19 @@ public class LookUpModule
         KeyedReference keyref = new KeyedReference("UDDI Type","wsdlSpec", getTModelKey(proxy, "uddi-org:types"));
         catBag.add(keyref);
         
-        try
-        {
+        try {
             TModelList tModelList = proxy.find_tModel(null, catBag, null, null, 0);
             Vector tModelInfoVector = tModelList.getTModelInfos().getTModelInfoVector();
             
-            for (int t=0;t<tModelInfoVector.size();t++)
-            {
+            for (int t=0;t<tModelInfoVector.size();t++) {
                 TModelInfo tModelInfo = (TModelInfo) tModelInfoVector.elementAt(t);
                 tModelBag.add(new TModelKey(tModelInfo.getTModelKey()));
             }
         }
-        catch (UDDIException ue)
-        {
+        catch (UDDIException ue) {
             throw ue;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         

@@ -14,10 +14,11 @@ import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 import org.apache.log4j.*;
 import java.util.Properties;
-import ac.dl.xml.*;
+import uk.ac.dl.xml.*;
 import org.jdom.*;
 import java.io.*;
 import java.util.*;
+import uk.ac.dl.dn.Convert;
 
 /**
  *
@@ -38,7 +39,10 @@ public class Search {
             //add the exra string to the dis
             //take of the Disoc= from the dis
             String Discipline = "Discipline='"+discipline+"'";
-            
+             //get dn and take all / out the name
+            dn = Convert.removeSpaces(dn);
+                
+                
             Service  service = new Service();
             Call  call    = (Call) service.createCall();
             
@@ -62,7 +66,7 @@ public class Search {
             Document doc1  = new org.jdom.Document(el1);
             
             //System.out.println(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
-            Saver.save(doc1, new File(workingDir+File.separator+"profiles"+File.separator+sid+"1.xml"));
+            Saver.save(doc1, new File(workingDir+File.separator+"profiles"+File.separator+dn+"1.xml"));
             
             
             ArrayList res1 = new ArrayList();
@@ -95,15 +99,7 @@ public class Search {
                 for(int i =0;i<facs.length;i++){
                     buff2.append("&facs="+facs[i]);
                 }
-                //get dn and take all / out the name
-                int n = dn.length();
-                StringBuffer h = new StringBuffer();
-                for(int i = 0; i<n; i++){
-                    if( dn.charAt(i) == '/') h.append("_");
-                    else  if( dn.charAt(i) == ' ') h.append("_");
-                    else h.append(dn.charAt(i));
-                }
-                dn = h.toString();
+               
                 
                 String dis = discipline;
                 //add %20 to dis

@@ -63,6 +63,14 @@
     <url-pattern>/servlet/AdminServlet</url-pattern>
   </servlet-mapping>
  -->
+ <resource-ref>
+ <description>Oracle Datasource example</description>
+ <res-ref-name>jdbc/dataportalDB</res-ref-name>
+ <res-type>javax.sql.DataSource</res-type>
+ <res-auth>Container</res-auth>
+</resource-ref>
+
+
   <welcome-file-list id="WelcomeFileList_1">
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>

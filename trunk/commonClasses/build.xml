@@ -1,0 +1,52 @@
+<project name="Xml" default="dist" basedir=".">
+	<description>
+        simple example build file
+    </description>
+	<!-- set global properties for this build -->
+	<property name="src" location="${basedir}/src"/>
+	<property name="build" location="${basedir}/build"/>
+	<property name="dist" location="${basedir}/dist"/>
+	<property name="lib" location="${basedir}/web/WEB-INF/lib"/>
+	<property name="common.lib" value="${basedir}/../common/lib"/>
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<delete dir="${build}"/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+	</target>
+	<target name="compile" depends="init, getClasspath" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}" excludes="uk/ac/cclrc/dataportal/credentials/**">
+		
+			<classpath refid="compile.classpath"/>
+		</javac>
+	</target>
+	<target name="javadoc" depends="init, getClasspath">
+		<javadoc packagenames="uk.ac.*.*.*" sourcepath="src" defaultexcludes="yes" destdir="docs/api" use="true" windowtitle="Data Portal common utility files">
+			<classpath refid="compile.classpath"/>
+		</javadoc>
+	</target>
+	<target name="jar" depends="compile" description="generate the distribution">
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}/lib"/>
+		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+		<jar jarfile="${dist}/lib/dp_common.jar" basedir="${build}"/>
+	</target>
+	<target name="dist" depends="jar">
+		<delete includeEmptyDirs="true">
+			<fileset dir="${build}"/>
+		</delete>
+	</target>
+	<target name="getClasspath">
+		<path id="compile.classpath">
+			<pathelement path="${common.lib}/log4j-1.2.8.jar"/>
+			<pathelement path="${lib}/jdom-1.0b9.jar"/>
+			<pathelement path="${common.lib}/axis.jar"/>
+			<pathelement path="${common.lib}/mail.jar"/>
+			<pathelement path="${common.lib}/jaxrpc.jar"/>
+			<pathelement path="${common.lib}/cog-jglobus.jar"/>
+			<pathelement path="${common.lib}/servlet-api.jar"/>
+		</path>
+	</target>
+</project>

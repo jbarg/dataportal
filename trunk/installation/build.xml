@@ -60,7 +60,7 @@
 	<property name="hsqldb.src" value="${basedir}/uddi/hsql"/>
         <property name="hsqldb.home" value="${basedir}/hsql"/>
         <property name="juddi.home" value="${basedir}/uddi/juddi"/>
-        <property name="commonlib.home" value="${basedir}/dataportal/common/lib"/>
+        <property name="common.tomcat.home" value="${basedir}/dataportal/common/shared"/>
          
         <!--=======================Avaliablities ofr file ==========================-->
         
@@ -202,10 +202,10 @@
         -->
         <target name="stop_dataportalDB" description="stops database instance" if="hsql.present">
     
-        <java classname="uk.ac.cclrc.config.StopDatabase" spawn="false" fork="yes">
+        <java classname="uk.ac.cclrc.config.StopDatabase" spawn="false" fork="no">
 			<classpath>
 			     <pathelement location="${hsqldb.src}/hsqldb.jar"/>
-			     <pathelement location="${basedir}/lib/dp_common.jar"/>
+			     <pathelement location="${basedir}/dataportal/common/shared/dp_common.jar"/>
 		        </classpath>
 
 			<arg line="9002 dpdb dataportal datap0rt4l" />
@@ -220,10 +220,10 @@
         -->
         <target name="stop_uddiDB" description="stops database instance" if="hsql.present">
     
-        <java classname="uk.ac.cclrc.config.StopDatabase" spawn="false" fork="yes">
+        <java classname="uk.ac.cclrc.config.StopDatabase" spawn="false" fork="no">
 			<classpath>
 			     <pathelement location="${hsqldb.src}/hsqldb.jar"/>
-			     <pathelement location="${basedir}/lib/dp_common.jar"/>
+			    <pathelement location="${basedir}/dataportal/common/shared/dp_common.jar"/>
 		        </classpath>
 
 			<arg line="9001 xdb dataportal datap0rt4l" />
@@ -299,7 +299,7 @@
         -->
         <target name="installLibiaries" description="install the dataportal libs">
             <copy  todir="${catalina.home}/shared/lib">
-                 <fileset dir="${commonlib.home}">
+                 <fileset dir="${common.tomcat.home}">
                  <include name="**/*.jar"/>
                  <!--<excludes name="**/hsqldb.jar"/>-->
             </fileset>
@@ -320,8 +320,83 @@
             <!-- <antcall target="installfacility"/>               -->
         </target>
         
-       
+        <!-- ==================== remove dataportal        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="removedp" description="install the juddi server and libs" if="catalina.home.present">
+            <antcall target="removeUDDI"/>
+            <antcall target="removeLibiaries"/>
+             <antcall target="removemodules"/>
+            <!--<antcall target="removeDB"/>     -->
+            <!-- <antcall target="installfacility"/>               -->
+        </target>
         
+         <!-- ==================== remove dataportal        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="removemodules" description="install the juddi server and libs" if="catalina.home.present">
+           <delete file="${catalina.home}/conf/Catalina/localhost/sessionmanager.xml"/>
+            <delete file="${catalina.home}/conf/Catalina/localhost/queryandreply.xml"/>
+             <delete file="${catalina.home}/conf/Catalina/localhost/dataportal.xml"/>
+              <delete file="${catalina.home}/conf/Catalina/localhost/shopcart.xml"/>
+               <delete file="${catalina.home}/conf/Catalina/localhost/datatransfer.xml"/>
+                <delete file="${catalina.home}/conf/Catalina/localhost/authent.xml"/>
+                 <delete file="${catalina.home}/conf/Catalina/localhost/facility.xml"/>
+                  <delete file="${catalina.home}/conf/Catalina/localhost/lookup.xml"/>
+        </target>
+        
+         <!-- ==================== remove UDDI from tomcat        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="removeLibiaries" description="" if="catalina.home.present">
+          <delete file="${catalina.home}/common/lib/hsqldb.jar"/>
+          <delete file="${catalina.home}/shared/lib/activation.jar"/>
+          <delete file="${catalina.home}/shared/lib/axis.jar"/>
+          <delete file="${catalina.home}/shared/lib/axis-ant.jar"/>
+          <delete file="${catalina.home}/shared/lib/cog-jglobus.jar"/>
+          <delete file="${catalina.home}/shared/lib/commons-logging.jar"/>
+          <delete file="${catalina.home}/shared/lib/commons-discovery.jar"/>
+          <delete file="${catalina.home}/shared/lib/cryptix.jar"/>
+          <delete file="${catalina.home}/shared/lib/cryptix32.jar"/>
+          <delete file="${catalina.home}/shared/lib/cryptix-asn1.jar"/>
+          <delete file="${catalina.home}/shared/lib/dp_common.jar"/>
+          <delete file="${catalina.home}/shared/lib/hsqldb.jar"/>
+          <delete file="${catalina.home}/shared/lib/jaxrpc.jar"/>
+          <delete file="${catalina.home}/shared/lib/jce-jdk13-120.jar"/>
+          <delete file="${catalina.home}/shared/lib/jdom-b9.jar"/> 
+          <delete file="${catalina.home}/shared/lib/jgss.jar"/> 
+          <delete file="${catalina.home}/shared/lib/jstl.jar"/>
+          <delete file="${catalina.home}/shared/lib/junit.jar"/>
+          <delete file="${catalina.home}/shared/lib/puretls.jar"/>
+          <delete file="${catalina.home}/shared/lib/log4j-1.2.8.jar"/> 
+          <delete file="${catalina.home}/shared/lib/mail.jar"/>
+          <delete file="${catalina.home}/shared/lib/saaj.jar"/>
+          <delete file="${catalina.home}/shared/lib/standard.jar"/>
+          <delete file="${catalina.home}/shared/lib/wsdl4j.jar"/>    
+            
+            
+            
+          
+        </target>
+        
+        
+         <!-- ==================== remove libs from tomcat        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="removeUDDI" description="" if="catalina.home.present">
+        
+          <delete file="${catalina.home}/conf/Catalina/localhost/juddi.xml"/>
+          <delete file="${catalina.home}/webapps/juddi.war"/>
+          <delete dir="${catalina.home}/webapps/juddi"/>
+        </target>
         
         
                <!-- ==================== creates jar file of dataportal        =========================== -->
@@ -340,12 +415,12 @@
         
         
         
-             <!-- ==================== install        =========================== -->
+             <!-- ==================== install   NOT USED NOW    =========================== -->
     <!--
         Use this target to Creates and moves hsqldb for uddi 
 
         -->
-        <target name="installfacility" description="install the juddi server and libs" if="catalina.home.present">
+        <target name="installfacilityNOTUSED" description="install the juddi server and libs" if="catalina.home.present">
             <ant antfile="dataportal/facility/build.xml" target="compile" inheritAll="false"> 
          <property name="basedir" value="${basedir}/dataportal/facility"/>
       </ant> 
@@ -400,129 +475,6 @@
        <!--<copy file="${basedir}/dataportal/facility/facility.xml" todir="${catalina.home}/conf/Catalina/localhost"/>-->
         
         </target>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        <!-- ========================   Not called directly ============================= -->
-			
-			
-			
-			
-		
-		<!-- ==================== compile Target =================================== -->
-		   <target name="compile" description="Compile Java sources">
-		      <antcall target="do">
-		         <param name="target" value="compile"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== all Target =================================== -->
-		   <target name="all" description="Clean build and dist directories, then compile">
-		      <antcall target="do">
-		         <param name="target" value="all"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== clean Target =================================== -->
-		   <target name="clean" description="Delete old build and dist directories">
-		      <antcall target="do">
-		         <param name="target" value="clean"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== dist Target =================================== -->
-		   <target name="dist" description="Create binary distribution">
-		      <antcall target="do">
-		         <param name="target" value="dist"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== install Target =================================== -->
-		   <target name="install" description="Install application to servlet container">
-		      <antcall target="do" inheritAll="false">
-		         <param name="target" value="install"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== javadoc Target =================================== -->
-		   <target name="javadoc" description="Create Javadoc API documentation">
-		      <antcall target="do">
-		         <param name="target" value="javadoc"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== list Target =================================== -->
-		   <target name="list" description="List installed applications on servlet container">
-		      <antcall target="do">
-		         <param name="target" value="list"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== reload Target =================================== -->
-		   <target name="reload" description="Reload application on servlet container">
-		      <antcall target="do">
-		         <param name="target" value="reload"/>
-		       </antcall>
-		   </target>
-		
-		<!-- ==================== remove Target =================================== -->
-		   <target name="remove" description="Remove application on servlet container">
-		      <antcall target="do">
-		         <param name="target" value="remove"/>
-		       </antcall>
-		   </target>
-		
-		        <!-- the following targer is called to process all subprojects -->
-			
-			   <target name="do" description="redirects ant call to all dataportal modules">
-			   
-			    <ant antfile="${dataportal.home}/WebInterface/build.xml" target="${target}" >  
-			   	         <property name="basedir" value="${dataportal.home}/WebInterface"/>
-			      </ant> 	      
-			
-			    <ant antfile="${dataportal.home}/datatransfer/build.xml" target="${target}" >
-			         <property name="basedir" value="${dataportal.home}/datatransfer"/>
-			         <!--<property name="catalina.home" value="${catalina.home}" />-->
-			         
-			      </ant>
-			
-			      <ant antfile="${dataportal.home}/ShoppingCart/build.xml" target="${target}" > 
-			         <property name="basedir" value="${dataportal.home}/ShoppingCart"/>
-			      </ant>
-			
-			     				 
-					
-			      <ant antfile="${dataportal.home}/uddilookup/build.xml" target="${target}" > 
-			         <property name="basedir" value="${dataportal.home}/uddilookup"/>
-			      </ant>
-			
-			     <ant antfile="${dataportal.home}/facility/build.xml" target="${target}" > 
-			         <property name="basedir" value="${dataportal.home}/facility"/>
-			      </ant>		     
-			      
-			      <ant antfile="${dataportal.home}/authent/build.xml" target="${target}" > 
-			         <property name="basedir" value="${dataportal.home}/authent"/>
-			      </ant>
-			
-			    <ant antfile="${dataportal.home}/sessionmanager/build.xml" target="${target}" > 
-			         <property name="basedir" value="${dataportal.home}/sessionmanager"/>
-			      </ant>
-			
-			      <ant antfile="${dataportal.home}/queryandreply/build.xml" target="${target}" > 
-			         <property name="basedir" value="${dataportal.home}/queryandreply"/>
-			      </ant>	  
-			 
-   	</target>
         
 </project>
 

@@ -37,19 +37,26 @@ import org.jdom.*;
 
 /**
  *
- * @author  Mark Williams
+ * @author GJD37
  */
 
 public class UDDIHelper {
     //set static log for the class
     private Logger log = Logger.getLogger(this.getClass().getName());
-    
+    private static String propertiesFileName = null;
     private UDDIProxy proxy;
     private AuthToken authToken;
     private Properties UDDIProps;
     
-    public UDDIHelper() throws Exception {
+    
+    
+    public UDDIHelper(String contextPath) throws Exception {
         try {
+            
+            if(contextPath != null){
+                propertiesFileName = contextPath;
+                log.info("changing context path to "+contextPath);
+            }
             
             UDDIProps = getUDDIProps();
             proxy = getUDDIProxy();
@@ -60,6 +67,7 @@ public class UDDIHelper {
             throw e;
         }
     }
+    
     
     public Properties getProps() {
         return this.UDDIProps;
@@ -76,7 +84,7 @@ public class UDDIHelper {
         // Load UDDI Properties from file - need to change this to include context path
         Properties UDDIProps = null;
         // This is hardcoded for testing outside of Axis - when running in Axis it gets overwritten by the context path below
-        String propertiesFileName = "C:/Documents and Settings/gjd37/My Documents/theDataPortal/dataportalcvs/dataportal/facility/web/WEB-INF/";
+        //propertiesFileName = "dataportal/facility/web/WEB-INF/";
         
         // We can only get the context path when deployed within Axis
         MessageContext messageContext = MessageContext.getCurrentContext();
@@ -243,10 +251,10 @@ public class UDDIHelper {
             
             businessKey = be.getBusinessKey();
             
-           // if (!cfb.getFacilityName().equalsIgnoreCase("DataPortal")) {
-                
-           //     setPublisherAssertion(dataPortalID, businessKey);
-           // }
+            // if (!cfb.getFacilityName().equalsIgnoreCase("DataPortal")) {
+            
+            //     setPublisherAssertion(dataPortalID, businessKey);
+            // }
         }
         catch (UDDIException ue) {
             log.fatal("UDDI Exception caught", ue);
@@ -402,7 +410,7 @@ public class UDDIHelper {
             
             //old version has this one
             //this pulls a null pointer exception when finding a facility
-          //  BusinessList businessList = proxy.find_business(names, null, null, null ,getTModelBag() , findQualifiers, 0);
+            //  BusinessList businessList = proxy.find_business(names, null, null, null ,getTModelBag() , findQualifiers, 0);
             //new one works
             BusinessList businessList = proxy.find_business(names, null, null, null ,null , findQualifiers, 0);
             Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
