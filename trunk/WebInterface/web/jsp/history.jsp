@@ -48,8 +48,8 @@ function openwindow(page){
 
 </head>
 
-<body background="../img/redbg.gif">
-
+<body>
+<a name="top" />
 <table width="100%" cellspacing="3" border="0">
 
 <tr>
@@ -78,7 +78,8 @@ html/netscape.html file from the content root.-->
 &nbsp;Home&nbsp;&nbsp;&nbsp;>&nbsp;<a href="history.jsp">History</a>
 
 <hr />
-<br />
+<div align="right"><a name="#top"/><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
+
 <br />
 <table border="1"  width="95%" cellspacing="0" cellpadding="1">
 <tr bgcolor="#ADD8E6">
@@ -151,7 +152,9 @@ html/netscape.html file from the content root.-->
 %>
 </table>
 <br />
-<br />
+
+
+<div align="right"><a name="bottom"/><font size="-1"><a align="right" href="#top">top</a></font></div>
 
 <hr />
 
