@@ -722,7 +722,7 @@ public class ISISCsmdMapper implements CsmdMapper
       String short_name = place_holder ;
       String instrument_comments =  place_holder ;
 
-      r = s.executeQuery ("select id, experiment_number, title, investigation_type, instrument_id, inst_calibration_id, inv_abstract, " +
+      r = s.executeQuery ("select id, experiment_number, title, investigation_type, instrument_id, calibration_id, inv_abstract, " +
                           " prev_experiment_number, bcat_inv_str, comments from investigation where investigation.id in " +
                           "(select investigation_id from investigation_list where study_id='" + key +"')") ;
 
@@ -732,9 +732,9 @@ public class ISISCsmdMapper implements CsmdMapper
          id = sr.LitWithEnt(xt.makeValid(r.getString("ID") ));
          experiment_number = sr.LitWithEnt(xt.makeValid(r.getString("EXPERIMENT_NUMBER") ));
          title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
-         investigation_type = sr.LitWithEnt(xt.makeValid(r.getString("INVASTIGATION_TYPE") ));
+         investigation_type = sr.LitWithEnt(xt.makeValid(r.getString("INVESTIGATION_TYPE") ));
          instrument_id = sr.LitWithEnt(xt.makeValid(r.getString("INSTRUMENT_ID") ));
-         inst_calibaration_id = sr.LitWithEnt(xt.makeValid(r.getString("INST_CALIBRATION_ID") ));
+         inst_calibaration_id = sr.LitWithEnt(xt.makeValid(r.getString("CALIBRATION_ID") ));
          inv_abstract = sr.LitWithEnt(xt.makeValid(r.getString("INV_ABSTRACT") ));
          prev_experiment_number = sr.LitWithEnt(xt.makeValid(r.getString("PREV_EXPERIMENT_NUMBER") ));
          bcat_inv_str = sr.LitWithEnt(xt.makeValid(r.getString("BCAT_INV_STR") ));
@@ -742,10 +742,10 @@ public class ISISCsmdMapper implements CsmdMapper
 
          sbr.append(ii+"<Investigation InvestigationID=\"investigation_" + id + "\">\n") ;
          sbr.append(ii+li+"<Name>"+title+"</Name>\n") ;
-         sbr.append(ii+li+"<InvestigationType>"+investigation_type+"</InvestigationType") ; 
+         sbr.append(ii+li+"<InvestigationType>"+investigation_type+"</InvestigationType>\n") ; 
          sbr.append(ii+li+"<Abstract>"+inv_abstract+"</Abstract>\n") ;
 
-         t_r=t_s.executeQuery("Select name, short_name, comments from intrument where id ='"+ instrument_id +"'") ; 
+         t_r=t_s.executeQuery("Select name, short_name, comments from instrument where id ='"+ instrument_id +"'") ; 
 
          if(t_r.next())
          {
@@ -899,15 +899,15 @@ public class ISISCsmdMapper implements CsmdMapper
       String description = place_holder ;
 
       t_r = t_s.executeQuery("select dataset.id \"DATASETID\", name, dataset_type, dataset_status, description from dataset where "+
-                              "dataset.id in (select datasetid from dataset_list where investigationid ='" + key + "')") ;
+                              "dataset.id in (select dataset_id from dataset_list where investigation_id ='" + key + "')") ;
 
       while(t_r.next()) 
       {
          dataset_id = sr.LitWithEnt(xt.makeValid(t_r.getString("DATASETID") ));
          name = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
-         dataset_type = sr.LitWithEnt(xt.makeValid(t_r.getString("dataset_type") ));
-         dataset_status = sr.LitWithEnt(xt.makeValid(t_r.getString("TITLE") ));
-         description = sr.LitWithEnt(xt.makeValid(t_r.getString("TITLE") ));
+         dataset_type = sr.LitWithEnt(xt.makeValid(t_r.getString("DATASET_TYPE") ));
+         dataset_status = sr.LitWithEnt(xt.makeValid(t_r.getString("DATASET_STATUS") ));
+         description = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
 
          sbr.append(ii+"<DataCollection dataid=\""+dataset_id+"\">\n") ;
          //HERE - remember dataholding->ado call needs revisit
@@ -1350,7 +1350,7 @@ public class ISISCsmdMapper implements CsmdMapper
  
       String name=place_holder ;
 
-      t_r=t_s.executeQuery("select title from experiment where id ='" + key + "'") ;
+      t_r=t_s.executeQuery("select title from investigation where id ='" + key + "'") ;
       if(t_r.next())
       {
          name = sr.LitWithEnt(xt.makeValid(t_r.getString("TITLE") ));
