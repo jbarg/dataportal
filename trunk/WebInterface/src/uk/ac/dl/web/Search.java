@@ -17,7 +17,7 @@ import java.util.Properties;
 import ac.dl.xml.*;
 import org.jdom.*;
 import java.io.*;
-import ac.dl.xml.*;
+import java.util.*;
 /**
  *
  * @author  gjd37
@@ -31,7 +31,7 @@ public class Search {
     public Search() {
     }
     
-    public static void doBasicSearch(String sid, String[] facs, String discipline,Integer waiting, String url,String workingDir,String dn, boolean doLog) throws Exception{
+    public static ArrayList[] doBasicSearch(String sid, String[] facs, String discipline,Integer waiting, String url,String workingDir,String dn, boolean doLog) throws Exception{
         FileWriter wr = null;
         try{
             //add the exra string to the dis
@@ -47,20 +47,36 @@ public class Search {
             call.addParameter( "op2", XMLType.SOAP_ARRAY, ParameterMode.IN );
             call.addParameter( "op3", XMLType.XSD_STRING, ParameterMode.IN );
             call.addParameter( "op4", XMLType.XSD_INTEGER, ParameterMode.IN );
-            call.setReturnType( XMLType.SOAP_ELEMENT );
+            //call.setReturnType( XMLType.SOAP_ELEMENT );
+            call.setReturnType( XMLType.SOAP_ARRAY );
             
             Object[] ob = new Object[]{sid,facs,Discipline,waiting};
             
-            org.w3c.dom.Element el = (org.w3c.dom.Element) call.invoke(ob );
+            org.w3c.dom.Element[] el = (org.w3c.dom.Element[]) call.invoke(ob );
             
             //build the file
             org.jdom.input.DOMBuilder builder = new org.jdom.input.DOMBuilder();
-            Element el1 = builder.build(el);
+            Element el1 = builder.build(el[0]);
             el1.detach();
             Document doc1  = new org.jdom.Document(el1);
             
             //System.out.println(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
             Saver.save(doc1, new File(workingDir+File.separator+"profiles"+File.separator+sid+"1.xml"));
+            
+                        
+            ArrayList[] res= new ArrayList[2];
+            for(int i = 1; i<el.length;i++){
+                Element build = builder.build(el[i]);
+                List list = build.getContent();
+                Iterator it = list.iterator();
+                while(it.hasNext()){
+                    Object o = it.next();
+                    if(o instanceof org.jdom.Element){
+                        org.jdom.Element e = (org.jdom.Element)o;
+                        res[i].add(e.getName());
+                    }
+                }
+            }            
             
             // logHistoryFile(object, (String)session.getAttribute("dn"),wd);
             if(doLog){

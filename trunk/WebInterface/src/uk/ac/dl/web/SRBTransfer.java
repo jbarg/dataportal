@@ -53,6 +53,7 @@ public class SRBTransfer extends HttpServlet {
             //get all the attributes needed
             File tarFile = null;
             String dir = request.getParameter("url");
+            String format  = request.getParameter("format");
             String urldir = dir.replaceFirst("srb","http");
             URL srburl= null;
             try{
@@ -86,7 +87,7 @@ public class SRBTransfer extends HttpServlet {
                 
                 
                 //need to add section to get the value from properties file.
-                URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password);
+                URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password+"&format="+format);
                 URLConnection yc = url.openConnection();
                 InputStream p = yc.getInputStream();
                 

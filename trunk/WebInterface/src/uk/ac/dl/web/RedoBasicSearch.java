@@ -55,23 +55,23 @@ public class RedoBasicSearch extends HttpServlet {
             String[] ret =  new String[5];
             
             //add ws here
-            try{
-                Properties prop = (Properties)session.getAttribute("props");
-                String url2 = prop.getProperty("CART");
-                String endpoint = url2;
-                
-                Service  service = new Service();
-                Call     call    = (Call) service.createCall();
-                call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-                call.setOperationName( "getNote" );
-                call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
-                call.addParameter( "op2", XMLType.XSD_INT, ParameterMode.IN );
-                call.setReturnType( XMLType.SOAP_ARRAY );
-                
-                Object[] ob = new Object[]{url,sid};
-                ret = (String[]) call.invoke(ob );
-                if(ret[0] == null) ret[0] = ""; //ret[0] is the notes
-                
+            try{ ArrayList[]
+            Properties prop = (Properties)session.getAttribute("props");
+            String url2 = prop.getProperty("CART");
+            String endpoint = url2;
+            
+            Service  service = new Service();
+            Call     call    = (Call) service.createCall();
+            call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+            call.setOperationName( "getNote" );
+            call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
+            call.addParameter( "op2", XMLType.XSD_INT, ParameterMode.IN );
+            call.setReturnType( XMLType.SOAP_ARRAY );
+            
+            Object[] ob = new Object[]{url,sid};
+            ret = (String[]) call.invoke(ob );
+            if(ret[0] == null) ret[0] = ""; //ret[0] is the notes
+            
             }
             
             catch(Exception e){
@@ -133,8 +133,10 @@ public class RedoBasicSearch extends HttpServlet {
                 Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
                  */
                 
-                Search.doBasicSearch(sid,facs,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
-                
+                ArrayList[] list =  Search.doBasicSearch(sid,facs,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
+                session.setAttribute("noConn", list[1]);
+                session.setAttribute("noRes", list[2]);
+                session.setAttribute("timedOut", list[3]);
                 
                 response.sendRedirect("../jsp/SimpleSearch.jsp");
             }

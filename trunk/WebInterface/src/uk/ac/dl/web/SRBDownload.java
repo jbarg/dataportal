@@ -49,6 +49,7 @@ public class SRBDownload extends HttpServlet {
             //get all the attributes needed
             File tarFile = null;
             String dir = request.getParameter("dir");
+             String format  = request.getParameter("format");
             //this is a srb url.  Need to parse to get dir out
             String urldir = dir.replaceFirst("srb","http");
             URL srburl= null;
@@ -78,7 +79,7 @@ public class SRBDownload extends HttpServlet {
                 
                 
                 //need to add section to get the value from properties file.
-                URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password);
+                URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password+"&format="+format);
                 System.out.println(url);
                 URLConnection yc = url.openConnection();
                 InputStream p = yc.getInputStream();
