@@ -98,7 +98,7 @@ public class sgetrservlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, java.io.IOException {
         ServletOutputStream out = response.getOutputStream();
-        Filenlist = null;
+        File list = null;
         try {
             //check password
             String password = props.getProperty("srb_passwd");
