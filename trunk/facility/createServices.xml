@@ -1,5 +1,5 @@
 <fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
-  <createServices facilityID="0a0445b0-3ab6-11d7-ba2d-b8a03c50a862">
+  <createServices facilityID="9dd061d0-c36d-11d7-8e5c-b8a03c50a862">
     <service>
       <serviceName>Mark testing</serviceName>
       <serviceDescription>Create services testing</serviceDescription>

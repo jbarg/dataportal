@@ -1,7 +1,7 @@
 <fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
-  <createFacility>
-    <facilityName>Dataportal</facilityName>
-    <facilityDescription>CCLRC Data Portal</facilityDescription>
+  <createDataPortal>
+    <dataPortalID>TEST</dataPortalID>
+    <dataPortalDescription>TEST Data Portal</dataPortalDescription>
     <service>
       <serviceName>Authentication</serviceName>
       <serviceDescription>Authentication and Authorisation (via ACM)</serviceDescription>
@@ -58,5 +58,5 @@
       <serviceEndpoint>http://escdmg.dl.ac.uk:8080/datatransfer/services/DataTransferService</serviceEndpoint>
       <serviceWSDL>http://escdmg.dl.ac.uk:8080/datatransfer/services/DataTransferService?wsdl</serviceWSDL>
     </service>
-  </createFacility>
+  </createDataPortal>
 </fadm:facilityAdmin>
