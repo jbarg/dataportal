@@ -183,6 +183,7 @@ public class SessionSingleton
          this.port = config.getProperty("dbport");
          this.collection =  config.getProperty("dbcollection");
          this.prefix = config.getProperty("dbconprefix");
+         this.server_port = config.getProperty("catalinahost") ;
          
       }
       catch (IOException e)
