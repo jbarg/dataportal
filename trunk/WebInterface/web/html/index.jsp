@@ -32,7 +32,7 @@
 <br />
  <div id="footer" align="right"><a
 href="http://validator.w3.org/check/referer"><img src="../img/vxhtml.gif" border="0" width="88" height="31" alt="Valid XHTML 1.0!"></a>
-<br /><a href="http://eminerals.org/">&copy; 2003 E-minerals Mini Grid</a></div>
+<br /><a href="http://eminerals.org/">&copy; 2004 E-minerals Mini Grid</a></div>
 </td>
 </tr>
 </table>
