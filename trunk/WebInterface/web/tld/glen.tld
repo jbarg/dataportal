@@ -12,8 +12,6 @@
     <short-name>xtags</short-name>
     <uri>/xtags</uri>
     <display-name>glen</display-name>
-    <small-icon></small-icon>
-    <large-icon></large-icon>
     <description></description>
 
 <tag>
@@ -124,7 +122,7 @@
 
 <name>netscapefile</name>
 
-<required>false</required>
+<required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>String</type>
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
@@ -141,7 +139,7 @@
 
 <name>iefile</name>
 
-<required>false</required>
+<required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>String</type>
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
