@@ -80,7 +80,7 @@ public class AuthCtl {
         LookUpModuleService service = new LookUpModuleServiceLocator();
         LookUpModule port = service.getLookUpService();
         String[] facilities = port.getFacilities();
-        String[] faciltyEndPoints = port.lookupEndpoint(facilities, "ACL");
+        String[] faciltyEndPoints = port.lookupEndpoint(facilities, "ACM");
         
         return faciltyEndPoints;
     }
