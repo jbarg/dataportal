@@ -55,9 +55,10 @@ public class SRBTransfer extends HttpServlet {
             String dir = request.getParameter("url");
             String urlTo = request.getParameter("urlTo");
             String sid = (String)session.getAttribute("sessionid");
+            String wd =  (String)session.getAttribute("wd");
             try{
                 //locate the prop file.  Normal get this from web.xml file
-                String wd =  (String)session.getAttribute("wd");
+                
                 PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
                 //load properties
                 Properties props = new Properties();
@@ -143,7 +144,10 @@ public class SRBTransfer extends HttpServlet {
                 
                 result = (String) call.invoke(ob );*/
                 //save credential
-                
+                String save = wd+File.separator+"profiles"+File.separator+sid;
+                              
+                FileWriter w = new FileWriter(save);
+                w.close();
                 
                 
                 //read in the message
