@@ -81,7 +81,14 @@ public class Search {
                 }
                 dn = h.toString();
                 
-                
+                //add %20 to dis
+                int l = discipline.length();
+                StringBuffer bu = new StringBuffer();
+                for(int i = 0; i<l; i++){
+                    if( discipline.charAt(i) == ' ') bu.append("%20");
+                    else bu.append(discipline.charAt(i));
+                }
+                discipline = bu.toString();
                 
                 wr = new FileWriter(workingDir+File.separator+"profiles"+File.separator+"history"+File.separator+dn,true);
                 wr.write("<tr><td>"+buff.toString()+" </td>");

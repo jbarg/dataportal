@@ -39,7 +39,8 @@ public class ResendQuery extends HttpServlet{
         String[] facilities = request.getParameterValues("facs");
         String wait = request.getParameter("wait");
         if(wait ==null) wait = "20000000";
-        Integer max = Integer.getInteger(wait);
+        int max1 = Integer.parseInt(wait);
+        Integer max = new Integer(max1);
         
         
         String sid = (String)session.getAttribute("sessionid");
@@ -76,7 +77,10 @@ public class ResendQuery extends HttpServlet{
             Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
             logHistoryFile(object, (String)session.getAttribute("dn"),wd);
             */
-            
+            System.out.println("sid is "+sid);
+            System.out.println("facs is "+facilities);
+            System.out.println("dis "+discipline);
+            System.out.println("max is "+max);
             Search.doBasicSearch(sid,facilities,discipline, max,endpoint,wd,(String)session.getAttribute("dn"), true);
             
             
