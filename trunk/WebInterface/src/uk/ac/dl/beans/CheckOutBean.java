@@ -39,8 +39,8 @@ public class CheckOutBean {
     
     /** Creates a new instance of CheckOutBean */
     public CheckOutBean() {
-        logger = Logger.getLogger(CheckOutBean.class);
-        BasicConfigurator.configure();
+        logger = Logger.getLogger(this.getClass().getName());
+       // BasicConfigurator.configure();
         isEmpty = false;
     }
     
@@ -79,7 +79,7 @@ public class CheckOutBean {
             return doc;
         }
         catch(Exception e){
-            logger.error("unable to get user cart for "+sid,e);
+            logger.error("Unable to get user cart for "+sid,e);
             throw e;
         }
     }

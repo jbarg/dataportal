@@ -24,11 +24,11 @@ import javax.xml.namespace.QName;
 public class Cleanup {
     
     //set static log for the class
-    static Logger logger;
+    private static Logger logger;
     
     static {
-        logger = Logger.getLogger(Cleanup.class);
-        BasicConfigurator.configure();
+        logger = Logger.getLogger(uk.ac.dl.beans.Cleanup.class);
+       // BasicConfigurator.configure();
     }
     
     public static void session(HttpSession session) throws Exception{
