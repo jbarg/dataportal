@@ -735,7 +735,7 @@ public class ISISCsmdMapper implements CsmdMapper
          }
 
         //build data holding
-        buildMDDataHolding(id, sbr, ii+li, null) ;
+        buildMDDataHolding(id, sbr, ii+li, true) ;
 
      } // all investigation for this study have now been processed
          
@@ -805,15 +805,61 @@ public class ISISCsmdMapper implements CsmdMapper
       return ;
    }
 
-   void buildMDDataHolding(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   void buildMDDataHolding(String key, StringBuffer sbr, String ii, boolean nested) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+      //the key should be the key not of the study but of the investigation - as each dataholding is associated to
+      //an investigation
+
+      sbr.append(ii+"<DataHolding InvestigationID=\"" + key + "\">\n") ;
+
+      buildMDDataDescription(key, sbr, ii+li, "dataholding", true) ;
+      buildMDDataHoldingLocator(key, sbr, ii+li, null) ;
+      buildMDRelatedReferance(key, sbr, ii+li, null) ;
+      buildMDDataCollection(key, sbr, ii+li, null) ;
+      buildMDAtomicDataObject(key, sbr, ii+li, null) ;
+
+      sbr.append(ii+"</DataHolding>\n") ; 
 
       return ;
    }
-   void buildMDDataDescription(String key, StringBuffer sbr, String ii, String type) throws SQLException
+
+   void buildMDDataDescription(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
+
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+
+      if(type.compareTo("dataholding")==0)
+      {
+         String name=place_holder ;
+
+         t_r=t_s.executeQuery("Select title from investigation where id='" + key "'") ;
+
+         if(t_r.next())
+         {
+            name = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+         }
+
+         t_r.close() ;
+
+         sbr.append(ii+"<DataDescription>\n") ;
+         sbr.append(ii+li+"<DataName>" + name + "</DataName>\n") ;
+         //leave it like this for now - not sure what else we can fill in
+         sbr.append(ii+"</DataDescription>\n") ;
+      }
+
+      return ;
+   }
+
 
       return ;
    }
