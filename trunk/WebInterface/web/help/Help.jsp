@@ -10,14 +10,21 @@
 String name = request.getParameter("page");
 session.removeAttribute("xmldocs");
 %>
+
+
 <html>
     <title>CLRC Data Portal/Estedi - Basic Search</title>
     <link rel="stylesheet" href="../style/main.css">
 
-    <frameset border="0" frameborder="0" bgcolor="white" bordercolor="black" cols="150,*">
-   	<frame name="menu"  src="menu.jsp" scrolling="no" target="footer">
+    <frameset border="0" frameborder="0" bgcolor="white" bordercolor="black" cols="230,*">
+   	<frame name="menu"  src="menu.jsp" scrolling="yes" target="footer">
+       <!-- <frameset border="0" frameborder="0" bgcolor="white" bordercolor="black" rows="50%,*">
+            <frame name="menu"  src="menu.jsp" scrolling="no" target="parent.menuBottom">
+            <frame name="menuBottom"  src="menuBottom.jsp" scrolling="yes" target="footer">
+        </frameset>-->
 
-        <frame name="footer" src="DataPortal_help.htm#<%=name%>"   scrolling="yes">
+
+        <frame name="footer" src="Dataportal.html"   scrolling="yes">
    </frameset>
 
 </html> 

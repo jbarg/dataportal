@@ -81,6 +81,20 @@
 
 	</servlet>
 
+          <servlet>
+
+		<servlet-name>HelpSearch1</servlet-name>
+
+		<display-name>HelpSearch</display-name>
+
+		<servlet-class>
+
+       uk.ac.dl.web.HelpSearch1
+
+    </servlet-class>
+
+	</servlet>
+        
 	<servlet>
 
 		<servlet-name>AdvancedStudyServlet</servlet-name>
@@ -325,6 +339,15 @@
 
 	</servlet-mapping>
 
+        <servlet-mapping>
+
+		<servlet-name>HelpSearch1</servlet-name>
+
+		<url-pattern>/servlet/HelpSearch1</url-pattern>
+
+	</servlet-mapping>
+
+        
 	<servlet-mapping>
 
 		<servlet-name>DeleteCart</servlet-name>
