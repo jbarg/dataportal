@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+<title>e-Materials Data Portal</title>
+<script language="JavaScript">
+
+    /*var javawsInstalled = 0;
+    isIE = "false";
+
+    if (navigator.mimeTypes && navigator.mimeTypes.length)
+    {
+        x = navigator.mimeTypes['application/x-java-jnlp-file'];
+        if (x) javawsInstalled = 1;
+    }
+    else
+    {
+        isIE = "true";
+        javawsInstalled = 1;
+    }*/
+
+var javawsInstalled = 0; 
+var javaws12Installed = 0; 
+var javaws142Installed=0; 
+isIE = "false"; 
+if (navigator.mimeTypes && navigator.mimeTypes.length) { 
+   x = navigator.mimeTypes['application/x-java-jnlp-file'];  
+  if (x) { 
+      javawsInstalled = 1; 
+      javaws12Installed=1;      
+      javaws142Installed=1; 
+   }
+ }
+ else {    isIE = "true"; } 
+
+
+</script>
+<script language="VBScript">
+
+If isIE = "true" Then
+  If Not(IsObject(CreateObject("JavaWebStart.isInstalled"))) Then
+     javawsInstalled = 0
+  Else
+     javawsInstalled = 1
+  End If
+  If Not(IsObject(CreateObject("JavaWebStart.isInstalled.2"))) Then
+     javaws12Installed = 0
+  Else
+     javaws12Installed = 1
+  End If
+  If Not(IsObject(CreateObject("JavaWebStart.isInstalled.1.4.2.0"))) Then
+     javaws142Installed = 0
+  Else
+     javaws142Installed = 1
+  End If  
+End If
+</script>
+
+<script language="JavaScript">
+
+
+    function insertLink(url, name)
+    {   
+
+    
+    /* Note that the logic below always launches the JNLP application *if the browser is Gecko based. This is because it is not possible *to detect MIME type application/x-java-jnlp-file on Gecko-based browsers.  */
+    if (javawsInstalled || (navigator.userAgent.indexOf("Gecko") !=-1)) {
+                document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
+                 //
+              document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start.");
+                          
+    } else {
+        document.write("Click ");
+        document.write("<a href=http://java.sun.com/PluginBrowserCheck?pass=download.html&fail=http://java.sun.com/j2se/1.4.2/download.html>here</a> ");
+
+        document.write("to download and install JRE 1.4.2 and the application.");
+    }
+}
+
+
+     
+
+function check(){
+
+var username = document.logon.username.value;
+var password = document.logon.password.value;
+var lifetime = document.logon.lifetime.value;
+
+if(username == "" ||password == ""||lifetime == ""){
+    alert("Please enter a username, password and/or lifetime");
+    return false;
+
+}
+else if(parseInt(lifetime) && lifetime>0){
+
+return true;
+}
+else{
+alert("Enter a number for the lifetime");
+return false;}
+}
+
+function openHelp(){
+    window.open("../help/Help.jsp","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
+
+}
+</script>
+
+
+<title>e-Materials Data Portal</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="robots" content="index, nofollow" /><meta name="description" content="This site is the dataportal" />
+<meta name="keywords" content="Dataportal, metadata, clrc, dl, facilities,Estedi, data, search, Glen Drinkwater, Synchrotron Radiation,British Atmospheric Data Centre, shopping basket" />
+<link rel="stylesheet" href="../style/eminNN4.css" type="text/css" />
+<style type="text/css">
+@import url(../style/emin2.css); /*IE and NN6x styles*/
+</style>
+</head>
+<body  onload="document.forms['logon'].username.focus();">
+<table width="100%" cellspacing="3" border="0"><tr>
+<td valign="top" width="20%" align="left">
+<br />
+
+<a href="http://www.clrc.ac.uk"><img src="../img/cclrc.gif" width="130" height="90"
+alt="E-materials" border="0" /></a>
+<br />
+<br />
+<br />
+<br />
+
+<center><a href="http://www.ucl.ac.uk/"><img src="../img/emin5.gif" width="80" height="100" alt="E-minerals" border="0" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</center>
+<br />
+<br />
+<br />
+<br />
+
+<a href="http://www.clrc.ac.uk"><img src="../img/cclrc.gif" width="130" height="90" alt="E-minerals" border="0" /></a>
+<br />
+<br />
+<br />
+<br />
+
+<center><a href="http://www.ucl.ac.uk/"><img src="../img/emin5.gif" width="80" height="100" alt="E-minerals" border="0" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</center>
+
+
+
+<!--<form name="top-search_form" action="">
+
+<input class="button" onclick="location='../index.html'" type="button"
+value="Home page" />
+
+</form>-->
+</td>
+<td valign="top">
+<h1>Login to the e-Materials Data Portal</h1>
+<br />
+<br />
+<br />
+<br />
+<br />
+<form class="mess" name="logon" method="post" onsubmit="return check();"
+action="../servlet/LoginServlet">
+<table cellspacing="0" border="0" cellpadding="3">
+
+<tr>
+<td width="100">Username</td>
+<td><input type="text" name="username" /></td>
+</tr>
+<tr>
+<td align="left">Passphrase</td>
+
+<td><input type="password" name="password" /></td>
+
+</tr>
+<tr>
+<td width="100">Lifetime (hours)</td>
+<td><input type="text" name="lifetime" /></td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td><input type="submit" value="Login" /></td></tr>
+</table>
+</form>
+<br />
+<br />
+<br />
+<script  language="Javascript">
+
+    insertLink("proxy/proxy4.jnlp", "e-Materials Proxy");
+</script>
+<br />
+Or download the application:&nbsp;
+<a href="proxy/Proxy.tar">Proxy.tar</a>&nbsp;
+&nbsp;
+<a
+href="proxy/Proxy.zip">Proxy.zip</a>
+<br />
+
+   <a href='installation.html'>Installation notes</a>.
+  <br />
+<br />
+<a href="#" onclick="openHelp();">Help pages</a>.
+<br />
+
+<a href="../">Home page</a>.
+<br />
+<div id="footer" align="right"> <a href="http://validator.w3.org/check/referer"><img
+
+         src="../img/vxhtml.gif"
+
+        alt="Valid XHTML 1.0!" border="0" height="31" width="88" /></a>
+
+<br />
+<br />
+<br />
+<br />
+<a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top">&copy; 2003 CLRC DataPortal</a></div>
+</td>
+</tr>
+</table>
+</body>
+</html>
+
+
+

@@ -1,0 +1,42 @@
+note
+----- 
+this is a temporary document until the javadoc is done
+
+classes			dependencies				notes
+-------			------------				-----
+-StringReplace		none					replace literal entities with escaped form
+
+-XmlText		none					filters text removing all invalid characters in the low range
+
+-StringZip		none					compresses a string - at the moment not thread safe
+
+-InterfaceItems		none					helper class
+
+-SessionSingleton	ParseQuery				used by the 'main' classes and some of their dependencies
+
+-ParseQuery		SessionSingleton			deals with decomposing xmlwrapper query
+
+-CeraMapperFactory	CeraMapper				single point of creation of CeraMappers
+			BADCCeraMapper				
+			MPIMCeraMapper
+
+-DBHelper		SessionSingleton			helper class to allow connection to the database
+
+
+-CeraMapper		none					interface for inhertance
+
+-BADCCeraMapper		CeraMapper,				BADC relational to schema mapping
+			ParseQuery
+
+-only a test version- MPIMCeraMapper		CeraMapper,				MPIM relational to schema mapping
+			ParseQuery
+
+
+-XmlWrapperBADC		SessionSingleton,			BADC XML Wrapper
+			CeraMapperFactory,
+
+-XmlWrapperMPIM		SessionSingleton,			MPIM XML Wrapper
+			CeraMapperFactory
+
+-XmlWrapperTester	deployed XmlWrapperBADC,		Tests the web services functionality - basic request-response
+			deployed XmlWrapperMPIM			save to file method

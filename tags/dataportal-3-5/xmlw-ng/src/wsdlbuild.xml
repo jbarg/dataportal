@@ -1,0 +1,118 @@
+<project name="Dataportal XmlWrappers: wsdl part" default="compile" basedir=".">
+
+
+  <target name="wsdl"
+   description="makes wsdl and server skeltons and client stubs">
+
+    <!-- need to generate the wsdl and the stubs & skeleton -->
+    <!-- DocBuilder: -->
+    <!-- 'single quotes' around values containing double quotes -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='builderxmlw.wsdl'/>
+       <arg value='-l'/>
+       <arg value='http://localhost:8080/${app.name}/xmlwrapper_builder'/>
+       <arg value='-n'/>
+       <arg value='urn:xmlwrapper'/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperDocBuilder'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='.'/>
+       <arg value='-d'/>
+       <arg value='Application'/>
+       <arg value="-s"/>
+       <arg value='-p'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.ws.builder'/>
+       <arg value='builderxmlw.wsdl'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+    <!-- need to generate the wsdl and the stubs & skeleton -->
+    <!-- DocSelector: -->
+    <!-- 'single quotes' around values containing double quotes -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='selectorxmlw.wsdl'/>
+       <arg value='-l'/>
+       <arg value='http://localhost:8080/${app.name}/xmlwrapper_selector'/>
+       <arg value='-n'/>
+       <arg value='urn:xmlwrapper'/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperDocSelector'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='.'/>
+       <arg value='-d'/>
+       <arg value='Application'/>
+       <arg value="-s"/>
+       <arg value='-p'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.ws.selector'/>
+       <arg value='selectorxmlw.wsdl'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+
+  </target>
+  <!-- -->
+  
+  <target name="deploy"
+	  description="deploy xmlwrapper web services">
+
+	  <!-- DocBuilder: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/builder/deploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+
+	  <!-- DocSelector: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/selector/deploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+
+  </target>
+
+  <target name="undeploy"
+	  description="deploy xmlwrapper web services">
+
+	  <!-- DocBuilder: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/builder/undeploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+	  <!-- DocSelector: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/selector/undeploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+  </target>
+
+	
+</project>

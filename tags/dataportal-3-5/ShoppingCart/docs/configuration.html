@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Installation Guide</title>
+		<style type="text/css">
+		span.blue {background-color: #9CF2FA}
+		
+		</style>
+	</head>
+	<body>
+		<h2>
+			<u>
+				<b>Installing the Shopping Cart</b>
+			</u>
+		</h2>
+		<br />
+		<h3>
+			<u>
+				<b>
+					<span class="blue">Step 1. setting up the libraries.</span>
+				</b>
+			</u>
+		</h3>
+		<br />
+		<p>Before the shopping cart can work you need to install axis on you tomcat server.  The installation notes can be found 		<a href="http://cvs.apache.org/viewcvs.cgi/~checkout~/xml-axis/java/docs/install.html">Axis installation</a>
+		</p>
+		<br />
+		<h3>
+			<u>
+				<b>
+					<span class="blue">Step 2. configuring Shop.conf.</span>
+				</b>
+			</u>
+		</h3>
+		<p>This file is located in the $installation_home/web/WEB-INF folder.  This file configures the cart for the location of the database etc.  It requires that the table structure is in the form of the createTable.sql located in the same folder.  The configuration options are as follows.</p>
+		<ul>
+			<li>
+				<b>db_url</b>. This is the JDBC url of the database.  Normally in the form of  jdbc:{database_name}://{computer_name}:{database_port_number}.  <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Not all are like this so goto here for <a href="http://java.sun.com/docs/books/tutorial/jdbc/basics/connecting.html">help</a>
+			</li>
+			<li>
+				<b>db_name</b>.  This is the name of the database.  This is appended to the end of the db_url</li>
+			<li>
+				<b>db_user</b>.  This is the name of the user in the database for JDBC to login to.</li>
+			<li>
+				<b>db_user</b>.  This is the password of the user in the database.</li>
+			<li>
+				<b>db_table_name</b>.  This the table name where the shopping cart is stored</li>
+			<li>
+				<b>db_driver</b>.  This is the driver that the JDBC tries to load. NB:The third party driver's jar file must be placed in the classpath of tomcat</li>
+		</ul>
+		
+		<br />
+		<p>An example script to initialise the cart database for a postgres database can be found <a href="createCartDB.sql">ShoppingCart Home</a> folder, called CreateCartDB.sql.  The xml table column needs to be a Binary Large Object (BLOB).</p>
+		<h3>
+			<u>
+				<b>
+					<span class="blue">Step 3. configuring build.properties.</span>
+				</b>
+			</u>
+		</h3>
+		<p>This file is also located in the $installation_home/web/WEB-INF folder.  This file configures the ant script where to deploy the web service and sets a few envirnmental varaibles  The options are as follows</p>
+		<ul>
+			<li>
+				<b>server.name</b>.  This specifies the server name and the port it is running on.  Usually this will be localhost:8080</li>
+			<li>
+				<b>manager.username &amp; manager.password</b>.  For ant to install a web application on to tomcat, it needs the username and password for the managers role in tomcat.  These are specified in the $TOMCAT_HOME/conf/tomcat-users.xml file.  Within the document tags there needs to be two nested tags.  One specifies a role as and manager &lt;role rolename="manager"/&gt; and the other specifies the username and password of a user who have a role of and manager  &lt;user username="your username" password="your password" roles="tomcat,role1"/&gt;</li>
+			<li>
+				<b>catalina.home</b>.  This is the same value as your $CATALINA_HOME variable. This sets where and which serveryou are going to deploy on</li>
+<li>
+				<b>logger</b>.  This is the file name of the properties file for log4j.  It is located in the web/WEB-INF folder.  Ie logger.properties would point to web/WEB-INF/logger.properties. </li>
+
+		</ul>
+		<br />
+		<h3>
+			<u>
+				<b>
+					<span class="blue">Step 4. building the web service</span>
+				</b>
+			</u>
+		</h3>
+		<p>Its now time to build the web service from the source code. In your command prompt go to the $INSTALLATION_HOME.  To build the service you need to type </p>
+		<blockquote>
+			<pre>ant -file build.xml</pre>
+		</blockquote>
+		<p>This should have created a folder called build in your $INSTALLATION_HOME.</p>
+		<br />
+		<h3>
+			<u>
+				<b>
+					<span class="blue">Step 5. javadoc the web service</span>
+				</b>
+			</u>
+		</h3>
+		<p>To document the code within the web service you now need to type</p>
+		<blockquote>
+			<pre>ant -file build.xml dist</pre>
+		</blockquote>
+		<p>Note that if you have not just built your web service this command will compile it aswell.  This process will also jar up the entire build folder and place it in the dist directory as a .war file.</p>
+		<br />
+		<h3>
+			<u>
+				<b>
+					<span class="blue">Step 6.install the web service on to tomcat</span>
+				</b>
+			</u>
+		</h3>
+		<p>The web service is now build and documented.  We need to install this on to tomcat.  Type this</p>
+		<blockquote>
+			<pre>ant -file build.xml install</pre>
+		</blockquote>
+		<p>If the installation is succesful then the web service hae been installed on to your server.  To check put this in to your browser</p>
+		<blockquote>
+			<pre>http://localhost:8080/shopcart/services/ShoppingCart</pre>
+		</blockquote>
+	</body>
+</html>

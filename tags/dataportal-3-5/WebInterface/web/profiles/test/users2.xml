@@ -1,0 +1,1290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<CLRCMetadata>
+
+<MetadataRecord metadataID="S6">
+
+    <Topic>
+
+      <Discipline>Crystallography</Discipline>
+
+      <Subject>atomic displacement parameters</Subject>
+
+      <Subject>barrier to rotation</Subject>
+
+      <Subject>intermolecular contacts</Subject>
+
+      <Subject>variable temperature</Subject>
+
+      <Discipline>Organic Chemistry</Discipline>
+
+      <Subject>atomic displacement parameters</Subject>
+
+      <Subject>barrier to rotation</Subject>
+
+      <Subject>bisbenzenechromium</Subject>
+
+      <Subject>intermolecular contacts</Subject>
+
+      <Subject>variable temperature</Subject>
+
+    </Topic>
+
+    <Measurement>
+
+      <StudyName>Cr(C6D6)2 300K neutron SXD</StudyName>
+
+      <StudyID studyid="RB00003">
+
+        <Institution institutionID="INST10" institutiontype="academic">University of Keele</Institution>
+
+      </StudyID>
+
+      <Investigator>
+
+        <Name>
+
+          <Surname>Jones</Surname>
+
+          <Initials>R.H.</Initials>
+
+          <PersonTitle>Dr</PersonTitle>
+
+        </Name>
+
+        <Status>Lecturer</Status>
+
+        <Institution institutionID="INST10" institutiontype="academic">University of Keele</Institution>
+
+        <Role>Principle Investigator</Role>
+
+        <ContactDetails>
+
+          <Address>
+
+            <Addressline1/>
+
+            <Town>Keele</Town>
+
+            <Country countryabbrev=""/>
+
+          </Address>
+
+        </ContactDetails>
+
+      </Investigator>
+
+      <StudyInformation>
+
+        <Funding>EPSRC - Ref: Direct Access - Funding: Unknown</Funding>
+
+        <TimePeriod>
+
+          <StartDate>
+
+            <Date>01/11/1998</Date>
+
+          </StartDate>
+
+          <EndDate>
+
+            <Date>01/12/1998</Date>
+
+          </EndDate>
+
+        </TimePeriod>
+
+        <Purpose>
+
+          <Abstract>To investigate the structure of bis(benzene)chromium [Cr(C6D6)] at 300K, to add information on the hydrogen atoms to extensive variable temperature data from SRS station 9.8 aimed at characterising from diffraction the barrier to rotation of the benzene groups..  The neutron study will be used to look for any unusual excess libration of the hydrogen atoms and to characterise fully the intermolecular contacts.  Additional information at lower temperatures to be collected in later experiments under this RB number if this study successful..</Abstract>
+
+          <StudyType>Data run</StudyType>
+
+        </Purpose>
+
+        <Notes>Complementary X-ray work published Chem Phys Letters, 319 (2000), 423</Notes>
+
+      </StudyInformation>
+
+      <DataManager>
+
+        <Institution institutionID="INST3" institutiontype="government">ISIS, CLRC Rutherford Appleton Laboratory</Institution>
+
+        <Contact>
+
+          <Name>
+
+            <Surname>Wilson</Surname>
+
+            <Initials>CC</Initials>
+
+            <Forename>Chick</Forename>
+
+            <PersonTitle>Dr</PersonTitle>
+
+          </Name>
+
+          <Status>Unknown</Status>
+
+          <Institution institutionID="INST3" institutiontype="government">ISIS, CLRC Rutherford Appleton Laboratory</Institution>
+
+          <ContactDetails>
+
+            <Address>
+
+              <Addressline1>ISIS Facility</Addressline1>
+
+              <Addressline2>CLRC Rutherford Appleton Laboratory</Addressline2>
+
+              <Town>Chilton, Didcot</Town>
+
+              <Region>Oxfordshire</Region>
+
+              <Country countryabbrev="UK">United Kingdom</Country>
+
+              <Postcode>OX11 0QX</Postcode>
+
+            </Address>
+
+            <Email>C.C.Wilson@rl.ac.uk</Email>
+
+          </ContactDetails>
+
+        </Contact>
+
+        <Contact>
+
+          <Name>
+
+            <Surname>Jones</Surname>
+
+            <Initials>R.H.</Initials>
+
+            <PersonTitle>Dr</PersonTitle>
+
+          </Name>
+
+          <Status>Lecturer</Status>
+
+          <Institution institutionID="INST10" institutiontype="academic">University of Keele</Institution>
+
+          <ContactDetails>
+
+            <Address>
+
+              <Addressline1/>
+
+              <Town>Keele</Town>
+
+              <Country countryabbrev=""/>
+
+            </Address>
+
+          </ContactDetails>
+
+        </Contact>
+
+      </DataManager>
+
+      <Instrument>ISIS Single crytal diffractometer</Instrument>
+
+      <Condition>
+
+        <ParamName>Chemical formula</ParamName>
+
+        <ParamValue>Cr(C6D6)2</ParamValue>
+
+      </Condition>
+
+      <Condition>
+
+        <ParamName>Temperature</ParamName>
+
+        <Units>K</Units>
+
+        <ParamValue>300</ParamValue>
+
+      </Condition>
+
+    </Measurement>
+
+    <AccessConditions>The users must be one of: Prof. E.Sinn, Demo user, Dr N.Young, Dr.S.J.Teat, Dr J.Crane.</AccessConditions>
+
+    <DataHolding>
+
+      <DataName>Cr(C6D6)2 300k</DataName>
+
+      <TypeOfData>Collection</TypeOfData>
+
+      <Status>Complete</Status>
+
+      <LogicalDescription>
+
+        <TimePeriod>
+
+          <StartDate>
+
+            <Date>01/11/1998</Date>
+
+          </StartDate>
+
+          <EndDate>
+
+            <Date>01/12/1998</Date>
+
+          </EndDate>
+
+        </TimePeriod>
+
+      </LogicalDescription>
+
+      <DataSet>
+
+        <DataName>Inter8</DataName>
+
+        <TypeOfData>Collection</TypeOfData>
+
+        <Status>Complete</Status>
+
+        <LogicalDescription>
+
+          <Condition>
+
+            <ParamName>Temperature</ParamName>
+
+            <Units>K</Units>
+
+            <ParamValue>300</ParamValue>
+
+          </Condition>
+
+        </LogicalDescription>
+
+        <File>
+
+          <DataName>SXD09117.SF</DataName>
+
+          <URI>SXD09117.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD09121.SF</DataName>
+
+          <URI>SXD09121.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12014.SF</DataName>
+
+          <URI>SXD12014.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12015.SF</DataName>
+
+          <URI>SXD12015.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12016.SF</DataName>
+
+          <URI>SXD12016.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12018.SF</DataName>
+
+          <URI>SXD12018.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12019.SF</DataName>
+
+          <URI>SXD12019.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12020.SF</DataName>
+
+          <URI>SXD12020.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12022.SF</DataName>
+
+          <URI>SXD12022.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12023.SF</DataName>
+
+          <URI>SXD12023.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12030.SF</DataName>
+
+          <URI>SXD12030.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12031.SF</DataName>
+
+          <URI>SXD12031.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12032.SF</DataName>
+
+          <URI>SXD12032.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12033.SF</DataName>
+
+          <URI>SXD12033.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12034.SF</DataName>
+
+          <URI>SXD12034.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12035.SF</DataName>
+
+          <URI>SXD12035.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12036.SF</DataName>
+
+          <URI>SXD12036.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12037.SF</DataName>
+
+          <URI>SXD12037.SF</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12038.SF</DataName>
+
+          <URI>SXD12038.SF</URI>
+
+        </File>
+
+      </DataSet>
+
+      <DataSet>
+
+        <DataName>Proc8</DataName>
+
+        <TypeOfData>Collection</TypeOfData>
+
+        <Status>Complete</Status>
+
+        <LogicalDescription>
+
+          <Condition>
+
+            <ParamName>Temperature</ParamName>
+
+            <Units>K</Units>
+
+            <ParamValue>300</ParamValue>
+
+          </Condition>
+
+          <Condition>
+
+            <ParamName>Chemical formula</ParamName>
+
+            <ParamValue>Cr(C6D6)2</ParamValue>
+
+          </Condition>
+
+        </LogicalDescription>
+
+        <File>
+
+          <DataName>BIS300.EXP</DataName>
+
+          <URI>BIS300.EXP</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>BIS300.REF01M</DataName>
+
+          <URI>BIS300.REF01M</URI>
+
+        </File>
+
+      </DataSet>
+
+      <DataSet>
+
+        <DataName>Raw8</DataName>
+
+        <TypeOfData>Collection</TypeOfData>
+
+        <Status>Complete</Status>
+
+        <LogicalDescription>
+
+          <Condition>
+
+            <ParamName>Temperature</ParamName>
+
+            <Units>K</Units>
+
+            <ParamValue>300</ParamValue>
+
+          </Condition>
+
+        </LogicalDescription>
+
+        <File>
+
+          <DataName>SXD12014.RAW</DataName>
+
+          <URI>SXD12014.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12015.RAW</DataName>
+
+          <URI>SXD12015.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12016.RAW</DataName>
+
+          <URI>SXD12016.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12017.RAW</DataName>
+
+          <URI>SXD12017.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12018.RAW</DataName>
+
+          <URI>SXD12018.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12019.RAW</DataName>
+
+          <URI>SXD12019.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12020.RAW</DataName>
+
+          <URI>SXD12020.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12021.RAW</DataName>
+
+          <URI>SXD12021.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12022.RAW</DataName>
+
+          <URI>SXD12022.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12023.RAW</DataName>
+
+          <URI>SXD12023.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12030.RAW</DataName>
+
+          <URI>SXD12030.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12031.RAW</DataName>
+
+          <URI>SXD12031.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12032.RAW</DataName>
+
+          <URI>SXD12032.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12033.RAW</DataName>
+
+          <URI>SXD12033.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12034.RAW</DataName>
+
+          <URI>SXD12034.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12035.RAW</DataName>
+
+          <URI>SXD12035.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12036.RAW</DataName>
+
+          <URI>SXD12036.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12037.RAW</DataName>
+
+          <URI>SXD12037.RAW</URI>
+
+        </File>
+
+        <File>
+
+          <DataName>SXD12038.RAW</DataName>
+
+          <URI>SXD12038.RAW</URI>
+
+        </File>
+
+      </DataSet>
+
+    </DataHolding>
+
+    <DataHoldingLocator>
+
+      <DataName>Cr(C6D6)2 300k</DataName>
+
+      <Locator type="absolute">
+
+        <URL>ftp://ftp.isis.rl.ac.uk/SCD/PORTAL/CRC6D6/</URL>
+
+        <DataSourceAccess>Read access public, modify access Data Holder and CC Wilson</DataSourceAccess>
+
+      </Locator>
+
+      <DataSetLocator>
+
+        <DataName>Raw8</DataName>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/</URL>
+
+        </Locator>
+
+      </DataSetLocator>
+
+      <DataSetLocator>
+
+        <DataName>Inter8</DataName>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/</URL>
+
+        </Locator>
+
+      </DataSetLocator>
+
+      <DataSetLocator>
+
+        <DataName>Proc8</DataName>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/</URL>
+
+        </Locator>
+
+      </DataSetLocator>
+
+      <FileLocator>
+
+        <URI>SXD09117.SF</URI>
+
+        <Locator type=" relative">
+
+          <URL>/VT/DET1/SXD09117.SF</URL>
+
+        </Locator>
+
+        <Locator type=" relative">
+
+          <URL>/VT/DET2/SXD09117.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD09121.SF</URI>
+
+        <Locator type=" relative">
+
+          <URL>/VT/DET1/SXD09121.SF</URL>
+
+        </Locator>
+
+        <Locator type=" relative">
+
+          <URL>/VT/DET2/SXD09121.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12014.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12014.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12015.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12015.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12016.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12016.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12017.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12017.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12018.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12018.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12019.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12019.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12020.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12020.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12021.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12021.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12022.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12022.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12023.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12023.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12030.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12030.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12031.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12031.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12032.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12032.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12033.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12033.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12034.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12034.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12035.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12035.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12036.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12036.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12037.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12037.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12038.RAW</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXDMGR/DATA/SXD12038.RAW</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12014.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12014.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12014.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12015.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12015.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12015.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12016.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12016.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12016.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12018.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12018.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12018.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12019.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12019.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12019.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12020.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12020.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12020.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12022.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12022.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12022.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12023.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12023.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12023.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12030.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12030.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12030.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12031.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12031.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12031.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12032.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12032.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12032.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12033.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12033.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12033.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12034.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12034.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12034.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12035.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12035.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12035.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12036.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12036.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12036.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12037.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12037.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12037.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>SXD12038.SF</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/SXD12038.SF</URL>
+
+        </Locator>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET2/SXD12038.SF</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>BIS300.EXP</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/BIS300.EXP</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+      <FileLocator>
+
+        <URI>BIS300.REF01M</URI>
+
+        <Locator type="absolute">
+
+          <URL>ftp://ftp.isis.rl.ac.uk/SXD/PORTAL/CRC6D6/DET1/BIS300.REF01M</URL>
+
+        </Locator>
+
+      </FileLocator>
+
+    </DataHoldingLocator>
+
+  </MetadataRecord>
+
+</CLRCMetadata>
+

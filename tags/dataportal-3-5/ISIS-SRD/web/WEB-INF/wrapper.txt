@@ -1,0 +1,3 @@
+#this is the configuration for the isis and srd demo wrappers
+isis_url=http://gepidae.esc.rl.ac.uk/DataPortal/ReturnXML.asp
+srd_url=http://gepidae.esc.rl.ac.uk/DataPortal/ReturnXML.asp

@@ -1,0 +1,75 @@
+/* Glen's CSS style sheet for DataPortal -- 18th Jan 2002	*/
+
+/* this is used for the XHTML for the frames pages  this does not have the background
+
+for main page of the frame */
+
+body 		{ margin: 10px; font-family: Trebuchet, Arial, sans-serif; )
+
+}
+
+
+
+h1		{ text-align: right; color: black; }
+
+
+
+#footer	{ text-align: right; font-size: 8pt; }
+
+span.navtext	{ color: #ffffff; text-align: left; }
+
+span.navbar	{ color: #ffffff; text-align: left; }
+
+
+
+hr		{ color: #ADD8E6; height: 3px; }
+
+
+
+#button		{height:40px; width:100px; }
+
+
+
+a:link 		{ color: BLUE; text-decoration: none;  background: #FFFFFF;}
+
+
+
+a:visited 	{ color: #0000FF; text-decoration: none;  background: #FFFFFF;}
+
+
+
+a:hover		{ color: #999999; text-decoration: underline;  background: #FFFFFF;}
+
+
+
+a:active 	{ color: #9999CC; text-decoration: underline;  background: #FFFFFF;}
+
+
+
+#b               {text-align: center; font-weight: bold}
+
+ 
+
+#top_table      {border-style: solid; border-width: 0px ; width:100%}
+
+
+
+#td_top1         {text-align: left; vertical-align:text-top; width:150px}
+
+
+
+
+
+#td_top2        {text-align: left; vertical-align:text-top}
+
+
+
+img             {border-style: solid; border-width: 0px; border:0px }
+
+
+
+#xhtml          { width:88; height:31; border-style: solid; border-width: 0px}
+
+
+
+p.footer       	{ text-align: right; font-size: 8pt; }
