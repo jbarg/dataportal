@@ -17,7 +17,7 @@ public abstract class DelegateProxy
 {
 // Data specific to MyProxyServer
 
-    public static GlobusProxy getProxy( String aUsername, String aPassPhrase, GlobusProxy thePortalProxy ) 
+    public static GlobusProxy getProxy( String aUsername, String aPassPhrase,Integer lifetime, GlobusProxy thePortalProxy ) 
                                               throws GlobusProxyException, MyProxyException
     {
         GlobusProxy portalProxy = thePortalProxy;
@@ -37,7 +37,7 @@ public abstract class DelegateProxy
                                                      portalProxy, 
                                                      username,
                                                      userPassphrase,
-                                                     AuthCtl.delegateProxyLifetime,
+                                                   lifetime.intValue(),
                                                      AuthCtl.myProxyServerDN );
 
         return delegateUserProxy;

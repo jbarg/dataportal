@@ -5,7 +5,8 @@ package uk.ac.clrc.dataportal.authent;
 import java.util.*;
 import java.sql.*;
 //security classes
-
+import java.net.*;
+import java.io.*;
 import javax.xml.parsers.*;
 import org.jdom.*;
 import org.jdom.output.*;
@@ -58,13 +59,13 @@ public class AuthCtl {
             throw e;
         }
     }
-    public int login( String userName, String password ) throws Exception {
+    public String login( String userName, String password, Integer lifetime ) throws Exception {
         
         String[] facilityEndPoints;
         org.w3c.dom.Element facilityAccess;
-        int sessionId;
+        String sessionId;
         AuthCtl.getMyConfig();
-        X509Certificate userCert = idCheck( userName, password );
+        GlobusProxy userCert = idCheck( userName, password, lifetime );
         //        S
         //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
         //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
@@ -72,7 +73,7 @@ public class AuthCtl {
         
         
         if ( userCert == null )
-            sessionId = -1;
+            sessionId = "-1";
         else {
             facilityEndPoints = lookupFacility();
             //            System.out.println(facilityEndPoints.length);
@@ -81,13 +82,27 @@ public class AuthCtl {
             //            }
             
             //*** WILL USE DN WITH FACILITIES SOOOOOON...
-            facilityAccess = buildAccess( userName, facilityEndPoints );
-            System.out.println( "---> User:     " + userCert.getSubjectDN().getName() );
-            sessionId = getSessionId( userCert.getSubjectDN().getName(), facilityAccess );
+            facilityAccess = buildAccess( userCert.getUserCert().getSubjectDN().getName(), facilityEndPoints );
+            //System.out.println( "---> User:     " + userCert.getUserCert().getSubjectDN().getName() );
+            sessionId = getSessionId( userCert, facilityAccess );
         }
         
         return sessionId;
         
+    }
+    
+    //this is called by the session manager for 3rd party authentication.
+    
+    public org.w3c.dom.Element getAccessRights(String dn) throws Exception{
+        
+        String[] facilityEndPoints;
+        org.w3c.dom.Element facilityAccess;
+        AuthCtl.getMyConfig();
+        System.out.println("looking up facs ....");
+        //
+        facilityEndPoints = lookupFacility();
+        facilityAccess = buildAccess( dn, facilityEndPoints );
+        return facilityAccess;
     }
     
     // This was used when we checked the ID in throws database. Kept in case we revert
@@ -116,7 +131,7 @@ public class AuthCtl {
     }
     
     // new version of idCheck that uses MyProxy and GSI certificates
-    private X509Certificate idCheck( String userName, String userPassword ) throws Exception {
+    private GlobusProxy idCheck( String userName, String userPassword,Integer lifetime ) throws Exception {
         //users password and name from database
         boolean loggedIn = false;
         GlobusProxy portalProxy = null;
@@ -129,13 +144,16 @@ public class AuthCtl {
         }
         catch( Exception e ) {
             System.out.println( "Caught exception while creating portal proxy:\n\t" + e.toString() );
-            System.exit( -1 );
+            //System.exit( -1 );
         }
         
         GlobusProxy delegateUserProxy = null;
         
         try {
-            delegateUserProxy = DelegateProxy.getProxy( userName, userPassword, portalProxy );
+            delegateUserProxy = DelegateProxy.getProxy( userName, userPassword,lifetime, portalProxy );
+            /*FileOutputStream out = new FileOutputStream("c:/myproxy.txt");
+            delegateUserProxy.save(out);
+            out.close();*/
             //            System.out.println( "Successfully retrieved proxy" );
             userCert = delegateUserProxy.getUserCert();
             loggedIn = true;
@@ -144,21 +162,29 @@ public class AuthCtl {
             System.out.println( "Caught exception while retrieving proxy:\n\t" + e.toString() );
         }
         
-        
-        
-        
-        
-        return ( userCert );
+        return  delegateUserProxy ;
     }
     
     private String[] lookupFacility() throws Exception {
         
-        LookUpModuleService service = new LookUpModuleServiceLocator();
+        /*LookUpModuleService service = new LookUpModuleServiceLocator();
         LookUpModule port = service.getLookUpService();
         String[] facilities = port.getFacilities();
-        String[] faciltyEndPoints = port.lookupEndpoint(facilities, "ACM");
+        String[] faciltyEndPoints = port.lookupEndpoint(facilities, "ACM");*/
+        Service  service = new Service();
+        Call  call    = (Call) service.createCall();
         
-        return faciltyEndPoints;
+        call.setTargetEndpointAddress( new java.net.URL(uDDILookUpService) );
+        call.setOperationName( "LookupEndpoint" );
+        call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
+        call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
+        call.setReturnType( XMLType.SOAP_ARRAY );
+        String[] name = {"BADC","SRD","ISIS","MPIM"};
+        Object[] ob = new Object[]{name,"ACM"};
+        
+        String[] faciltyEndPoints = (String[]) call.invoke(ob );
+               
+                return faciltyEndPoints;
     }
     
     private org.w3c.dom.Element buildAccess( String userName, String[] facilityEndPoints ) throws Exception {
@@ -172,6 +198,11 @@ public class AuthCtl {
         
         Service  service = new Service();
         
+        //hard coded section
+        ///String[] facilityEndPointsHC = {"http://localhost:8080/acmbadc/services/acm","http://localhost:8080/acmmpim/services/acm","http://localhost:8080/acmsrd/services/acm","http://localhost:8080/acmisis/services/acm"};
+        
+        //facilityEndPoints = facilityEndPointsHC;
+        //System.out.println("AUTH: access urls are "+facilityEndPoints);
         for (int i  = 0 ; i < facilityEndPoints.length ; i++){
             
             if ( facilityEndPoints[i] != null ) {
@@ -205,41 +236,82 @@ public class AuthCtl {
     }
     
     
-    private int getSessionId( String userName, org.w3c.dom.Element facilityAccess ) throws Exception {
+    
+    private String getSessionId( GlobusProxy proxy, org.w3c.dom.Element facilityAccess ) throws Exception {
         
         // need to define endpoint or call lookup module
         // below is a fix
         // use String[] lookupEndpoint(String[] facilityList, String serviceType) with "dataportal" and "session"
         
-        LookUpModuleService lookupService = new LookUpModuleServiceLocator();
+        
+        
+        /*LookUpModuleService lookupService = new LookUpModuleServiceLocator();
         LookUpModule port = lookupService.getLookUpService();
         String[] facilities = { "Dataportal" };
-        String[] facilityEndPoints = port.lookupEndpoint(facilities, "SESSION");
+        String[] facilityEndPoints = port.lookupEndpoint(facilities, "SESSION");*/
+        Service  service1 = new Service();
+        Call  call1    = (Call) service1.createCall();
         
-        // String endpoint = "http://escvig1.dl.ac.uk:8080/axis/services/SessionManager";
+        call1.setTargetEndpointAddress( new java.net.URL(uDDILookUpService) );
+        call1.setOperationName( "LookupEndpoint" );
+        call1.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
+        call1.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
+        call1.setReturnType( XMLType.SOAP_ARRAY );
+        String[] name = {"Dataportal"};
+        Object[] ob = new Object[]{name,"SESSION"};
         
+        String[] sessionendpoint = (String[]) call1.invoke(ob );
+        
+                
         // error handling in case no endpoint in returned!
+        //save to file
+        FileOutputStream out = new FileOutputStream(Config.getContextPath()+proxy.getSubject());
+        proxy.save(out);
+        out.close();
+        //turn proxy into string
+        URL url1  = new URL("file:///"+Config.getContextPath()+proxy.getSubject());
+        // System.out.println(url);
+        URLConnection con = url1.openConnection();
+        InputStream in2 = con.getInputStream();
+        BufferedReader in = new BufferedReader(new InputStreamReader(in2));
+        String inputLine;
+        // String certt;
+        StringBuffer cert = new StringBuffer();
+        while ((inputLine = in.readLine()) != null){
+            //System.out.println(inputLine);
+            cert.append(inputLine);
+            cert.append("\n");
+            //  if(!inputLine.equals("-----END CERTIFICATE-----"))  cert.append("\n");
+            
+        }
+        in.close();
+        //end of file save
+        File proxyfile = new File(Config.getContextPath()+proxy.getSubject());
+        proxyfile.delete();
         
         Service service = new Service();
         Call call = (Call) service.createCall();
-        call.setTargetEndpointAddress( new java.net.URL(facilityEndPoints[0]) );
+        call.setTargetEndpointAddress( new java.net.URL(sessionendpoint[0]) );
         call.setOperationName("startSession");
-        call.addParameter( "userName", XMLType.XSD_STRING, ParameterMode.IN );
-        call.addParameter( "facilityAccess", XMLType.SOAP_ELEMENT, ParameterMode.IN );
-        call.setReturnType( XMLType.XSD_INT );
+        call.addParameter( "proxy", XMLType.XSD_STRING, ParameterMode.IN );
         
-        Integer ret = (Integer) call.invoke( new Object [] {userName, facilityAccess});
+        
+        call.addParameter( "facilityAccess", XMLType.SOAP_ELEMENT, ParameterMode.IN );
+        call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
+        call.setReturnType( XMLType.XSD_STRING );
+        
+        String ret = (String) call.invoke( new Object [] {cert.toString(), facilityAccess,null});
         //        System.out.println("Results: " + ret);
-        return ret.intValue();
+        return ret;
     }
     
     public static void main(String[] args) throws Exception {
         
         AuthCtl auth = new AuthCtl();
         
-        int loggedin = auth.login("mike","letmein");
+        // int loggedin = auth.login("mike","letmein");
         
-        System.out.println("Result: " + Integer.toString(loggedin));
+        //System.out.println("Result: " + Integer.toString(loggedin));
     }
     
 }

@@ -9,14 +9,15 @@ import java.util.Properties;
 import org.jdom.input.DOMBuilder;
 import org.jdom.Element;
 import org.jdom.Document;
-import java.util.List;
-import java.util.Iterator;
+import java.util.*;
 
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
 import javax.xml.rpc.ParameterMode;
 import javax.xml.rpc.ServiceException;
+
+import java.io.*;
 /**
  *
  * @author  ljb53
@@ -78,13 +79,16 @@ public class QueryThread extends Thread {
         //DUMMY LOOKUP & WRAPPERS
         //String endpoint = "http://localhost:8080/axis/services/ServicesSimulator";
         //LIVE LOOKUP & WRAPPERS
-        String endpoint = "http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService";
-        logger.info(getFacilityName()+":"+"using lookup address "+endpoint);
+      //  String endpoint = "http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService";
+        Properties prop = new Properties();
+        prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
+        String lookup_url = prop.getProperty("lookup_module_url");
+        logger.info(getFacilityName()+":"+"using lookup address "+lookup_url);
         
         // Find address of facility's XML wrapper by asking the lookup web service
         Service service = new Service();
         Call call = (Call) service.createCall();
-        call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+        call.setTargetEndpointAddress( new java.net.URL(lookup_url) );
         call.setOperationName("lookup");
         call.addParameter("facilityList", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter("serviceType", XMLType.XSD_STRING, ParameterMode.IN );
