@@ -1,156 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CLRCMetadata xmlns="http://www.escience.clrc.ac.uk/schemas/scientific" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.escience.clrc.ac.uk/schemas/scientific
 E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\xsd\clrcmetadata.xsd">
-<MetadataRecord MetadataID="ECHAM3_T42_22032AMIP" Facility="MPIM">
+<MetadataRecord MetadataID="MPIM-ECHAM3_T42_22032AMIP" Facility="MPIM">
 		<Topic>
-			<Keywords>
-				<Discipline>Chemistry</Discipline>
-				<Keyword>Organic</Keyword>
-				<Keyword>Benzene</Keyword>
-				<Keyword>Denatured Benzene</Keyword>
-				<Keyword>C6H6</Keyword>
-				<Keyword>C6D6</Keyword>
-			</Keywords>
 			<Subjects>
-				<Discipline>Chemistry</Discipline>
+				<Discipline>Earth Sciences</Discipline>
+				<SubjectSource>http://www.pik-potsdam.de/dept/dc/e/sdm/cera/Descriptions/TABLES/TOPIC_DKRZ.html</SubjectSource>
 				<Subject>
-					<SubjectName>Chemsitry</SubjectName>
+					<SubjectName>ATMOSPHERE</SubjectName>
 					<Subject>
-						<SubjectName>Organic</SubjectName>
+						<SubjectName>Atmospheric Temperature</SubjectName>
 						<Subject>
-							<SubjectName>Benzene</SubjectName>
+							<SubjectName>Temperature Anomalies</SubjectName>
 						</Subject>
 					</Subject>
 				</Subject>
 			</Subjects>
 		</Topic>
-		<Study StudyID="SXD1009">
-			<StudyName>Benzene, variable temperature study: 150K</StudyName>
+		<Study StudyID="ECHAM3_T42_22032AMIP">
+			<StudyName>T42_ECHAM3_22032AMIP</StudyName>
 			<StudyInstitution>
-				<Name institutionID="ISIS" institutiontype="academic">ISIS</Name>
+				<Name institutionID="MPIM" institutiontype="research">Max-Planck Institute for Meteorology</Name>
 				<Role>Study Institution</Role>
 			</StudyInstitution>
 			<StudyPerson>
 				<Name>
-					<Surname>Perimentor</Surname>
-					<MiddleInitials>X</MiddleInitials>
-					<Forename>Anne</Forename>
-					<Title>Professor</Title>
+					<Surname>Bengtsson</Surname>
+					<Forename>Lennart</Forename>
 				</Name>
 				<ContactDetails>
 					<Address>
-						<Addressline1>Department of Organic Chemistry</Addressline1>
-						<Addressline2>University of SomeWhere</Addressline2>
-						<Town>Some Town</Town>
-						<Region>Some Region</Region>
-						<Postcode>S12 4WE</Postcode>
-						<Country countryabbrev="UK">United Kindom</Country>
+						<Addressline1>Max Planck Institute for Meteorology</Addressline1>
+						<Addressline2>Bundesstraﬂe 53</Addressline2>
+						<Town>20146 Hamburg</Town>
+						<Country>Germany</Country>
 					</Address>
-					<DirectLine>01922 222 2222</DirectLine>
-					<Switchboard>01922 222 2000</Switchboard>
-					<Fax>01922 222 1111</Fax>
-					<Email>a.x.perimentor@chem.someuni.ac.uk</Email>
-					<WebPage>http://www.somuni.ac.uk/axperimentor</WebPage>
+					<Switchboard>(+49 40) 41173 - 0</Switchboard>
+					<Fax>(+49 40) 41173 - 298</Fax>
+					<Email>bengtsson@dkrz.de</Email>
+					<WebPage>http://www.mpimet.mpg.de/~bengtsson.lennart/</WebPage>
 				</ContactDetails>
 				<RoleInStudy>Principal Investigator</RoleInStudy>
 				<RoleInInstitution>Professor</RoleInInstitution>
-			</StudyPerson>
-			<StudyPerson>
-				<Name>
-					<Surname>Wilson</Surname>
-					<Forename>Chick</Forename>
-					<Title>Doctor</Title>
-				</Name>
-				<ContactDetails>
-					<Address>
-						<Addressline1>ISIS</Addressline1>
-						<Addressline2>Rutherford Appleton Laboratory</Addressline2>
-						<Addressline3>Chilton</Addressline3>
-						<Town>Didcot</Town>
-						<Region>Oxon</Region>
-						<Postcode>OX11 0QX</Postcode>
-						<Country countryabbrev="UK">United Kindom</Country>
-					</Address>
-					<DirectLine>01111 111 1111</DirectLine>
-					<Switchboard>01111 111 1000</Switchboard>
-					<Fax>01111 111 2111</Fax>
-					<Email>chick.wilson@rl.ac.uk</Email>
-					<WebPage>http://www.rl.ac.uk/wilsonc</WebPage>
-				</ContactDetails>
-				<RoleInStudy>Data Holder</RoleInStudy>
 			</StudyPerson>
 			<StudyInformation>
 				<Funding>EPSRC</Funding>
 				<TimePeriod>
 					<StartDate>
-						<Date>2000-11-01</Date>
-						<Time>09:00:00-00:00</Time>
+						<Date>2001-11-26</Date>
+						<Time>19:19:25+01:00</Time>
 					</StartDate>
-					<EndDate>
-						<Date>2001-11-01</Date>
-						<Time>17:30:00-00:00</Time>
 					</EndDate>
 				</TimePeriod>
 				<Purpose>
-					<Abstract>To study the structure of Benzene at a temperature of 150K</Abstract>
+					<Abstract>The purpose of the experiment was to evaluate the long term atmospheric response to pre-
+ scribed SST anomoaly patterns over the period 1979-1992 by carrying out a series of simula-
+tions with the same atmospheric model but starting from different atmospheric initial states
+  
+The ECHAM3 model was essentially finalized in late 1992 and has since then been extensively
+used in different climate experiments. Together with a large number of other modelling groups,
+the ECHAM3 model has also taken part in the so called AMIP investigations ("1992: AMIP:The
+atmospheric model intercomparison project, Bull. Am. Met. Soc., 73 (12), 1962-1970," Gates, 1992).
+The model has mainly been used at low and medium horizontal resolutions, T21 and T42, in
+addition shorter integrations of 5 years duration have been done at a T106 resolution.
+  
+Five different integrations were than carried out all using different atmospheric initial states.
+The initial data were all obtained from control runs with climatological SST starting several
+month beforehand. The original archive was generated with a time resolution of 12 hours; the
+majority of the investigations in this study has been using a special archive of seasonally averaged data.
+  
+The central objective of this study is to explore the impact and importance of SST anomalies of
+the low frequency circulation of the atmosphere."(Climate predictability experiments with a
+general circulation model, Max-Planck_Report No. 145, Bengtsson, Arpe, Roeckner, Schulzweida).
+
+  
+This is the control run which produces the initial states for the five experiments:
+ECHAM3_T42_22056HMBG, ECHAM3_T42_22062LLNL, ECHAM3_T42_23101AMIP, ECHAM3_T42_23102AMIP,
+ECHAM3_T42_23103AMIP.
+  
+The URL address of the ECHAM3 model description is http://www.dkrz.de/forschung/reports-eng.html
+Report No. 6 ECHAM3-Atmospheric General Circulation Model.
+					</Abstract>
 				</Purpose>
 				<StudyStatus>Complete</StudyStatus>
-				<Resources>Beam time on ISIS using the SXD for 1 hour on 11/01/2001</Resources>
 			</StudyInformation>
-			<Investigation InvestigationID="INV-SXD1009">
-				<Name>Benzene, variable temperature study: 150K</Name>
-				<InvestigationType>Experiment</InvestigationType>
-				<Abstract>To study the structure of Benzene at a temperature of 150K</Abstract>
-				<Resources>Beam time on ISIS using the SXD for 1 hour on 11/01/2001</Resources>
-				<DataHolding InvestigationID="INV-SXD1009">
+			<Investigation InvestigationID="INV-ECHAM3_T42_22032AMIP">
+				<Name>ECHAM3_T42_22032AMIP</Name>
+				<InvestigationType>Simulation</InvestigationType>
+				<Abstract>As Study Abstract</Abstract>
+				<DataHolding InvestigationID="DH-ECHAM3_T42_22032AMIP">
 					<DataDescription>
-						<DataName>INV-SXD1009</DataName>
+						<DataName>ECHAM3_T42_22032AMIP</DataName>
 						<TypeOfData>Collection</TypeOfData>
 						<Status>Complete</Status>
 						<LogicalDescription>
 							<Parameter>
-								<ParamName>Temperature</ParamName>
+								<ParamName>Location</ParamName>
 								<Derivation>condition</Derivation>
-								<Units>
-									<UnitName>Kelvin</UnitName>
-									<UnitAcronym>K</UnitAcronym>
-								</Units>
-								<ParamValue>150</ParamValue>
+								<ParamValue>World (general)</ParamValue>
 							</Parameter>
-							<TimePeriod>
-								<StartDate>
-									<Date>2000-11-01</Date>
-									<Time>09:00:00-00:00</Time>
-								</StartDate>
-								<EndDate>
-									<Date>2001-11-01</Date>
-									<Time>17:30:00-00:00</Time>
-								</EndDate>
-							</TimePeriod>
 							<FacilityUsed>
-								<FacilityName>ISIS</FacilityName>
-								<Resource>ISIS SXD</Resource>
+								<FacilityName>MPIM</FacilityName>
 							</FacilityUsed>
 						</LogicalDescription>
 					</DataDescription>
 					<DataHoldingLocator>
-						<DataName>INV-SXD1009</DataName>
-						<Locator pathtype="absolute">ftp://ftp.isis.rl.ac.uk/SXD/SXD1009/</Locator>
-						<Locator pathtype="absolute">http://www.dooc.uos.ac.uk/~perimentor/benzene/</Locator>
+						<DataName>ECHAM3_T42_22032AMIP</DataName>
+						<Locator pathtype="database">Database</Locator>
 					</DataHoldingLocator>
-					<DataCollection dataid="INV-SXD1009-DC-RAW">
+					<DataCollection dataid="ECHAM3_T42_22032AMIP_T2M">
 						<DataDescription>
-							<DataName>RAW</DataName>
+							<DataName>ECHAM3_T42_22032AMIP_T2M</DataName>
 							<TypeOfData>Collection</TypeOfData>
 							<Status>Complete</Status>
+							<LogicalDescription>
+								<Parameter>
+									<ParamName>latitude</ParamName>
+									<Derivation>condition</Derivation>
+									<Units>
+										<UnitName>degrees</UnitName>
+									</Units>
+									<Range>
+										<Limit bound="upper">87.8638</Limit>
+										<Limit bound="lower">-87.8638</Limit>
+									</Range>
+								</Parameter>
+								<Parameter>
+									<ParamName>longitude</ParamName>
+									<Derivation>condition</Derivation>
+									<Units>
+										<UnitName>degrees</UnitName>
+									</Units>
+									<Range>
+										<Limit bound="upper">357.1875</Limit>
+										<Limit bound="lower">0.0</Limit>
+									</Range>
+								</Parameter>
+								<Parameter>
+									<ParamName>altitude</ParamName>
+									<Derivation>condition</Derivation>
+									<Units>
+										<UnitName>metre</UnitName>
+									</Units>
+									<ParamValue>2.0</ParamValue>
+								</Parameter>
+								<Parameter>
+									<ParamName>Location</ParamName>
+									<Derivation>condition</Derivation>
+									<ParamValue>World (general)</ParamValue>
+								</Parameter>
+								<Parameter>
+									<ParamName>start date</ParamName>
+									<Derivation>condition</Derivation>
+									<Units>
+										<UnitSystem>ISO8601</UnitSystem>
+										<UnitFormat>YYYY-MM-DD</UnitFormat>
+									</Units>
+									<ParamValue>1911-01-01</ParamValue>
+								</Parameter>
+								<Parameter>
+									<ParamName>end date</ParamName>
+									<Derivation>condition</Derivation>
+									<Units>
+										<UnitSystem>ISO8601</UnitSystem>
+										<UnitFormat>YYYY-MM-DD</UnitFormat>
+									</Units>
+									<ParamValue>1941-01-01</ParamValue>
+								</Parameter>
+							</LogicalDescription>
 						</DataDescription>
 						<DataCollectionLocator>
-							<DataName>RAW</DataName>
-							<Locator pathtype="relative">raw/</Locator>
+							<DataName>ECHAM3_T42_22032AMIP_T2M</DataName>
+							<Locator pathtype="database">database</Locator>
 						</DataCollectionLocator>
-						<AtomicDataObject dataid="INV-SXD1009-DC-RAW-ADO-1">
+						<AtomicDataObject dataid="DH-ECHAM3_T42_22032AMIP_T2M-ADO1">
 							<DataDescription>
-								<DataName>SXD10091.RAW</DataName>
+								<DataName>ECHAM3_T42_22032AMIP_T2M</DataName>
 								<TypeOfData>File</TypeOfData>
 								<Status>Complete</Status>
 							</DataDescription>
