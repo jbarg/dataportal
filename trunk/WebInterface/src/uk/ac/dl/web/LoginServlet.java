@@ -116,7 +116,7 @@ public class LoginServlet extends HttpServlet {
                 lookup = prop.getProperty("LookupWebService");
                 String id = prop.getProperty("defaultid");
                 String emineralsS = prop.getProperty("eminerals");
-                if(emineralsS == null || !emineralsS.equalsIgnoreCase("true")|| !emineralsS.equalsIgnoreCase("false")) emineralsS = "false";
+                if(emineralsS == null || !emineralsS.equalsIgnoreCase("true")) emineralsS = "false";
                 eminerals = new Boolean(emineralsS).booleanValue();
                 locations = getLocations(lookup,id);
                 

@@ -158,8 +158,8 @@ public class SRBTransfer extends HttpServlet {
                 call.addParameter( "cert", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.XSD_STRING );
                 InetAddress host = InetAddress.getLocalHost();
-                System.out.println("http://"+host.getHostAddress()+":8080/dataportal/xml/"+sid+".tar");
-                Object[] ob = new Object[]{"http://"+host.getCanonicalHostName() +":8080/dataportal/xml/"+sid+".tar",urlTo,cert};
+                logger.info("http://"+host.getHostAddress()+":"+request.getServerPort()+request.getContextPath()+"/xml/"+sid+".tar");
+                Object[] ob = new Object[]{"http://"+host.getHostAddress()+":"+request.getServerPort()+request.getContextPath()+"/xml/"+sid+".tar",urlTo,cert};
                 
                 result = (String) call.invoke(ob );
                 //save credential
