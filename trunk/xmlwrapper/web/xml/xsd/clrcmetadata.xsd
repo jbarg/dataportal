@@ -346,7 +346,7 @@
       <xsd:sequence>
          <xsd:element name="DataDescription"    type="cmd:DataDescriptionType"/>
          <xsd:element name="DataCollection"            type="cmd:DataCollectionType" minOccurs="0" maxOccurs="1"/>
-	 <xsd:element name="RelatedStudy"       type="cmd:RelatedStudyType" minOccurs="0"/>
+         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataHoldingLocator" type="cmd:DataHoldingLocatorType"/>
       </xsd:sequence>
 <!-- again following attribute type should really be a CDATA equivelent -->
@@ -450,11 +450,7 @@
          <xsd:element name="DataDescription" type="cmd:DataDescriptionType"/>
 	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataCollection"           type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="RelatedDataCollectionRef" type="cmd:RelatedDataCollectionRefType" minOccurs="0" maxOccurs="unbounded"/>
-	 <!--         <xsd:element name="ParentDataCollectionRef"  type="xsd:string" minOccurs="0" maxOccurs="1"/> -->
-	 <!-- <xsd:element name="ChildDataCollectionRef"   type="xsd:string" minOccurs="0"/> -->
-         <xsd:element name="DerivedFromDataCollectionRef" type="cmd:DerivedFromDataCollectionRefType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="UsedByDataCollectionRef" type="cmd:UsedByDataCollectionRefType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataCollectionLocator"    type="cmd:DataCollectionLocatorType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
 <!-- again the following is stated as a CDATA type in the original DTD -->
@@ -462,26 +458,30 @@
    </xsd:complexType>
 
 
-   <xsd:complexType name="DerivedFromDataCollectionRefType">
+   <xsd:complexType name="RelatedReferenceType">
       <xsd:sequence>
-         <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="DataCollectionRef"     type="xsd:string"/>
-         <xsd:element name="DerivationType"     type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Type" type="xsd:string"/>
+	 <xsd:element name="Direction" type="xsd:string" minOccurs="0" />
+	 <xsd:element name="ReferredToItem" type="xsd:string"/>
+	 <xsd:element name="Method" type="xsd:string"/>
+	 <xsd:element name="ReferenceLocation" type="cmd:ReferenceLocationType" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
 
-   <xsd:complexType name="UsedByDataCollectionRefType">
+<!--service oriented reference location resolution-->
+   <xsd:complexType name="ReferenceLocationType">
       <xsd:sequence>
-         <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="DataCollectionRef"     type="xsd:string"/>
-         <xsd:element name="UsageType"     type="xsd:string" minOccurs="0"/>
-      </xsd:sequence>
-   </xsd:complexType>
-
-   <xsd:complexType name="RelatedDataCollectionRefType">
-      <xsd:sequence>
-         <xsd:element name="DataCollectionRef"   type="xsd:string"/>
-         <xsd:element name="RelationType" type="xsd:string"/>
+         <xsd:element name="Server" type="xsd:string"/>
+	 <xsd:element name="Port" type="xsd:string" minOccurs="0" />
+	 <xsd:element name="Service" type="xsd:string"/>
+	 <xsd:element name="StudyName" type="xsd:string"/>
+	 <xsd:element name="StudyId" type="xsd:IDREF"/>
+	 <xsd:element name="InvestigationName" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="InvestigationId" type="xsd:IDREF" minOccurs="0"/>
+	 <xsd:element name="DataCollection" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="DataCollectionId" type="xsd:IDREF" minOccurs="0"/>
+	 <xsd:element name="ADOName" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="ADOId" type="xsd:IDREF" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
 
@@ -491,8 +491,7 @@
       <xsd:sequence>
 	 <xsd:element name="Name" type="xsd:string"/>
          <xsd:element name="DataDescription" type="cmd:DataDescriptionType"/>
-         <xsd:element name="RelatedADORef" type="cmd:RelatedADORefType" minOccurs="0"/>
-         <xsd:element name="DerivedFromADORef" type="cmd:DerivedFromADORefType" minOccurs="0"/>
+         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="ADOLocator"        type="cmd:ADOLocatorType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="dataid" type="xsd:ID" use="required"/>
@@ -543,39 +542,12 @@
    </xsd:complexType>
 
 
-   <xsd:complexType name="RelatedADORefType">
-      <xsd:sequence>
-         <xsd:element name="ADORef" type="xsd:string"/>
-         <xsd:element name="RelationType" type="xsd:string"/>
-      </xsd:sequence>
-   </xsd:complexType>
-
-   
-   <xsd:complexType name="DerivedFromADORefType">
-      <xsd:sequence>
-         <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="DataCollectionRef"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="ADORef"        type="xsd:string" />
-         <xsd:element name="DerivationType"    type="xsd:string" minOccurs="0" />
-      </xsd:sequence>
-   </xsd:complexType>
-
-   <xsd:complexType name="UsedByADORefType">
-      <xsd:sequence>
-         <xsd:element name="DataHoldingRef" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="DataCollectionRef"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="ADORef"        type="xsd:string" />
-         <xsd:element name="UsageType"    type="xsd:string" minOccurs="0" />
-      </xsd:sequence>
-   </xsd:complexType>
-
-
 <!--  in the following the compact syntax works because a complex type defined without -->
 <!--  any simpleContent or complexContent is interpreted as shorthand for complex      -->
 <!--  content that restricts anyType -->
 
 
-   <xsd:complexType name="RelatedStudyType">
+<!--   <xsd:complexType name="RelatedStudyType">
       <xsd:sequence>
          <xsd:element name="StudyRef">
             <xsd:complexType>
@@ -584,7 +556,7 @@
          </xsd:element>
          <xsd:element name="RelationType" type="xsd:string"/>
       </xsd:sequence>
-   </xsd:complexType>
+   </xsd:complexType> -->
 
 
    <!-- The DataLocationTypes  -->
