@@ -474,8 +474,8 @@
          <xsd:element name="DataDescription"    type="cmd:DataDescriptionType"/>
          <xsd:element name="DataHoldingLocator" type="cmd:CollectionLocatorType"/>
          <xsd:element name="RelatedReference"   type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="DataCollection"     type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="AtomicDataObject"   type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="DataCollection"     type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="InvestigationID" type="xsd:IDREF" use="required"/>
    </xsd:complexType>
