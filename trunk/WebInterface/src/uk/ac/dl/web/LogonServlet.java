@@ -3,7 +3,7 @@
  *
  * Created on 26 March 2003, 09:16
  */
-
+//old log on servlet. See LoginServlet
 package uk.ac.dl.web;
 
 import ac.dl.xml.*;

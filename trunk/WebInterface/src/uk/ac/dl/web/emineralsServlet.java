@@ -8,7 +8,7 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
 //security classes
-
+import java.sql.*;
 import java.math.*;
 import java.net.*;
 import javax.xml.parsers.*;
@@ -105,6 +105,7 @@ public class emineralsServlet extends HttpServlet {
         //end of added section
         Properties locations = null;
         Properties prop = null;
+        String sessionid = null;
         try{
             String lookup = null;
             //System.out.println("name is "+reName);
@@ -129,7 +130,7 @@ public class emineralsServlet extends HttpServlet {
                 //locations.put("trans_url",transfer);
                 session.setAttribute("props",locations);
                
-                String sessionid = loginOn( session,reName,rePass,lifetime,locations);
+                 sessionid = loginOn( session,reName,rePass,lifetime,locations);
                 // int sessionID = sessionid.intValue();
                 session.setAttribute("sessionid",sessionid);
                 
@@ -179,6 +180,18 @@ public class emineralsServlet extends HttpServlet {
             catch(Exception e){
                 logger.fatal("Could not locate permissions for the user",e);
                 //response.sendRedirect("../jsp/error.jsp");
+            }
+              //add logging section
+            if(prop.getProperty("logging") == null || !(prop.getProperty("logging").equals("true"))){
+                
+            }
+            else if(prop.getProperty("logging").equals("true")){
+                try{
+                    logUser(sessionid,locations.getProperty("SESSION"),prop);
+                }
+                catch(Exception e){
+                    logger.fatal("Could not update users logging",e);
+                }
             }
             response.sendRedirect("../html/index.jsp");
         }
@@ -642,6 +655,81 @@ public class emineralsServlet extends HttpServlet {
         //add the ones that arent in the dataportal lookup
         //prop.add("
         return prop;
+        
+    }
+              public synchronized void logUser(String sessionid,String session_url,Properties prop) throws Exception{
+        
+        //get the dn from the session manager
+        Service  service = new Service();
+        Call  call    = (Call) service.createCall();
+        
+        call.setTargetEndpointAddress( new java.net.URL(session_url) );
+        call.setOperationName( "getDName" );
+        call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
+        
+        call.setReturnType( XMLType.XSD_STRING);
+        
+        Object[] ob = new Object[]{sessionid};
+        
+        String dn = (String) call.invoke(ob );
+        //got dn
+        
+        //put into database
+        Connection myConn = null;
+        Statement stat = null;
+        ResultSet rs = null;
+        try{
+            //System.out.println("from cart in shop driver is "+prop.getProperty("db_driver"));
+            Class.forName(prop.getProperty("db_driver"));
+            
+            myConn = DriverManager.getConnection(prop.getProperty("db_url")+"/"+prop.getProperty("db_name"),prop.getProperty("db_user"),prop.getProperty("db_password"));
+            
+            String table = prop.getProperty("db_table_name");
+            
+            //first check if user has cart
+            stat = myConn.createStatement();
+            rs = stat.executeQuery("select * from "+table+" where dn = '"+dn+"' ");
+            
+            if(rs.next()){
+                int hits =  rs.getInt("hits");
+                hits++;
+                stat.executeUpdate("update "+table+" set hits="+new Integer(hits)+" where dn='"+dn+"'");
+                
+            }
+            else{
+                stat.executeUpdate("insert into "+table+" values ('"+dn+"',1)");
+                
+            }
+            
+            rs.close();
+            rs = null;
+            
+            stat.close();
+            stat =null;
+            
+            myConn.close();
+            myConn = null;
+        }
+        catch(Exception e){
+            throw e;
+        }
+        finally {
+            // Always make sure result sets and statements are closed,
+            // and the connection is returned to the pool
+            if (rs != null) {
+                try { rs.close(); } catch (SQLException e) { ; }
+                rs = null;
+            }
+            if (stat != null) {
+                try { stat.close(); } catch (SQLException e) { ; }
+                stat = null;
+            }
+            if (myConn != null) {
+                try { myConn.close(); } catch (SQLException e) {
+                    logger.warn("Connection unable to be closed",e);  }
+                myConn = null;
+            }
+        }
         
     }
     
