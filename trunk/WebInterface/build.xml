@@ -396,10 +396,10 @@
 
    <!-- copy common.lib jar first so any in ${web.homea/}lib can overwrite them -->
 
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/axis.jar"/>
+    <!--<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/axis.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>-->
       <!-- Copy static content of this web application -->
 
     <copy todir="${build.home}">
@@ -443,11 +443,11 @@
     <java classname="uk.ac.dl.web.Indexer" fork="false">
         <arg value="create" />
      
-       <!--  <arg value="build/help/xml" />
-        <arg value="build/help/xml/index" />-->
+         <arg value="${basedir}/build/help/xml" />
+        <arg value="${basedir}/build/help/xml/index" />
         <classpath refid="compile.classpath"/>
         <classpath>
-        <pathelement path="build/WEb-INF/classes"/>
+        <pathelement path="${basedir}/build/WEB-INF/classes"/>
         </classpath>
     </java>
   </target>
