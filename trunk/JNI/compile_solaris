@@ -1,0 +1,7 @@
+#! /usr/bin/bash
+#Have to use jdk1.2 for now.....
+ROOT=/usr/java1.2
+JVMSO=$ROOT/jre/lib/sparc
+#JVMSO=$ROOT/jre/lib/sparc/client
+export LD_LIBRARY_PATH=$JVMSO:$LD_LIBRARY_PATH
+gcc -I/usr/java/include/ -I/usr/java/include/solaris/ -L$JVMSO -ljvm -o main main.c
