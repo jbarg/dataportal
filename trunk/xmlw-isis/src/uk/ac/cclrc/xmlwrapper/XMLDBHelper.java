@@ -8,6 +8,7 @@ import org.apache.log4j.* ;
 import org.xmldb.api.base.*;
 import org.xmldb.api.modules.*;
 import org.xmldb.api.*;
+import org.exist.xmldb.XQueryService;
 
 
 //class depends upon valid SessionSingleton if not then it creates the things that are needed
@@ -23,9 +24,9 @@ public class XMLDBHelper implements DBHelper
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
 
-      //get Xindice connection information
+      //get xml:db connection information
       org.xmldb.api.base.Collection col = ss.getXMLCollection() ;
-      XQueryService  xqs = ss.getXQueryService();
+      org.exist.xmldb.XQueryService  xqs = ss.getXQueryService();
       ResourceSet res  = ss.getResourceSet() ;
 
       Logger log = ss.getLogger() ;
@@ -90,12 +91,13 @@ public class XMLDBHelper implements DBHelper
 
             log.info(connect_string) ;
 
-            ss.setCollection(DatabaseManager.getCollection(connect_string));
+            //need to make user/pass a configuration option at some stage
+            ss.setCollection(DatabaseManager.getCollection(connect_string, "admin", "admin"));
             col = ss.getXMLCollection() ;
 
 
             //need to create the statement handle here also
-            ss.setXQueryService((XQueryService) col.getService("XQueryService", "1.0"));
+            ss.setXQueryService((org.exist.xmldb.XQueryService) col.getService("XQueryService", "1.0"));
             xqs = ss.getXQueryService() ;
             //perhaps worth perf testing without this sometime
             xqs.setProperty("indent", "yes");
@@ -107,7 +109,7 @@ public class XMLDBHelper implements DBHelper
 
             if(reconnection_attempt == true)
             {
-               log.info("Now reconnected") ;
+               log.info("Now reconnected to XML repository") ;
             }
 
          }
