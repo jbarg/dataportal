@@ -14,17 +14,20 @@
       Set LDAP query parameters.
     </div>
 ##
-    #if (!$ldaphostname)
-      #set ( $ldaphostname="ngsinfo.grid-support.ac.uk" )
-    #end
+## default parameters now defined in the registration file
+## Xiaobo Yang, 20 December 2004
 ##
-    #if (!$ldaphostport)
-      #set ( $ldaphostport="2135" )
-    #end
+##    #if (!$ldaphostname)
+##      #set ( $ldaphostname="ngsinfo.grid-support.ac.uk" )
+##    #end
 ##
-    #if (!$ldapbasedn)
-      #set ( $ldapbasedn="Mds-Vo-name=ngsinfo, o=grid" )
-    #end
+##    #if (!$ldaphostport)
+##      #set ( $ldaphostport="2135" )
+##    #end
+##
+##    #if (!$ldapbasedn)
+##      #set ( $ldapbasedn="Mds-Vo-name=ngsinfo, o=grid" )
+##    #end
 ##
     <form name="$form-name" id="$form-name" action="#toolForm("$action")" method="post">
       <fieldset>

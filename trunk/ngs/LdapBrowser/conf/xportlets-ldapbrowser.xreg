@@ -11,6 +11,14 @@
             cachedOnName="true" cachedOnValue="true"/>
         <parameter name="action" value="xportlets.LdapBrowserAction"
             hidden="false" cachedOnName="true" cachedOnValue="true"/>
+        <!-- default parameters starts, Xiaobo Yang, 20 December 2004 -->
+        <parameter name="ldaphostname" value="ngsinfo.grid-support.ac.uk" hidden="false"
+            cachedOnName="true" cachedOnValue="true"/>
+        <parameter name="ldaphostport" value="2135" hidden="false"
+            cachedOnName="true" cachedOnValue="true"/>
+        <parameter name="ldapbasedn" value="Mds-Vo-name=ngsinfo, o=grid" hidden="false"
+            cachedOnName="true" cachedOnValue="true"/>
+        <!-- default parameters ends, Xiaobo Yang, 20 December 2004 -->
         <media-type ref="html"/>
         <url cachedOnURL="true"/>
         <category group="Jetspeed">CHEF</category>
