@@ -22,7 +22,7 @@
         <parameter name="action" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
       <parameter name="allowedMethods" value="loadXMLRep"/>
-      <parameter name="scope" value="Session"/>
+      <parameter name="scope" value="Application"/>
 
   </service>
 </deployment>

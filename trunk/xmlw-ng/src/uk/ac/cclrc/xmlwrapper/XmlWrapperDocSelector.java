@@ -199,25 +199,11 @@ public class XmlWrapperDocSelector
    //
    //
 
-   //
-   // equivelent to 'main' function
-   //
-
-   public org.w3c.dom.Element queryMetaData(String external_xquery) throws TransformerException 
+   String runXQuery(String input_xquery, String xml_input)
    {
 
-      //get necessary session attributes
-      SessionSingleton ss = SessionSingleton.getInstance() ;
-
-      Logger log = ss.getLogger() ;
-
-      ArrayList al = (ArrayList) ss.getContainer() ;
-      
-      StringBuffer result = new StringBuffer(1000000) ;
-
-
       //stuff needed for XQuery processing by saxon
-      //configure the saxon environment 
+      //configure the saxon environment
       net.sf.saxon.Configuration config = new net.sf.saxon.Configuration() ;
       config.setHostLanguage(Configuration.XQUERY);
       //needed when a query is being parsed
@@ -232,106 +218,78 @@ public class XmlWrapperDocSelector
       Properties outputProps = new Properties();
       outputProps.setProperty(OutputKeys.INDENT, "yes");
 
-      //find all keys in map and then pull all values out
-      //validate and place in xml doc repository
+      //reading in the xml string
+      InputSource eis = new InputSource(new StringReader(xml_input)) ;
 
-      Iterator e = al.iterator() ;
+      sourceInput = new SAXSource(eis) ;
 
-      //clear stringbuffer for re-use
-      if(result.length() != 0)
+      //query processing object and parsed query object(perhaps this need putting in a LRU cache to save re-parsing)
+      QueryProcessor xquery = new QueryProcessor(config, static_env);
+
+      //excuse the naff initialisation - getting around compiler problems
+      //XQueryExpression exp = (XQueryExpression) new Object() ;
+      XQueryExpression exp = null ;
+
+      try {
+             //use default context or input() as the reference to the document in the query
+             exp = xquery.compileQuery(new StringReader(input_xquery)) ;
+
+      }
+      catch (XPathException err)
       {
-         result.delete(0, result.length()) ;
+         int line = -1;
+         if (err.getLocator() != null) {
+            line = err.getLocator().getLineNumber();
+         }
+         if (line == -1) {
+            System.err.println("Failed to compile query: " + err.getMessage());
+         } else {
+            System.err.println("Syntax error at line " + line + ":");
+            System.err.println(err.getMessage());
+         }
+            //throw new TransformerException(err);
+      }
+      catch (java.io.IOException ioe)
+      {
+         ioe.printStackTrace()  ;
       }
 
-      String stp ;
-      String proc_str ;
+      SequenceIterator results = null ;
 
-      boolean got_root = false ;
-
-      //create a new JDOM document to add the results to
-      //create a new document to add things to
-      SAXBuilder sax = new SAXBuilder();
-      org.jdom.Document res_doc = new Document() ;
-      org.jdom.Document tmp_doc = null ;
-
-      while(e.hasNext())
+      //putting in the xml to query
+      try
       {
-
-         stp = StringZip.decompress((String)e.next()) ;
-       
-         //remove all the xml/dtd garbage infront just to process the root elements
-         //as validation would have occured at the time data was put into the archive
-         proc_str = stp.substring(stp.indexOf("<CLRCMetadata>"), stp.length()) ;
-
-         //reading in the xml string
-         InputSource eis = new InputSource(new StringReader(proc_str)) ;
-
-         //log.info(proc_str) ;
-         //we want to replace all references to metadata.xml with the actual xml fragment for each study
-         //we use () around the fragment to allow direct replacement of the document reference with the fragment
-         //String exp = xquery.replaceAll( "document\\s*\\u0028\\u0022metadata.xml\\u0022\\u0029" ,
-         //                                "("+ proc_str + ")" ) ;
-
-         sourceInput = new SAXSource(eis) ;
-
-         //query processing object and parsed query object(perhaps this need putting in a LRU cache to save re-parsing)
-         QueryProcessor xquery = new QueryProcessor(config, static_env);
-
-         //excuse the naff initialisation - getting around compiler problems
-         //XQueryExpression exp = (XQueryExpression) new Object() ;
-         XQueryExpression exp = null ;
-
- 
-
-         try {
-                //use default context or input() as the reference to the document in the query
-                exp = xquery.compileQuery(new StringReader(external_xquery)) ;
-
-         }
-          catch (XPathException err) 
-          {
-             int line = -1;
-             if (err.getLocator() != null) {
-                line = err.getLocator().getLineNumber();
-             }
-             if (line == -1) {
-                System.err.println("Failed to compile query: " + err.getMessage());
-             } else {
-                System.err.println("Syntax error at line " + line + ":");
-                System.err.println(err.getMessage());
-             }
-                throw new TransformerException(err);
-          }
-          catch (java.io.IOException ioe)
-          {
-             ioe.printStackTrace()  ;
-          }
-
-         SequenceIterator results ;
-
-         //putting in the xml to query
          DocumentInfo doc = xquery.buildDocument(sourceInput);
          dynamic_env.setContextNode(doc);
+      }
+      catch(net.sf.saxon.xpath.XPathException xpe)
+      {
+         xpe.printStackTrace() ;
+      }
 
-         try { // The next line actually executes the query
-            results = exp.iterator(dynamic_env);
-         }
-         catch (TerminationException err) 
-         {
-            throw err;
-         } catch (TransformerException err) {
-            // The message will already have been displayed; don't do it twice
-            throw new TransformerException("Run-time errors were reported");
-         }
+      try { // The next line actually executes the query
+         results = exp.iterator(dynamic_env);
+      }
+      catch (TerminationException err)
+      {
+         //throw err;
+         err.printStackTrace() ;
+      } catch (TransformerException err) {
+         // The message will already have been displayed; don't do it twice
+         System.err.println("Run-time errors were reported");
+      }
 
-         //actually reading the results of the query in 
-         OutputStream dest = new ByteArrayOutputStream(10000) ;
-         PrintWriter writer = new PrintWriter(dest);
+      //actually reading the results of the query in
+      OutputStream dest = new ByteArrayOutputStream(10000) ;
+      PrintWriter writer = new PrintWriter(dest);
 
-         while (results.hasNext()) 
+      try
+      {
+
+         while (results.hasNext())
          {
             Item item = results.next();
-            switch (item.getItemType()) 
+            switch (item.getItemType())
             {
                case Type.DOCUMENT:
                case Type.ELEMENT:
@@ -346,14 +304,76 @@ public class XmlWrapperDocSelector
             }
          }
          writer.close();
+      }
+      catch (net.sf.saxon.xpath.XPathException xpe)
+      {
+         xpe.printStackTrace() ;
+      }
+      catch (javax.xml.transform.TransformerException te)
+      {
+         te.printStackTrace() ;
+      }
+
+      //we now have the result in ByteArray - we return as a string
+
+      return dest.toString() ;
+
+   } 
 
 
-         //now we have the result in an output
-         //get the root from document and build up result in jdom
+
+
+
+   //
+   // equivelent to 'main' function
+   //
+
+   //at the moment the result returned has to be a valid xml document
+   public org.w3c.dom.Element queryMetaData(String external_xquery, String result_formatter)  
+   {
+
+      //get necessary session attributes
+      SessionSingleton ss = SessionSingleton.getInstance() ;
+
+      Logger log = ss.getLogger() ;
+
+      ArrayList al = (ArrayList) ss.getContainer() ;
+      
+
+      Iterator e = al.iterator() ;
+
+      String stp ;
+      String proc_str ;
+
+      boolean got_root = false ;
+
+      //create a new JDOM document to add the results to
+      //create a new document to add things to
+      SAXBuilder sax = new SAXBuilder();
+      org.jdom.Document res_doc = new Document() ;
+      org.jdom.Document tmp_doc = null ;
+      org.jdom.Document final_doc = null ;
+
+      //intermediate xml
+      String tmp_xml = null ;
+      String intermediate_xml = null ;
+
+      while(e.hasNext())
+      {
+
+         stp = StringZip.decompress((String)e.next()) ;
+       
+         //remove all the xml/dtd garbage infront just to process the root elements
+         //as validation would have occured at the time data was put into the archive
+         proc_str = stp.substring(stp.indexOf("<CLRCMetadata>"), stp.length()) ;
+
+         //get the intermediate result first before we run the formatter
+         tmp_xml = runXQuery(external_xquery, proc_str) ;
 
          try
          {
-            tmp_doc = sax.build(new StringReader(dest.toString()));
+            //takes in the result of the intermediate_xml processed by the formatting xml
+            tmp_doc = sax.build(new StringReader(tmp_xml));
          }
          catch (org.jdom.JDOMException jdome)
          {
@@ -384,14 +404,28 @@ public class XmlWrapperDocSelector
 
       } //end of while processed all documents
 
+      //need to serialse the result as xml before applying the formatter
+      org.jdom.output.XMLOutputter xmlo = new org.jdom.output.XMLOutputter() ;
+      intermediate_xml = xmlo.outputString(res_doc) ;
 
-      //perhaps need to write output as org.w3d.dom.Element to make the interface richer ?
+      String result_xml_string = runXQuery(result_formatter, intermediate_xml) ;
+
+      //perhaps need to write output as org.w3c.dom.Element to make the interface richer ?
+      try
+      {
+         final_doc = sax.build(new StringReader(result_xml_string)) ;
+      }
+      catch (org.jdom.JDOMException jdome)
+      {
+         jdome.printStackTrace() ;
+      }
+
 
       DOMOutputter dom_out = new DOMOutputter() ;
       org.w3c.dom.Document result_dom = null ;
       try
       {
-         result_dom = dom_out.output(res_doc) ;
+         result_dom = dom_out.output(final_doc) ;
       }
       catch (org.jdom.JDOMException jdome)
       {

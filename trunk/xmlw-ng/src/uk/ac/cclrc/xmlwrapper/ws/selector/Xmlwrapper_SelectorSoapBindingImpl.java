@@ -3,6 +3,7 @@
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis WSDL2Java emitter.
+ * and then modified so it would work !!
  */
 
 package uk.ac.cclrc.xmlwrapper.ws.selector;
@@ -13,8 +14,8 @@ public class Xmlwrapper_SelectorSoapBindingImpl implements uk.ac.cclrc.xmlwrappe
 
     XmlWrapperDocSelector xwds = new XmlWrapperDocSelector() ;
 
-    public java.lang.String queryMetaData(java.lang.String xquery) throws java.rmi.RemoteException {
-        return xwds.queryMetaData(xquery);
+    public org.w3c.dom.Element queryMetaData(java.lang.String external_Xquery, java.lang.String result_Formatter) throws java.rmi.RemoteException {
+        return xwds.queryMetaData(external_Xquery, result_Formatter) ;
     }
 
 }
