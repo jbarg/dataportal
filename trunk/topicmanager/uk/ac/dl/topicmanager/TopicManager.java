@@ -3,10 +3,10 @@
  *
  * Created on 24 September 2003, 15:59
  */
-package uk.ac.dl.topicmanager;
+package  dataportal.topicmanager.uk.ac.dl.topicmanager;
 
 // Database classes
-import java.sql.ResultSet;
+import java.sql.*;
 import java.sql.SQLException;
 import uk.ac.dl.db.DBConnection;
 
@@ -22,26 +22,45 @@ import org.jdom.JDOMException;
  */
 public class TopicManager {
     
-    private Document doc = null;
+    
     
     /** Creates a new instance of buildTopics */
-    public Document BuildTopics() throws SQLException {
-        
+    public static Document buildTopics(String url,String username,String password ) throws Exception {
+       
+        Document doc = null;
         // Create root element <active value="start"> </active>
         Element root = new Element("active");
         root.setAttribute("value", "start");
         Element lastElem = root;
         int level = 0;
         
-        DBConnection db = new DBConnection();
+        // DBConnection db = new DBConnection();
+        //get own connection
+        ResultSet rs = null;
+        Statement stat = null;
+        try{
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(url,username,password);
+            stat = conn.createStatement();
+        }
+        catch(Exception e){
+            System.out.println(e);
+            throw e;
+        }
         
-        // Get hierarchy of topics from the database
-        db.connect();
-        ResultSet rs = db.getData("select level, topic, leaf, "+
+        rs =stat.executeQuery("select level, topic, leaf, "+
         "SYS_CONNECT_BY_PATH(topic, '/') as \"final\" "+
         "from topic "+
         "start with topic='Chemistry' "+
         "connect by prior topic_id = parent ");
+        
+        // Get hierarchy of topics from the database
+        //db.connect();
+        /*ResultSet rs = db.getData("select level, topic, leaf, "+
+        "SYS_CONNECT_BY_PATH(topic, '/') as \"final\" "+
+        "from topic "+
+        "start with topic='Chemistry' "+
+        "connect by prior topic_id = parent ");*/
         
         int newLevel;
         while (rs.next()) { // get next row
@@ -104,10 +123,10 @@ public class TopicManager {
     // FOR TESTING ONLY
     public static void main(String[] args) {
         
-        TopicManager tm = new TopicManager();
+        // TopicManager tm = new TopicManager();
         try {
             
-            Document mydoc = tm.BuildTopics();
+            Document mydoc = TopicManager.buildTopics("jdbc:oracle:thin:@elektra.dl.ac.uk:1521:emat1","emat","tame");
             org.jdom.output.XMLOutputter serializer = new org.jdom.output.XMLOutputter();
             serializer.setIndent("  "); // use two space indent
             serializer.setNewlines(true);
