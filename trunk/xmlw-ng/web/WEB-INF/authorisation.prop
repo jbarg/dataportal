@@ -1,0 +1,13 @@
+cert_file=c:/cred.au
+facility=ACMEMIN
+server=dmgdev1.esc.rl.ac.uk
+port=5432
+db_name=acmisis
+username=dpuser
+passwd=dp4all
+algorithm=SHA1withRSA
+keystore=/home/tomcat4/.globuskeystore
+keystore_passwd=
+keystore_alias=acm
+certificate=/home/tomcat4/ACM.cert
+facilities=EMAT
