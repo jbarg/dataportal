@@ -32,6 +32,7 @@ public class Cleanup {
     }
     
     public static void session(HttpSession session) throws Exception{
+        
         String sid =null;
         String wd = null;
         Properties prop = null ;
