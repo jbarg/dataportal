@@ -67,20 +67,22 @@ public class Xmlwrapper_SelectorSoapBindingStub extends org.apache.axis.client.S
         }
     }
 
-    public org.w3c.dom.Element queryMetaData(java.lang.String external_Xquery, java.lang.String result_Formatter) throws java.rmi.RemoteException {
+    public org.w3c.dom.Element queryMetaData(java.lang.String external_Xquery, java.lang.String result_Formatter, java.lang.String proxy_Cert, java.lang.String auth_Token) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.addParameter(new javax.xml.namespace.QName("", "external_xquery"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
         _call.addParameter(new javax.xml.namespace.QName("", "result_formatter"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
+        _call.addParameter(new javax.xml.namespace.QName("", "proxy_cert"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
+        _call.addParameter(new javax.xml.namespace.QName("", "auth_token"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
         _call.setReturnType(new javax.xml.namespace.QName("http://xml.apache.org/xml-soap", "Element"), org.w3c.dom.Element.class);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setOperationStyle("rpc");
         _call.setOperationName(new javax.xml.namespace.QName("urn:xmlwrapper", "queryMetaData"));
 
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {external_Xquery, result_Formatter});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {external_Xquery, result_Formatter, proxy_Cert, auth_Token});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

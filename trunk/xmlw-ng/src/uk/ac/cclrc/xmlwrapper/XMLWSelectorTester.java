@@ -19,6 +19,8 @@ public class XMLWSelectorTester {
    void test(String endpoint_url,
 	     String query,
              String formatter,
+             String proxy,
+             String auth,
 	     String file_name) 
    {
 
@@ -52,11 +54,13 @@ public class XMLWSelectorTester {
         //call.setOperationName( "getXML" ); 
         call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN ); 
         call.addParameter( "op2", XMLType.XSD_STRING, ParameterMode.IN ); 
+        call.addParameter( "op3", XMLType.XSD_STRING, ParameterMode.IN ); 
+        call.addParameter( "op4", XMLType.XSD_STRING, ParameterMode.IN ); 
  
         call.setReturnType( XMLType.SOAP_ELEMENT ); 
  
         org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( 
-	      new Object [] {query,formatter});
+	      new Object [] {query, formatter, proxy, auth});
 
        //////////
 
@@ -167,6 +171,9 @@ public class XMLWSelectorTester {
                                           "</body>\n" +
                                     "</html>" ;
 
+      String proxy_cert = "" ;
+      String auth_token = "" ;
+
 
       xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
                          "<result>\n" +
@@ -180,7 +187,7 @@ public class XMLWSelectorTester {
 		         "{$b//StudyName}\n" +
 	                 "</metadata>\n" +
                          "}\n" +
-                         "</result>", xquery_result_format,
+                         "</result>", xquery_result_format, proxy_cert, auth_token,
                          "results_from_xquery.txt") ;
 
 

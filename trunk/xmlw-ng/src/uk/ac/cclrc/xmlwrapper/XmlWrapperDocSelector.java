@@ -330,7 +330,7 @@ public class XmlWrapperDocSelector
    //
 
    //at the moment the result returned has to be a valid xml document
-   public org.w3c.dom.Element queryMetaData(String external_xquery, String result_formatter)  
+   public org.w3c.dom.Element queryMetaData(String external_xquery, String result_formatter, String proxy_cert, String auth_token)  
    {
 
       //get necessary session attributes
