@@ -223,13 +223,25 @@
   </xsd:simpleType>
 
 
-<xsd:simpleType name="RoleTypes">
+<xsd:simpleType name="StudyRoleTypes">
      <xsd:restriction base="xsd:string">
 	<xsd:enumeration value="Post Doctoral Research Assistant"/>
 	<xsd:enumeration value="pdra"/>
 	<xsd:enumeration value="PDRA"/>
 	<xsd:enumeration value="PI"/>
 	<xsd:enumeration value="Principal Investigator"/>
+        <xsd:enumeration value="other"/>
+     </xsd:restriction>
+  </xsd:simpleType>
+
+<xsd:simpleType name="InstitutionRoleTypes">
+     <xsd:restriction base="xsd:string">
+	<xsd:enumeration value="Professor"/>
+	<xsd:enumeration value="Senior Lecturer"/>
+	<xsd:enumeration value="Lecturer"/>
+	<xsd:enumeration value="PDRA"/>
+	<xsd:enumeration value="PGRA Investigator"/>
+	<xsd:enumeration value="Undergraduate"/>
         <xsd:enumeration value="other"/>
      </xsd:restriction>
   </xsd:simpleType>
@@ -241,8 +253,8 @@
      <xsd:complexContent>
         <xsd:extension base="cmd:PersonType">
            <xsd:sequence>
-              <xsd:element name="RoleInStudy" type="cmd:RoleTypes"/>
-              <xsd:element name="RoleInInstitution" type="cmd:RoleTypes"/>
+              <xsd:element name="RoleInStudy" type="cmd:StudyRoleTypes"/>
+              <xsd:element name="RoleInInstitution" type="cmd:InstitutionRoleTypes"/>
            </xsd:sequence>
         </xsd:extension>
      </xsd:complexContent>
@@ -534,7 +546,7 @@
 	 <xsd:element name="Archive" type="xsd:string"/>
 	 <xsd:element name="ArchiveId" type="xsd:IDREF" minOccurs="0"/>
 	 <xsd:element name="StudyName" type="xsd:string"/>
-	 <xsd:element name="StudyId" type="xsd:IDREF"/>
+	 <xsd:element name="StudyId" type="xsd:IDREF" minOccurs="0"/>
 	 <xsd:element name="InvestigationName" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="InvestigationId" type="xsd:IDREF" minOccurs="0"/>
 	 <xsd:element name="DataCollection" type="xsd:string" minOccurs="0"/>
@@ -571,14 +583,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 ...
       >
-
+      note this assumed that the cmd schema is the default one
       ...
       
-      ...<ADOLocator xsi:type="cmd:FileLocator">
+      ...<ADOLocator xsi:type="FileADOL">
 
       ...
 
       -->
+   <!-- note ADOL stands for Atomic Data Object Locator -->
 
    <xsd:complexType name="FileADOL">
       <xsd:complexContent>

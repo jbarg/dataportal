@@ -20,7 +20,7 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 						<Subject>
 							<SubjectName>Benzene</SubjectName>
 						</Subject>
-					<Subject>
+					</Subject>
 				</Subject>
 			</Subjects>
 		</Topic>
@@ -131,8 +131,8 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 								<TypeOfData>File</TypeOfData>
 								<Status>Complete</Status>
 							</DataDescription>
-							<ADOLocator xsi:type="cmd:FileLocator">
-								<Locator pathtype="relative">SXD10091.RAW</URI>
+							<ADOLocator xsi:type="FileADOL">
+								<Locator pathtype="relative">SXD10091.RAW</Locator>
 							</ADOLocator>
 						</AtomicDataObject>
 						<AtomicDataObject dataid="INV-SXD1009-DC-RAW-ADO-2">
@@ -141,8 +141,8 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 								<TypeOfData>File</TypeOfData>
 								<Status>Complete</Status>
 							</DataDescription>
-							<ADOLocator xsi:type="cmd:FileLocator">
-								<Locator pathtype="relative">SXD10092.RAW</URI>
+							<ADOLocator xsi:type="FileADOL">
+								<Locator pathtype="relative">SXD10092.RAW</Locator>
 							</ADOLocator>
 						</AtomicDataObject>
 						<AtomicDataObject dataid="INV-SXD1009-DC-RAW-ADO-3">
@@ -151,8 +151,8 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 								<TypeOfData>File</TypeOfData>
 								<Status>Complete</Status>
 							</DataDescription>
-							<ADOLocator xsi:type="cmd:FileLocator">
-								<Locator pathtype="relative">SXD10093.RAW</URI>
+							<ADOLocator xsi:type="FileADOL">
+								<Locator pathtype="relative">SXD10093.RAW</Locator>
 							</ADOLocator>
 						</AtomicDataObject>
 					</DataCollection>
@@ -187,8 +187,8 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 								<TypeOfData>File</TypeOfData>
 								<Status>Complete</Status>
 							</DataDescription>
-							<ADOLocator xsi:type="cmd:FileLocator">
-								<Locator pathtype="relative">SXD10091.SF</URI>
+							<ADOLocator xsi:type="FileADOL">
+								<Locator pathtype="relative">SXD10091.SF</Locator>
 							</ADOLocator>
 						</AtomicDataObject>
 						<AtomicDataObject dataid="INV-SXD1009-DC-INT-ADO-2">
@@ -197,8 +197,8 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 								<TypeOfData>File</TypeOfData>
 								<Status>Complete</Status>
 							</DataDescription>
-							<ADOLocator xsi:type="cmd:FileLocator">
-								<Locator pathtype="relative">SXD10092.SF</URI>
+							<ADOLocator xsi:type="FileADOL">
+								<Locator pathtype="relative">SXD10092.SF</Locator>
 							</ADOLocator>
 						</AtomicDataObject>
 					</DataCollection>
