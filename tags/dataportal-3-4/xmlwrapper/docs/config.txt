@@ -1,0 +1,17 @@
+In the directory ../web/WEB-INF/conf the following files need updating to the local seetings:
+
+1. mpim.properties and or badc.properties:
+
+dbhost 	-	is the hostname where the cera database resides
+dbport	-	is the TCP/IP port of the oracle listener on the cera machine
+dbsid	-	is the Oracle SID of the database
+dbuser	-	the username to login to the database
+dbpass	-	the password to login to the database with
+
+(currently CERA 2.0 is only implemented on Oracle if you need access to another database then some code changes will be required)
+
+catalinahost	-	this is the <host>:<port> that the Tomcat Server runs on.
+
+
+2. mpim.log.properties and badc.log.properties:
+These are LOG4J property files; look at the http://jakarta.apache.org/log4j/docs/ site for more information on configuration.

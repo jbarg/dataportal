@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <jnlp spec="1.0+"  codebase="http://wk-pc1.dl.ac.uk:8080/dataportal/html/proxy"
+  href="jce.jnlp"> 
+
+    <information>
+        <title>JavaHelp</title>
+        <vendor>Sun Microsystems, Inc.</vendor>
+    </information>
+    <security> 
+             <all-permissions/>
+           <!--  <j2ee-application-client-permissions />-->
+  </security>
+    <resources>
+        <jar href="jce-jdk13-117.jar"/>
+    </resources>
+    <component-desc/>
+</jnlp>

@@ -1,0 +1,35 @@
+note
+----- 
+this is a temporary document until the javadoc is done
+
+classes			dependencies				notes
+-------			------------				-----
+-StringReplace		none					replace literal entities with escaped form
+
+-XmlText		none					filters text removing all invalid xml text characters in the low ascii range
+
+-StringZip		none					compresses a string - at the moment not thread safe
+
+-InterfaceItems		none					helper class
+
+-SessionSingleton	ParseQuery				used by the 'main' classes and some of their dependencies
+
+-ParseQuery		SessionSingleton			deals with decomposing xmlwrapper query
+
+-CsmdMapperFactory	CsmdMapper				single point of creation of CsmdMappers
+			EMINCsmdMapper				
+
+-DBHelper		SessionSingleton			helper class to allow connection to the database
+
+
+-CsmdMapper		none					interface for inhertance
+
+-EMINCsmdMapper		CsmdMapper,				EMIN relational to schema mapping
+			ParseQuery
+
+
+-XmlWrapperEMIN		SessionSingleton,			EMIN XML Wrapper
+			CsmdMapperFactory,
+
+-XmlWrapperTester	deployed XmlWrapperEMIN			Tests the web services functionality - basic request-response
+			                       			save to file method

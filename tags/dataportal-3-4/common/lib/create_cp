@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# to run this do 
+# . create_cp
+# in the directory where the jar files are e.g. dataportal/<module>/build/WEB-INF/lib
+# useful for creating classpath for test scripts which need jars that the servlets need
+
+export CLASSPATH=.
+
+for i in `ls *.jar`
+do
+export CLASSPATH=$CLASSPATH:`pwd`\/$i
+done
+
+echo $CLASSPATH

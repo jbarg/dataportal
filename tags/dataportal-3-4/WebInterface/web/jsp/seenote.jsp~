@@ -1,0 +1,206 @@
+<%@page contentType="text/html" import="java.util.*,org.apache.axis.client.*,javax.xml.rpc.ParameterMode,org.apache.axis.encoding.XMLType,javax.xml.namespace.QName,ac.dl.xml.*,org.apache.log4j.*,java.io.*,java.security.*,java.security.interfaces.*"%>
+
+<%
+
+//set static log for the class
+
+ Logger logger = Logger.getLogger("seenote.jsp");
+
+///locate the prop file.  Normal get this from web.xml file
+String  wd = (String)session.getAttribute("wd");
+PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
+            
+
+
+
+Integer dn = (Integer)session.getAttribute("sessionid");
+
+//System.out.println("usenaem passed on by seenote is "+username);
+
+//get url passed to see note
+
+String url = request.getParameter("url");
+
+//name of shopping item
+
+String name = null;
+
+//type of shopping item, ie file study
+
+String type = null;
+
+//number of rows for textarea
+
+String rows = null;
+
+//notes added previously
+
+String[] ret =  new String[2];
+
+
+
+//add ws here
+
+  try{
+
+            
+
+        
+
+             Properties prop = (Properties)session.getAttribute("props");
+
+            String url2 = prop.getProperty("sc_url");
+
+            String endpoint = url2;
+
+           
+
+            Service  service = new Service();
+
+            Call     call    = (Call) service.createCall();
+
+
+
+            call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+
+            call.setOperationName( "getNote" );
+
+            call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
+
+            call.addParameter( "op2", XMLType.XSD_INT, ParameterMode.IN );
+
+           
+
+            call.setReturnType( XMLType.SOAP_ARRAY );
+
+            
+
+
+
+            Object[] ob = new Object[]{url,dn};
+
+
+
+            ret = (String[]) call.invoke(ob );
+
+
+
+            if(ret[0] == null) ret[0] = ""; //ret[0] is the notes
+
+    }
+
+    catch(Exception e){
+
+            logger.error("Could not display notes for url "+url,e);
+
+    }
+
+
+
+
+
+        //if name has %20, replace with space
+
+        int namel = url.length();
+
+        /*StringBuffer buff = new StringBuffer();
+
+        for(int i = 0; i<namel; i++){
+
+        if( ret[1].charAt(i) == '%'){
+
+            buff.delete(i,i+2);
+
+            buff.append(" ");
+
+           }
+
+        else buff.append(ret[1].charAt(i));
+
+        }*/
+
+       // ret[1] = buff.toString();
+
+
+
+        //if type is study, remove a row from the textarea to incease space
+
+         rows="10";
+
+         //type  = record.getType();
+
+        if(namel > 30) rows="9";
+
+        else rows = "10";
+
+
+
+
+
+%>
+
+<html>
+
+<head><title>Notes</title>
+
+<script>
+
+function go(){
+
+window.setTimeout("window.close();",1000);
+
+}
+
+
+
+
+
+</script></head>
+
+<body onLoad="addnote.value.focus();">
+
+<p align="center"><b><%=ret[1]%></b></p>
+
+<form name="addnote" method="post" action="../servlet/AddNote">
+
+<table>
+
+<tr><td colspan="2">
+
+<input type="hidden" value="<%=url%>" name="url"/>
+
+<textarea name="value" cols="30" rows="<%=rows%>"><%=ret[0]%>
+
+</textarea>
+
+</td>
+
+</tr>
+
+<tr><td colspan="2">
+
+
+
+</td>
+
+<tr>
+
+<td colspan="2" align="center">
+
+
+
+<input type="submit" value="Add note">
+
+<input type="button" value="close" onClick="window.close();"/>
+
+</td>
+
+</table>
+
+</form>
+
+
+
+</body>
+
+</html>

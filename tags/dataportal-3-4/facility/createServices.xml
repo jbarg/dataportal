@@ -1,0 +1,18 @@
+<fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
+  <createServices facilityID="9dd061d0-c36d-11d7-8e5c-b8a03c50a862">
+    <service>
+      <serviceName>Mark testing</serviceName>
+      <serviceDescription>Create services testing</serviceDescription>
+      <serviceType>XMLW</serviceType>
+      <serviceEndpoint>http://localhost:8080/axis/services/xml_wrapper_badc</serviceEndpoint>
+      <serviceWSDL>http://localhost:8080/axis/services/xml_wrapper_badc?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>Mark Testing 2</serviceName>
+      <serviceDescription>Create services testing</serviceDescription>
+      <serviceType>ACM</serviceType>
+      <serviceEndpoint>http://localhost:8080/axis/services/acl</serviceEndpoint>
+      <serviceWSDL>http://localhost:8080/axis/services/acl?wsdl</serviceWSDL>
+    </service>
+  </createServices>
+</fadm:facilityAdmin>
