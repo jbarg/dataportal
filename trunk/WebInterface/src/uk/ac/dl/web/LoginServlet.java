@@ -26,6 +26,7 @@ import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 import org.apache.axis.AxisFault;
 import uk.ac.dl.topicmanager.*;
+import uk.ac.dl.beans.*;
 
 
 //

@@ -14,6 +14,8 @@ import org.apache.axis.client.Call;
 import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
+
+import uk.ac.dl.beans.*;
 //acts as a log off servlet
 
 public class SaveCartServlet extends HttpServlet{
