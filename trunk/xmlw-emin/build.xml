@@ -121,6 +121,7 @@
   <property name="manager.password"   value="tomcat"/>
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/web"/>
+  <property name="common.lib"      value="${basedir}/../common/lib"/>
 
 
 
@@ -213,40 +214,6 @@
 
 -->
 
-  <path id="compile.classpath">
-
-    <!-- Include all JAR files that will be included in /WEB-INF/lib -->
-    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-<!--
-    <pathelement location="${foo.jar}"/>
-    following picked up automatically as in a dir under web/WEB-INF/
-    <pathelement location="${classes.jar}"/>
-    <pathelement location="${log4j.jar}"/>
--->
-
-    <!-- Include all elements that Tomcat exposes to applications -->
-    <pathelement location="${catalina.home}/common/classes"/>
-    <fileset dir="${catalina.home}/common/endorsed">
-      <include name="*.jar"/>
-    </fileset>
-    <fileset dir="${catalina.home}/common/lib">
-      <include name="*.jar"/>
-    </fileset>
-    <pathelement location="${catalina.home}/shared/classes"/>
-    <fileset dir="${catalina.home}/shared/lib">
-      <include name="*.jar"/>
-    </fileset>
-
-   <!-- thought did not need to do this - but seemed to need to -->
-    <fileset dir="${web.home}/WEB-INF/lib">
-      <include name="*.jar"/>
-    </fileset>
-
-    <!-- included those that are in web/WEB-INF/lib so they go into -->
-    <!-- build/web/WEB-INF/lib - as keeping jars needed by module with each module -->
-
-  </path>
-
 
 
 <!-- ==================== All Target ====================================== -->
@@ -291,7 +258,7 @@
 
 -->
 
-  <target name="compile" depends="prepare"
+  <target name="compile" depends="postprepare,prepare"
    description="Compile Java sources">
 
     <!-- Compile Java classes as necessary -->
@@ -446,7 +413,22 @@
     <mkdir  dir="${build.home}"/>
     <mkdir  dir="${build.home}/WEB-INF"/>
     <mkdir  dir="${build.home}/WEB-INF/classes"/>
+    <mkdir  dir="${build.home}/WEB-INF/lib"/> 
 
+   <!-- copy common.lib jar first so any in ${web.homea/}lib can overwrite them -->
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/axis-ant.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/axis.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/classes12.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-discovery.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-logging.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jdom.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.7.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/shop.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/wsdl4j.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xml-dl.1.3.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xmlsec.jar"/>
 
     <!-- Copy static content of this web application -->
     <copy todir="${build.home}">
@@ -455,7 +437,6 @@
 
     <!-- Copy external dependencies as required -->
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-    <mkdir  dir="${build.home}/WEB-INF/lib"/>
 <!--
     <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
 -->
@@ -588,6 +569,50 @@
     <!-- not have to do this -->
     <ant antfile="${src.home}/wsdlbuild.xml" dir="${src.home}" target="undeploy" inheritRefs="true"/>
   </target>
+
+<!-- ================================= -->
+<!-- tests run for using common/lib -->
+
+ <target name="postprepare" depends="prepare"
+   description="post prepare target">
+
+  <path id="compile.classpath">
+
+    <!-- Include all JAR files that will be included in /WEB-INF/lib -->
+    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+<!--
+    <pathelement location="${foo.jar}"/>
+    following picked up automatically as in a dir under web/WEB-INF/
+    <pathelement location="${classes.jar}"/>
+    <pathelement location="${log4j.jar}"/>
+-->
+
+    <!-- Include all elements that Tomcat exposes to applications -->
+    <pathelement location="${catalina.home}/common/classes"/>
+    <fileset dir="${catalina.home}/common/endorsed">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${catalina.home}/common/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${catalina.home}/shared/classes"/>
+    <fileset dir="${catalina.home}/shared/lib">
+      <include name="*.jar"/>
+    </fileset>
+
+   <!-- thought did not need to do this - but seemed to need to -->
+    <fileset dir="${build.home}/WEB-INF/lib">
+      <include name="*.jar"/>
+    </fileset>
+
+    <!-- included those that are in web/WEB-INF/lib so they go into -->
+    <!-- build/web/WEB-INF/lib - as keeping jars needed by module with each module -->
+
+  </path>
+
+
+  </target>
+
 
   
 

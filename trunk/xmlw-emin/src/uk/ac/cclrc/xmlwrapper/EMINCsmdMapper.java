@@ -6,7 +6,7 @@ import java.sql.* ; //jdbc
 
 import org.apache.log4j.* ;
 
-public class MPIMCeraMapper implements CeraMapper
+public class EMINCsmdMapper implements CsmdMapper
 {
    public String getKeys(String query)
    {
