@@ -77,7 +77,7 @@ public class Search {
                         org.jdom.Element e = (org.jdom.Element)o;
                         String name  = e.getName();
                         if(name == null) name= "null";
-                        res[i-1].add(name);
+                        res[(i-1)].add(name);
                     }
                 }
             }
