@@ -111,7 +111,7 @@ public class Permissions {
         return new Integer(sid.getText());
     }
     
-    public static org.w3c.dom.Element buildTest() throws JDOMException {
+    public static org.w3c.dom.Element buildTest() throws Exception {
         
         /** Create test XML */
         Document doc = new Document();
