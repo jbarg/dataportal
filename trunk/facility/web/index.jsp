@@ -40,4 +40,34 @@ out.println(request.getHeader("Host") + request.getContextPath() + "/service/Fac
   <findFacility>FAC</findFacility>
 </fadm:facilityAdmin>
 </TEXTAREA>
+<P>Create Services Request</P>
+<TEXTAREA cols='100' rows='18' readonly>
+<fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
+  <createServices facilityID="0a0445b0-3ab6-11d7-ba2d-b8a03c50a862">
+    <service>
+      <serviceName>A new service</serviceName>
+      <serviceDescription>Create a new service</serviceDescription>
+      <serviceType>XMLW</serviceType>
+      <serviceEndpoint>http://localhost:8080/axis/services/xml_wrapper_badc</serviceEndpoint>
+      <serviceWSDL>http://localhost:8080/axis/services/xml_wrapper_badc?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>Another service</serviceName>
+      <serviceDescription>Create another new services</serviceDescription>
+      <serviceType>ACM</serviceType>
+      <serviceEndpoint>http://localhost:8080/axis/services/acl</serviceEndpoint>
+      <serviceWSDL>http://localhost:8080/axis/services/acl?wsdl</serviceWSDL>
+    </service>
+  </createServices>
+</fadm:facilityAdmin>
+</TEXTAREA>
+<P>Delete Services Request</P>
+<TEXTAREA cols='100' rows='6' readonly>
+<fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
+ <deleteServices>
+  <service ID="771a5ba0-435b-11d7-ba2d-b8a03c50a862"/>
+  <service ID="771ca590-435b-11d7-ba2d-b8a03c50a862"/>
+ </deleteServices>
+</facilityAdmin>
+</TEXTAREA>
 </HTML>
