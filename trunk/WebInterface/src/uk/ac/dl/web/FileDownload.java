@@ -98,7 +98,7 @@ public class FileDownload extends HttpServlet {
                 call.addParameter( "cert", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.XSD_STRING );
                 
-                Object[] ob = new Object[]{url,"file:///tmp/"+sid,cert};
+                Object[] ob = new Object[]{url,"file:////tmp/"+sid,cert};
                 
                 result = (String) call.invoke(ob );
                 
