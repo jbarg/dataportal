@@ -104,8 +104,8 @@
          <property name="basedir" value="${basedir}/xmlwrapper"/>
       </ant>
 		
-      <ant antfile="lookup/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/lookup"/>
+      <ant antfile="uddilookup/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/uddilookup"/>
       </ant>
 
       <ant antfile="facility/build.xml" target="${target}"> 
@@ -129,9 +129,9 @@
          <property name="basedir" value="${basedir}/queryandreply"/>
       </ant>
       
-      <ant antfile="datainsertion/build.xml" target="${target}"> 
+    <!--  <ant antfile="datainsertion/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/datainsertion"/>
-      </ant>
+      </ant>-->
  <ant antfile="srbcommands/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/srbcommands"/>
       </ant>
