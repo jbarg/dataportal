@@ -102,6 +102,7 @@ window.setTimeout("window.close();",1000);
 <p align="center"><b><font size="4"><%=ret[1]%></font></b><br />
 Study:&nbsp;&nbsp;&nbsp;<b>
 <%
+            if(ret[5] ==null) ret[5] =  "N/A";
             ret[5] = ret[5].replaceAll("%20"," ");
             out.println(ret[5]);
 
@@ -109,18 +110,33 @@ Study:&nbsp;&nbsp;&nbsp;<b>
 <u>Initial Query</u>:<br />
 Facility(s):&nbsp;&nbsp;&nbsp;<b><%
 
-
+    if(ret[2] ==null) {
+        out.println("N/A");
+    ret[2] =  "N/A";
+        }
+        else{
 String[] facs = ret[2].split(" ");
 for(int i = 0;i<facs.length;i++){
 out.print(facs[i]+" ");
 }
+}
 
 %></b><br />
-Discipline:&nbsp;&nbsp;&nbsp;<b><%=ret[3]%></b><br />
+Discipline:&nbsp;&nbsp;&nbsp;<b><%
+    if(ret[3] ==null) ret[3] =  "N/A";
+out.print(ret[3]);
+%></b><br />
 Waiting time:&nbsp;&nbsp;&nbsp;<b><%
+
+    if(ret[4] ==null) {
+        ret[4] =  "N/A";
+        out.print(ret[4]);
+        }   
+        else{
 int int1 = Integer.parseInt(ret[4]);
 int secs = int1/1000;
 out.println(secs);
+}
 
 %> &nbsp;seconds</b></p>
 <form name="addnote" method="post" action="../servlet/AddNote">

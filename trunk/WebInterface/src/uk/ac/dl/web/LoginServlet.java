@@ -221,6 +221,7 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect("../jsp/BasicSearch.jsp");
             }
             else{
+                session.removeAttribute("topics");
                 response.sendRedirect("../jsp/BasicSearch.jsp");
             }
         }
