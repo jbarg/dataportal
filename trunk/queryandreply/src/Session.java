@@ -46,6 +46,7 @@ public class Session {
         Properties prop = new Properties();
         prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
         String lookup_url = prop.getProperty("lookup_module_url");
+        //gets the name of the DataPortal in tha UDDI. IE DataPortla-VOLGA
         String defaultid = prop.getProperty("defaultid");
         String[] serviceTypes = {"SESSION"};
         
@@ -57,7 +58,7 @@ public class Session {
         call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"DataPortal"+defaultid};
+        String[] name = {defaultid};
         Object[] ob = new Object[]{name,serviceTypes[0]};
         
         String[] url = (String[]) call.invoke(ob );

@@ -60,7 +60,7 @@ public class AuthCtl {
             String facility = config.getProperty("facilities");
             AuthCtl.facilities =facility.split(" ");
             for(int i = 0; i<AuthCtl.facilities.length;i++){
-                facilities[i] =   facilities[i]+defaultid;
+                facilities[i] =   facilities[i].trim();
                 
             }
             
@@ -296,7 +296,7 @@ public class AuthCtl {
         call1.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call1.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call1.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"Dataportal"+defaultid};
+        String[] name = {defaultid};
         Object[] ob = new Object[]{name,"SESSION"};
         
         String[] sessionendpoint = (String[]) call1.invoke(ob );
