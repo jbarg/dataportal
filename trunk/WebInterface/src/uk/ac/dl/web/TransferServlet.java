@@ -56,7 +56,7 @@ public class TransferServlet extends HttpServlet {
             int position  = url.indexOf(":");
             url = url.substring(0,position-1);
             
-            if(url.equals("srb")){
+            if(!url.equals("srb")){
                 response.sendRedirect("../jsp/srb.jsp?url="+url);
             }
             else response.sendRedirect("../jsp/transfer.jsp?url="+url);
