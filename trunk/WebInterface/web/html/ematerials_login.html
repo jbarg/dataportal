@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html>
 <head>
 <title>e-Materials Data Portal</title>
@@ -67,8 +66,9 @@ End If
     /* Note that the logic below always launches the JNLP application *if the browser is Gecko based. This is because it is not possible *to detect MIME type application/x-java-jnlp-file on Gecko-based browsers.  */
     if (javawsInstalled || (navigator.userAgent.indexOf("Gecko") !=-1)) {
                 document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
-                document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start");
-
+                 //
+              document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start.");
+                          
     } else {
         document.write("Click ");
         document.write("<a href=http://java.sun.com/PluginBrowserCheck?pass=download.html&fail=http://java.sun.com/j2se/1.4.2/download.html>here</a> ");
@@ -196,6 +196,8 @@ Or download the application:&nbsp;
 <a
 href="proxy/Proxy.zip">Proxy.zip</a>
 <br />
+   Click <a href='installation.html'>here</a> for installation notes.
+   <br />
 <br />
 <a href="#" onclick="openHelp();">Help pages</a>.
 <br />
