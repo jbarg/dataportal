@@ -25,8 +25,8 @@ import java.util.*;
 public class Search {
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(Search.class);
-    
+     static Logger logger = Logger.getLogger(Search.class);
+       
     /** Creates a new instance of Search */
     public Search() {
     }

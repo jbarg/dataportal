@@ -22,8 +22,8 @@ import java.io.*;
 public class ResendQuery extends HttpServlet{
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(ResendQuery.class);
-    
+      Logger logger = Logger.getLogger(this.getClass().getName());
+      
     
     public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {

@@ -9,7 +9,7 @@
  response.setHeader("cache-control","no-store"); %>
 
 <%@ include file="loggedin.jsp" %>
-
+<%@ include file="logger.jsp" %>
 <%@ taglib uri="/tldweb" prefix="xtags" %>
 
 <html>
@@ -94,18 +94,12 @@ html/netscape.html file from the content root.-->
 <td width="15%" id="tablehead">Resend Query</td>
 </tr>
 <%
-        //set static log for the class
-        Logger logger = Logger.getLogger(this.getClass().getName());
-        String wd = (String)session.getAttribute("wd");
-
-        //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-
+      
+       
         if(loggedIn){
 
             String sid = (String)session.getAttribute("sessionid");
-            String workingDir = (String)session.getAttribute("wd");
-            String dn = (String)session.getAttribute("dn");
+             String dn = (String)session.getAttribute("dn");
             int n = dn.length();
             StringBuffer h = new StringBuffer();
             for(int i = 0; i<n; i++){

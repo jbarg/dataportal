@@ -31,6 +31,8 @@ import org.apache.axis.AxisFault;
  */
 public class TransferServlet extends HttpServlet {
     
+     Logger logger = Logger.getLogger(this.getClass().getName());
+    
     /** Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
@@ -47,8 +49,7 @@ public class TransferServlet extends HttpServlet {
         else{
             //locate the prop file.  Normal get this from web.xml file
             String wd =  (String)session.getAttribute("wd");
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-            
+             
             //get the url
             String url = "";
             try{

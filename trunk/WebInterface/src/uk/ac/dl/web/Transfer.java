@@ -31,6 +31,8 @@ import org.apache.axis.AxisFault;
  */
 public class Transfer extends HttpServlet {
     
+     Logger logger = Logger.getLogger(this.getClass().getName());
+    
     /** Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
@@ -40,8 +42,7 @@ public class Transfer extends HttpServlet {
     throws ServletException, IOException {
         //set static log for the class
         
-        Logger logger = Logger.getLogger("Transfer.class");
-        HttpSession session = request.getSession(false);
+       HttpSession session = request.getSession(false);
         if(session == null){
             response.sendRedirect("../html/SessionTimedOut.html");
             return;
@@ -49,9 +50,7 @@ public class Transfer extends HttpServlet {
         else{
             //locate the prop file.  Normal get this from web.xml file
             String wd =  (String)session.getAttribute("wd");
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-            
-            
+             
             //get all the attributes needed
             String url = request.getParameter("url");
             String urlTo = request.getParameter("urlTo");

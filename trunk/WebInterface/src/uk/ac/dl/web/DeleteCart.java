@@ -28,8 +28,8 @@ import java.security.interfaces.*;
  */
 public class DeleteCart extends HttpServlet {
     //set static log for the class
-    static Logger logger = Logger.getLogger(DeleteCart.class);
-    
+  Logger logger = Logger.getLogger(this.getClass().getName());
+      
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         
@@ -39,9 +39,7 @@ public class DeleteCart extends HttpServlet {
             return;
         }
         String wd = (String )session.getAttribute("wd");
-        //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-        
+         
         String sid = (String )session.getAttribute("sessionid");
         org.w3c.dom.Element ret  = null;
         try{

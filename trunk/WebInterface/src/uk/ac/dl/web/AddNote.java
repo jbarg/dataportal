@@ -27,7 +27,7 @@ import java.math.*;
 public class AddNote extends HttpServlet {
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(AddNote.class);
+     Logger logger = Logger.getLogger(this.getClass().getName());
     
     
     /** Handles the HTTP <code>POST</code> method.
@@ -47,10 +47,7 @@ public class AddNote extends HttpServlet {
         //get working directories
         String workingDir = (String)session.getAttribute("wd");
      
-        //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure(workingDir+File.separator+"WEB-INF"+File.separator+"logger.properties");
-       
-        //get added text
+               //get added text
         String notes = request.getParameter("value");
         String url = request.getParameter("url");
         

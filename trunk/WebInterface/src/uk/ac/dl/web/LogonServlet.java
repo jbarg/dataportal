@@ -340,8 +340,7 @@ public class LogonServlet extends HttpServlet{
         
         //locate the prop file.  Normally get this from web.xml file
         
-        PropertyConfigurator.configure(workingDir+File.separator+"WEB-INF"+File.separator+"logger.properties");
-        
+         
         try{
             for(int i =0;i<serviceTypes.length;i++){
                 Service  service = new Service();

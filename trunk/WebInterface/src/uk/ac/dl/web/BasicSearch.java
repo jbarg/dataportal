@@ -30,7 +30,7 @@ import java.util.*;
 public class BasicSearch extends HttpServlet {
     
     //set static log for the class
-    static Logger logger = Logger.getLogger(BasicSearch.class);
+    Logger logger = Logger.getLogger(this.getClass().getName());
     
     /** Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -48,8 +48,6 @@ public class BasicSearch extends HttpServlet {
         else{
             //get working dir
             String wd = (String )session.getAttribute("wd");
-            //locate the prop file.  Normal get this from web.xml file
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
             
             //change spaces with %20.
             String Discipline = request.getParameter("Discipline");

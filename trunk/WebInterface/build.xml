@@ -462,4 +462,24 @@
         </classpath>
     </java>
   </target>
+  
+  <target name="start_log4jserver" depends="postprepare" description="Starts the log4j server">
+   
+      <java classname="uk.ac.cclrc.log4j.Log4jServer" fork="true">
+          <arg value="4445" />
+       
+           <arg value="15" />
+          <arg value="${basedir}/build/WEB-INF/log4jServer.conf" />
+         
+          <classpath refid="compile.classpath"/>
+          <classpath>
+           <pathelement path="${java.class.path}"/>
+          <pathelement path="${basedir}/build/WEB-INF/lib/dp_common.jar"/>
+          </classpath>
+                </java>
+      
+    </target>
+    
+  
+  
 </project>

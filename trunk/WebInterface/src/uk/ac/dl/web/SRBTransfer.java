@@ -74,9 +74,6 @@ public class SRBTransfer extends HttpServlet {
             String data_transfer_location;
             String data_transfer_password;
             try{
-                //locate the prop file.  Normal get this from web.xml file
-                
-                PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
                 //load properties
                 Properties props = new Properties();
                 props.load(new FileInputStream(wd+File.separator+"WEB-INF"+File.separator+"web.conf"));

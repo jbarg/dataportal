@@ -32,8 +32,8 @@ import org.apache.axis.AxisFault;
  */
 public class TransferDataSet extends HttpServlet {
     
-    Logger logger = Logger.getLogger("TransferDataSet.class");
-    /** Handles the HTTP <code>POST</code> method.
+   Logger logger = Logger.getLogger(this.getClass().getName());
+      /** Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
      */
@@ -50,7 +50,6 @@ public class TransferDataSet extends HttpServlet {
         else{
             //locate the prop file.  Normal get this from web.xml file
             String wd =  (String)session.getAttribute("wd");
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
             
             String sid = (String )session.getAttribute("sessionid");
             
@@ -145,8 +144,7 @@ public class TransferDataSet extends HttpServlet {
     }
     
     private String[] getDataSetUrls(String url,String sid,String wd,String sc_url){
-        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-        String[] dataseturls= null;
+         String[] dataseturls= null;
         String name = null;
         try{
             //HARD CODE FOR NOW
