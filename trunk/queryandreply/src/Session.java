@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
 
 public class Session {
     //DUMMY
-    String endpoint = "http://localhost:8080/sm/services/SessionManager";
+    String endpoint = "http://localhost:8080/sessionmanager/services/SessionManager";
     //LIVE
     //
     Integer sid;
