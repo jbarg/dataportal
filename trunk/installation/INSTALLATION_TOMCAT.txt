@@ -9,7 +9,9 @@ NB:  Make sure Environmental variable CATALINE_HOME is set correctly if you are 
 
 Copy  $CATALINA_HOME/server/lib/catalina-ant.jar into ANT_HOME/lib where  $CATALINA_HOME represents the tomcat root directory.
 
-3) Change the properties for the build.properties file.
+3) Change the properties for the $DATAPORTAL_HOME/build.properties file.
+
+Where $DATAPORTAL_HOME represents the root directory where you unpacked the dataportal file.
 
 server.name=localhost:8080    server name and port of tomcat instance.  localhost is ok if it is on the same machine
 catalina.home=D\:\\tomcat     location on file system of tomcat instance. (\ is an escape character. So windows needs to escape : and \ within the path. IE c\:\\My Documents\\ etc)
@@ -81,7 +83,7 @@ Insert this sections into the the file.
                  
  </ResourceParams>
 
-5) Also insert inbewteen the <Host> tags just below the <Logger> and above the </Host> tags
+5) Also insert inbewteen the <Host> tags just below the <Logger> and above the </Host> tag
 
 <Host>
 
@@ -111,7 +113,7 @@ this...
 </DefaultContext>
 
  
-6)  ant installdp
+6)  ant installdp    (NB: All ant commands need to be executed in the $DATAPORTAL_HOME directory)
 
 This installs the UDDI , Database and relevant libraries into your tomcat instance.
 
