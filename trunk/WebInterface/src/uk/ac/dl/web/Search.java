@@ -68,6 +68,14 @@ public class Search {
                 for(int i =0;i<facs.length;i++){
                     buff2.append("&facs="+facs[i]);
                 }
+                //get dn and take all / out the name
+                int n = dn.length();
+                StringBuffer h = new StringBuffer();
+                for(int i = 0; i<n; i++){
+                    if( dn.charAt(i) == '/') h.append("_");
+                    else h.append(dn.charAt(i));
+                }
+                dn = h.toString();
                 
                 wr = new FileWriter(workingDir+File.separator+"profiles"+File.separator+"history"+File.separator+dn,true);
                 wr.write("<tr><td>"+buff.toString()+" </td>");
