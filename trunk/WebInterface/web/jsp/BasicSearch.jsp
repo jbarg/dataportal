@@ -49,8 +49,6 @@
 
   	<frame name="qinetiq_logo"  src="menu.jsp" scrolling="no" target="parent" />
 
-  	   		
-
         <frame name="footer" src="dataxmlform<%=topics%>.jsp?list=<%=facility%>"   scrolling="yes" />
 
    </frameset>
