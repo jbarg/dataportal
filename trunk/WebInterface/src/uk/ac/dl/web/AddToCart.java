@@ -171,13 +171,13 @@ public class AddToCart extends HttpServlet{
                 Sfacs.append(facs[i]);
                 
             }
-           // facility.setAttribute(new Attribute("facs",Sfacs.toString()));
+            // facility.setAttribute(new Attribute("facs",Sfacs.toString()));
             facility.addContent(Sfacs.toString());
             Element discipline =new Element("discipline");
             //discipline.setAttribute(new Attribute("dis",dis));
             discipline.addContent(dis);
             Element wait = new Element("wait");
-           /// wait.setAttribute(new Attribute("wait",max_wait));
+            /// wait.setAttribute(new Attribute("wait",max_wait));
             wait.addContent(max_wait);
             query.addContent(facility);
             query.addContent(discipline);
@@ -285,8 +285,10 @@ public class AddToCart extends HttpServlet{
         
         //create a xsl file to turn the large xml file a small one easily travered to get info out
         File temp2 = new File(workingDir+File.separator+"profiles"+File.separator+"res"+Math.random()+".xsl");
+        FileWriter  d1 = null;
+        File shop = null;
         try{
-            FileWriter  d1 = new FileWriter(temp2);
+            d1 = new FileWriter(temp2);
             d1.write("<?xml version='1.0'?>\n");
             d1.write("<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n");
             d1.write("<xsl:output method='xml' indent='yes'/>\n");
@@ -485,9 +487,10 @@ public class AddToCart extends HttpServlet{
             d1.write("</xsl:template>\n");
             d1.write("</xsl:stylesheet>\n");
             d1.close();
-            XSLTransformer.transformFiletoFile(new File(workingDir+File.separator+"profiles"+File.separator+dn+"3.xml"),temp2,new File(workingDir+File.separator+"profiles"+File.separator+"shop"+dn+".xml"));
+            shop =new File(workingDir+File.separator+"profiles"+File.separator+"shop"+dn+".xml");
+            XSLTransformer.transformFiletoFile(new File(workingDir+File.separator+"profiles"+File.separator+dn+"3.xml"),temp2,shop);
             
-            org.w3c.dom.Document doc1 = XML_DOMBuilder.parse(new File(workingDir+File.separator+"profiles"+File.separator+"shop"+dn+".xml"));
+            org.w3c.dom.Document doc1 = XML_DOMBuilder.parse(shop);
             
             
             // Saver.save(n,new File(workingDirUser+File.separator+name+File.separator+"cera.xml"));
@@ -546,10 +549,16 @@ public class AddToCart extends HttpServlet{
             }
             //session.setAttribute("db", db11);
             d1.close();
-            // temp2.delete();
-            
+            temp2.delete();
+            shop.delete();
             
         } catch(Exception e){
+            try{
+                d1.close();
+            }
+            catch(Exception ignore){}
+            temp2.delete();
+            shop.delete();
             logger.warn("AddToCart exception, creating xml",e);
             
         }

@@ -100,7 +100,7 @@ public class Search {
                 int time  = waiting.intValue();
                 int secs = (int)time/1000;
                 wr.write("<td>"+secs+"</td>");
-                wr.write("<td><a href='../servlet/ResendQuery?discipline="+discipline+"&wait="+waiting+""+buff2.toString()+"'>Resend Query</a></td></tr>\n");
+                wr.write("<td><a href='../servlet/ResendQuery?discipline="+discipline+"&wait="+waiting+""+buff2.toString()+"'>Ok</a></td></tr>\n");
                 wr.close();
             }
         }
