@@ -30,9 +30,12 @@ public class XMLWTester {
 
         ////////////////////
 	
-        String endpoint = 
-                       "http://escvig2.dl.ac.uk:8080/axis/services/xmlwrapper_badc"; 
+        //String endpoint = 
+        //             "http://escvig2.dl.ac.uk:8080/axis/services/xmlwrapper_badc"; 
  
+        String endpoint = 
+                     "http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc"; 
+
         Service  service = new Service(); 
         Call     call    = (Call) service.createCall(); 
  

@@ -168,7 +168,7 @@ the commands for generating the wrappers:
 
 java org.apache.axis.wsdl.Java2WSDL -o badcxmlw.wsdl -l"http://localhost:8080/xmlw/xmlwrapper_badc" -n urn:xmlwrapper -p"uk.ac.cclrc.xmlwrapper" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperBADC
 
-java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.badc badcxmlw.wsdl
+java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.badc ./badcxmlw.wsdl
 
 --- MPIM
 

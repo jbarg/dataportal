@@ -62,5 +62,57 @@
     </java>
 
   </target>
+  <!-- -->
+  
+  <target name="deploy"
+	  description="deploy xmlwrapper web services">
 
+	  <!-- BADC: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/badc/deploy.wsdd'/>
+             <classpath>
+                <pathelement path="${java.class.path}"/>
+             </classpath>
+          </java>
+
+	  <!-- MPIM: -->
+          <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+	  <arg value='uk/ac/cclrc/xmlwrapper/ws/mpim/deploy.wsdd'/>
+             <classpath>
+                <pathelement path="${java.class.path}"/>
+             </classpath>
+          </java>
+
+  </target>
+
+  <target name="undeploy"
+	  description="deploy xmlwrapper web services">
+
+	  <!-- BADC: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/badc/undeploy.wsdd'/>
+             <classpath>
+                <pathelement path="${java.class.path}"/>
+             </classpath>
+          </java>
+
+	  <!-- MPIM: -->
+          <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+	  <arg value='uk/ac/cclrc/xmlwrapper/ws/mpim/undeploy.wsdd'/>
+             <classpath>
+                <pathelement path="${java.class.path}"/>
+             </classpath>
+          </java>
+
+  </target>
+
+	
 </project>

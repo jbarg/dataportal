@@ -151,7 +151,11 @@ public class XmlWrapperBADC
                    "\"http://escvig2.dl.ac.uk:8080/xmlwrapper/xml/dtd/clrcmetadata.dtd\">\n") ;
       result.append("<CLRCMetadata>\n") ;
 
+      log.debug(query) ;
+
       String entries = cm.getKeys(query) ;
+
+      log.debug(entries) ;
 
       StringTokenizer st = new StringTokenizer(entries, ", ") ;
 

@@ -517,7 +517,7 @@
 
 <!--
 
-  This target created the swdl file and client stubs and server skeleton (which needs filling in)
+  This target created the wsdl file and client stubs and server skeleton (which needs filling in)
   for the code under the src directory - it has to compile code for this reason but removes .class
   files afterwards
   
@@ -551,14 +551,38 @@
 
     <!-- echo a reminder to update the java files i.e. the SOAP binding one -->
     <echo>
-    Don't forget to update the *SoapBindingImpl.java files under ws.badc and ws.mpim before
+    Don't forget to update the *_SoapBindingImpl.java files under ws.badc and ws.mpim before
     compiling, installing and deploying
     </echo>
 
-
-
-
-
   </target>
+
+<!-- ==================== deploy web services Target =================================== -->
+
+<!-- deploys the web services such that they are accessable -->
+
+  <target name="deploy"
+   description="deploy xmlwrapper web services">
+
+    <!-- call subbuild file to cope with package names correctly -->
+    <!-- perhaps there is a way to change the ${basedir} so we would -->
+    <!-- not have to do this -->
+    <ant antfile="${src.home}/wsdlbuild.xml" dir="${src.home}" target="deploy" inheritRefs="true"/>
+  </target>
+  
+<!-- ==================== undeploy web services Target =================================== -->
+
+<!-- undeploys the web services -->
+
+  <target name="undeploy"
+   description="undeploy xmlwrapper web services">
+
+    <!-- call subbuild file to cope with package names correctly -->
+    <!-- perhaps there is a way to change the ${basedir} so we would -->
+    <!-- not have to do this -->
+    <ant antfile="${src.home}/wsdlbuild.xml" dir="${src.home}" target="undeploy" inheritRefs="true"/>
+  </target>
+
+  
 
 </project>

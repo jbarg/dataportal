@@ -171,16 +171,6 @@ public class SessionSingleton
       this.s = s ;
    }
 
-   void setResultSet(ResultSet r)
-   {
-      this.r = r ;
-   }
-
-   void setResultSetMetaData(ResultSetMetaData rsmd)
-   {
-      this.rsmd = rsmd ;
-   }
-
    Connection getConnection()
    {
       return c;

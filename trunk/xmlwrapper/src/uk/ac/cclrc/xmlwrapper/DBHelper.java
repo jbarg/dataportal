@@ -78,14 +78,20 @@ public class DBHelper
                                     "(PROTOCOL=tcp)(PORT="+ss.getPort()+"))"+
                                     "(CONNECT_DATA=(SID="+ss.getSid()+")))";
 
-            c = DriverManager.getConnection(
-                          "jdbc:oracle:thin:@"+dbConnectString, ss.getUser(), ss.getPass());
+	    //classic pointer to pointer type problem
+	    //only the class holding the reference which is referred to can
+	    //actually change the value of the reference - i.e. changing a value
+	    //of a reference here will not change it in the SessionSingleton class
+	    //and the correct value will this not propagate throughout the system
+            ss.setConnection(DriverManager.getConnection("jdbc:oracle:thin:@"+dbConnectString, ss.getUser(), ss.getPass()));
+            c = ss.getConnection() ;
 
 
             //need to create the statement handle here also
             //open JDBC connection handles as they will be used
             //extensively
-            s = c.createStatement() ;
+            ss.setStatement(c.createStatement()) ;
+            s = ss.getStatement() ;
 
             connected = true ;
 

@@ -32,7 +32,7 @@
 
    <xsd:complexType name="MetadataRecordType">
       <xsd:sequence>
-         <xsd:element name="Topic" type="cmd:TopicType" minOccurs="0"/>
+         <xsd:element name="Topic" type="cmd:TopicType" />
          <xsd:element name="Study" type="cmd:StudyType"/>
          <xsd:element name="AccessConditions" type="xsd:string"/>
 	 <xsd:element name="RelatedMaterial" type="cmd:RelatedMaterialTypes" minOccurs="0" maxOccurs="unbounded"/>
@@ -74,7 +74,7 @@
    <xsd:complexType name="StudyType">
       <xsd:sequence>
          <xsd:element name="StudyName"        type="xsd:string"/>
-	 <xsd:element name="StudyInstitutions"     type="cmd:InstitutionType" minOccurs="0" maxOccurs="unbounded"/>
+	 <xsd:element name="StudyInstitution"     type="cmd:InstitutionType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="Investigator"     type="cmd:InvestigatorType" minOccurs="1" maxOccurs="unbounded"/>
          <xsd:element name="StudyInformation" type="cmd:StudyInformationType"/>
          <xsd:element name="Notes"            type="xsd:string" minOccurs="0" maxOccurs="1"/>
@@ -114,7 +114,7 @@
 <!--     <xsd:element name="Institution" type="xsd:string" minOccurs="0" maxOccurs="1"> -->
 <!-- above line is incorrect file would not validate - we have to extend the type   -->
 <!-- to add some attributes -->
-         <xsd:element name="Institution" minOccurs="0" maxOccurs="1">
+         <xsd:element name="Name" minOccurs="0" maxOccurs="1">
          <!-- adding attributes to an element -->
             <xsd:complexType>
                <xsd:simpleContent>
@@ -156,25 +156,34 @@
   <xsd:complexType name="PersonType">
      <xsd:sequence>
         <xsd:element name="Name"           type="cmd:NameType"/>
-	<xsd:element name="Status"         type="cmd:StatusTypes"/>
         <xsd:element name="Institution"    type="cmd:InstitutionType"/>
         <xsd:element name="ContactDetails" type="cmd:ContactDetailsType"/>
      </xsd:sequence>
   </xsd:complexType>
 
-  <xsd:simpleType name="StatusTypes">
+  <xsd:simpleType name="TitleTypes">
      <xsd:restriction base="xsd:string">
         <xsd:enumeration value="professor"/>
         <xsd:enumeration value="Professor"/>
-        <xsd:enumeration value="Prof."/>
+        <xsd:enumeration value="Prof"/>
 	<xsd:enumeration value="doctor"/>
 	<xsd:enumeration value="Doctor"/>
-	<xsd:enumeration value="Dr."/>
-	<xsd:enumeration value="student"/>
-	<xsd:enumeration value="Student"/>
+	<xsd:enumeration value="Dr"/>
+	<xsd:enumeration value="Mr"/>
+	<xsd:enumeration value="Mrs"/>
+	<xsd:enumeration value="Ms"/>
+        <xsd:enumeration value="other"/>
+     </xsd:restriction>
+  </xsd:simpleType>
+
+
+<xsd:simpleType name="RoleTypes">
+     <xsd:restriction base="xsd:string">
 	<xsd:enumeration value="Post Doctoral Research Assistant"/>
 	<xsd:enumeration value="pdra"/>
 	<xsd:enumeration value="PDRA"/>
+	<xsd:enumeration value="PI"/>
+	<xsd:enumeration value="Principal Investigator"/>
         <xsd:enumeration value="other"/>
      </xsd:restriction>
   </xsd:simpleType>
@@ -186,7 +195,7 @@
      <xsd:complexContent>
         <xsd:extension base="cmd:PersonType">
            <xsd:sequence>
-              <xsd:element name="Role" type="xsd:string"/>
+              <xsd:element name="Role" type="cmd:RoleTypes"/>
            </xsd:sequence>
         </xsd:extension>
      </xsd:complexContent>
@@ -198,7 +207,7 @@
         <xsd:element name="Surname" type="xsd:string"/>
         <xsd:element name="Initials" type="xsd:string"/>
         <xsd:element name="Forename" type="xsd:string" minOccurs="0"/>
-        <xsd:element name="PersonTitle" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Title" type="cmd:TitleTypes" minOccurs="0" maxOccurs="1"/>
      </xsd:sequence>
   </xsd:complexType>
 
@@ -245,7 +254,7 @@
 <!-- perhaps the following should be an enumerated list - even held in a different file -->
 <!-- and included here - note taken from the DTD -->
          <xsd:element name="StudyStatus" type="xsd:string"/>
-         <xsd:element name="Reources" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="Resources" type="xsd:string" minOccurs="0" maxOccurs="1"/>
       </xsd:sequence>
    </xsd:complexType>
 
