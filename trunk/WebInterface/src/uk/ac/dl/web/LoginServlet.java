@@ -193,89 +193,7 @@ public class LoginServlet extends HttpServlet {
         
     }
     
-    /** This method counts the number of dpusers and logs it to
-     *
-     * log/hits.txt
-     *
-     */
-    
-    public synchronized void count(String wd, String name){
-        
-        BufferedReader buff = null;
-        
-        FileReader read = null;
-        
-        
-        try{
-          Service  service = new Service();
-                Call  call    = (Call) service.createCall();
-                
-                call.setTargetEndpointAddress( new java.net.URL(lookup) );
-                call.setOperationName( "LookupEndpoint" );
-                call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
-                call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
-                call.setReturnType( XMLType.SOAP_ARRAY );
-                String[] name = {"Dataportal-EMIN"};
-                Object[] ob = new Object[]{name,serviceTypes[i]};
-                
-                String[] url = (String[]) call.invoke(ob );
-                //System.out.println(url[0] + "   "+serviceTypes[i]);
-                prop.put(serviceTypes[i],url[0]);
-            }      
-            //load file and read the current number
-            
-            File file = new File(wd+File.separator+"log"+File.separator+"hit.txt");
-            read = new FileReader(file);
-            buff = new BufferedReader(read);
-            
-            
-            String number = buff.readLine();
-            
-            float counter = Float.parseFloat(number);
-            
-            //increment the number
-            float newCounter  = counter+1;
-            
-            //new hit number
-            
-            String stringCounter = String.valueOf(newCounter);
-            
-            buff.close();
-            read.close();
-            
-            FileWriter wr = new FileWriter(file);
-            wr.write(stringCounter);
-            wr.close();
-        }
-        
-        catch(Exception e){
-            try{
-                buff.close();
-                read.close();
-            }
-            
-            catch(Exception e2){
-                logger.error("logs/hit.txt could not be closed",e2);
-            }
-            logger.error("Could not increase hit counter",e);
-            
-           Service  service = new Service();
-                Call  call    = (Call) service.createCall();
-                
-                call.setTargetEndpointAddress( new java.net.URL(lookup) );
-                call.setOperationName( "LookupEndpoint" );
-                call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
-                call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
-                call.setReturnType( XMLType.SOAP_ARRAY );
-                String[] name = {"Dataportal-EMIN"};
-                Object[] ob = new Object[]{name,serviceTypes[i]};
-                
-                String[] url = (String[]) call.invoke(ob );
-                //System.out.println(url[0] + "   "+serviceTypes[i]);
-                prop.put(serviceTypes[i],url[0]);
-            } }
-        
-    }
+ 
     
     /** Uses the request header to determine the browser type and version
      *
@@ -341,21 +259,7 @@ public class LoginServlet extends HttpServlet {
         
         //read in file
         
-           Service  service = new Service();
-                Call  call    = (Call) service.createCall();
-                
-                call.setTargetEndpointAddress( new java.net.URL(lookup) );
-                call.setOperationName( "LookupEndpoint" );
-                call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
-                call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
-                call.setReturnType( XMLType.SOAP_ARRAY );
-                String[] name = {"Dataportal-EMIN"};
-                Object[] ob = new Object[]{name,serviceTypes[i]};
-                
-                String[] url = (String[]) call.invoke(ob );
-                //System.out.println(url[0] + "   "+serviceTypes[i]);
-                prop.put(serviceTypes[i],url[0]);
-            } String[] br = {"IE6","IE5","N7","N6","N4","N3","Konqueror","Opera","Mozilla","other"};
+        String[] br = {"IE6","IE5","N7","N6","N4","N3","Konqueror","Opera","Mozilla","other"};
         String wd = (String)session.getAttribute("wd");
         try{
             File fr = new File(wd+File.separator+"log"+File.separator+"browser.txt");

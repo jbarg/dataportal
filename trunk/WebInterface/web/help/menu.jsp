@@ -3,7 +3,7 @@
   <html>
 <head>
 
-<title>CLRC Data Portal/Estedi - Basic database search</title>
+<title>CLRC Data Portal - Help Pages</title>
 <!--<link rel="stylesheet" href="../style/main.css">-->
 <style>
 
@@ -78,7 +78,7 @@ document.onmousedown=click*/
 
 
 
-<a href="http://www.clrc.ac.uk"><img border="0" src="../img/emin2.gif" width="70" height="90" alt="CLRC logo" border="0"></a>
+<a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" width="70" height="90" alt="CLRC logo" border="0"></a>
 
 <br />&nbsp;<br /><br />
 
