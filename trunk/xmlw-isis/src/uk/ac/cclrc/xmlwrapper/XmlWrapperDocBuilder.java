@@ -55,11 +55,11 @@ public class XmlWrapperDocBuilder
       }
 
       //connect to the database
-      DBHelper dbh = ss.getDBHelper() ;
+      DBHelper dbh = ss.getRelDBHelper() ;
       dbh.connectToDB() ;
 
       //load the map (i.e. the compressed entry cache)
-      loadMap() ;
+      //loadMap() ;
 
    }
 
@@ -155,15 +155,12 @@ public class XmlWrapperDocBuilder
       //find all keys in map and then pull all values out
       //validate and place in xml doc repository
 
-      Set se = m.entrySet() ;
-      Iterator e = se.iterator() ;
+      String sid = null ;
 
-      Map.Entry me = null ;
-      String entry = null ;
-      int hash_code = 0 ;
-      Integer key = null ;
+      List keylisty = new ArrayList() ;
+      keylisty.add("1") ;
 
-      while(e.hasNext())
+      for (Iterator it=keylisty.iterator(); it.hasNext();) 
       {
          //clear stringbuffer for re-use
          if(result.length() != 0)
@@ -171,29 +168,22 @@ public class XmlWrapperDocBuilder
             result.delete(0, result.length()) ;
          }
 
-         log.info("location of dtd is:\t" + ss.getDTDLocation()) ;
+         //get study_id of entry to be processed
+         sid = (String)it.next() ;
+
+         log.info("location of xsd is:\t" + ss.getSchemaLocation()) ;
 
          //need to delete the contents of stringbuffer first
          result.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") ;
-         result.append("<!DOCTYPE CLRCMetadata PUBLIC \"-//W3C//DTD CLRC-MD 1.0 Strict//EN\" " +
-                    "\"" + ss.getDTDLocation() + "\">\n") ;
-         result.append("<CLRCMetadata>\n") ;
+         result.append("<CCLRCMetadata xmlns=\"http://www.escience.clrc.ac.uk/schemas/scientific\" ");
+         result.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ") ;
+         result.append("xsi:schemaLocation=\"http://www.escience.clrc.ac.uk/schemas/scientific\" \"" + ss.getSchemaLocation + "\">\n") ; 
 
-         //get the key and the entry ;
-         me = (Map.Entry) e.next() ;
-
-         entry = (String) me.getValue() ;
-
-         hash_code = me.hashCode() ;
-
-         key = (Integer) me.getKey() ;
-
+         //build metadata record
      
 
-         //pull the entry out of the map
-         result.append(StringZip.decompress(entry));
     
-         result.append("</CLRCMetadata>") ;
+         result.append("</CCLRCMetadata>") ;
 
          log.info("Entry being processed:\t" + key ) ;
 
