@@ -48,25 +48,17 @@ import org.apache.axis.AxisFault;
 
 public class LoginServlet extends HttpServlet {
     
-    
-    
-    
-    
     private Properties prop = null;
     
-    
-    
     //set static log for the class
-    
-    private static Logger logger = Logger.getLogger(LoginServlet.class);
+        private static Logger logger = Logger.getLogger(LoginServlet.class);
     
     //get context path
-    
-    private ServletConfig scon = null ;
+        private ServletConfig scon = null ;
     private String workingDir = null;
     
     public void init(ServletConfig config) throws ServletException {
-        
+        System.out.println("Loading Login");
         scon = config ;
         
     }
