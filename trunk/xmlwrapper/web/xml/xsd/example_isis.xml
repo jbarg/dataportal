@@ -100,117 +100,12 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 								<Resource>ISIS SXD</Resource>
 							</FacilityUsed>
 						</LogicalDescription>
-						<Software>
-							<Production>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</Production>
-							<Production>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</Production>
-							<Anlaysis>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</Anlaysis>
-							<Anlaysis>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</Anlaysis>
-							<Conversion>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</Conversion>
-							<Conversion>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</Conversion>
-							<Visualisation>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</Visualisation>
-							<Visualisation>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</Visualisation>
-							<MultiPurpose>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</MultiPurpose>
-							<MultiPurpose>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</MultiPurpose>
-							<other>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</other>
-							<other>
-								<LongName>String</LongName>
-								<ProgramName>String</ProgramName>
-								<Version>String</Version>
-								<URI>String</URI>
-								<OperatingSystem>String</OperatingSystem>
-								<OperatingSystemVersion>String</OperatingSystemVersion>
-								<Architecture>String</Architecture>
-							</other>
-						</Software>
 					</DataDescription>
+					<DataHoldingLocator>
+						<DataName>INV-SXD1009</DataName>
+						<Locator pathtype="absolute">ftp://ftp.isis.rl.ac.uk/SXD/SXD1009</Locator>
+						<Locator pathtype="absolute">http://www.dooc.uos.ac.uk/~perimentor/benzene/</Locator>
+					</DataHoldingLocator>
 					<DataCollection dataid="ID000003">
 						<DataDescription>
 							<DataName>String</DataName>
@@ -1116,11 +1011,6 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 							<URI>String</URI>
 						</ReferenceLocation>
 					</RelatedReference>
-					<DataHoldingLocator dataidref="String">
-						<DataName>String</DataName>
-						<Locator>absolute</Locator>
-						<Locator>absolute</Locator>
-					</DataHoldingLocator>
 				</DataHolding>
 			</Investigation>
 			<Investigation InvestigationID="ID000006">
