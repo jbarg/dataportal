@@ -56,7 +56,7 @@ public class SessionManagerHouseKeeping implements Job{
                    log.warn("User "+this.cert.getDName()+" has invalid certificate.");
                     
                     db.updateData("delete from session where sid = '"+this.sid+"'");
-                    db.updateData("delete from session_access_rights where sid '"+this.sid+"'");
+                    db.updateData("delete from session_access_rights where sid = '"+this.sid+"'");
                       log.warn("Removed certificate for "+this.cert.getDName()+".");
                 }
                 
@@ -68,7 +68,7 @@ public class SessionManagerHouseKeeping implements Job{
                     log.info("Invalid certificate. No lifetime left for "+this.cert.getDName()+".");
                  //System.out.println("\n");
                     db.updateData("delete from session where sid = '"+this.sid+"'");
-                    db.updateData("delete from session_access_rights where sid '"+this.sid+"'");
+                    db.updateData("delete from session_access_rights where sid = '"+this.sid+"'");
                     log.info("Removed certificate for "+this.cert.getDName()+".");
                 }
             }
@@ -76,7 +76,7 @@ public class SessionManagerHouseKeeping implements Job{
             
         }
         catch(Exception sql){
-           // log.warn("Error with job execution",sql);
+            log.warn("Error with job execution",sql);
         }
         finally {
             try{
