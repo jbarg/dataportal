@@ -1,9 +1,9 @@
 /*
- * buildTopics.java
+ * TopicManager.java
  *
  * Created on 24 September 2003, 15:59
  */
-package dataportal.topicmanager.uk.ac.dl.topicmanager;
+package uk.ac.dl.topicmanager;
 
 // Database classes
 import java.sql.ResultSet;
@@ -39,7 +39,7 @@ public class TopicManager {
         db.connect();
         ResultSet rs = db.getData("select level, topic, leaf, "+
         "SYS_CONNECT_BY_PATH(topic, '/') as \"final\" "+
-        "from mytopic "+
+        "from topic "+
         "start with topic='Chemistry' "+
         "connect by prior topic_id = parent ");
         
@@ -114,7 +114,7 @@ public class TopicManager {
             serializer.output(mydoc, System.out);
         }
         catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         
         
