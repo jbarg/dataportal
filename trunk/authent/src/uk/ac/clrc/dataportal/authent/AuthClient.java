@@ -21,7 +21,7 @@ public class AuthClient {
     public static void main(String [] args) throws Exception {
         
         //String endPoint = "http://gjd37vig.dl.ac.uk:" + 8080 +        "/authent/services/AUTH";
-        String endPoint = "http://dmgdev1.esc.rl.ac.uk:" + 8080 + "/authent/services/AUTH";
+        String endPoint = "http://localhost:" + 8080 + "/authent/services/AUTH";
         
         if (args == null || args.length != 3) {
             System.err.println("Usage: AuthClinet <userId> <password>");
