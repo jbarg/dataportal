@@ -2,8 +2,10 @@
 <project basedir="." default="all" name="facilitymodule">
 
     <target name="init">
+        <property name="tomcatlibs" value="C:/jakarta-tomcat-4.1.12/common/lib"/>
         <property name="src" value="${basedir}/src"/>
         <property name="web" value="${basedir}/web"/>
+        <property name="docs" value="${basedir}/docs"/>
         <property name="webinf" value="${web}/WEB-INF"/>
         <property name="dest" value="${webinf}/classes"/>
         <property name="warfile" value="facility.war"/>
@@ -13,6 +15,7 @@
         <javac debug="true" deprecation="true" destdir="${dest}" srcdir="${src}">
             <classpath>
                 <pathelement location="${dest}"/>
+                <pathelement location="${tomcatlibs}/servlet.jar"/>
                 <fileset dir="${webinf}/lib">
                     <include name="**/*.jar"/>
                 </fileset>
@@ -35,5 +38,13 @@
         </delete>
         <delete file="${warfile}"/>
     </target>
-
+    
+    <target name="javadoc" depends="init">
+        <javadoc packagenames="uk.ac.clrc.dataportal.facility" destdir="${docs}">
+            <sourcepath>
+                <pathelement location="${src}"/>
+            </sourcepath>
+        </javadoc>
+    </target>
+    
 </project>

@@ -1,0 +1,13 @@
+<fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
+  <createFacility>
+    <facilityName>Dataportal</facilityName>
+    <facilityDescription>CCLRC Data Portal</facilityDescription>
+    <service>
+      <serviceName>Session Manager</serviceName>
+      <serviceDescription>Performs Session Management</serviceDescription>
+      <serviceType>SESSION</serviceType>
+      <serviceEndpoint>http://escvig1.dl.ac.uk:8080/axis/services/SessionManager</serviceEndpoint>
+      <serviceWSDL>http://escvig1.dl.ac.uk:8080/axis/services/SessionManager?wsdl</serviceWSDL>
+    </service>
+  </createFacility>
+</fadm:facilityAdmin>
