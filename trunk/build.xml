@@ -80,7 +80,7 @@
 
    <target name="do" description="redirects ant call to all dataportal modules">
 
-     <ant antfile="datatransfer/build.xml" target="${target}">
+    <ant antfile="datatransfer/build.xml" target="${target}">
          <property name="basedir" value="${basedir}/datatransfer"/>
       </ant>
 
@@ -128,16 +128,16 @@
          <property name="basedir" value="${basedir}/acmsrd"/>
       </ant>
       
-     <!-- <ant antfile="acmemin/build.xml" target="${target}"> 
+      <ant antfile="acmemin/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/acmemin"/>
-      </ant>-->
+      </ant>
 
 
       <ant antfile="authent/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/authent"/>
       </ant>
 
-      <ant antfile="sessionmanager/build.xml" target="${target}"> 
+    <ant antfile="sessionmanager/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/sessionmanager"/>
       </ant>
 
@@ -145,11 +145,10 @@
          <property name="basedir" value="${basedir}/queryandreply"/>
       </ant>
       
-   <!--    <ant antfile="datainsertion/build.xml" target="${target}"> 
+      <ant antfile="datainsertion/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/datainsertion"/>
       </ant>
--->
-  <ant antfile="srbcommands/build.xml" target="${target}"> 
+ <ant antfile="srbcommands/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/srbcommands"/>
       </ant>
 
