@@ -57,7 +57,7 @@ public class BasicSearch extends HttpServlet {
                 if( Discipline.charAt(i) == ' ') h.append("%20");
                 else h.append(Discipline.charAt(i));
             }*/
-            Discipline = "Discipline="+Discipline;
+           
             
             //get the list of facilites that the user has chosen
             String[] fac  = (String[])session.getAttribute("fac");

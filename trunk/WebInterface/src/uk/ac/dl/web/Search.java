@@ -34,6 +34,10 @@ public class Search {
     public static void doBasicSearch(String sid, String[] facs, String discipline,Integer waiting, String url,String workingDir,String dn, boolean doLog) throws Exception{
         FileWriter wr = null;
         try{
+            //add the exra string to the dis
+            //take of the Disoc= from the dis
+            String Discipline = "Discipline="+discipline;
+            
             Service  service = new Service();
             Call  call    = (Call) service.createCall();
             
@@ -45,7 +49,7 @@ public class Search {
             call.addParameter( "op4", XMLType.XSD_INTEGER, ParameterMode.IN );
             call.setReturnType( XMLType.SOAP_ELEMENT );
             
-            Object[] ob = new Object[]{sid,facs,discipline,waiting};
+            Object[] ob = new Object[]{sid,facs,Discipline,waiting};
             
             org.w3c.dom.Element el = (org.w3c.dom.Element) call.invoke(ob );
             
@@ -76,6 +80,8 @@ public class Search {
                     else h.append(dn.charAt(i));
                 }
                 dn = h.toString();
+                
+                
                 
                 wr = new FileWriter(workingDir+File.separator+"profiles"+File.separator+"history"+File.separator+dn,true);
                 wr.write("<tr><td>"+buff.toString()+" </td>");
