@@ -6,15 +6,19 @@ import org.apache.axis.client.Call;
 import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
-import org.jdom.*;
-import ac.dl.xml.*;
 import java.io.*;
 
+//additional for JDOM
+import org.jdom.Document ;
+import org.jdom.Element ;
+import org.jdom.input.SAXBuilder ;
+import org.jdom.output.XMLOutputter ;
 
 public class XMLWSelectorTester {
 
    void test(String endpoint_url,
 	     String query,
+             String formatter,
 	     String file_name) 
    {
 
@@ -44,14 +48,15 @@ public class XMLWSelectorTester {
         Call     call    = (Call) service.createCall(); 
  
         call.setTargetEndpointAddress( new java.net.URL(endpoint_url) ); 
-        call.setOperationName( "getXML" ); 
+        call.setOperationName( "queryMetaData" );
+        //call.setOperationName( "getXML" ); 
         call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN ); 
+        call.addParameter( "op2", XMLType.XSD_STRING, ParameterMode.IN ); 
  
         call.setReturnType( XMLType.SOAP_ELEMENT ); 
  
         org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( 
-	      new Object [] {query});
-	      //new Object [] {"'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'"});
+	      new Object [] {query,formatter});
 
        //////////
 
@@ -62,9 +67,23 @@ public class XMLWSelectorTester {
 
        org.jdom.input.DOMBuilder buildert = new org.jdom.input.DOMBuilder();
        org.jdom.Element el = buildert.build(ret);
-       org.jdom.Document doc1  =new org.jdom.Document(el);
+       org.jdom.Document doc1  = new org.jdom.Document((org.jdom.Element) el.clone());
 	 
-       Saver.save(doc1, new File(file_name));
+      try
+      {
+         FileOutputStream out = new FileOutputStream(file_name);
+         //might be worth setting second option to false - it could help with making smaller files - might not make a different though
+         XMLOutputter op = new XMLOutputter(" ", true);
+         op.setLineSeparator("\n") ;
+         op.output(doc1, out);
+         out.flush();
+         out.close();
+      }
+      catch (IOException ioe)
+      {
+         System.err.println(ioe);
+      }
+
     }
 
 
@@ -134,8 +153,22 @@ public class XMLWSelectorTester {
    {
       XMLWSelectorTester xmlwt = new XMLWSelectorTester() ;
 
+      String xquery_result_format = "<html>\n" +
+                                       "<head/>\n" +
+                                       "<body>\n" +
+                                          "<h1>Scientific Studies</h1>\n" +
+                                          "<ul>\n" +
+                                          "{\n" +
+                                             "for $a in //metadata\n" +
+                                             "return\n" +
+                                                "<li>{$a/@id}</li>\n" + 
+                                          "}\n" +
+                                          "</ul>\n" +
+                                          "</body>\n" +
+                                    "</html>" ;
 
-      xmlwt.test_selector("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
+
+      xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
                          "<result>\n" +
                          "{\n" +
                          //"let $data_i := document(\"metadata.xml\")\n" + this is a qexo line
@@ -147,7 +180,7 @@ public class XMLWSelectorTester {
 		         "{$b//StudyName}\n" +
 	                 "</metadata>\n" +
                          "}\n" +
-                         "</result>",
+                         "</result>", xquery_result_format,
                          "results_from_xquery.txt") ;
 
 

@@ -18,11 +18,12 @@
       <parameter name="wsdlServicePort" value="xmlwrapper_selector"/>
       <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.selector.Xmlwrapper_SelectorSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="XmlWrapperDocSelector"/>
-      <operation name="queryMetaData" qname="operNS:queryMetaData" xmlns:operNS="urn:xmlwrapper" returnQName="queryMetaDataReturn" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" >
-        <parameter name="xquery" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      <operation name="queryMetaData" qname="operNS:queryMetaData" xmlns:operNS="urn:xmlwrapper" returnQName="queryMetaDataReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
+        <parameter name="external_xquery" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter name="result_formatter" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
       <parameter name="allowedMethods" value="queryMetaData"/>
-      <parameter name="scope" value="Session"/>
+      <parameter name="scope" value="Application"/>
 
   </service>
 </deployment>

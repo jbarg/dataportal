@@ -67,28 +67,29 @@ public class Xmlwrapper_SelectorSoapBindingStub extends org.apache.axis.client.S
         }
     }
 
-    public java.lang.String queryMetaData(java.lang.String xquery) throws java.rmi.RemoteException {
+    public org.w3c.dom.Element queryMetaData(java.lang.String external_Xquery, java.lang.String result_Formatter) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.addParameter(new javax.xml.namespace.QName("", "xquery"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
-        _call.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class);
+        _call.addParameter(new javax.xml.namespace.QName("", "external_xquery"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
+        _call.addParameter(new javax.xml.namespace.QName("", "result_formatter"), new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, javax.xml.rpc.ParameterMode.IN);
+        _call.setReturnType(new javax.xml.namespace.QName("http://xml.apache.org/xml-soap", "Element"), org.w3c.dom.Element.class);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setOperationStyle("rpc");
         _call.setOperationName(new javax.xml.namespace.QName("urn:xmlwrapper", "queryMetaData"));
 
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {xquery});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {external_Xquery, result_Formatter});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
         }
         else {
             try {
-                return (java.lang.String) _resp;
+                return (org.w3c.dom.Element) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.String) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String.class);
+                return (org.w3c.dom.Element) org.apache.axis.utils.JavaUtils.convert(_resp, org.w3c.dom.Element.class);
             }
         }
     }
