@@ -63,6 +63,11 @@ else{
 alert("Enter a number for the lifetime");
 return false;}
 }
+
+function openHelp(){
+    window.open("../help/Help.jsp","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
+
+}
 </script>
 
 <title>CLRC DataPortal / Estedi - Basic database search</title>
@@ -136,6 +141,9 @@ action="servlet/LoginServlet">
     insertLink("html/proxy/proxy1.jnlp", "DataPortal Proxy");
 </script>
 <br />
+<br />
+
+<a href="#" onclick="openHelp();">Help pages</a>.
 <br />
 Back to <a href="../index.html">Home page</a>.
 <br />
