@@ -1,0 +1,222 @@
+#!/bin/bash
+# script to send filesystems to ADS
+# Started MDOHERTY 26/11/2003
+#Set up environment variables
+#
+# Read the config file first - MDOHERTY 28/1/2004
+if [ ! -r /etc/masstab ]; then
+   	echo ""
+   	echo "+=========================================================="
+   	echo "| mass_bck: ADS backup utility"
+   	echo "| Version 2.0, MDOHERTY January 2004"
+   	echo "+=========================================================="
+   	echo "| "
+	echo "| MASS CRITICAL FAILURE: NO CONFIG FILE"
+   	echo "| "
+   	echo "+----------------------------------------------------------"
+	exit
+fi
+{ while read massvar massval ; do
+        export $massvar=$massval
+done } < /etc/masstab
+#
+#
+if [ $# != 5 ]; then
+   echo ""
+   echo "+=========================================================="
+   echo "| mass_bck: ADS backup utility"
+   echo "| Version 2.0, MDOHERTY January 2004"
+   echo "+=========================================================="
+   echo "| SYNTAX ERROR: $# argument[s] have been entered"
+   echo "| USAGE: mass_bck <disk> <method> <filename> <append tape>"
+   echo "| 	<backup level>"
+   echo "| i.e. mass_bck /dev/backup tar tapename Y 0"
+   echo "| or   mass_bck /dev/backup dump tapename N 5"
+   echo "+----------------------------------------------------------"
+   exit 1
+fi
+#
+#
+disk="$1"
+method="$2"
+fname="$3"
+tapp="$4"
+level="$5"
+TQFILE=$MASS_HOME/tmp/${disk##*/}_"$method".tqf
+BCKLOG=$MASS_HOME/log/backups.log
+BCKLOGBCK=$MASS_HOME/log/backups_log.bck
+echo ""
+echo "+=========================================================="
+echo "| mass_bck: ADS backup utility"
+echo "| Version 2.0, MDOHERTY January 2004"
+echo "+=========================================================="
+echo "| Process Id:     $$"
+echo "| Date:           "`date`
+echo "|"
+echo "+----------------------------------------------------------"
+echo "| Configuration Parameters for this run..."
+echo "|"
+echo "|    +-----------------------------------------------------"
+echo "|    | disk              $disk"
+echo "|    | method            $method"
+echo "|    | ADS File(s)       $fname"
+echo "|    | Append backup?    $tapp"
+echo "|    | Backup level      $level"
+echo "|    +-----------------------------------------------------"
+echo "|"
+echo "+----------------------------------------------------------"
+echo "| ADS File status for ADS file(s) used in this run..."
+echo "|"
+#
+#
+tapeno=NONE
+#
+#
+function toupper()      {
+  if [ -z "$1" ]       #  If no argument(s) passed,
+  then                 #  send error message
+    echo "(null)"      #  (C-style void-pointer error message)
+    return             #  and return from function.
+  fi
+  echo "$@" | tr a-z A-Z
+  # Translate all passed arguments ($@).
+  return
+}
+#
+#
+function splitstr()	{
+  tapein="$fname"
+  if [ -r $TQFILE ]
+  then
+     rm $TQFILE
+  fi
+  tapeout=""
+  indx=1
+  { while [ "$indx" -ne 0 ]; do 
+        indx=`expr index "$tapein" ,`
+	if [ "$indx" = 0 ]
+	then
+		tapeout=$tapein
+	else
+		length=$(($indx-1))
+		tapeout=`expr substr $tapein 1 $length`
+	fi
+	echo $TOWNER	$tapeout >> $TQFILE
+	tapein=${tapein:$indx}
+  done }
+}
+#
+#
+day=${day:-$(date +%a)}
+day=`toupper $day`
+#
+#
+#Check to see if we are bing passed mutiple ADS files (AKA Tapes)
+#if so set the qfile variable - MDOHERTY 02/12/2003
+#-just use a simple test to look for a "," in the file name
+qfile=0
+qfile=`expr index "$fname" ,`
+if [ "$qfile" -ne 0 ]
+then
+   splitstr
+fi
+#
+#
+#Setup the method of backup - TAR for OCFS and DUMP for all others
+method=`toupper $method`
+#echo "out of here"
+#exit
+if [ "$method" = "TAR" ]
+   then
+	if [ "$qfile" = 0 ]
+	then
+		if [ "$tapp" = "N" ]
+		then
+        		tar --o_direct -clf - $disk  | /usr/local/bin/tape \
+			-n${disk##*/} -w $TOWNER $fname
+		else
+        		tar --o_direct -clf - $disk  | /usr/local/bin/tape \
+			-me -n${disk##*/} -w $TOWNER $fname
+		fi
+	else
+		if [ "$tapp" = "N" ]
+		then
+        		tar --o_direct -clf - $disk  | /usr/local/bin/tape \
+			-n${disk##*/} -w -q$TQFILE 
+		else
+        		tar --o_direct -clf - $disk  | /usr/local/bin/tape \
+			-me -n${disk##*/} -w -q$TQFILE
+		fi
+	fi
+   else
+	if [ "$qfile" = 0 ]
+	then
+		if [ "$tapp" = "N" ]
+		then
+        		/sbin/dump $level -uf - $disk | /usr/local/bin/tape \
+			-n${disk##*/} -w $TOWNER $fname
+		else
+        		/sbin/dump $level -uf - $disk | /usr/local/bin/tape \
+			-me -n${disk##*/} -w $TOWNER $fname
+		fi
+	else
+		if [ "$tapp" = "N" ]
+		then
+        		/sbin/dump $level -uf - $disk | /usr/local/bin/tape \
+			-n${disk##*/} -w -q$TQFILE
+		else
+        		/sbin/dump $level -uf - $disk | /usr/local/bin/tape \
+			-me -n${disk##*/} -w -q$TQFILE
+		fi
+	fi
+fi
+#
+#
+#Verify the last write into the datastore
+#
+qfname="NULL"
+if [ $qfile -ne 0 ]
+then
+	{ while read TOWNER qfname; do
+	   /usr/sbin/sysreq flfsys query owner=$TOWNER \
+	   name=$qfname sh\<. name numpages wdate maxpages
+	done } < $TQFILE
+else
+	/usr/sbin/sysreq flfsys query owner=$TOWNER \
+	name=$fname sh\<. name numpages wdate maxpages
+fi
+#
+#
+# Write to the backup log file for information on all backups
+# backing up the log file first - MDOHERTY 21/1/2004
+if [ ! -r $BCKLOG ]; then
+	touch $BCKLOG
+else
+	cp $BCKLOG $BCKLOGBCK
+fi
+#
+# Get month in year
+# if first backup of month, rotate log file to reduce size
+moy=`date +%b`
+if [ ! -r "$BCKLOG"_"$moy" ]; then
+	# Caveat for first time installation - MDOHERTY 26/1/2004
+	if [ ! -r "$BCKLOG" ]; then
+		touch $BCKLOG
+	fi
+	cp $BCKLOG "$BCKLOG"_"$moy"
+	rm $BCKLOG
+	touch $BCKLOG
+fi
+logtime=`date +%"D %T"`
+node=`hostname`
+echo $logtime" "$node" "$disk" "$method" "$TOWNER" "$fname" "$tapp" "$level >> $BCKLOG
+#sort -r -k1,2 $BCKLOG | sort -u -k4,4 -k 7,7 | sort > $LGBCK
+#
+#
+# Now mail the information to selected users - MDOHERTY 22/1/2004
+# moved to mass_tcl - MDOHERTY 26/1/2004
+# mail -s "$node"" Last Good Backups ""$logtime" $MASS_ADMINS < $LGBCK
+
+#Now finished
+echo "+----------------------------------------------------------"
+exit
