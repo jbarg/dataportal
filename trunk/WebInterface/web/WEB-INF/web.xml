@@ -328,7 +328,7 @@
 -->
  
 	<welcome-file-list id="WelcomeFileList_1">
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>ematerials.html</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>index.jws</welcome-file>
 	</welcome-file-list>
