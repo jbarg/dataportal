@@ -263,10 +263,9 @@ $ANT_HOME/lib where $CATALINA_HOME represents the tomcat root directory.</span><
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>(NB: Red Hat Linux comes preinstalled with ant,
 usually in /<span class=SpellE>usr</span>/bin/ant.&nbsp; You need to use apache
-<span class=GramE>ant which</span> you need to have installed.&nbsp; Either
-make sure apache ant is in front in you PATH variable or you use the full path
-when executing ant.&nbsp; <span class=SpellE>I.e</span> $ANT_HOME/bin/<span
-class=GramE>ant )</span></span></p>
+ant, which you need to have installed.&nbsp; Either make sure apache ant is in
+front in you PATH variable or you use the full path when executing ant.&nbsp; <span
+class=SpellE>I.e</span> $ANT_HOME/bin/ant)</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>3) <i style='mso-bidi-font-style:normal'>Change the
@@ -353,9 +352,9 @@ user's proxy credential out of a <span class=SpellE>MyProxy</span> server</span>
 
 <p class=MsoNormal align=left style='text-align:left'><span class=SpellE><span
 class=GramE><span style='font-size:10.0pt;font-family:Arial'>manager.password</span></span></span><span
-style='font-size:10.0pt;font-family:Arial'> and manager .username are needed to
-install the Data Portal modules onto tomcat.&nbsp; Change the file
-$CATALINA_HOME/conf/tomcat-<span class=SpellE>users.xml</span>. </span></p>
+style='font-size:10.0pt;font-family:Arial'> and <span class=SpellE>manager.username</span>
+are needed to install the Data Portal modules onto tomcat.&nbsp; Change the
+file $CATALINA_HOME/conf/tomcat-<span class=SpellE>users.xml</span>. </span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>Insert/modify this line:</span></p>
@@ -393,8 +392,8 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>Making sure the username and password are matching
-the ones in the <span class=SpellE>build.properties</span> file. </span></p>
+10.0pt;font-family:Arial'>Making sure the username and password are matching the
+ones in the <span class=SpellE>build.properties</span> file. </span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>4) <span class=SpellE>Inbetween</span> <i
@@ -948,10 +947,11 @@ text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'> </span><span style='mso-tab-count:1'>      </span><span
-style='mso-spacerun:yes'>                    </span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
+style='mso-spacerun:yes'>          </span><span
+style='mso-spacerun:yes'>          </span></span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
+class=GramE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
+background:white;mso-highlight:white'>parameter</span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
 color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
@@ -1044,7 +1044,8 @@ text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-tab-count:4'>                           </span><span
-style='mso-spacerun:yes'>           </span></span><span style='font-size:8.5pt;
+style='mso-spacerun:yes'>          </span><span
+style='mso-spacerun:yes'> </span></span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
 class=GramE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
 background:white;mso-highlight:white'>value</span><span style='font-size:8.5pt;
@@ -1086,9 +1087,10 @@ color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
 <p class=MsoNormal align=left style='text-align:left'><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>5) Also <i style='mso-bidi-font-style:normal'>insert <span
-class=SpellE>inbewteen</span> the &lt;Host&gt; tags just below the
-&lt;Logger&gt; and above the &lt;/Host&gt; tag</i></span></p>
+10.0pt;font-family:Arial'>5) <i style='mso-bidi-font-style:normal'>Also</i> <i
+style='mso-bidi-font-style:normal'>insert <span class=SpellE>inbewteen</span>
+the &lt;Host&gt; tags just below the &lt;Logger&gt; and above the &lt;/Host&gt;
+tag</i></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -1248,26 +1250,32 @@ Arial;color:red;background:white;mso-highlight:white'><o:p></o:p></span></p>
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:red;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>     </span><span class=GramE>type</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span class=SpellE><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>javax.sql.DataSource</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:red;background:white;mso-highlight:white'> </span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>/&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+style='mso-spacerun:yes'>     </span></span><span lang=FR style='font-size:
+8.5pt;font-family:Arial;color:red;background:white;mso-highlight:white;
+mso-ansi-language:FR'>type</span><span lang=FR style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white;mso-ansi-language:
+FR'>=&quot;</span><span lang=FR style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white;mso-ansi-language:FR'>javax.sql.DataSource</span><span
+lang=FR style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white;mso-ansi-language:FR'>&quot;</span><span lang=FR
+style='font-size:8.5pt;font-family:Arial;color:red;background:white;mso-highlight:
+white;mso-ansi-language:FR'> </span><span lang=FR style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white;mso-ansi-language:
+FR'>/&gt;</span><span lang=FR style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white;mso-ansi-language:FR'><o:p></o:p></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-8.5pt;font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>DefaultContext</span></span><span
+<p class=MsoNormal align=left style='text-align:left'><span lang=FR
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span></p>
+mso-highlight:white;mso-ansi-language:FR'>&lt;/</span><span lang=FR
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white;mso-ansi-language:FR'>DefaultContext</span><span lang=FR
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white;mso-ansi-language:FR'>&gt;</span><span lang=FR
+style='mso-ansi-language:FR'><o:p></o:p></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>&nbsp;</span></p>
+<p class=MsoNormal align=left style='text-align:left'><span lang=FR
+style='font-size:10.0pt;font-family:Arial;mso-ansi-language:FR'>&nbsp;</span><span
+lang=FR style='mso-ansi-language:FR'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>6)&nbsp; <span class=GramE><i style='mso-bidi-font-style:
@@ -1291,7 +1299,7 @@ two files <span class=SpellE>jstl.jar</span> and <span class=SpellE>standard.jar
 in there)</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>7)&nbsp; <span class=GramE><i style='mso-bidi-font-style:
+10.0pt;font-family:Arial'>7) <span class=GramE><i style='mso-bidi-font-style:
 normal'>ant</i></span><i style='mso-bidi-font-style:normal'> <span
 class=SpellE>start_dbs</span></i></span><i style='mso-bidi-font-style:normal'><o:p></o:p></i></p>
 
@@ -1318,9 +1326,11 @@ class=GramE>' which</span> should open a database window to the <span
 class=SpellE>DataPortal</span> database.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>8)&nbsp; <span class=SpellE><span class=GramE>startup</span></span>
-the tomcat instance.&nbsp; <span class=SpellE>Goto</span> $CATALINA_HOME/bin
-and execute <span class=SpellE>startup.bat</span> or <span class=SpellE>startup.sh</span></span></p>
+10.0pt;font-family:Arial'>8)&nbsp;<span class=SpellE><span class=GramE><i
+style='mso-bidi-font-style:normal'>startup</i></span></span><i
+style='mso-bidi-font-style:normal'> the tomcat instance.&nbsp; <span
+class=SpellE>Goto</span></i> $CATALINA_HOME/bin and execute <span class=SpellE>startup.bat</span>
+or <span class=SpellE>startup.sh</span></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>9) <span class=GramE><i style='mso-bidi-font-style:
@@ -1366,8 +1376,8 @@ ONTO YOUR TOMCAT.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span class=SpellE><i
 style='mso-bidi-font-style:normal'><span style='font-size:10.0pt;font-family:
-Arial'>Goto</span></i></span><span style='font-size:10.0pt;font-family:Arial'> http://localhost:8080/dataportal
-and log in.&nbsp; </span></p>
+Arial'>Goto</span></i></span><span style='font-size:10.0pt;font-family:Arial'>
+http://localhost:8080/dataportal and log in.&nbsp; </span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span class=SpellE><span
 class=GramE><i style='mso-bidi-font-style:normal'><span style='font-size:10.0pt;
@@ -1422,8 +1432,8 @@ name 'test' for the facility name.</i></span><i style='mso-bidi-font-style:
 normal'><o:p></o:p></i></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>4)&nbsp;<i style='mso-bidi-font-style:normal'>Change the
-values in all the URLs for '<span class=SpellE>localhost</span>' to
+10.0pt;font-family:Arial'>4)&nbsp;<i style='mso-bidi-font-style:normal'>Change
+the values in all the URLs for '<span class=SpellE>localhost</span>' to
 'tiber.dl.ac.uk' and click 'Create Facility'</i></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
@@ -1507,9 +1517,8 @@ style='font-size:10.0pt;font-family:Arial'>or</span></span><span
 style='font-size:10.0pt;font-family:Arial'> 2)<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'><span style='mso-spacerun:yes'> </span><span
-style='mso-spacerun:yes'> </span><span class=SpellE>i</span>) <span
-class=GramE><i style='mso-bidi-font-style:normal'>ant</i></span><i
+10.0pt;font-family:Arial'><span style='mso-spacerun:yes'>  </span><span
+class=SpellE>i</span>) <span class=GramE><i style='mso-bidi-font-style:normal'>ant</i></span><i
 style='mso-bidi-font-style:normal'> <span class=SpellE>removedp</span></i></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
