@@ -48,27 +48,19 @@ import org.apache.axis.AxisFault;
 
 public class LoginServlet extends HttpServlet {
     
-    
-    
-    
-    
     private Properties prop = null;
-    
-    
     
     //set static log for the class
     
     private static Logger logger = Logger.getLogger(emineralsServlet.class);
     
     //get context path
-    
     private ServletConfig scon = null ;
     private String workingDir = null;
     
     public void init(ServletConfig config) throws ServletException {
         
         scon = config ;
-        
     }
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -209,89 +201,81 @@ public class LoginServlet extends HttpServlet {
     
     public synchronized void count(String wd, String name){
         
-        
-        
         BufferedReader buff = null;
         
         FileReader read = null;
         
         
-        
-        
-        
         try{
-            
+          Service  service = new Service();
+                Call  call    = (Call) service.createCall();
+                
+                call.setTargetEndpointAddress( new java.net.URL(lookup) );
+                call.setOperationName( "LookupEndpoint" );
+                call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
+                call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
+                call.setReturnType( XMLType.SOAP_ARRAY );
+                String[] name = {"Dataportal-EMIN"};
+                Object[] ob = new Object[]{name,serviceTypes[i]};
+                
+                String[] url = (String[]) call.invoke(ob );
+                //System.out.println(url[0] + "   "+serviceTypes[i]);
+                prop.put(serviceTypes[i],url[0]);
+            }      
             //load file and read the current number
             
             File file = new File(wd+File.separator+"log"+File.separator+"hit.txt");
-            
             read = new FileReader(file);
-            
             buff = new BufferedReader(read);
-            
             
             
             String number = buff.readLine();
             
-            
-            
             float counter = Float.parseFloat(number);
             
-            
-            
             //increment the number
-            
             float newCounter  = counter+1;
             
             //new hit number
             
             String stringCounter = String.valueOf(newCounter);
             
-            
-            
             buff.close();
-            
             read.close();
             
-            
-            
             FileWriter wr = new FileWriter(file);
-            
             wr.write(stringCounter);
-            
             wr.close();
-            
         }
         
         catch(Exception e){
-            
             try{
-                
                 buff.close();
-                
                 read.close();
-                
             }
             
             catch(Exception e2){
-                
                 logger.error("logs/hit.txt could not be closed",e2);
-                
             }
-            
             logger.error("Could not increase hit counter",e);
             
-        }
-        
-        
+           Service  service = new Service();
+                Call  call    = (Call) service.createCall();
+                
+                call.setTargetEndpointAddress( new java.net.URL(lookup) );
+                call.setOperationName( "LookupEndpoint" );
+                call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
+                call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
+                call.setReturnType( XMLType.SOAP_ARRAY );
+                String[] name = {"Dataportal-EMIN"};
+                Object[] ob = new Object[]{name,serviceTypes[i]};
+                
+                String[] url = (String[]) call.invoke(ob );
+                //System.out.println(url[0] + "   "+serviceTypes[i]);
+                prop.put(serviceTypes[i],url[0]);
+            } }
         
     }
-    
-    
-    
-    
-    
-    
     
     /** Uses the request header to determine the browser type and version
      *
@@ -302,181 +286,116 @@ public class LoginServlet extends HttpServlet {
         
         
         String browsertype = null;
-        
         String browser = request.getHeader("User-Agent");
-        
         String name = request.getParameter("username");
-        
         HttpSession session = request.getSession();
         
         
-        
             /*gets the actual name of the browser, because Mircosoft used to
-             
              hide their browser name.*/
-        
         if(browser.indexOf("MSIE 6")>=0){
-            
             browsertype = "IE6";
-            
-            
             
         }
         
         else  if(browser.indexOf("MSIE 5")>=0){
-            
             browsertype = "IE5";
-            
-            
             
         }
         
         else if(browser.indexOf("Netscape/7")>=0){
-            
-            
-            
             browsertype = "N7";
-            
-            
-            
-            
-            
         }
         
         else if(browser.indexOf("Netscape6")>=0){
-            
-            
-            
             browsertype = "N6";
-            
-            
-            
-            
             
         }
         
         else if(browser.indexOf("Mozilla/4.")>=0){
-            
-            
-            
             browsertype= "N4";
-            
         }
         
         else if(browser.indexOf("Mozilla/3.")>=0){
             
-            
-            
             browsertype= "N3";
-            
         }
-        
         else if(browser.indexOf("Konqueror")>=0){
             
-            
-            
             browsertype= "Konqueror";
-            
         }
         
         else if(browser.indexOf("Opera")>=0){
-            
-            
-            
             browsertype= "Opera";
             
         }
-        
         else if(browser.indexOf("Mozilla/5")>=0){
             
-            
-            
             browsertype ="Mozilla";
-            
         }
         
         else browsertype = "other";
-        
         // logger.info("Browser is "+browsertype);
         
         
         
         //read in file
         
-        String[] br = {"IE6","IE5","N7","N6","N4","N3","Konqueror","Opera","Mozilla","other"};
-        
+           Service  service = new Service();
+                Call  call    = (Call) service.createCall();
+                
+                call.setTargetEndpointAddress( new java.net.URL(lookup) );
+                call.setOperationName( "LookupEndpoint" );
+                call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
+                call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
+                call.setReturnType( XMLType.SOAP_ARRAY );
+                String[] name = {"Dataportal-EMIN"};
+                Object[] ob = new Object[]{name,serviceTypes[i]};
+                
+                String[] url = (String[]) call.invoke(ob );
+                //System.out.println(url[0] + "   "+serviceTypes[i]);
+                prop.put(serviceTypes[i],url[0]);
+            } String[] br = {"IE6","IE5","N7","N6","N4","N3","Konqueror","Opera","Mozilla","other"};
         String wd = (String)session.getAttribute("wd");
-        
         try{
-            
             File fr = new File(wd+File.separator+"log"+File.separator+"browser.txt");
-            
             if(fr.exists()){
                 
                 FileReader file = new FileReader(fr);
-                
                 //
                 
                 BufferedReader buff = new BufferedReader(file);
-                
                 int[] res = new int[br.length];
-                
                 float[] f = new float[br.length];
-                
                 String line = null;
                 
-                
-                
-                
-                
                 int i  =0;
-                
                 while ((line = buff.readLine()) != null) {
-                    
                     res[i] = Integer.parseInt(line);
-                    
                     i++;
                     
                 }
                 
                 for(int i1 = 0; i1<br.length;i1++){
-                    
                     if(browsertype.equals(br[i1])) res[i1] = res[i1]+1;
-                    
                 }
-                
                 FileWriter wr = new FileWriter(fr);
                 
                 for(int p = 0;p < br.length ;p++){
-                    
                     wr.write(String.valueOf(res[p])+"\n");
-                    
                 }
-                
                 wr.close();
                 
             }
-            
         }
-        
-        
         
         catch(Exception e){
             logger.error("unable to count the browser tyep",e);
-            
         }
-        
-        
-        
-        
-        
-        
         
         if(browsertype.equals("N4")) browsertype="Netscape 4.0";
         
         return browsertype;
-        
-        
         
     }
     
@@ -491,111 +410,61 @@ public class LoginServlet extends HttpServlet {
     private String loginOn(HttpSession session,String username,String passphrase,String lifetime,Properties locations) throws Exception{
         
         try{
-            
             String endpoint = locations.getProperty("AUTH");
             
             //System.out.println("authent url "+endpoint);
-            
             Service  service = new Service();
-            
             Call  call    = (Call) service.createCall();
             
-            
-            
             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-            
             call.setOperationName( "login" );
-            
             call.addParameter( "userName", XMLType.XSD_STRING, ParameterMode.IN );
             call.addParameter( "password", XMLType.XSD_STRING, ParameterMode.IN );
             call.addParameter( "lifetime", XMLType.XSD_INT, ParameterMode.IN );
-            
             call.setReturnType( XMLType.XSD_STRING );
             
-            
-            
-            
-            
             Object[] ob = new Object[]{username,passphrase,Integer.valueOf(lifetime)};
-            
-            
             
             String sid = (String) call.invoke(ob );
             
             return sid;
-            
         }
-        
         catch(Exception e){
-            
             throw e;
-            
         }
-        
-        
-        
     }
-    
     
     
     private  ArrayList getFacilities(HttpSession session,Properties locations)throws Exception{
         
         try{
-            
             String endpoint = locations.getProperty("SESSION");
-            
             String sid = (String)session.getAttribute("sessionid");
             
-            
-            
             Service  service = new Service();
-            
             Call  call    = (Call) service.createCall();
             
-            
-            
             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-            
             call.setOperationName( "getPermissions" );
-            
-            
-            
             call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
-            
-            
-            
             call.setReturnType( XMLType.XSD_ANY );
-            
-            
-            
-            
             
             Object[] ob = new Object[]{sid};
             
             
-            
             org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke(ob );
-            
             org.jdom.input.DOMBuilder buildert = new org.jdom.input.DOMBuilder();
-            
             org.jdom.Element el = buildert.build(ret);
-            
             //org.jdom.Document doc  = new org.jdom.Document(el);
             //Saver.save(doc,"c:/per.xml" );
             //Element root = doc.getRootElement();
             
             List list = el.getChildren("Facility");
-            
             Iterator it = list.iterator();
-            
-            
             
             ArrayList facs = new ArrayList();
             
-            
-            
             while(it.hasNext()){
-                
                 Element el2 = (Element)it.next();
                 //System.out.println(el2.getChild("Data").getText());
                 //if(el2.getChild("Data").getText().equals("t")) facs.add(el2.getAttribute("name").getValue().toUpperCase());
@@ -604,22 +473,16 @@ public class LoginServlet extends HttpServlet {
                     facs.add(el2.getAttribute("name").getValue().toUpperCase());
                     //System.out.println(el2.getAttribute("name").getValue().toUpperCase());
                 }
-                
-                
             }
-            
             //System.out.println("facs is +"+ facs);
             
             return facs;
-            
         }
         
         catch(Exception e){
             // System.out.println(e);
             throw e;
-            
         }
-        
     }
     
     private Properties getLocations(String lookup) throws Exception{
@@ -640,11 +503,12 @@ public class LoginServlet extends HttpServlet {
                 call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
                 call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.SOAP_ARRAY );
-                String[] name = {"Dataportal"};
+                String[] name = {"Dataportal-EMIN"};
                 Object[] ob = new Object[]{name,serviceTypes[i]};
                 
                 String[] url = (String[]) call.invoke(ob );
-                //System.out.println(url[0] + "   "+serviceTypes[i]);
+                System.out.println(url[0] + "   "+serviceTypes[i]);
+                
                 prop.put(serviceTypes[i],url[0]);
             }
         }
