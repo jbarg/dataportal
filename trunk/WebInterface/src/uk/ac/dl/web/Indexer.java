@@ -93,7 +93,7 @@ public class Indexer {
         IndexWriter writer = null;
         try{
             writer = new IndexWriter(indexPath, new SimpleAnalyzer(), isNew);
-            for (int i=1; i<filesPath.length; i++) {
+            for (int i=0; i<filesPath.length; i++) {
                 
                 InputStream is = new FileInputStream(filesPath[i]);
                 
