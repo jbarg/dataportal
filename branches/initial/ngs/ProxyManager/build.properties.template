@@ -1,7 +1,0 @@
-# Alliance portal build properties specific to user environment.
-#
-# Use for an installation of cygwin on windows.  NOTE: You must use
-# relative paths when deploying within cygwin.
-
-# this is the directory under webapps where Jetspeed is distributed
-alliance.home = /u/lifang/packages/jakarta-tomcat/webapps/jetspeed
