@@ -1,0 +1,52 @@
+Pre-installation Tasks
+----------------------
+
+1. Install postgres (if necessary)
+
+2. Create a new database called sessionmanager: default user and password is dpuser/dp4all.
+If different username and password are used then edit the file sessionmanager/web/sm.conf as
+follows:
+
+# database user
+db_user=<postgres user>
+
+# database password
+db_password=<postgres password>
+
+3. Create the tables SESSION and SESSION_ACCESS_RIGHTS in the sessionmanager database
+using the following scripts (in this directory) within psql (postgres utility):
+
+\i session.sql
+\i session_access_rights.sql
+
+These tables hold current session information. When the Session Manager's startSession 
+method is called, a new row is created in the SESSION table with a new unique session
+identifier and the user name. In addition, a number of rows are created in the 
+SESSION_ACCESS_RIGHTS, each row representing the permissions that the session has to a 
+particular facility e.g
+
+    for session id 9, user has access to facility BADC, it's metadata and data
+    but for facility MPIM the user has access to metadata only
+
+4. Create the sequence to generate unique session identifier using the following script:
+
+\i session.seq
+
+5. Ensure that the server where the Session Manager web service is installed has access
+to the postgres database. If not edit the <POSTGRES_HOME>/data/pga_hb.conf file and add
+the IP address to the list. You will need to restart postgres.
+
+
+To test the module individually
+-------------------------------
+
+1. Install the web service (as above) 
+
+2. Run TestClient.class with the following arguments:
+
+<web service address> <method> <args>
+e.g.    "http://localhost:8080/axis/services/SessionManager" isValid <session identifier>
+        "http://localhost:8080/axis/services/SessionManager" getDName <session identifier>
+        "http://localhost:8080/axis/services/SessionManager" getPermissions <session identifier>
+        "http://localhost:8080/axis/services/SessionManager" endSession <session identifier>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shoppingCart xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="sampleCart.xsd">
+	<item type="File" url="lipr00010112">
+		<notes/>
+		<assStudy>ECMWF%2015%20Year%20Reanalysis%20Project</assStudy>
+		<date>Fri Mar 07 11:49:17 GMT 2003</date>
+		<name>lipr00010112</name>
+		<url>lipr00010112</url>
+		<cera endday="2" endmonth="1" endyear="2000" maxalt="1000" maxlat="90000" maxlon="357500" minalt="1" minlat="-90000" minlon="0" startday="1" startmonth="1" startyear="2000"/>
+	</item>
+	<item type="File" url="lipr00010112">
+		<notes/>
+		<assStudy>ECMWF%2015%20Year%20Reanalysis%20Project</assStudy>
+		<date>Fri Mar 07 11:49:17 GMT 2003</date>
+		<name>lipr00010112</name>
+		<url>lipr00010112</url>
+		<cera endday="2" endmonth="1" endyear="2000" maxalt="1000" maxlat="90000" maxlon="357500" minalt="1" minlat="-90000" minlon="0" startday="1" startmonth="1" startyear="2000"/>
+
+
+	</item>
+
+</shoppingCart>
