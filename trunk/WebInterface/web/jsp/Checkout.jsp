@@ -72,12 +72,10 @@ function check(){
 //-->
 </script>
 </head>
-<body background="../img/redbg.gif">
+<body>
+<a name="top" />
 <table width="100%" cellspacing="3" border="0"><tr>
-<td valign="top" widt<div align="right">
-    <input type="button" value="Select All" onclick="selectAll('mess','selected',true);"/>
-    </div>
-<br />h="20%" align="left">
+<td valign="top" width="20%" align="left">
 <a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
 <br />&nbsp;<br /><br />
 <!-- out puts the content if the browser is not netsacpe 4.  If so out puts
@@ -96,6 +94,8 @@ html/netscape.html file from the content root.-->
 &nbsp;&nbsp;>&nbsp;<a href="Explore.jsp">Data</a>
 &nbsp;&nbsp;>&nbsp;<a href="Checkout.jsp">Shopping Cart</a>
 <hr />
+<div align="right"><a name="#top"/><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
+
 <%
         String sid  = (String)session.getAttribute("sessionid");
         
@@ -180,6 +180,7 @@ html/netscape.html file from the content root.-->
     </table>
 </c:when>
 </c:choose>
+<div align="right"><a name="bottom"/><font size="-1"><a align="right" href="#top">top</a></font></div>
 
 <hr />
 <%@ include file="../html/footer.html"%></td>
