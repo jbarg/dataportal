@@ -24,8 +24,8 @@ public abstract class PortalProxy
     // won't be here when using portal proxy
     private static final String privateKeyPassPhrase = "portaltest";
 
-    private static final String portalCertFilename = "/home/tomcat4/.globus/usercert.pem";
-    private static final String portalPrivateKeyFilename = "/home/tomcat4/.globus/userkey.pem";
+    private static final String portalCertFilename = "/home/tomcat4/.globus/portalcert.pem";
+    private static final String portalPrivateKeyFilename = "/home/tomcat4/.globus/portalkey.pem";
     private static final String caCertFilename = "/etc/grid-security/certificates/01621954.0";
 
     private static GlobusProxy portalProxy;
@@ -67,7 +67,7 @@ public abstract class PortalProxy
             SSLeayKeyHolder sslKey = new SSLeayKeyHolder( portalPrivateKeyFilename );
 
     // shouldn't need when use portal certificate
-            if( sslKey.isEncrypted() ) sslKey.decrypt( privateKeyPassPhrase );
+           // if( sslKey.isEncrypted() ) sslKey.decrypt( privateKeyPassPhrase );
 
             portalPrivateKey = sslKey.getPrivateKey();
         }
