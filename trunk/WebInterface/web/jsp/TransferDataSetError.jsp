@@ -9,6 +9,7 @@ errorPage="error.jsp"
  %>
 
 <%@ include file="loggedin.jsp" %>
+<%@ include file="logger.jsp"%>
 <%@ taglib uri="/tldweb" prefix="xtags" %>
 <html>
 <script type="text/javascript">
