@@ -80,7 +80,7 @@ public class SRBDownload extends HttpServlet {
                 
                 //need to add section to get the value from properties file.
                 URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password+"&format="+format);
-                System.out.println(url);
+                //System.out.println(url);
                 URLConnection yc = url.openConnection();
                 InputStream p = yc.getInputStream();
                 
