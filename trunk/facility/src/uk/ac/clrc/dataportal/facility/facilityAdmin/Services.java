@@ -51,7 +51,7 @@ public class Services {
             Object[] ob = new Object[]{element};
             org.w3c.dom.Element el = (org.w3c.dom.Element) call.invoke(ob );
             
-            System.out.println(el);
+            //System.out.println(el);
         }
         catch(Exception e){
             System.out.println(e);

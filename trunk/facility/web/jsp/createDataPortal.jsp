@@ -113,25 +113,6 @@
 <%@ include file="../html/footer.html"%>
 </td>
 </table>
-<%
 
-/*AdminUDDI ad = new AdminUDDI();
-System.out.println("hello");
-org.jdom.Document build = XML_JDOMBuilder.build(new java.io.File("c:/createDataportal.xml"));
-System.out.println(build.toString());
-
-org.jdom.Element el = build.getRootElement();
-
-
-org.w3c.dom.Element e = ad.createDataportal(Converter.JDOMtoDOM(build).getDocumentElement());
-org.jdom.input.DOMBuilder jdom = new org.jdom.input.DOMBuilder();
-org.jdom.Element d = jdom.build(e);
-//org.jdom.Document f = new org.jdom.Document(d);
-
-    org.jdom.output.XMLOutputter outputter = new org.jdom.output.XMLOutputter("  ", true);
-    outputter.output(d, System.out);
-*/
-
-%>
 </body>
 </html>

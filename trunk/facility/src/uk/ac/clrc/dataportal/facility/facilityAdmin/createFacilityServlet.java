@@ -52,7 +52,8 @@ public class createFacilityServlet extends HttpServlet {
         //get facility info
         String fac_id = request.getParameter("fac_id");
         if(fac_id.equalsIgnoreCase("dataportal")) {
-            response.sendRedirect("../jsp/deleteFacility.jsp");
+            log.info("Cannot create another facility called DataPortal");
+            response.sendRedirect("../jsp/deleteFacility.jsp?error=Cannot create another facility called DataPortal");
             return;
         }
         //check if dac_id is already in the UDDI

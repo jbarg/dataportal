@@ -36,8 +36,6 @@ public class FacilityAdminModule
     // Input and Output are org.w3c.dom.Element types (for Axis) but these are converted to/from JDOM for ease
     // Input messages should really be validated at some point too....
     {
-        if(Config.getContextPath() != null) PropertyConfigurator.configure(Config.getContextPath()+"log4j.properties");
-        
         // DOM Response array - will only have one element anyway....
         org.w3c.dom.Element[] responseSBE = new org.w3c.dom.Element[requestSBE.length];
         

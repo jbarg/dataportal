@@ -38,7 +38,7 @@ public class Config  {
             //config.load(getClass().getResource("Shop.conf").openStream());
             config.load(new FileInputStream(path+"Shop.conf"));
         } catch (IOException e) {
-            System.out.println("Error loading Shop.conf property file\n" + e);
+            logger.warn("Error loading Shop.conf property file" + e);
             
             throw e;        }
         return config;

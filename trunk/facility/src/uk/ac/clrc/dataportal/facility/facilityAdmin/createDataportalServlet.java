@@ -53,9 +53,7 @@ public class createDataportalServlet extends HttpServlet {
         }
         
         String wd = (String)session.getAttribute("wd");
-        //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"log4j.properties");
-                
+                 
         String dp_id = (String)request.getParameter("dataportal_id");
         String dp_desc = (String)request.getParameter("dataportal_desc");
         dp_id = "DataPortal";
