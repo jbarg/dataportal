@@ -1,0 +1,71 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from XmlWrapperDocSelectorService WSDL service -->
+
+  <service name="xmlwrapper_selector" provider="java:RPC">
+      <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperDocSelectorService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_selector"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.selector.Xmlwrapper_SelectorSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperDocSelector"/>
+      <operation name="queryMetaData" qname="operNS:queryMetaData" xmlns:operNS="urn:xmlwrapper" returnQName="queryMetaDataReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
+        <parameter name="external_xquery" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter name="result_formatter" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter name="proxy_cert" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter name="auth_token" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="queryMetaData"/>
+      <parameter name="scope" value="Application"/>
+
+      <typeMapping
+        xmlns:ns="http://client.authorisation.cclrc.ac.uk"
+        qname="ns:InvalidAuthorisationTokenException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.InvalidAuthorisationTokenException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:UserNotAuthorisedException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.UserNotAuthorisedException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:XQueryProducedNullOutputException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.XQueryProducedNullOutputException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:FormatterProducedNullOutputException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedNullOutputException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:FormatterProducedInvalidXMLException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedInvalidXMLException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>
