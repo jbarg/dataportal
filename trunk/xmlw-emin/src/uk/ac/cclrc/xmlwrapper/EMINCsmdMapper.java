@@ -55,8 +55,8 @@ public class EMINCsmdMapper implements CsmdMapper
          {
             // for some reason jdbc did not like  brackets around the following - strange.
             temp_str = ("SELECT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
-                        "(SELECT STUDY_ID FROM " + dbs + "STUDY_TOPICS WHERE TOPIC_ID IN " +
-                        "(SELECT TOPIC_ID FROM " + dbs + "TOPICS WHERE lower(TOPIC) LIKE '%" + discipline + "%'))") ;
+                        "(SELECT STUDY_ID FROM " + dbs + "STUDY_TOPIC WHERE TOPIC_ID IN " +
+                        "(SELECT TOPIC_ID FROM " + dbs + "TOPIC WHERE lower(TOPIC) LIKE '%" + discipline + "%'))") ;
 	    discipline = temp_str ;
 	 }
 
@@ -64,8 +64,8 @@ public class EMINCsmdMapper implements CsmdMapper
          {
             temp_str = ("SELECT DISTINCT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
                         "(SELECT STUDY_ID FROM " + dbs + "INVESTIGATION WHERE INVESTIGATION_ID IN " +
-                        "(SELECT INVESTIFGATION_ID FROM " + dbs + "DATA WHERE DATA_ID IN " +
-                        "(SELECT DATA_ID FROM " + dbs + "PARAMETERS WHERE lower(NAME) LIKE '%" + subject + "%')))") ;
+                        "(SELECT INVESTIGATION_ID FROM " + dbs + "DATA WHERE DATA_ID IN " +
+                        "(SELECT DATA_ID FROM " + dbs + "PARAMETER WHERE lower(NAME) LIKE '%" + subject + "%')))") ;
 	    subject = temp_str ;
 	 }
 
