@@ -49,7 +49,9 @@ function selectAll(formID, fieldName, value)
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
-<body background="../img/redbg.gif" >
+<body>
+<a name="top" />
+
 <table width="100%" cellspacing="3" border="0">
 <tr>
 <td valign="top" width="20%" align="left">
@@ -71,7 +73,11 @@ html/netscape.html file from the content root.--%>
 <br />
 &nbsp;Home&nbsp;&nbsp;&nbsp;>&nbsp;<a href="BasicSearch.jsp">Basic Search</a>
 &nbsp;&nbsp;>&nbsp;<a href="SimpleSearch.jsp">Studies</a>
+<!-- top and bottom hyperlinks-->
+
 <hr />
+<div align="right"><a name="#top"/><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
+
 <br />
 <form class="mess" name="simpleresult" action="../servlet/ExpandResultsServlet" method="post">
 <%
@@ -128,13 +134,15 @@ if(current<max){
 %>
 
 </form>
-<br />
+
 <%--  pulls out the list of facilities that have no results from the following
 request.  This is stored in the session attribute NoRes--%>
 <xtags:query name="noConn" send="no" project="eminerals" message="No connections to: " host="exchange06.dl.ac.uk" />
 <xtags:query name="noRes" send="no" project="eminerals" message="No results from: " host="exchange06.dl.ac.uk" />
 <xtags:query name="timedOut" send="no" project="eminerals" message="Results timed out from: " host="exchange06.dl.ac.uk" />
-<br />
+
+<div align="right"><a name="bottom"/><font size="-1"><a align="right" href="#top">top</a></font></div>
+
 <hr />
 <%@ include file="../html/footer.html"%></td>
 </tr>
