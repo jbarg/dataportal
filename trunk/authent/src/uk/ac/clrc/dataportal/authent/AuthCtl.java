@@ -199,9 +199,9 @@ public class AuthCtl {
         Service  service = new Service();
         
         //hard coded section
-        String[] facilityEndPointsHC = {"http://localhost:8080/acmbadc/services/acm","http://localhost:8080/acmmpim/services/acm","http://localhost:8080/acmsrd/services/acm","http://localhost:8080/acmisis/services/acm"};
+        //String[] facilityEndPointsHC = {"http://localhost:8080/acmbadc/services/acm","http://localhost:8080/acmmpim/services/acm","http://localhost:8080/acmsrd/services/acm","http://localhost:8080/acmisis/services/acm"};
         
-        facilityEndPoints = facilityEndPointsHC;
+        //facilityEndPoints = facilityEndPointsHC;
         //System.out.println("AUTH: access urls are "+facilityEndPoints);
         for (int i  = 0 ; i < facilityEndPoints.length ; i++){
             
