@@ -41,7 +41,7 @@
 <br />
 <br />
 <hr />
-<P CLASS=footer><a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top">&copy;  2003 CLRC DataPortal</a></p>
+<%@ include file="../html/footer.html"%>
 </td>
 </table>
 </body>

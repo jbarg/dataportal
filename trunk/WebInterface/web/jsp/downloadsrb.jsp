@@ -25,12 +25,6 @@
 <br />
 <br />
 <hr />
-<div id="footer" align="right"> <a href="http://validator.w3.org/check/referer"><img
-         src="../img/vxhtml.gif"
-        alt="Valid XHTML 1.0!" border="0" height="31" width="88" /></a>
-<br />
-<br />
-<a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top">&copy;  2002 CLRC DataPortal</a></div>
-</td>
+<%@ include file="../html/footer.html"%></td>
 </tr>
 </table>
