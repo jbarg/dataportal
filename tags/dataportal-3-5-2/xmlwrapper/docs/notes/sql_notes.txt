@@ -1,0 +1,145 @@
+SELECT ENTRY_ID FROM ENTRY WHERE ENTRY_TYPE_ID NOT IN (SELECT ENTRY_TYPE_ID FROM ENTRY_TYPE WHERE ENTRY_TYPE LIKE '%Grib message%')
+
+
+select storage1.storage_name||chr(58)||storage2.storage_name||chr(47)||storage3.storage_name
+from storage1, storage2, storage3
+where
+storage1.storage_id = (select storage1_id from data_access where data_access_id = 9)
+and
+storage2.storage_id = (select storage2_id from data_access where data_access_id = 9)
+and
+storage3.storage_id = (select storage3_id from data_access where data_access_id = 9)
+
+
+
+
+select storage1.storage_name||storage2.storage_name||storage3.storage_name
+from storage1, storage2, storage3
+where
+storage1.storage_id = (select storage1_id from data_access where data_access_id = 8)
+and
+storage2.storage_id = (select storage2_id from data_access where data_access_id = 8)
+and
+storage3.storage_id = (select storage3_id from data_access where data_access_id = 8)
+
+---------------------------------------------------
+ftp://tornado.badc.rl.ac.uk/badc/ecmwf-op/data/gridded/2000/lipr0001/lipr00010100
+
+http://www.tornado.badc.rl.ac.uk/badc/ecmwf-op/data/gridded/2000/lipr0001/lipr00010100
+
+------------------------------------------------------
+
+SELECT STORAGE1_ID, STORAGE2_ID, STORAGE3_ID, STORAGE4_ID FROM DATA_ACCESS
+WHERE DATA_ACCESS_ID IN 
+(SELECT DATA_ACCESS_ID FROM PARAMETER WHERE ENTRY_ID='765') 
+
+-----------------------------------------------------------------------
+
+Entry Types (that are important):
+
+SQL> select distinct entry_type from entry_type where entry_type_id in (select distinct entry_type_id from entry) ;
+
+ENTRY_TYPE
+-------------------------------
+DATA_FILE
+DATA_SET
+EXPERIMENT
+Grib message
+STUDY
+
+SQL>
+
+----------------------------
+
+minus
+select entry_id from entry where entry_type_id in
+(select entry_type_id from entry_type where entry_type like '%Grib message%') ;
+
+
+-----------------------------------
+
+SELECT ENTRY_ID FROM ENTRY WHERE ENTRY_ID IN 
+   (SELECT ENTRY_ID FROM PARAMETER WHERE TOPIC_ID IN 
+      (SELECT TOPIC_ID FROM TOPIC WHERE lower(TOPIC_NAME) LIKE '%u-velocity%')
+   ) 
+minus 
+select entry_id from entry where entry_type_id in  
+   (select entry_type_id from entry_type where entry_type like '%Grib message%')
+
+------------------------------------------
+
+SELECT DISTINCT SPEC_ENTRY_ID FROM ENTRY_CONNECT WHERE GEN_ENTRY_ID = '1' 
+INTERSECT SELECT ENTRY_ID FROM ENTRY WHERE ENTRY_TYPE_ID IN
+(SELECT ENTRY_TYPE_ID FROM ENTRY_TYPE WHERE ENTRY_TYPE LIKE '%EXPERIMENT%') ;
+
+
+SELECT DISTINCT SPEC_ENTRY_ID FROM ENTRY_CONNECT WHERE GEN_ENTRY_ID = '2' 
+INTERSECT SELECT ENTRY_ID FROM ENTRY WHERE ENTRY_TYPE_ID IN
+(SELECT ENTRY_TYPE_ID FROM ENTRY_TYPE WHERE ENTRY_TYPE LIKE '%DATA_SET%') ;
+
+SELECT DISTINCT SPEC_ENTRY_ID FROM ENTRY_CONNECT WHERE GEN_ENTRY_ID = '759' 
+INTERSECT SELECT ENTRY_ID FROM ENTRY WHERE ENTRY_TYPE_ID IN
+(SELECT ENTRY_TYPE_ID FROM ENTRY_TYPE WHERE ENTRY_TYPE LIKE '%DATA_FILE%') ;
+
+---------------------------------------------
+
+exporting from twister:
+
+Export done in US7ASCII character set and US7ASCII NCHAR character set
+
+---------------------------------------------
+
+sees that the character set is converted to UCS-2 (UTF-16) in Java
+(UCS-2 is UTF-16 sort of - apparenty 4 types of UCS-2 - pairing and ordering perhaps)
+---------------------------------------------
+
+SELECT SUMMARY FROM SUMMARY WHERE SUMMARY_ID IN (SELECT SUMMARY_ID FROM ENTRY WHERE ENTRY_ID='1') ;
+
+---------------------------------------------
+
+select distinct topic_name from topic where topic_id in 
+   (select topic_id from parameter where entry_id in 
+      (select entry_id from entry where entry_type_id in 
+         (select entry_type_id from entry_type where entry_type like '%Grib message%') ) ) ;
+
+TOPIC_NAME
+--------------------------------------------------------------------------------
+geopotential
+relative humidity
+temperature
+u-velocity (zonal water)
+v-velocity (meridional water)
+vertical velocity
+
+6 rows selected.
+
+----------------------------------------------------
+
+RAS_COLLEC
+----------
+PARAM_129
+PARAM_130
+PARAM_131
+PARAM_132
+PARAM_135
+PARAM_157
+
+
+-------------------------------------------------
+finding the topic/parameter of a particular RAS_COLLECTION
+
+select distinct topic_name from topic where topic_id in 
+   (select topic_id from parameter where entry_id in 
+      (select entry_id from entry where entry_type_id in 
+         (select entry_type_id from entry_type where entry_type like '%Grib message%') 
+       intersect
+       select distinct entry_id from ras_connect where ras_collection like '%PARAM_129%') ) ;
+
+finding the units of the topic/parameter of a particular RAS_COLLECTION
+
+
+
+
+
+
+

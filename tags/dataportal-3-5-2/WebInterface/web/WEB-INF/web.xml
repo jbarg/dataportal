@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd"
+    version="2.4">
+	<display-name>Web Interface</display-name>
+	<!--	<listener>
+		<listener-class>SessionListener</listener-class>
+	</listener>-->
+	<servlet>
+		<servlet-name>AddNote</servlet-name>
+		<display-name>AddNote</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.AddNote
+
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.LoginServlet
+
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>SRBTransfer</servlet-name>
+		<display-name>SRBTransfer</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.SRBTransfer
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>RedoBasicSearch</servlet-name>
+		<display-name>SRBTransfer</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.RedoBasicSearch
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>ResendQuery</servlet-name>
+		<display-name>ResendQuery</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.ResendQuery
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>SRBDownload</servlet-name>
+		<display-name>SRBDownload</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.SRBDownload
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>emineralsServlet</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.emineralsServlet
+
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>HelpSearch1</servlet-name>
+		<display-name>HelpSearch</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.HelpSearch1
+
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>AdvancedStudyServlet</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+	       uk.ac.dl.web.AdvancedStudyServlet
+
+	    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Transfer</servlet-name>
+		<display-name>Transfer Servlet</display-name>
+		<servlet-class>
+
+	       uk.ac.dl.web.Transfer
+
+	    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>TransferDataSet</servlet-name>
+		<display-name>Transfer DataSet</display-name>
+		<servlet-class>
+	
+		       uk.ac.dl.web.TransferDataSet
+	
+		    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>TransferServlet</servlet-name>
+		<display-name>Transfer Servlett</display-name>
+		<servlet-class>
+	
+		       uk.ac.dl.web.TransferServlet
+	
+		    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>FileTransfer</servlet-name>
+		<display-name>Transfer Servlett</display-name>
+		<servlet-class>
+	
+		       uk.ac.dl.web.FileTransfer
+	
+		    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>FileDownload</servlet-name>
+		<display-name>Transfer Servlett</display-name>
+		<servlet-class>
+	
+		       uk.ac.dl.web.FileDownload
+	
+		    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DeleteSelectedWS</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+	       uk.ac.dl.web.DeleteSelectedWS
+
+	    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>SaveCartServlet</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+		       uk.ac.dl.web.SaveCartServlet
+
+		    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>HelpSearchPage</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.HelpSearchPage
+
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>AddToCart</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.AddToCart
+
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DeleteCart</servlet-name>
+		<display-name>DeleteCart</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.DeleteCart
+
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>HelpSearch</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+         uk.ac.dl.web.HelpSearch
+
+      </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Explore</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+         uk.ac.dl.web.Explore
+
+      </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>BasicSearch</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.BasicSearch
+
+    </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>ExpandResultsServlet</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+         uk.ac.dl.web.ExpandResultsServlet
+
+      </servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>LogonHPC</servlet-name>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-class>
+
+         uk.ac.dl.web.LogonHPC
+
+      </servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/servlet/LoginServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>TransferServlet</servlet-name>
+		<url-pattern>/servlet/TransferServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>HelpSearch1</servlet-name>
+		<url-pattern>/servlet/HelpSearch1</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteCart</servlet-name>
+		<url-pattern>/servlet/DeleteCart</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AddNote</servlet-name>
+		<url-pattern>/servlet/AddNote</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>emineralsServlet</servlet-name>
+		<url-pattern>/servlet/emineralsServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LogonHPC</servlet-name>
+		<url-pattern>/servlet/LogonHPC</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>TransferDataSet</servlet-name>
+		<url-pattern>/servlet/TransferDataSet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FileTransfer</servlet-name>
+		<url-pattern>/servlet/FileTransfer</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FileDownload</servlet-name>
+		<url-pattern>/servlet/FileDownload</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RedoBasicSearch</servlet-name>
+		<url-pattern>/servlet/RedoBasicSearch</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SRBTransfer</servlet-name>
+		<url-pattern>/servlet/SRBTransfer</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SRBDownload</servlet-name>
+		<url-pattern>/servlet/SRBDownload</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>HelpSearchPage</servlet-name>
+		<url-pattern>/servlet/HelpSearchPage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AdvancedStudyServlet</servlet-name>
+		<url-pattern>/servlet/AdvancedStudyServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExpandResultsServlet</servlet-name>
+		<url-pattern>/servlet/ExpandResultsServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AddToCart</servlet-name>
+		<url-pattern>/servlet/AddToCart</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SaveCartServlet</servlet-name>
+		<url-pattern>/servlet/SaveCartServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>HelpSearch</servlet-name>
+		<url-pattern>/servlet/HelpSearch</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteSelectedWS</servlet-name>
+		<url-pattern>/servlet/DeleteSelectedWS</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Explore</servlet-name>
+		<url-pattern>/servlet/Explore</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BasicSearch</servlet-name>
+		<url-pattern>/servlet/BasicSearch</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Transfer</servlet-name>
+		<url-pattern>/servlet/Transfer</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ResendQuery</servlet-name>
+		<url-pattern>/servlet/ResendQuery</url-pattern>
+	</servlet-mapping>
+	<!-- uncomment this if you want the admin servlet -->
+	<!--
+
+  <servlet-mapping>
+
+    <servlet-name>AdminServlet</servlet-name>
+
+    <url-pattern>/servlet/AdminServlet</url-pattern>
+
+  </servlet-mapping>
+-->
+	<welcome-file-list id="WelcomeFileList_1">
+		<welcome-file>ematerials.html</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.jws</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<exception-type>uk.ac.dl.web.SessionTimedOutException</exception-type>
+		<location>/jsp/SessionTimedOut.jsp</location>
+	</error-page>
+        <!--<error-page>
+		<error-code>500</error-code>
+		<location>/jsp/error.jsp</location>
+	</error-page>-->
+	<taglib>
+		<taglib-uri>/tldweb</taglib-uri>
+		<taglib-location>/tld/glen.tld</taglib-location>
+	</taglib>
+	
+	  <!--<security-constraint>
+	    <web-resource-collection>
+	      <web-resource-name>DataPortal</web-resource-name>
+	      <url-pattern>/html/proxy/*</url-pattern>
+	      <url-pattern>/html/ematerials_login.html</url-pattern>
+	      <url-pattern>/index.html</url-pattern>
+	    </web-resource-collection>
+	    <user-data-constraint>
+	      <transport-guarantee>NONE</transport-guarantee>
+	    </user-data-constraint>
+	  </security-constraint>-->
+	  <security-constraint>
+	    <web-resource-collection>
+	      <web-resource-name>DataPortal</web-resource-name>
+	      
+	      <url-pattern>/servlet/*</url-pattern>
+	     <url-pattern>/jsp/*</url-pattern>
+	    <url-pattern>/html/*</url-pattern>
+	    
+	    </web-resource-collection>
+	    <user-data-constraint>
+	      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+	    </user-data-constraint>
+  </security-constraint>
+</web-app>

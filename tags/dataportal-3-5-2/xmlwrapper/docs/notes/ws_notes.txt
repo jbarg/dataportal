@@ -1,0 +1,180 @@
+for testing axis:
+------------------
+
+java org.apache.axis.client.AdminClient -lhttp://localhost:8080/axis/services/AdminService samples/stock/deploy.wsdd
+
+java samples.stock.GetQuote -lhttp://localhost:8080/axis/servlet/AxisServlet -uuser1 -wpass1 XXX
+
+
+-------------------------------------------------------------------------
+
+for building xmlwrapper web service:
+------------------------------------
+
+putting all the files in WEB-INF/classes/*.java into WEB-INF/classes/xmlwrapper/
+
+and adding the line 'package xmlwrapper ;' to all the java files (as some issues with access modifiers)
+
+and then recompiling javac *.java in the classes/xmlwrapper directory
+
+1. then cd back to WEB-INF/classes to run the following:
+
+
+java org.apache.axis.wsdl.Java2WSDL -o xmlw.wsdl -l"http://localhost:8080/axis/services/xmlwrapper_badc" -n urn:xmlwrapper -p"xmlwrapper" urn:xmlwrapper xmlwrapper.BADCCeraXmlWrapper
+
+
+this is what resulted:
+
+ xmlw.wsdl -l"http://localhost:8080/axis/services/xmlwrapper_badc" -n urn:xmlwra
+pper -p"xmlwrapper" urn:xmlwrapper xmlwrapper.BADCCeraXmlWrapper
+- The class javax.servlet.ServletConfig is defined in a java or javax package an
+d cannot be converted into an xml schema type.  An xml schema anyType will be us
+ed to define this class in the wsdl file.
+- The class javax.servlet.http.HttpServletRequest is defined in a java or javax
+package and cannot be converted into an xml schema type.  An xml schema anyType
+will be used to define this class in the wsdl file.
+- The class javax.servlet.http.HttpServletResponse is defined in a java or javax
+ package and cannot be converted into an xml schema type.  An xml schema anyType
+ will be used to define this class in the wsdl file.
+
+
+-----------------------------
+
+changing class to take in string (just the where clause and return a sting - the xml - I wonder if this messes up)
+
+--------------------------------
+
+trying again:
+
+it gave no funny warning this time
+
+-----------------------------------
+
+2. next we need to create the server skeleton and client stubs
+
+java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p xmlwrapper.ws xmlw.wsdl
+
+
+
+changed the following file xmlwrapper.ws.Xmlwrapper_BadcSoapBindingImpl.java to the following:
+
+/**
+ * Xmlwrapper_BadcSoapBindingImpl.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis WSDL2Java emitter.
+ */
+
+package xmlwrapper.ws;
+
+
+
+public class Xmlwrapper_BadcSoapBindingImpl implements xmlwrapper.ws.BADCCeraXmlWrapper{
+     
+   
+    public void destroy() throws java.rmi.RemoteException {
+         
+    }
+
+    public org.w3c.dom.Element getXML(java.lang.String in0) throws java.rmi.RemoteException {
+        return null ;
+    }
+
+}
+
+
+/**
+ * Xmlwrapper_BadcSoapBindingImpl.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis WSDL2Java emitter.
+ */
+
+package xmlwrapper.ws;
+
+import xmlwrapper.BADCCeraXmlWrapper;
+
+public class Xmlwrapper_BadcSoapBindingImpl implements xmlwrapper.ws.BADCCeraXmlWrapper{
+    
+   BADCCeraXmlWrapper bcxw = new BADCCeraXmlWrapper() ;
+   
+    public void destroy() throws java.rmi.RemoteException {
+       bcxw.destroy() ;
+       return ;
+    }
+
+    public org.w3c.dom.Element getXML(java.lang.String in0) throws java.rmi.RemoteException {
+        return bcxw.getXML(in0) ;
+    }
+
+}
+
+-------------------------------------------------------------------
+
+now compile the code:
+
+javac xmlwrapper\ws\*.java
+
+
+Next, we package all of the code that we have and copy it into Axis' classpath:
+
+
+% jar cvf xmlw.jar xmlwrapper\*.class xmlwrapper\ws\*.class
+
+
+% copy xmlw.jar %AXIS_HOME%\webapps\axis\WEB-INF\lib
+
+copy the .map and log properties files there also (note would put the classes in WEB-INF/classes if we had not used packages)
+
+(hmm how does the jar file know about them ?)
+
+-----------------------------------------------
+now deploy the web service:
+
+cd xmlwrapper\ws
+
+java org.apache.axis.client.AdminClient deploy.wsdd
+
+to undeploy:
+
+java org.apache.axis.client.AdminClient undeploy.wsdd
+
+
+--------------------------------------- some additional notes ones we have web-infed everything:
+
+(hmm need to compile the classes before this can be done)
+
+java org.apache.axis.wsdl.Java2WSDL -o xmlw.wsdl -l"http://localhost:8080/xmlw/xmlwrapper_badc" -n urn:xmlwrapper -p"uk.ac.cclrc.xmlwrapper" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperBADC
+
+java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p uk.ac.cclrc.xmlwrapper.ws xmlw.wsdl
+
+(hmm need different ones for mpim and badc - hence creation of two new directories and a target in build.xml)
+
+development wsdl target:
+
+1.compile classes under src
+2.generate wsdl
+3.create client stub and server skeleton
+4.edit the class files especially the soapbindingImpl_ - one
+5.delete .class files under src
+
+as the file names don't change can check them into cvs - autogenerating and filling in when necessary
+
+the commands for generating the wrappers:
+
+(note could substitute the context path the the $ variable in the ant scripts):
+
+-- BADC
+
+java org.apache.axis.wsdl.Java2WSDL -o badcxmlw.wsdl -l"http://localhost:8080/xmlw/xmlwrapper_badc" -n urn:xmlwrapper -p"uk.ac.cclrc.xmlwrapper" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperBADC
+
+java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.badc ./badcxmlw.wsdl
+
+--- MPIM
+
+java org.apache.axis.wsdl.Java2WSDL -o mpimxmlw.wsdl -l"http://localhost:8080/xmlw/xmlwrapper_mpim" -n urn:xmlwrapper -p"uk.ac.cclrc.xmlwrapper" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperMPIM
+
+java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.mpim mpimxmlw.wsdl
+
+
+

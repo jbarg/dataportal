@@ -1,0 +1,48 @@
+delete from session
+where sid=9;
+
+delete from session_access_rights
+where sid=9; 
+
+insert into session ( 
+ sid,
+ user_id,
+ last_accessed
+) values (
+9,'glen',CURRENT_TIMESTAMP+'1 day'
+);
+
+insert into session_access_rights (
+ sid,
+ facility_code,
+ metadata_access,
+ data_access
+) values (
+ 9,'BADC',TRUE, FALSE);
+
+insert into session_access_rights (
+ sid,
+ facility_code,
+ metadata_access,
+ data_access
+) values (
+ 9,'SRD',TRUE, FALSE
+);
+
+insert into session_access_rights (
+ sid,
+ facility_code,
+ metadata_access,
+ data_access
+) values (
+ 9,'ISIS',TRUE, FALSE
+);
+
+insert into session_access_rights (
+ sid,
+ facility_code,
+ metadata_access,
+ data_access
+) values (
+ 9,'MPIM',TRUE, FALSE
+);

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+ <globalConfiguration>
+  <parameter name="adminPassword" value="admin"/>
+  <parameter name="attachments.Directory" value="C:\xml-axis-10\webapps\axis\WEB-INF\attachments"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <requestFlow>
+   <handler type="soapmonitor"/>
+   <handler type="java:org.apache.axis.handlers.JWSHandler">
+    <parameter name="scope" value="session"/>
+   </handler>
+   <handler type="java:org.apache.axis.handlers.JWSHandler">
+    <parameter name="scope" value="request"/>
+    <parameter name="extension" value=".jwr"/>
+   </handler>
+  </requestFlow>
+  <responseFlow>
+   <handler type="soapmonitor"/>
+  </responseFlow>
+ </globalConfiguration>
+ <handler name="soapmonitor" type="java:org.apache.axis.handlers.SOAPMonitorHandler">
+  <parameter name="wsdlURL" value="/axis/SOAPMonitorService-impl.wsdl"/>
+  <parameter name="namespace" value="http://tempuri.org/wsdl/2001/12/SOAPMonitorService-impl/"/>
+  <parameter name="serviceName" value="SOAPMonitorService"/>
+  <parameter name="portName" value="Demo"/>
+ </handler>
+ <handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+ <handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+ <handler name="RPCDispatcher" type="java:org.apache.axis.providers.java.RPCProvider"/>
+ <requestFlow name="checks">
+  <handler type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+  <handler type="java:org.apache.axis.handlers.SimpleAuthorizationHandler"/>
+ </requestFlow>
+ <handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+ <handler name="MsgDispatcher" type="java:org.apache.axis.providers.java.MsgProvider"/>
+ <service name="AdminService" provider="java:MSG">
+  <parameter name="allowedMethods" value="AdminService"/>
+  <parameter name="enableRemoteAdmin" value="false"/>
+  <parameter name="className" value="org.apache.axis.utils.Admin"/>
+  <namespace>http://xml.apache.org/axis/wsdd/</namespace>
+ </service>
+ <service name="urn:cominfo" provider="java:RPC">
+  <parameter name="allowedMethods" value="getInfo"/>
+  <parameter name="allowedRoles" value="user3"/>
+  <parameter name="className" value="samples.stock.ComInfoService"/>
+ </service>
+ <service name="Version" provider="java:RPC">
+  <parameter name="allowedMethods" value="getVersion"/>
+  <parameter name="className" value="org.apache.axis.Version"/>
+ </service>
+
+ <!-- put added services here - hmm need to change these by hand -->
+
+   <!-- DocBuilder -->
+
+<service name="xmlwrapper_builder" provider="java:RPC">
+      <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperDocBuilderService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_builder"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.builder.Xmlwrapper_BuilderSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperDocBuilder"/>
+      <operation name="loadXMLRep" qname="operNS:loadXMLRep" xmlns:operNS="urn:xmlwrapper" returnQName="loadXMLRepReturn" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" >
+        <parameter name="action" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="loadXMLRep"/>
+      <parameter name="scope" value="Application"/>
+
+  </service>
+
+
+  <!--DocSelector-->
+  <!-- Services from XmlWrapperDocSelectorService WSDL service -->
+
+<service name="xmlwrapper_selector" provider="java:RPC">
+      <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperDocSelectorService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_selector"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.selector.Xmlwrapper_SelectorSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperDocSelector"/>
+      <operation name="queryMetaData" qname="operNS:queryMetaData" xmlns:operNS="urn:xmlwrapper" returnQName="queryMetaDataReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
+        <parameter name="external_xquery" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter name="result_formatter" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter name="proxy_cert" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter name="auth_token" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="queryMetaData"/>
+      <parameter name="scope" value="Application"/>
+
+      <typeMapping
+        xmlns:ns="http://client.authorisation.cclrc.ac.uk"
+        qname="ns:InvalidAuthorisationTokenException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.InvalidAuthorisationTokenException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:UserNotAuthorisedException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.UserNotAuthorisedException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:XQueryProducedNullOutputException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.XQueryProducedNullOutputException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:FormatterProducedNullOutputException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedNullOutputException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:FormatterProducedInvalidXMLException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedInvalidXMLException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+
+
+
+
+ <!-- //////////////////////////////////////////////////////// -->
+ <service name="urn:xmltoday-delayed-quotes" provider="java:RPC">
+  <requestFlow name="checks">
+   <handler type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+   <handler type="java:org.apache.axis.handlers.SimpleAuthorizationHandler"/>
+  </requestFlow>
+  <parameter name="allowedMethods" value="getQuote test"/>
+  <parameter name="allowedRoles" value="user1,user2"/>
+  <parameter name="className" value="samples.stock.StockQuoteService"/>
+  <parameter name="wsdlServicePort" value="GetQuote"/>
+ </service>
+ <transport name="http">
+  <requestFlow>
+   <handler type="URLMapper"/>
+   <handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+  </requestFlow>
+ </transport>
+ <transport name="local">
+  <responseFlow>
+   <handler type="java:org.apache.axis.transport.local.LocalResponder"/>
+  </responseFlow>
+ </transport>
+</deployment>
