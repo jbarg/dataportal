@@ -177,14 +177,15 @@ public class XmlWrapperEMIN
 
       boolean cache_updated = false ;
       
-      int count = 0 ;
-      while (st.hasMoreTokens() && count < 1)
+      //int count = 0 ;
+      //while (st.hasMoreTokens() && count < 1)
+      while (st.hasMoreTokens())
       {
 
          if(repeat_last == false)
          {
             tmp_tok = st.nextToken() ;
-	    count++ ;
+	    //count++ ;
          }
          else
          {
