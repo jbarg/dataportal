@@ -597,7 +597,9 @@
 
     <java classname="uk.ac.cclrc.xmlwrapper.XMLWTester">
          <classpath>
+           <pathelement path="${java.home}/lib/rt.jar"/>
            <pathelement path="${build.home}/WEB-INF/classes"/>
+           <pathelement path="${catalina.home}/common/lib/servlet.jar"/>
            <fileset dir="${web.home}/WEB-INF/lib">
              <include name="*.jar"/>
            </fileset>
