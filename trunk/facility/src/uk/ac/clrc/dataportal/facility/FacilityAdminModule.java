@@ -66,7 +66,7 @@ public class FacilityAdminModule
                     command = (Element) request.getChildren().get(0);
                 }
                 
-                UDDIHelper uddi = new UDDIHelper();
+                UDDIHelper uddi = new UDDIHelper(null);
                 Element returnElement = new Element(command.getName());
                 
                 if (command.getName().equalsIgnoreCase("createDataPortal"))

@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!--   this si the proper one  ---->
+<!--   this si the proper one  -->
 
 
-<%@ page errorPage="frameerror.jsp"  import="ac.dl.xml.*,org.apache.log4j.*,java.util.*,org.jdom.input.*,java.io.*,javax.xml.parsers.*,org.w3c.dom.*,org.xml.sax.*,javax.xml.transform.dom.*" %>
+<%@ page errorPage="frameerror.jsp"  import="uk.ac.dl.xml.*,org.apache.log4j.*,java.util.*,java.io.*,org.w3c.dom.*,org.xml.sax.*,javax.xml.transform.dom.*,uk.ac.dl.dn.*" %>
 <%@ taglib uri="/tldweb" prefix="xtags" %>
  <%@ taglib uri="/tld/taglibs-xtags.tld" prefix="xtags1" %>
  <%@ include file="loggedin.jsp" %>
@@ -22,20 +22,16 @@
 
         
         String sid = (String)session.getAttribute("sessionid");
-            
+        String dn = Convert.removeSpaces((String)session.getAttribute("dn"));
+        String[] list2 = request.getParameterValues("list");
+        //get level and value from request
+	String value = request.getParameter("value");  
+      
 	Document  doc = null;
 doc = (Document)session.getAttribute("xml");
-        //if session already has xml built, use that, if null same as line before
-        //test level == null tells us that a new document has to be built as the fac has been pressed.
+        
+        String fileName = "_"+dn+".xml";
 
-        // so if level != null then we already have a document
-	//doc = (Document)session.getAttribute("xml");	
-        //get the list of facilities choosen by the user
-
-	String[] list2 = request.getParameterValues("list");
-        //get level and value from request
-	String value = request.getParameter("value");
-         //change spaces with _
 
          if(value == null){}
          else{
@@ -53,8 +49,7 @@ doc = (Document)session.getAttribute("xml");
         //initialise variables
 	String facs = "";
 	String final1 = "";
-        DocumentBuilderFactory dbf = null;
-	DocumentBuilder db = null;        //test if we need xml document
+       
 	if(level == null){
        		//not really needed
 		session.setAttribute("fac", list2);
@@ -70,11 +65,11 @@ doc = (Document)session.getAttribute("xml");
                 File[] filename = new File [(list2.length)];
                                  if(list2.length == 1) {
                    //System.out.print("trying to parse "+wd+File.separator+"profiles"+File.separator+conf.getProperty(list2[0]).trim()+sid);
-                    doc = XML_DOMBuilder.parse(new File(wd+File.separator+"profiles"+File.separator+list2[0].trim().toLowerCase()+sid));
+                    doc = XML_DOMBuilder.parse(new File(wd+File.separator+"profiles"+File.separator+list2[0].trim().toLowerCase()+fileName));
                  }
                  else{
                      for(int i = 0 ; i< list2.length;i++){
-                        filename[i] = new File(wd+File.separator+"profiles"+File.separator+list2[i].trim().toLowerCase()+sid);
+                        filename[i] = new File(wd+File.separator+"profiles"+File.separator+File.separator+list2[i].trim().toLowerCase()+fileName);
                       }
                      doc = Combiner.build(filename,"active");
                  }   

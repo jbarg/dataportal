@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@ page errorPage="error.jsp" import="ac.dl.xml.*,org.apache.log4j.*,java.util.*,org.jdom.filter.*,java.util.*, java.io.*,org.jdom.*,org.jdom.input.*"%>
+<%@ page errorPage="error.jsp" import="uk.ac.dl.xml.*,org.apache.log4j.*,java.util.*,java.util.*, java.io.*,uk.ac.dl.dn.*"%>
 <% response.setHeader("pragma","no-cache");
  response.setHeader("cache-control","no-store"); %>
 <%@ taglib uri="/tldweb" prefix="xtags" %>
@@ -87,7 +87,9 @@ html/netscape.html file from the content root.--%>
     
    //String workingDir = (String)session.getAttribute("wd");
     String sid =(String)session.getAttribute("sessionid");
-
+   String dn = (String)session.getAttribute("dn");
+                dn = Convert.removeSpaces(dn);
+            
     //get what the type of study the user wants
     String typeOfStudy =(String)session.getAttribute("type");
     //Document xml = null;
@@ -98,10 +100,13 @@ html/netscape.html file from the content root.--%>
     String sxsl = null;
 
     String path = request.getContextPath();
+
+     String port = String.valueOf(request.getServerPort());
+    String protocal = request.getScheme();
     //sxml = workingDir+File.separator+"profiles"+File.separator+username+File.separator+"users.xml";
-    sxml = "http://localhost:8080"+path+"/profiles/"+sid+"1.xml";
+    sxml = protocal+"://localhost:"+port+path+"/profiles/"+dn+"1.xml";
     //sxml = "file:"+File.separator+File.separator+workingDir+File.separator+"profiles"+File.separator+sid+"1.xml";
-    xml =  new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
+    xml =  new File(wd+File.separator+"profiles"+File.separator+dn+"1.xml");
     if(!xml.exists()){
        response.sendRedirect("../jsp/BasicSearch.jsp");
        return;

@@ -1,4 +1,4 @@
-package uk.ac.clrc.dataportal;
+package dataportal.datatransfer.src.uk.ac.clrc.dataportal;
 
 import java.io.PrintStream;
 import java.net.URL;
@@ -58,6 +58,7 @@ public class TestTransfer {
         }
         catch(Exception e) {
             System.out.println(e);
+            e.printStackTrace();
         }
         System.out.println("Transfer done");
     }

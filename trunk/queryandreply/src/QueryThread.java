@@ -94,8 +94,8 @@ public class QueryThread extends Thread {
         prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
         
         // Get properties
-        String defaultid = prop.getProperty("defaultid");
-        String lookup_url = prop.getProperty("lookup_module_url");
+        String defaultid = prop.getProperty("defaultid","DataPortal");
+        String lookup_url = prop.getProperty("lookup_module_url","http://localhost:8080/lookup/services/LookUpService");
         logger.info(facilityName+":"+"using lookup address "+lookup_url);
         
         // Find address of facility's XML wrapper by asking the lookup web service

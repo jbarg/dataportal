@@ -12,7 +12,6 @@ import org.jdom.*;
 import org.jdom.output.*;
 import org.jdom.input.*;
 
-import uk.ac.clrc.dataportal.authent.lookupclient.*;
 
 import org.ietf.jgss.*;
 import org.gridforum.jgss.*;
@@ -25,7 +24,7 @@ import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 import java.io.*;
-
+import org.apache.log4j.*;
 import org.apache.axis.utils.XMLUtils;
 
 // We somehow recive a username and password in SOAP format. Need to work this out
@@ -45,42 +44,63 @@ public class AuthCtl {
     public static String defaultid = null;
     public static String[] facilities;
     
+        //set static log for the class
+    private Logger logger = Logger.getLogger(this.getClass());
+    
     // class method here
-    public static void getMyConfig() throws     Exception {
+    public  void getMyConfig() throws     Exception {
         try {
             config.load(new FileInputStream(Config.getContextPath()+"authent.conf"));
-            AuthCtl.myProxyServerName = config.getProperty("my_proxy_server_name");
-            AuthCtl.myProxyServerDN = config.getProperty("my_proxy_server_dn");
-            AuthCtl.myProxyServerPort = Integer.parseInt(config.getProperty("my_proxy_server_port"));
-            AuthCtl.delegateProxyLifetime = Integer.parseInt(config.getProperty("delegate_proxy_lifetime"));
-            AuthCtl.portalCertFilename = config.getProperty("portal_cert_filename");
-            AuthCtl.portalPrivateKeyFilename = config.getProperty("portal_private_key_filename");
-            AuthCtl.caCertFilename = config.getProperty("ca_cert_filename");
-            AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service");
-            AuthCtl.defaultid = config.getProperty("defaultid");
-            String facility = config.getProperty("facilities");
+           // AuthCtl.myProxyServerName = config.getProperty("my_proxy_server_name");
+            ///AuthCtl.myProxyServerDN = config.getProperty("my_proxy_server_dn");
+            //AuthCtl.myProxyServerPort = Integer.parseInt(config.getProperty("my_proxy_server_port"));
+            //AuthCtl.delegateProxyLifetime = Integer.parseInt(config.getProperty("delegate_proxy_lifetime"));
+            AuthCtl.portalCertFilename = config.getProperty("portal_cert_filename",Config.getContextPath()+"portalcert.pem");
+            AuthCtl.portalPrivateKeyFilename = config.getProperty("portal_private_key_filename",Config.getContextPath()+"portalkey.pem");
+            AuthCtl.caCertFilename = config.getProperty("ca_cert_filename",Config.getContextPath()+"01621954.0");
+            AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service","http://localhost:8080/lookup/services/LookUpService");
+            AuthCtl.defaultid = config.getProperty("defaultid" , "DataPortal");
+         //   String facility = config.getProperty("facilities");
             
-            AuthCtl.facilities =facility.split(" ");
+          /*  AuthCtl.facilities =facility.split(" ");
             
             for(int i = 0; i<AuthCtl.facilities.length;i++){
                 facilities[i] =   facilities[i].trim();
                 
-            }
+            }*/
             
             
             
         } catch ( Exception e ) {
-            System.out.println( "---> Error: Cannot read config file" );
-            throw e;
+           logger.error("Cannot read config file "+Config.getContextPath()+"authent.conf" );
+              throw e;
         }
     }
     public String login( String userName, String password, Integer lifetime ) throws Exception {
+        
+       return  loginImp(userName,password,lifetime,AuthCtl.myProxyServerName,AuthCtl.myProxyServerDN, new Integer(AuthCtl.myProxyServerPort));
+        
+        
+    }
+    public String login(  String userName, String password, Integer lifetime, String servername, String dn, Integer port  ) throws Exception {
+        
+        return loginImp(userName,password,lifetime,servername,dn,port);
+        
+        
+    }
+    
+    public String loginImp( String userName, String password, Integer lifetime, String servername, String dn, Integer port ) throws Exception {
+    
+    //locate the prop file.  Normal get this from web.xml file
+        PropertyConfigurator.configure(Config.getContextPath()+"log4j.properties");
+        
         String[][] facilityAccess;
         String[] facilityEndPoints;
+        String[] facilites;
         //org.w3c.dom.Element facilityAccess;
         String sessionId = "-1";
-        AuthCtl.getMyConfig();
-        GSSCredential userCert = idCheck( userName, password, lifetime );
+        new AuthCtl().getMyConfig();
+        GSSCredential userCert = idCheck( userName, password, lifetime,servername, dn,port );
         //        S
         //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
         //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
@@ -90,64 +110,25 @@ public class AuthCtl {
         else if(userCert.getRemainingLifetime() == -1)
             sessionId = "-1";
         else {
-            facilityEndPoints = lookupFacility();
+            //check the end points from the facilties
+            facilities = lookupACMtoDataPortal(defaultid);
             
-            //            System.out.println(facilityEndPoints.length);
-            //            if (facilityEndPoints.length > 0) {
-            //                System.out.println(facilityEndPoints[0]);
-            //            }
             
             //*** WILL USE DN WITH FACILITIES SOOOOOON...
-            facilityAccess = buildAccess( turnintoString(userCert), facilityEndPoints );
+            facilityAccess = buildAccess( turnintoString(userCert),facilities, lookupFacilityEndPoints(facilities) );
             //System.out.println( "---> User:     " + userCert.getUserCert().getSubjectDN().getName() );
             sessionId = getSessionId( userCert, facilityAccess );
         }
         
         return sessionId;
-        
+    
+    
     }
     
-    //this is called by the session manager for 3rd party authentication.
-    
-    /*public org.w3c.dom.Element getAccessRights(String dn) throws Exception{
-     
-        String[] facilityEndPoints;
-        org.w3c.dom.Element facilityAccess;
-        AuthCtl.getMyConfig();
-        System.out.println("looking up facs ....");
-        //
-        facilityEndPoints = lookupFacility();
-        //facilityAccess = buildAccess( dn, facilityEndPoints );
-        return facilityAccess;
-    }*/
-    
-    // This was used when we checked the ID in throws database. Kept in case we revert
-    // mrd67 17/02/2003
-    private boolean idCheckDb( String userName, String userPassword ) throws Exception {
-        //users password and name from database
-        boolean loggedIn = false;
-        try {
-            
-            DbAccess db = new DbAccess();
-            ResultSet myResults = db.query("SELECT dp_password from dp_users WHERE dp_user = '"+userName+"'");
-            
-            //de-ecrypt password
-            while (myResults.next() ) {
-                
-                if( userPassword.equals(myResults.getString(1)))
-                    loggedIn = true;
-                else
-                    loggedIn = false;
-            }
-        }
-        catch (Exception e) {
-            throw e;
-        }
-        return ( loggedIn );
-    }
+   
     
     // new version of idCheck that uses MyProxy and GSI certificates
-    private GSSCredential idCheck( String userName, String userPassword,Integer lifetime ) throws Exception {
+    private GSSCredential idCheck( String userName, String userPassword,Integer lifetime,String servername, String dn, Integer port  ) throws Exception {
         //users password and name from database
         boolean loggedIn = false;
         GSSCredential portalProxy = null;
@@ -159,14 +140,15 @@ public class AuthCtl {
             
         }
         catch( Exception e ) {
-            System.out.println( "Caught exception while creating portal proxy:\n\t" + e.toString() );
+            logger.error( "Caught exception while creating portal proxy:" , e);
             //System.exit( -1 );
+            throw e;
         }
         
         GSSCredential delegateUserProxy = null;
         
         try {
-            delegateUserProxy = DelegateCredential.getProxy( userName, userPassword,lifetime, portalProxy );
+            delegateUserProxy = DelegateCredential.getProxy( userName, userPassword,lifetime,servername, dn, port, portalProxy );
             /*FileOutputStream out = new FileOutputStream("c:/myproxy.txt");
             delegateUserProxy.save(out);
             out.close();*/
@@ -175,13 +157,14 @@ public class AuthCtl {
             loggedIn = true;
         }
         catch( Exception e ) {
-            System.out.println( "Caught exception while retrieving proxy:\n\t" + e.toString() );
+            logger.error( "Caught exception while retrieving proxy" , e );
+            throw e;
         }
         
         return  delegateUserProxy ;
     }
     
-    private String[] lookupFacility() throws Exception {
+    private String[] lookupFacilityEndPoints(String[] facilities) throws Exception {
         if(facilities == null) return null;
         if(facilities.length == 0) return facilities;
         
@@ -202,13 +185,17 @@ public class AuthCtl {
         Object[] ob = new Object[]{facilities,"ACM"};
         
         String[] faciltyEndPoints = (String[]) call.invoke(ob );
+          /*logger.debug("Facilites that user can view:");
         for(int i = 0; i<faciltyEndPoints.length;i++){
-            System.out.println(faciltyEndPoints[i]);
-        }
+            
+            logger.debug(facilities[i]+"\n"+faciltyEndPoints[i]);
+        }   */       
         return faciltyEndPoints;
+       
+       
     }
     
-    private String[][] buildAccess( String userCert, String[] facilityEndPoints ) throws Exception {
+    private String[][] buildAccess( String userCert, String[] facilities,String[] facilityEndPoints ) throws Exception {
         Element accessRights = new Element("UserAccessPrivilege");
         //Element userElement = new Element("User");
         // userElement.setText(DN);
@@ -275,7 +262,7 @@ public class AuthCtl {
         }*/
         for(int i = 0; i < facilityEndPoints.length; i++) {
             for(int j = 0; j < 2; j++) {
-                System.out.println(map[i][j]);
+               logger.debug(map[i][j]);
             }
         }
         //return accessRightsDOM;
@@ -367,6 +354,28 @@ public class AuthCtl {
         file.delete();
         //System.out.println(cert);
         return cert.toString();
+        
+    }
+    
+      //this method contacts the lookupmodule for a list offacilites on throws UDDI
+    private String[] lookupACMtoDataPortal(String exclude) throws Exception{
+        
+        Service  service = new Service();
+        Call  call    = (Call) service.createCall();
+        
+        call.setTargetEndpointAddress( new java.net.URL(uDDILookUpService) );
+        call.setOperationName( "getFacilities" );
+        
+        call.addParameter( "exclude", XMLType.XSD_STRING, ParameterMode.IN );
+        call.setReturnType( XMLType.SOAP_ARRAY );
+        // String[] name = {facilities};
+        Object[] ob = new Object[]{exclude};
+        logger.debug("Facilites that user can view:");
+        String[] facilties = (String[]) call.invoke(ob );
+        for(int i = 0; i<facilties.length;i++){
+            logger.debug(facilties[i]);
+        }
+        return facilties;
         
     }
     

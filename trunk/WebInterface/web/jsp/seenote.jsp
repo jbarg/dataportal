@@ -1,4 +1,4 @@
-<%@page errorPage="../html/seenoteError.html" import="java.util.*,org.apache.axis.client.*,javax.xml.rpc.ParameterMode,org.apache.axis.encoding.XMLType,javax.xml.namespace.QName,ac.dl.xml.*,org.apache.log4j.*,java.io.*,java.security.*,java.security.interfaces.*"%>
+<%@page errorPage="../html/seenoteError.html" import="java.util.*,uk.ac.dl.xml.*,org.apache.log4j.*,java.io.*"%>
 <%@ include file="loggedin.jsp"%>
 <%@ include file="logger.jsp"%>
 <%

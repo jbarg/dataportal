@@ -20,7 +20,13 @@ import java.net.URL;
 
 public class SessionManager {
     
-    static Logger logger = Logger.getLogger(SessionManager.class);
+    static Logger logger;
+    static {
+        logger = Logger.getLogger(SessionManager.class);
+        PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
+        
+    }
+    
     static Properties prop = new Properties();
     
     static String lookup_url;
@@ -40,8 +46,8 @@ public class SessionManager {
         }
         
         // Get properties
-        lookup_url = prop.getProperty("lookup_module");
-        defaultid  = prop.getProperty("defaultid");
+        lookup_url = prop.getProperty("lookup_module","http://localhost:8080/lookup/services/LookUpService");
+        defaultid  = prop.getProperty("defaultid","DataPortal");
     }
     
     /*
@@ -62,7 +68,7 @@ public class SessionManager {
             if (c.lifetimeLeft()) {
                 
                 // Proxy ok so create new session
-                Session s = new Session(c, permissionList);
+                Session s = new Session(c, permissionList,prop);
                 sid = s.start();
                 logger.info("New session created for user: "+dn+" sid: "+sid);
                 return sid;
@@ -90,7 +96,7 @@ public class SessionManager {
         try {
             
             // Get session from database
-            Session s = new Session(sid);
+            Session s = new Session(sid,prop);
             s.getSession();
             Certificate c = s.getCert();
             
@@ -122,7 +128,7 @@ public class SessionManager {
     public Boolean isValid(String sid) throws Exception {
         
         try {
-            Session s = new Session(sid);
+            Session s = new Session(sid,prop);
             s.getSession();
             Certificate c = s.getCert();
             return new Boolean(c.lifetimeLeft());
@@ -144,7 +150,7 @@ public class SessionManager {
         
         try {
             // Get session from database
-            Session s = new Session(sid);
+            Session s = new Session(sid,prop);
             s.getSession();
             Certificate c = s.getCert();
             
@@ -173,7 +179,7 @@ public class SessionManager {
     public void endSession(String sid) throws Exception {
         
         try {
-            Session s = new Session(sid);
+            Session s = new Session(sid,prop);
             s.end();
         }
         catch (Exception e) {
@@ -205,7 +211,7 @@ public class SessionManager {
             String[][] p = getAllPermissions(dn);
             
             // Create new session in database
-            Session s = new Session(sid, c, p);
+            Session s = new Session(sid, c, p,prop);
             s.start();
             logger.info("Third party session started: "+sid);
             return new Boolean(true);
@@ -227,7 +233,7 @@ public class SessionManager {
     public String getProxy(String sid) throws Exception{
         
         try {
-            Session s = new Session(sid);
+            Session s = new Session(sid,prop);
             s.getSession();
             Certificate c = s.getCert();
             String dn = c.getDName();
@@ -257,7 +263,7 @@ public class SessionManager {
     public long getLifetime(String sid) throws Exception {
         
         try {
-            Session s = new Session(sid);
+            Session s = new Session(sid,prop);
             s.getSession();
             Certificate c = s.getCert();
             String dn = c.getDName();
@@ -325,27 +331,27 @@ public class SessionManager {
     // Test stub
     private static void prt(SessionManager sm, String sid) throws Exception {
         
-        System.out.println("DN: "+sm.getDName(sid));
+       /* System.out.println("DN: "+sm.getDName(sid));
         System.out.println("LIFETIME: "+sm.getLifetime(sid));
         System.out.println("LIFETIME LEFT: "+sm.isValid(sid));
         
         String p[][] = sm.getPermissions(sid);
         for (int i = 0; i < p.length; i++) {
-            
+        
             System.out.println("PERMISSIONS: "+p[i][1]);
             System.out.println("FOR: "+p[i][0]);
         }
         System.out.println("CERTIFICATE: "+sm.getProxy(sid));
-        
+        */
     }
     
     public static void main(String[] args) throws Exception {
         
-        String[][] p = { {"BADC_access_permissions","BADC"},
+    /*    String[][] p = { {"BADC_access_permissions","BADC"},
         {"MPIM_access_permissions","MPIM"}};
-        
+     
         Certificate c = new Certificate(new URL("file:///E:/cog-1.1/build/cog-1.1/bin/x509up_37349.pem"));
-        
+     
         System.out.println("Creating new session");
         SessionManager sm = new SessionManager();
         String sid = sm.startSession(c.toString(),p);
@@ -353,13 +359,13 @@ public class SessionManager {
             prt(sm,sid);
             sm.endSession(sid);
         }
-        
+     
         System.out.println("Creating third party session");
         Boolean result = sm.putCredentials("HPC sid", c.toString(), "dataportal");
         if (result.booleanValue() == true) {
             prt(sm, "HPC sid");
             sm.endSession(sid);
-        }
+        }*/
         
         //System.out.println(sm.getDName("c548092e-2649-11d8-965c-9768792e49d2"));
         

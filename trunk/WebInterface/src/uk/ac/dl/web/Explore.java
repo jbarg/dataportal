@@ -10,8 +10,9 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 //log classes
 import org.apache.log4j.*;
-import ac.dl.xml.*;
+import uk.ac.dl.xml.*;
 import org.jdom.input.*;
+import uk.ac.dl.dn.Convert;
 
 /** This class takes the studies selected from the Expand class to decrease
  * the size of the xlm document.  It does this using a xsl. The servlet then
@@ -44,11 +45,13 @@ public class Explore extends HttpServlet{
                 //get working directories
                 
                 String sid = (String)session.getAttribute("sessionid");
-                
+                 String dn = (String)session.getAttribute("dn");
+                dn = Convert.removeSpaces(dn);
+            
                 File xml = null;
                 //get users username
                 
-                xml = new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml");
+                xml = new File(wd+File.separator+"profiles"+File.separator+dn+"2.xml");
                 //check if user has alredy done a search
                          
                 
@@ -84,7 +87,7 @@ public class Explore extends HttpServlet{
                 //SAXBuilder builder = new SAXBuilder();
                 //org.jdom.Document doc = null;
                 
-                XSLTransformer.transformFiletoFile(xml,temp,new File(wd+File.separator+"profiles"+File.separator+sid+"3.xml"));
+                XSLTransformer.transformFiletoFile(xml,temp,new File(wd+File.separator+"profiles"+File.separator+dn+"3.xml"));
                 
                 temp.delete();
                 

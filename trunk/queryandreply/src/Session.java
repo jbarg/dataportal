@@ -45,9 +45,9 @@ public class Session {
     private String lookup() throws Exception{
         Properties prop = new Properties();
         prop.load(new FileInputStream(Config.getContextPath()+"qr.conf"));
-        String lookup_url = prop.getProperty("lookup_module_url");
+        String lookup_url = prop.getProperty("lookup_module_url", "http://localhost:8080/lookup/services/LookUpService");
         //gets the name of the DataPortal in tha UDDI. IE DataPortla-VOLGA
-        String defaultid = prop.getProperty("defaultid");
+        String defaultid = prop.getProperty("defaultid","DataPortal");
         String[] serviceTypes = {"SESSION"};
         
         Service  service = new Service();

@@ -1,5 +1,5 @@
 <%@page contentType="text/html" %>
-<%@page import="uk.ac.clrc.dataportal.facility.*, org.apache.log4j.*"%>
+<%@page import="uk.ac.clrc.dataportal.facility.*, org.apache.log4j.*,java.io.*"%>
 <% response.setHeader("pragma","no-cache");
  response.setHeader("cache-control","no-store");
  %>
@@ -62,7 +62,7 @@ return true;
 <%
     
     //List all the facilities with the Data Portal
-    UDDIHelper uddi = new UDDIHelper();
+    UDDIHelper uddi = new UDDIHelper((String)session.getAttribute("wd")+File.separator+"WEB-INF"+File.separator);
     org.jdom.Element[] elements = uddi.findFacility("%");
 
     //check if dataportal already exists

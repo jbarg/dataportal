@@ -8,7 +8,8 @@ import ac.dl.taglib.*;
 
 //log classes
 import org.apache.log4j.*;
-import ac.dl.xml.*;
+import uk.ac.dl.xml.*;
+import uk.ac.dl.dn.*;
 import java.util.Properties;
 //web axis stuff
 import javax.xml.rpc.ParameterMode;
@@ -16,6 +17,7 @@ import org.apache.axis.client.Call;
 import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
+
 
 /** This class takes the studies selected from the Expand class to decrease
  * the size of the xlm document.  It does this using a xsl. The servlet then
@@ -280,7 +282,7 @@ public class AddToCart extends HttpServlet{
         
         //get working directories
         String workingDir = (String)session.getAttribute("wd");
-        String dn = (String )session.getAttribute("sessionid");
+        String dn = Convert.removeSpaces((String )session.getAttribute("dn"));
         
         //create a xsl file to turn the large xml file a small one easily travered to get info out
         File temp2 = new File(workingDir+File.separator+"profiles"+File.separator+"res"+Math.random()+".xsl");

@@ -8,9 +8,12 @@ import java.util.*;
 // Log classes
 import org.apache.log4j.Logger;
 import java.util.Properties;
+import javax.naming.*;
+import javax.sql.DataSource;
 
 
-/* 
+
+/*
  * Provides database access to internal data portal database
  * - requires file db.conf in same directory as class file containing
  *   connection parameters
@@ -31,43 +34,40 @@ public class DBAccess {
     private static String url;
     private static String username;
     private static String password;
-    
+    private static  DataSource ds;
     /*
      * Creates DBAccess when connection params are in db.conf found
      * in same directory as calling class
      */
-    public DBAccess(Class caller) throws Exception {
+    public DBAccess(String datasource) throws Exception {
         
         // Get database parameters from config file that is found in
         // same directory as calling class
-        try {
-            InputStream propFile = caller.getResourceAsStream("db.conf");
-            prop.load(propFile);
-            
-        } catch (Exception e) {
-            
-            logger.fatal("Cannot load db.conf");
-            throw e;
+       
+
+        try{
+            Context initContext = new InitialContext();
+            Context envContext  = (Context)initContext.lookup("java:/comp/env");
+            ds = (DataSource)envContext.lookup("jdbc/"+datasource);
         }
+        catch(Exception e){
+            logger.fatal("Unable to connect the the connection pool for data portal",e);
+            throw e;
+        }            
         
-        this.url = prop.getProperty("db_url");
-        this.driver = prop.getProperty("db_driver");
-        this.username = prop.getProperty("db_user");
-        this.password = prop.getProperty("db_password");
-        
-        logger.info("Using database: "+url);
+        logger.debug("Using database: "+url);
         
     }
     
     /*
      * Create DBAccess with connection params
      */
-    public DBAccess(String driver, String url, String username, String password) {
+   /* public DBAccess(String driver, String url, String username, String password) {
         this.driver = driver;
         this.url = url;
         this.username = username;
         this.password = password;
-    }
+    }*/
     
     /*
      * Connect to database
@@ -75,9 +75,9 @@ public class DBAccess {
     public Connection connect() throws Exception {
         try {
             // Connect to db
-            Class.forName(driver);
-            conn = DriverManager.getConnection(url, username, password);
-            logger.info("Connected to database");
+            
+            conn = ds.getConnection();
+            logger.debug("Connected to database");
             return conn;
         }
         catch (SQLException e) {
@@ -105,7 +105,7 @@ public class DBAccess {
      * Calling class must call disconnect() at end of SQL processing
      */
     public void disconnect() {
-        logger.info("Disconnecting from database");
+        logger.debug("Disconnecting from database");
         try {
             if (rs!=null) {
                 rs.close();
@@ -128,7 +128,7 @@ public class DBAccess {
      */
     public ResultSet getData(String sql) throws Exception {
         
-        logger.info(sql);
+        logger.debug(sql);
         rs = null;
         try {
             stmt = conn.createStatement();
@@ -158,7 +158,7 @@ public class DBAccess {
      * Used for INSERT, UPDATE and DELETE statements
      */
     public void updateData(String sql) throws Exception {
-        logger.info(sql);
+        logger.debug(sql);
         try {
             stmt = conn.createStatement();
             stmt.executeUpdate(sql);
@@ -181,7 +181,7 @@ public class DBAccess {
         }
     }
     
-    /* 
+    /*
      * To use commit for transaction processing you need to:
      *   conn.autocommit(false);
      * in calling class first
@@ -189,7 +189,7 @@ public class DBAccess {
     public void commit() throws Exception {
         try {
             conn.commit();
-            logger.info("COMMIT sucessful");
+            logger.debug("COMMIT sucessful");
         }
         catch (SQLException e) {
             StringBuffer sqlerr = new StringBuffer();
@@ -209,14 +209,14 @@ public class DBAccess {
         }
         
     }
-
-    /* 
+    
+    /*
      * To use rollback for transaction processing you need to:
      *   conn.autocommit(false);
      * in calling class first
      */
     public void rollback() {
-        logger.info("ROLLBACK");
+        logger.debug("ROLLBACK");
         try {
             conn.rollback();
         }
@@ -249,7 +249,7 @@ public class DBAccess {
     
     // Testing stub
     public static void main(String args[]) throws Exception {
-        DBAccess db = new DBAccess(uk.ac.cclrc.db.DBAccess.class);
+       /* DBAccess db = new DBAccess(uk.ac.cclrc.db.DBAccess.class);
         db.connect();
         
         db.updateData("insert into session (sid, certificate, last_accessed) values ('dummy1','dummy'::bytea,CURRENT_TIMESTAMP)");
@@ -259,17 +259,17 @@ public class DBAccess {
         while (rs.next()) {
             System.out.println(rs.getString("sid"));
         }
-
+        
         db.updateData("delete from session where sid like 'dummy%'");
-
+        
         db.disconnect();
         
         // Testing transaction processing
         db = new DBAccess("org.postgresql.Driver",
-                          "jdbc:postgresql://escdmg.dl.ac.uk:5432/sessionmanager",
-                          "dpuser",
-                          "dp4all");
-                
+        "jdbc:postgresql://escdmg.dl.ac.uk:5432/sessionmanager",
+        "dpuser",
+        "dp4all");
+        
         Connection conn = db.connect();
         conn.setAutoCommit(false);
         db.updateData("insert into session (sid, certificate, last_accessed) values ('dummy3','dummy'::bytea,CURRENT_TIMESTAMP)");
@@ -280,10 +280,10 @@ public class DBAccess {
         while (rs.next()) {
             System.out.println(rs.getString("sid"));
         }
-
-        db.updateData("delete from session where sid like 'dummy%'");
-
-        db.disconnect();
         
+        db.updateData("delete from session where sid like 'dummy%'");
+        
+        db.disconnect();
+        */
     }
 }

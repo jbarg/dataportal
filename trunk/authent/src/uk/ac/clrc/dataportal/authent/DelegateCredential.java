@@ -19,7 +19,7 @@ public abstract class DelegateCredential
 {
 // Data specific to MyProxyServer
 
-    public static GSSCredential getProxy( String aUsername, String aPassPhrase,Integer lifetime, GSSCredential thePortalProxy ) 
+    public static GSSCredential getProxy( String aUsername, String aPassPhrase,Integer lifetime,String servername, String dn, Integer port , GSSCredential thePortalProxy ) 
                                               throws Exception, MyProxyException
     {
         GSSCredential portalProxy = thePortalProxy;
@@ -32,15 +32,15 @@ public abstract class DelegateCredential
             throw new Exception( "Invalid portal proxy" );
         }
 
-        org.globus.myproxy.MyProxy proxy = new org.globus.myproxy.MyProxy( AuthCtl.myProxyServerName, AuthCtl.myProxyServerPort );
+        org.globus.myproxy.MyProxy proxy = new org.globus.myproxy.MyProxy( servername, lifetime.intValue() );
          
-        GSSCredential delegateUserProxy = proxy.get( AuthCtl.myProxyServerName, 
-                                                     AuthCtl.myProxyServerPort,
+        GSSCredential delegateUserProxy = proxy.get( servername, 
+                                                     port.intValue(),
                                                      portalProxy, 
                                                      username,
                                                      userPassphrase,
                                                    lifetime.intValue(),
-                                                     AuthCtl.myProxyServerDN );
+                                                     dn );
 
         return delegateUserProxy;
     }

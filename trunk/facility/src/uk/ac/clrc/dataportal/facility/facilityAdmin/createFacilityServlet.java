@@ -59,7 +59,7 @@ public class createFacilityServlet extends HttpServlet {
         //check if dac_id is already in the UDDI
         //List all the facilities with the Data Portal
         try{
-            UDDIHelper uddi = new UDDIHelper();
+            UDDIHelper uddi = new UDDIHelper(null);
             org.jdom.Element[] elements = uddi.findFacility("%");
             
             
@@ -128,7 +128,7 @@ public class createFacilityServlet extends HttpServlet {
         // </createFacility>
         //</fadm:facilityAdmin>
         
-        UDDIHelper uddi = new UDDIHelper();
+        UDDIHelper uddi = new UDDIHelper(null);
         
         //create with afciltiy bean representation of above XML
         FacilityBean cfb = new FacilityBean();

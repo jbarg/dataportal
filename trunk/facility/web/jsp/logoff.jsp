@@ -34,7 +34,7 @@ return true;
 <hr class="menuhr" />
 <!--&nbsp;&nbsp;<a class="menu" href="create.jsp">Create Facility</a><br/>
 &nbsp;&nbsp;<a class="menu" href="deleteFacility.jsp">List </a><br />-->
-&nbsp;&nbsp;<a class="menu" href="../">Log In</a><br />
+&nbsp;&nbsp;<a class="menu" href="../index.html">Log In</a><br />
 
 &nbsp;</td></tr>
 

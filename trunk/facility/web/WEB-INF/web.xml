@@ -118,21 +118,5 @@
     <welcome-file>index.jsp</welcome-file>
     <welcome-file>index.jws</welcome-file>
   </welcome-file-list>
-
-  <!--<security-constraint>
-    <web-resource-collection>
-    <web-resource-name>Facility Manager</web-resource-name>
-    <url-pattern>/*</url-pattern>
-    <url-pattern>/html/*</url-pattern>
-    </web-resource-collection>
-  </security-constraint>
-  
-  <login-config>
-    <auth-method>FORM</auth-method>
-        <form-login-config>
-            <form-login-page>/html/Login.html</form-login-page>
-            <form-error-page>/html/ErrorLogin.html</form-error-page>
-        </form-login-config>
-  </login-config>-->
   
 </web-app>

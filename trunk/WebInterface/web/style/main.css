@@ -4,7 +4,7 @@
 
 body 		{ margin: 7px; font-family: Trebuchet, Arial, sans-serif; background-image:
 
-url("../img/bluebg.gif")
+url("../img/bluebg.gif"); background-repeat: no-repeat
 
 }
 
