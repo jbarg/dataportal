@@ -98,11 +98,13 @@ public class TransferDataServlet extends HttpServlet {
                     uc.copy();
                     out.print("true");
                     out.close();
+                    new File(cred).delete();
                 }
                 catch(Exception e) {
                     out.print(e.getMessage());
                     out.close();
                     System.out.println(e);
+                     new File(cred).delete();
                     return;
                 }
                 System.out.println("Transfer done");
