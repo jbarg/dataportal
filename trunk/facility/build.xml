@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="facilitymodule">
+
+    <target name="init">
+        <property name="src" value="${basedir}/src"/>
+        <property name="web" value="${basedir}/web"/>
+        <property name="webinf" value="${web}/WEB-INF"/>
+        <property name="dest" value="${webinf}/classes"/>
+        <property name="warfile" value="facility.war"/>
+    </target>
+
+    <target depends="init" name="compile">
+        <javac debug="true" deprecation="true" destdir="${dest}" srcdir="${src}">
+            <classpath>
+                <pathelement location="${dest}"/>
+                <fileset dir="${webinf}/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <target depends="init,compile" name="war">
+        <jar basedir="${web}" compress="true" jarfile="${warfile}">
+            <exclude name="**/*.java"/>
+            <exclude name="**/*.*~"/>
+        </jar>
+    </target>
+
+    <target depends="init" name="clean">
+        <delete>
+            <fileset dir=".">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+        <delete file="${warfile}"/>
+    </target>
+
+</project>
