@@ -32,9 +32,9 @@ public abstract class DelegateCredential
             throw new Exception( "Invalid portal proxy" );
         }
 
-        //MyProxy proxy = new MyProxy( AuthCtl.myProxyServerName, AuthCtl.myProxyServerPort );
+        org.globus.myproxy.MyProxy proxy = new org.globus.myproxy.MyProxy( AuthCtl.myProxyServerName, AuthCtl.myProxyServerPort );
          
-        GSSCredential delegateUserProxy = org.globus.myproxy.MyProxy.get( AuthCtl.myProxyServerName, 
+        GSSCredential delegateUserProxy = proxy.get( AuthCtl.myProxyServerName, 
                                                      AuthCtl.myProxyServerPort,
                                                      portalProxy, 
                                                      username,
