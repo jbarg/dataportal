@@ -445,7 +445,7 @@ public class emineralsServlet extends HttpServlet {
                 call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
                 call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.SOAP_ARRAY );
-                String[] name = {"Dataportal"+defaultid};
+                String[] name = {defaultid};
                 Object[] ob = new Object[]{name,serviceTypes[i]};
                 
                 String[] url = (String[]) call.invoke(ob );

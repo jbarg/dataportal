@@ -433,7 +433,8 @@ public class LoginServlet extends HttpServlet {
                 call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
                 call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.SOAP_ARRAY );
-                String[] name = {"Dataportal"+defaultid};
+                //defaultid is the name of the Dataportal in the UDDI
+                String[] name = {defaultid};
                 Object[] ob = new Object[]{name,serviceTypes[i]};
                 
                 String[] url = (String[]) call.invoke(ob );
