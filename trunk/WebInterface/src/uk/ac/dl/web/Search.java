@@ -119,6 +119,7 @@ public class Search {
                 wr.write("<td><a href='../servlet/ResendQuery?discipline="+discipline+"&wait="+waiting+""+buff2.toString()+"'>Ok</a></td></tr>\n");
                 wr.close();
             }
+            return res;
         }
         catch(Exception e){
             logger.warn("Coulld not do basic search",e);
