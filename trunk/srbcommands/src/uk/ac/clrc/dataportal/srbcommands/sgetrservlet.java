@@ -103,6 +103,7 @@ public class sgetrservlet extends HttpServlet {
             String exe = request.getParameter("format");
             System.out.println("FORMAT is "+exe);
             if(exe == null ) exe  ="tar";
+            System.out.println("FORMAT is "+exe);
             //String executable = props.getProperty("tarHome");
             //if(exe.equals("tar")) executable = props.getProperty("tarHome")+" -cvf";
             //else if(exe.equals("zip")) executable = props.getProperty("zipHome");
@@ -146,7 +147,7 @@ public class sgetrservlet extends HttpServlet {
             String dir = request.getParameter("dir");
             String filename = dir.substring(dir.lastIndexOf("/") + 1);
             filename = filename.replace('.','_');
-            response.setHeader("Content-disposition","attachment; filename=bvnbvnbvnbvn."+exe);
+            response.setHeader("Content-disposition","attachment; filename=bvnbvnbvnbvn");
             System.out.println("File name ius "+filename+exe);
             //this is the one that is working with the whole collection
             File srbtempdir = new File(props.getProperty("srbDest"));
