@@ -1,0 +1,7 @@
+<undeployment xmlns="http://xml.apache.org/axis/wsdd/"
+            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+  <service name="MatrixService" provider="java:RPC">
+    <parameter name="className" value="uk.ac.clrc.dataportal.matrix.MatrixModule" />
+    <parameter name="methodName" value="*" />
+  </service>
+</undeployment>
