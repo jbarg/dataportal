@@ -18,8 +18,6 @@ xmlns="http://www.w3.org/TR/REC-html40">
  <w:WordDocument>
   <w:View>Print</w:View>
   <w:Zoom>128</w:Zoom>
-  <w:SpellingState>Clean</w:SpellingState>
-  <w:GrammarState>Clean</w:GrammarState>
   <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
  </w:WordDocument>
 </xml><![endif]--><!--[if !mso]><object
@@ -202,12 +200,6 @@ a:visited, span.MsoHyperlinkFollowed
 	{color:#606420;
 	text-decoration:underline;
 	text-underline:single;}
-span.SpellE
-	{mso-style-name:"";
-	mso-spl-e:yes;}
-span.GramE
-	{mso-style-name:"";
-	mso-gram-e:yes;}
 @page Section1
 	{size:595.45pt 841.7pt;
 	margin:72.0pt 64.8pt 72.0pt 72.0pt;
@@ -241,13 +233,18 @@ div.Section1
 
 <div class=Section1>
 
-<p class=MsoNormal><b>Installation of the Data Portal using a Tomcat <span
-class=SpellE>Servlet</span> engine</b></p>
+<p class=MsoNormal><b>Installation of the Data Portal using a Tomcat Servlet
+engine</b></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>1)&nbsp; Install Apache Tomcat <span class=SpellE>servlet</span>
-engine.&nbsp; Need version 5.0+.&nbsp; Download <a
+10.0pt;font-family:Arial'>1)&nbsp; Install Apache Tomcat servlet engine.&nbsp;
+Need version 5.0+.&nbsp; Download <a
 href="http://jakarta.apache.org/site/binindex.cgi">http://jakarta.apache.org/site/binindex.cgi</a></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>Tomcat 5.0.X and the Data Portal modules uses java
+jre version 1.4.x (preferably 1.4.2) and does not run on version 1.5 (or java 5
+'tiger') or 1.3.<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>(NB:&nbsp; Make sure Environmental variable
@@ -260,22 +257,22 @@ style='font-size:10.0pt;font-family:Arial'>&nbsp; Need Version 1.6+.&nbsp;
 Download <a href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><i style='mso-bidi-font-style:
-normal'><span style='font-size:10.0pt;font-family:Arial'>Copy $<span
-class=SpellE>CATALINA_HOME/server/lib/catalina-ant.jar</span> into
-$ANT_HOME/lib where $CATALINA_HOME represents the tomcat root directory and
-$ANT_HOME represents the ant root directory.</span><o:p></o:p></i></p>
+normal'><span style='font-size:10.0pt;font-family:Arial'>Copy
+$CATALINA_HOME/server/lib/catalina-ant.jar into $ANT_HOME/lib where
+$CATALINA_HOME represents the tomcat root directory and $ANT_HOME represents
+the ant root directory.</span><o:p></o:p></i></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>(NB: Red Hat Linux comes preinstalled with ant,
-usually in /<span class=SpellE>usr</span>/bin/ant.&nbsp; You need to use apache
-ant, which you need to have installed.&nbsp; Either make sure apache ant is in
-front in you PATH variable or you use the full path when executing ant.&nbsp; <span
-class=SpellE>I.e</span> $ANT_HOME/bin/ant)</span></p>
+usually in /usr/bin/ant.&nbsp; You need to use apache ant, which you need to
+have installed.&nbsp; Either make sure apache ant is in front in you PATH
+variable or you use the full path when executing ant.&nbsp; I.e
+$ANT_HOME/bin/ant)</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>3) <i style='mso-bidi-font-style:normal'>Change the
-properties for the $DATAPORTAL_HOME/<span class=SpellE>build.properties</span>
-file.</i></span><i style='mso-bidi-font-style:normal'><o:p></o:p></i></p>
+properties for the $DATAPORTAL_HOME/build.properties file.</i></span><i
+style='mso-bidi-font-style:normal'><o:p></o:p></i></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>Where $DATAPORTAL_HOME represents the root directory
@@ -283,66 +280,60 @@ where you unpacked the data portal file.</span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>server.name</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>=</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>localhost<span class=GramE>:8080</span><span
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>server.name</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>localhost:8080<span
 style='mso-spacerun:yes'>    </span>//server name and port of tomcat
-instance.<span style='mso-spacerun:yes'>  </span><span class=SpellE><span
-class=GramE>localhost</span></span> is ok if it is on the same machine<o:p></o:p></span></p>
+instance.<span style='mso-spacerun:yes'>  </span>localhost is ok if it is on
+the same machine<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>catalina.home</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>=</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>D\:\\tomcat<span style='mso-spacerun:yes'>    </span>//
-location on file system of tomcat instance<span class=GramE>. </span>(\ is an
-escape character<span class=GramE>. </span>So windows needs to escape : and \
-within the path<span class=GramE>. </span>IE c\:\\My Documents\\ etc)<o:p></o:p></span></p>
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>catalina.home</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>D\:\\tomcat<span
+style='mso-spacerun:yes'>    </span>// location on file system of tomcat
+instance. (\ is an escape character. So windows needs to escape : and \ within
+the path. IE c\:\\My Documents\\ etc)<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>manager.username</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>=</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>tomcat<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>manager.username</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>tomcat<span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>manager.password</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>=</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>tomcat<o:p></o:p></span></p>
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>manager.password</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>tomcat<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:black;
-background:white;mso-highlight:white'>globusKey</span></span></span><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:blue;
-background:white;mso-highlight:white'>=</span></span><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>C\:\\Documents
-and Settings\\gjd37\\.globus\\portalkey.pem<span style='mso-spacerun:yes'> 
-</span><o:p></o:p></span></p>
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>globusKey</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>C\:\\Documents and
+Settings\\gjd37\\.globus\\portalkey.pem<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:black;
-background:white;mso-highlight:white'>globusCert</span></span></span><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:blue;
-background:white;mso-highlight:white'>=</span></span><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>C\:\\Documents
-and Settings\\gjd37\\.globus\\portalcert.pem<o:p></o:p></span></p>
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>globusCert</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>C\:\\Documents and
+Settings\\gjd37\\.globus\\portalcert.pem<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -350,65 +341,42 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>The last two are the locations of your <span
-class=SpellE>globus</span> host key and certificate.&nbsp; These <span
-class=GramE>are used</span> to create a proxy that is used to retrieve the
-user's proxy credential out of a <span class=SpellE>MyProxy</span> server.<span
+10.0pt;font-family:Arial'>The last two are the locations of your globus host
+key and certificate.&nbsp; These are used to create a proxy that is used to
+retrieve the user's proxy credential out of a MyProxy server.<span
 style='mso-spacerun:yes'>  </span>Host credentials for </span><st1:country-region><st1:place><span
-  class=SpellE><span class=GramE><span style='font-size:10.0pt;font-family:
-  Arial'>Uk</span></span></span></st1:place></st1:country-region><span
+  style='font-size:10.0pt;font-family:Arial'>Uk</span></st1:place></st1:country-region><span
 style='font-size:10.0pt;font-family:Arial'> e-Science can be requested from <a
-href="http://ca.grid-support.ac.uk/"><span class=SpellE>Uk</span> <span
-class=SpellE>eScience</span> CA</a>. <o:p></o:p></span></p>
+href="http://ca.grid-support.ac.uk/">Uk eScience CA</a>. <o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>(NB: The Data Portal requires a <span class=SpellE>MyProxy</span>
-Server to request a user credential to authenticate the user to the Data
-Portal.<span style='mso-spacerun:yes'>  </span>To request a user's credential
-the Data Portal needs a host public and private key in <span class=SpellE>Globus</span>
-format to authenticate itself to the <span class=SpellE>MyProxy</span> server,
-the DN of this host certificate <span class=GramE>must be allowed</span> to get
-user's credentials out of the <span class=SpellE>MyProxy</span> server).</span></p>
+10.0pt;font-family:Arial'>(NB: The Data Portal requires a MyProxy Server to
+request a user credential to authenticate the user to the Data Portal.<span
+style='mso-spacerun:yes'>  </span>To request a user's credential the Data
+Portal needs a host public and private key in Globus format to authenticate
+itself to the MyProxy server, the DN of this host certificate must be allowed
+to get user's credentials out of the MyProxy server).</span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=SpellE><span
-class=GramE><span style='font-size:10.0pt;font-family:Arial'>manager.password</span></span></span><span
-style='font-size:10.0pt;font-family:Arial'> and <span class=SpellE>manager.username</span>
-are needed to install the Data Portal modules onto tomcat.&nbsp; Change the
-file $CATALINA_HOME/conf/tomcat-<span class=SpellE>users.xml</span>. </span></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>manager.password and manager.username are needed to
+install the Data Portal modules onto tomcat.&nbsp; Change the file $CATALINA_HOME/conf/tomcat-users.xml.
+</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>Insert this line or modify by adding a role manager
-to the role attribute of the user xml tag:</span></p>
+to the role attribute of the user xml tag highlighted in blue here:</span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
-style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
-mso-highlight:white'>user</span><span style='font-size:8.5pt;font-family:Arial;
-color:red;background:white;mso-highlight:white'> username</span><span
+font-family:Arial;color:maroon;background:white;mso-highlight:white'>&lt;user
+username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;tomcat </span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'>tomcat</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:red;background:white;mso-highlight:white'> password</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'>tomcat</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:red;background:white;mso-highlight:white'> roles</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'>tomcat</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>, </span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'>manager</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&quot;/&gt;</span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'> </span><span
-style='font-size:8.5pt;font-family:Arial;color:black'><o:p></o:p></span></p>
+mso-highlight:white'>, manager</span><span style='font-size:8.5pt;font-family:
+Arial;color:maroon;background:white;mso-highlight:white'>&quot;/&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'> </span><span style='font-size:8.5pt;font-family:Arial;
+color:black'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -417,13 +385,17 @@ font-family:Arial'><o:p>&nbsp;</o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>Making sure the username and password are matching
-the ones in the <span class=SpellE>build.properties</span> file. </span></p>
+the ones in the build.properties file. </span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>4) <span class=SpellE>Inbetween</span> <i
-style='mso-bidi-font-style:normal'>the &lt;<span class=SpellE>GlobalNamingResources</span>&gt;
-tags near the top of the $CATALINA_HOME/conf/<span class=SpellE>server.xml</span>
-file and below the &lt;Environment&gt; tag.</i></span></p>
+10.0pt;font-family:Arial'>4) <i style='mso-bidi-font-style:normal'>Inbetween</i>
+<i style='mso-bidi-font-style:normal'>the &lt;GlobalNamingResources&gt; tags
+near the top of the $CATALINA_HOME/conf/server.xml file and below the
+&lt;Environment&gt; tag.<o:p></o:p></i></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>Text documents containing these tags can be found <a
+href="server.xml.tags">here</a></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -477,10 +449,8 @@ text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.
 mso-layout-grid-align:none;text-autospace:none'><span lang=FR style='font-size:
 8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white;
 mso-ansi-language:FR'><span style='mso-spacerun:yes'>  </span></span><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:black;
-background:white;mso-highlight:white'>..insert</span></span><span
 style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'> here.... <o:p></o:p></span></p>
+mso-highlight:white'>..insert here.... <o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -491,27 +461,25 @@ font-family:Arial;color:black;background:white;mso-highlight:white'><o:p>&nbsp;<
 8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'> </span></span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>GlobalNamingResources</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:blue'><o:p></o:p></span></p>
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>GlobalNamingResources</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>Insert this sections into the <span class=SpellE>the</span>
-file.</span></p>
+10.0pt;font-family:Arial'>Insert this sections into the the file.</span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:10.0pt;
-font-family:Arial'>&nbsp;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;!--</span></span><span
+font-family:Arial'>&nbsp;</span><span style='font-size:8.5pt;font-family:Arial;
+color:blue;background:white;mso-highlight:white'>&lt;!--</span><span
 style='font-size:8.5pt;font-family:Arial;color:gray;background:white;
 mso-highlight:white'><span style='mso-spacerun:yes'>  </span>Used to connect to
-the HSQL database for the <span class=SpellE>dataportal</span> </span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>--&gt;</span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+the HSQL database for the dataportal </span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>--&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -521,8 +489,8 @@ style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
 mso-highlight:white'>Resource</span><span style='font-size:8.5pt;font-family:
 Arial;color:red;background:white;mso-highlight:white'> name</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span class=SpellE><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>jdbc/dataportalDB</span></span><span
+mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
+Arial;color:black;background:white;mso-highlight:white'>jdbc/dataportalDB</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
 Arial;color:red;background:white;mso-highlight:white'> auth</span><span
@@ -533,8 +501,8 @@ style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
 Arial;color:red;background:white;mso-highlight:white'> type</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span class=SpellE><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>javax.sql.DataSource</span></span><span
+mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
+Arial;color:black;background:white;mso-highlight:white'>javax.sql.DataSource</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&quot;/&gt;</span><span style='font-size:8.5pt;font-family:
 Arial;color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
@@ -545,16 +513,15 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>      </span></span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>ResourceParams</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:red;background:white;mso-highlight:
-white'> name</span><span style='font-size:8.5pt;font-family:Arial;color:blue;
-background:white;mso-highlight:white'>=&quot;</span><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>jdbc/dataportalDB</span></span><span style='font-size:
-8.5pt;font-family:Arial;color:blue;background:white;mso-highlight:white'>&quot;&gt;</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'><o:p></o:p></span></p>
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>ResourceParams</span><span style='font-size:8.5pt;
+font-family:Arial;color:red;background:white;mso-highlight:white'> name</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
+Arial;color:black;background:white;mso-highlight:white'>jdbc/dataportalDB</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&quot;&gt;</span><span style='font-size:8.5pt;font-family:
+Arial;color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -562,11 +529,11 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>      </span></span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>parameter</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>parameter</span><span style='font-size:8.5pt;font-family:
+Arial;color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -574,11 +541,11 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                           </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>name</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span></span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'>factory</span><span
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>factory</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>name</span><span
@@ -595,8 +562,8 @@ style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>value</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span class=SpellE><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'>org.apache.commons.dbcp.BasicDataSourceFactory</span></span><span
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>org.apache.commons.dbcp.BasicDataSourceFactory</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>value</span><span
@@ -622,14 +589,14 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                        </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;&lt;</span><span style='font-size:8.5pt;font-family:
 Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span class=SpellE><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'>maxActive</span></span><span
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>maxActive</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>name</span><span
@@ -655,14 +622,14 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                        </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;&lt;</span><span style='font-size:8.5pt;font-family:
 Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span class=SpellE><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'>maxIdle</span></span><span
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>maxIdle</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>name</span><span
@@ -686,17 +653,16 @@ color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>                 </span><span
-style='mso-spacerun:yes'>       </span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>parameter</span></span><span
+style='mso-spacerun:yes'>                        </span></span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;&lt;</span><span style='font-size:8.5pt;font-family:
 Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span class=SpellE><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'>maxWait</span></span><span
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>maxWait</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>name</span><span
@@ -722,8 +688,8 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                        </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;&lt;</span><span style='font-size:8.5pt;font-family:
 Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
@@ -755,8 +721,8 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                        </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;&lt;</span><span style='font-size:8.5pt;font-family:
 Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
@@ -788,8 +754,8 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                        </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
 color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
@@ -800,16 +766,16 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                                     </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>name</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span></span><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>logAbandoned</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
-style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
-mso-highlight:white'>name</span><span style='font-size:8.5pt;font-family:Arial;
-color:blue;background:white;mso-highlight:white'>&gt;<o:p></o:p></span></p>
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>logAbandoned</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>name</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&gt;<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -817,11 +783,11 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                                     </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>value</span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>value</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span></span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'>true</span><span
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>true</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>value</span><span
@@ -847,31 +813,11 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                         </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
 color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>             </span><span
-style='mso-spacerun:yes'>                        </span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span></span><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>removeAbandoned</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
-style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
-mso-highlight:white'>name</span><span style='font-size:8.5pt;font-family:Arial;
-color:blue;background:white;mso-highlight:white'>&gt;</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -879,54 +825,11 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>                                     </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>value</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span></span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'>true</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
-color:maroon;background:white;mso-highlight:white'>value</span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>name</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>                          </span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
-color:maroon;background:white;mso-highlight:white'>parameter</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'> <o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>                          </span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>              </span><span style='mso-tab-count:2'>             </span><span
-style='mso-spacerun:yes'>           </span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>name</span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&gt;</span></span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:black;
-background:white;mso-highlight:white'>driverClassName</span></span><span
+color:black;background:white;mso-highlight:white'>removeAbandoned</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>name</span><span
@@ -938,17 +841,78 @@ color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>            </span><span
-style='mso-spacerun:yes'> </span><span style='mso-tab-count:2'>              </span><span
+style='mso-spacerun:yes'>                                     </span></span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>value</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>true</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>value</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><span
+style='mso-spacerun:yes'>                          </span></span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'> <o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><span
+style='mso-spacerun:yes'>                          </span></span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><span
+style='mso-spacerun:yes'>      </span><span
+style='mso-spacerun:yes'>        </span><span style='mso-tab-count:2'>             </span><span
+style='mso-spacerun:yes'>           </span></span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>name</span><span style='font-size:8.5pt;font-family:Arial;
+color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'>driverClassName</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>name</span><span style='font-size:8.5pt;font-family:Arial;
+color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><span
+style='mso-spacerun:yes'>             </span><span style='mso-tab-count:2'>              </span><span
 style='mso-spacerun:yes'>       </span><span style='mso-tab-count:1'>      </span><span
 style='mso-spacerun:yes'>    </span></span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
 style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
 mso-highlight:white'>value</span><span style='font-size:8.5pt;font-family:Arial;
-color:blue;background:white;mso-highlight:white'>&gt;</span><span class=SpellE><span
+color:blue;background:white;mso-highlight:white'>&gt;</span><span
 style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>org.hsqldb.jdbcDriver</span></span><span style='font-size:
-8.5pt;font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
+mso-highlight:white'>org.hsqldb.jdbcDriver</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
 style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
 mso-highlight:white'>value</span><span style='font-size:8.5pt;font-family:Arial;
 color:blue;background:white;mso-highlight:white'>&gt;</span><span
@@ -974,8 +938,8 @@ font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'> </span><span style='mso-tab-count:1'>      </span><span
 style='mso-spacerun:yes'>                    </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
 color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
@@ -987,75 +951,11 @@ font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>       </span><span style='mso-tab-count:2'>             </span><span
 style='mso-spacerun:yes'>                  </span></span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>name</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span></span><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>url</span></span><span style='font-size:8.5pt;font-family:
-Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
-style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
-mso-highlight:white'>name</span><span style='font-size:8.5pt;font-family:Arial;
-color:blue;background:white;mso-highlight:white'>&gt;</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'><o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>                    </span><span style='mso-tab-count:
-2'>             </span><span style='mso-spacerun:yes'>    </span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>value</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span></span><span style='font-size:8.5pt;font-family:
-Arial;color:black;background:white;mso-highlight:white'>jdbc:hsqldb:hsql://localhost:9002/dpdb</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
-color:maroon;background:white;mso-highlight:white'>value</span><span
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>name</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-tab-count:2'>             </span><span style='mso-spacerun:yes'>    
-</span><span style='mso-spacerun:yes'>       </span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
-color:maroon;background:white;mso-highlight:white'>parameter</span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>          </span><span style='mso-tab-count:3'>                 </span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&lt;</span><span class=GramE><span style='font-size:8.5pt;
-font-family:Arial;color:maroon;background:white;mso-highlight:white'>parameter</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:black;background:white;mso-highlight:white'><span
-style='mso-tab-count:4'>                           </span><span
-style='mso-spacerun:yes'>           </span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>name</span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&gt;</span></span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:black;
-background:white;mso-highlight:white'>validationQuery</span></span><span
+color:black;background:white;mso-highlight:white'>url</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
 color:maroon;background:white;mso-highlight:white'>name</span><span
@@ -1067,12 +967,76 @@ color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
+style='mso-spacerun:yes'>                    </span><span style='mso-tab-count:
+2'>             </span><span style='mso-spacerun:yes'>   </span><span
+style='mso-spacerun:yes'> </span></span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>value</span><span style='font-size:8.5pt;font-family:Arial;
+color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'>jdbc:hsqldb:hsql://localhost:9002/dpdb</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&lt;/</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>value</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><span
+style='mso-tab-count:2'>             </span><span
+style='mso-spacerun:yes'>            </span></span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>parameter</span><span style='font-size:8.5pt;font-family:
+Arial;color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><span
+style='mso-spacerun:yes'>          </span><span style='mso-tab-count:3'>                 </span></span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&lt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:maroon;background:white;mso-highlight:white'>parameter</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-tab-count:4'>                           </span><span
 style='mso-spacerun:yes'>           </span></span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
-class=GramE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>value</span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>&gt;</span></span><span
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>name</span><span style='font-size:8.5pt;font-family:Arial;
+color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'>validationQuery</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>name</span><span style='font-size:8.5pt;font-family:Arial;
+color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'><o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><span
+style='mso-tab-count:4'>                           </span><span
+style='mso-spacerun:yes'>           </span></span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>value</span><span style='font-size:8.5pt;font-family:Arial;
+color:blue;background:white;mso-highlight:white'>&gt;</span><span
 style='font-size:8.5pt;font-family:Arial;color:black;background:white;
 mso-highlight:white'>select count(*) from CART</span><span style='font-size:
 8.5pt;font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
@@ -1101,19 +1065,18 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'> </span></span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>ResourceParams</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>ResourceParams</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>5) <i style='mso-bidi-font-style:normal'>Also</i> <i
-style='mso-bidi-font-style:normal'>insert <span class=SpellE>inbewteen</span>
-the &lt;Host&gt; tags just below the &lt;Logger&gt; and above the &lt;/Host&gt;
-tag</i></span></p>
+style='mso-bidi-font-style:normal'>insert inbewteen the &lt;Host&gt; tags just
+below the &lt;Logger&gt; and above the &lt;/Host&gt; tag</i></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
@@ -1131,10 +1094,10 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
 style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
 mso-highlight:white'>Logger</span><span style='font-size:8.5pt;font-family:
-Arial;color:red;background:white;mso-highlight:white'> <span class=SpellE>className</span></span><span
+Arial;color:red;background:white;mso-highlight:white'> className</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span class=SpellE><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>org.apache.catalina.logger.FileLogger</span></span><span
+mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
+Arial;color:black;background:white;mso-highlight:white'>org.apache.catalina.logger.FileLogger</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
 Arial;color:red;background:white;mso-highlight:white'><o:p></o:p></span></p>
@@ -1143,7 +1106,7 @@ Arial;color:red;background:white;mso-highlight:white'><o:p></o:p></span></p>
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:red;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>                 </span><span class=GramE>directory</span></span><span
+style='mso-spacerun:yes'>                 </span>directory</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
 Arial;color:black;background:white;mso-highlight:white'>logs</span><span
@@ -1152,11 +1115,9 @@ mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
 Arial;color:red;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>  </span>prefix</span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>=&quot;</span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:black;
-background:white;mso-highlight:white'>localhost_log</span></span><span
 style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>.</span><span style='font-size:8.5pt;font-family:Arial;
-color:blue;background:white;mso-highlight:white'>&quot;</span><span
+mso-highlight:white'>localhost_log.</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&quot;</span><span
 style='font-size:8.5pt;font-family:Arial;color:red;background:white;mso-highlight:
 white'> suffix</span><span style='font-size:8.5pt;font-family:Arial;color:blue;
 background:white;mso-highlight:white'>=&quot;</span><span style='font-size:
@@ -1169,7 +1130,7 @@ Arial;color:red;background:white;mso-highlight:white'><o:p></o:p></span></p>
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:red;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>            </span><span class=GramE>timestamp</span></span><span
+style='mso-spacerun:yes'>            </span>timestamp</span><span
 style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
 mso-highlight:white'>=&quot;</span><span style='font-size:8.5pt;font-family:
 Arial;color:black;background:white;mso-highlight:white'>true</span><span
@@ -1219,17 +1180,16 @@ text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><o:p>&nbsp;</o:p></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-style='font-size:10.0pt;font-family:Arial'>this</span></span><span
-style='font-size:10.0pt;font-family:Arial'>:</span></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>this:</span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:10.0pt;
 font-family:Arial'>&nbsp;</span><span style='font-size:8.5pt;font-family:Arial;
-color:blue;background:white;mso-highlight:white'>&lt;</span><span class=SpellE><span
+color:blue;background:white;mso-highlight:white'>&lt;</span><span
 style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
-mso-highlight:white'>DefaultContext</span></span><span style='font-size:8.5pt;
+mso-highlight:white'>DefaultContext</span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&gt;</span><span
 style='font-size:8.5pt;font-family:Arial;color:black;background:white;
 mso-highlight:white'><o:p></o:p></span></p>
@@ -1240,164 +1200,141 @@ mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:black;background:white;mso-highlight:white'><span
 style='mso-spacerun:yes'>   </span></span><span style='font-size:8.5pt;
 font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;</span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>ResourceLink</span></span><span
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>ResourceLink</span><span style='font-size:8.5pt;
+font-family:Arial;color:red;background:white;mso-highlight:white'> <o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
+text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:red;background:white;mso-highlight:white'><span
+style='mso-spacerun:yes'>     </span>name</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>=&quot;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'>jdbc/dataportalDB</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&quot;</span><span
 style='font-size:8.5pt;font-family:Arial;color:red;background:white;mso-highlight:
-white'> <o:p></o:p></span></p>
+white'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:red;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>     </span><span class=GramE>name</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span class=SpellE><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>jdbc/dataportalDB</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:red;background:white;mso-highlight:white'><o:p></o:p></span></p>
+style='mso-spacerun:yes'>     </span>global</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>=&quot;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'>jdbc/dataportalDB</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&quot;</span><span
+style='font-size:8.5pt;font-family:Arial;color:red;background:white;mso-highlight:
+white'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
 mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
 font-family:Arial;color:red;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>     </span><span class=GramE>global</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span class=SpellE><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>jdbc/dataportalDB</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:red;background:white;mso-highlight:white'><o:p></o:p></span></p>
-
-<p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
-text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
-font-family:Arial;color:red;background:white;mso-highlight:white'><span
-style='mso-spacerun:yes'>     </span><span class=GramE>type</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>=&quot;</span><span class=SpellE><span style='font-size:
-8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>javax.sql.DataSource</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&quot;</span><span style='font-size:8.5pt;font-family:
-Arial;color:red;background:white;mso-highlight:white'> </span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>/&gt;</span><span style='font-size:8.5pt;font-family:Arial;
-color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
+style='mso-spacerun:yes'>     </span>type</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>=&quot;</span><span
+style='font-size:8.5pt;font-family:Arial;color:black;background:white;
+mso-highlight:white'>javax.sql.DataSource</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&quot;</span><span
+style='font-size:8.5pt;font-family:Arial;color:red;background:white;mso-highlight:
+white'> </span><span style='font-size:8.5pt;font-family:Arial;color:blue;
+background:white;mso-highlight:white'>/&gt;</span><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'><o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 8.5pt;font-family:Arial;color:blue;background:white;mso-highlight:white'>&lt;/</span><span
-class=SpellE><span style='font-size:8.5pt;font-family:Arial;color:maroon;
-background:white;mso-highlight:white'>DefaultContext</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
-mso-highlight:white'>&gt;</span><span style='font-size:10.0pt;font-family:Arial'>&nbsp;</span><o:p></o:p></p>
+style='font-size:8.5pt;font-family:Arial;color:maroon;background:white;
+mso-highlight:white'>DefaultContext</span><span style='font-size:8.5pt;
+font-family:Arial;color:blue;background:white;mso-highlight:white'>&gt;</span><span
+style='font-size:10.0pt;font-family:Arial'>&nbsp;</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>6)&nbsp;<span class=GramE><i style='mso-bidi-font-style:
-normal'>ant</i></span><i style='mso-bidi-font-style:normal'> <span
-class=SpellE>install_dp</span></i>&nbsp;&nbsp;&nbsp; (NB: All ant commands need
-to be executed in the $DATAPORTAL_HOME directory)</span></p>
+10.0pt;font-family:Arial'>6)&nbsp;<i style='mso-bidi-font-style:normal'>ant
+install_dp</i>&nbsp;&nbsp;&nbsp; (NB: All ant commands need to be executed in
+the $DATAPORTAL_HOME directory)</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>This installs the UDDI, databases and relevant
 libraries into your tomcat instance.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>(NB: This process installs all the axis and <span
-class=SpellE>jglobus</span> jar files into $CATALINA_HOME/shared/lib.</span></p>
+10.0pt;font-family:Arial'>(NB: This process installs all the axis and jglobus
+jar files into $CATALINA_HOME/shared/lib.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>It also puts <span class=SpellE>dp_common.jar</span>,
-<span class=SpellE>hsqldb.jar</span>, <span class=SpellE>mail.jar</span>, <span
-class=SpellE>activation.jar</span>, <span class=SpellE>jdom.jar</span> and the
-two files <span class=SpellE>jstl.jar</span> and <span class=SpellE>standard.jar</span>
-in there)</span></p>
+10.0pt;font-family:Arial'>It also puts dp_common.jar, hsqldb.jar, mail.jar,
+activation.jar, jdom.jar and the two files jstl.jar and standard.jar in there)</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>7) <span class=GramE><i style='mso-bidi-font-style:
-normal'>ant</i></span><i style='mso-bidi-font-style:normal'> <span
-class=SpellE>start_dbs</span></i></span><i style='mso-bidi-font-style:normal'><o:p></o:p></i></p>
+10.0pt;font-family:Arial'>7) <i style='mso-bidi-font-style:normal'>ant
+start_dbs</i></span><i style='mso-bidi-font-style:normal'><o:p></o:p></i></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>This starts up the databases.&nbsp; These <span
-class=GramE>are needed</span> for the UDDI registry and the data portal
-modules.</span></p>
+10.0pt;font-family:Arial'>This starts up the databases.&nbsp; These are needed
+for the UDDI registry and the data portal modules.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>(<span class=GramE>NB:</span> <i style='mso-bidi-font-style:
-normal'>ant <span class=SpellE>stop_dbs</span> </i></span><i style='mso-bidi-font-style:
-normal'><o:p></o:p></i></p>
-
-<p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-style='font-size:10.0pt;font-family:Arial'>stops</span></span><span
-style='font-size:10.0pt;font-family:Arial'> the two database instances.</span></p>
+10.0pt;font-family:Arial'>(NB: <i style='mso-bidi-font-style:normal'>ant stop_dbs
+</i></span><i style='mso-bidi-font-style:normal'><o:p></o:p></i></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>(Extra: To view the data portal database run 'ant <span
-class=SpellE>run_GUI</span>' <span class=GramE>which should open a database
-window to the Data Portal database))</span></span></p>
+10.0pt;font-family:Arial'>stops the two database instances.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>8)&nbsp;<span class=SpellE><span class=GramE><i
-style='mso-bidi-font-style:normal'>startup</i></span></span><i
-style='mso-bidi-font-style:normal'> the tomcat instance.&nbsp; <span
-class=SpellE>Goto</span></i> $CATALINA_HOME/bin and execute <span class=SpellE>startup.bat</span>
-or <span class=SpellE>startup.sh</span></span></p>
+10.0pt;font-family:Arial'>(Extra: To view the data portal database run 'ant
+run_GUI' which should open a database window to the Data Portal database))</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>9) <span class=GramE><i style='mso-bidi-font-style:
-normal'>ant</i></span><i style='mso-bidi-font-style:normal'> -f <span
-class=SpellE>installation.xml</span> install</i></span></p>
+10.0pt;font-family:Arial'>8)&nbsp;<i style='mso-bidi-font-style:normal'>startup
+the tomcat instance.&nbsp; Goto</i> $CATALINA_HOME/bin and execute startup.bat
+or startup.sh</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>9) <i style='mso-bidi-font-style:normal'>ant -f
+installation.xml install</i></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>If this fails with a</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>&nbsp;<span class=SpellE><span class=GramE>taskdef</span></span>
-A class needed by class <span class=SpellE>org.apache.catalina.ant.InstallTask</span>
-cannot be found: org/apache/tools/ant/Task</span></p>
-
-<p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-style='font-size:10.0pt;font-family:Arial'>error</span></span><span
-style='font-size:10.0pt;font-family:Arial'> then:</span></p>
-
-<p class=MsoNormal align=left style='text-align:left'><span class=SpellE><span
-style='font-size:10.0pt;font-family:Arial'>i</span></span><span
-style='font-size:10.0pt;font-family:Arial'>) <span class=GramE><i
-style='mso-bidi-font-style:normal'>shutdown</i></span><i style='mso-bidi-font-style:
-normal'> tomcat</i> ($CATALINA_HOME/bin/<span class=SpellE>shutdown.sh</span>(bat))</span></p>
+10.0pt;font-family:Arial'>&nbsp;taskdef A class needed by class
+org.apache.catalina.ant.InstallTask cannot be found: org/apache/tools/ant/Task</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>ii) <span class=GramE><i style='mso-bidi-font-style:
-normal'>ant</i></span><i style='mso-bidi-font-style:normal'> -f <span
-class=SpellE>installation.xml</span> install2</i></span></p>
+10.0pt;font-family:Arial'>error then:</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>iii) <span class=GramE><i style='mso-bidi-font-style:
-normal'>then</i></span><i style='mso-bidi-font-style:normal'> restart tomcat</i>
-($CATALINA_HOME/bin/<span class=SpellE>startup.sh</span>(bat))</span></p>
+10.0pt;font-family:Arial'>i) <i style='mso-bidi-font-style:normal'>shutdown
+tomcat</i> ($CATALINA_HOME/bin/shutdown.sh(bat))</span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>ii) <i style='mso-bidi-font-style:normal'>ant -f
+installation.xml install2</i></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>iii) <i style='mso-bidi-font-style:normal'>then
+restart tomcat</i> ($CATALINA_HOME/bin/startup.sh(bat))</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>This installs all the modules to the tomcat
-instance.&nbsp; Once installed these <span class=GramE>are not needed to be
-installed</span> again and should be present when you restart tomcat again.</span></p>
+instance.&nbsp; Once installed these are not needed to be installed again and
+should be present when you restart tomcat again.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>THE DATAPORTAL <span class=GramE>SHOULD BE INSTALLED</span>
-ONTO YOUR TOMCAT.</span></p>
+10.0pt;font-family:Arial'>THE DATAPORTAL SHOULD BE INSTALLED ONTO YOUR TOMCAT.</span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=SpellE><i
-style='mso-bidi-font-style:normal'><span style='font-size:10.0pt;font-family:
-Arial'>Goto</span></i></span><span style='font-size:10.0pt;font-family:Arial'> <a
+<p class=MsoNormal align=left style='text-align:left'><i style='mso-bidi-font-style:
+normal'><span style='font-size:10.0pt;font-family:Arial'>Goto</span></i><span
+style='font-size:10.0pt;font-family:Arial'> <a
 href="http://localhost:8080/dataportal">http://localhost:8080/dataportal</a>
 and log in.&nbsp; </span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=SpellE><span
-class=GramE><i style='mso-bidi-font-style:normal'><span style='font-size:10.0pt;
-font-family:Arial'>Goto</span></i></span></span><span class=GramE><span
+<p class=MsoNormal align=left style='text-align:left'><i style='mso-bidi-font-style:
+normal'><span style='font-size:10.0pt;font-family:Arial'>Goto</span></i><span
 style='font-size:10.0pt;font-family:Arial'> <a
 href="http://tiber.dl.ac.ul:8080/myproxy">http://tiber.dl.ac.ul:8080/myproxy</a>
-for help to upload <span class=SpellE>Globus</span> proxy into a <span
-class=SpellE>MyProxy</span> Server.</span></span></p>
+for help to upload Globus proxy into a MyProxy Server.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>Once logged in you should have no access to
@@ -1411,17 +1348,13 @@ internal section error thrown)</span></p>
 10.0pt;font-family:Arial'>10)&nbsp; Once installed and running, to start the
 Data Portal when everything is shutdown:</span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=SpellE><span
-style='font-size:10.0pt;font-family:Arial'>i</span></span><span
-style='font-size:10.0pt;font-family:Arial'>) <span class=GramE><i
-style='mso-bidi-font-style:normal'>ant</i></span><i style='mso-bidi-font-style:
-normal'> <span class=SpellE>start_dbs</span></i></span><i style='mso-bidi-font-style:
-normal'><o:p></o:p></i></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>i) <i style='mso-bidi-font-style:normal'>ant
+start_dbs</i></span><i style='mso-bidi-font-style:normal'><o:p></o:p></i></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>ii) <span class=GramE><i style='mso-bidi-font-style:
-normal'>start</i></span><i style='mso-bidi-font-style:normal'> tomcat instance</i>
-($CATALINA_HOME/bin/<span class=SpellE>startup.sh</span>(bat))</span></p>
+10.0pt;font-family:Arial'>ii) <i style='mso-bidi-font-style:normal'>start
+tomcat instance</i> ($CATALINA_HOME/bin/startup.sh(bat))</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>&nbsp;</span></p>
@@ -1430,14 +1363,14 @@ normal'>start</i></span><i style='mso-bidi-font-style:normal'> tomcat instance</
 style='font-size:10.0pt;font-family:Arial'>Configuration of the Data Portal </span></b></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>1) <span class=SpellE><i style='mso-bidi-font-style:
-normal'>Goto</i></span> <a href="http://localhost:8080/facility">http://localhost:8080/facility</a>
-and log in as username tomcat password tomcat. </span></p>
+10.0pt;font-family:Arial'>1) <i style='mso-bidi-font-style:normal'>Goto</i> <a
+href="http://localhost:8080/facility">http://localhost:8080/facility</a> and
+log in as username tomcat password tomcat. </span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>2) <i style='mso-bidi-font-style:normal'>Click
-&quot;Add Facility&quot;.</i>&nbsp; <span class=GramE>There is a test facility
-that</span> allows access to test information.</span></p>
+&quot;Add Facility&quot;.</i>&nbsp; There is a test facility that allows access
+to test information.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>3) <i style='mso-bidi-font-style:normal'>Put in the
@@ -1446,16 +1379,16 @@ normal'><o:p></o:p></i></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>4)&nbsp;<i style='mso-bidi-font-style:normal'>Change
-the values in all the URLs for '<span class=SpellE>localhost</span>' to
-'tiber.dl.ac.uk' and click 'Create Facility'</i></span></p>
+the values in all the URLs for 'localhost' to 'tiber.dl.ac.uk' and click
+'Create Facility'</i></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>This creates a test facility for the Data Portal to
-search <span class=GramE>for</span>.</span></p>
+search for.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>5) <span class=SpellE><i style='mso-bidi-font-style:
-normal'>Goto</i></span> <a href="http://localhost:8080/dataportal">http://localhost:8080/dataportal</a>
+10.0pt;font-family:Arial'>5) <i style='mso-bidi-font-style:normal'>Goto</i> <a
+href="http://localhost:8080/dataportal">http://localhost:8080/dataportal</a>
 and log in again, and you should see a test facility for you to search.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
@@ -1473,15 +1406,14 @@ data and therefore the data transfer section will not work correctly)</span></p>
 style='font-size:10.0pt;font-family:Arial'>Information</span></b></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>1) Log files <span class=GramE>are written</span> to the
-console from the Web Interface.&nbsp; All other modules and the Web Interface
-log their file in the $CATALINA_HOME/logs/<span class=SpellE>dataportal.xml</span>
-file. </span></p>
+10.0pt;font-family:Arial'>1) Log files are written to the console from the Web
+Interface.&nbsp; All other modules and the Web Interface log their file to the
+$CATALINA_HOME/logs/dataportal.xml file. </span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>This file is not <span class=GramE>really human</span>
-readable.&nbsp; It is in the format of Chainsaw.&nbsp; To view this information
-download chainsaw at http://logging.apache.org/log4j/docs/chainsaw.html</span></p>
+10.0pt;font-family:Arial'>This file is not really human readable.&nbsp; It is
+in the format of Chainsaw.&nbsp; To view this information download chainsaw at
+http://logging.apache.org/log4j/docs/chainsaw.html</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>2) Remove Data Portal from tomcat in two ways.&nbsp;
@@ -1494,44 +1426,37 @@ delete.</span></p>
 10.0pt;font-family:Arial'>2.1)<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'><span style='mso-spacerun:yes'> </span><span
-class=SpellE>i</span>) <span class=GramE><i style='mso-bidi-font-style:normal'>ant</i></span><i
-style='mso-bidi-font-style:normal'> -f installation remove</i></span><i
+10.0pt;font-family:Arial'><span style='mso-spacerun:yes'> </span>i) <i
+style='mso-bidi-font-style:normal'>ant -f installation remove</i></span><i
 style='mso-bidi-font-style:normal'><o:p></o:p></i></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'><span style='mso-spacerun:yes'>  </span><span
-class=GramE>If that fails remove all the xml file related to the data portal in
-the $CATALINA_HOME/conf/Catalina/<span class=SpellE>localhost</span> directory.</span></span></p>
+10.0pt;font-family:Arial'><span style='mso-spacerun:yes'>  </span>If that fails
+remove all the xml file related to the data portal in the
+$CATALINA_HOME/conf/Catalina/localhost directory.</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'><span style='mso-spacerun:yes'>  </span>These should be
-<span class=SpellE>dataportal</span>, <span class=SpellE>shopcart</span>,
-facility, <span class=SpellE>juddi</span>, <span class=SpellE>queryandreply</span>,
-<span class=SpellE>uddilookup</span>, <span class=SpellE>sessionmanager</span>,
-<span class=SpellE><span class=GramE>authent</span></span> and <span
-class=SpellE>datatransfer</span> .xml files</span></p>
+10.0pt;font-family:Arial'><span style='mso-spacerun:yes'>  </span>These should
+be dataportal, shopcart, facility, juddi, queryandreply, uddilookup,
+sessionmanager, authent and datatransfer .xml files</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'><span style='mso-spacerun:yes'> </span>ii) <i
-style='mso-bidi-font-style:normal'>Remove <span class=SpellE>juddi</span>
-folder from&nbsp;$CATALINA_HOME/<span class=SpellE>webapps</span></i></span></p>
+style='mso-bidi-font-style:normal'>Remove juddi folder
+from&nbsp;$CATALINA_HOME/webapps</i></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'><span style='mso-spacerun:yes'> </span>iii) <i
 style='mso-bidi-font-style:normal'>Remove new jar files from
-$CATALINA_HOME/shared/lib folder</i>.&nbsp; <span class=SpellE>Goto</span>
-Installation part 6) to find out which jar files <span class=GramE>are
-installed</span></span></p>
-
-<p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-style='font-size:10.0pt;font-family:Arial'>or</span></span><span
-style='font-size:10.0pt;font-family:Arial'> 2.2)<o:p></o:p></span></p>
+$CATALINA_HOME/shared/lib folder</i>.&nbsp; Goto Installation part 6) to find
+out which jar files are installed</span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'><span style='mso-spacerun:yes'>  </span><span
-class=SpellE>i</span>) <span class=GramE><i style='mso-bidi-font-style:normal'>ant</i></span><i
-style='mso-bidi-font-style:normal'> <span class=SpellE>remove_dp</span></i></span></p>
+10.0pt;font-family:Arial'>or 2.2)<o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'><span style='mso-spacerun:yes'>  </span>i) <i
+style='mso-bidi-font-style:normal'>ant remove_dp</i></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>3) The Data Portal can run a server to email an
@@ -1542,102 +1467,107 @@ administrator regarding errors and faults. </span></p>
 normal'>'ant run_log4jserver'</i></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>To configure the server go to dataportal/WebInterface/build/WEB-INF/log4jServer.conf</span></p>
+10.0pt;font-family:Arial'>To configure the server go to
+dataportal/WebInterface/build/WEB-INF/log4jServer.conf</span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>dataportal.id</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>=</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>test<span
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>dataportal.id</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>test<span
 style='mso-spacerun:yes'>                          </span>//id of the email<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>mail.host</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>=</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>exchange06.dl.ac.uk<span
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>mail.host</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>exchange06.dl.ac.uk<span
 style='mso-spacerun:yes'>               </span>//mail server host name of the <o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='margin-bottom:0pt;margin-bottom:.0001pt;
 text-align:left;tab-stops:15.0pt 30.0pt 45.0pt 60.0pt 75.0pt 90.0pt 105.0pt 120.0pt 135.0pt 150.0pt 165.0pt 180.0pt 195.0pt 210.0pt 225.0pt 240.0pt 255.0pt 270.0pt 285.0pt 300.0pt;
-mso-layout-grid-align:none;text-autospace:none'><span class=SpellE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>email.address</span></span><span style='font-size:8.5pt;
-font-family:Arial;color:blue;background:white;mso-highlight:white'>=</span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>g.j.drinkwater@dl.ac.uk<span
+mso-layout-grid-align:none;text-autospace:none'><span style='font-size:8.5pt;
+font-family:Arial;color:black;background:white;mso-highlight:white'>email.address</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>g.j.drinkwater@dl.ac.uk<span
 style='mso-spacerun:yes'>       </span>//list of addresses to send the email
-to, <span class=SpellE>separtted</span> by spaces<o:p></o:p></span></p>
+to, separtted by spaces<o:p></o:p></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>level</span><span style='font-size:8.5pt;font-family:Arial;
-color:blue;background:white;mso-highlight:white'>=</span></span><span
-style='font-size:8.5pt;font-family:Arial;color:black;background:white;
-mso-highlight:white'>ERROR<span style='mso-spacerun:yes'>  </span>// Log4j
-minimum that the message will get emailed.<span style='mso-spacerun:yes'> 
-</span>Only allows ERROR and FATAL</span><span style='font-size:8.5pt;
-font-family:Arial;color:black'><o:p></o:p></span></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+8.5pt;font-family:Arial;color:black;background:white;mso-highlight:white'>level</span><span
+style='font-size:8.5pt;font-family:Arial;color:blue;background:white;
+mso-highlight:white'>=</span><span style='font-size:8.5pt;font-family:Arial;
+color:black;background:white;mso-highlight:white'>ERROR<span
+style='mso-spacerun:yes'>  </span>// Log4j minimum that the message will get
+emailed.<span style='mso-spacerun:yes'>  </span>Only allows ERROR and FATAL</span><span
+style='font-size:8.5pt;font-family:Arial;color:black'><o:p></o:p></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-style='font-size:10.0pt;font-family:Arial;color:black'>4) Using different
-databases than <span class=SpellE>HypersonicSQL</span> for the data portal
-databases.</span></span><span style='font-size:10.0pt;font-family:Arial;
-color:black'><span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial;color:black'>4) Using different databases than
+HypersonicSQL for the data portal databases.<span style='mso-spacerun:yes'> 
+</span><o:p></o:p></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=SpellE><span
-style='font-size:10.0pt;font-family:Arial;color:black'>i</span></span><span
-style='font-size:10.0pt;font-family:Arial;color:black'>) To configure different
-databases rather than using the default <span class=SpellE>HypersonicSQL</span>
-you need to create the database tables in your new database using the scripts </span><span
-style='font-size:10.0pt;font-family:Arial'>$DATAPORTAL_HOME/<span class=SpellE>sql</span>.<span
-style='mso-spacerun:yes'>  </span>Modifying the <span class=GramE>three <span
-class=SpellE>sql</span></span> scripts for your database, the only problem
-might be with the LONGVARBINARY which is used in the <span class=SpellE>shoppingcart_hsql.sql</span>
-file to represent a BLOB, and create the tables in the new database.<o:p></o:p></span></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial;color:black'>i) To configure different databases
+rather than using the default HypersonicSQL you need to create the database
+tables in your new database using the scripts </span><span style='font-size:
+10.0pt;font-family:Arial'>$DATAPORTAL_HOME/sql.<span style='mso-spacerun:yes'> 
+</span>Modifying the three sql scripts for your database, the only problem
+might be with the LONGVARBINARY which is used in the shoppingcart_hsql.sql file
+to represent a BLOB, and create the tables in the new database.<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
 10.0pt;font-family:Arial'>ii)<span style='mso-spacerun:yes'>  </span>Change the
-username, password, <span class=SpellE><span style='color:black;background:
-white;mso-highlight:white'>driverClassName</span></span><span style='color:
-black'> and <span class=SpellE><span class=GramE>url</span></span> in the <span
-class=SpellE><span style='background:white;mso-highlight:white'>GlobalNamingResources</span>/ResourceParams/parameter/name</span>
-tags of section 4's installation within the </span>$CATALINA_HOME/cong/<span
-class=SpellE>server.xml</span> file.<o:p></o:p></span></p>
+username, password, <span style='color:black;background:white;mso-highlight:
+white'>driverClassName</span><span style='color:black'> and url in the <span
+style='background:white;mso-highlight:white'>GlobalNamingResources</span>/ResourceParams/parameter/name
+tags of section 4's installation within the </span>$CATALINA_HOME/cong/server.xml
+file.<o:p></o:p></span></p>
 
 <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-10.0pt;font-family:Arial'>(NB: <span class=SpellE>Goto</span> <a
+10.0pt;font-family:Arial'>(NB: Goto <a
 href="http://jakarta.apache.org/tomcat/tomcat-5.0-doc/jndi-datasource-examples-howto.html">Apache
 Tomcat</a> for help on tomcat database pooling)<o:p></o:p></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-style='font-size:10.0pt;font-family:Arial'>5) <span style='color:black'>Using
-different databases than <span class=SpellE>HypersonicSQL</span> for the UDDI
-databases.</span></span></span><span style='font-size:10.0pt;font-family:Arial;
-color:black'><span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial'>5) <span style='color:black'>Using different
+databases than HypersonicSQL for the UDDI databases.<span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=SpellE><span
-class=GramE><span style='font-size:10.0pt;font-family:Arial;color:black'>i</span></span></span><span
-class=GramE><span style='font-size:10.0pt;font-family:Arial;color:black'>) <span
-class=SpellE>Goto</span> <a href="http://ws.apache.org/juddi/install.html">JUDDI</a>
-for help installing JUDDI on another database.</span></span><span
-style='font-size:10.0pt;font-family:Arial;color:black'><span
-style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial;color:black'>i) Goto <a
+href="http://ws.apache.org/juddi/install.html">JUDDI</a> for help installing
+JUDDI on another database.<span style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
 
-<p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-style='font-size:10.0pt;font-family:Arial;color:black'>ii) Once installed
-change the file's properties located in </span><span style='font-size:10.0pt;
-font-family:Arial'>$<span class=SpellE>DATAPORTAL_HOME<span style='color:black'>/dataportal/facility/web/WEB-INF/uddi.properties</span></span><span
-style='color:black'> to the <span class=SpellE>uddi_username</span>, <span
-class=SpellE>uddi_password</span>, <span class=SpellE>uddi_inquiry</span> and <span
-class=SpellE>uddi_publish</span> of your JUDDI installation.</span></span></span><span
-style='font-size:10.0pt;font-family:Arial;color:black'><o:p></o:p></span></p>
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial;color:black'>ii) Once installed change the file's
+properties located in </span><span style='font-size:10.0pt;font-family:Arial'>$DATAPORTAL_HOME<span
+style='color:black'>/dataportal/facility/web/WEB-INF/uddi.properties to the
+uddi_username, uddi_password, uddi_inquiry and uddi_publish of your JUDDI
+installation.<span style='mso-spacerun:yes'>  </span>The code needs to be
+recompiled with the command 'and -f installation.xml compile' when tomcat is
+stopped.<o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><b style='mso-bidi-font-weight:
+normal'><span style='font-size:10.0pt;font-family:Arial;color:black'>Tested OS
+Systems<o:p></o:p></span></b></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial;color:black'>This version of the Data Portal has been successfully
+tested on Window 2000, Windows XP, RedHat Enterprise Edition 3, RedHat 9,
+Gentoo, SuSe 9.x. <o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial;color:black'>All tested on Java(TM) 2 Runtime
+Environment, Standard Edition version 1.4.1 or 1.4.2.<o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style='text-align:left'><span style='font-size:
+10.0pt;font-family:Arial;color:black'><o:p>&nbsp;</o:p></span></p>
 
 </div>
 

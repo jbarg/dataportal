@@ -171,6 +171,7 @@
               <copy todir="${dataportal.home}/common/shared">
               <fileset dir="${dataportal.src}/common/tomcat/shared">
                  <include name="*.jar"/>
+                 <include name="*.LICENSE"/>
             </fileset>
               </copy>
               
