@@ -37,8 +37,8 @@
          <xsd:element name="AccessConditions" type="xsd:string"/>
 	 <xsd:element name="RelatedMaterial" type="cmd:RelatedMaterialTypes" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
-      <xsd:attribute name="metadataID" type="cmd:metadataIDKeyType" use="required"/>
-      <xsd:attribute name="facility" type="xsd:string" use="required"/>
+      <xsd:attribute name="MetadataID" type="cmd:metadataIDKeyType" use="required"/>
+      <xsd:attribute name="Facility" type="xsd:string" use="required"/>
    </xsd:complexType>
 
    <!-- metadataID uniquely identified one record - logicaly it consists of the -->
@@ -75,7 +75,7 @@
       <xsd:sequence>
 	 <xsd:element name="Discipline" type="xsd:string"/>
 	 <xsd:element name="KeywordSource" type="xsd:string" minOccurs="0"/>
-	 <xsd:element name="Keyword" type="xsd:string" />
+	 <xsd:element name="Keyword" type="xsd:string" maxOccurs="unbounded" />
       </xsd:sequence>
    </xsd:complexType>
 
@@ -107,6 +107,7 @@
 	 <!-- sc -->
 	 <xsd:element name="Investigation"    type="cmd:InvestigationType" minOccurs="1" maxOccurs="unbounded"/>
       </xsd:sequence>
+      <xsd:attribute name="StudyID" type="xsd:ID" use="required"/>
    </xsd:complexType>
 
    <xsd:complexType name="InvestigationType">
@@ -125,8 +126,11 @@
 
    <xsd:simpleType name="InvestigationTypes">
      <xsd:restriction base="xsd:string">
+	<xsd:enumeration value="Experiment"/>
 	<xsd:enumeration value="experiment"/>
+        <xsd:enumeration value="Measurement"/>
         <xsd:enumeration value="measurement"/>
+	<xsd:enumeration value="Simulation"/>
 	<xsd:enumeration value="simulation"/>
         <xsd:enumeration value="other"/>
      </xsd:restriction>
@@ -232,7 +236,7 @@
   <xsd:complexType name="NameType">
      <xsd:sequence>
         <xsd:element name="Surname" type="xsd:string"/>
-        <xsd:element name="Initials" type="xsd:string"/>
+        <xsd:element name="MiddleInitials" type="xsd:string"/>
         <xsd:element name="Forename" type="xsd:string" minOccurs="0"/>
         <xsd:element name="Title" type="cmd:TitleTypes" minOccurs="0" maxOccurs="1"/>
      </xsd:sequence>
@@ -351,7 +355,7 @@
       </xsd:sequence>
 <!-- again following attribute type should really be a CDATA equivelent -->
 <!-- but can't seem to find it -->
-      <xsd:attribute name="InvestigationID" type="xsd:ID" use="required"/>
+      <xsd:attribute name="InvestigationID" type="xsd:IDREF" use="required"/>
    </xsd:complexType>
 
 
@@ -471,8 +475,13 @@
 
    <xsd:simpleType name="TypesOfData">
       <xsd:restriction base="xsd:string">
+	 <xsd:enumeration value="File Based"/>
 	 <xsd:enumeration value="File"/>
+	 <xsd:enumeration value="BLOB Based"/>
 	 <xsd:enumeration value="BLOB"/>
+	 <xsd:enumeration value="Database Select Based"/>
+	 <xsd:enumeration value="Database Select"/>
+         <xsd:enumeration value="other"/>
          <xsd:enumeration value="other"/>
       </xsd:restriction>
    </xsd:simpleType>
