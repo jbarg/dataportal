@@ -1,0 +1,20 @@
+<fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
+  <createFacility>
+    <facilityName>EMIN</facilityName>
+    <facilityDescription>E-Minerals</facilityDescription>
+    <service>
+      <serviceName>Access Control Module</serviceName>
+      <serviceDescription>Returns EMIN Access Control details for user</serviceDescription>
+      <serviceType>ACM</serviceType>
+      <serviceEndpoint>http://wk-pc1.dl.ac.uk:8080/acmemin/services/acm</serviceEndpoint>
+      <serviceWSDL>http://wk-pc1.dl.ac.uk:8080/acmemin/services/acm?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>XML Wrapper</serviceName>
+      <serviceDescription>Returns XML data from remote database</serviceDescription>
+      <serviceType>XMLW</serviceType>
+      <serviceEndpoint>http://wk-pc1.dl.ac.uk:8080/xmlw-em/services/xmlwrapper_emin</serviceEndpoint>
+      <serviceWSDL>http://wk-pc1.dl.ac.uk:8080/xmlw-em/services/xmlwrapper_emin?wsdl</serviceWSDL>
+    </service>
+  </createFacility>
+</fadm:facilityAdmin>
