@@ -1,0 +1,27 @@
+MODULE_VERSION_STACK=3.1.6
+HOSTNAME=grid-data.rl.ac.uk
+TERM=vt100
+SHELL=/bin/bash
+HISTSIZE=1000
+SSH_CLIENT=130.246.72.35 2732 22
+SSH_TTY=/dev/pts/0
+USER=psb20
+LS_COLORS=no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32:*.cmd=01;32:*.exe=01;32:*.com=01;32:*.btm=01;32:*.bat=01;32:*.sh=01;32:*.csh=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.bz=01;31:*.tz=01;31:*.rpm=01;31:*.cpio=01;31:*.jpg=01;35:*.gif=01;35:*.bmp=01;35:*.xbm=01;35:*.xpm=01;35:*.png=01;35:*.tif=01;35:
+ENV=/home/psb20/.bashrc
+MODULE_VERSION=3.1.6
+MAIL=/var/spool/mail/psb20
+PATH=/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin
+INPUTRC=/etc/inputrc
+PWD=/home/psb20
+LANG=en_US.UTF-8
+MODULEPATH=/usr/local/Cluster-Config/Modulesfiles/
+LOADEDMODULES=
+SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+SHLVL=1
+HOME=/home/psb20
+LOGNAME=psb20
+SSH_CONNECTION=130.246.72.35 2732 130.246.143.163 22
+MODULESHOME=/usr/local/Cluster-Apps/Modules/
+LESSOPEN=|/usr/bin/lesspipe.sh %s
+G_BROKEN_FILENAMES=1
+_=/usr/local/Cluster-Apps/Modules/3.1.6/bin/modulecmd
