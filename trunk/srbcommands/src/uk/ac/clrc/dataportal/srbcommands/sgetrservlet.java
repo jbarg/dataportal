@@ -94,7 +94,7 @@ public class sgetrservlet extends HttpServlet {
         }
         catch(Exception e){
             log.warn(e);
-            throw new Exception("Unable to load properties file");
+            throw new IOException("Unable to load properties file");
         }
         ServletOutputStream out = response.getOutputStream();
         
