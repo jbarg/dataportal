@@ -922,6 +922,23 @@ public class ISISCsmdMapper implements CsmdMapper
       return ;
    }
    //
+   void buildMDADOLocator(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
+   {
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
+
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+
+
+   //
    void buildMDDataCollectionLocator(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
    {
       Connection c = ss.getConnection() ;
@@ -948,35 +965,40 @@ public class ISISCsmdMapper implements CsmdMapper
       }
       t_r.close() ;
 
-      t_r=t_s.executeQuery("select uri from datafile where datafile.id in " +
-                           "(select datafile_id from datafile_list where dataset_id ='" + key + "')") ;
-      if(t_r.next())
-      {
-         locator = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
-      }
+      //can't do this which isis data organisation (cf. phone call Damian Flannery 17/01/2005)
+      //files exist in the physical directory structure which do not belong with the logical data organisation 
+      //expressed in icat - physically instrument->year->run and logically experiment->dataset->datafile - dataset
+      //is a virtual concept and therefore does not have a real physical location - the physical resolution of the
+      //dataset will only occur by concatenation of the datafiles within the dataset 
+      //t_r=t_s.executeQuery("select uri from datafile where datafile.id in " +
+      //                     "(select datafile_id from datafile_list where dataset_id ='" + key + "')") ;
+      //if(t_r.next())
+      //{
+      //   locator = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
+      //}
 
-      StringBuffer sbt=new StringBuffer(locator) ;
+      //StringBuffer sbt=new StringBuffer(locator) ;
 
-      sbt.reverse() ;
+      //sbt.reverse() ;
 
-      boolean process=true ;
-      while(process == true)
-      {
-         if(sbr.charAt(i) == "\\" || sbr.charAt(i) == "/")
-         {
-            proc=false ;
-         }
-         else
-         {
-            sbr.deleteCharAt(0) ;
-         }
-      }
+      //boolean process=true ;
+      //while(process == true)
+      //{
+      //   if(sbr.charAt(i) == "\\" || sbr.charAt(i) == "/")
+      //   {
+      //      proc=false ;
+      //   }
+      //   else
+      //   {
+      //      sbr.deleteCharAt(0) ;
+      //   }
+      //}
 
-      locator = (sbt.reverse()).toString() ;
+      //locator = (sbt.reverse()).toString() ;
          
       sbr.append(ii+"<DataCollectionLocator>\n") ; 
       abr.append(ii+li+"<DataName>"+name+"</DataName>\n") ;
-      abr.append(ii+li+"<Locator>"+locator+"</Locator>\n") ;
+      //abr.append(ii+li+"<Locator>"+locator+"</Locator>\n") ;
       sbr.append(ii+"</DataCollectionLocator>\n") ; 
 
       t_r.close() ;
