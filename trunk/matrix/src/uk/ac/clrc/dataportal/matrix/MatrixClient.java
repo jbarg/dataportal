@@ -52,10 +52,12 @@ public class MatrixClient {
         String logicalLocation = null;
         String dataSetId = null;
         String collection = null;
+        String createOp = null;
+        String createOpArg = null;
         
         try {
             if (args.length == 0) {
-                System.out.println("Syntax: MatrixClient <list|ingest|download> [<operationArgs>]");
+                System.out.println("Syntax: MatrixClient <list|ingest|download|create> [<operationArgs>]");
                 return;
             }
             
@@ -74,6 +76,15 @@ public class MatrixClient {
                 } else {
                     collection = args[1];
                 }
+            } else if (args[0].equals("create")) {
+                // This can be expanded to allow create container etc etc....
+                if (args.length != 3) {
+                    System.out.println("Syntax: MatrixClient create <collection|container> <collectionName>");
+                    return;
+                } else {
+                    createOp = args[1];
+                    createOpArg = args[2];
+                }
             }
             
             MatrixDataGridRequest request = new MatrixDataGridRequest("sapphire.esc.rl.ac.uk",5544,"srbadm","srbadm4badc","badc","/home/srbadm.matrix","badc-escience");
@@ -91,6 +102,17 @@ public class MatrixClient {
                 // The resource used should be changed in the MatrixDataGridRequest object for now but it should be possible to specify it for different files
                 MatrixIngestOp ingestOp = new MatrixIngestOp();
                 tx = ingestOp.createIngestOpTransaction(logicalLocation, dataSetId);
+            } else if (args[0].equalsIgnoreCase("create")) {
+                if (createOp.equalsIgnoreCase("collection")) {
+                    MatrixCreateCollectionOp createOpTx = new MatrixCreateCollectionOp();
+                    tx = createOpTx.createCreateCollectionOpTransaction(createOpArg);
+                } else if (createOp.equalsIgnoreCase("container")) {
+                    System.out.println("Create Container operation not yet implemented!!");
+                    return;
+                } else {
+                    System.out.println("Invalid create operation!");
+                    return;
+                }
             } else {
                 System.out.println("Operation " + args[0] + " not supported.");
                 return;
@@ -131,7 +153,7 @@ public class MatrixClient {
             Source source = request.getSource();
             soapPart.setContent(source);
             
-            //printReply(msg);  // Print out the request
+            printReply(msg);  // Print out the request
             
             System.out.println("Sending request to endpoint : " + MatrixClient.ENDPOINT);
             SOAPMessage reply = connection.call(msg, new URL(MatrixClient.ENDPOINT));
@@ -208,6 +230,9 @@ public class MatrixClient {
                     dh.writeTo(fout);
                     fout.close();
                 }
+            } else if (stepName.equals("createOp")) {
+                System.out.println("Create Op processing.....");
+                printReply(reply);
             } else {
                 System.out.println("Unknown step- response not processed.");
             }

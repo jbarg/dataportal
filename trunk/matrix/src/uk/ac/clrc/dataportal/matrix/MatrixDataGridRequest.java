@@ -4,8 +4,6 @@
  * Created on 18 July 2003, 12:02
  *
  * This creates a DataGridRequest object for sending to the Matrix server.
- * Currently a file is created but this will later be changed into a Web Services Client
- * that will just send the XML to the server instead of using the bundled xml sender program.
  *
  * Some parameters MUST be set as specified below as the SDSC Matrix code seems to get some
  * parameters from the wrong places!!  eg. OperationName taken from StepName
