@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v5 rel. 2 U (http://www.xmlspy.com) by k1 (CCLRC) -->
+<project name="My Project" default="compile" basedir=".">
+	<!--  Set all of the properties for the file to be avaliable-->
+	<target name="do" description="Clean build and dist directories, the">
+		<ant antfile="ShoppingCart/build.xml" inheritAll="false" target="${target}">
+			<property file="ShoppingCart/build.properties"/>
+		</ant>
+		<ant antfile="ISIS-SRD/build.xml" inheritAll="false" target="${target}">
+			<property file="ISIS-SRD/build.properties"/>
+		</ant>
+		<ant antfile="Rasgrib/build.xml" inheritAll="false" target="${target}">
+					<property file="ISIS-SRD/build.properties"/>
+		</ant>
+		
+		<ant antfile="xmlwrapper/build.xml" inheritAll="false" target="${target}">
+					<property file="ISIS-SRD/build.properties"/>
+		</ant>
+		
+		<ant antfile="lookup/build.xml" inheritAll="false" target="${target}">
+							<property file="ISIS-SRD/build.properties"/>
+		</ant>
+		<ant antfile="facility/build.xml" inheritAll="false" target="${target}">
+							<property file="ISIS-SRD/build.properties"/>
+		</ant>
+		<ant antfile="acm/build.xml" inheritAll="false" target="${target}">
+									<property file="ISIS-SRD/build.properties"/>
+		</ant>
+		<ant antfile="authent/build.xml" inheritAll="false" target="${target}">
+									<property file="ISIS-SRD/build.properties"/>
+		</ant>
+	</target>
+	
+	
+</project>
