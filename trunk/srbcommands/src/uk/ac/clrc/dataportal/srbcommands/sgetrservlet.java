@@ -163,7 +163,7 @@ public class sgetrservlet extends HttpServlet {
             File cre = new File(props.getProperty("srbDest")+File.separator+request.getSession().getId());
             cre.mkdir();
             
-            LaunchProcess.runCommand( props.getProperty("srbHome") + File.separator+"Sget -r " + dir +props.getProperty("srbDest") + File.separator+request.getSession().getId());
+            LaunchProcess.runCommand( props.getProperty("srbHome") + File.separator+"Sget -r " + dir +File.separator+"*.* "+props.getProperty("srbDest") + File.separator+request.getSession().getId());
             
             //this is my one with the single files
             // LaunchProcess.runCommand("/bin/sh -c \""+ props.getProperty("srbHome") + "/Sls -C " + dir + " > /tmp/srbtemp/" + request.getSession().getId()+"conf\"");
@@ -181,11 +181,11 @@ public class sgetrservlet extends HttpServlet {
             //LaunchProcess.runCommand( "/bin/sh -c \"cd /tmp/srbtemp/" + request.getSession().getId() + ";/usr/bin/zip -mr /tmp/srbtemp/" + request.getSession().getId() + ".zip .\"");
              */
             
-            String listing = "/bin/ls -ltr "+props.getProperty("srbDest")+File.separator+"$1 | grep -v '^d' | grep -v total | awk '{print $9}' > "+props.getProperty("srbDest")+File.separator+"$1.list";
+            //String listing = "/bin/ls -ltr "+props.getProperty("srbDest")+File.separator+"$1 | grep -v '^d' | grep -v total | awk '{print $9}' > "+props.getProperty("srbDest")+File.separator+"$1.list";
             //execute cammand.  List the files in the directory and prints it out to file
             //LaunchProcess.runCommand("ls -ltr "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" | grep -v '^d' | grep -v total | awk '{print $9}' > "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+".list");
-            String newFile = workingDir+File.separator+"run.sh";
-            LaunchProcess.runCommand(newFile + " "+request.getSession().getId());
+            /*String newFile = workingDir+File.separator+"run.sh";
+            //LaunchProcess.runCommand(newFile + " "+request.getSession().getId());
             
             
             //read in file and add all the files to a buffer
@@ -198,22 +198,23 @@ public class sgetrservlet extends HttpServlet {
                 
             }
             buff.close();
+            System.out.println(b);*/
             // Need to fix the above command to strip off the extra path information that we don't want
             //LaunchProcess.runCommand( "/usr/bin/zip -mr /tmp/srbtemp/" + request.getSession().getId() + ".zip /tmp/srbtemp/" + request.getSession().getId());
             if(exe.equals("tar")){
-                LaunchProcess.runCommand( props.getProperty("tarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" "+b.toString());
+                LaunchProcess.runCommand( props.getProperty("tarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             }
             else if(exe.equals("zip")){
                 //LaunchProcess.runCommand("cd"+ props.getProperty("srbDest"));
                 //LaunchProcess.runCommand( props.getProperty("zipHome")+" -rvj "+ request.getSession().getId() + ".zip  "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+File.separator+"*");
-                
+                exe = "jar";
             }
             else if(exe.equals("jar")){
-                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".jar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" "+b.toString());
+                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".jar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
                 
             }
             else{
-                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" "+b.toString());
+                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
             }
             File myFileIn = null;
             
@@ -236,7 +237,7 @@ public class sgetrservlet extends HttpServlet {
             myBufferedInputStream.close();
             
             out.close();
-            list.delete();
+            //list.delete();
             LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + "."+exe);
             LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() );
             
@@ -245,7 +246,7 @@ public class sgetrservlet extends HttpServlet {
             
             // Better error handling is required for when things go wrong.....
             try{
-                list.delete();
+               // list.delete();
                 LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + "."+exe);
                 LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() );
             }
