@@ -4,7 +4,7 @@
  * Created on 04 February 2003, 16:57
  */
 //package uk.ac.clrc.dataportal.authent;
-package dataportal.authent.src.uk.ac.clrc.dataportal.authent;
+package src.uk.ac.clrc.dataportal.authent;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
