@@ -65,6 +65,7 @@ declare -a level
 declare -a tape_name
 declare -a tape_pool
 declare -a tape_size
+declare -a list_names
 
 
 ## Declare our global variables
@@ -124,7 +125,7 @@ function show_ctrl()
 	header
 	## Display the control.dat file contents as they exist in memory
 
-	echo -e "PARTITION\tINDEX\t\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
+	echo -e "PARTITION\tTAPE LIST\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
 
 	if [[ $num_entries -eq 0 ]]
 	then
@@ -140,9 +141,189 @@ function show_ctrl()
 	done
 }
 
+function add_tapelist()
+{
+	## If no index file exists, create one
+	## An entry in a tape index comprises tape name, tape pool, tape size
+	header
+	
+	tput cup 22 0
+	
+	## If we've not been supplied a name prompt for one
+	if [[ -z $1 ]]
+	then
+		echo "Enter new tape list name:"
+		tput cup 23 0
+		read list_name
+	else
+		list_name=$1
+	fi
+	
+	## Loop around adding tapes to the list, any that don't exist in ADS we should create
+	count=0
+	while [[ 1 ]]
+	do
+		show_tapelist $list_name
+		tput cup 22 0
+		echo "Enter tape name (or enter 'x' to finish): "
+		tput cup 23 0
+		read new_tape_name
+		if [[ $new_tape_name != "x" && $new_tape_name != "X" ]]
+		then
+			add_tape $new_tape_name
+		else
+			break
+		fi
+		
+		tape_name[$count]=$new_tape_name
+		count=$(($count+1))		
+	done
+	
+	
+	
+}
+
+function add_tape()
+{
+	## See if a tape with the given name already exists
+	## If not, prompt for a pool name and tape size
+	## If pool does not exist, create it
+	
+	cmd_line="datastore query OWNER=$TOWNER NAME=$1 NAME | grep $1 | wc -l"
+	if [[ `$cmd_line` == "0" ]]
+	then
+		## We need to create the file and potentially also the pool to hold it
+		header
+		show_ctrl $new_tape_name
+		
+		tput cup 22 0
+		echo "Enter pool name:"
+		tput cup 23 0
+		read new_pool_name
+		cmd_line="datastore pool query $TOWNER | grep $new_pool_name | wc -l"
+		if [[ `$cmd_line` == "0" ]]
+		then
+			## We need to create the pool
+			cmd_line="datastore pool add $TOWNER $new_pool_name"
+			exec $cmd_line
+		fi
+		
+		while [[ ! $new_tape_size -ge 1 && ! $new_tape_size -le 48 ]]
+		do
+			header
+			show_ctrl $new_tape_name
+		
+			tput cup 22 0
+			echo "Enter tape size (1-48GB):"
+			tput cup 23 0
+			read new_tape_size
+			new_tape_size=$new_tape_size"GB"
+		done
+		
+		## Now we have enough info to create the tape file
+		cmd_line="datastore create $TOWNER $new_tape_name $new_tape_size POOL $new_pool_name"
+		exec $cmd_line		
+	fi
+	
+}
+
+function manage_tapelists()
+{
+	## Allow for creation,editing and deletion of tapelists.
+	## Also support import of ADS qfiles
+	## First thing to do is get a list of index files
+	while [[ 1 ]]
+	do
+		header
+		count=0
+		for f in `ls $MASS_HOME/ctl/*.idx`
+		do
+			echo $f > $MASS_HOME/tmp/idx_name.tmp
+			list_names[$count]=`sed s,.*\/\(.*\)\.idx,\1, $MASS_HOME/tmp/idx_name.tmp`
+			echo $(($count+1))" ) "${list_names[$count]}
+			count=$(($count+1))
+		done
+	
+		tput cup 22 0
+		echo "1-"$(($count+1))") (A)dd (D)elete E(x)it:"
+		read answer
+		
+		if [[ $answer -ge 1 && $answer -le $(($count+1)) ]]
+		then
+			current_list=${list_names[$(($answer-1))]}
+			read_tapelist $current_list
+			show_tapelist
+		
+		elif [[ $answer == "a" || $answer == "A" ]]
+		then
+			add_tapelist
+		
+		elif [[ $answer == "d" || $answer == "D" ]]
+		then
+			del_tapelist ${list_names[$(($answer-1))]}
+			
+		elif [[ $answer == "x" || $answer == "X" ]]
+		then
+			break
+		fi
+	done
+}
+
+function del_tapelist()
+{
+	## Remove a tapelist from disk
+	rm -f $MASS_HOME/ctl/$1.idx
+}
+
+function read_tapelist()
+{
+	## Read a tapelist in from a *.idx file held under $MASS_HOME/ctl
+	## File is a list of tuples comprising tape name, tape size, tape pool
+	header
+	count=0
+	
+	{ while read 	$tape_name[$count] \
+			$tape_size[$count] \
+			$tape_pool[$count]
+	do
+		count=$(($count+1))
+	done
+	} < $MASS_HOME/ctl/$1.idx
+	
+	num_lines=$(($count+1))
+}
+	
+function write_tapelist()
+{
+	## Write a tape list out to disk
+	count=0
+	
+	{ while [[ $count -lt $num_lines ]]
+	do
+		echo -e ${tape_name[$count]}"\t"${tape_size[$count]}"\t"${tape_pool[$count]}
+		count=$(($count+1))
+	done
+	} > $MASS_HOME/ctl/$1.idx
+}
+
+function show_tapelist()
+{
+	## Display contents of a tape list
+	header
+	echo "Working with tape list: "$1
+	echo -e "NAME\tSIZE\tPOOL"
+	
+	count=0
+	while [[ $count -lt $num_lines ]]
+	do
+		echo -e ${tape_name[$count]}"\t"${tape_size[$count]}"\t"${tape_pool[$count]}
+		count=$(($count+1))
+	done
+}
+
 function add_entry()
 {	
-	## Adds an MASS backup schedule for a particular partition
+	## Adds an MASS backup schedule
 	temp_num=$num_entries
 	num_entries=$(($num_entries+1))
 	
@@ -156,13 +337,13 @@ function add_entry()
 	header
 	show_ctrl
 	tput cup 22 0
-	echo "Enter tape index:"
+	echo "Enter tape list:"
 	tput cup 23 0
 	
 	read new_index
 	if [[ ! -r $MASS_HOME/ctl/$new_index.idx ]]
 	then
-		add_index
+		add_tapelist $new_index
 	fi
 	
 	index[$temp_num]=$new_index
@@ -256,7 +437,7 @@ function del_entry()
 	while [[ 1 ]]
 	do
 		header
-		echo -e "PARTITION\tINDEX\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
+		echo -e "PARTITION\tTAPE LIST\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
 
 		count=0
 		while [[ $count -lt $num_entries ]]
@@ -383,7 +564,7 @@ function mod_entry()
 	while [[ 1 ]]
 	do
 		header
-		echo -e "PARTITION\tINDEX\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
+		echo -e "PARTITION\tTAPE LIST\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
 
 		count=0
 		while [[ $count -lt $num_entries ]]
@@ -416,7 +597,7 @@ function mod_entry()
 				echo -e ${append[$count]}"\t"${leve[$count]}
 				
 				tput cup 22 0
-				echo "Modify (P)artition,(I)ndex,(D)ay,(M)ethod,(A)ctive,Appe(N)d or 'x' to finish:"
+				echo "Modify (P)artition,(T)ape List,(D)ay,(M)ethod,(A)ctive,Appe(N)d or 'x' to finish:"
 				tput cup 23 0
 				
 				read choice
@@ -433,13 +614,13 @@ function mod_entry()
 					set_active
 					active[$(($answer-1))]=$new_active
 					;;
-				i* | I* )
-					echo "Enter tape index:"
+				t* | T* )
+					echo "Enter tape list:"
 					tput cup 24 0
 					read new_index
 					if [[ ! -r $MASS_HOME/ctl/$new_index.idx ]]
 					then
-						add_index
+						add_tapelist $new_index
 					else
 						index[$(($answer-1))]=$new_index
 					fi
@@ -476,7 +657,7 @@ function run_entry()
 	while [[ 1 ]]
 	do
 		header
-		echo -e "PARTITION\tINDEX\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
+		echo -e "PARTITION\tTAPE LIST\tDAY\tMETHOD\tACTIVE\tAPPEND\tLEVEL"
 
 		count=0
 		while [[ $count -lt $num_entries ]]
@@ -527,7 +708,7 @@ function show_menu()
 {
 	## Places a menu on screen so the user can choose what to do
 	tput cup 22 0
-	echo "Option: (A)Add (D)Delete (M)Modify (I)Immediate Execution (X)Exit:"
+	echo "Option: (A)Add,(D)Delete,(M)Modify,Manage (T)ape-lists,(I)Immediate Execution,(X)Exit:"
 	tput cup 23 0
 }
 
@@ -549,23 +730,27 @@ do
 	read choice
 
 	case $choice in
-	a | A )
+	a* | A* )
 		add_entry
 		;;
 
-	d | D )
+	d* | D* )
 		del_entry
 		;;
 		
-	m | M )
+	m* | M* )
 		mod_entry
 		;;
 	
-	i | I )
+	i* | I* )
 		run_entry
 		;;
 	
-	x | X )
+	t* | T* )
+		manage_tapelists
+		;;
+		
+	x* | X* )
 		quit=1
 		;;
 
