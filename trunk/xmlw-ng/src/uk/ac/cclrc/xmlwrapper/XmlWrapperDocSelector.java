@@ -337,7 +337,7 @@ public class XmlWrapperDocSelector
          // Create a DOM builder and parse the fragment
          javax.xml.parsers.DocumentBuilderFactory   factory = DocumentBuilderFactory.newInstance();
          org.w3c.dom.Document d = factory.newDocumentBuilder().parse( new InputSource(new StringReader(auth_token)));
-         org.w3c.dom.Element element  = doc.getDocumentElement();
+         org.w3c.dom.Element element  = d.getDocumentElement();
 
          //need to configure authorisation.prop for the following class - naff
          TokenReader reader = new TokenReader();

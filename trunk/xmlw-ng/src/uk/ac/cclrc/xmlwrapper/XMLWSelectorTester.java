@@ -214,6 +214,8 @@ public class XMLWSelectorTester {
    {
       XMLWSelectorTester xmlwt = new XMLWSelectorTester() ;
 
+      ////////////////////////////////////////////////////////////////////
+
       String xquery_result_format = "<html>\n" +
                                        "<head/>\n" +
                                        "<body>\n" +
@@ -228,13 +230,15 @@ public class XMLWSelectorTester {
                                           "</body>\n" +
                                     "</html>" ;
 
+      ////////////////////////////////////////////////////////////////////
+
 
       //read in the time limited proxy assuming that it is in the cwd
       StringBuffer pc = new StringBuffer();
 
       try
       {
-         BufferedReader in = new BufferedReader (new FileReader("proxy.cred")) ;
+         BufferedReader in = new BufferedReader (new FileReader("/home/sas27/.globus/proxy/shoaib.proxy")) ;
          String str ;
          while ((str = in.readLine()) != null)
          {
@@ -249,7 +253,12 @@ public class XMLWSelectorTester {
       }
 
       String proxy_cert = pc.toString() ;
+
+      ////////////////////////////////////////////////////////////////////
+
       String auth_token = xmlwt.getAuthToken(proxy_cert) ;
+
+      ////////////////////////////////////////////////////////////////////
 
 
       xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
