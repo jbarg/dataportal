@@ -67,14 +67,23 @@ public class SRBTransfer extends HttpServlet {
             URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password);
             URLConnection yc = url.openConnection();
             InputStream p = yc.getInputStream();
-            BufferedReader in = new BufferedReader(new InputStreamReader(p));
-            String inputLine;
+            
             File tarFile = new File(wd+File.separator+"xml"+File.separator+sid+".tar");
-            FileWriter tar = new FileWriter(tarFile);
-            while ((inputLine = in.readLine()) != null){
-                tar.write(inputLine);
+            BufferedInputStream myBufferedInputStream = new BufferedInputStream(p);
+            
+            BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(new FileOutputStream(tarFile));
+            
+            byte[] buffer = new byte[65536];
+            int c=0;
+            
+            while ((c=myBufferedInputStream.read(buffer)) > -1) {
+                myBufferedOutputStream.write(buffer,0,c);
             }
-            tar.close();
+            
+            myBufferedOutputStream.flush();
+            myBufferedOutputStream.close();
+            myBufferedInputStream.close();
+            p.close();
             
             //use datatransfer module
             Properties prop = (Properties)session.getAttribute("props");
