@@ -82,9 +82,18 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 				<DataHolding InvestigationID="INV-SXD1009">
 					<DataDescription>
 						<DataName>INV-SXD1009</DataName>
-						<TypeOfData>File Based</TypeOfData>
+						<TypeOfData>Collection</TypeOfData>
 						<Status>Complete</Status>
 						<LogicalDescription>
+							<Parameter>
+								<ParamName>Temperature</ParamName>
+								<Derivation>condition</Derivation>
+								<Units>
+									<UnitName>Kelvin</UnitName>
+									<UnitAcronym>K</UnitAcronym>
+								</Units>
+								<ParamValue>150</ParamValue>
+							</Parameter>
 							<TimePeriod>
 								<StartDate>
 									<Date>2000-11-01</Date>
@@ -103,199 +112,19 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 					</DataDescription>
 					<DataHoldingLocator>
 						<DataName>INV-SXD1009</DataName>
-						<Locator pathtype="absolute">ftp://ftp.isis.rl.ac.uk/SXD/SXD1009</Locator>
+						<Locator pathtype="absolute">ftp://ftp.isis.rl.ac.uk/SXD/SXD1009/</Locator>
 						<Locator pathtype="absolute">http://www.dooc.uos.ac.uk/~perimentor/benzene/</Locator>
 					</DataHoldingLocator>
-					<DataCollection dataid="ID000003">
+					<DataCollection dataid="INV-SXD1009-RAW">
 						<DataDescription>
-							<DataName>String</DataName>
-							<TypeOfData>File</TypeOfData>
-							<Status>String</Status>
-							<DataTopic>
-								<Keywords>
-									<Discipline>String</Discipline>
-									<KeywordSource>String</KeywordSource>
-									<Keyword>String</Keyword>
-								</Keywords>
-								<Keywords>
-									<Discipline>String</Discipline>
-									<KeywordSource>String</KeywordSource>
-									<Keyword>String</Keyword>
-								</Keywords>
-								<Subjects>
-									<Discipline>String</Discipline>
-									<SubjectSource>String</SubjectSource>
-									<Subject>
-										<SubjectName>String</SubjectName>
-									</Subject>
-								</Subjects>
-								<Subjects>
-									<Discipline>String</Discipline>
-									<SubjectSource>String</SubjectSource>
-									<Subject>
-										<SubjectName>String</SubjectName>
-									</Subject>
-								</Subjects>
-							</DataTopic>
-							<LogicalDescription>
-								<Parameter>
-									<ParamName>String</ParamName>
-									<Derivation>fixed</Derivation>
-									<Units>
-										<UnitName>String</UnitName>
-										<UnitAcronym>String</UnitAcronym>
-										<UnitSystem>String</UnitSystem>
-									</Units>
-									<ParamValue>String</ParamValue>
-									<Range>
-										<Limit bound="upper">String</Limit>
-										<Limit bound="upper">String</Limit>
-										<MarginOfError>String</MarginOfError>
-									</Range>
-								</Parameter>
-								<Parameter>
-									<ParamName>String</ParamName>
-									<Derivation>fixed</Derivation>
-									<Units>
-										<UnitName>String</UnitName>
-										<UnitAcronym>String</UnitAcronym>
-										<UnitSystem>String</UnitSystem>
-									</Units>
-									<ParamValue>String</ParamValue>
-									<Range>
-										<Limit bound="upper">String</Limit>
-										<Limit bound="upper">String</Limit>
-										<MarginOfError>String</MarginOfError>
-									</Range>
-								</Parameter>
-								<TimePeriod>
-									<StartDate>
-										<Date>1967-08-13</Date>
-										<Time>14:20:00-05:00</Time>
-									</StartDate>
-									<EndDate>
-										<Date>1967-08-13</Date>
-										<Time>14:20:00-05:00</Time>
-									</EndDate>
-								</TimePeriod>
-								<Description>String</Description>
-								<FacilityUsed>
-									<FacilityName>String</FacilityName>
-									<Resource>String</Resource>
-									<Resource>String</Resource>
-								</FacilityUsed>
-							</LogicalDescription>
-							<Software>
-								<Production>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</Production>
-								<Production>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</Production>
-								<Anlaysis>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</Anlaysis>
-								<Anlaysis>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</Anlaysis>
-								<Conversion>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</Conversion>
-								<Conversion>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</Conversion>
-								<Visualisation>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</Visualisation>
-								<Visualisation>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</Visualisation>
-								<MultiPurpose>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</MultiPurpose>
-								<MultiPurpose>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</MultiPurpose>
-								<other>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</other>
-								<other>
-									<LongName>String</LongName>
-									<ProgramName>String</ProgramName>
-									<Version>String</Version>
-									<URI>String</URI>
-									<OperatingSystem>String</OperatingSystem>
-									<OperatingSystemVersion>String</OperatingSystemVersion>
-									<Architecture>String</Architecture>
-								</other>
-							</Software>
+							<DataName>RAW</DataName>
+							<TypeOfData>Collection</TypeOfData>
+							<Status>Complete</Status>
 						</DataDescription>
+						<DataCollectionLocator>
+							<DataName>RAW</DataName>
+							<Locator pathtype="relative">raw/</Locator>
+						</DataCollectionLocator>
 						<AtomicDataObject dataid="ID000004">
 							<Name>String</Name>
 							<DataDescription>
@@ -924,16 +753,6 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 								<URI>String</URI>
 							</ReferenceLocation>
 						</RelatedReference>
-						<DataCollectionLocator dataidref="String">
-							<DataName>String</DataName>
-							<Locator>absolute</Locator>
-							<Locator>absolute</Locator>
-						</DataCollectionLocator>
-						<DataCollectionLocator dataidref="String">
-							<DataName>String</DataName>
-							<Locator>absolute</Locator>
-							<Locator>absolute</Locator>
-						</DataCollectionLocator>
 					</DataCollection>
 					<RelatedReference>
 						<Type>String</Type>
