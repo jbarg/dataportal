@@ -3,11 +3,18 @@
     <facilityName>SRD</facilityName>
     <facilityDescription>Synchrotron Radiation Department </facilityDescription>
     <service>
+      <serviceName>Access Control Module</serviceName>
+      <serviceDescription>Returns SRD Access Control details for user</serviceDescription>
+      <serviceType>ACM</serviceType>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/acmsrd/services/acm</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/acmsrd/services/acm?wsdl</serviceWSDL>
+    </service>
+    <service>
       <serviceName>XML Wrapper</serviceName>
       <serviceDescription>Returns XML data from remote database</serviceDescription>
       <serviceType>XMLW</serviceType>
-      <serviceEndpoint>http://gjd37vig.dl.ac.uk:8080/wrappers/services/xml_wrapperSRD</serviceEndpoint>
-      <serviceWSDL>http://gjd37vig.dl.ac.uk:8080/wrappers/services/xml_wrapperSRD?wsdl</serviceWSDL>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/wrappers/services/xml_wrapperSRD</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/wrappers/services/xml_wrapperSRD?wsdl</serviceWSDL>
     </service>
   </createFacility>
 </fadm:facilityAdmin>

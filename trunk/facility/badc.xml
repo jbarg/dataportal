@@ -6,15 +6,15 @@
       <serviceName>Access Control Module</serviceName>
       <serviceDescription>Returns BADC Access Control details for user</serviceDescription>
       <serviceType>ACM</serviceType>
-      <serviceEndpoint>http://escvig3.dl.ac.uk:8080/axis/services/ACM</serviceEndpoint>
-      <serviceWSDL>http://escvig3.dl.ac.uk:8080/axis/services/ACM?wsdl</serviceWSDL>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/acmbadc/services/acm</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/acmbadc/services/acm?wsdl</serviceWSDL>
     </service>
     <service>
       <serviceName>XML Wrapper</serviceName>
       <serviceDescription>Returns XML data from remote database</serviceDescription>
       <serviceType>XMLW</serviceType>
-      <serviceEndpoint>http://escvig2.dl.ac.uk:8080/axis/services/xmlwrapper_badc</serviceEndpoint>
-      <serviceWSDL>http://escvig2.dl.ac.uk:8080/axis/services/xmlwrapper_badc?wsdl</serviceWSDL>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc?wsdl</serviceWSDL>
     </service>
   </createFacility>
 </fadm:facilityAdmin>

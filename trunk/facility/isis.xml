@@ -3,11 +3,18 @@
     <facilityName>ISIS</facilityName>
     <facilityDescription>ISIS, the worlds most powerful pulsed neutron and muon source</facilityDescription>
     <service>
+      <serviceName>Access Control Module</serviceName>
+      <serviceDescription>Returns ISIS Access Control details for user</serviceDescription>
+      <serviceType>ACM</serviceType>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/acmisis/services/acm</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/acmisis/services/acm?wsdl</serviceWSDL>
+    </service>
+    <service>
       <serviceName>XML Wrapper</serviceName>
       <serviceDescription>Returns XML data from remote database</serviceDescription>
       <serviceType>XMLW</serviceType>
-      <serviceEndpoint>http://gjd37vig.dl.ac.uk:8080/wrappers/services/xml_wrapperISIS</serviceEndpoint>
-      <serviceWSDL>http://gjd37vig.dl.ac.uk:8080/wrappers/services/xml_wrapperISIS?wsdl</serviceWSDL>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/wrappers/services/xml_wrapperISIS</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/wrappers/services/xml_wrapperISIS?wsdl</serviceWSDL>
     </service>
   </createFacility>
 </fadm:facilityAdmin>

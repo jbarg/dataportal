@@ -1,19 +1,20 @@
 <fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
   <createFacility>
-    <facilityName>SRD</facilityName>
-    <facilityDescription>Synchrotron Radiation Department </facilityDescription>
+    <facilityName>MPIM</facilityName>
+    <facilityDescription>MPIM</facilityDescription>
     <service>
       <serviceName>Access Control Module</serviceName>
-      <serviceDescription>Returns SRD Access Control details for user</serviceDescription>
+      <serviceDescription>Returns MPIM Access Control details for user</serviceDescription>
       <serviceType>ACM</serviceType>
-      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/acmsrd/services/acm</serviceEndpoint>
-      <serviceWSDL>http://escdmg.dl.ac.uk:8080/acmsrd/services/acm?wsdl</serviceWSDL>
-    </service>    <service>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/acmmpim/services/acm</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/acmmpim/services/acm?wsdl</serviceWSDL>
+    </service>
+    <service>
       <serviceName>XML Wrapper</serviceName>
       <serviceDescription>Returns XML data from remote database</serviceDescription>
       <serviceType>XMLW</serviceType>
-      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/xmlw/services/xmlwrapper_srd</serviceEndpoint>
-      <serviceWSDL>http://escdmg.dl.ac.uk:8080/xmlw/services/xmlwrapper_srd?wsdl</serviceWSDL>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/xmlw/services/xmlwrapper_mpim</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/xmlw/services/xmlwrapper_mpim?wsdl</serviceWSDL>
     </service>
   </createFacility>
 </fadm:facilityAdmin>

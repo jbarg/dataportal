@@ -14,6 +14,8 @@ import java.lang.*;
 import uk.ac.clrc.dataportal.authent.lookupclient.*;
 
 import org.globus.security.GlobusProxy;
+import java.security.cert.X509Certificate;
+
 //web axis stuff
 import javax.xml.rpc.ParameterMode;
 import org.apache.axis.client.Call;
@@ -33,9 +35,12 @@ public class AuthCtl {
         //--        String[] facilityEndPoints = { "http://escvig3.dl.ac.uk:8080/axis/services/ACM" };
         org.w3c.dom.Element facilityAccess;
         int sessionId;
+        X509Certificate userCert = idCheck( userName, password );
+        //        System.out.println( "---> User:     " + userCert.getSubjectDN() );
+        //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
+        //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
         
-        
-        if ( !idCheck( userName, password ) )
+        if ( userCert == null )
             sessionId = -1;
         else {
             facilityEndPoints = lookupFacility();
@@ -43,8 +48,11 @@ public class AuthCtl {
             //            if (facilityEndPoints.length > 0) {
             //                System.out.println(facilityEndPoints[0]);
             //            }
+            
+            //*** WILL USE DN WITH FACILITIES SOOOOOON...
             facilityAccess = buildAccess( userName, facilityEndPoints );
-            sessionId = getSessionId( userName, facilityAccess );
+            System.out.println( "---> User:     " + userCert.getSubjectDN().getName() );
+            sessionId = getSessionId( userCert.getSubjectDN().getName(), facilityAccess );
         }
         
         return sessionId;
@@ -77,17 +85,16 @@ public class AuthCtl {
     }
     
     // new version of idCheck that uses MyProxy and GSI certificates
-    private boolean idCheck( String userName, String userPassword ) throws Exception {
+    private X509Certificate idCheck( String userName, String userPassword ) throws Exception {
         //users password and name from database
         boolean loggedIn = false;
         GlobusProxy portalProxy = null;
+        X509Certificate userCert = null;
         
         try {
             portalProxy = PortalProxy.getPortalProxy();
             
-            //            System.out.println( "Successfully created proxy for: ");
-            //            System.out.println( "\t\tUser: " + portalProxy.getSubject() );
-            //            System.out.println( "\t\tCA:  " + portalProxy.getIssuer() );
+            
         }
         catch( Exception e ) {
             System.out.println( "Caught exception while creating portal proxy:\n\t" + e.toString() );
@@ -99,19 +106,18 @@ public class AuthCtl {
         try {
             delegateUserProxy = DelegateProxy.getProxy( userName, userPassword, portalProxy );
             //            System.out.println( "Successfully retrieved proxy" );
+            userCert = delegateUserProxy.getUserCert();
             loggedIn = true;
         }
         catch( Exception e ) {
             System.out.println( "Caught exception while retrieving proxy:\n\t" + e.toString() );
         }
         
-        //        X509Certificate userCert = delegateUserProxy.getUserCert();
-        //        System.out.println( "---> User:     " + userCert.getSubjectDN() );
-        //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
-        //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
+        
+
         
         
-        return ( loggedIn );
+        return ( userCert );
     }
     
     private String[] lookupFacility() throws Exception {
