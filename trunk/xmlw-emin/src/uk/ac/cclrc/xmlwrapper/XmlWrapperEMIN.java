@@ -202,6 +202,12 @@ public class XmlWrapperEMIN
 	 {
             entry_xml = StringZip.decompress((String)m.get(entry_id)) ;
 	 }
+         else
+         {
+            //item is not cached - need to clear entry_xml otherwise keep
+            //getting first entries xml for all entries
+            entry_xml = null ;
+         }
 
          if(entry_xml == null)
          {
