@@ -313,7 +313,7 @@
         Use this target to Creates and moves hsqldb for uddi 
 
         -->
-        <target name="installdp" description="install the juddi server and libs" if="catalina.home.present">
+        <target name="install_dp" description="install the juddi server and libs" if="catalina.home.present">
             <antcall target="installUDDI"/>
             <antcall target="installLibiaries"/>
             <antcall target="installDB"/>
@@ -347,7 +347,7 @@
         Use this target to Creates and moves hsqldb for uddi 
 
         -->
-        <target name="removedp" description="install the juddi server and libs" if="catalina.home.present">
+        <target name="remove_dp" description="install the juddi server and libs" if="catalina.home.present">
             <antcall target="removeUDDI"/>
             <antcall target="removeLibiaries"/>
              <antcall target="removemodules"/>
