@@ -98,7 +98,7 @@ public class Session {
         }
         
         // Convert certificate to string
-        this.cert = new Certificate(rs.getString("certificate"));
+        this.cert = new Certificate(rs.getBinaryStream("certificate"));
         this.dName = rs.getString("user_id");
         
         
@@ -140,7 +140,7 @@ public class Session {
     }
     
     // Testing stub
-    private static void prt(Session s) {
+    private static void prt(Session s) throws Exception {
         System.out.println("SID: "+s.getSid());
         System.out.println("DN: "+s.getDName());
         String p[][] = s.getPermissions();
@@ -151,10 +151,14 @@ public class Session {
         }
         
         System.out.println("CERTIFICATE: "+s.getCert().toString());
+        
+        Certificate c = s.getCert();
+        System.out.println("DN FROM CERT: "+c.getDName());
     }
     
     public static void main(String[] args) throws Exception {
         
+        /*
         String[][] p = { {"BADC_access_permissions","BADC"},
         {"MPIM_access_permissions","MPIM"}};
         
@@ -176,6 +180,11 @@ public class Session {
         
         s.end();
         r.end();
+        */
+        
+        Session s = new Session("c548092e-2649-11d8-965c-9768792e49d2");
+        s.getSession();
+        prt(s);
         
     }
     

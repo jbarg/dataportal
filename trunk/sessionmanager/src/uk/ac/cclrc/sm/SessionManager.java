@@ -3,7 +3,7 @@ package uk.ac.cclrc.sm;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import java.util.Properties;
-import java.io.InputStream;
+import java.io.FileInputStream;
 
 // Web Services
 import org.apache.axis.client.Call;
@@ -32,9 +32,8 @@ public class SessionManager {
         
         // Load the properties file
         try {
-            InputStream propFile = getClass().getResourceAsStream("db.conf");
-            prop.load(propFile);
-
+            prop.load(new FileInputStream(Config.getContextPath()+"sm.conf"));
+            
         } catch (Exception e) {
             logger.fatal("Cannot load sm.conf");
             throw e;
@@ -289,7 +288,10 @@ public class SessionManager {
         Certificate c = new Certificate(new URL("file:///E:/cog-1.1/build/cog-1.1/bin/x509up_17456.pem"));
         
         SessionManager sm = new SessionManager();
-        String sid = sm.startSession(c.toString(),p);
+        //String sid = sm.startSession(c.toString(),p);
+        
+        System.out.println(sm.getDName("c548092e-2649-11d8-965c-9768792e49d2"));
+        
         
     }
     
