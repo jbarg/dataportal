@@ -3,13 +3,6 @@
     <facilityName>Dataportal</facilityName>
     <facilityDescription>CCLRC Data Portal</facilityDescription>
     <service>
-      <serviceName>Access Control Module</serviceName>
-      <serviceDescription>Returns Access Control details for user</serviceDescription>
-      <serviceType>ACM</serviceType>
-      <serviceEndpoint>http://escvig3.dl.ac.uk:8080/axis/services/ACM</serviceEndpoint>
-      <serviceWSDL>http://escvig3.dl.ac.uk:8080/axis/services/ACM?wsdl</serviceWSDL>
-    </service>
-    <service>
       <serviceName>Authentication</serviceName>
       <serviceDescription>Authentication and Authorisation (via ACM)</serviceDescription>
       <serviceType>AUTH</serviceType>

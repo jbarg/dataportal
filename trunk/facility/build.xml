@@ -1,50 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="all" name="facilitymodule">
-
+<project basedir="." default="all">
     <target name="init">
-        <property name="tomcatlibs" value="C:/jakarta-tomcat-4.1.12/common/lib"/>
-        <property name="src" value="${basedir}/src"/>
-        <property name="web" value="${basedir}/web"/>
-        <property name="docs" value="${basedir}/docs"/>
-        <property name="webinf" value="${web}/WEB-INF"/>
-        <property name="dest" value="${webinf}/classes"/>
-        <property name="warfile" value="facility.war"/>
+	<property file="build.properties"/>
+<!--
+	<property name="app.name" value="facility"/>
+	<property name="package.name" value="uk.ac.clrc.dataportal.facility"/>
+	<property name="compile.debug" value="true"/>
+	<property name="compile.deprecation" value="true"/>
+	<property name="compile.optimize" value="true"/>
+        <property name="catalina.home" value="C:/jakarta-tomcat-4.1.12"/>
+-->
+
+        <property name="src.home" value="${basedir}/src"/>
+        <property name="web.home" value="${basedir}/web"/>
+        <property name="docs.home" value="${basedir}/docs"/>
+        <property name="dest.home" value="${web.home}/WEB-INF/classes"/>
     </target>
 
-    <target depends="init" name="compile">
-        <javac debug="true" deprecation="true" destdir="${dest}" srcdir="${src}">
+    <target name="all" depends="clean,compile"/>
+    
+    <target name="compile" depends="init">
+        <mkdir dir="${dest.home}"/>
+        <javac	srcdir="${src.home}"
+		destdir="${dest.home}"
+		debug="${compile.debug}"
+		deprecation="${compile.deprecation}"
+		optimize="${compile.optimize}">
             <classpath>
-                <pathelement location="${dest}"/>
-                <pathelement location="${tomcatlibs}/servlet.jar"/>
-                <fileset dir="${webinf}/lib">
+                <pathelement location="${catalina.home}/common/classes"/>
+                <fileset dir="${catalina.home}/common/endorsed">
+                    <include name="*.jar"/>
+                </fileset>
+                <fileset dir="${catalina.home}/common/lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <pathelement location="${catalina.home}/shared/classes"/>
+                <fileset dir="${catalina.home}/shared/lib">
+                    <include name="*.jar"/>
+                </fileset>
+                <pathelement location="${dest.home}"/>
+                <fileset dir="${web.home}/WEB-INF/lib">
                     <include name="**/*.jar"/>
                 </fileset>
             </classpath>
         </javac>
-    </target>
+    </target>    
 
-    <target depends="init,compile" name="war">
-        <jar basedir="${web}" compress="true" jarfile="${warfile}">
-            <exclude name="**/*.java"/>
-            <exclude name="**/*.*~"/>
-        </jar>
-    </target>
-
-    <target depends="init" name="clean">
+    <target name="clean" depends="init">
         <delete>
             <fileset dir=".">
                 <include name="**/*.class"/>
             </fileset>
         </delete>
-        <delete file="${warfile}"/>
+        <delete file="${basedir}/${app.name}.war"/>
     </target>
-    
-    <target name="javadoc" depends="init">
-        <javadoc packagenames="uk.ac.clrc.dataportal.facility" destdir="${docs}">
+
+        <target name="javadoc" depends="init">
+        <mkdir dir="${docs.home}"/>
+        <javadoc packagenames="${package.name}" destdir="${docs.home}">
             <sourcepath>
-                <pathelement location="${src}"/>
+                <pathelement location="${src.home}"/>
             </sourcepath>
         </javadoc>
     </target>
+   
+    <target name="war" depends="clean,compile">
+        <jar basedir="${web.home}" compress="true" jarfile="${basedir}/${app.name}.war">
+            <exclude name="**/*.java"/>
+            <exclude name="**/*.*~"/>
+        </jar>
+    </target>
+    
+    <target name="dist" depends="clean,javadoc,war"/>
     
 </project>
