@@ -34,12 +34,28 @@
       <xsd:sequence>
          <xsd:element name="Topic" type="cmd:TopicType" />
          <xsd:element name="Study" type="cmd:StudyType"/>
-         <xsd:element name="AccessConditions" type="xsd:string"/>
+         <xsd:element name="AccessConditions" minOccurs="0">
+            <xsd:complexType>
+               <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                     <xsd:attribute name="acsystem" type="cmd:AccessControlSystemTypes"/>
+                  </xsd:extension>
+               </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
 	 <xsd:element name="RelatedMaterial" type="cmd:RelatedMaterialTypes" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="MetadataID" type="cmd:metadataIDKeyType" use="required"/>
       <xsd:attribute name="Facility" type="xsd:string" use="required"/>
    </xsd:complexType>
+
+   <xsd:simpleType name="AccessControlSystemTypes">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="On Application"/>
+         <xsd:enumeration value="Digital Access Control System"/>
+         <xsd:enumeration value="Other"/>
+      </xsd:restriction>
+   </xsd:simpleType>
 
    <!-- metadataID uniquely identified one record - logicaly it consists of the -->
    <!-- name of the data archive (which has to be unique in the dataportal )    -->
@@ -350,9 +366,9 @@
       <xsd:sequence>
          <xsd:element name="DataDescription"    type="cmd:DataDescriptionType"/>
          <xsd:element name="DataHoldingLocator" type="cmd:CollectionLocatorType"/>
+         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataCollection"            type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
 <!-- again following attribute type should really be a CDATA equivelent -->
 <!-- but can't seem to find it -->
@@ -443,7 +459,7 @@
          <xsd:element name="DataName"   type="xsd:string"/>
 	 <xsd:element name="TypeOfData" type="cmd:TypesOfData" minOccurs="0" />
          <xsd:element name="Status"     type="xsd:string" minOccurs="0" />
-         <xsd:element name="DataTopic"  type="cmd:DataTopicType" minOccurs=0 />
+         <xsd:element name="DataTopic"  type="cmd:DataTopicType" minOccurs="0" />
 <!-- need to use a union type as LogicalDescription can be of one or more type -->
          <xsd:element name="LogicalDescription" type="cmd:LogicalDescriptionTypes" minOccurs="0" />
 	 <xsd:element name="Software" type="cmd:SoftwareType" minOccurs="0" />
@@ -512,9 +528,9 @@
 <!--service oriented reference location resolution-->
    <xsd:complexType name="ReferenceLocationType">
       <xsd:sequence>
-         <xsd:element name="Server" type="xsd:string"/>
+         <xsd:element name="Server" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="Port" type="xsd:string" minOccurs="0" />
-	 <xsd:element name="Service" type="xsd:string"/>
+	 <xsd:element name="Service" type="xsd:string" minOccurs="0" />
 	 <xsd:element name="Archive" type="xsd:string"/>
 	 <xsd:element name="ArchiveId" type="xsd:IDREF" minOccurs="0"/>
 	 <xsd:element name="StudyName" type="xsd:string"/>
@@ -525,8 +541,16 @@
 	 <xsd:element name="DataCollectionId" type="xsd:IDREF" minOccurs="0"/>
 	 <xsd:element name="ADOName" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="ADOId" type="xsd:IDREF" minOccurs="0"/>
-	 <!-- for a none service based reference a URI location can also be stored -->
-	 <xsd:element name="URI" type="xsd:string" minOccurs="0"/>
+	 <!-- for a none service based reference a URI-esque (if it is an absolute) location can also be stored -->
+         <xsd:element name="Locator" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                     <xsd:attribute name="pathtype" type="cmd:PathTypes"/>
+                  </xsd:extension>
+               </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
       </xsd:sequence>
    </xsd:complexType>
 
