@@ -26,13 +26,14 @@ public class sgetrservlet extends HttpServlet {
     private boolean sinitdone = false;
     private Properties props = null;
     private ServletConfig scon = null ;
+    String workingDir = null;
     
     public void init(ServletConfig config) throws ServletException {
         scon = config;
         super.init(config);
         try {
             ServletContext sc = scon.getServletContext();
-            String workingDir = sc.getRealPath("");
+             workingDir = sc.getRealPath("");
             try{
                 props = getProps(workingDir);
             }
@@ -178,9 +179,12 @@ public class sgetrservlet extends HttpServlet {
             //LaunchProcess.runCommand( "/bin/sh -c \"cd /tmp/srbtemp/" + request.getSession().getId() + ";/usr/bin/zip -mr /tmp/srbtemp/" + request.getSession().getId() + ".zip .\"");
              */
             
-            
+            String listing = "/bin/ls -ltr "+props.getProperty("srbDest")+File.separator+"$1 | grep -v '^d' | grep -v total | awk '{print $9}' > "+props.getProperty("srbDest")+File.separator+"$1.list";
             //execute cammand.  List the files in the directory and prints it out to file
-            LaunchProcess.runCommand("ls -ltr "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" | grep -v '^d' | grep -v total | awk '{print $9}' > "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+".list");
+            //LaunchProcess.runCommand("ls -ltr "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" | grep -v '^d' | grep -v total | awk '{print $9}' > "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+".list");
+            String newFile = workingDir+File.separator+"run.sh"; 
+            LaunchProcess.runCommand(newFile + " "+request.getSession().getId());
+            
             
             //read in file and add all the files to a buffer
             File list = new File(props.getProperty("srbDest") +File.separator+ request.getSession().getId()+".list");
