@@ -182,7 +182,7 @@ public class sgetrservlet extends HttpServlet {
             }
             else if(exe.equals("zip")){
                  LaunchProcess.runCommand("cd"+ props.getProperty("srbDest");
-                LaunchProcess.runCommand( props.getProperty("zipHome")+" -rvj -b ~ "+ request.getSession().getId() + ".zip  "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+File.separator+"*");
+                LaunchProcess.runCommand( props.getProperty("zipHome")+" -rvj "+ request.getSession().getId() + ".zip  "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+File.separator+"*");
                 
             }
             else if(exe.equals("jar")){
