@@ -30,8 +30,8 @@ public class SaveCartServlet extends HttpServlet{
             if(session == null) {
                 //terminate the session
                 //session.invalidate();
-                response.sendRedirect("../jsp/Logoff.jsp");
-
+                response.sendRedirect("../html/SessionTimedOut.html");
+                 return;
             }
             else{
                 //locate the prop file.  Normal get this from web.xml file

@@ -44,7 +44,8 @@ public class TransferDataSet extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         if(session == null){
-            response.sendRedirect("../html/Login.html");
+         response.sendRedirect("../html/SessionTimedOut.html");
+         return;
         }
         else{
             //locate the prop file.  Normal get this from web.xml file

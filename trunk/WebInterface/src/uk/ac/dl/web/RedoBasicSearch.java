@@ -43,7 +43,8 @@ public class RedoBasicSearch extends HttpServlet {
         //request users current session
         HttpSession session = request.getSession(false);
         if(session == null){
-            response.sendRedirect("../html/Login.html");
+         response.sendRedirect("../html/SessionTimedOut.html");
+            return;
         }
         else{
             //get working dir

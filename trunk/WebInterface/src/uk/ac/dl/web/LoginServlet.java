@@ -155,7 +155,7 @@ public class LoginServlet extends HttpServlet {
             //session.setAttribute("username", reName);
             //session.setAttribute("passphrase", rePass);
             session.setAttribute("LOGIN_STATUS", new Boolean(true));
-            session.setMaxInactiveInterval(Integer.parseInt(lifetime)-300);
+            //session.setMaxInactiveInterval(Integer.parseInt(lifetime)-300);
             
             ClockBean clock =new ClockBean(Integer.parseInt(lifetime)-300);
             session.setAttribute("clockbean", clock);

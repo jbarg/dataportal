@@ -46,7 +46,8 @@ public class ExpandResultsServlet extends HttpServlet{
         
         HttpSession session = request.getSession(false);
         if(session == null){
-            response.sendRedirect("../Login.html");
+            response.sendRedirect("../html/SessionTimedOut.html");
+            return;
         }
         else{
             //get working dir

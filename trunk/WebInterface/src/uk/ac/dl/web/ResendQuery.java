@@ -31,7 +31,8 @@ public class ResendQuery extends HttpServlet{
         //get session
         HttpSession session = request.getSession(false);
         if(session == null){
-            response.sendRedirect("../Login.html");
+            response.sendRedirect("../html/SessionTimedOut.html");
+            return;
         }
         //get working dir
         String wd = (String)session.getAttribute("wd");

@@ -43,7 +43,8 @@ public class FileDownload extends HttpServlet {
         Logger logger = Logger.getLogger(this.getClass().getName());
         HttpSession session = request.getSession(false);
         if(session == null){
-            response.sendRedirect("../html/Login.html");
+         response.sendRedirect("../html/SessionTimedOut.html");
+            return;
         }
         else{
             //locate the prop file.  Normal get this from web.xml file

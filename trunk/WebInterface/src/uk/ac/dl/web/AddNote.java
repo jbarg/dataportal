@@ -41,7 +41,8 @@ public class AddNote extends HttpServlet {
         
         HttpSession session = request.getSession(false);
          if(session == null){
-            response.sendRedirect("../Login.html");
+            response.sendRedirect("../html/SessionTimedOut.html");
+            return;
         }
         //get working directories
         String workingDir = (String)session.getAttribute("wd");

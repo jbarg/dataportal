@@ -35,7 +35,8 @@ public class DeleteCart extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         if(session == null){
-            response.sendRedirect("../Login.html");
+          response.sendRedirect("../html/SessionTimedOut.html");
+            return;
         }
         String wd = (String )session.getAttribute("wd");
         //locate the prop file.  Normal get this from web.xml file

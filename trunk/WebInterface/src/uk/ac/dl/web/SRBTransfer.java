@@ -46,7 +46,7 @@ public class SRBTransfer extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         if(session == null){
-            response.sendRedirect("../html/Login.html");
+          response.sendRedirect("../html/SessionTimedOut.html");
             return;
         }
         else{
