@@ -179,7 +179,7 @@ public class AuthCtl {
         call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"BADC","SRD","ISIS","MPIM","EMIN"};
+        String[] name = {"BADC-EMIN","SRD","ISIS","MPIM","EMIN"};
         Object[] ob = new Object[]{name,"ACM"};
         
         String[] faciltyEndPoints = (String[]) call.invoke(ob );
@@ -257,7 +257,7 @@ public class AuthCtl {
         call1.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call1.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call1.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"Dataportal"};
+        String[] name = {"Dataportal-EMIN"};
         Object[] ob = new Object[]{name,"SESSION"};
         
         String[] sessionendpoint = (String[]) call1.invoke(ob );

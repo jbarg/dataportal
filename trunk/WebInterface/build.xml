@@ -387,6 +387,8 @@
 		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
 		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
 		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>
+		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-logging.jar"/>
+		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-discovery.jar"/>
 		<!-- Copy static content of this web application -->
 		<copy todir="${build.home}">
 			<fileset dir="${web.home}"/>
