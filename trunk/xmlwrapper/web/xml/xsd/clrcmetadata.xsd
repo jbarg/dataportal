@@ -375,15 +375,15 @@
       <xsd:sequence>
 	 <xsd:element name="UnitName" type="xsd:string"/>
 	 <xsd:element name="UnitAcronym" type="xsd:string"/>
-	 <xsd:element name="UnitSystem" type ="xsd:string"/>
+	 <xsd:element name="UnitSystem" type ="xsd:string" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
 	
 
    <xsd:simpleType name="DerivationTypes">
       <xsd:restriction base="xsd:string">
-	 <!-- i.e. experimental conditions e.g. date : -->
-	 <xsd:enumeration value="fixed"/>
+	 <!-- i.e. experimental conditions e.g. date, location : -->
+	 <xsd:enumeration value="condition"/>
 	 <!-- i.e. what was actually measured e.g. temperature : -->
 	 <xsd:enumeration value="measured"/>
 	 <!-- i.e. a derived parameter from measured/fixed ones e.g. average temperature : -->
@@ -441,11 +441,11 @@
    <xsd:complexType name="DataDescriptionType">
       <xsd:sequence>
          <xsd:element name="DataName"   type="xsd:string"/>
-	 <xsd:element name="TypeOfData" type="cmd:TypesOfData" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="Status"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
-         <xsd:element name="DataTopic"  type="cmd:DataTopicType" />
+	 <xsd:element name="TypeOfData" type="cmd:TypesOfData" minOccurs="0" />
+         <xsd:element name="Status"     type="xsd:string" minOccurs="0" />
+         <xsd:element name="DataTopic"  type="cmd:DataTopicType" minOccurs=0 />
 <!-- need to use a union type as LogicalDescription can be of one or more type -->
-         <xsd:element name="LogicalDescription" type="cmd:LogicalDescriptionTypes" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="LogicalDescription" type="cmd:LogicalDescriptionTypes" minOccurs="0" />
 	 <xsd:element name="Software" type="cmd:SoftwareType" minOccurs="0" />
       </xsd:sequence>
    </xsd:complexType>
@@ -476,11 +476,9 @@
 
    <xsd:simpleType name="TypesOfData">
       <xsd:restriction base="xsd:string">
-	 <xsd:enumeration value="File Based"/>
+	 <xsd:enumeration value="Collection"/>
 	 <xsd:enumeration value="File"/>
-	 <xsd:enumeration value="BLOB Based"/>
 	 <xsd:enumeration value="BLOB"/>
-	 <xsd:enumeration value="Database Select Based"/>
 	 <xsd:enumeration value="Database Select"/>
          <xsd:enumeration value="other"/>
          <xsd:enumeration value="other"/>
@@ -491,10 +489,10 @@
    <xsd:complexType name="DataCollectionType">
       <xsd:sequence>
          <xsd:element name="DataDescription" type="cmd:DataDescriptionType"/>
+         <xsd:element name="DataCollectionLocator"    type="cmd:CollectionLocatorType" minOccurs="0" />
+         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataCollection"           type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="DataCollectionLocator"    type="cmd:CollectionLocatorType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
 <!-- again the following is stated as a CDATA type in the original DTD -->
       <xsd:attribute name="dataid" type="xsd:ID" use="required"/>
