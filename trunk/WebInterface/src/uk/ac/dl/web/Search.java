@@ -96,7 +96,10 @@ public class Search {
                 wr.write("<tr><td>"+buff.toString()+" </td>");
                 wr.write("<td>"+dis+"</td>");
                 wr.write("<td>"+new java.util.Date()+"</td>");
-                wr.write("<td>"+waiting+"</td>");
+                //get time in seconds
+                int time  = waiting.intValue();
+                int secs = (int)time/1000;
+                wr.write("<td>"+secs+"</td>");
                 wr.write("<td><a href='../servlet/ResendQuery?discipline="+discipline+"&wait="+waiting+""+buff2.toString()+"'>Resend Query</a></td></tr>\n");
                 wr.close();
             }

@@ -85,13 +85,13 @@ public class RedoBasicSearch extends HttpServlet {
             String Smax_wait = ret[4];
             //get the max number of minutes user wishes to wait of results
             
-            if(Smax_wait == null) Smax_wait = "15";
+            if(Smax_wait == null) Smax_wait = "15000";
             
             //1 min = 60sec
             //60sec = 60000? secs in java
-            
-            double Dmax_wait = Double.parseDouble(Smax_wait)*1000;
-            int max_wait = (int)Dmax_wait;
+            //time already in java time
+            //double Dmax_wait = Double.parseDouble(Smax_wait)*1000;
+            int max_wait = Integer.parseInt(Smax_wait);
             
             
             Integer max2 = new Integer(max_wait);
