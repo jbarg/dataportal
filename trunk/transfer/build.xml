@@ -233,16 +233,30 @@
 		<mkdir dir="${build.home}/WEB-INF/classes"/>
 		<!-- added in excludes="uk/ac/dl/test/**" -->
 		<javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
-			<classpath refid="compile.classpath"/>
+<classpath refid="compile.classpath"/>
+			
+		</javac>
+		<javac srcdir="${web.home}/WEB-INF/Transfer" destdir="${web.home}/WEB-INF/Transfer" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
+			<classpath>
+				<fileset dir="${basedir}/web/WEB-INF/libTransfer">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
 		</javac>
 		<!-- Copy application resources -->
 		<copy todir="${build.home}/WEB-INF/classes">
 			<!-- added in ,**/test/** -->
 			<fileset dir="${src.home}" excludes="**/*.java"/>
 		</copy>
-                 <exec dir="${build.home}/WEB-INF/Transfer" os="Linux,Unix" executable="/bin/chmod">
-                    <arg line="754 UrlCopy.sh TestWS.sh compile.sh setEnv.sh" />
-                </exec>
+		<copy todir="${build.home}/WEB-INF/Transfer">
+			<!-- added in ,**/test/** -->
+			<fileset dir="${web.home}/WEB-INF/Transfer" excludes="**/*.java"/>
+		</copy>
+
+		
+		<exec dir="${build.home}/WEB-INF/Transfer" os="Linux,Unix" executable="/bin/chmod">
+			<arg line="754 UrlCopy.sh TestWS.sh compile.sh setEnv.sh"/>
+		</exec>
 	</target>
 	<!-- ==================== Dist Target ===================================== -->
 	<!--
@@ -287,8 +301,7 @@
 
 -->
 	<target name="install" depends="compile" description="Install application to servlet container">
-	        <install url="${manager.url}" username="${manager.username}" password="${manager.password}" path="${app.path}" war="file://${build.home}"/>
-               
+		<install url="${manager.url}" username="${manager.username}" password="${manager.password}" path="${app.path}" war="file://${build.home}"/>
 	</target>
 	<!-- ==================== Javadoc Target ================================== -->
 	<!--
