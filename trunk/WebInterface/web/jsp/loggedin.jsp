@@ -12,16 +12,15 @@
         
 	// if status is non-null then let's get the login status
 	if (clock != null) {
-                
 		loggedIn = clock.isValid();
-		
 	}
-
-	//FD	
-	// if user is not logged in, then send them to error page
-	if ( !loggedIn || clock == null) {
+	// if clock is null then session already been invalidated
+        if(clock == null){
+                throw new uk.ac.dl.web.SessionTimedOutException();
+        }
+        // if get to here, then first time user has get here, and certi has ran out
+	else if ( !loggedIn ) {
+                uk.ac.dl.web.Cleanup.session(session.getAttribute("sessionid"));
 		throw new uk.ac.dl.web.SessionTimedOutException();
-		//response.sendRedirect("../");
-
 	}
 %>
