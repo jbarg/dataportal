@@ -271,7 +271,15 @@
             <type>String</type>
   
 </attribute>
+<attribute>
 
+<name>host</name>
+
+<required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>String</type>
+  
+</attribute>
 <attribute>
 
 <name>send</name>
