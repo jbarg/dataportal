@@ -4,7 +4,7 @@
  * Created on 16 December 2003, 09:44
  */
 
-package uk.ac.dl.web;
+package uk.ac.dl.beans;
 
 import org.apache.log4j.*;
 import java.io.*;

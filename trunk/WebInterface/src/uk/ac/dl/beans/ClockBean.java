@@ -4,7 +4,7 @@
  * Created on 15 December 2003, 11:18
  */
 
-package uk.ac.dl.web;
+package uk.ac.dl.beans;
 import java.util.*;
 /**
  *
