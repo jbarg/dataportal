@@ -9,13 +9,12 @@ package uk.ac.clrc.dataportal.srbcommands;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.axis.components.logger.LogFactory;
-import org.apache.commons.logging.Log;
+
 
 import java.util.*;
 import java.io.*;
 import java.lang.StringBuffer;
-
+import org.apache.log4j.*;
 /**
  *
  * @author  maw24
@@ -23,7 +22,7 @@ import java.lang.StringBuffer;
  */
 public class sgetrservlet extends HttpServlet {
     
-    Log log = LogFactory.getLog(this.getClass().getName());
+    static Logger log = Logger.getLogger("sgetrservlet.class");
     private boolean sinitdone = false;
     private Properties props = null;
     private ServletConfig scon = null ;
@@ -69,7 +68,8 @@ public class sgetrservlet extends HttpServlet {
         // Log on to SRB - we could have made this a general purpose login so that clients could use this web service to interact with any SRB server
         // but for now just have it so that the Web Service is configured locally and connects to just one SRB server / domain
         if (! sinitdone) {
-            log.info("Logged on to SRB");
+            log.info("Logging on to SRB");
+            log.info("Executing "+props.getProperty("srbHome") + "/Sinit");
             LaunchProcess.runCommand( props.getProperty("srbHome") + "/Sinit");
         }
         sinitdone = true;
