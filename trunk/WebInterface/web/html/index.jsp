@@ -19,22 +19,22 @@ facilities,E-minerals, data, search, Glen Drinkwater, Synchrotron Radiation,Brit
 
 <table id="top_table"  width="100%" cellspacing="3" ><tr>
 <td id="td_top1" valign="top" width="18%">
-<a href="http://www.clrc.ac.uk"><img src="../img/emin1.jpg" width="50%" height="50%" alt="E-minerals" border="0" /></a>
+<a href="http://www.clrc.ac.uk"><img src="../img/emin1.gif" width="70" height="90" alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin2.png" width="50%" height="50%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin2.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin3.png" width="50%" height="50%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin3.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin4.jpg" width="50%" height="50%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin4.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin5.png" width="50%" height="50%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin5.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin6.png" width="50%" height="400%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin6.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 
 
 </td>
