@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all">
+    <target name="init">
+	<property file="build.properties"/>
+        <property name="src.home" value="${basedir}/src"/>
+        <property name="web.home" value="${basedir}/web"/>
+        <property name="docs.home" value="${basedir}/docs"/>
+        <property name="dest.home" value="${web.home}/WEB-INF/classes"/>
+	<property name="ignoresystemclasses" value="true"/>
+    </target>
+
+    <target depends="clean,compile" name="all"/>
+    
+    <target depends="init" name="compile">
+        <mkdir dir="${dest.home}"/>
+        <javac debug="${compile.debug}" deprecation="${compile.deprecation}" destdir="${dest.home}" optimize="${compile.optimize}" srcdir="${src.home}">
+        <classpath>
+                <pathelement location="${dest.home}"/>
+                <fileset dir="${web.home}/WEB-INF/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target> 
+
+    <target depends="init" name="clean">
+        <delete>
+            <fileset dir=".">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+        <delete file="${basedir}/${app.name}.war"/>
+    </target>
+
+        
+   <target depends="init, compile" name="run">
+        <java classname="uk.ac.clrc.dataportal.uddisetup.CreateTModels" fork="true">
+        <arg value="${servicetypes.filename}"/>
+        <arg value="${keys.filename}"/>
+        <classpath>
+                <pathelement location="${dest.home}"/>
+                <fileset dir="${web.home}/WEB-INF/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+<!--
+                <fileset dir="${java.home}/lib">
+                    <include name="jsse.jar"/>
+                </fileset>
+-->
+            </classpath>
+         </java>
+   </target>
+    
+    
+</project>

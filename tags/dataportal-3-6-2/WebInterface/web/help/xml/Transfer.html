@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+	<body>
+		<table border="0" cellspacing="0" cellpadding="2" width="100%">
+			<tr>
+				<td bgcolor="#525D76">
+					<font color="#ffffff" face="arial,helvetica,sanserif">
+						<a name="">
+							<strong>Transfer / Download</strong>
+						</a>
+					</font>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<blockquote>
+						<p>
+							<br />
+						</p>
+						<table border="0" cellspacing="0" cellpadding="2" width="100%">
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="">
+											<strong>Options</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+										<p>Currently items (files and datasets) can only be downloaded and transfered.  The Data Portal currenty can retrieve items from SRB, HTTP, GridFTP, GASS and FTP severs and transfer them to GridFTP, GASS and FTP severs or just to download to your machine.</p>
+									</blockquote>
+								</td>
+							</tr>
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="Wildcard Searches">
+											<strong>SRB (Storage Resource Broker)</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+										<p>SRB items (Data Sets and Files) can be transferred or downloaded using the Data Portal.  Click on the download button and the SRB collection will be tar balled and downloaded to your machine as a single file, or downloaded as a single file if the item is a SRB file.</p>
+										<p>To transfer the item, either the tar balled collection or file can be transferred to any of GridFTP, GASS and FTP severs.  This requires you to put in the correct URL for the destination file.  Goto <a href="#url">Globus URL</a> for more inforation on the URLs.  Once the correct URL has been typed press 'transfer' and wait for the reply.  If sucessful, a transfer sucessful page will appear, otherwise an error page will be presented with a error.  For more information understanding <a href="#error">error messages</a> click here.
+ 
+</p>
+									</blockquote>
+								</td>
+							</tr>
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="">
+											<strong>Files</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+										<p>Files can be transfered or downloaded using the Data Portal (but not Data Sets of files).  Click on the download button and the File will be downloaded to your machine.</p>
+										<p>The file can be transferred to any of GridFTP, GASS and FTP severs.  This requires you to put in the correct URL for the destination file.  Goto <a href="#url">Globus URL</a> for more inforation on the URLs.  Once the correct URL has been typed press 'transfer' and wait for the reply.  If sucessful, a transfer sucessful page will appear, otherwise an error page will be presented with a error.  For more information understanding <a href="#error">error messages</a> click here.
+ 
+</p>
+									</blockquote>
+								</td>
+							</tr>
+						</table>
+					</blockquote>
+				</td>
+			</tr>
+		</table>
+		<table border="0" cellspacing="0" cellpadding="2" width="100%">
+			<tr>
+				<td bgcolor="#525D76">
+					<font color="#ffffff" face="arial,helvetica,sanserif">
+						<a name="url">
+							<strong>Globus</strong>
+						</a>
+					</font>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<blockquote>
+						<p>
+							<br />
+						</p>
+						<table border="0" cellspacing="0" cellpadding="2" width="100%">
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="">
+											<strong>URL</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+										<p>Globus URLs take the same format as HTTP urls.  The normal format is <br /><br />
+									<blockquote>	&lt;protocol&gt;://&lt;machine name&gt;/&lt;file location&gt;</blockquote>										For example, if you wanted to do a 3rd party GridFTP transfer, to a machine www.bbc.co.uk and put in the the /tmp directory as a file called myfile the URL would be:<br /><blockquote>gsiftp://www.bbc.co.uk//tmp/myfile</blockquote>If you wanted to do a 3rd party HTTPS (GASS) transfer, to a machine www.bbc.co.uk and put in the the c:\temp directory as a file called myfile the URL would be:<br />
+<blockquote>https://www.bbc.co.uk/c:/temp/myfile</blockquote>
+A URL :<br />
+<blockquote>gsiftp://www.bbc.co.uk/tmp/myfile</blockquote>would represent a file in the tmp directory of you home directory.
+
+
+</p>
+									</blockquote>
+								</td>
+							</tr>
+							<tr>
+								<td bgcolor="#828DA6">
+									<font color="#ffffff" face="arial,helvetica,sanserif">
+										<a name="error">
+											<strong>Globus Exceptions</strong>
+										</a>
+									</font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<blockquote>
+										<p>Globus Exceptions can be very hard to read and understand.  Here is some examples and there meanings</p>
+										<p><b>Error: Missing '[protocol]://' </b>&nbsp;&nbsp;&nbsp; Means that either you have not put a protocol into the URL or the protocol that you have put in is invalid (spelt incorrectly).
+<br />
+<p><b>Error: UrlCopy transfer failed. [Root error message: escy.dl.ac.uk] 
+</b>&nbsp;&nbsp;&nbsp; Means that the host is unknown to the system.<br />
+<p><b>Error: UrlCopy transfer failed. [Root error message: Connection refused]  
+</b>&nbsp;&nbsp;&nbsp; Means that either the machine is down or the globus server is down.<br />
+ 
+<p><b>Error: UrlCopy transfer failed. [Root error message: exception code 1 (Server refused performing the request.), custom message: User authorization failed.
+</b>&nbsp;&nbsp;&nbsp; Means that you dont have mapping of your certificates DN to a local user on the machine and that you are therefore have no write permissions on the file system.<br />
+
+</p>
+									</blockquote>
+								</td>
+							</tr>
+							
+						</table>
+					</blockquote>
+				</td>
+			</tr>
+		</table>
+
+	</body>
+</html>

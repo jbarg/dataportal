@@ -1,0 +1,38 @@
+Authentication and Authorization Web Service
+12/03/03
+--------------------------------------------
+There are no product dependencies for this module. However the following web services are required to be running in order for the module to function:
+
+The Lookup Service
+The Access Control Modules for each facility
+The Session Manager
+
+This module is configured by the "authent.conf" file. The following variables should be set
+
+1) my_proxy_server_name = The name of the MyProxy Server your system uses
+
+2) my_proxy_server_dn = The Distinguished Name of the MyProxy Server
+
+3) my_proxy_server_port = The IP Port number of the MyProxy Server
+
+4) delegate_proxy_lifetime = The default lifetime of delegated certificates
+
+5) portal_cert_filename = The location and name of the Data Portal certificate
+
+6) portal_private_key_filename = The location and name of the Data Portal private key file
+
+7) ca_cert_filename = The e-Science Certification Authority certificate (who signed the Data Portal certificate).
+
+8) uddi_lookup_service = The name of the UDDI server where all Data Portal web services are registered
+
+
+An exmaple would be
+
+my_proxy_server_name=wk-ibm1.dl.ac.uk
+my_proxy_server_dn=/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/wk-ibm1.dl.ac.uk
+my_proxy_server_port=7512
+delegate_proxy_lifetime=3600
+portal_cert_filename=/home/tomcat4/.globus/portalcert.pem
+portal_private_key_filename=/home/tomcat4/.globus/portalkey.pem
+ca_cert_filename=/etc/grid-security/certificates/01621954.0
+uddi_lookup_service=http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService

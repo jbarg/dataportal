@@ -1,0 +1,36 @@
+<Context path="/juddi" docBase="juddi" debug="5" reloadable="true" crossContext="true">
+   <Logger className="org.apache.catalina.logger.FileLogger" prefix="localhost_juddiDB_log" suffix=".txt" timestamp="true"/>
+   <Resource name="jdbc/juddiDB" auth="Container" type="javax.sql.DataSource"/>
+   <ResourceParams name="jdbc/juddiDB">
+     
+
+      
+      
+   <parameter>
+                  <name>factory</name>
+                  <value>org.apache.commons.dbcp.BasicDataSourceFactory</value>
+               </parameter>
+               <parameter><name>maxActive</name><value>100</value></parameter>
+               <parameter><name>maxIdle</name><value>30</value></parameter>
+               <parameter><name>maxWait</name><value>10000</value></parameter>
+               <parameter><name>username</name><value>dataportal</value></parameter>
+               <parameter><name>password</name><value>datap0rt4l</value></parameter>
+               <parameter>
+                  <name>driverClassName</name>
+         
+         <value>org.hsqldb.jdbcDriver</value>
+         
+               </parameter>
+               
+               <parameter>
+                  <name>url</name>
+                  <value>jdbc:hsqldb:hsql://localhost:9001/xdb</value>
+      </parameter>
+           
+      <parameter>
+         <name>validationQuery</name>
+         <value>select count(*) from TMODEL</value>
+      </parameter>
+
+   </ResourceParams>
+</Context>
