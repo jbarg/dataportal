@@ -871,13 +871,25 @@ public class ISISCsmdMapper implements CsmdMapper
 
          Statement t_t_s = null ;
          ResultSet t_t_r = null ;
-         //HERE-need to iterate through all ados
-         buildMDAtomicDataObject(key, sbr, ii+li, null, true) ;
+         t_t_s=c.createStatement() ;
+         String datafile_id = place_holder ;
+      
+         t_t_r=t_t_s.executeQuery("select datafile_id from datafile_list where dataset_id = '" + dataset_id + "'") ;
+
+         while (t_t_r.next())
+         {
+            //HERE-need to iterate through all ados
+            buildMDAtomicDataObject(key, sbr, ii+li, null, true) ;
+         }
+         t_t_r.close() ;
+         t_t_s.close() ;
+
          //won't need the recursive call for isis - but maybe in the future
          //buildMDDataCollection(key, sbr, ii+li, "datacollection", true) ;
 
       }
 
+      t_r.close() ;
       t_s.close() ;
 
       return ;
@@ -898,9 +910,14 @@ public class ISISCsmdMapper implements CsmdMapper
          t_s=s ;
       }
       //
-      buildMDDataDescription(dataset_id, sbr, ii+li, "datacollection" , true) ;
+      sbr.append("<AtomicDataObject>\n") ;
+
+      buildMDDataDescription(key, sbr, ii+li, "ado" , true) ;
+      buildMDADOLocator(key, sbr, ii+li, "ado" , true) ;
+      buildMDRelatedReference(key, sbr, ii+li, "ado" , true) ;
       
-      
+      sbr.append("</AtomicDataObject>\n") ;
+
       //
       return ;
    }
