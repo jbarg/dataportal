@@ -12,6 +12,12 @@ import javax.xml.parsers.* ; //for jaxp DocumentBuilderFactory etc.
 
 import org.xml.sax.* ; //for InputSource
 
+import org.xmldb.api.base.*; //for xindice stuff
+import org.xmldb.api.modules.*;
+import org.xmldb.api.*;
+
+
+
 
 public class XmlWrapperDocBuilder
 {
@@ -155,7 +161,7 @@ public class XmlWrapperDocBuilder
       //find all keys in map and then pull all values out
       //validate and place in xml doc repository
 
-      Set sei = m.entrySet() ;
+      Set se = m.entrySet() ;
       Iterator e = se.iterator() ;
 
       while(e.hasNext())
@@ -204,7 +210,7 @@ public class XmlWrapperDocBuilder
          }
          
          //get the xindice handles needed for insert
-         Collection col = ss.getCollection() ;
+          org.xmldb.api.base.Collection col = ss.getXMLCollection() ;
          XMLResource xmlr = ss.getXMLResource() ;
 
          try
@@ -214,8 +220,8 @@ public class XmlWrapperDocBuilder
             col.storeResource(xmlr);
             //System.out.println("Document " + args[0] + " inserted");
          }
-         catch (XMLDBException e) {
-            System.err.println("XML:DB Exception occured " + e.errorCode);
+         catch (XMLDBException xmle) {
+            System.err.println("XML:DB Exception occured " + xmle.errorCode);
          }
 
 

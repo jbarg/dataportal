@@ -7,9 +7,14 @@
 
 package uk.ac.cclrc.xmlwrapper.ws.selector;
 
+import uk.ac.cclrc.xmlwrapper.XmlWrapperDocSelector ;
+
 public class Xmlwrapper_SelectorSoapBindingImpl implements uk.ac.cclrc.xmlwrapper.ws.selector.XmlWrapperDocSelector{
+
+    XmlWrapperDocSelector xwds = new XmlWrapperDocSelector() ;
+
     public java.lang.String queryMetaData(java.lang.String xquery) throws java.rmi.RemoteException {
-        return null;
+        return xwds.queryMetaData(xquery);
     }
 
 }

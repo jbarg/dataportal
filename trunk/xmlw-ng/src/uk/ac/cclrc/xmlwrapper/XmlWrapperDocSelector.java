@@ -56,8 +56,8 @@ public class XmlWrapperDocSelector
       DBHelper dbh = ss.getDBHelper() ;
       dbh.connectToDB() ;
 
-      //load the map (i.e. the compressed entry cache)
-      loadMap() ;
+      //load the cache from the xml repository (coherancy will need dealing with some day)
+      loadCache() ;
 
    }
 
@@ -76,10 +76,10 @@ public class XmlWrapperDocSelector
        
       ArrayList al = (ArrayList) ss.getContainer() ;
 
-      Collection col = ss.getCollection()
-      XPathQueryService xqs = ss.getXPathQueryService()
-      ResourceSet rs = ss.getResourceSet()
-      XMLResource xmlr = ss.getXMLResource()
+      org.xmldb.api.base.Collection col = ss.getXMLCollection() ;
+      XPathQueryService xqs = ss.getXPathQueryService() ;
+      ResourceSet rs = ss.getResourceSet() ;
+      XMLResource xmlr = ss.getXMLResource() ;
 
       ////////////////
 
@@ -87,7 +87,7 @@ public class XmlWrapperDocSelector
       {
          rs = xqs.query("/") ; //need an XPath query here to select all documents in the collection
 
-         ResourceIterator results = resultSet.getIterator();
+         ResourceIterator results = rs.getIterator();
 
          while (results.hasMoreResources()) 
          {
@@ -133,7 +133,7 @@ public class XmlWrapperDocSelector
       //clear stringbuffer for re-use
       if(result.length() != 0)
       {
-         result.delete(0, sbr.length()) ;
+         result.delete(0, result.length()) ;
       }
 
 
@@ -141,10 +141,17 @@ public class XmlWrapperDocSelector
       {
          //we want to replace all references to metadata.xml with the actual xml fragment for each study
          //we use () around the fragment to allow direct replacement of the document reference with the fragment
-         String exp = xquery.replaceAll( "document\s*\u0028\u0022metadata.xml\u0022\u0029" ,
-                                         "("+ StringZip.decompress((String)e.next())+ ")" )
+         String exp = xquery.replaceAll( "document\\s*\\u0028\\u0022metadata.xml\\u0022\\u0029" ,
+                                         "("+ StringZip.decompress((String)e.next())+ ")" ) ;
 
-         result.append((String)xq.eval(exp));
+         try
+         {
+            result.append((String)xq.eval(exp));
+         }
+         catch (Throwable thr)
+         {
+            thr.printStackTrace() ;
+         }
       }
 
 
