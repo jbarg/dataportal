@@ -122,23 +122,23 @@ public class FileDownload extends HttpServlet {
                 response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+url);
              
             }*/
-             ServletOutputStream out = response.getOutputStream();
+            ServletOutputStream out = response.getOutputStream();
             try{
                 //now download the file to the user.
-               
-            response.setContentType("application/download");
-            response.setBufferSize(65536);
-            
-            String filename = url.substring(url.lastIndexOf("/") + 1);
-            filename = filename.replace('.','_');
-            response.setHeader("Content-disposition","attachment; filename=" + filename + ".tar");
-            
+                
                 response.setContentType("application/download");
                 response.setBufferSize(65536);
                 
                 String filename = url.substring(url.lastIndexOf("/") + 1);
                 filename = filename.replace('.','_');
                 response.setHeader("Content-disposition","attachment; filename=" + filename + ".tar");
+                
+                response.setContentType("application/download");
+                response.setBufferSize(65536);
+                
+                String filename1 = url.substring(url.lastIndexOf("/") + 1);
+                filename1 = filename1.replace('.','_');
+                response.setHeader("Content-disposition","attachment; filename=" + filename1 );
                 
                 File myFileIn = new File("/tmp/"+sid);
                 FileInputStream myFileInputStream = new FileInputStream(myFileIn);
