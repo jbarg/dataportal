@@ -482,6 +482,8 @@
          <xsd:element name="Server" type="xsd:string"/>
 	 <xsd:element name="Port" type="xsd:string" minOccurs="0" />
 	 <xsd:element name="Service" type="xsd:string"/>
+	 <xsd:element name="Archive" type="xsd:string"/>
+	 <xsd:element name="ArchiveId" type="xsd:IDREF" minOccurs="0"/>
 	 <xsd:element name="StudyName" type="xsd:string"/>
 	 <xsd:element name="StudyId" type="xsd:IDREF"/>
 	 <xsd:element name="InvestigationName" type="xsd:string" minOccurs="0"/>
@@ -490,6 +492,8 @@
 	 <xsd:element name="DataCollectionId" type="xsd:IDREF" minOccurs="0"/>
 	 <xsd:element name="ADOName" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="ADOId" type="xsd:IDREF" minOccurs="0"/>
+	 <!-- for a none service based reference a URI location can also be stored -->
+	 <xsd:element name="URI" type="xsd:string" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
 
