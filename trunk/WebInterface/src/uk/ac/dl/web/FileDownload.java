@@ -61,6 +61,7 @@ public class FileDownload extends HttpServlet {
             String cert = null;
             String result = "";
             FileWriter cred = null;
+            File download = new File("/tmp/"+sid);
             try{
                 
                 //get the proxy from the session manager
@@ -76,9 +77,9 @@ public class FileDownload extends HttpServlet {
                 
                 cert = (String) call1.invoke(ob1 );
                 String save = wd+File.separator+"profiles"+File.separator+sid;
-                cred = new FileWriter(save);
-                cred.write(cert);
-                cred.close();
+                //cred = new FileWriter(save);
+                //cred.write(cert);
+                //cred.close();
                 int no = save.length();
                 StringBuffer h1 = new StringBuffer();
                 for(int i = 0; i<no; i++){
@@ -106,8 +107,8 @@ public class FileDownload extends HttpServlet {
             }
             catch(Exception e){
                 //System.out.println(e);
-                logger.warn("Unable to transfer file collection",e);
-                
+                logger.warn("Unable to transfer file.",e);
+                download.delete();
                 response.sendRedirect("../jsp/error.jsp");
                 
                 return;
@@ -118,14 +119,6 @@ public class FileDownload extends HttpServlet {
                 ServletOutputStream out = response.getOutputStream();
                 try{
                     //now download the file to the user.
-                    
-                    response.setContentType("application/download");
-                    response.setBufferSize(65536);
-                    
-                    String filename = url.substring(url.lastIndexOf("/") + 1);
-                    filename = filename.replace('.','_');
-                    response.setHeader("Content-disposition","attachment; filename=" + filename + ".tar");
-                    
                     response.setContentType("application/download");
                     response.setBufferSize(65536);
                     
@@ -155,7 +148,8 @@ public class FileDownload extends HttpServlet {
                 }
                 catch(Exception e){
                     out.close();
-                    System.out.println(e);
+                    download.delete();
+                    logger.warn("Error in downloading file",e);
                     response.sendRedirect("../jsp/error.jsp");
                 }
             }
