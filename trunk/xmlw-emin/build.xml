@@ -113,6 +113,7 @@
   <property name="app.path"      value="/${app.name}"/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
+<!--  <property name="catalina.home" value="c:\tomcat4.1.12"/> --> <!-- UPDATE THIS! -->
   <property name="catalina.home" value="/var/tomcat4"/> <!-- UPDATE THIS! -->
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/docs"/>
