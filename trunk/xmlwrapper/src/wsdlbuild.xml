@@ -1,0 +1,66 @@
+<project name="Dataportal XmlWrappers: wsdl part" default="compile" basedir=".">
+
+
+  <target name="wsdl"
+   description="makes wsdl and server skeltons and client stubs">
+
+    <!-- need to generate the wsdl and the stubs & skeleton -->
+    <!-- BADC: -->
+    <!-- 'single quotes' around values containing double quotes -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL" 
+          fork="true"
+	  failonerror="true">
+       <arg value='-o"badcxmlw.wsdl"'/> 
+       <arg value='-l"http://localhost:8080/${app.name}/xmlwrapper_badc"'/>
+       <arg value='-n"urn:xmlwrapper"'/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperBADC'/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java" 
+          fork="true"
+          failonerror="true">
+       <arg value='-o"."'/>
+       <arg value='-d"Session"'/>
+       <arg value="-s"/> 
+       <arg value='-p"uk.ac.cclrc.xmlwrapper.ws.badc"'/>
+       <arg value='badcxmlw.wsdl'/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+
+    <!-- MPIM: -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL" 
+          fork="true"
+          failonerror="true">
+       <arg value='-o"mpimxmlw.wsdl"'/>
+       <arg value='-l"http://localhost:8080/${app.name}/xmlwrapper_mpim"'/>
+       <arg value='-n"urn:xmlwrapper"'/> 
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperMPIM'/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java" 
+          fork="true"
+          failonerror="true">
+       <arg value='-o"."'/>
+       <arg value='-d"Session"'/>
+       <arg value="-s"/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper.ws.mpim"'/>
+       <arg value='mpimxmlw.wsdl'/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+  </target>
+
+</project>

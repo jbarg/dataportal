@@ -539,40 +539,22 @@
         <classpath refid="compile.classpath"/>
     </javac>
 
-    <!-- need to generate the wsdl and the stubs & skeleton -->
-    <!-- BADC: -->
-    <java classname="org.apache.axis.wsdl.Java2WSDL">
-       <arg value="-o ${src.home}/badcxmlw.wsdl -l\"http://localhost:8080/${app.name}/xmlwrapper_badc\" -n urn:xmlwrapper -p\"uk.ac.cclrc.xmlwrapper\" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperBADC "/> 
-       <classpath>
-          <pathelement path="${java.class.path}"/>
-       </classpath>
-    </java>
-
-    <java classname="org.apache.axis.wsdl.WSDL2Java">
-       <arg value="-o ${src.home} -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.badc ${src.home}/badcxmlw.wsdl"/> 
-       <classpath>
-          <pathelement path="${java.class.path}"/>
-       </classpath>
-    </java>
-
-
-    <!-- MPIM: -->
-    <java classname="org.apache.axis.wsdl.Java2WSDL">
-       <arg value="-o ${src.home}/mpimcxmlw.wsdl -l\"http://localhost:8080/${app.name}/xmlwrapper_mpim\" -n urn:xmlwrapper -p\"uk.ac.cclrc.xmlwrapper\" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperMPIM "/> 
-       <classpath>
-          <pathelement path="${java.class.path}"/>
-       </classpath>
-    </java>
-
-    <java classname="org.apache.axis.wsdl.WSDL2Java">
-       <arg value="-o ${src.home} -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.mpim ${src.home}/mpimxmlw.wsdl"/> 
-       <classpath>
-          <pathelement path="${java.class.path}"/>
-       </classpath>
-    </java>
+    <!-- call subbuild file to cope with package names correctly -->
+    <!-- perhaps there is a way to change the ${basedir} so we would -->
+    <!-- not have to do this -->
+    <ant antfile="${src.home}/wsdlbuild.xml" dir="${src.home}" target="wsdl" inheritRefs="true"/>
 
     <!-- delete class files -->
+    <delete>
+       <fileset dir="${src.home}" includes="**/*.class"/>
+    </delete>
+
     <!-- echo a reminder to update the java files i.e. the SOAP binding one -->
+    <echo>
+    Don't forget to update the *SoapBindingImpl.java files under ws.badc and ws.mpim before
+    compiling, installing and deploying
+    </echo>
+
 
 
 
