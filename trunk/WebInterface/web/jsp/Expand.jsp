@@ -11,21 +11,15 @@
 <%@ taglib uri="/tldweb" prefix="xtags" %>
 
 <html>
-
 <head>
-
 <title>CCLRC Data Portal - Expanded results</title>
-
 <!--<link rel="stylesheet" href="../style/mainNN4.css" type="text/css" /> -->
 
 <style type="text/css"> 
-
 @import url(../style/mainmenu.css); /*IE and NN6x styles*/
-
 </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
 <script type="text/javascript">
 
 <!--
@@ -40,34 +34,34 @@ function openwindow(page){
 
 }
 
+// sets all checkboxes
+function selectAll(formID, fieldName, value)
+{
+  var elements = document.forms[formID].elements;
+  for (i = 0; i < elements.length; i++) {
+    if (elements[i].name && elements[i].name.indexOf(fieldName) > -1) {
+      elements[i].checked = value; 
+    }
+  }
+  return null;
+}
 //-->
 
 </script> 
-
 </head>
-
-<body background="../img/redbg.gif">
-
-<table width="100%" cellspacing="3" border="0">
-
-<tr>
-
+<body>
+<a name="top" />
+<table width="100%" cellspacing="3" border="0"><tr>
 <td class="tdwidth" valign="top" width="20%" align="left">
-
 <a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
-
 <br />&nbsp;<br /><br />
-
-
 
 <!-- out puts the content if the browser is not netsacpe 4.  If so out puts
 
 html/netscape.html file from the content root.-->
 <xtags:menu netscapefile="html/netscape.html" iefile="html/ie.html">
-
 </xtags:menu>
 </td>
-
 <td valign="top">
 
 <h1>Data Portal expanded results</h1>
@@ -75,20 +69,15 @@ html/netscape.html file from the content root.-->
 &nbsp;Home&nbsp;&nbsp;&nbsp;>&nbsp;<a href="BasicSearch.jsp">Basic Search</a>
 &nbsp;&nbsp;>&nbsp;<a href="SimpleSearch.jsp">Studies</a>
 &nbsp;&nbsp;>&nbsp;<a href="Expand.jsp">Expanded Studies</a>
-
-
 <hr />
+<div align="right"><a name="#top"/><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
 
 <br />
 
  <form class="mess" name="simpleresult" action="../servlet/Explore" method="post">
-
 <%
-
    	//set static log for the class
-
 	if(loggedIn){
-
             String sid = (String)session.getAttribute("sessionid");
       
             //Document xml = null;
@@ -110,24 +99,14 @@ html/netscape.html file from the content root.-->
 	else{}
 
 %>
-
-
-
 </form>
-
-
-
+<div align="right"><a name="bottom"/><font size="-1"><a align="right" href="#top">top</a></font></div>
 <hr />
-
 <%@ include file="../html/footer.html"%>
 </td>
-
 </tr>
-
 </table>
-
 </body>
-
 </html>
 
 

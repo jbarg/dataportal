@@ -31,7 +31,8 @@ function openwindow(page){
 
 </script>
 </head>
-<body background="../img/redbg.gif">
+<body>
+<a name="top" />
 <table width="100%" cellspacing="3" border="0"><tr>
 <td valign="top" width="20%" align="left">
 <a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
@@ -52,9 +53,10 @@ html/netscape.html file from the content root.-->
 &nbsp;&nbsp;>&nbsp;<a href="SimpleSearch.jsp">Studies</a>
 &nbsp;&nbsp;>&nbsp;<a href="Expand.jsp">Expanded Studies</a>
 &nbsp;&nbsp;>&nbsp;<a href="Explore.jsp">Data</a>
-<div class="colour">
+
 <hr />
-</div>
+<div align="right"><a name="#top"/><font size="-1"><a align="right" href="#bottom">bottom</a></font></div>
+
 <br />
  <form class="mess" name="simpleresult" action="../servlet/AddToCart" method="post">
 
@@ -83,7 +85,9 @@ html/netscape.html file from the content root.-->
 
 
 </form>
-<br />
+
+<div align="right"><a name="bottom"/><font size="-1"><a align="right" href="#top">top</a></font></div>
+
 <hr />
 <%@ include file="../html/footer.html"%></td>
 </tr>
