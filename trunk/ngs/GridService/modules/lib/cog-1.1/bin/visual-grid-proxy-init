@@ -1,0 +1,58 @@
+#! /bin/sh 
+
+EXEC=org.globus.tools.proxy.GridProxyInit
+OPTIONS=
+
+fixCommandLine() {
+
+    COMMANDLINE=
+
+    while [ "X$1" !=  "X" ] ; do
+        COMMANDLINE="${COMMANDLINE} \"$1\""
+        shift
+    done
+
+    echo $COMMANDLINE
+}
+
+updateOptions() {
+ 
+    if [ "X$2" != "X" ] ; then
+	OPTIONS="$OPTIONS -D$1=$2"
+    fi
+
+}
+
+####### MAIN BODY ##########
+
+if [ ! -d "$COG_INSTALL_PATH" ] ; then
+    echo "Error: COG_INSTALL_PATH not set" 1>&2
+    exit 1
+fi
+
+CONFIG=${COG_INSTALL_PATH}/etc/java.cfg
+
+if [ -r "${CONFIG}" ] ; then
+   . "${CONFIG}"
+else
+   echo "Error: Cannot find ${CONFIG} configuration file"
+   exit
+fi
+
+CMDLINE=`fixCommandLine "$@"`
+
+### SETUP OTHER ENV VARIABLES ####
+
+updateOptions "GLOBUS_LOCATION" "$GLOBUS_LOCATION"
+updateOptions "X509_USER_PROXY" "$X509_USER_PROXY"
+
+### EXECUTE ############
+
+LDAP_JARS=-Xbootclasspath/p:$COG_INSTALL_PATH/lib/providerutil.jar:$COG_INSTALL_PATH/lib/ldap.jar
+
+eval java ${OPTIONS} ${COG_OPTS} ${LDAP_JARS} -classpath ${LOCALCLASSPATH} ${EXEC} ${CMDLINE}
+return_code=$?
+
+exit $return_code
+
+
