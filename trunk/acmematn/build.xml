@@ -99,12 +99,13 @@
 	<property name="app.path" value="/${app.name}"/>
 	<property name="app.version" value="0.1-dev"/>
 	<property name="build.home" value="${basedir}/build"/>
-	<!--<property name="catalina.home" value="c:/jakarta-tomcat-4.1.12"/>-->
+	<!-- <property name="catalina.home" value="e:\tomcat5.0"/> -->
 	<!-- UPDATE THIS! -->
 	<property name="server.name" value="${server.name}"/>
 	<property name="dist.home" value="${basedir}/dist"/>
 	<property name="docs.home" value="${basedir}/dist/docs"/>
 	<property name="manager.url" value="http://${server.name}/manager"/>
+	<property name="manager.password" value="admin"/>
 	<property name="src.home" value="${basedir}/src"/>
 	<property name="web.home" value="${basedir}/web"/>
 	<!-- ================== Custom Ant Task Definitions ======================= -->
