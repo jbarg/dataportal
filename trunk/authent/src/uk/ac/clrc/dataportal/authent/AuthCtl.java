@@ -42,9 +42,10 @@ public class AuthCtl {
     public static String caCertFilename = null;
     public static String uDDILookUpService = null;
     public static String defaultid = null;
+    public static String[] facilities = null;
     
     // class method here
-    public static void getMyConfig() throws IOException {
+    public static void getMyConfig() throws     Exception {
         try {
             config.load(new FileInputStream(Config.getContextPath()+"authent.conf"));
             AuthCtl.myProxyServerName = config.getProperty("my_proxy_server_name");
@@ -55,16 +56,23 @@ public class AuthCtl {
             AuthCtl.portalPrivateKeyFilename = config.getProperty("portal_private_key_filename");
             AuthCtl.caCertFilename = config.getProperty("ca_cert_filename");
             AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service");
-             AuthCtl.defaultid = config.getProperty("defaultid");
-        } catch ( IOException e ) {
+            AuthCtl.defaultid = config.getProperty("defaultid");
+            String facility = config.getProperty("facilities");
+            AuthCtl.facilities =facility.split(" ");
+            for(int i = 0; i<AuthCtl.facilities.length;i++){
+                facilities[i] =   facilities[i]+defaultid;
+                
+            }
+            
+        } catch ( Exception e ) {
             System.out.println( "---> Error: Cannot read config file" );
             throw e;
         }
     }
     public String login( String userName, String password, Integer lifetime ) throws Exception {
-        
+        String[][] facilityAccess;
         String[] facilityEndPoints;
-        org.w3c.dom.Element facilityAccess;
+        //org.w3c.dom.Element facilityAccess;
         String sessionId = "-1";
         AuthCtl.getMyConfig();
         GlobusProxy userCert = idCheck( userName, password, lifetime );
@@ -78,13 +86,14 @@ public class AuthCtl {
             sessionId = "-1";
         else {
             facilityEndPoints = lookupFacility();
+            
             //            System.out.println(facilityEndPoints.length);
             //            if (facilityEndPoints.length > 0) {
             //                System.out.println(facilityEndPoints[0]);
             //            }
             
             //*** WILL USE DN WITH FACILITIES SOOOOOON...
-            facilityAccess = buildAccess( userCert.getUserCert().getSubjectDN().getName(), facilityEndPoints );
+            facilityAccess = buildAccess( turnintoString(userCert), facilityEndPoints );
             //System.out.println( "---> User:     " + userCert.getUserCert().getSubjectDN().getName() );
             sessionId = getSessionId( userCert, facilityAccess );
         }
@@ -95,17 +104,17 @@ public class AuthCtl {
     
     //this is called by the session manager for 3rd party authentication.
     
-    public org.w3c.dom.Element getAccessRights(String dn) throws Exception{
-        
+    /*public org.w3c.dom.Element getAccessRights(String dn) throws Exception{
+     
         String[] facilityEndPoints;
         org.w3c.dom.Element facilityAccess;
         AuthCtl.getMyConfig();
         System.out.println("looking up facs ....");
         //
         facilityEndPoints = lookupFacility();
-        facilityAccess = buildAccess( dn, facilityEndPoints );
+        //facilityAccess = buildAccess( dn, facilityEndPoints );
         return facilityAccess;
-    }
+    }*/
     
     // This was used when we checked the ID in throws database. Kept in case we revert
     // mrd67 17/02/2003
@@ -181,8 +190,8 @@ public class AuthCtl {
         call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"EMAT"};
-        Object[] ob = new Object[]{name,"ACM"};
+       // String[] name = {facilities};
+        Object[] ob = new Object[]{facilities,"ACM"};
         
         String[] faciltyEndPoints = (String[]) call.invoke(ob );
         for(int i = 0; i<faciltyEndPoints.length;i++){
@@ -191,17 +200,19 @@ public class AuthCtl {
         return faciltyEndPoints;
     }
     
-    private org.w3c.dom.Element buildAccess( String userName, String[] facilityEndPoints ) throws Exception {
+    private String[][] buildAccess( String userCert, String[] facilityEndPoints ) throws Exception {
         Element accessRights = new Element("UserAccessPrivilege");
-        Element userElement = new Element("User");
-        userElement.setText(userName);
-        accessRights.addContent(userElement);
+        //Element userElement = new Element("User");
+        // userElement.setText(DN);
+        //accessRights.addContent(userElement);
         
         DOMBuilder domBuilder = new DOMBuilder();
         DOMOutputter domOut = new DOMOutputter();
         
         Service  service = new Service();
         
+        String[][] map = new String[facilityEndPoints.length][2];
+        // HashMap map = new HashMap();
         //hard coded section
         //String[] facilityEndPointsHC = {"http://localhost:8080/acmbadc/services/acm","http://localhost:8080/acmmpim/services/acm","http://localhost:8080/acmsrd/services/acm","http://localhost:8080/acmisis/services/acm"};
         
@@ -210,38 +221,62 @@ public class AuthCtl {
         for (int i  = 0 ; i < facilityEndPoints.length ; i++){
             
             if ( facilityEndPoints[i] != null ) {
-                
-                try {
-                    Call     call    = (Call) service.createCall();
-                    call.setTargetEndpointAddress( new java.net.URL(facilityEndPoints[i]) );
-                    call.setOperationName("getAccessInW3CElement");
-                    call.addParameter( "userId", XMLType.XSD_STRING, ParameterMode.IN );
-                    call.setReturnType( XMLType.SOAP_ELEMENT);
-                    org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( new Object[] {userName});
-                    
-                    Element retJdom = domBuilder.build(ret);
-                    
+                for (int j  = 0 ; j < 2 ; j++){
+                    if(j==1)    map[i][1] = facilities[i];
+                    else{
+                        try {
+                            Call     call    = (Call) service.createCall();
+                            call.setTargetEndpointAddress( new java.net.URL(facilityEndPoints[i]) );
+                            call.setOperationName("getAuthorisationTokenInXMLString");
+                            call.addParameter( "userId", XMLType.XSD_STRING, ParameterMode.IN );
+                            call.setReturnType( XMLType.XSD_STRING);
+                            String ret = (String) call.invoke( new Object[] {userCert});
+                            
+                    /*System.out.println(ret);
                     //System.out.println(XMLUtils.ElementToString(ret));
-                    Element facElement = (Element) retJdom.getChild("Facility").clone();
-                    accessRights.addContent(facElement);
-                    
-                    
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    Element facElement = new Element("facility");
+                    facElement.setAttribute("name", facilityEndPoints[i]);
+                    facElement.addContent(ret);
+                    accessRights.addContent(facElement);*/
+                            //System.out.println(ret);
+                            //System.out.println(facilityEndPoints[i]);
+                            // map.put(ret, facilityEndPoints[i]);
+                            map[i][j] = ret;
+                            //FileWriter rr=  new FileWriter("c:/test.xml");
+                            // rr.write(ret);
+                            // rr.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
+                
             }
         }
         
-        org.w3c.dom.Element accessRightsDOM = domOut.output(accessRights);
-        System.out.println(XMLUtils.ElementToString(accessRightsDOM));
+        //org.w3c.dom.Element accessRightsDOM = domOut.output(accessRights);
+        /// System.out.println(XMLUtils.ElementToString(accessRightsDOM));
         
-        return accessRightsDOM;
-        
+      /*  Collection n = map.values();
+        while(n.iterator().hasNext()){
+            Object t = n.iterator().next();
+            System.out.println("attribute is"+map.get(t));
+            System.out.println("");
+            System.out.println("");
+            System.out.println("http is "+t);
+        }*/
+        for(int i = 0; i < facilityEndPoints.length; i++) {
+            for(int j = 0; j < 2; j++) {
+                System.out.println(map[i][j]);
+            }
+        }
+        //return accessRightsDOM;
+        return map;
     }
     
     
     
-    private String getSessionId( GlobusProxy proxy, org.w3c.dom.Element facilityAccess ) throws Exception {
+    private String getSessionId( GlobusProxy proxy, String[][] facilityAccess ) throws Exception {
         
         // need to define endpoint or call lookup module
         // below is a fix
@@ -269,11 +304,33 @@ public class AuthCtl {
         
         // error handling in case no endpoint in returned!
         //save to file
-        FileOutputStream out = new FileOutputStream(Config.getContextPath()+proxy.getSubject());
-        proxy.save(out);
+        String proxystring = turnintoString(proxy);
+        
+        Service service = new Service();
+        Call call = (Call) service.createCall();
+        call.setTargetEndpointAddress( new java.net.URL(sessionendpoint[0]) );
+        call.setOperationName("startSession");
+        call.addParameter( "proxy", XMLType.XSD_STRING, ParameterMode.IN );
+        
+        
+        call.addParameter( "facilityAccess", new javax.xml.namespace.QName("", "ArrayOfArrayOf_xsd_string"), java.lang.String[][].class, ParameterMode.IN );
+        //call.addParameter( "sid", new javax.xml.namespace.QName("", "ArrayOfArrayOf_xsd_string"), java.lang.String[][].class, ParameterMode.IN );
+        call.setReturnType( XMLType.XSD_STRING );
+        
+        String ret = (String) call.invoke( new Object [] {proxystring, facilityAccess});
+        //        System.out.println("Results: " + ret);
+        return ret;
+    }
+    
+    private static synchronized String turnintoString(GlobusProxy cred)throws Exception{
+        
+        File file = new File(Config.getContextPath()+"globuscred.txt");
+        FileOutputStream out = new FileOutputStream(file);
+        
+        cred.save(out);
         out.close();
         //turn proxy into string
-        URL url1  = new URL("file:///"+Config.getContextPath()+proxy.getSubject());
+        URL url1  = new URL("file:///"+file.getAbsolutePath());
         // System.out.println(url);
         URLConnection con = url1.openConnection();
         InputStream in2 = con.getInputStream();
@@ -290,23 +347,12 @@ public class AuthCtl {
         }
         in.close();
         //end of file save
-        File proxyfile = new File(Config.getContextPath()+proxy.getSubject());
-        proxyfile.delete();
-        
-        Service service = new Service();
-        Call call = (Call) service.createCall();
-        call.setTargetEndpointAddress( new java.net.URL(sessionendpoint[0]) );
-        call.setOperationName("startSession");
-        call.addParameter( "proxy", XMLType.XSD_STRING, ParameterMode.IN );
         
         
-        call.addParameter( "facilityAccess", XMLType.SOAP_ELEMENT, ParameterMode.IN );
-        call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
-        call.setReturnType( XMLType.XSD_STRING );
+        file.delete();
+        System.out.println(cert);
+        return cert.toString();
         
-        String ret = (String) call.invoke( new Object [] {cert.toString(), facilityAccess,null});
-        //        System.out.println("Results: " + ret);
-        return ret;
     }
     
     public static void main(String[] args) throws Exception {
