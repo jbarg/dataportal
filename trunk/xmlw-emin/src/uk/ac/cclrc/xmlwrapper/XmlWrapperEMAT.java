@@ -231,8 +231,7 @@ public class XmlWrapperEMAT
 
      result.append("</CLRCMetadata>") ;
 
-     //HERE manual debugging as log4j gone on one
-     System.out.println(result.toString()) ;
+     log.debug(result.toString()) ;
 
      org.w3c.dom.Element el = null ;
 
