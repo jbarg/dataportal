@@ -115,8 +115,8 @@ this...
 
 This installs the UDDI , Database and relevant libraries into your tomcat instance.
 
-NB: This process installs all the axis and jglobus jar files into $CATALINA_HOME/shared/lib
-It aslo puts dp_common.jar, hsqldb.jar, mail.jar, activation.jar, jdom.jar and the two files jstl.jar and standard.jar in there
+NOTE: This process installs all the axis and jglobus jar files into $CATALINA_HOME/shared/lib
+It also puts dp_common.jar, hsqldb.jar, mail.jar, activation.jar, jdom.jar and the two files jstl.jar and standard.jar in there.
 
 7)  ant start_dbs
 
@@ -187,12 +187,15 @@ Information
 1) Log files are written to the console from the Web Interface. All other modules and the Web Interface log their file in the $CATALINA_HOME/logs/dataportal.xml file. 
 This file is not really human readable.  It is in the format of Chainsaw.  To view this information download chainsaw at http://logging.apache.org/log4j/docs/chainsaw.html
 
-2) Remove Data Portal from tomcat by 
-i)'ant -f installation remove'. 
+2) Remove Data Portal from tomcat in two ways.  The first is manual (the second does it by ant scripts.  This removes all jar files in the $CATALINA_HOME/shared/lib
+directory that were put there before listed in Installation part 6)  Some of these you might not wanting to delete.
+1,i)'ant -f installation remove'. 
 If that fails remove all the xml file related to the data portal in the $CATALINA_HOME/conf/Catalina/localhost directory.
 These should be dataportal, shopcart,facility, juddi, queryandreply,uddilookup,sessionmanager,authent and datatransfer .xml files
-ii) Remove juddi folder from   $CATALINA_HOME/webapps
-iii) Remove new jar files from  $CATALINA_HOME/shared/lib folder.
+1,ii) Remove juddi folder from   $CATALINA_HOME/webapps
+1,iii) Remove new jar files from  $CATALINA_HOME/shared/lib folder.  Goto Installation part 6) to find out which jar files are installed
+
+or 2,i) ant removedp
 
 3) The Data Portal can run a server to email an administrator regarding errors and faults. 
 To run the server type 'ant run_log4jserver'
