@@ -14,7 +14,7 @@ public class Xmlwrapper_EminSoapBindingImpl implements uk.ac.cclrc.xmlwrapper.ws
     XmlWrapperEMIN xwe = new XmlWrapperEMIN() ;
 
     public org.w3c.dom.Element getXML(java.lang.String query) throws java.rmi.RemoteException {
-        return xwe.getXML(query);;
+        return xwe.getXML(query);
     }
 
 }

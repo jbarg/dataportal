@@ -45,8 +45,7 @@
        <arg value='http://localhost:8080/${app.name}/xmlwrapper_emin'/>
        <arg value='-n'/>
        <arg value='urn:xmlwrapper'/>
-       <arg value='-p'/>
-       <arg value='uk.ac.cclrc.xmlwrapper=urn:xmlwrapper'/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
        <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperEMIN'/>
        <classpath refid="compile.classpath"/>
     </java>
@@ -64,10 +63,6 @@
        <arg value='eminxmlw.wsdl'/>
        <classpath refid="compile.classpath"/>
     </java>
-
-
-  </target>
-
 
 
   </target>
