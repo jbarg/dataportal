@@ -188,6 +188,7 @@ public class LoginServlet extends HttpServlet {
             }
             if(prop.getProperty("topics").equals("true")){
                 //get the topics
+                session.setAttribute("topics",  "true");
                 try{
                     String meta_url = prop.getProperty("meta_url");
                     String meta_passwd = prop.getProperty("meta_passwd");
@@ -213,7 +214,7 @@ public class LoginServlet extends HttpServlet {
                     logger.warn("Unable to get the topics",e);
                     System.out.println(e);
                 }
-                response.sendRedirect("../jsp/BasicSearcht.jsp");
+                response.sendRedirect("../jsp/BasicSearch.jsp");
             }
             else{
                 response.sendRedirect("../jsp/BasicSearch.jsp");
