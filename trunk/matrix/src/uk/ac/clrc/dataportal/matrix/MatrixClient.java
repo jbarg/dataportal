@@ -51,14 +51,18 @@ public class MatrixClient {
         
         // First create our request
         MatrixDataGridRequest request = new MatrixDataGridRequest();
+        Transaction tx = null;
         
         // Next create the transaction / operatiob we want to perform and attach it to the request
         
-        MatrixDownloadOp downloadOp = new MatrixDownloadOp();
-        request.setTransaction(downloadOp.createDownloadOpTransaction());
+        //MatrixDownloadOp downloadOp = new MatrixDownloadOp();
+        //tx = downloadOp.createDownloadOpTransaction();
         
-        //        MatrixListOp listOp = new MatrixListOp();
-        //        request.setTransaction(listOp.createListOpTransaction());
+        MatrixListOp listOp = new MatrixListOp();
+        tx = listOp.createListOpTransaction();
+        
+        // Attach transaction to request
+        request.setTransaction(tx);
         
         try {
             JAXBContext jc = JAXBContext.newInstance("edu.sdsc.matrix.srb.parser");
@@ -96,39 +100,53 @@ public class MatrixClient {
             
             msg = mf.createMessage();
             soapPart = msg.getSOAPPart();
-            
             source = request.getSource();
             soapPart.setContent(source);
+
+            System.out.println("Sending status query to endpoint : " + MatrixClient.ENDPOINT);
+            reply = connection.call(msg, new URL(MatrixClient.ENDPOINT));
             
-            // Status Codes are in edu/sdsc/matrix/srb/code/MatrixCodes.java
-            int statusCode = 9000003; // This is the transaction started (but not finished) status code
+            // Figure out what the transaction was..... use the step name for this as it's set to the op name
+            // Note that SDSC may fix this as some point!!
+            Step step = (Step) tx.getFlow().getSteps().get(0);
+            String stepName = step.getStepName();
             
-            // Loop until the transaction has finished
-            while ( statusCode == 9000003 ) {
+            if (stepName.equals("listOp")) {
+                System.out.println("List Op Response");
+                printReply(reply);
+            } else if (stepName.equals("ingestOp")) {
+                System.out.println("Ingest Op processing.....");
+            } else if (stepName.equals("downloadDataSetOp")) {
                 
-                System.out.println("Sending status query to endpoint : " + MatrixClient.ENDPOINT);
-                reply = connection.call(msg, new URL(MatrixClient.ENDPOINT));
+                // Status Codes are in edu/sdsc/matrix/srb/code/MatrixCodes.java
+                int statusCode = 9000003; // This is the transaction started (but not finished) status code
                 
-                replyxml = reply.getSOAPPart().getContent();
-                dgresponse = (DataGridResponse) unmarshaller.unmarshal(replyxml);
-                TransactionStatusResponse txnStatus = dgresponse.getTransactionStatusResponse();
+                // Loop until the transaction has finished
+                while ( statusCode == 9000003 ) {
+                    
+                    replyxml = reply.getSOAPPart().getContent();
+                    dgresponse = (DataGridResponse) unmarshaller.unmarshal(replyxml);
+                    TransactionStatusResponse txnStatus = dgresponse.getTransactionStatusResponse();
+                    
+                    // Because we know there was only one step in our transaction we can get the first object in the list
+                    StepStatusResponse stepStatusResponse = (StepStatusResponse) txnStatus.getFlowStatusResponse().getStepStatusResponse().get(0);
+                    statusCode = stepStatusResponse.getStatusCode();
+                    
+                    System.out.println("STATUS CODE IS " + statusCode + "\n");
+                }
                 
-                // Because we know there was only one step in our transaction we can get the first object in the list
-                StepStatusResponse stepStatusResponse = (StepStatusResponse) txnStatus.getFlowStatusResponse().getStepStatusResponse().get(0);
-                statusCode = stepStatusResponse.getStatusCode();
-                
-                System.out.println("STATUS CODE IS " + statusCode + "\n");
-            }
-            
-            System.out.println("Received " + reply.countAttachments() + " attachments:");
-            Iterator it = reply.getAttachments();
-            while(it.hasNext()) {
-                AttachmentPart attachment = (AttachmentPart)it.next();
-                System.out.println(attachment.getContentId());
-                DataHandler dh = attachment.getDataHandler();
-                FileOutputStream fout = new FileOutputStream(attachment.getContentId());
-                dh.writeTo(fout);
-                fout.close();
+                System.out.println("Received " + reply.countAttachments() + " attachments:");
+                Iterator it = reply.getAttachments();
+                while(it.hasNext()) {
+                    AttachmentPart attachment = (AttachmentPart)it.next();
+                    System.out.println(attachment.getContentId());
+                    DataHandler dh = attachment.getDataHandler();
+                    FileOutputStream fout = new FileOutputStream(attachment.getContentId());
+                    dh.writeTo(fout);
+                    fout.close();
+                }
+            } else {
+                System.out.println("Unknown step- response not processed.");
             }
             
             connection.close();
