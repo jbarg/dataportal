@@ -217,6 +217,7 @@ public class XmlWrapperDocSelector
       //output properties for the result of the xquery
       Properties outputProps = new Properties();
       outputProps.setProperty(OutputKeys.INDENT, "yes");
+      outputProps.setProperty(OutputKeys.METHOD, "xml"); //stop unclosed meta tags ?
 
       //reading in the xml string
       InputSource eis = new InputSource(new StringReader(xml_input)) ;
@@ -370,56 +371,89 @@ public class XmlWrapperDocSelector
          //get the intermediate result first before we run the formatter
          tmp_xml = runXQuery(external_xquery, proc_str) ;
 
-         try
+         if (tmp_xml != null)
          {
-            //takes in the result of the intermediate_xml processed by the formatting xml
-            tmp_doc = sax.build(new StringReader(tmp_xml));
-         }
-         catch (org.jdom.JDOMException jdome)
-         {
-            jdome.printStackTrace() ;
-         }
+            try
+            {
+               //takes in the result of the intermediate_xml processed by the formatting xml
+               tmp_doc = sax.build(new StringReader(tmp_xml));
+            }
+            catch (org.jdom.JDOMException jdome)
+            {
+               jdome.printStackTrace() ;
+            }
 
-         org.jdom.Element tmp_root = tmp_doc.getRootElement() ;
+            org.jdom.Element tmp_root = tmp_doc.getRootElement() ;
 
-         if(got_root == false)
-         {
-            res_doc.setRootElement(new Element(tmp_root.getName())) ;
-            got_root = true ;
-         }
-         org.jdom.Element res_root = res_doc.getRootElement() ;
+            if(got_root == false)
+            {
+               res_doc.setRootElement(new Element(tmp_root.getName())) ;
+               got_root = true ;
+            }
+            org.jdom.Element res_root = res_doc.getRootElement() ;
 
-         List children = tmp_root.getChildren() ;
+            List children = tmp_root.getChildren() ;
 
-         Iterator itr = children.iterator();
-         Element el = null ;
-         while(itr.hasNext())
-         {
-            //see jdom faq for why not to use the Element.detach() method for this
-            //modifies list and document at the same time leads to concurrentmodification exception
-            el = (Element)itr.next() ;
-            itr.remove() ;
-            res_root.addContent(el);
-         }
+            Iterator itr = children.iterator();
+            Element el = null ;
+            while(itr.hasNext())
+            {
+               //see jdom faq for why not to use the Element.detach() method for this
+               //modifies list and document at the same time leads to concurrentmodification exception
+               el = (Element)itr.next() ;
+               itr.remove() ;
+               res_root.addContent(el);
+            }
+         }//block performed if result of query not null
 
       } //end of while processed all documents
 
       //need to serialse the result as xml before applying the formatter
-      org.jdom.output.XMLOutputter xmlo = new org.jdom.output.XMLOutputter() ;
-      intermediate_xml = xmlo.outputString(res_doc) ;
+      String result_xml_string = null ;
+      
+      if(got_root == true) //i.e. initial xquery brought back some result to format
+      {
+         org.jdom.output.XMLOutputter xmlo = new org.jdom.output.XMLOutputter() ;
+         intermediate_xml = xmlo.outputString(res_doc) ;
 
-      String result_xml_string = runXQuery(result_formatter, intermediate_xml) ;
+         result_xml_string = runXQuery(result_formatter, intermediate_xml) ;
+      }
+      else
+      {
+         result_xml_string = "<error>xquery produced null output</error>" ;
+      }
 
       //perhaps need to write output as org.w3c.dom.Element to make the interface richer ?
       try
       {
-         final_doc = sax.build(new StringReader(result_xml_string)) ;
+         if (result_xml_string != null)
+         {
+            //System.err.println("XX" + result_xml_string + "XX") ;
+            final_doc = sax.build(new StringReader(result_xml_string)) ;
+         }
+         else //formatter brought back null result need to send back error
+         {
+            final_doc = sax.build(new StringReader("<error>formatter produced null output</error>")) ;
+         }
       }
       catch (org.jdom.JDOMException jdome)
       {
          jdome.printStackTrace() ;
       }
 
+      //needed - somday these errors need changing to exceptions
+      if (final_doc == null)
+      {
+         try
+         {
+            final_doc = sax.build(new StringReader("<error>formatter produced in valid xml</error>")) ;
+         }
+         catch (org.jdom.JDOMException jdome)
+         {
+            jdome.printStackTrace() ;
+         }
+
+      }
 
       DOMOutputter dom_out = new DOMOutputter() ;
       org.w3c.dom.Document result_dom = null ;
@@ -436,6 +470,7 @@ public class XmlWrapperDocSelector
       
       //perhaps need some pre-processing if special characters need escaping
       return result_element ;
+
 
    }
 
