@@ -38,7 +38,10 @@ function seenoteWS(page){
     }
     else{
         win = window.open("../jsp/seenote.jsp?url="+page+"","Add_note","toolbar=no, width=385, height=360");
-    }
+    }<div align="right">
+    <input type="button" value="Select All" onclick="selectAll('mess','selected',true);"/>
+    </div>
+<br />
 }
 
 function addnote(page){
@@ -71,7 +74,10 @@ function check(){
 </head>
 <body background="../img/redbg.gif">
 <table width="100%" cellspacing="3" border="0"><tr>
-<td valign="top" width="20%" align="left">
+<td valign="top" widt<div align="right">
+    <input type="button" value="Select All" onclick="selectAll('mess','selected',true);"/>
+    </div>
+<br />h="20%" align="left">
 <a href="http://www.clrc.ac.uk"><img border="0" src="../img/clrc.gif" alt="CLRC logo" /></a>
 <br />&nbsp;<br /><br />
 <!-- out puts the content if the browser is not netsacpe 4.  If so out puts
