@@ -1,0 +1,5 @@
+EMIN=emin.xml
+BADC=badc.xml
+MPIM=mpim.xml	
+SRD=srd.xml
+ISIS=isis.xml
