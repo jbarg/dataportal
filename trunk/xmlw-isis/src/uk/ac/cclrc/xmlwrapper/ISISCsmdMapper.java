@@ -1053,6 +1053,23 @@ public class ISISCsmdMapper implements CsmdMapper
          sbr.append(ii+"</DataDescription>\n") ;
 
       }
+      else if (type.compareTo("ado")==0)
+      {
+         String name = place_holder ;
+         String datafile_type = place_holder ;
+         String comments = place_holder ;
+
+         t_r=t_s.executeQuery("select name, datafile_type, comments from datafile where id = '"+key+"'") ;
+
+         if(t_r.next())
+         {
+            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+            datafile_type = sr.LitWithEnt(xt.makeValid(r.getString("DATAFILE_TYPE") ));
+            comments = sr.LitWithEnt(xt.makeValid(r.getString("COMMENTS") ));
+
+
+
+      }
         
       t_s.close() ;   
 
