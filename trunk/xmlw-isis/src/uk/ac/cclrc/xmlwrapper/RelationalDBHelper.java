@@ -1,4 +1,4 @@
-//package uk.ac.cclrc.xmlwrapper ;
+package uk.ac.cclrc.xmlwrapper ;
 
 import java.util.* ;
 import java.sql.* ;

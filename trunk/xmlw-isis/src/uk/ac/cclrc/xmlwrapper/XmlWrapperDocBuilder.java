@@ -253,7 +253,7 @@ public class XmlWrapperDocBuilder
 
   }
 
-  public static int void main (String  args[])
+  public static void main (String  args[])
   {
      XmlWrapperDocBuilder xwdb = new XmlWrapperDocBuilder() ;     
 

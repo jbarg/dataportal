@@ -2,6 +2,8 @@ package uk.ac.cclrc.xmlwrapper ;
 
 import java.util.* ;
 
+import java.io.* ;
+
 import java.sql.* ; //jdbc
 
 import org.apache.log4j.* ;
@@ -37,7 +39,7 @@ public class ISISCsmdMapper implements CsmdMapper
       //setup these local variables as it would be too verbose to put them at the start of each function in this class
       //get local values needed from SessionSingleton
       this.ss = SessionSingleton.getInstance() ;
-      this.r=ss.getStringReplace() ;
+      this.sr=ss.getStringReplace() ;
       this.xt=ss.getXmlText() ;
       //setup logger
       ss.setLogger(ISISCsmdMapper.class.getName() + ".class" ) ;
@@ -46,7 +48,7 @@ public class ISISCsmdMapper implements CsmdMapper
       this.i_place_holder = ss.i_place_holder ;
       this.ti = indentToStr(ss.indent) ;
       this.level_indent = ss.indent ;
-      this.li = indentToStr(levell_ident) ; 
+      this.li = indentToStr(level_indent) ; 
       //retrieve the database name
       this.dbs = ss.getDbs() ;
 
@@ -86,7 +88,7 @@ public class ISISCsmdMapper implements CsmdMapper
       Statement s = ss.getStatement() ;
       ResultSet r = ss.getResultSet() ;
 
-      DBHelper dbh = ss.getDBHelper() ;
+      DBHelper dbh = ss.getRelDBHelper() ;
 
       ParseQuery pq = ss.getParseQuery() ;
 
@@ -372,7 +374,7 @@ public class ISISCsmdMapper implements CsmdMapper
       buildMDKeywords(key, sbr, ii+li, null) ;
       //following will have to list all distinct subjects related to study
       //ISIS icat_v2 now has subjects
-      buildMDSubject(key, sbr, ii+li, null) ;
+      buildMDSubjects(key, sbr, ii+li, null) ;
 
       sbr.append(ii +  "</Topic>\n") ;
 
@@ -437,26 +439,28 @@ public class ISISCsmdMapper implements CsmdMapper
       //as this is called from a nested context 
       Connection c = ss.getConnection() ;
       Statement t_s = c.createStatement() ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
  
       List listy = new ArrayList() ;
 
       int level = 99 ;
 
+      String name=place_holder ;
+
       //recursion would have been better - but writing that stuff hurts my head !!
       while(level > 0) 
       {
-         t_r = t_s.execute("select name, parent_id, level from topic where topic_id = '" + topic_id +"'") ;
+         t_r = t_s.executeQuery("select name, parent_id, level from topic where topic_id = '" + topic_id +"'") ;
  
          if(t_r.next())
          {
             name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
             topic_id = sr.LitWithEnt(xt.makeValid(r.getString("PARENT_ID") ));
-            level = sr.LitWithEnt(xt.makeValid(r.getString("LEVEL") ));
+            level = r.getInt("LEVEL") ;
 
             listy.add(name) ;
          
-            if(topic_id < 0 )
+            if(Integer.parseInt(topic_id, 10) < 0 )
             {
                level = 0 ;
             }
@@ -471,7 +475,7 @@ public class ISISCsmdMapper implements CsmdMapper
       t_r.close() ;
       t_s.close() ;
 
-      int size=listy.size ;
+      int size=listy.size() ;
       String ind = ii ;
 
       while(size > 0)
@@ -593,7 +597,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       String surname = place_holder ;
       String forename = place_holder ;
-      String middle_initial = place_holder ;
+      String middle_initials = place_holder ;
       String title = place_holder ;
       String email = place_holder ;
 
@@ -648,7 +652,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
       //Connection c = ss.getConnection() ;
       //Statement t_s = null ;
-      //Resultset t_r = null ;
+      //ResultSet t_r = null ;
 
       //if(nested == true)
       //{
@@ -680,7 +684,7 @@ public class ISISCsmdMapper implements CsmdMapper
       //as this is called from a nested context
       Connection c = ss.getConnection() ;
       Statement t_s = c.createStatement() ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       //variables
       String id = place_holder ;
@@ -721,7 +725,7 @@ public class ISISCsmdMapper implements CsmdMapper
          sbr.append(ii+li+"<InvestigationType>"+investigation_type+"</InvestigationType") ; 
          sbr.append(ii+li+"<Abstract>"+inv_abstract+"</Abstract>\n") ;
 
-         t_r=t_s.executeQuery("Select name, short_name, comments from intrument where id ='"+ instrument_idi +"'") ; 
+         t_r=t_s.executeQuery("Select name, short_name, comments from intrument where id ='"+ instrument_id +"'") ; 
 
          if(t_r.next())
          {
@@ -731,9 +735,9 @@ public class ISISCsmdMapper implements CsmdMapper
          }
          // put in the resource/instrument used 
          sbr.append(ii+li+"<Resources\n>") ; 
-         sbr.append(ii+li+li+"<Name"> + name + "</Name>\n") ;
-         sbr.append(ii+li+li+"<ShortName"> + short_name + "</ShortName>\n") ;
-         sbr.append(ii+li+li+"<Comments"> + instrument_comments + "</Comments>\n") ;
+         sbr.append(ii+li+li+"<Name>" + name + "</Name>\n") ;
+         sbr.append(ii+li+li+"<ShortName>" + short_name + "</ShortName>\n") ;
+         sbr.append(ii+li+li+"<Comments>" + instrument_comments + "</Comments>\n") ;
          sbr.append(ii+li+"<Resources\n>") ; 
 
          t_r.close() ;
@@ -758,7 +762,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -774,6 +778,9 @@ public class ISISCsmdMapper implements CsmdMapper
 
          String title = place_holder ;
          String investigation_id = place_holder ;
+
+         String studyname = place_holder ;
+         String study_id = place_holder ;
       
          t_r=t_s.executeQuery("select TITLE, investigation.id \"INVESTIGATION_ID\" from investigation where experiment_number = '" + key + "'") ;
 
@@ -836,7 +843,8 @@ public class ISISCsmdMapper implements CsmdMapper
       //HERE - what does related reference get the info from - note essentially redundant as investigation and dataholding are
       //synonymous - but put in here at the moment anyway - as may change
       buildMDRelatedReferance(key, sbr, ii+li, "dataholding", true) ;
-      buildMDAtomicDataObject(key, sbr, ii+li, null) ;
+      //do not have any ado's at the same level as dc so commented out for now
+      //buildMDAtomicDataObject(key, sbr, ii+li, null, true) ;
       buildMDDataCollection(key, sbr, ii+li, null, true) ;
 
       sbr.append(ii+"</DataHolding>\n") ; 
@@ -848,7 +856,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -864,9 +872,8 @@ public class ISISCsmdMapper implements CsmdMapper
       String dataset_type = place_holder ;
       String dataset_status  = place_holder ;
       String description = place_holder ;
-      String name = place_holder ;
 
-      t_r = t_s.exectuteQuery("select dataset.id \"DATASETID\", name, dataset_type, dataset_status, description from dataset where "+
+      t_r = t_s.executeQuery("select dataset.id \"DATASETID\", name, dataset_type, dataset_status, description from dataset where "+
                               "dataset.id in (select datasetid from dataset_list where investigationid ='" + key + "')") ;
 
       while(t_r.next()) 
@@ -917,7 +924,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -950,7 +957,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -993,7 +1000,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -1047,7 +1054,7 @@ public class ISISCsmdMapper implements CsmdMapper
       //locator = (sbt.reverse()).toString() ;
          
       sbr.append(ii+"<DataCollectionLocator>\n") ; 
-      abr.append(ii+li+"<DataName>"+name+"</DataName>\n") ;
+      sbr.append(ii+li+"<DataName>"+name+"</DataName>\n") ;
       //abr.append(ii+li+"<Locator>"+locator+"</Locator>\n") ;
       sbr.append(ii+"</DataCollectionLocator>\n") ; 
 
@@ -1069,7 +1076,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -1170,7 +1177,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -1185,7 +1192,7 @@ public class ISISCsmdMapper implements CsmdMapper
       {
          sbr.append(ii+"</LogicalDescription>\n") ;
 
-         buildMDParemeters(key, sbr, ii+li, "datacollection", true) ;
+         buildMDParameters(key, sbr, ii+li, "datacollection", true) ;
          buildMDTimePeriod(key, sbr, ii+li, "datacollection", true) ;
          buildMDFacilityUsed(key, sbr, ii+li, "datacollection", true) ;
 
@@ -1206,7 +1213,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -1219,6 +1226,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
       if(type.compareTo("ado")==0)
       {
+         String id=place_holder ;
          String name=place_holder ;
          String value=place_holder ;
          String units=place_holder ;
@@ -1227,7 +1235,7 @@ public class ISISCsmdMapper implements CsmdMapper
          String range_bottom=place_holder ;
          String error=place_holder ;
 
-         t_r=t_s.execute("select id, name, value, units, exponent, range_top, range_bottom, error from parameter "+
+         t_r=t_s.executeQuery("select id, name, value, units, exponent, range_top, range_bottom, error from parameter "+
                          "where parameter.id in (select parameterid from parameter_list where datafileid = '" + key + "')") ;
 
          //may need to check to see results otherwise might get empty tags - not a serious one
@@ -1291,7 +1299,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
-      Resultset t_r = null ;
+      ResultSet t_r = null ;
 
       if(nested == true)
       {
@@ -1356,7 +1364,6 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDContact(String key, StringBuffer sbr, String ii, String contact_type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
 
       r = s.executeQuery("select institution.name, institution.institution_id, address_1, address_2, town, region, postcode, country, " +
                          "title, forename, surname, other_initials, telephone, email, fax from " + dbs +
@@ -1647,7 +1654,7 @@ public class ISISCsmdMapper implements CsmdMapper
    {
       ISISCsmdMapper icm = new ISISCsmdMapper() ;
 
-      String key = icm.getKeys(1) ;
+      String key = icm.getKeys("1") ;
 
       StringBuffer sbr = new StringBuffer(1024*1024) ;
 
@@ -1655,12 +1662,12 @@ public class ISISCsmdMapper implements CsmdMapper
       {
          icm.buildMetadataRecord(key, sbr) ;
       }
-      catch (SQLExceltion sqle)
+      catch (SQLException sqle)
       {
           sqle.printStackTrace() ;
       }
    
-      System.out.print(sbr.toString) ;
+      System.out.print(sbr.toString()) ;
 
       return  ;
    }

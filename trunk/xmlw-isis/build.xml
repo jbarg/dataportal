@@ -418,22 +418,13 @@
    <!-- copy common.lib jar first so any in ${web.home}/lib can overwrite them -->
    <!-- axis, globus-cog, log4j necessary jar files now moved into $CATALINA_HOME/shared (or common)/lib -->
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/classes12.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jdom-b9.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/shop.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xml-dl.1.3.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xmlsec.jar"/>
     <!-- stuff for xml query processing -->
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saxon7.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saxon7-sql.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saxon7-jdom.jar"/>
-    <!-- stuff for accessing xindice xml repository -->
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xindice.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xmldb.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/openorb-1.2.0.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xerces-1.4.3.jar"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xalan-2.0.1.jar"/>
     <!-- stuff for integrating new authorisation architecture-->
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/acm.jar"/>
+    <!-- stuff for integrating eXist xml:db is currently in ${webhome}/WEB-INF/lib - this may change-->
 
     <!-- Copy static content of this web application -->
     <copy todir="${build.home}">
