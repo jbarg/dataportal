@@ -1,3 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>E-minerals Mini Grid</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-store" />
+<meta name="robots" content="index, follow" />
+<meta name="description" content="This site is the dataportal" />
+<meta name="keywords" content="Dataportal, metadata, clrc, dl,
+facilities,E-minerals, data, search, Glen Drinkwater, Synchrotron Radiation,British Atmospheric Data Centre, shopping basket" />
+<link rel="stylesheet" href="../style/eminNN4.css" type="text/css" />
+<style type="text/css">
+@import url(../style/emin2.css); /*IE and NN6x styles*/
+</style>
+</head>
+<body>
+
+<table id="top_table"  width="100%" cellspacing="3" ><tr>
+<td id="td_top1" valign="top" width="18%">
+<a href="http://www.clrc.ac.uk"><img src="../img/emin1.gif" width="70" height="90" alt="E-minerals" border="0" /></a>
+<br />
+<br />
+<a href="http://eminerals.org"><img src="../img/emin2.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
+<br />
+<br />
+<a href="http://eminerals.org"><img src="../img/emin3.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
+<br />
+<br />
+<a href="http://eminerals.org"><img src="../img/emin4.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
+<br />
+<br />
+<a href="http://eminerals.org"><img src="../img/emin5.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
+<br />
+
+<br />
 <a href="http://eminerals.org"><img src="../img/emin6.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 
 
