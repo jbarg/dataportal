@@ -37,28 +37,28 @@ public class MatrixIngestOp {
     
     private static ObjectFactory objFactory = new ObjectFactory();
     
-    public Transaction createDownloadOpTransaction() {
+    public Transaction createIngestOpTransaction() {
         
         Transaction tx = null;
         
         try {
             DataSet dataSet = objFactory.createDataSet();
-            dataSet.setDataIdentifier("dbtf.pdf");
+            dataSet.setDataIdentifier("ingest.txt");
             dataSet.setLogicalLocation("/home/srbadm.matrix");
             
-            DownloadDataSetParams downloadParams = objFactory.createDownloadDataSetParams();
-            downloadParams.setDataSource(dataSet);
-            downloadParams.setContentMIMEID("download_filename"); // Should be a parameter
+            IngestDataSetParams ingestParams = objFactory.createIngestDataSetParams();
+            ingestParams.setContentMIMEID("INGESTFILE");
+            ingestParams.setDataDestination(dataSet);
             
-            DownloadDataSetOp downloadOp = objFactory.createDownloadDataSetOp();
-            downloadOp.setStdParams(downloadParams);
+            IngestDataSetOp ingestOp = objFactory.createIngestDataSetOp();
+            ingestOp.setStdParams(ingestParams);
             
             Operation op = objFactory.createOperation();
-            op.setDownloadDataSetOp(downloadOp);
+            op.setIngestOp(ingestOp);
             
             Step step = objFactory.createStep();
             step.setStepID("ID0001");
-            step.setStepName("downloadDataSetOp"); // MUST BE "downloadDataSetOp"
+            step.setStepName("ingestOp"); // MUST BE "ingestOp"
             step.setOperation(op);
             
             Flow flow = objFactory.createFlow();
