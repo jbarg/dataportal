@@ -34,7 +34,7 @@ public class ResendQuery extends HttpServlet{
             response.sendRedirect("../Login.html");
         }
         //get working dir
-        String wd = (String )session.getAttribute("wd");
+        String wd = (String)session.getAttribute("wd");
         String discipline = request.getParameter("discipline");
         String[] facilities = request.getParameterValues("facs");
         String wait = request.getParameter("wait");
@@ -45,7 +45,7 @@ public class ResendQuery extends HttpServlet{
         String sid = (String)session.getAttribute("sessionid");
         Object[] object = new Object[]{sid,facilities,discipline,wait};
         session.setAttribute("query", object);
-        discipline = "Discipline="+discipline;
+       
         try{
             Properties prop = (Properties)session.getAttribute("props");
             
