@@ -21,9 +21,23 @@ public class Certificate {
     private String certificate;
     public String toString() { return certificate; }
     
-    /** Creates a new instance of certificate from a string */
     public Certificate(String certificate) {
         this.certificate = certificate;
+    }
+    
+    /** Creates a new instance of certificate from a string */
+    public Certificate(java.io.InputStream certificate) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(certificate));
+        String inputLine;
+        StringBuffer cert = new StringBuffer();
+        while ((inputLine = in.readLine()) != null){
+            cert.append(inputLine);
+            cert.append("\n");
+        }
+        in.close();
+
+        this.certificate = cert.toString();
+        
     }
     
     /*
@@ -94,8 +108,8 @@ public class Certificate {
         prt(cert);
         
         // test with certificate as string
-        Certificate cert2 = new Certificate(cert.toString());
-        prt(cert2);
+        //Certificate cert2 = new Certificate(cert.toString());
+        //prt(cert2);
     }
     
 }
