@@ -40,10 +40,10 @@ public class SaveCartServlet extends HttpServlet{
                 
                 Properties prop   = (Properties)session.getAttribute("props");
                 String session_url = prop.getProperty("SESSION");
-                //String sid  = 
-                endSession((String)session.getAttribute("sessionid"),session_url );
+                String sid  = (String)session.getAttribute("sessionid");
+                endSession(sid,session_url );
                 
-                deleteFile((String)session.getAttribute("sessionid"),(String)session.getAttribute("wd"));
+                deleteFiles(sid,wd);
                 
                 //workingDir = (String)session.getAttribute("wd");
                 //logger.warn("Error with logging off",e);
@@ -86,9 +86,14 @@ public class SaveCartServlet extends HttpServlet{
         }
     }
     
-    public void deleteFile(String sid, String wd){
+    public void deleteFiles(String sid, String wd){
         
-        File file = new File(wd+File.separator+"xml"+File.separator+"emat"+sid);
+        File file = new File(wd+File.separator+"profiles"+File.separator+"emat"+sid);
+        File file1 = new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
+        File file2 = new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml");
+        File file3 = new File(wd+File.separator+"prolfiles"+File.separator+sid+"3.xml");
+        
+        
         file.delete();
         
     }

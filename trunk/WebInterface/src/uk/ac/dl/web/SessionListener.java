@@ -4,7 +4,7 @@
  * Created on 12 July 2002, 14:11
  */
 
-package dataportal.WebInterface.src.uk.ac.dl.web;
+package uk.ac.dl.web;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
