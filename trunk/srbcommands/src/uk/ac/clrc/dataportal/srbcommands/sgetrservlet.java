@@ -100,6 +100,12 @@ public class sgetrservlet extends HttpServlet {
         try {
             //check password
             String password = props.getProperty("srb_passwd");
+            String exe = request.getParameter("format");
+            if(exe == null ) exe  ="tar";
+            //String executable = props.getProperty("tarHome");
+            //if(exe.equals("tar")) executable = props.getProperty("tarHome")+" -cvf";
+            //else if(exe.equals("zip")) executable = props.getProperty("zipHome");
+            
             if(!password.equals("dp()u5er4em@a^")){
                 
                 response.flushBuffer();
@@ -139,7 +145,7 @@ public class sgetrservlet extends HttpServlet {
             String dir = request.getParameter("dir");
             String filename = dir.substring(dir.lastIndexOf("/") + 1);
             filename = filename.replace('.','_');
-            response.setHeader("Content-disposition","attachment; filename=" + filename + ".tar");
+            response.setHeader("Content-disposition","attachment; filename=" + filename + "."+exe);
             //this is the one that is working with the whole collection
             File cre = new File(props.getProperty("srbDest")+File.separator+request.getSession().getId());
             cre.mkdir();
@@ -164,9 +170,22 @@ public class sgetrservlet extends HttpServlet {
             
             // Need to fix the above command to strip off the extra path information that we don't want
             //LaunchProcess.runCommand( "/usr/bin/zip -mr /tmp/srbtemp/" + request.getSession().getId() + ".zip /tmp/srbtemp/" + request.getSession().getId());
-            LaunchProcess.runCommand( props.getProperty("tarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
+            if(exe.equals("tar")){
+                LaunchProcess.runCommand( props.getProperty("tarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
+            }
+            else if(exe.equals("zip")){
+                LaunchProcess.runCommand( props.getProperty("zipHome")+" -rvj -b "+props.getProperty("srbDest") +" "+ request.getSession().getId() + ".zip  "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+File.separator+"*");
+        
+            }
+            else if(exe.equals("jar")){
+                LaunchProcess.runCommand( props.getProperty("zipHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".zip -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
+        
+            }
+            else{
+                LaunchProcess.runCommand( props.getProperty("jarHome")+" -cvf "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".jar -C "+props.getProperty("srbDest") +File.separator+ request.getSession().getId()+" .");
+            }
             
-            File myFileIn = new File(props.getProperty("srbDest")+File.separator + request.getSession().getId() + ".tar");
+            File myFileIn = new File(props.getProperty("srbDest")+File.separator + request.getSession().getId() + "."+exe);
             FileInputStream myFileInputStream = new FileInputStream(myFileIn);
             BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
             
@@ -184,7 +203,7 @@ public class sgetrservlet extends HttpServlet {
             myBufferedInputStream.close();
             
             out.close();
-            LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + ".tar");
+            LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() + "."+exe);
             LaunchProcess.runCommand( props.getProperty("rmHome")+" -r "+props.getProperty("srbDest") +File.separator+ request.getSession().getId() );
             
         }
