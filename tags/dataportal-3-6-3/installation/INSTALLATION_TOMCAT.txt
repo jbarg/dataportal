@@ -1,0 +1,215 @@
+Installation of the Data Portal using a Tomcat Servlet engine
+--------------------------------------------------------------
+
+1) Install Apache Tomcat servlet engine.  Need version 5+.  Download http://jakarta.apache.org/site/binindex.cgi
+
+NB:  Make sure Environmental variable CATALINE_HOME is set correctly if you are installing a new instance of tomcat
+
+2) Install Apache Ant.  Need Version 1.6+.  Download http://ant.apache.org/bindownload.cgi
+
+Copy  $CATALINA_HOME/server/lib/catalina-ant.jar into ANT_HOME/lib where  $CATALINA_HOME represents the tomcat root directory.
+
+(NB: Red Hat Linux comes preinstalled with ant, usually in /usr/bin/ant.  You need to use apache ant which you need to have installed.
+Either make sure apache ant is infront in you PATH variable or you use the full path when executing ant.  I.e ANT_HOME/bin/ant ...)
+
+3) Change the properties for the $DATAPORTAL_HOME/build.properties file.
+
+Where $DATAPORTAL_HOME represents the root directory where you unpacked the dataportal file.
+
+server.name=localhost:8080    server name and port of tomcat instance.  localhost is ok if it is on the same machine
+catalina.home=D\:\\tomcat     location on file system of tomcat instance. (\ is an escape character. So windows needs to escape : and \ within the path. IE c\:\\My Documents\\ etc)
+manager.username=tomcat	     		
+manager.password=tomcat
+globusKey=C\:\\Documents and Settings\\gjd37\\.globus\\portalkey.pem  
+globusCert=C\:\\Documents and Settings\\gjd37\\.globus\\portalcert.pem
+
+The last two are the locations of your globus host key and certificate.  These are used to create a proxy that is used to retrieve the users proxy credential out of a MyProxy server
+manager.password and username are needed to install the Data Portal modules onto tomcat.  Change the file $CATALINA_HOME/conf/tomcat-users.xml. 
+Insert/modify this line:
+
+<user username="tomcat" password="tomcat" roles="manager"/>
+ 
+making sure the username and password are matching the ones in the build.properties file. 
+
+
+4) Inbetween the <GlobalNamingResources>  tags near the top of the $CATALINA_HOME/conf/server.xml file and below the <Environment> tag.
+
+<!-- Global JNDI resources -->
+  <GlobalNamingResources>
+  
+  <Environment />
+  
+  ..insert here....
+  
+ </GlobalNamingResources>
+
+Insert this sections into the the file.
+
+<!--  Used to connect to the HSQL database for the dataportal -->
+<Resource name="jdbc/dataportalDB" auth="Container" type="javax.sql.DataSource"/>
+      <ResourceParams name="jdbc/dataportalDB">
+      <parameter>
+		   <name>factory</name>
+		   <value>org.apache.commons.dbcp.BasicDataSourceFactory</value>
+		</parameter>
+		<parameter><name>maxActive</name><value>20</value></parameter>
+		<parameter><name>maxIdle</name><value>10</value></parameter>
+		<parameter><name>maxWait</name><value>15000</value></parameter>
+		<parameter><name>username</name><value>dataportal</value></parameter>
+		<parameter><name>password</name><value>datap0rt4l</value></parameter>
+		<parameter>
+			 <name>logAbandoned</name>
+			 <value>true</value>
+		       </parameter>
+
+		 <parameter>
+			 <name>removeAbandoned</name>
+			 <value>true</value>
+		       </parameter>
+
+		<parameter>
+		   <name>driverClassName</name>
+
+	  <value>org.hsqldb.jdbcDriver</value>
+
+		</parameter>
+
+		<parameter>
+		   <name>url</name>
+		   <value>jdbc:hsqldb:hsql://localhost:9002/dpdb</value>
+	</parameter>
+
+	<parameter>
+	  <name>validationQuery</name>
+	  <value>select count(*) from CART</value>
+	</parameter>
+                 
+ </ResourceParams>
+
+5) Also insert inbewteen the <Host> tags just below the <Logger> and above the </Host> tag
+
+<Host>
+
+''''''''
+'''''''''
+'''''''''
+
+<Logger className="org.apache.catalina.logger.FileLogger"
+                 directory="logs"  prefix="localhost_log." suffix=".txt"
+            timestamp="true"/>
+
+Insert here
+
+
+      </Host>
+
+
+ </Engine>
+
+this...
+ 
+ <DefaultContext>
+   <ResourceLink 
+     name="jdbc/dataportalDB"
+     global="jdbc/dataportalDB"
+     type="javax.sql.DataSource" />
+</DefaultContext>
+
+ 
+6)  ant installdp    (NB: All ant commands need to be executed in the $DATAPORTAL_HOME directory)
+
+This installs the UDDI , Database and relevant libraries into your tomcat instance.
+
+NOTE: This process installs all the axis and jglobus jar files into $CATALINA_HOME/shared/lib
+It also puts dp_common.jar, hsqldb.jar, mail.jar, activation.jar, jdom.jar and the two files jstl.jar and standard.jar in there.
+
+7)  ant start_dbs
+
+This starts up the databases.  These are needed for the UDDI registry and the data portal modules.
+
+i) ant stop_dbs 
+
+stops the two database instances.
+
+(Extra: to view the dataportal database run 'ant run_GUI' which should open a database window to the DataPortal database.
+
+8)  startup the tomcat instance.  Goto $CATALINA_HOME/bin and execute startup.bat or startup.sh
+
+
+9) ant -f installation.xml install
+
+If this fails with 
+ taskdef A class needed by class org.apache.catalina.ant.InstallTask cannot be found: org/apache/tools/ant/Task
+error then:
+
+i) shutdown tomcat ($CATALINA_HOME/bin/shutdown.sh(bat))
+ii) ant -f installation.xml install2
+iii) then restart tomcat ($CATALINA_HOME/bin/startup.sh(bat))
+
+
+This installs all the modules to the tomcat instance.  Once installed these are not needed to be installed again and should be present when you restart tomcat again.
+
+
+THE DATAPORTAL SHOULD BE INSTALLED ONTO YOUR TOMCAT.
+
+http://localhost:8080/dataportal and log in.  
+
+http://tiber.dl.ac.ul:8080/myproxy for help to upload Globus proxy into a MyProxy Server.
+
+Once logged in you should have no access to facilities because there are no facilties asscoiated.(See below) 
+(NB:  Press refresh if internal section throws error)
+
+10)  Once installed and running, to start the Data Portal when everything is shutdown:
+
+i) ant start_dbs
+ii) start tomcat instance ($CATALINA_HOME/bin/startup.sh(bat))
+
+
+Configuration of the Data Portal 
+---------------------------------
+
+1) Goto http://localhost:8080/facility and log in as tomcat tomcat.
+ 
+2) Click "Add Facility".  There is a test facility that allows access to test information.
+
+3) Put in the name 'test' for the facility name.
+
+4)  Change the values in all the URLs for 'localhost' to 'tiber.dl.ac.uk' and click 'Create Facility'
+
+This creates a test facility for the Data Portal to search for.
+
+5) http://localhost:8080/dataportal and log in again, and you should see a test facility for you to search.
+
+NB: If you make an error in the configuration of the Data Portal facility, press 'delete' next to the facilty and start again.
+
+NB:  Since the metadata is test data, there is no data and therefore the data transfer section will not work correctly.
+
+
+
+
+
+Information
+------------
+
+1) Log files are written to the console from the Web Interface. All other modules and the Web Interface log their file in the $CATALINA_HOME/logs/dataportal.xml file. 
+This file is not really human readable.  It is in the format of Chainsaw.  To view this information download chainsaw at http://logging.apache.org/log4j/docs/chainsaw.html
+
+2) Remove Data Portal from tomcat in two ways.  The first is manual (the second does it by ant scripts.  This removes all jar files in the $CATALINA_HOME/shared/lib
+directory that were put there before listed in Installation part 6)  Some of these you might not wanting to delete.
+1,i)'ant -f installation remove'. 
+If that fails remove all the xml file related to the data portal in the $CATALINA_HOME/conf/Catalina/localhost directory.
+These should be dataportal, shopcart,facility, juddi, queryandreply,uddilookup,sessionmanager,authent and datatransfer .xml files
+1,ii) Remove juddi folder from   $CATALINA_HOME/webapps
+1,iii) Remove new jar files from  $CATALINA_HOME/shared/lib folder.  Goto Installation part 6) to find out which jar files are installed
+
+or 2,i) ant removedp
+
+3) The Data Portal can run a server to email an administrator regarding errors and faults. 
+To run the server type 'ant run_log4jserver'
+
+To configure the server go to dataportal/WebInterface/build/WEB-INF/log4jServer.conf
+
+dataportal.id=test                          //id of the email
+mail.host=exchange06.dl.ac.uk               //mail server host name of the 
+email.address=g.j.drinkwater@dl.ac.uk       //list of addresses to send the email to, separtted by spaces
+level=ERROR                                 // Log4j minimum that the message will get emailled.  Only allows ERROR and FATAL

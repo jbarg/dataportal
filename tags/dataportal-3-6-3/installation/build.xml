@@ -1,0 +1,544 @@
+
+<!-- A "project" describes a set of targets that may be requested
+     when Ant is executed.  The "default" attribute defines the
+     target which is executed if no specific target is requested,
+     and the "basedir" attribute defines the current working directory
+     from which Ant executes the requested task.  This is normally
+     set to the current working directory.
+-->
+<project name="Data Portal" default="start_tomcat" basedir=".">
+	<!-- ===================== Property Definitions =========================== -->
+	<!--
+
+  Each of the following properties are used in the build script.
+  Values for these properties are set by the first place they are
+  defined, from the following list:
+
+  * Definitions on the "ant" command line (ant -Dfoo=bar compile).
+
+  * Definitions from a "build.properties" file in the top level
+    source directory of this application.
+
+  * Definitions from a "build.properties" file in the developer's
+    home directory.
+
+  * Default definitions in this build.xml file.
+
+  You will note below that property values can be composed based on the
+  contents of previously defined properties.  This is a powerful technique
+  that helps you minimize the number of changes required when your development
+  environment is modified.  Note that property composition is allowed within
+  "build.properties" files as well as in the "build.xml" script.
+
+-->
+	<property file="build.properties"/>
+	<!--<property file="${user.home}/build.properties"/>-->
+	<!-- ==================== File and Directory Names ======================== -->
+	<!--
+
+  These properties generally define file and directory names (or paths) that
+  affect where the build process stores its outputs.
+
+  
+  catalina.home        The directory in which you have installed
+                       a binary distribution of Tomcat 4.  This will
+                       be used by the "deploy" target.
+
+  dist.home            The name of the base directory in which
+                       distribution files are created.
+                       Defaults to "dist".
+-->
+	<property name="dataportal.home" value="${basedir}/dataportal"/>
+	<!-- UPDATE THIS! -->
+	<property name="server.name" value="${server.name}"/>
+	<property name="dist.home" value="${basedir}/dist"/>
+        <property name="build.home" value="${basedir}/dist"/>
+	<property name="docs.home" value="${basedir}/dist/docs"/>
+	<property name="manager.url" value="http://${server.name}/manager"/>
+	<property name="src.home" value="${basedir}/src"/>
+	<property name="web.home" value="${basedir}/web"/>
+	<property name="hsqldb.src" value="${basedir}/uddi/hsql"/>
+        <property name="hsqldb.home" value="${basedir}/hsql"/>
+        <property name="juddi.home" value="${basedir}/uddi/juddi"/>
+        <property name="common.tomcat.home" value="${basedir}/dataportal/common/shared"/>
+         
+        <!--=======================Avaliablities ofr file ==========================-->
+        
+        <available property="hsql.present" file="${hsqldb.home}/mydb.script" type="file" />
+        <available property="catalina.home.present" file="${catalina.home}" type="dir" />
+	<!-- ==================== External Dependencies =========================== -->
+	<!--
+
+  Use property values to define the locations of external JAR files on which
+  your application will depend.  In general, these values will be used for
+  two purposes:
+  * Inclusion on the classpath that is passed to the Javac compiler
+  * Being copied into the "/WEB-INF/lib" directory during execution
+    of the "deploy" target.
+
+  Because we will automatically include all of the Java classes that Tomcat 4
+  exposes to web applications, we will not need to explicitly list any of those
+  dependencies.  You only need to worry about external dependencies for JAR
+  files that you are going to include inside your "/WEB-INF/lib" directory.
+
+-->
+	<!-- Dummy external dependency -->
+	<!--
+  <property name="foo.jar"
+           value="/path/to/foo.jar"/>
+-->
+	
+
+<!-- ====================== Help =========================== -->
+
+
+  
+  <target name="help" description="help">
+     <echo>
+	The following targets can be executed:
+
+            runDP       - runs the Data Portal, including the uddi server, modules and the database
+            stopDP      - stops the Data Portal, including ..
+            installDB   - installs the database with preinstalled uddi settings
+            reinstallDB - reinstalls the database to its original preinstalled uddi settings
+            
+         NB: installDB has to be run before the Data Portal will work properly. -this will be apart of the module installtions i think  
+	   
+     </echo>
+  </target>
+	
+	<!-- ==================== Start tomcat =========================== -->
+<!--
+    Use this target to start tomcat
+    
+    -->
+    <target name="start_tomcat" description="starts tomcat instance">
+    <java classname="org.apache.catalina.startup.Bootstrap" spawn="true" fork="yes"  dir="${catalina.home}/bin">
+	 <arg value="start" />
+	 <sysproperty key="catalina.base" value="${catalina.home}" />
+	 <sysproperty key="catalina.home" value="${catalina.home}" />
+	 <classpath>
+	      <pathelement location="${catalina.home}/bin/bootstrap.jar"/>
+	      <pathelement path="${catalina.home}/bin"/>
+              <pathelement path="${catalina.home}/lib"/>
+               <pathelement path="${java.home}/../lib/tools.jar"/>
+         </classpath>
+    </java>
+    </target>
+    
+    <!-- ==================== Stop tomcat =========================== -->
+    <!--
+        Use this target to stop tomcat
+
+        -->
+        <target name="stop_tomcat" description="stops tomcat instance">
+        <java classname="org.apache.catalina.startup.Bootstrap" spawn="false" fork="yes"  dir="${catalina.home}/bin">
+             <arg value="stop" />
+             <sysproperty key="catalina.base" value="${catalina.home}" />
+             <sysproperty key="catalina.home" value="${catalina.home}" />
+             <classpath>
+                  <pathelement location="${catalina.home}/bin/bootstrap.jar"/>
+                  <pathelement path="${catalina.home}/bin"/>
+                  <pathelement path="${catalina.home}/lib"/>
+             </classpath>
+        </java>
+        </target>
+        
+         
+        <!-- ==================== Start databases =========================== -->
+	<!--
+	     Use this target to start the hypersonic databse for the uddi server
+	
+	   -->
+	 <target name="start_dbs" description="starts dataportal database instance" if="hsql.present">
+	      <antcall target="start_uddiDB" />
+	         <antcall target="start_dataportalDB" />
+	      <echo message="Databases started"/>
+        </target>
+        
+        
+         <!-- ==================== Stop databases =========================== -->
+	 <!--
+	    Use this target to start the hypersonic databse for the uddi server
+	   -->
+	<target name="stop_dbs" description="starts dataportal database instance" if="hsql.present">
+		      <antcall target="stop_uddiDB" />
+		         <antcall target="stop_dataportalDB" />
+		      <echo message="Databases stopped"/>
+        </target>
+        
+        
+        <!-- ==================== Start database =========================== -->
+    <!--
+        Use this target to start the hypersonic databse for the uddi server
+
+        -->
+        <target name="start_uddiDB" description="starts database instance" if="hsql.present">
+        <java classname="org.hsqldb.Server" dir="${basedir}/hsql" spawn="true" classpath="${hsqldb.src}/hsqldb.jar" fork="yes">
+		
+		<arg line="-database.0 mydb -dbname.0 xdb" />
+		</java>
+                <echo message="Database started"/>
+        </target>
+
+        
+              <!-- ==================== Start database =========================== -->
+    <!--
+        Use this target to start the hypersonic databse for the uddi server
+
+        -->
+        <target name="start_dataportalDB" description="starts dataportal database instance" if="hsql.present">
+        <java classname="org.hsqldb.Server" dir="${basedir}/hsql" spawn="true" classpath="${hsqldb.src}/hsqldb.jar" fork="yes">
+		
+		<arg line="-database.0 dpdb -dbname.0 dpdb -port 9002" />
+		</java>
+                <echo message="Database started"/>
+        </target>
+        
+        <!-- ==================== Stop database =========================== -->
+    <!--
+        Use this target to stop the hypersonic databse for the uddi server
+
+        -->
+        <target name="stop_dataportalDB" description="stops database instance" if="hsql.present">
+    
+        <java classname="uk.ac.cclrc.config.StopDatabase" spawn="false" fork="no">
+			<classpath>
+			     <pathelement location="${hsqldb.src}/hsqldb.jar"/>
+			     <pathelement location="${basedir}/dataportal/common/shared/dp_common.jar"/>
+		        </classpath>
+
+			<arg line="9002 dpdb dataportal datap0rt4l" />
+			</java>
+           <echo message="Stopped database .."/>
+          </target>
+          
+          <!-- ==================== Stop database =========================== -->
+    <!--
+        Use this target to stop the hypersonic databse for the uddi server
+
+        -->
+        <target name="stop_uddiDB" description="stops database instance" if="hsql.present">
+    
+        <java classname="uk.ac.cclrc.config.StopDatabase" spawn="false" fork="no">
+			<classpath>
+			     <pathelement location="${hsqldb.src}/hsqldb.jar"/>
+			    <pathelement location="${basedir}/dataportal/common/shared/dp_common.jar"/>
+		        </classpath>
+
+			<arg line="9001 xdb dataportal datap0rt4l" />
+			</java>
+           <echo message="Stopped database .."/>
+          </target>
+          
+          <!-- ==================== Creates and moves hsqldb for uddi =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="reinstallDB" description="reinstalls the original database to installation">
+        <delete dir="${hsqldb.home}"/>
+        <antcall target="installDB" />
+        
+        </target>
+        
+         <!-- ==================== Creates and moves hsqldb for uddi =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="installDB" description="moves database to installation">
+        <mkdir dir="${hsqldb.home}"/>
+        <copy todir="${hsqldb.home}">
+           <fileset dir="${hsqldb.src}">
+                 <exclude name="**/*.jar"/>
+            </fileset>
+
+        </copy>
+        </target>
+
+        
+         
+         <!-- ==================== Run  dataportal =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="runDP" description="runs dataportal">
+         <antcall target="start_tomcat" />
+        <antcall target="start_db" />
+        </target>
+        
+        
+             <!-- ==================== Stop  dataportal =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="stopDP" description="runs dataportal">
+         <antcall target="stop_tomcat" />
+        <antcall target="stop_db" />
+        </target>
+        
+        
+        
+             <!-- ==================== install uddi server       =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="installUDDI" description="install the juddi server on to tomcat">
+            <copy file="${juddi.home}/juddi.war" todir="${catalina.home}/webapps"/>
+            <copy file="${juddi.home}/juddi.xml" todir="${catalina.home}/conf/Catalina/localhost"/>
+        </target>
+        
+          <!-- ==================== install uddi server       =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="installLibiaries" description="install the dataportal libs">
+            <copy  todir="${catalina.home}/shared/lib">
+                 <fileset dir="${common.tomcat.home}">
+                 <include name="**/*.jar"/>
+                 <!--<excludes name="**/hsqldb.jar"/>-->
+            </fileset>
+            </copy>
+            <copy file="${hsqldb.src}/hsqldb.jar" todir="${catalina.home}/common/lib" />
+           
+        </target>
+        
+             <!-- ==================== install        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="install_dp" description="install the juddi server and libs" if="catalina.home.present">
+            <antcall target="installUDDI"/>
+            <antcall target="installLibiaries"/>
+            <antcall target="installDB"/>
+            <antcall target="installAuthent"/>  
+              <antcall target="installWebIntLog4j"/>   
+            <!-- <antcall target="installfacility"/>               -->
+        </target>
+        
+        
+             <!-- ==================== install   authent modules key and cert     =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="installAuthent" description="install the juddi server and libs" >
+              <java classname="uk.ac.cclrc.config.AuthentConfig">
+			<classpath>
+			 <fileset dir="${common.tomcat.home}">
+				<include name="**/*.jar"/>
+                              	</fileset>                            
+		        </classpath>
+                     <arg line="'${dataportal.home}/authent/web/WEB-INF/authent.conf' '${globusKey}' '${globusCert}'" />
+			
+			</java>
+                     <echo message="${dataportal.home}/authent/web/WEB-INF/authent.conf ${globusKey} ${globusCert}" />
+         </target>
+        
+         
+          <!-- ==================== install   authent modules key and cert     =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="installWebIntLog4j" description="install the log4j" >
+              <java classname="uk.ac.cclrc.config.WebIntLog4jConfig">
+			<classpath>
+			 <fileset dir="${common.tomcat.home}">
+				<include name="**/*.jar"/>
+                              	</fileset>                            
+		        </classpath>
+                     <arg line="'${dataportal.home}/WebInterface/web/WEB-INF/log4j.properties' '${dataportal.home}/WebInterface/web/WEB-INF/log4j-2.properties' '${catalina.home}/logs/dataportal.xml' " />
+			
+			</java>
+                     <echo message="${dataportal.home}/WebInterface/web/WEB-INF/log4j.properties  ${catalina.home}/logs/dataportal.xml ${dataportal.home}/WebInterface/web/WEB-INF/log4j-2.properties" />
+         </target>
+        
+        
+        <!-- ==================== remove dataportal        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="remove_dp" description="install the juddi server and libs" if="catalina.home.present">
+            <antcall target="removeUDDI"/>
+            <antcall target="removeLibiaries"/>
+             <antcall target="removemodules"/>
+            <!--<antcall target="removeDB"/>     -->
+            <!-- <antcall target="installfacility"/>               -->
+        </target>
+        
+         <!-- ==================== remove dataportal        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="removemodules" description="install the juddi server and libs" if="catalina.home.present">
+           <delete file="${catalina.home}/conf/Catalina/localhost/sessionmanager.xml"/>
+            <delete file="${catalina.home}/conf/Catalina/localhost/queryandreply.xml"/>
+             <delete file="${catalina.home}/conf/Catalina/localhost/dataportal.xml"/>
+              <delete file="${catalina.home}/conf/Catalina/localhost/shopcart.xml"/>
+               <delete file="${catalina.home}/conf/Catalina/localhost/datatransfer.xml"/>
+                <delete file="${catalina.home}/conf/Catalina/localhost/authent.xml"/>
+                 <delete file="${catalina.home}/conf/Catalina/localhost/facility.xml"/>
+                  <delete file="${catalina.home}/conf/Catalina/localhost/lookup.xml"/>
+        </target>
+        
+         <!-- ==================== remove UDDI from tomcat        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="removeLibiaries" description="" if="catalina.home.present">
+          <delete file="${catalina.home}/common/lib/hsqldb.jar"/>
+          <delete file="${catalina.home}/shared/lib/activation.jar"/>
+          <delete file="${catalina.home}/shared/lib/axis.jar"/>
+          <delete file="${catalina.home}/shared/lib/axis-ant.jar"/>
+          <delete file="${catalina.home}/shared/lib/cog-jglobus.jar"/>
+          <delete file="${catalina.home}/shared/lib/commons-logging.jar"/>
+          <delete file="${catalina.home}/shared/lib/commons-discovery.jar"/>
+          <delete file="${catalina.home}/shared/lib/cryptix.jar"/>
+          <delete file="${catalina.home}/shared/lib/cryptix32.jar"/>
+          <delete file="${catalina.home}/shared/lib/cryptix-asn1.jar"/>
+          <delete file="${catalina.home}/shared/lib/dp_common.jar"/>
+          <delete file="${catalina.home}/shared/lib/hsqldb.jar"/>
+          <delete file="${catalina.home}/shared/lib/jaxrpc.jar"/>
+          <delete file="${catalina.home}/shared/lib/jce-jdk13-120.jar"/>
+          <delete file="${catalina.home}/shared/lib/jdom-b9.jar"/> 
+          <delete file="${catalina.home}/shared/lib/jgss.jar"/> 
+          <delete file="${catalina.home}/shared/lib/jstl.jar"/>
+          <delete file="${catalina.home}/shared/lib/junit.jar"/>
+          <delete file="${catalina.home}/shared/lib/puretls.jar"/>
+          <delete file="${catalina.home}/shared/lib/log4j-1.2.8.jar"/> 
+          <delete file="${catalina.home}/shared/lib/mail.jar"/>
+          <delete file="${catalina.home}/shared/lib/saaj.jar"/>
+          <delete file="${catalina.home}/shared/lib/standard.jar"/>
+          <delete file="${catalina.home}/shared/lib/wsdl4j.jar"/>    
+            
+            
+            
+          
+        </target>
+        
+        
+         <!-- ==================== remove libs from tomcat        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="removeUDDI" description="" if="catalina.home.present">
+        
+          <delete file="${catalina.home}/conf/Catalina/localhost/juddi.xml"/>
+          <delete file="${catalina.home}/webapps/juddi.war"/>
+          <delete dir="${catalina.home}/webapps/juddi"/>
+        </target>
+        
+        
+               <!-- ==================== creates jar file of dataportal        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="jar" description="install the juddi server and libs" >
+          <jar destfile="dataportal.jar" basedir="." excludes="hsql/**">
+             
+         <include name="build.xml"/>
+          <include name="build.properties"/>
+            <include name="INSTALLATION_TOMCAT.txt"/>
+          
+  </jar>  </target>
+        
+             <!-- ==================== install   NOT USED NOW    =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="installfacilityNOTUSED" description="install the juddi server and libs" if="catalina.home.present">
+            <ant antfile="dataportal/facility/build.xml" target="compile" inheritAll="false"> 
+         <property name="basedir" value="${basedir}/dataportal/facility"/>
+      </ant> 
+      
+      <!-- Check that catalina home are there and avaliable-->
+      
+      <java classname="uk.ac.cclrc.config.CreateContext" spawn="false" fork="yes">
+			<classpath>
+			 <fileset dir="${basedir}/lib">
+				<include name="*.jar"/>
+                                
+			</fileset>
+                            
+		        </classpath>
+           
+			<arg line="facility '${basedir}/dataportal/facility/build' '${catalina.home}/conf/Catalina/localhost/facility.xml'" />
+			</java>
+                      
+           <echo message="installed facility .."/>
+         
+       <!--<copy file="${basedir}/dataportal/facility/facility.xml" todir="${catalina.home}/conf/Catalina/localhost"/>-->
+        
+        </target>
+        
+       
+        
+        
+               <!-- ==================== run_GUI        =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+
+        -->
+        <target name="run_GUI" description="connects GUI to hsql database" >
+           
+      
+    
+      
+      <java classname="org.hsqldb.util.DatabaseManagerSwing" spawn="false" fork="yes">
+			<classpath>
+			 <fileset dir="${hsqldb.src}">
+				<include name="*.jar"/>
+                                
+			</fileset>
+                            
+		        </classpath>
+           
+			<arg line="-url jdbc:hsqldb:hsql://localhost:9002/dpdb -user dataportal -password datap0rt4l  -driver org.hsqldb.jdbcDriver" />
+			</java>
+                      
+           <echo message="installed facility .."/>
+         
+       <!--<copy file="${basedir}/dataportal/facility/facility.xml" todir="${catalina.home}/conf/Catalina/localhost"/>-->
+        
+        </target>
+        
+        
+         <!-- ==================== run log4j server =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+        -->
+        <target name="run_log4jserver" description="connects GUI to hsql database" >                
+      <java classname="uk.ac.cclrc.log4j.Log4jServer" spawn="false" fork="no">
+			<classpath>
+			 <fileset dir="${common.tomcat.home}">
+				<include name="**/*.jar"/>
+                              	</fileset>
+                           </classpath>
+           
+			<arg line="4445 10 '${dataportal.home}/WebInterface/build/WEB-INF/log4jServer.conf'" />
+			</java>
+                      
+           <echo message="Server running on port 4445"/>        
+        </target>
+        
+        
+</project>
+
+
+
+
+
+
