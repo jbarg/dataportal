@@ -1,0 +1,91 @@
+#**
+Grid FTP Client Portlet
+@author <a href="mailto:x.yang@dl.ac.uk">Xiaobo Yang, CCLRC e-Science Centre, 15 December 2004</a>
+**#
+<div class="chefPortletContainer">
+  #if ($menu)
+    #toolbar($menu)
+  #end
+  <div class="chefPortletContent">
+    #if ($alertMessage)
+      <div class="chefAlertBox">
+        Alert: $validator.escapeHtml($alertMessage)
+      </div>
+    #end
+    <div class="chefPageviewTitle">
+      Set parameters for file transfer.
+    </div>
+##
+    <form name="$form-name" id="$form-name" action="#toolForm("$action")" method="post">
+      <fieldset>
+        <legend>File Transfer Settings</legend>
+        <table class="chefEditItem" summary="File Transfer Settings">
+          <tr>
+            <td>
+              <input type="radio" name=rol value="local"> One Host Only &nbsp &nbsp 
+              <input type="radio" name=rol value="remote" checked> Two Hosts
+              <br/><br/>
+            </td>
+          </tr>
+          <tr>
+            <td class="chefLabel">
+              <label for="host1">Please specify the Grid FTP Host 1:</label>
+            </td>
+          </tr>
+            <td>
+##    <input type=text name=host1 value="$!host1" size="32">
+              <select name=host1> ## Xiaobo Yang, 10 November 2004, use dropdown menu instead of text box for host selecting
+                #foreach($host in $hostlist)
+                  <option value="$host"
+                    #if ($host==$defaulthost1)
+                      selected
+                    #end
+                  >$host
+                #end
+              </select>
+              Port: <input type=text name=port1
+                #if ($port1 && $port1!="")
+                  value="$port1"
+                #else
+                  value="2811"
+                #end
+                size="6"/>
+              <br/><br/>
+            </td>
+          </tr>
+          <tr>
+            <td class="chefLabel">
+              <label for="host2">Please specify the Grid FTP Host 2:</label>
+            </td>
+          </tr>
+            <td>
+##    <input type=text name=host1 value="$!host1" size="32">
+              <select name=host2> ## Xiaobo Yang, 10 November 2004, use dropdown menu instead of text box for host selecting
+                #foreach($host in $hostlist)
+                  <option value="$host"
+                    #if ($host==$defaulthost2)
+                      selected
+                    #end
+                  >$host
+                #end
+              </select>
+              Port: <input type=text name=port2
+                #if ($port2 && $port2!="")
+                  value="$port2"
+                #else
+                  value="2811"
+                #end
+                size="6"/>
+              <br/><br/>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+##
+      <div class="chefButtonRow">
+        <input type="submit" name="eventSubmit_doBrowse" value="Enter"/>
+      </div>
+    </form>
+##
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<!-- $Header$ -->
+<project name="CHEF" default="build" basedir=".">
+
+	<property name="package" value="CHEF Grid Extensions" />
+
+	<!--  read properties from build.properties here, and in the user's home 'chef' directory -->
+	<property file="../../../build.properties" />
+	<property file="build.properties" />
+
+	<!-- set global properties for this build -->
+	<property name="src" value="src"/>
+	<property name="build" value="${chef.home}/build"/>
+	<property name="doc" value="doc"/>
+	<property name="modules_lib" value="${chef.home}/modules/lib"/>
+
+	<!-- Indiana ProxyTable location -->
+<!--	<property name="lib-ogsa-iu" value="../../ogsa-iu/dist" /> -->
+
+	<!-- COG and OGSA locations -->
+<!--	<property name="lib-ogsa" value = "../../ogsa/lib" /> -->
+
+	<!-- Indiana ProxyTable location -->
+<!--	<property name="lib-ogsa-iu" value="../../cog-iu/dist"/>
+	<property name="lib-proxymanager" value="../../ProxyManager/lib"/> -->
+
+	<!-- COG and OGSA locations -->
+<!--	<property name="lib-cog" value="../../cog-1.1/lib"/> -->
+
+	<!-- build the classpath for the build -->
+	<path id="classpath">
+
+		<!-- the jars in the CHEF lib dir -->
+		<fileset dir="${chef.home}/dist/lib">
+			<include name="core*.jar"/>
+		</fileset>
+
+		<fileset dir="${jetspeed.distribution}/bin">
+			<include name="*.jar"/>
+		</fileset>
+
+		<fileset dir="${jetspeed.distribution}/lib">
+			<include name="*.jar"/>
+		</fileset>
+
+<!--		<fileset dir="${lib-cog}">
+			<include name="**/*.jar"/>
+		</fileset> -->
+
+<!--		<fileset dir="${lib-ogsa-iu}"> -->
+<!--		<fileset dir="${lib-proxymanager}">
+			<include name="*.jar"/>
+		</fileset> -->
+		<fileset dir="${modules_lib}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="build" description="build java source">
+		<mkdir dir="${build}"/>
+		<echo>Compiling ${package}</echo>
+		<javac classpathref="classpath" srcdir="${src}/java" destdir="${build}" debug="on"/>
+	</target>
+
+	<target name="clean" description="nothing to clean">
+		<echo>umich.grid: nothing to clean</echo>
+	</target>
+
+	<target name="deploy.vm" description="copy templates">
+		<echo>
+			copying ${package} templates from ${src}/vm
+		</echo>
+		<copy preservelastmodified="true" overwrite="true" todir="${web.inf}/templates/vm/portlets/html">
+			<fileset dir="${src}/vm"/>
+		</copy>
+	</target>
+
+	<target name="deploy.conf" depends="deploy.vm" description="deploy module">
+		<echo>
+			Deploying configuration for ${package} into Tomcat
+		</echo>
+		<copy preservelastmodified="true" overwrite="true" todir="${web.inf}/conf">
+			<fileset dir="${src}/conf/jetspeed">
+				<include name="*.xreg"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="deploy" depends="deploy.vm, deploy.conf" description="deploy module">
+		<echo>
+			${package} deployment complete.
+		</echo>
+	</target>
+
+	<target name="dep" depends="build,deploy">
+		<ant dir="${chef.home}" target="post.module.deploy"/>
+	</target>
+
+</project>
