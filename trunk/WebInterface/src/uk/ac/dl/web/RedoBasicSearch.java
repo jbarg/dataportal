@@ -135,9 +135,9 @@ public class RedoBasicSearch extends HttpServlet {
                  */
                 
                 ArrayList[] list =  Search.doBasicSearch(sid,facs,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
-                session.setAttribute("noConn", list[1]);
-                session.setAttribute("noRes", list[2]);
-                session.setAttribute("timedOut", list[3]);
+                session.setAttribute("noConn", list[0]);
+                session.setAttribute("noRes", list[1]);
+                session.setAttribute("timedOut", list[2]);
                 
                 response.sendRedirect("../jsp/SimpleSearch.jsp");
             }

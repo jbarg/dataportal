@@ -82,9 +82,9 @@ public class ResendQuery extends HttpServlet{
             // System.out.println("dis "+discipline);
             // System.out.println("max is "+max);
             ArrayList[] list =  Search.doBasicSearch(sid,facilities,discipline, max,endpoint,wd,(String)session.getAttribute("dn"), true);
-            session.setAttribute("noConn", list[1]);
-            session.setAttribute("noRes", list[2]);
-            session.setAttribute("timedOut", list[3]);
+            session.setAttribute("noConn", list[0]);
+            session.setAttribute("noRes", list[1]);
+            session.setAttribute("timedOut", list[2]);
             
             response.sendRedirect("../jsp/SimpleSearch.jsp");
         }
