@@ -11,13 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-store" />
-<meta name="robot<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@ page errorPage="error.jsp"   %>
-<% response.setHeader("pragma","no-cache");
- response.setHeader("cache-control","no-store");
- %>
-<%@ include file="loggedin.jsp" %>
-<%@ include file="logger.jsp" %>s" content="index, follow" />
+<meta name="robot" content="index, follow" />
 <meta name="description" content="This site is the dataportal" />
 <meta name="keywords" content="Dataportal, metadata, clrc, dl,
 facilities,E-minerals, data, search, Glen Drinkwater, Synchrotron Radiation,British Atmospheric Data Centre, shopping basket" />
