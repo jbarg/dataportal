@@ -122,6 +122,10 @@
          <property name="basedir" value="${basedir}/acmpim"/>
       </ant>
 
+      <ant antfile="acmsrd/build.xml" target="${target}"> 
+         <property name="basedir" value="${basedir}/acmsrd"/>
+      </ant>
+
       <ant antfile="authent/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/authent"/>
       </ant>
