@@ -51,6 +51,10 @@ import org.jdom.Element ;
 import org.jdom.input.SAXBuilder ;
 import org.jdom.output.DOMOutputter ;
 
+//needed for authorisation framework integration
+import uk.ac.cclrc.authorisation.client.*;
+import uk.ac.cclrc.authorisation.server.*;
+
 
 public class XmlWrapperDocSelector
 {
@@ -321,8 +325,38 @@ public class XmlWrapperDocSelector
 
    } 
 
+   //need to tie down which Exception are thrown
+   void isUserAuthenticated(String proxy_cert, String auth_token) throws Exception
+   {
+      //at the moment just check the token - need to check DN with that of proxy really
+      //and config of TokenReader needs to be improved to allow just sending the token and the ACM.cert public key
+      // or something.
 
+      try
+      {
+         // Create a DOM builder and parse the fragment
+         javax.xml.parsers.DocumentBuilderFactory   factory = DocumentBuilderFactory.newInstance();
+         org.w3c.dom.Document d = factory.newDocumentBuilder().parse( new InputSource(new StringReader(auth_token)));
+         org.w3c.dom.Element element  = doc.getDocumentElement();
 
+         //need to configure authorisation.prop for the following class - naff
+         TokenReader reader = new TokenReader();
+
+         uk.ac.cclrc.authorisation.AttributeList list =  reader.getAttributes(element);
+
+         System.out.println("Data access "+list.getDataAccessGroup());
+         System.out.println("Wrapper access "+list.getWrapperGroup());
+         System.out.println("Facility access "+list.getDPView());
+
+            //getUserPrivilegesFromDB();
+      } 
+      catch (Exception e)
+      {
+         System.out.println(e);
+      }
+      
+      return ;
+   }
 
 
    //
@@ -339,6 +373,16 @@ public class XmlWrapperDocSelector
       Logger log = ss.getLogger() ;
 
       ArrayList al = (ArrayList) ss.getContainer() ;
+
+      //need to modify this to 
+      try
+      {
+         isUserAuthenticated(proxy_cert, auth_token) ;
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace() ;
+      }
       
 
       Iterator e = al.iterator() ;
