@@ -228,10 +228,8 @@ fi
 # Now mail the information to selected users - MDOHERTY 26/1/2004
 logtime=`date +%"D %T"`
 node=`hostname`
-#cat $MASS_HOME/log/backups.l* | sort -r -k1,2 | sort -u -k4,4 -k 7,7 \
-#| sort > $LGBCK
-
-cat $MASS_HOME/log/backups.l* | sort -r k1,2 > $LGBCK
+#cat $MASS_HOME/log/backups.l* | sort -r -k1,2 | sort -u -k4,4 -k 7,7 | sort > $LGBCK
+find $MASS_HOME/log -name "backups.l*" -mtime -183 -exec cat \{} \; | sort -r -k1.7,1.8 > $LGBCK
 
 #
 # Now mail the last good backup, plus the output from this backup
