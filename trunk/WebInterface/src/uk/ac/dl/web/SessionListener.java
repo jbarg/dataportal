@@ -48,7 +48,7 @@ public class SessionListener implements HttpSessionListener {
         //locate the prop file.  Normal get this from web.xml file
         //PropertyConfigurator.configure("../logs/DataPortal.log.properties");
         try{
-           
+            
             
             
             active--;
@@ -57,7 +57,7 @@ public class SessionListener implements HttpSessionListener {
             
             if(active == 0){
                 try{
-                   
+                    
                     File dir = new File(wd+File.separator+"profiles");
                     String[] files = dir.list();
                     for(int i = 0;i < files.length;i++){
