@@ -50,7 +50,10 @@ public class SRBTransfer extends HttpServlet {
             return;
         }
         else{
-            
+            //get all the attributes needed
+                String dir = request.getParameter("url");
+                String urlTo = request.getParameter("urlTo");
+                String sid = (String)session.getAttribute("sessionid");
             try{
                 //locate the prop file.  Normal get this from web.xml file
                 String wd =  (String)session.getAttribute("wd");
@@ -61,10 +64,7 @@ public class SRBTransfer extends HttpServlet {
                 String srb_location = props.getProperty("srb_location");
                 String srb_password = props.getProperty("srb_password");
                 
-                //get all the attributes needed
-                String dir = request.getParameter("url");
-                String urlTo = request.getParameter("urlTo");
-                String sid = (String)session.getAttribute("sessionid");
+                
                 
                 //need to add section to get the value from properties file.
                 URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password);
