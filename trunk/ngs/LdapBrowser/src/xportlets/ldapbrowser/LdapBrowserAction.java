@@ -57,7 +57,7 @@
  */
 
 /*
- * Xiaobo Yang, CCLRC e-Science Centre, 14 December 2004
+ * Xiaobo Yang, CCLRC e-Science Centre, 20 December 2004
  *
  */
 
@@ -99,35 +99,19 @@ import xportlets.reflect.UnsupportedTypeException;
 import xmlutil.PrettyPrint;
 
 import org.apache.jetspeed.services.statemanager.SessionState;
-//import org.chefproject.actions.PagedResourceAction;
 import org.chefproject.util.Menu;
-//import org.chefproject.util.EventObservingCourier;
-
-//import java.util.List;
 
 import org.chefproject.actions.VelocityPortletPaneledAction;
 
+import org.apache.jetspeed.portal.PortletConfig;
 
-/**
- * An  class to build VelocityPortlet actions.
- *
- * @author <a href="mailto:lifang@extreme.indiana.edu">Liang Fang</a>
- * @author Octav Chipara --- added support for invokating components
- */
 
-//
-// Xiaobo Yang, 6 December 2004
-// Rewrite the code to extend PagedResourceAction
-// Remove the service part
-//
-//public class LdapBrowserAction extends PagedResourceAction {
 public class LdapBrowserAction extends VelocityPortletPaneledAction {
     
   final private String HOSTNAME = "ldaphostname";
   final private String HOSTPORT = "ldaphostport";
   final private String BASEDN = "ldapbasedn";
   final private String DN = "dn";
-//  private String ERRMSG = "errmsg";
   final private String ERRMSG = "alertMessage";
 
   final private String RESULTS = "results";
@@ -136,8 +120,6 @@ public class LdapBrowserAction extends VelocityPortletPaneledAction {
   final private String LINKS = "links";
   final private String ENTRIES = "entries";
   final private String PARENT = "parent";
-//  private String SERVICE = "service";
-//  private String METHODS = "methods";
   final private String METHOD = "method";
   final private String PARAMS = "params";
   final private String REF = "ref";
@@ -148,17 +130,30 @@ public class LdapBrowserAction extends VelocityPortletPaneledAction {
   private Object invokedObject = null;
 
   final private String TOOLMODE = "toolmode";
-  final private String CUSTOMIZE = "customize";
   final private String QUERY = "query";
 
   final private String MODE_LEAF = "leaf";
   final private String MODE_NODE = "node";
 
 
-//  protected List readAllResources(SessionState state) {
-//    return null;
-//
-//  }
+  protected void initState(SessionState state, VelocityPortlet portlet,
+						JetspeedRunData rundata) {
+    super.initState(state, portlet, rundata);
+
+    // retrieve default parameters from the registration file
+    // Xiaobo Yang, 20 December 2004
+    PortletConfig config = portlet.getPortletConfig();
+    if (state.getAttribute(HOSTNAME)==null) {
+      state.setAttribute(HOSTNAME, config.getInitParameter(HOSTNAME));
+    }
+    if (state.getAttribute(HOSTPORT)==null) {
+      state.setAttribute(HOSTPORT, config.getInitParameter(HOSTPORT));
+    }
+    if (state.getAttribute(BASEDN)==null) {
+      state.setAttribute(BASEDN, config.getInitParameter(BASEDN));
+    }
+
+  }
 
   /**
    * Subclasses must override this method to provide default behavior
@@ -174,10 +169,13 @@ public class LdapBrowserAction extends VelocityPortletPaneledAction {
     ctxpath = rundata.getContextPath();
 
     String toolmode = (String)state.getAttribute(TOOLMODE);
-    if (toolmode!=null && toolmode.equals(QUERY)) {
+    if (toolmode!=null && toolmode.equals(QUERY)) { // mode: query
       template = buildQueryContext(state, context);
     }
-    else {
+    else { // mode: null the first time or something wrong happened
+      context.put(HOSTNAME, state.getAttribute(HOSTNAME));
+      context.put(HOSTPORT, state.getAttribute(HOSTPORT));
+      context.put(BASEDN, state.getAttribute(BASEDN));
       template = "xportlets-ldapbrowser-customize";
     }
 
@@ -215,32 +213,28 @@ public class LdapBrowserAction extends VelocityPortletPaneledAction {
   public void doGetldapinfo(RunData data, Context context) {
     SessionState state = ((JetspeedRunData)data).getPortletSessionState(((JetspeedRunData)data).getJs_peid());
     state.setAttribute(TOOLMODE, QUERY);
+    state.removeAttribute(ERRMSG);
 
-/*      String hostname = (String)data.getUser().getPerm(HOSTNAME);
-      String hostport = (String)data.getUser().getPerm(HOSTPORT);
-      String dn = (String)data.getUser().getPerm(DN);
-      String basedn = (String)data.getUser().getPerm(BASEDN);
-      String mode = (String)data.getUser().getPerm(HOSTNAME);
-*/
     String hostname = data.getParameters().getString(HOSTNAME);
     String hostport = data.getParameters().getString(HOSTPORT);
     String dn = data.getParameters().getString(DN);
-    String basedn = data.getParameters().getString(BASEDN,
-						"Mds-Vo-name=ngsinfo, o=grid");
+//    String basedn = data.getParameters().getString(BASEDN,
+//						"Mds-Vo-name=ngsinfo, o=grid");
+    String basedn = data.getParameters().getString(BASEDN);
     String mode = data.getParameters().getString(MODE);
 
     String ctxpath = data.getContextPath();
     state.setAttribute(CONTEXTPATH, ctxpath);
 
-    if (hostname==null) {
-      hostname = (String)data.getUser().getPerm(HOSTNAME,
-						"ngsinfo.grid-support.ac.uk");
-      hostport = (String)data.getUser().getPerm(HOSTPORT, "2135");
-      basedn = (String)data.getUser().getPerm(BASEDN,
-						"Mds-Vo-name=ngsinfo, o=grid");
-      dn = (String)data.getUser().getPerm(DN, "Mds-Vo-name=ngsinfo, o=grid");
-      mode = (String)data.getUser().getPerm(MODE, MODE_NODE);
-    }
+//    if (hostname==null) {
+//      hostname = (String)data.getUser().getPerm(HOSTNAME,
+//						"ngsinfo.grid-support.ac.uk");
+//      hostport = (String)data.getUser().getPerm(HOSTPORT, "2135");
+//      basedn = (String)data.getUser().getPerm(BASEDN,
+//						"Mds-Vo-name=ngsinfo, o=grid");
+//      dn = (String)data.getUser().getPerm(DN, "Mds-Vo-name=ngsinfo, o=grid");
+//      mode = (String)data.getUser().getPerm(MODE, MODE_NODE);
+//    }
 
 /*	Log.info(" (xportlets.LdapBrowser) Stating doGetldaptinfo");
 
@@ -254,12 +248,12 @@ public class LdapBrowserAction extends VelocityPortletPaneledAction {
     try {
       if (dn!=null) {
         dn = URLDecoder.decode(dn, "UTF-8");
-        data.getUser().setPerm(DN, dn);
+//        data.getUser().setPerm(DN, dn);
 //          Log.info(" (xportlets.LdapBrowser) DN setPerm:"+dn); 
       }
       else {
         dn = URLDecoder.decode(basedn, "UTF-8");
-        data.getUser().setPerm(DN, basedn);
+//        data.getUser().setPerm(DN, basedn);
 //          Log.info(" (xportlets.LdapBrowser) DN setPerm:"+basedn); 
       }
 
@@ -458,9 +452,7 @@ public class LdapBrowserAction extends VelocityPortletPaneledAction {
         state.setAttribute(LINKS, attrV);
       }
 
-      state.setAttribute(ERRMSG, null);
-//      state.setAttribute(ERRMSG, "LALALA");
-//      enableObserver(state);
+//      state.setAttribute(ERRMSG, null);
     }
     catch (Exception ex) {
 //      ex.printStackTrace();
