@@ -2,8 +2,8 @@
 <!-- JNLP File for MDS Query Application --> 
 <jnlp 
   spec="1.0+" 
-  codebase="http://wk-pc1.dl.ac.uk:8080/dataportal/html/proxy"
-  href="proxy.jnlp"> 
+   codebase="http://gjd37vig.dl.ac.uk:8080/lib"
+  href="proxy1.jnlp"> 
 
   <information> 
     <title>DataPortal Application</title> 
@@ -26,7 +26,7 @@
     <jar href="Proxy.jar" />
    	<jar href="cog-jglobus-ch.jar"/>
    	<jar href="log4j-1.2.5.jar"/>
-   <extension name="jce" href="jce.jnlp" />
+  <!-- <extension name="jce" href="jce.jnlp" />-->
    	<jar href="fastreversedns.jar"/>
    	<jar href="puretls.jar"/>
    	<jar href="cryptix-asn1.jar"/>

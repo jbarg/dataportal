@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <jnlp spec="1.0+"  codebase="http://wk-pc1.dl.ac.uk:8080/dataportal/html/proxy"
+    <jnlp spec="1.0+"  codebase="http://gjd37vig.dl.ac.uk:8080/dataportal/html/proxy"
   href="jce.jnlp"> 
 
     <information>
@@ -11,7 +11,7 @@
            <!--  <j2ee-application-client-permissions />-->
   </security>
     <resources>
-        <jar href="jce-jdk13-117.jar"/>
+        <jar href="bcprov-jdk14-120.jar"/>
     </resources>
     <component-desc/>
 </jnlp>
