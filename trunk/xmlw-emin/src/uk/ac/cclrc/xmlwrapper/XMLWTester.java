@@ -89,14 +89,13 @@ public class XMLWTester {
    {
       XMLWTester xmlwt = new XMLWTester() ;
 
-      xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc",
-           "Discipline='/earth sciences/atmosphere/atmospheric temperature/Temperature'",
-           "saved_badc.xml") ;
+     // xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_badc",
+     //      "Discipline='/earth sciences/atmosphere/atmospheric temperature/Temperature'",
+     //      "saved_badc.xml") ;
 		     
-      xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw/services/xmlwrapper_mpim",
-           //"'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'",
-           "Discipline='/earth sciences/oceans/ocean temperature/temperature'",
-           "saved_mpim.xml") ;
+      xmlwt.test("http://escdmg.dl.ac.uk:8080/xmlw-em/services/xmlwrapper_emin",
+                 "Discipline='All'",
+                 "saved_emin.xml") ;
 
       return ;
    }
