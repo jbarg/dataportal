@@ -1,0 +1,129 @@
+<!--th XMLSPY v5 rel. 2 U (http://www.xmlspy.com) by k1 (CCLRC) -->
+<!-- Created by gjd37 on 22 April 2002, 15:28 -->
+<!--<!DOCTYPE active SYSTEM "active_topics.dtd">-->
+<active value="start">
+	<level1 canSubmit="false" value="Agriculture" final="">
+		<level2 value="Soils" canSubmit="false" final="Agriculture/">
+			<level3 canSubmit="false" value="Soil Minerology" final="Agriculture/Soils/">
+				<level4 canSubmit="false" value="Weathering" final="Agriculture/Soils/Soil Minerology">
+					<level5 canSubmit="true" value="submit" final="Agriculture/Soils/Soil Minerology/Weathering"/>
+				</level4>
+			</level3>
+		</level2>
+	</level1>
+	<level1 canSubmit="false" value="Chemistry" final="">
+		<level2 value="Computational" canSubmit="false" final="Chemistry/">
+			<level3 canSubmit="false" value="Monte Carlo" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Monte Carlo"/>
+			</level3>
+			<level3 canSubmit="false" value="Reverse Monte Carlo" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Reverse Monte Carlo"/>
+			</level3>
+			<level3 canSubmit="false" value="Molecular Dynamics" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Molecular Dynamics"/>
+			</level3>
+			<level3 canSubmit="false" value="Ab Initio and DF" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Ab Initio and DF"/>
+			</level3>
+			<level3 canSubmit="false" value="Empirical Force Field" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Empirical Force Field"/>
+			</level3>
+			<level3 canSubmit="false" value="Quantum Mechanics" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Quantum Mechanics"/>
+			</level3>
+			<level3 canSubmit="false" value="Energy Relaxation" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Energy Relaxation"/>
+			</level3>
+			<level3 canSubmit="false" value="Lattice Dynamics" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Lattice Dynamics"/>
+			</level3>
+			<level3 canSubmit="false" value="Activation Energies" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Activation Energies"/>
+			</level3>
+			<level3 canSubmit="false" value="Mishins method" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Mishins method"/>
+			</level3>
+			<level3 canSubmit="false" value="Inverse Modelling" final="Chemistry/Computational/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Computational/Inverse Modelling"/>
+			</level3>
+		</level2>
+		<level2 value="Inorganic" canSubmit="false" final="Chemistry/">
+			<level3 canSubmit="false" value="Structure" final="Chemistry/Inorganic/">
+				<level4 canSubmit="true" value="submit" final="Chemistry/Inorganic/Structure"/>
+			</level3>
+		</level2>
+	</level1>
+	<level1 canSubmit="false" value="Geology" final="">
+		<level2 value="Minerals" canSubmit="false" final="Geology/">
+			<level3 canSubmit="false" value="Silicates" final="Geology/Minerals/">
+				<level4 canSubmit="true" value="submit" final="Geology/Minerals/Silicates"/>
+			</level3>
+			<level3 canSubmit="false" value="Sulphides" final="Geology/Minerals/">
+				<level4 canSubmit="true" value="submit" final="Geology/Minerals/Sulphides"/>
+			</level3>
+			<level3 canSubmit="false" value="Zircon" final="Geology/Minerals/">
+				<level4 canSubmit="true" value="submit" final="Geology/Minerals/Zircon"/>
+			</level3>
+		</level2>
+	</level1>
+	<level1 canSubmit="false" value="Surface Science" final="">
+		<level2 value="Adsorption of Molecules" canSubmit="false" final="Surface Science/">
+			<level3 canSubmit="true" value="submit" final="Surface Science/Adsorption of Molecules">
+				
+			</level3>
+		</level2>
+		<level2 value="Diffusion Behaviour" canSubmit="false" final="Surface Science/">
+			<level3 canSubmit="true" value="submit" final="Surface Science/Diffusion Behaviour">
+				
+			</level3>
+		</level2>
+		<level2 value="Solid Liquid Interact" canSubmit="false" final="Surface Science/">
+			<level3 canSubmit="true" value="submit" final="Surface Science/Solid Liquid Interact">
+				
+			</level3>
+		</level2>
+	</level1>
+	<level1 canSubmit="false" value="Geochemistry" final="">
+		<level2 value="Crystallography" canSubmit="false" final="Geochemistry/">
+			<level3 canSubmit="true" value="submit" final="Geochemistry/Crystallography">
+				
+			</level3>
+		</level2>
+	</level1>
+	<level1 canSubmit="false" value="Environment" final="">
+		<level2 value="Radiation Damage" canSubmit="false" final="Environment/">
+			<level3 canSubmit="true" value="submit" final="Environment/Radiation Damage"/>
+		</level2>
+		<level2 canSubmit="false" value="Hazardous Waste" final="Environment/">
+			<level3 canSubmit="false" value="Radioactive Waste" final="Environment/Hazardous Waste">
+				<level4 canSubmit="true" value="submit" final="Environment/Hazardous Waste/Radioactive Waste"/>
+			</level3>
+		</level2>
+		<level2 canSubmit="false" value="Pollutants" final="Environment/">
+			<level3 canSubmit="false" value="Arsenic" final="Environment/Pollutants">
+				<level4 canSubmit="true" value="submit" final="Environment/Pollutants/Arsenic"/>
+			</level3>
+			<level3 canSubmit="false" value="DDT" final="Environment/Pollutants">
+				<level4 canSubmit="true" value="submit" final="Environment/Pollutants/DDT"/>
+			</level3>
+		</level2>
+		<level2 canSubmit="false" value="Toxic Substances" final="Environment/">
+			<level3 canSubmit="false" value="Mercury" final="Environment/Toxic Substances">
+				<level4 canSubmit="true" value="submit" final="Environment/Toxic Substances/Mercury"/>
+			</level3>
+		</level2>
+		<level2 canSubmit="false" value="Water Resources" final="Environment/">
+			<level3 canSubmit="false" value="Arsenic Contamination" final="Environment/Water Resources">
+				<level4 canSubmit="true" value="submit" final="Environment/Water Resources/Arsenic Contamination"/>
+			</level3>
+		</level2>
+	</level1>
+	<level1 canSubmit="false" value="Physics" final="">
+		<level2 canSubmit="false" value="Condensed Matter" final="Physics/">
+			<level3 canSubmit="false" value="Magnetism" final="Physics/Condensed Matter">
+				<level4 canSubmit="true" value="submit" final="Physics/Water Resources/Magnetism"/>
+			</level3>
+		</level2>
+	</level1>
+</active>
+

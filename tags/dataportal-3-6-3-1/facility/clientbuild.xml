@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all">
+    <target name="init">
+	<property file="clientbuild.properties"/>
+        <property name="src.home" value="${basedir}/src"/>
+        <property name="web.home" value="${basedir}/web"/>
+        <property name="docs.home" value="${basedir}/docs"/>
+        <property name="dest.home" value="${web.home}/WEB-INF/classes"/>
+	<property name="ignoresystemclasses" value="true"/>
+	<path id="tomcat.class.path">
+	<pathelement location="${catalina.home}/common/classes"/>
+	    <fileset dir="${catalina.home}/common/endorsed">
+	        <include name="*.jar"/>
+	    </fileset>
+	    <fileset dir="${catalina.home}/common/lib">
+	        <include name="*.jar"/>
+	    </fileset>
+	    <pathelement location="${catalina.home}/shared/classes"/>
+	    <fileset dir="${catalina.home}/shared/lib">
+	        <include name="*.jar"/>
+	    </fileset>
+	</path>
+
+    </target>
+
+    <target depends="clean,compile" name="all"/>
+    
+    <target depends="init" name="compile">
+        <mkdir dir="${dest.home}"/>
+        <javac debug="${compile.debug}" deprecation="${compile.deprecation}" destdir="${dest.home}" optimize="${compile.optimize}" srcdir="${src.home}" includes="**/client/*.java">
+            <classpath refid="tomcat.class.path"/>
+            <classpath>
+                <pathelement location="${dest.home}"/>
+                <fileset dir="${web.home}/WEB-INF/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target> 
+
+    <target depends="init" name="clean">
+        <delete>
+            <fileset dir=".">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+        <delete file="${basedir}/${app.name}.war"/>
+    </target>
+
+        
+   <target depends="init, compile" name="run">
+        <java classname="uk.ac.clrc.dataportal.facility.client.FacilityAdminClient" fork="true">
+        <arg value="${service.endpoint}"/>
+        <arg value="${dataportal.datafile}"/>
+        <arg value="${badc.datafile}"/>
+        <arg value="${mpim.datafile}"/>
+        <arg value="${isis.datafile}"/>
+        <arg value="${srd.datafile}"/>
+        <classpath refid="tomcat.class.path"/>
+        <classpath>
+	    <pathelement location="${dest.home}"/>
+	    <fileset dir="${web.home}/WEB-INF/lib">
+	        <include name="**/*.jar"/>
+	    </fileset>
+        </classpath>
+        </java>
+   </target>
+    
+    
+</project>

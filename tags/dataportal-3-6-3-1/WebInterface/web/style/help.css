@@ -1,0 +1,27 @@
+/* 
+
+  File name:  help
+
+  Created on: 15 January 2003 at 11:27
+
+  Author:     gjd37  
+
+
+
+  Description:
+
+    An empty stylesheet.
+
+*/
+
+
+
+span.highlight { background-color : blue;}
+
+span { background-color : blue;}
+
+
+
+
+
+span.highlight { color : red;}
