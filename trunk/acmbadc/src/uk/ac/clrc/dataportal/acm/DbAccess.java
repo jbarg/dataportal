@@ -29,11 +29,11 @@ public class DbAccess {
             
             Properties prop = new Properties();
             prop.load(new FileInputStream(getPropertiesFile()));
-            facilityName = prop.getProperty(FACILITYNAME);
+            facilityName = prop.getProperty("FACILITYNAME");
             Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql:" + prop.getProperty(SERVER) +":"+ prop.getProperty(PORT)+"/acm" ,
-            prop.getProperty(USERNAME), // username
-            prop.getProperty(PASSWORD)); // password
+            conn = DriverManager.getConnection("jdbc:postgresql:" + prop.getProperty("SERVER") +":"+ prop.getProperty("PORT")+"/acm" ,
+            prop.getProperty("USERNAME"), // username
+            prop.getProperty("PASSWORD")); // password
             
         }catch (ClassNotFoundException e) {
             System.out.println("possible classpath problem");
