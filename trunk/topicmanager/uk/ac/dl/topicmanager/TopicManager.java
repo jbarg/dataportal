@@ -8,7 +8,6 @@ package uk.ac.dl.topicmanager;
 // Database classes
 import java.sql.*;
 import java.sql.SQLException;
-import uk.ac.dl.db.DBConnection;
 
 // JDOM
 import org.jdom.Document;
@@ -25,7 +24,7 @@ public class TopicManager {
     
     
     /** Creates a new instance of buildTopics */
-    public static Document buildTopics(String url,String username,String password ) throws Exception {
+    public static Document buildTopics(String url,String username,String password, String startTopic) throws Exception {
        
         Document doc = null;
         // Create root element <active value="start"> </active>
@@ -50,18 +49,10 @@ public class TopicManager {
         
         rs =stat.executeQuery("select level, topic, leaf, "+
         "SYS_CONNECT_BY_PATH(topic, '/') as \"final\" "+
-        "from topic "+
-        "start with topic='Chemistry' "+
+        "from (select * from topic order by topic) "+
+        "start with topic='"+startTopic+"' "+
         "connect by prior topic_id = parent ");
-        
-        // Get hierarchy of topics from the database
-        //db.connect();
-        /*ResultSet rs = db.getData("select level, topic, leaf, "+
-        "SYS_CONNECT_BY_PATH(topic, '/') as \"final\" "+
-        "from topic "+
-        "start with topic='Chemistry' "+
-        "connect by prior topic_id = parent ");*/
-        
+
         int newLevel;
         while (rs.next()) { // get next row
             
@@ -126,7 +117,7 @@ public class TopicManager {
         // TopicManager tm = new TopicManager();
         try {
             
-            Document mydoc = TopicManager.buildTopics("jdbc:oracle:thin:@elektra.dl.ac.uk:1521:emat1","emat","tame");
+            Document mydoc = TopicManager.buildTopics("jdbc:oracle:thin:@elektra.dl.ac.uk:1521:emat1","emat","tame","Chemistry");
             org.jdom.output.XMLOutputter serializer = new org.jdom.output.XMLOutputter();
             serializer.setIndent("  "); // use two space indent
             serializer.setNewlines(true);
@@ -135,8 +126,5 @@ public class TopicManager {
         catch (Exception e) {
             e.printStackTrace();
         }
-        
-        
     }
-    
 }
