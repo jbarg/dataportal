@@ -10,6 +10,8 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
+import java.nio.*;
+import java.nio.channels.*;
 
 //log classes
 
@@ -69,7 +71,7 @@ public class ExpandResultsServlet extends HttpServlet{
                 current = current+1;
                 if(current <= 0) current = 0;
                 //get old values if any
-                HashMap oldvalues = (HashMap)session.getAttribute("values");
+                HashMap oldvalues = (HashMap)session.getAttribute("select");
                 if(oldvalues ==  null){
                     
                     oldvalues = new HashMap();
@@ -112,7 +114,7 @@ public class ExpandResultsServlet extends HttpServlet{
                     oldvalues = new HashMap();
                 }
                 //get choosen values just given
-                String valuesP[] = request.getParameterValues("expand");
+                String valuesP[] = request.getParameterValues("select");
                 
                 //add both together
                 //HashMap totalvalues = new HashMap();
@@ -129,14 +131,15 @@ public class ExpandResultsServlet extends HttpServlet{
                 response.sendRedirect("../jsp/SimpleSearch.jsp?from="+current);
             }
             
-            else{
-                //user wants to see results
+            
+            else {
+                //user wants to see expanded results
                 File temp = null;
                 FileWriter f = null;
                 try {
                     //String[] values = new String[100];
                     //get values to expand
-                    String valuesP[] = request.getParameterValues("expand");
+                    String valuesP[] = request.getParameterValues("select");
                     //get older values from session
                     HashMap oldvalues = (HashMap)session.getAttribute("values");
                     
@@ -164,8 +167,8 @@ public class ExpandResultsServlet extends HttpServlet{
                     String sid = (String)session.getAttribute("sessionid");
                     
                     // create new temp file
-                     temp = new File(wd+File.separator+"profiles"+File.separator+"expand"+sid+".xsl");
-                     f = new FileWriter(temp);
+                    temp = new File(wd+File.separator+"profiles"+File.separator+"expand"+sid+".xsl");
+                    f = new FileWriter(temp);
                     
                     f.write("<?xml version='1.0'?>\n");
                     f.write("<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n");
@@ -211,14 +214,44 @@ public class ExpandResultsServlet extends HttpServlet{
                     //get users username
                     
                     xml = new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
-                    XSLTransformer.transformFiletoFile(xml,temp,new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml"));
+                    File result = new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml");
+                    XSLTransformer.transformFiletoFile(xml,temp,result);
                     
                     //attempt to delete the file
                     // if(!temp.delete()){
                     //     logger.warn("Could no delete temp file");
                     // }
                     temp.delete();
-                    response.sendRedirect("../jsp/Expand.jsp");
+                    
+                    //user want to view data sets
+                    if(submit.equals("View selected studies datasets")){
+                        //copy file
+                        FileChannel srcChannel = null;
+                        FileChannel dstChannel = null;
+                        try {
+                            // Create channel on the source
+                            srcChannel = new FileInputStream(result).getChannel();
+                            
+                            // Create channel on the destination
+                            dstChannel = new FileOutputStream(new File(wd+File.separator+"profiles"+File.separator+sid+"3.xml")).getChannel();
+                            
+                            // Copy file contents from source to destination
+                            dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
+                            
+                            // Close the channels
+                            srcChannel.close();
+                            dstChannel.close();
+                        } catch (IOException e) {
+                            // Close the channels
+                            srcChannel.close();
+                            dstChannel.close();
+                            throw e;
+                        }
+                        
+                        response.sendRedirect("../jsp/Explore.jsp");
+                    }
+                    //user wants to view expande dstudies
+                    else response.sendRedirect("../jsp/Expand.jsp");
                 }
                 
                 
