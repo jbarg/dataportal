@@ -349,9 +349,10 @@
    <xsd:complexType name="DataHoldingType">
       <xsd:sequence>
          <xsd:element name="DataDescription"    type="cmd:DataDescriptionType"/>
-         <xsd:element name="DataCollection"            type="cmd:DataCollectionType" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="DataHoldingLocator" type="cmd:CollectionLocatorType"/>
+         <xsd:element name="DataCollection"            type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
+	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="DataHoldingLocator" type="cmd:DataHoldingLocatorType"/>
       </xsd:sequence>
 <!-- again following attribute type should really be a CDATA equivelent -->
 <!-- but can't seem to find it -->
@@ -493,7 +494,7 @@
 	 <xsd:element name="AtomicDataObject"            type="cmd:ADOType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="DataCollection"           type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="DataCollectionLocator"    type="cmd:DataCollectionLocatorType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="DataCollectionLocator"    type="cmd:CollectionLocatorType" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
 <!-- again the following is stated as a CDATA type in the original DTD -->
       <xsd:attribute name="dataid" type="xsd:ID" use="required"/>
@@ -610,33 +611,28 @@
    <!-- The DataLocationTypes  -->
 
 
-   <xsd:complexType name="DataHoldingLocatorType">
+   <xsd:complexType name="CollectionLocatorType">
       <xsd:sequence>
          <xsd:element name="DataName" type="xsd:string"/>
-         <xsd:element name="Locator"  type="cmd:LocatorTypes" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="Locator" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                     <xsd:attribute name="pathtype" type="cmd:PathTypes"/>
+                  </xsd:extension>
+               </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
       </xsd:sequence>
-<!-- type of this attribute should really be a CDATA - no equivelent in XMLSchema -->
-      <xsd:attribute name="dataidref" type="xsd:string" use="required"/>
    </xsd:complexType>
 
 
-   <xsd:simpleType name="LocatorTypes">
+   <xsd:simpleType name="PathTypes">
       <xsd:restriction base="xsd:string">
          <xsd:enumeration value="absolute"/>
          <xsd:enumeration value="relative"/>
       </xsd:restriction>
    </xsd:simpleType>
-
-
-   <xsd:complexType name="DataCollectionLocatorType">
-      <xsd:sequence>
-         <xsd:element name="DataName" type="xsd:string"/>
-         <xsd:element name="Locator"  type="cmd:LocatorTypes" minOccurs="0" maxOccurs="unbounded"/>
-      </xsd:sequence>
-<!-- type of this attribute should really be a CDATA - no equivelent in XMLSchema -->
-      <xsd:attribute name="dataidref" type="xsd:string" use="required"/>
-   </xsd:complexType>
-
 
    <xsd:complexType name="ADOLocatorType">
       <xsd:sequence>
@@ -648,7 +644,7 @@
       </xsd:sequence>
 <!-- type of this attribute should really be a CDATA - no equivelent in XMLSchema -->
       <xsd:attribute name="dataidref" type="xsd:string" use="required"/>
-      <xsd:attribute name="type" type="cmd:LocatorTypes" default="absolute" use="optional"/>
+      <xsd:attribute name="pathtype" type="cmd:PathTypes" default="absolute" use="optional"/>
    </xsd:complexType>
 
 
