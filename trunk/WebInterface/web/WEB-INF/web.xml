@@ -58,6 +58,16 @@
     </servlet-class>
 
 	</servlet>
+        <servlet>
+		<servlet-name>RedoBasicSearch</servlet-name>
+		<display-name>SRBTransfer</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.RedoBasicSearch
+    </servlet-class>
+
+	</servlet>
+        
           <servlet>
 		<servlet-name>SRBDownload</servlet-name>
 		<display-name>SRBDownload</display-name>
@@ -318,6 +328,10 @@
         <servlet-mapping>
 		<servlet-name>FileDownload</servlet-name>
 		<url-pattern>/servlet/FileDownload</url-pattern>
+	</servlet-mapping>
+          <servlet-mapping>
+		<servlet-name>RedoBasicSerach</servlet-name>
+		<url-pattern>/servlet/RedoBasicSerach</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>SRBTransfer</servlet-name>
