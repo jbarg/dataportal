@@ -137,7 +137,7 @@ public class FileDownload extends HttpServlet {
                 response.setBufferSize(65536);
                 
                 String filename1 = url.substring(url.lastIndexOf("/") + 1);
-                filename1 = filename1.replace('.','_');
+                //filename1 = filename1.replace('.','_');
                 response.setHeader("Content-disposition","attachment; filename=" + filename1 );
                 
                 File myFileIn = new File("/tmp/"+sid);

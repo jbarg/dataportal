@@ -56,8 +56,8 @@ public class SRBTransfer extends HttpServlet {
             String urlTo = request.getParameter("urlTo");
             String sid = (String)session.getAttribute("sessionid");
             String wd =  (String)session.getAttribute("wd");
-            String srb_location; 
-            String srb_password; 
+            String srb_location;
+            String srb_password;
             String data_transfer_location;
             String data_transfer_password;
             try{
@@ -133,7 +133,7 @@ public class SRBTransfer extends HttpServlet {
             try{
                 //HARD CODE FOR NOW
                 
-               /* String endpoint =url1;
+                String endpoint =url1;
                 Service  service = new Service();
                 Call     call    = (Call) service.createCall();
                 
@@ -148,17 +148,17 @@ public class SRBTransfer extends HttpServlet {
                 System.out.println("http://"+host.getHostAddress()+":8080/dataportal/xml/"+sid+".tar");
                 Object[] ob = new Object[]{"http://"+host.getCanonicalHostName() +":8080/dataportal/xml/"+sid+".tar",urlTo,cert};
                 
-                result = (String) call.invoke(ob );*/
+                result = (String) call.invoke(ob );
                 //save credential
-                String save = wd+File.separator+"profiles"+File.separator+sid;
+                /*String save = wd+File.separator+"profiles"+File.separator+sid;
                 savefile = new File(save);
                 FileWriter w = new FileWriter(savefile);
                 w.close();
-                
-                
+                 
+                 
                 //read in the message
                 URL  urlservlet = new URL(data_transfer_location+"?cred="+save+"&from="+tarFile+"&to="+urlTo+"&passwd="+data_transfer_password);
-                
+                 
                 URLConnection urlc = urlservlet.openConnection();
                 InputStream input = urlc.getInputStream();
                 BufferedReader read = new BufferedReader(new InputStreamReader(input));
@@ -168,8 +168,8 @@ public class SRBTransfer extends HttpServlet {
                     buff.append(str);
                 }
                 read.close();
-                
-                result = buff.toString();
+                 
+                result = buff.toString();*/
                 
             } catch (Exception e) {
                 logger.warn("Unable to transfer srb collection",e);
@@ -179,7 +179,7 @@ public class SRBTransfer extends HttpServlet {
                 isError = true;
                 return;
             }
-             savefile.delete();
+            savefile.delete();
             tarFile.delete();
             if(result.equals("true")) {
                 response.sendRedirect("../jsp/transferOk.jsp");
@@ -190,7 +190,7 @@ public class SRBTransfer extends HttpServlet {
                 response.sendRedirect("../jsp/transferError.jsp?error="+result+"&url="+dir);
                 
             }
-                        
+            
         }
     }
     
