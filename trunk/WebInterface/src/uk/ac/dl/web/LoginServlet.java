@@ -92,7 +92,8 @@ public class LoginServlet extends HttpServlet {
         String rePass = request.getParameter("password");
         //seconds  :  1hour  = 60*60
         lifetime = request.getParameter("lifetime");
-        int lifetime_int = Integer.parseInt(lifetime)*60*60;
+        double lifetime_long = Double.parseDouble(lifetime)*100;
+        int lifetime_int = ((int)lifetime_long)*6*6;
         lifetime = String.valueOf(lifetime_int);
         //set login status as false
         boolean loggedin = false;

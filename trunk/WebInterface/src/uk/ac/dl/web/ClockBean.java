@@ -22,29 +22,40 @@ public class ClockBean {
         
         this.timeleft = (timeleft > 0)? timeleft :0;
         
-        //get current time
-        currenttime = new GregorianCalendar();
-        expiretime = new GregorianCalendar();
+        currenttime = getCurrentTime();
+        expiretime = (Calendar)currenttime.clone();
         
         //add timeleft to currenttime to get expire time
-        int currentminute = currenttime.get(Calendar.MINUTE);
-        int expireminute = currentminute + (int)this.timeleft/60;
+        int expireminute = expiretime.get(Calendar.MINUTE) + (int)this.timeleft/60;
         
         //clear minute and set to new minute
         expiretime.clear(Calendar.MINUTE);
         expiretime.set(Calendar.MINUTE,expireminute);
         
         
-        System.out.println("Current time "+currenttime.getTime());
-        System.out.println("Expire time "+expiretime.getTime());
+        //System.out.println("Current time "+currenttime.getTime());
+        //System.out.println("Expire time "+expiretime.getTime());
         
     }
     
     public boolean isValid(){
         
+        currenttime = getCurrentTime();
         return currenttime.before(expiretime);
         
     }
+    
+    public void show(){
+        System.out.println("Current time "+getCurrentTime().getTime());
+        System.out.println("Expire time "+expiretime.getTime());
+    }
+    
+    private Calendar getCurrentTime(){
+        //get current time
+        return new GregorianCalendar();
+        
+    }
+    
     
     public static void main(String[] args){
         ClockBean clock =   new ClockBean(-1861);
