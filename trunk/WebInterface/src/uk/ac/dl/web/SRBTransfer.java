@@ -64,7 +64,7 @@ public class SRBTransfer extends HttpServlet {
             String sid = (String)session.getAttribute("sessionid");
             
             //need to add section to get the value from properties file.
-            URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_location);
+            URL url = new URL(srb_location+"?dir="+dir+"&name="+srb_password);
             URLConnection yc = url.openConnection();
             InputStream p = yc.getInputStream();
             BufferedReader in = new BufferedReader(new InputStreamReader(p));
@@ -98,8 +98,11 @@ public class SRBTransfer extends HttpServlet {
             }
             catch(Exception e){
                 logger.error("Could not retrieve proxy cert from session manager",e);
-                isError = true;
+                response.sendRedirect("../jsp/error.jsp");
+                return;
             }
+            String result = "";
+            String error= "";
             try{
                 //HARD CODE FOR NOW
                 
@@ -109,7 +112,7 @@ public class SRBTransfer extends HttpServlet {
                 
                 
                 call.setTargetEndpointAddress( new java.net.URL(url1) );
-                call.setOperationName( "transferFile" );
+                call.setOperationName( "urlCopy" );
                 call.addParameter( "url", XMLType.XSD_STRING, ParameterMode.IN );
                 call.addParameter( "urlTo", XMLType.XSD_STRING, ParameterMode.IN );
                 call.addParameter( "cert", XMLType.XSD_STRING, ParameterMode.IN );
@@ -118,15 +121,26 @@ public class SRBTransfer extends HttpServlet {
                 System.out.println("http://"+host.getHostAddress()+":8080/dataportal/xml/"+sid+".tar");
                 Object[] ob = new Object[]{"http://"+host.getCanonicalHostName() +":8080/dataportal/xml/"+sid+".tar",urlTo,cert};
                 
-                Object whatever = (Object) call.invoke(ob );
+                result = (String) call.invoke(ob );
+                
                 
             } catch (Exception e) {
                 logger.warn("Unable to transfer srb collection",e);
+                response.sendRedirect("../jsp/error.jsp");
                 isError = true;
+                return;
             }
             tarFile.delete();
-            if(isError) response.sendRedirect("../jsp/error.jsp");
-            else response.sendRedirect("../jsp/transferOk.jsp");
+            if(result.equals("true")) {
+                response.sendRedirect("../jsp/transferOk.jsp");
+                
+            }
+            else {
+                logger.warn("Error in transfering srb object.\nError: "+result);
+                response.sendRedirect("../jsp/transferError.jsp?error="+result);
+                
+            }
+            
             
         }
     }
