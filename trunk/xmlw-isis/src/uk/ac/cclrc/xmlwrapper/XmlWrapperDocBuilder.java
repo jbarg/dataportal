@@ -37,8 +37,8 @@ public class XmlWrapperDocBuilder
    public XmlWrapperDocBuilder()
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
-      //setup wrapper name
-      ss.setWrapperName("ng") ;
+      //setup wrapper name - should be changed to read its name from the external facility
+      ss.setWrapperName("isis") ;
       //setup logger
       ss.setLogger(XmlWrapperDocBuilder.class.getName() + ".class" ) ;
       //setup login details
@@ -190,6 +190,7 @@ public class XmlWrapperDocBuilder
          catch (java.sql.SQLException sqle)
          {
             //System.err.println("failed on isis record:\t" + sid ) ;
+            log.debug(sbr.toString()) ;
             sqle.printStackTrace() ;
          }
     
@@ -226,7 +227,7 @@ public class XmlWrapperDocBuilder
 	    jii.printStackTrace() ;
          }
          
-         //get the xindice handles needed for insert
+         //get the exist handles needed for insert
          org.xmldb.api.base.Collection col = ss.getXMLCollection() ;
          //XMLResource xmlr = ss.getXMLResource() ;
          XMLResource xmlr = null ;

@@ -1,4 +1,4 @@
-/**
+/** note this is the one to mod
  * Xmlwrapper_BuilderSoapBindingImpl.java
  *
  * This file was auto-generated from WSDL

@@ -9,4 +9,9 @@ create environment:
 go to location: (as test programs part of uk.ac.cclrc.xmlwrapper package)
 	dpib (i.e. dataportal isis wrapper build/WEB-INF/classes direcory)
 
-e.g. java
+e.g. :
+
+#note for some reason servlet.jar is required also
+
+java uk.ac.cclrc.xmlwrapper.XMLWBuilderTester
+java uk.ac.cclrc.xmlwrapper.XMLWSelectorTester

@@ -79,7 +79,7 @@ public class XmlWrapperDocSelector
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
       //setup wrapper name
-      ss.setWrapperName("ng") ;
+      ss.setWrapperName("isis") ;
       //setup logger
       ss.setLogger(XmlWrapperDocSelector.class.getName() + ".class" ) ;
       //setup login details

@@ -30,20 +30,23 @@ public class ISISCsmdMapper implements CsmdMapper
    int    level_indent = 0 ;
    String li = null ;
    //retrieve the database schema name if their is a need to prepend this before the table names
-   String dbs = null ;
+   String dbs = "" ;
 
    public ISISCsmdMapper()
    {
+      this.ss = SessionSingleton.getInstance() ;
       //setup wrapper name
-      ss.setWrapperName("ISIS") ; // perhaps this duplicates the facility name - but they could be different
+      ss.setWrapperName("isis") ; // perhaps this duplicates the facility name - but they could be different
       //setup these local variables as it would be too verbose to put them at the start of each function in this class
       //get local values needed from SessionSingleton
-      this.ss = SessionSingleton.getInstance() ;
       this.sr=ss.getStringReplace() ;
       this.xt=ss.getXmlText() ;
       //setup logger
       ss.setLogger(ISISCsmdMapper.class.getName() + ".class" ) ;
       this.log = ss.getLogger() ;
+
+      log.debug("En:ISISCsmdMapper") ;
+      
       this.place_holder = ss.place_holder ;
       this.i_place_holder = ss.i_place_holder ;
       this.ti = indentToStr(ss.indent) ;
@@ -71,6 +74,8 @@ public class ISISCsmdMapper implements CsmdMapper
       this.s = ss.getStatement() ;
       this.r = ss.getResultSet() ;
 
+      log.debug("Le:ISISCsmdMapper") ;
+
    }
 
    public String getKeys(String query)
@@ -79,9 +84,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
       //get values needed for session ;
       
-      SessionSingleton ss = SessionSingleton.getInstance() ;
-
-      Logger log = ss.getLogger() ;
+      log.debug("En:getKeys") ;
 
       log.debug("where:\t" + query) ;
 
@@ -119,15 +122,15 @@ public class ISISCsmdMapper implements CsmdMapper
 	 if(discipline.compareTo("") != 0)
          {
             // for some reason jdbc did not like  brackets around the following - strange.
-            temp_str = ("SELECT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
-                        "(SELECT STUDY_ID FROM " + dbs + "STUDY_TOPIC WHERE TOPIC_ID IN " +
-                        "(SELECT TOPIC_ID FROM " + dbs + "TOPIC WHERE lower(TOPIC) LIKE '%" + discipline + "%'))") ;
+            temp_str = ("SELECT ID FROM " + dbs + "STUDY WHERE ID IN " +
+                        "(SELECT STUDY_ID FROM " + dbs + "TOPIC_LIST WHERE TOPIC_ID IN " +
+                        "(SELECT TOPIC.ID FROM " + dbs + "TOPIC WHERE lower(NAME) LIKE '%" + discipline + "%'))") ;
 	    discipline = temp_str ;
 	 }
 
 	 if(subject.compareTo("") != 0)
          {
-            temp_str = ("SELECT DISTINCT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
+            temp_str = ("SELECT DISTINCT ID FROM " + dbs + "STUDY WHERE ID IN " +
                         "(SELECT STUDY_ID FROM " + dbs + "INVESTIGATION WHERE INVESTIGATION_ID IN " +
                         "(SELECT INVESTIGATION_ID FROM " + dbs + "DATA WHERE DATA_ID IN " +
                         "(SELECT DATA_ID FROM " + dbs + "PARAMETER WHERE lower(NAME) LIKE '%" + subject + "%')))") ;
@@ -152,7 +155,7 @@ public class ISISCsmdMapper implements CsmdMapper
 	       dis_cp = st.nextToken() ;
 	    }
             
-	    temp_str = ("SELECT STUDY_ID FROM " + dbs + "STUDY " +
+	    temp_str = ("SELECT ID FROM " + dbs + "STUDY " +
 		        "WHERE lower(NAME) LIKE '%" + studyname + "%' ") ; 
 
 	    studyname = temp_str ;
@@ -340,6 +343,9 @@ public class ISISCsmdMapper implements CsmdMapper
             
       log.debug("contents:\t" + sb.toString()) ;
 
+      log.debug("Le:getKeys") ;
+      
+
       return sb.toString() ;
     
    }
@@ -368,6 +374,7 @@ public class ISISCsmdMapper implements CsmdMapper
    //Indexing  - note ii is initial indent - is the indentation level (i.e. number of space in a String)
    void buildMDTopic(String key, StringBuffer sbr, String  ii, String type) throws SQLException
    {
+      log.debug("En:buildMDTopic") ;
 
       sbr.append(ii +  "<Topic>\n") ;
 
@@ -384,10 +391,12 @@ public class ISISCsmdMapper implements CsmdMapper
    //note spaceing of ii worked out for you by calling function - thus we pass on requests for ii + li to called methods
    void buildMDKeywords(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
+      log.debug("En:buildMDKeywords") ;
+
       String keyword = place_holder ;
 
       r = s.executeQuery("select name from " + dbs + "keyword where keyword.id in (select keyword.id from " + dbs + "keyword_list" +
-                         " where study_id  = '" + key + "'") ; 
+                         " where study_id  = '" + key + "')") ; 
       
       sbr.append(ii + "<Keywords>\n") ;
 
@@ -396,7 +405,6 @@ public class ISISCsmdMapper implements CsmdMapper
 
       while(r.next())
       {
-         r.getRow() ;
          keyword = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
          sbr.append(ii+li+"<Keyword>" + keyword + "</Keyword>\n") ;
       }
@@ -409,6 +417,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDSubjects(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
+      log.debug("En:buildMDSubjects") ;
+
       String topic_id = place_holder ;
       String subject = place_holder ;
 
@@ -436,6 +446,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDSubjectList(String topic_id, StringBuffer sbr, String ii, String type) throws SQLException 
    {
+      log.debug("En:buildMDSubjectList") ;
+
       //as this is called from a nested context 
       Connection c = ss.getConnection() ;
       Statement t_s = c.createStatement() ;
@@ -450,13 +462,13 @@ public class ISISCsmdMapper implements CsmdMapper
       //recursion would have been better - but writing that stuff hurts my head !!
       while(level > 0) 
       {
-         t_r = t_s.executeQuery("select name, parent_id, level from topic where topic_id = '" + topic_id +"'") ;
+         t_r = t_s.executeQuery("select name, parent_id, level from topic where topic.id = '" + topic_id +"'") ;
  
          if(t_r.next())
          {
-            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-            topic_id = sr.LitWithEnt(xt.makeValid(r.getString("PARENT_ID") ));
-            level = r.getInt("LEVEL") ;
+            name = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
+            topic_id = sr.LitWithEnt(xt.makeValid(t_r.getString("PARENT_ID") ));
+            level = t_r.getInt("LEVEL") ;
 
             listy.add(name) ;
          
@@ -503,6 +515,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDStudy(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
+      log.debug("En:buildMDTopic Key:"+key) ;
     
       String studyname = place_holder ;
       String notes = place_holder ; 
@@ -536,6 +549,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDStudyInformation(String key, StringBuffer sbr, String ii, String type) throws SQLException //some where you might use type as
    {
+      log.debug("En:buildMDSutdyInformation") ;
+
       String start_date_date = place_holder ;
       String start_date_time = place_holder ;
       String funding = place_holder ;
@@ -595,6 +610,8 @@ public class ISISCsmdMapper implements CsmdMapper
    }
    void buildMDStudyPerson(String key, StringBuffer sbr, String ii, String type) throws SQLException //similar to buildMDContact template
    {
+      log.debug("En:buildMDStudyPerson") ;
+
       String surname = place_holder ;
       String forename = place_holder ;
       String middle_initials = place_holder ;
@@ -637,6 +654,7 @@ public class ISISCsmdMapper implements CsmdMapper
    void buildMDStudyInstitution(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
       //there is no such info in the ISIS ICAT yet so essentially putting in a meaningful place holder
+      log.debug("En:buildMDStudyInstitution") ;
 
       sbr.append(ii + "<StudyInsitution>\n");
       sbr.append(ii + li + "<Name institutiontype=\"research\">ISIS, RAL</Name>\n") ;
@@ -680,6 +698,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDInvestigation(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
+      log.debug("En:buildMDInvestigation") ;
+
       //following needed as some calls from nested context:
       //as this is called from a nested context
       Connection c = ss.getConnection() ;
@@ -703,7 +723,7 @@ public class ISISCsmdMapper implements CsmdMapper
       String instrument_comments =  place_holder ;
 
       r = s.executeQuery ("select id, experiment_number, title, investigation_type, instrument_id, inst_calibration_id, inv_abstract, " +
-                          " prev_experiment_number, bcat_inv_str, comments from investigation where investigation_id in " +
+                          " prev_experiment_number, bcat_inv_str, comments from investigation where investigation.id in " +
                           "(select investigation_id from investigation_list where study_id='" + key +"')") ;
 
       while(r.next())
@@ -729,9 +749,9 @@ public class ISISCsmdMapper implements CsmdMapper
 
          if(t_r.next())
          {
-            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-            short_name = sr.LitWithEnt(xt.makeValid(r.getString("SHORT_NAME") ));
-            instrument_comments = sr.LitWithEnt(xt.makeValid(r.getString("COMMENTS") ));
+            name = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
+            short_name = sr.LitWithEnt(xt.makeValid(t_r.getString("SHORT_NAME") ));
+            instrument_comments = sr.LitWithEnt(xt.makeValid(t_r.getString("COMMENTS") ));
          }
          // put in the resource/instrument used 
          sbr.append(ii+li+"<Resources\n>") ; 
@@ -760,6 +780,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDRelatedReferance(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
+      log.debug("En:buildMDRelatedReferance") ;
+
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
       ResultSet t_r = null ;
@@ -786,8 +808,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
          if(t_r.next())
          {
-            title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
-            investigation_id = sr.LitWithEnt(xt.makeValid(r.getString("INVESTIGATION_ID") ));
+            title = sr.LitWithEnt(xt.makeValid(t_r.getString("TITLE") ));
+            investigation_id = sr.LitWithEnt(xt.makeValid(t_r.getString("INVESTIGATION_ID") ));
 
             sbr.append(ii+"<RelatedReference>\n") ;
             sbr.append(ii+li+"<Type>" + "previous" + "</Type>\n") ; 
@@ -802,8 +824,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
             if(t_r.next())
             {
-               studyname = sr.LitWithEnt(xt.makeValid(r.getString("STUDYNAME") )); 
-               study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") )); 
+               studyname = sr.LitWithEnt(xt.makeValid(t_r.getString("STUDYNAME") )); 
+               study_id = sr.LitWithEnt(xt.makeValid(t_r.getString("STUDY_ID") )); 
             }
 
             t_r.close() ;
@@ -833,6 +855,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDDataHolding(String key, StringBuffer sbr, String ii, boolean nested) throws SQLException
    {
+      log.debug("En:buildMDDataHolding") ;
       //the key should be the key not of the study but of the investigation - as each dataholding is associated to
       //an investigation
 
@@ -854,6 +877,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDDataCollection(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
    {
+      log.debug("En:buildMDDataCollection") ;
+
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
       ResultSet t_r = null ;
@@ -878,11 +903,11 @@ public class ISISCsmdMapper implements CsmdMapper
 
       while(t_r.next()) 
       {
-         dataset_id = sr.LitWithEnt(xt.makeValid(r.getString("DATASETID") ));
-         name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-         dataset_type = sr.LitWithEnt(xt.makeValid(r.getString("dataset_type") ));
-         dataset_status = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
-         description = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+         dataset_id = sr.LitWithEnt(xt.makeValid(t_r.getString("DATASETID") ));
+         name = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
+         dataset_type = sr.LitWithEnt(xt.makeValid(t_r.getString("dataset_type") ));
+         dataset_status = sr.LitWithEnt(xt.makeValid(t_r.getString("TITLE") ));
+         description = sr.LitWithEnt(xt.makeValid(t_r.getString("TITLE") ));
 
          sbr.append(ii+"<DataCollection dataid=\""+dataset_id+"\">\n") ;
          //HERE - remember dataholding->ado call needs revisit
@@ -922,6 +947,8 @@ public class ISISCsmdMapper implements CsmdMapper
    //
    void buildMDAtomicDataObject(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
    {
+      log.debug("En:buildMDAtomicDataObject") ;
+
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
       ResultSet t_r = null ;
@@ -955,6 +982,8 @@ public class ISISCsmdMapper implements CsmdMapper
    //
    void buildMDADOLocator(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
    {
+      log.debug("En:buildMDADOLocator") ;
+
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
       ResultSet t_r = null ;
@@ -976,8 +1005,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
       if(t_r.next())
       {
-         uri=sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
-         datafile_format=sr.LitWithEnt(xt.makeValid(r.getString("DATAFILE_FORMAT") ));
+         uri=sr.LitWithEnt(xt.makeValid(t_r.getString("URI") ));
+         datafile_format=sr.LitWithEnt(xt.makeValid(t_r.getString("DATAFILE_FORMAT") ));
       }
 
       t_r.close() ;
@@ -998,6 +1027,8 @@ public class ISISCsmdMapper implements CsmdMapper
    //
    void buildMDDataCollectionLocator(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
    {
+      log.debug("En:buildMDDataCollectionLocator") ;
+
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
       ResultSet t_r = null ;
@@ -1018,7 +1049,7 @@ public class ISISCsmdMapper implements CsmdMapper
       t_r=t_s.executeQuery("select name from dataset where id = '"+key+"'") ;
       if(t_r.next())
       {
-         name=sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+         name=sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
       }
       t_r.close() ;
 
@@ -1031,7 +1062,7 @@ public class ISISCsmdMapper implements CsmdMapper
       //                     "(select datafile_id from datafile_list where dataset_id ='" + key + "')") ;
       //if(t_r.next())
       //{
-      //   locator = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
+      //   locator = sr.LitWithEnt(xt.makeValid(t_r.getString("URI") ));
       //}
 
       //StringBuffer sbt=new StringBuffer(locator) ;
@@ -1074,6 +1105,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDDataDescription(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
    {
+      log.debug("En:buildMDDataDescription") ;
+
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
       ResultSet t_r = null ;
@@ -1095,7 +1128,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
          if(t_r.next())
          {
-            name = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+            name = sr.LitWithEnt(xt.makeValid(t_r.getString("TITLE") ));
          }
 
          t_r.close() ;
@@ -1116,10 +1149,10 @@ public class ISISCsmdMapper implements CsmdMapper
 
          if(t_r.next())
          {
-            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-            dataset_type = sr.LitWithEnt(xt.makeValid(r.getString("DATASET_TYPE") ));
-            dataset_status = sr.LitWithEnt(xt.makeValid(r.getString("DATASET_STATUS") ));
-            description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
+            name = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
+            dataset_type = sr.LitWithEnt(xt.makeValid(t_r.getString("DATASET_TYPE") ));
+            dataset_status = sr.LitWithEnt(xt.makeValid(t_r.getString("DATASET_STATUS") ));
+            description = sr.LitWithEnt(xt.makeValid(t_r.getString("DESCRIPTION") ));
          }
 
          t_r.close() ;
@@ -1145,9 +1178,9 @@ public class ISISCsmdMapper implements CsmdMapper
 
          if(t_r.next())
          {
-            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-            datafile_type = sr.LitWithEnt(xt.makeValid(r.getString("DATAFILE_TYPE") ));
-            comments = sr.LitWithEnt(xt.makeValid(r.getString("COMMENTS") ));
+            name = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
+            datafile_type = sr.LitWithEnt(xt.makeValid(t_r.getString("DATAFILE_TYPE") ));
+            comments = sr.LitWithEnt(xt.makeValid(t_r.getString("COMMENTS") ));
          }
          t_r.close() ;
          
@@ -1175,6 +1208,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDLogicalDescription(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
+      log.debug("En:buildMDLogicalDescription") ;
+
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
       ResultSet t_r = null ;
@@ -1210,6 +1245,7 @@ public class ISISCsmdMapper implements CsmdMapper
    //
    void buildMDParameters(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
+      log.debug("En:buildMDParameters") ;
 
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
@@ -1242,14 +1278,14 @@ public class ISISCsmdMapper implements CsmdMapper
 
          while(t_r.next())
          {
-            id = sr.LitWithEnt(xt.makeValid(r.getString("ID") ));
-            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-            value = sr.LitWithEnt(xt.makeValid(r.getString("VALUE") ));
-            units = sr.LitWithEnt(xt.makeValid(r.getString("UNITS") ));
-            exponent = sr.LitWithEnt(xt.makeValid(r.getString("EXPONENT") ));
-            range_top = sr.LitWithEnt(xt.makeValid(r.getString("RANGE_TOP") ));
-            range_bottom = sr.LitWithEnt(xt.makeValid(r.getString("RANGE_BOTTOM") ));
-            error = sr.LitWithEnt(xt.makeValid(r.getString("ERROR") ));
+            id = sr.LitWithEnt(xt.makeValid(t_r.getString("ID") ));
+            name = sr.LitWithEnt(xt.makeValid(t_r.getString("NAME") ));
+            value = sr.LitWithEnt(xt.makeValid(t_r.getString("VALUE") ));
+            units = sr.LitWithEnt(xt.makeValid(t_r.getString("UNITS") ));
+            exponent = sr.LitWithEnt(xt.makeValid(t_r.getString("EXPONENT") ));
+            range_top = sr.LitWithEnt(xt.makeValid(t_r.getString("RANGE_TOP") ));
+            range_bottom = sr.LitWithEnt(xt.makeValid(t_r.getString("RANGE_BOTTOM") ));
+            error = sr.LitWithEnt(xt.makeValid(t_r.getString("ERROR") ));
 
             sbr.append(ii+"<Parameter paramid=\""+id+"\">\n") ;
 
@@ -1297,6 +1333,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDDataHoldingLocator(String key, StringBuffer sbr, String ii, String type, boolean nested) throws SQLException
    {
+      log.debug("En:buildMDDataHoldingLocator") ;
+
       Connection c = ss.getConnection() ;
       Statement t_s = null ;
       ResultSet t_r = null ;
@@ -1315,7 +1353,7 @@ public class ISISCsmdMapper implements CsmdMapper
       t_r=t_s.executeQuery("select title from experiment where id ='" + key + "'") ;
       if(t_r.next())
       {
-         name = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+         name = sr.LitWithEnt(xt.makeValid(t_r.getString("TITLE") ));
       }
       t_r.close() ;
 
@@ -1364,6 +1402,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDContact(String key, StringBuffer sbr, String ii, String contact_type) throws SQLException
    {
+      log.debug("En:buildMDContact") ;
 
       r = s.executeQuery("select institution.name, institution.institution_id, address_1, address_2, town, region, postcode, country, " +
                          "title, forename, surname, other_initials, telephone, email, fax from " + dbs +
@@ -1459,6 +1498,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
    public void buildMetadataRecord(String key, StringBuffer sbr) throws SQLException
    {
+      log.debug("En:buildMDTopic") ;
       //avoid accumulation of results due to successive calls to this function
       if(sbr.length() != 0 )
       {
@@ -1468,18 +1508,18 @@ public class ISISCsmdMapper implements CsmdMapper
       //all elements of the study need extracting as will be used later ;
       String study_id = place_holder ;
 
-      r = s.executeQuery("select study_id from " + dbs + "study where study_id = '" + key + "'") ; 
+      r = s.executeQuery("select id from " + dbs + "study where id = '" + key + "'") ; 
       if(r.next())
       {
 	 r.getRow() ;
-	 study_id = sr.LitWithEnt(xt.makeValid(r.getString("STUDY_ID") ));
+	 study_id = sr.LitWithEnt(xt.makeValid(r.getString("ID") ));
       }
       r.close() ;
 
       // li is of type String and it is the number of spaces in the indentation when going to a more nested level 
       //MetadataRecord starts
       sbr.append(li + "<MetadataRecord metadataID=\"" + ss.getWrapperName() + "-" + key + "\"" +
-                             " facilityi=\"" + ss.getWrapperName()+ "\">\n");
+                             " facility=\"" + ss.getWrapperName()+ "\">\n");
 
       //Topic
       buildMDTopic(key, sbr, (li+li), null) ;
