@@ -12,4 +12,10 @@ do
 export CLASSPATH=$CLASSPATH:`pwd`\/$i
 done
 
+#following needed for axis test programs
+
+export CLASSPATH=$CLASSPATH:$CATALINA_HOME/common/lib/servlet.jar
+
 echo $CLASSPATH
+
+
