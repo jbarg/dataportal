@@ -225,7 +225,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>TransferServlet</servlet-name>
-		<url-pattern>/servlet/.SessioTransferServlet</url-pattern>
+		<url-pattern>/servlet/TransferServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>HelpSearch1</servlet-name>
@@ -335,10 +335,10 @@
 		<exception-type>uk.ac.dl.web.SessionTimedOutException</exception-type>
 		<location>/jsp/SessionTimedOut.jsp</location>
 	</error-page>
-        <error-page>
+        <!--<error-page>
 		<error-code>500</error-code>
 		<location>/jsp/error.jsp</location>
-	</error-page>
+	</error-page>-->
 	<taglib>
 		<taglib-uri>/tldweb</taglib-uri>
 		<taglib-location>/tld/glen.tld</taglib-location>
