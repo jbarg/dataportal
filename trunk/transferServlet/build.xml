@@ -236,27 +236,9 @@
 <classpath refid="compile.classpath"/>
 			
 		</javac>
-		<javac srcdir="${web.home}/WEB-INF/Transfer" destdir="${web.home}/WEB-INF/Transfer" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
-			<classpath>
-				<fileset dir="${basedir}/web/WEB-INF/libTransfer">
-					<include name="*.jar"/>
-				</fileset>
-			</classpath>
-		</javac>
-		<!-- Copy application resources -->
-		<copy todir="${build.home}/WEB-INF/classes">
-			<!-- added in ,**/test/** -->
-			<fileset dir="${src.home}" excludes="**/*.java"/>
-		</copy>
-		<copy todir="${build.home}/WEB-INF/Transfer">
-			<!-- added in ,**/test/** -->
-			<fileset dir="${web.home}/WEB-INF/Transfer" excludes="**/*.java"/>
-		</copy>
+		
 
 		
-		<exec dir="${build.home}/WEB-INF/Transfer" os="Linux,Unix" executable="/bin/chmod">
-			<arg line="754 UrlCopy.sh TestWS.sh compile.sh setEnv.sh"/>
-		</exec>
 	</target>
 	<!-- ==================== Dist Target ===================================== -->
 	<!--
