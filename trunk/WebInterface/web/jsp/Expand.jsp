@@ -87,7 +87,7 @@ html/netscape.html file from the content root.-->
             String sid = (String)session.getAttribute("sessionid");
          String dn = (String)session.getAttribute("dn");
                 dn = Convert.removeSpaces(dn);
-            
+             
             //Document xml = null;
             //transfomr xml 
             File xml = null;

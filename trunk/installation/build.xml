@@ -413,8 +413,6 @@
           
   </jar>  </target>
         
-        
-        
              <!-- ==================== install   NOT USED NOW    =========================== -->
     <!--
         Use this target to Creates and moves hsqldb for uddi 
@@ -475,6 +473,26 @@
        <!--<copy file="${basedir}/dataportal/facility/facility.xml" todir="${catalina.home}/conf/Catalina/localhost"/>-->
         
         </target>
+        
+        
+         <!-- ==================== run log4j server =========================== -->
+    <!--
+        Use this target to Creates and moves hsqldb for uddi 
+        -->
+        <target name="run_log4jserver" description="connects GUI to hsql database" >                
+      <java classname="uk.ac.cclrc.log4j.Log4jServer" spawn="false" fork="no">
+			<classpath>
+			 <fileset dir="${common.tomcat.home}">
+				<include name="**/*.jar"/>
+                              	</fileset>
+                           </classpath>
+           
+			<arg line="4445 10 '${dataportal.home}/WebInterface/build/WEB-INF/log4jServer.conf'" />
+			</java>
+                      
+           <echo message="Server running on port 4445"/>        
+        </target>
+        
         
 </project>
 

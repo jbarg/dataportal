@@ -41,6 +41,7 @@ public class Log4jServer {
         prop_file_name = args[2];
 
         try{
+           // BasicConfigurator.configure();
             server = new ServerSocket(port,max_wait);
             log.info("Started server on port "+port);
 
@@ -82,7 +83,7 @@ public class Log4jServer {
                             email = (level.equalsIgnoreCase("ERROR") ||level.equalsIgnoreCase("FATAL") )? true : false;
                         }
 
-                        log.debug("Logging level is "+level+" . Sending email(s): "+email);
+                        log.info("Log level is "+level+", base level is "+confLevel+". Sending email(s): "+email);
                         //get the time of the event
                         long time = event.getStartTime();
                         Date date = new Date(time);

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<%@ page errorPage="frameerror.jsp" import="ac.dl.xml.*,org.apache.log4j.*,java.util.*,org.jdom.input.*,java.io.*,javax.xml.parsers.*,org.w3c.dom.*,org.xml.sax.*,javax.xml.transform.dom.*" %>
+<%@ page errorPage="frameerror.jsp" import="uk.ac.dl.xml.*,org.apache.log4j.*,java.util.*,org.jdom.input.*,java.io.*" %>
 <%@ taglib uri="/tldweb" prefix="xtags" %>
  <%@ taglib uri="/tld/taglibs-xtags.tld" prefix="xtags1" %>
  <%@ include file="loggedin.jsp" %>
