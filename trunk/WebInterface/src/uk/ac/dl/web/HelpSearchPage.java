@@ -25,15 +25,15 @@ public class HelpSearchPage extends HttpServlet{
     throws IOException, ServletException {
         
         HttpSession session = request.getSession(false);
-        String wd = (String )session.getAttribute("wd"); 
-         //locate the prop file.  Normal get this from web.xml file
-            PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-            
+        String wd = (String )session.getAttribute("wd");
+        //locate the prop file.  Normal get this from web.xml file
+        PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
+        
         if(session == null){
             response.sendRedirect("../Login.html");
         }
         else{
-           
+            
             
             PrintWriter out = response.getWriter();
             //add another vector
