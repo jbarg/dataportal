@@ -43,7 +43,8 @@
                </xsd:simpleContent>
             </xsd:complexType>
          </xsd:element>
-	 <xsd:element name="RelatedMaterial" type="cmd:RelatedMaterialTypes" minOccurs="0" maxOccurs="unbounded"/>
+	 <xsd:element name="RelatedPublication" type="cmd:PublicationType" minOccurs="0" maxOccurs="unbounded"/>
+	 <xsd:element name="OtherRelatedMaterial" type="cmd:RelatedMaterialTypes" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="MetadataID" type="cmd:metadataIDKeyType" use="required"/>
       <xsd:attribute name="Facility" type="xsd:string" use="required"/>
@@ -120,6 +121,8 @@
          <xsd:element name="StudyPerson"     type="cmd:StudyPersonType" minOccurs="1" maxOccurs="unbounded"/>
          <xsd:element name="StudyInformation" type="cmd:StudyInformationType"/>
          <xsd:element name="Notes"            type="xsd:string" minOccurs="0" maxOccurs="1"/>
+	 <!-- contains a link to related studies etc -->
+         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 	 <!-- sc -->
 	 <xsd:element name="Investigation"    type="cmd:InvestigationType" minOccurs="1" maxOccurs="unbounded"/>
       </xsd:sequence>
@@ -135,6 +138,7 @@
 	 <xsd:element name="Abstract" type="xsd:string"/>
 	 <!-- perhaps this should be at dataset and dataobject level also -->
 	 <xsd:element name="Resources" type="xsd:string"/>
+         <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="DataHolding" type="cmd:DataHoldingType" minOccurs="0"/>
       </xsd:sequence>
       <xsd:attribute name="InvestigationID" type="xsd:ID" use="required"/>
@@ -692,23 +696,54 @@
 <!-- type of this attribute should really be a CDATA - no equivelent in XMLSchema -->
    </xsd:complexType>
 
-
-  <!-- Related Materials as a type  -->
-
-   <xsd:simpleType name="Publications">
-      <xsd:restriction base="xsd:string"/>
+   <xsd:simpleType name="AuthorTypes">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="primary"/>
+         <xsd:enumeration value="co"/>
+         <xsd:enumeration value="other"/>
+      </xsd:restriction>
    </xsd:simpleType>
 
+   <xsd:simpleType name="UniqueIdentifierSystem">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="ISBN"/>
+         <xsd:enumeration value="SAN"/>
+         <xsd:enumeration value="ISMN"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+
+   <xsd:complexType name="PublicationType">
+      <xsd:sequence>
+         <xsd:element name="PublicationName" type="xsd:string"/>
+         <xsd:element name="Author" minOccurs="1" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                     <xsd:attribute name="authortype" type="cmd:AuthorTypes"/>
+                  </xsd:extension>
+               </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Identifier" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                     <xsd:attribute name="identsystem" type="cmd:UniqueIdentifierSystem"/>
+                  </xsd:extension>
+               </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="URI" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+
+  <!-- Related Materials as a type  -->
    
    <xsd:simpleType name="References">
       <xsd:restriction base="xsd:string"/>
    </xsd:simpleType>
-
- 
-   <xsd:simpleType name="RelatedInvestigations">
-      <xsd:restriction base="xsd:string"/>
-   </xsd:simpleType>         
-
 
    <xsd:simpleType name="CommunityInformation">
       <xsd:restriction base="xsd:string"/>
@@ -716,7 +751,7 @@
 
 
    <xsd:simpleType name="RelatedMaterialTypes">
-      <xsd:union memberTypes="xsd:string cmd:Publications cmd:References cmd:RelatedInvestigations cmd:CommunityInformation"/> 
+      <xsd:union memberTypes="xsd:string cmd:References cmd:CommunityInformation"/> 
    </xsd:simpleType>
 
 
