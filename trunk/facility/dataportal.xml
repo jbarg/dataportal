@@ -37,5 +37,26 @@
       <serviceEndpoint>http://escdmg.dl.ac.uk:8080/sessionmanager/services/SessionManager</serviceEndpoint>
       <serviceWSDL>http://escdmg.dl.ac.uk:8080/sessionmanager/services/SessionManager?wsdl</serviceWSDL>
     </service>
+    <service>
+      <serviceName>Shopping Cart</serviceName>
+      <serviceDescription>Manipulates the contents of a users Shopping Cart</serviceDescription>
+      <serviceType>CART</serviceType>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/shopcart/services/ShoppingCart</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/shopcart/services/ShoppingCart?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>RasDaMan</serviceName>
+      <serviceDescription>Performs RasDaMan searches</serviceDescription>
+      <serviceType>RASGRIB</serviceType>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/rasgrib/services/Rasgrib</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/rasgrib/services/Rasgrib?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>Data Transfer</serviceName>
+      <serviceDescription>Performs third party transfer of data using GripFTP and others</serviceDescription>
+      <serviceType>DTS</serviceType>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/datatransfer/services/DataTransferService</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/datatransfer/services/DataTransferService?wsdl</serviceWSDL>
+    </service>
   </createFacility>
 </fadm:facilityAdmin>
