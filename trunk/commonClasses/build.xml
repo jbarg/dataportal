@@ -7,7 +7,7 @@
 	<property name="build" location="${basedir}/build"/>
 	<property name="dist" location="${basedir}/dist"/>
 	<property name="lib" location="${basedir}/web/WEB-INF/lib"/>
-	<property name="common.lib" value="${basedir}/../common/lib"/>
+	<property name="common.lib" value="${basedir}/../common/tomcat/shared"/>
 	<target name="init">
 		<!-- Create the time stamp -->
 		<tstamp/>

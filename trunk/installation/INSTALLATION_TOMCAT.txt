@@ -12,10 +12,13 @@ Copy  $CATALINA_HOME/server/lib/catalina-ant.jar into ANT_HOME/lib where  $CATAL
 3) Change the properties for the build.properties file.
 
 server.name=localhost:8080    server name and port of tomcat instance.  localhost is ok if it is on the same machine
-catalina.home=D\:\\tomcat     location on file system of tomcat instance. (z is an escape character.  d:/tomcat is ok aswell
+catalina.home=D\:\\tomcat     location on file system of tomcat instance. (\ is an escape character. So windows needs to escape : and \ within the path. IE c\:\\My Documents\\ etc)
 manager.username=tomcat	     		
 manager.password=tomcat
+globusKey=C\:\\Documents and Settings\\gjd37\\.globus\\portalkey.pem  
+globusCert=C\:\\Documents and Settings\\gjd37\\.globus\\portalcert.pem
 
+The last two are the locations of your globus host key and certificate.  These are used to create a proxy that is used to retrieve the users proxy credential out of a MyProxy server
 manager.password and username are needed to install the Data Portal modules onto tomcat.  Change the file $CATALINA_HOME/conf/tomcat-users.xml. 
 Insert/modify this line:
 
@@ -190,3 +193,13 @@ If that fails remove all the xml file related to the data portal in the $CATALIN
 These should be dataportal, shopcart,facility, juddi, queryandreply,uddilookup,sessionmanager,authent and datatransfer .xml files
 ii) Remove juddi folder from   $CATALINA_HOME/webapps
 iii) Remove new jar files from  $CATALINA_HOME/shared/lib folder.
+
+3) The Data Portal can run a server to email an administrator regarding errors and faults. 
+To run the server type 'ant run_log4jserver'
+
+To configure the server go to dataportal/WebInterface/build/WEB-INF/log4jServer.conf
+
+dataportal.id=test                          //id of the email
+mail.host=exchange06.dl.ac.uk               //mail server host name of the 
+email.address=g.j.drinkwater@dl.ac.uk       //list of addresses to send the email to, separtted by spaces
+level=ERROR                                 // Log4j minimum that the message will get emailled.  Only allows ERROR and FATAL
