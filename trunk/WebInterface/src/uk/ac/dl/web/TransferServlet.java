@@ -50,14 +50,21 @@ public class TransferServlet extends HttpServlet {
             PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
             
             //get the url
-            String url = request.getParameter("url");
+            String url = "";
+            try{
+             url = request.getParameter("url");
             int position  = url.indexOf(":");
             url = url.substring(0,position-1);
             
-            if(!url.equals("srb")){
+            if(url.equals("srb")){
                 response.sendRedirect("../jsp/srb.jsp?url="+url);
             }
             else response.sendRedirect("../jsp/transfer.jsp?url="+url);
+            }
+            catch(Exception r){
+                response.sendRedirect("../jsp/transfer.jsp?url="+url);
+            }
+                
         }
     }
 }
