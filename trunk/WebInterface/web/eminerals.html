@@ -13,8 +13,20 @@ facilities,E-minerals, data, search, Glen Drinkwater, Synchrotron Radiation,Brit
 <style type="text/css">
 @import url(style/emin2.css); /*IE and NN6x styles*/
 </style>
+
+<script type="text/javascript">
+<!--
+function isN4(){
+    if(navigator.userAgent.indexOf("Mozilla/4") != -1 && navigator.appName.indexOf("Netscape") !=-1 && parseInt(navigator.appVersion) < 5){
+    
+     alert("The Data Portal does not support Netscape 4.x browsers.\nPlease use Internet Explorer 5/6, Netscape 6/7, Mozilla 1 or other compatable browsers.\nYou may download:\nMoziila from www.mozilla.org\nNetscape from channels.netscape.com/ns/browsers/download.jsp.\nThank you.");
+    }
+}
+
+//-->
+</script>
 </head>
-<body>
+<body onload="isN4();">
 
 
 <table id="top_table"  width="100%" cellspacing="3" ><tr>

@@ -4,7 +4,7 @@
 
 <head>
 
-<title>CCLRC DataPortal / Estedi</title>
+<title>CCLRC DataPortal</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
@@ -19,26 +19,36 @@
 <meta name="keywords" content="Dataportal, metadata, clrc, dl, facilities,Estedi, data, search, Glen Drinkwater, Synchrotron Radiation,British Atmospheric Data Centre, shopping basket" />
 
 
+<script type="text/javascript">
+<!--
+function isN4(){
+    if(navigator.userAgent.indexOf("Mozilla/4") != -1 && navigator.appName.indexOf("Netscape") !=-1 && parseInt(navigator.appVersion) < 5){
+    
+     alert("The Data Portal does not support Netscape 4.x browsers.\nPlease use Internet Explorer 5/6, Netscape 6/7, Mozilla 1 or other compatable browsers.\nYou may download:\nMoziila from www.mozilla.org\nNetscape from channels.netscape.com/ns/browsers/download.jsp.\nThank you.");
+    }
+}
+
+//-->
+</script>
 
 
 
-<link rel="stylesheet" href="style/mainNN4.css" type="text/css" />
 
 <style type="text/css">
 
-@import url(style/main.css); /*IE and NN6x styles*/
+@import url(style/mainmenu.css); /*IE and NN6x styles*/
 
 </style>
 
 </head>
 
-<body background="img/redbg.gif" >
+<body background="img/redbg.gif" onload="isN4();" >
 
 
 
 <table id="top_table"  width="100%" cellspacing="3" ><tr>
 
-<td id="td_top1" valign="top" width="128">
+<td id="td_top1" valign="top" width="20%">
 
 <a href="http://www.clrc.ac.uk"><img src="img/clrc.gif" alt="DataPortal CCLRC"
 border="1" /></a>
