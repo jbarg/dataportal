@@ -174,12 +174,12 @@ public class SRBTransfer extends HttpServlet {
             } catch (Exception e) {
                 logger.warn("Unable to transfer srb collection",e);
                 tarFile.delete();
-                savefile.delete();
+               // savefile.delete();
                 response.sendRedirect("../jsp/error.jsp");
                 isError = true;
                 return;
             }
-            savefile.delete();
+            //savefile.delete();
             tarFile.delete();
             if(result.equals("true")) {
                 response.sendRedirect("../jsp/transferOk.jsp");
