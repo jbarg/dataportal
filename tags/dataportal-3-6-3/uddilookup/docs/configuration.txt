@@ -1,0 +1,17 @@
+Pre-installation Tasks
+----------------------
+
+1. Install postgres if necessary
+
+2. psql
+
+3. create user uddiuser45;
+
+4. create database uddinode45;
+
+5. \c uddinode45
+
+6. \i dump2
+
+This all loads the database tables for the lookup module into the database
+uddinode45.
