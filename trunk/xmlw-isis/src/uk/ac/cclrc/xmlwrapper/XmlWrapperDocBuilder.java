@@ -180,17 +180,25 @@ public class XmlWrapperDocBuilder
          result.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") ;
          result.append("<CCLRCMetadata xmlns=\"http://www.escience.clrc.ac.uk/schemas/scientific\" ");
          result.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ") ;
-         result.append("xsi:schemaLocation=\"http://www.escience.clrc.ac.uk/schemas/scientific\" \"" + ss.getSchemaLocation + "\">\n") ; 
+         result.append("xsi:schemaLocation=\"http://www.escience.clrc.ac.uk/schemas/scientific\" \"" + ss.getSchemaLocation() + "\">\n") ; 
 
          //build metadata record
-         cm.buildMetadataRecord(sid,sbr) ;
+         try 
+         {
+            cm.buildMetadataRecord(sid,sbr) ;
+         }
+         catch (java.sql.SQLException sqle)
+         {
+            //System.err.println("failed on isis record:\t" + sid ) ;
+            sqle.printStackTrace() ;
+         }
     
          result.append(sbr) ;
          result.append("\n") ;
     
          result.append("</CCLRCMetadata>") ;
 
-         log.info("Entry being processed:\t" + key ) ;
+         log.info("Entry being processed:\t" + sid ) ;
 
          org.w3c.dom.Element el = null ;
          try
@@ -226,7 +234,7 @@ public class XmlWrapperDocBuilder
          try
          {
             // following needed to specify unique key per document added
-            xmlr = (XMLResource) col.createResource((String)("MPIM-"+ key), "XMLResource"); 
+            xmlr = (XMLResource) col.createResource((String)("ISIS-"+ sid), "XMLResource"); 
          }
          catch ( XMLDBException xmldbe)
          {

@@ -19,7 +19,7 @@ public class XMLDBHelper implements DBHelper
 {
    //boolean driver_loaded = false ;
 
-   void connectToDB()
+   public void connectToDB()
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
 
@@ -82,7 +82,7 @@ public class XMLDBHelper implements DBHelper
 
             //connect_string = "xmldb:xindice://"+ss.getHost()+":"+ss.getPort()+ss.getCollectionName(); 
             //as assuming working in embedded mode
-            connect_string = "xmldb:exist://"+ss.getHost()+":"+ss.getPort()+ss.getCollectionName(); 
+            connect_string = "xmldb:exist://"+ss.getXMLHost()+":"+ss.getXMLPort()+ss.getXMLCollectionName(); 
 
             //note embedded mode maybe of limited use as not available outside of jvm of running process
             //XML doc selector and doc builder need access to the same collection - so perhaps standalone mode is the best

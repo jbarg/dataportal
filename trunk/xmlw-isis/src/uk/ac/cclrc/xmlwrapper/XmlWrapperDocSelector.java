@@ -96,7 +96,7 @@ public class XmlWrapperDocSelector
       }
 
       //connect to the database
-      DBHelper dbh = ss.getDBHelper() ;
+      DBHelper dbh = ss.getXMLDBHelper() ;
       dbh.connectToDB() ;
 
       //load the cache from the xml repository (coherancy will need dealing with some day)
