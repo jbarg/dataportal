@@ -967,7 +967,7 @@ public class ISISCsmdMapper implements CsmdMapper
          t_s=s ;
       }
       //
-      sbr.append(ii+"<AtomicDataObject>\n") ;
+      sbr.append(ii+"<AtomicDataObject dataid=\"ado_" + key + "\">\n") ;
 
       buildMDDataDescription(key, sbr, ii+li, "ado" , true) ;
       buildMDADOLocator(key, sbr, ii+li, "ado" , true) ;
@@ -1020,7 +1020,7 @@ public class ISISCsmdMapper implements CsmdMapper
          t_s.close() ;
       }
       //need to put some NS stuff here when doing checking vs the schema 
-      sbr.append(ii+"<ADOLocator>\n") ; 
+      sbr.append(ii+"<ADOLocator xsi:type=\"FileADOL\" >\n") ; 
       sbr.append(ii+li+"<Locator>"+uri+"</Locator>\n") ; 
       sbr.append(ii+li+"<Filetype>"+datafile_format+"</Filetype>\n") ; 
       sbr.append(ii+"</ADOLocator>\n") ; 
@@ -1230,13 +1230,15 @@ public class ISISCsmdMapper implements CsmdMapper
 
       if(type.compareTo("datacollection")==0)
       {
-         sbr.append(ii+"<LogicalDescription>\n") ;
+         sbr.append(ii+"<LogicalDescription>") ; //remove \n at end of line for now - otherwise ssems to take it as content if their
+                                                 //are no child elements
 
          buildMDParameters(key, sbr, ii+li, "datacollection", true) ;
          buildMDTimePeriod(key, sbr, ii+li, "datacollection", true) ;
          buildMDFacilityUsed(key, sbr, ii+li, "datacollection", true) ;
 
-         sbr.append(ii+"</LogicalDescription>\n") ;
+         // removed front spaces - as causes problems if empty -  sbr.append(ii+"</LogicalDescription>\n") ;
+         sbr.append("</LogicalDescription>\n") ;
       }
 
       if(nested==true)
