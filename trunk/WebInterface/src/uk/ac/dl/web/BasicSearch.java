@@ -118,7 +118,7 @@ public class BasicSearch extends HttpServlet {
                 ArrayList[] list =  Search.doBasicSearch(sid,fac,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
                 session.setAttribute("noConn", list[0]);
                 session.setAttribute("noRes", list[1]);
-                session.setAttribute("timedOut", list[2));
+                session.setAttribute("timedOut", list[2]);
                 response.sendRedirect("../jsp/SimpleSearch.jsp");
             }
             catch(Exception a){
