@@ -97,6 +97,10 @@ public class XMLWTester {
                  "Discipline='All'",
                  "saved_emin.xml") ;
 
+      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emat",
+                 "Discipline='All'",
+                 "saved_emat.xml") ;
+
       return ;
    }
 		     
