@@ -41,13 +41,18 @@ public class CreateTModels
         {
             Properties servTypeProps = new Properties();
             /*
+             * Just in case we need to run without a properties file!
             servTypeProps.setProperty("ACL","Access Control List");
             servTypeProps.setProperty("XMLW","XML Wrapper");
             servTypeProps.setProperty("QNR","Query and Reply");
             servTypeProps.setProperty("AUTH","Authentication");
             servTypeProps.setProperty("LOOKUP","Service Lookup");
             servTypeProps.setProperty("FACADM","Facilities Administation");
-             */
+            servTypeProps.setProperty("CART","Shopping Cart");
+            servTypeProps.setProperty("RASGRIB","RasDaMan");
+            servTypeProps.setProperty("DTS","Data Transfer");
+            */
+            
             FileInputStream in = new FileInputStream(args[0]);
             servTypeProps.load(in);
             in.close();
