@@ -284,7 +284,7 @@ public class EMINCsmdMapper implements CsmdMapper
    // 
    //
 
-   String indentToStr(indent int)
+   String indentToStr(int indent)
    {
       StringBuffer sbr = new StringBuffer() ;
      
@@ -302,7 +302,7 @@ public class EMINCsmdMapper implements CsmdMapper
 
    // contact_type can be Investigator or DataManager
 
-   void buildMDContact(String key, StringBuffer sbr, initial_indent int, String contact_type) throws SQLException
+   void buildMDContact(String key, StringBuffer sbr, int initial_indent, String contact_type) throws SQLException
    {
       //get local values needed from SessionSingleton
       SessionSingleton ss = SessionSingleton.getInstance() ;
@@ -363,7 +363,7 @@ public class EMINCsmdMapper implements CsmdMapper
          email = sr.LitWithEnt(xt.makeValid(r.getString("EMAIL") ));
       }
  
-      r.close
+      r.close() ;
 
       if(contact_type.compareToIgnoreCase("Investigator") == 0 )
       {
@@ -552,13 +552,25 @@ public class EMINCsmdMapper implements CsmdMapper
 
       
       sbr.append("         <StudyName>" + study_name + "</StudyName>\n" ) ;
+
+      //finding institution information
+      String institution_id = place_holder ;
+      String institution_name = place_holder ;
+
+      r = s.executeQuery("SELECT INSTITUTION_ID, NAME FROM " + dbs + "INSTITUTION WHERE INSTITUTION_ID IN " +
+                         "(SELECT INSTITUTION_ID FROM " + dbs + "STUDY_INSTITUTION WHERE STUDY_ID='" + key + "' )") ;
+      while(r.next())
+      {
+         institution_id = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTION_ID") ));
+         institution_name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+      }
      
 
-      if(project_name.compareTo(place_holder) != 0 )
+      if(study_name.compareTo(place_holder) != 0 )
       {
-         if(institute_name.compareTo(place_holder) != 0)
+         if(institution_name.compareTo(place_holder) != 0)
          {
-            sbr.append("         <StudyID studyid=\"" + study_name + "\" institutionref=\"I" + institute_id + "\"/>\n") ;
+            sbr.append("         <StudyID studyid=\"" + study_name + "\" institutionref=\"I" + institution_id + "\"/>\n") ;
          }
          else
          {
@@ -599,7 +611,7 @@ public class EMINCsmdMapper implements CsmdMapper
 
       sbr.append("          <Instrument>" + place_holder + "</Instrument>\n") ;
 
-      appendConditionsForEntry(key, 3*indent , sbr) ; // 9 = 3 spaces per level - and 3 level 3x3
+      appendConditionsForEntry(key, 3*indent, "experiment",  sbr) ; // 9 = 3 spaces per level - and 3 level 3x3
 
  
       // end of measurement now measurement
@@ -640,7 +652,7 @@ public class EMINCsmdMapper implements CsmdMapper
          sbr.append("       <DataHolding dataid=\"" + study_id + "\">\n") ;
 	 sbr.append("          <DataName>" + study_name + "</DataName>\n") ;
 	 sbr.append("          <TypeOfData>" + typeofdata + "</TypeOfData>\n") ;
-	 sbr.append("          <Status>" + progress + "</Status>\n") ;
+	 sbr.append("          <Status>" + status + "</Status>\n") ;
 
 	 // fill in the dataholdinglocation details - save uneccessary calls later
 	 //////
@@ -648,7 +660,7 @@ public class EMINCsmdMapper implements CsmdMapper
 	 sbr_dhl.append("      <DataHoldingLocator dataidref=\"" + study_id + "\">\n") ;
          sbr_dhl.append("         <DataName>" + study_name + "</DataName>\n") ;
 	 sbr_dhl.append("         <Locator type=\"absolute\">\n") ;
-         sbr_dhl.append("            <URL>" + getStoragePath(exp_id, 1) + "</URL>\n") ;
+         sbr_dhl.append("            <URL>" + place_holder + "</URL>\n") ;
          sbr_dhl.append("            <DataSourceAccess>" + access_conditions + "</DataSourceAccess>\n") ;
 	 sbr_dhl.append("         </Locator>\n") ;
 	 
@@ -667,16 +679,16 @@ public class EMINCsmdMapper implements CsmdMapper
 
          //and now for each dataset
          Iterator g = datasets.iterator() ;
-         String dataset_key = place_holder ;
+         String dataset_id = place_holder ;
 
          //create object references outside of the loop
          String dataset_name = place_holder ;
          String dataset_description = place_holder ;
-         String resources = place_holder ;
+         String dataset_resources = place_holder ;
          String dataset_uri = place_holder ;
          String access_method = place_holder ;
-         String start_date = place_holder ;
-         String end_date = place_holder ;
+         String dataset_start_date = place_holder ;
+         String dataset_end_date = place_holder ;
       
          while(g.hasNext())
          {
@@ -689,27 +701,27 @@ public class EMINCsmdMapper implements CsmdMapper
 	    {
 	       dataset_name = sr.LitWithEnt(xt.makeValid(r.getString("DATASET_NAME") ));
 	       dataset_description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
-	       resources = sr.LitWithEnt(xt.makeValid(r.getString("RESOURCES") ));
+	       dataset_resources = sr.LitWithEnt(xt.makeValid(r.getString("RESOURCES") ));
 	       dataset_uri = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
 	       access_method = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_METHOD") ));
-	       start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
-	       end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
+	       dataset_start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
+	       dataset_end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
 	    }
 	    r.close() ;
 	 
             sbr.append("          <DataSet dataid=\"" + dataset_id + "\">\n") ;
 	    sbr.append("             <DataName>" + dataset_name + "</DataName>\n") ;
 	    sbr.append("             <TypeOfData>" + typeofdata + "</TypeOfData>\n") ;
-	    sbr.append("             <Status>" + progress + "</Status>\n") ;
+	    sbr.append("             <Status>" + place_holder + "</Status>\n") ;
 	    sbr.append("             <LogicalDescription>\n") ;
-            appendConditionsForEntry(dataset_key, 5*indent, sbr) ; // 5 levels in
+            appendConditionsForEntry(dataset_id, 5*indent, "dataset", sbr) ; // 5 levels in
 	    sbr.append("             </LogicalDescription>\n") ;
 
             //a fair place to populate the DataHoldingLocator
             sbr_dhl.append("         <DataSetLocator dataidref=\"" + dataset_id + "\">\n") ;
             sbr_dhl.append("            <DataName>" + dataset_name + "</DataName>\n") ;
             sbr_dhl.append("            <Locator type=\"absolute\">\n") ;
-            sbr_dhl.append("               <URL>" + dateset_uri + "</URL>\n") ;
+            sbr_dhl.append("               <URL>" + dataset_uri + "</URL>\n") ;
             sbr_dhl.append("            </Locator>\n") ;
             sbr_dhl.append("         </DataSetLocator>\n") ;
 
@@ -732,17 +744,17 @@ public class EMINCsmdMapper implements CsmdMapper
             //object references here
             String data_name = place_holder ;
             String data_format = place_holder ;
-            String status = place_holder ;
+            status = place_holder ;
             String data_description = place_holder ;
             String producing_facility = place_holder ;
             String data_uri = place_holder ;
-            String access_method = place_holder ;
+            access_method = place_holder ;
             String data_start_date = place_holder ;
             String data_end_date = place_holder ;
 
             while(ro.hasNext())
             {
-	       datafile_key = (String) ro.next() ;
+	       data_id = (String) ro.next() ;
 	       
 	       r = s.executeQuery("SELECT DATA_NAME, DATA_FORMAT, STATUS, DESCRIPTION, PRODUCING_FACILITY, " +
                                   "URI, ACCESS_METHOD, START_DATE, END_DATE FROM " + dbs + "DATA WHERE DATA_ID = '" + data_id + "'") ;
@@ -751,7 +763,7 @@ public class EMINCsmdMapper implements CsmdMapper
 		  data_name = sr.LitWithEnt(xt.makeValid(r.getString("DATA_NAME") ));
 		  data_format = sr.LitWithEnt(xt.makeValid(r.getString("DATA_FORMAT") ));
 		  status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
-		  description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
+		  data_description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
 		  producing_facility = sr.LitWithEnt(xt.makeValid(r.getString("PRODUCING_FACILITY") ));
 		  data_uri = sr.LitWithEnt(xt.makeValid(r.getString("DATA_URI") ));
 		  access_method = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_METHOD") ));
@@ -805,7 +817,7 @@ public class EMINCsmdMapper implements CsmdMapper
    //
    //
 
-   void appendConditionsForEntry(String id, int num_spaces, boolean dataset, StringBuffer sbr) throws SQLException
+   void appendConditionsForEntry(String id, int num_spaces, String type, StringBuffer sbr) throws SQLException
    {
       //
       //set session variables
@@ -842,21 +854,55 @@ public class EMINCsmdMapper implements CsmdMapper
 
 
       /////
-      String in_list = place_holder ;
+      String dataset_in_list = place_holder ;
 
-      if (dataset == true)
+      if (type.compareTo("experiment") == 0) 
+      {
+         List dataset = new LinkedList() ;
+         r = s.executeQuery("SELECT DATASET_ID FROM " + dbs + "DATASET WHERE STUDY_ID = '" + id + "'") ;
+         while(r.next())
+         {
+            dataset.add(Integer.toString(r.getInt("DATASET_ID"))) ;
+         }
+         r.close() ;
+
+         Iterator e = dataset.iterator() ;
+         StringBuffer tmp_sb = new StringBuffer() ;
+
+         tmp_sb.append("(") ;
+
+         while(e.hasNext())
+         {
+            tmp_sb.append(((String) e.next())) ;
+            tmp_sb.append(",") ;
+         }
+
+         tmp_sb.delete(tmp_sb.length()-1, tmp_sb.length()) ;
+
+         dataset_in_list = tmp_sb.toString() ;
+
+      }
+      else if (type.compareTo("dataset") == 0 )
+      {
+         dataset_in_list = "(" + id + ")" ;
+      }
+
+
+      String data_in_list = place_holder ;
+
+      if (type.compareTo("experiment") == 0 || type.compareTo("dataset") == 0)
       {
          List data = new LinkedList() ;
 
-         r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATASET_ID = '" + id + "'") ;
+         r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATASET_ID IN " + dataset_in_list ) ;
          while(r.next())
          {
             data.add(Integer.toString(r.getInt("DATA_ID"))) ;
          }
-         r.close ;
+         r.close() ;
 
          Iterator e = data.iterator() ;
-         StringBuffer tmpsb ;
+         StringBuffer tmp_sb = new StringBuffer() ;
 
          tmp_sb.append("(") ;
 
@@ -868,12 +914,12 @@ public class EMINCsmdMapper implements CsmdMapper
 
          tmp_sb.delete(tmp_sb.length()-1, tmp_sb.length()) ;
        
-         in_list = tmp_sb.toString() ;
+         data_in_list = tmp_sb.toString() ;
 
       }
       else //this is just a data object
       {
-        in_list = "("+ id + ")" 
+        data_in_list = "("+ id + ")" ;
       }
 
       //get the date for all the rows of conditions infromation for this dataset or file
@@ -881,7 +927,7 @@ public class EMINCsmdMapper implements CsmdMapper
       String param_unit = place_holder ;
       String param_value = place_holder ; 
 
-      r = s.executeQuery("SELECT NAME, UNIT, VALUE FROM " + dbs + "PARAMETER WHERE DATA_ID IN (" + in_list + ")") ;
+      r = s.executeQuery("SELECT NAME, UNIT, VALUE FROM " + dbs + "PARAMETER WHERE DATA_ID IN (" + data_in_list + ")") ;
 
       while(r.next())
       {
