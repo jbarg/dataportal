@@ -1066,8 +1066,14 @@ public class ISISCsmdMapper implements CsmdMapper
             name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
             datafile_type = sr.LitWithEnt(xt.makeValid(r.getString("DATAFILE_TYPE") ));
             comments = sr.LitWithEnt(xt.makeValid(r.getString("COMMENTS") ));
-
-
+         }
+         t_r.close() ;
+         
+         sbr.append(ii+"<DataDescription>\n") ;
+         sbr.append(ii+li+"<DataName>"+name+"</DataName>\n") ;
+         sbr.append(ii+li+"<Description>"+comments+"</Description>\n") ;
+         sbr.append(ii+li+"<TypeOfData>"+datafile_type+"</TypeOfData>\n") ;
+         sbr.append(ii+"<DataDescription>\n") ;
 
       }
         
