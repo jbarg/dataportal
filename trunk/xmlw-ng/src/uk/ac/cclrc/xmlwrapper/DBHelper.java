@@ -23,7 +23,7 @@ public class DBHelper
       SessionSingleton ss = SessionSingleton.getInstance() ;
 
       //get Xindice connection information
-      Collection col = ss.getCollection() ;
+      org.xmldb.api.base.Collection col = ss.getXMLCollection() ;
       XPathQueryService  xqs = ss.getXPathQueryService();
       ResourceSet res  = ss.getResourceSet() ;
 
@@ -40,9 +40,21 @@ public class DBHelper
          DatabaseManager.registerDatabase(database);
 
       }
+
       catch (XMLDBException e) {
          System.err.println("XML:DB Exception occured " + e.errorCode);
       }
+
+      catch (IllegalAccessException iae) {
+         iae.printStackTrace() ;
+      }
+
+      catch (InstantiationException iex) {
+         iex.printStackTrace();
+      }
+      catch (ClassNotFoundException cnfe) {
+         cnfe.printStackTrace();
+      } 
 
       
       boolean connected = false ;
@@ -60,8 +72,8 @@ public class DBHelper
             }
 
             //e.g. of full connect string xindice://escdmg.dl.ac.uk:4080/db/cclrcmetadata
-            ss.setCollection(DatabaseManager.getCollection(ss.getPrefix+ss.getHost+ss.getPort+ss.getCollection);
-            col = ss.getCollection() ;
+            ss.setCollection(DatabaseManager.getCollection(ss.getPrefix()+ss.getHost()+ss.getPort()+ss.getCollectionName()));
+            col = ss.getXMLCollection() ;
 
 
             //need to create the statement handle here also
@@ -69,7 +81,7 @@ public class DBHelper
             xqs = ss.getXPathQueryService() ;
 
             //needed for inserts
-            ss.setXMLResource(XMLResource document = (XMLResource) col.createResource(null, "XMLResource"));
+            ss.setXMLResource((XMLResource) col.createResource(null, "XMLResource"));
 
             connected = true ;
 
@@ -78,6 +90,7 @@ public class DBHelper
                log.info("Now reconnected") ;
             }
 
+         }
          catch (XMLDBException e) {
          System.err.println("XML:DB Exception occured " + e.errorCode);
          }

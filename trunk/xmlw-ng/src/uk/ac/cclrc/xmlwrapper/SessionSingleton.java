@@ -44,7 +44,7 @@ public class SessionSingleton
    String prefix ;   
 
    //xindice handles
-   Collection col ;
+   org.xmldb.api.base.Collection col ;
    XPathQueryService  xqs ;
    ResourceSet res  ;
    XMLResource xmlr ;
@@ -221,7 +221,7 @@ public class SessionSingleton
       return port ;
    }
 
-   String getCollection()
+   String getCollectionName()
    {
       return collection ;
    }
@@ -235,9 +235,9 @@ public class SessionSingleton
    //
    //
 
-   void setCollection(Collection col)
+   void setCollection(org.xmldb.api.base.Collection col)
    {
-      this.col = col
+      this.col = col ;
    }
 
    void setXPathQueryService(XPathQueryService xqs)
@@ -250,7 +250,7 @@ public class SessionSingleton
       this.xmlr = xmlr ;
    }
 
-   Collection getCollection()
+   org.xmldb.api.base.Collection getXMLCollection()
    {
       return col;
    }
