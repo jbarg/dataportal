@@ -371,8 +371,8 @@ public class ISISCsmdMapper implements CsmdMapper
 
       buildMDKeywords(key, sbr, ii+li, null) ;
       //following will have to list all distinct subjects related to study
-      //ISIS only have keywords
-      //buildMDSubject(key, sbr, ii+li, null) ;
+      //ISIS icat_v2 now has subjects
+      buildMDSubject(key, sbr, ii+li, null) ;
 
       sbr.append(ii +  "</Topic>\n") ;
 
@@ -405,13 +405,106 @@ public class ISISCsmdMapper implements CsmdMapper
       return ;
    }
 
-   //ISIS only have keywords
-   //void buildMDSubjects(String key, StringBuffer sbr, String ii, String type) throws SQLException
-   //{
-   //   String ii = indentToStr(initial_indent) ;
-   //
-   //     return ;
-   // }
+   void buildMDSubjects(String key, StringBuffer sbr, String ii, String type) throws SQLException
+   {
+      String topic_id = place_holder ;
+      String subject = place_holder ;
+
+      //need another statement handle for nested queries
+      Connection c = ss.getConnection() ;
+      Statement t_s = c.createStatement() ;
+      ResultSet t_r = null ; 
+
+      r = s.executeQuery("select topic_id from  topic_list where study_id = '" + key + "'") ;  
+
+      sbr.append(ii + "<Subjects>\n") ;
+
+      //temp - perhaps need re-classifying
+      sbr.append(ii+li+"<Discipline>" + ss.getWrapperName() + "</Discipline>\n") ;
+
+      while(r.next())
+      {
+         topic_id = sr.LitWithEnt(xt.makeValid(r.getString("TOPIC_ID") ));
+
+         t_r = t_s.executeQuery("select name, parent_id, level from topic where topic_id='" + topic_id + "'") ; 
+ 
+         while(t_r.next())
+         {
+            buildMDSubjectList(key, sbr, ii+li, null, name, parent_id, level) ;
+         }
+         
+      }
+      r.close() ;
+      t_r.close() ;
+      t_s.close() ;
+
+      sbr.append(ii + "</Subjects>\n") ;
+
+      return ;
+   }
+
+   void buildMDSubjectList(String key, StringBuffer sbr, String ii, String type,  String name, String parent_id, String level) throws SQLException 
+   {
+      //as this is called from a nested context 
+      Connection c = ss.getConnection() ;
+      Statement t_s = c.createStatement() ;
+      Resultset t_r = null ;
+ 
+      List listy = new ArrayList() ;
+
+      listy.add(name) ;
+
+      //recursion would have been better - but writing that stuff hurts my head !!
+      while(level > 0) 
+      {
+         t_r = t_s.execute("select name, parent_id, level from topic where topic_id = '" + parent_id +") ;
+ 
+         if(t_r.next())
+         {
+            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+            parent_id = sr.LitWithEnt(xt.makeValid(r.getString("PARENT_ID") ));
+            level = sr.LitWithEnt(xt.makeValid(r.getString("LEVEL") ));
+
+            listy.add(name) ;
+         
+            if(parent_id < 0 )
+            {
+               level = 0 ;
+            }
+
+         }
+         else
+         {
+            level=0 ;
+         }
+      }
+
+      t_r.close() ;
+      t_s.close() ;
+
+      int size=listy.size ;
+      String ind = ii ;
+
+      while(size > 0)
+      {
+         sbr.append(ind+"<Subject>\n") ;
+         sbr.append(ind+li"<SubjectName>" + (String)listy.get(--size) + "</SubjectName>\n") ;
+         ind = ind+li ;
+      }
+
+      size=listy.size() ;
+      int num_ent = 0 ;
+
+      while(size > 0)
+      {
+         sbr.append(ind+"<Subject>\n") ;
+         ind = ind.substring(li.length()) ; 
+         --size ;
+      }  
+
+      return ;
+
+   }
 
    //Study/investigation information (keeping mainly leaf node level complexity)
 
@@ -438,7 +531,8 @@ public class ISISCsmdMapper implements CsmdMapper
      
       sbr.append(ii + li + "<Notes>" + notes + "</Notes>\n") ;
 
-      buildMDRelatedReferance(key, sbr, ii+li, null) ;  
+      //not needed at the moment: - perhaps if their was a workflow extention
+      //buildMDRelatedReferance(key, sbr, ii+li, null) ;  
       buildMDInvestigation(key, sbr, ii+li, null) ;  
 
       sbr.append(ii + "</Study>\n") ;
@@ -454,18 +548,27 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDStudyInformation(String key, StringBuffer sbr, String ii, String type) throws SQLException //some where you might use type as
    {
-      String start_date = place_holder ;
+      String start_date_date = place_holder ;
+      String start_date_time = place_holder ;
       String funding = place_holder ;
-      String end_date = place_holder ;
+      String end_date_date = place_holder ;
+      String end_date_time = place_holder ;
       String purpose = place_holder ;
       String status = place_holder ;
 
-      r = s.executeQuery("select funding_info, start_date, end_date, purpose, status from study where id='" + key + "'") ;
+      r = s.executeQuery("select funding_info, purpose, status, to_char(start_date, 'YYYY-MM-DD') \"SDD\", " +
+                         "to_char(start_date, 'HH24:MI:SS') \"SDT\", " +
+	                 "to_char(end_date, 'YYYY-MM-DD') \"EDD\", " +
+	                 "to_char(end_date, 'HH24:MI:SS') \"EDT\" "
+	                 "from study where id='" + key + "'") ;
+
       if(r.next())
       {
          funding = sr.LitWithEnt(xt.makeValid(r.getString("FUNDING_INFO") ));
-         start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
-         end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
+         start_date_date = sr.LitWithEnt(xt.makeValid(r.getString("SDD") ));
+         start_date_time = sr.LitWithEnt(xt.makeValid(r.getString("SDT") ));
+         end_date_date = sr.LitWithEnt(xt.makeValid(r.getString("EDD") ));
+         end_date_time = sr.LitWithEnt(xt.makeValid(r.getString("EDT") ));
          purpose = sr.LitWithEnt(xt.makeValid(r.getString("PURPOSE") ));
          status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
       }
