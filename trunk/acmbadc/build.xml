@@ -27,7 +27,7 @@
      from which Ant executes the requested task.  This is normally
      set to the current working directory.
 -->
-<project name="ACMBADC" default="compile" basedir=".">
+<project name="ACM" default="compile" basedir=".">
 	<!-- ===================== Property Definitions =========================== -->
 	<!--
 
