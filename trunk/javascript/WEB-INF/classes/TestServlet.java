@@ -4,7 +4,6 @@
  * Created on 07 March 2002, 11:51
  */
 
-package Templates.JSP_Servlet;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -14,7 +13,7 @@ import javax.servlet.http.*;
  * @author  djn
  * @version
  */
-public class Servlet extends HttpServlet {
+public class TestServlet extends HttpServlet {
     
     /** Initializes the servlet.
      */
