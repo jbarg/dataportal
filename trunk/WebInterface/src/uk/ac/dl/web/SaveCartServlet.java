@@ -88,7 +88,7 @@ public class SaveCartServlet extends HttpServlet{
     
     public void deleteFile(String sid, String wd){
         
-        File file = new File(wd+File.separator+"xml"+File.separator+"emin"+sid);
+        File file = new File(wd+File.separator+"xml"+File.separator+"emat"+sid);
         file.delete();
         
     }
