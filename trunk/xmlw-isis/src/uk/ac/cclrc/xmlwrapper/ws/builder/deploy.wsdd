@@ -1,0 +1,28 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from XmlWrapperDocBuilderService WSDL service -->
+
+  <service name="xmlwrapper_builder" provider="java:RPC">
+      <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperDocBuilderService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_builder"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.builder.Xmlwrapper_BuilderSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperDocBuilder"/>
+      <operation name="loadXMLRep" qname="operNS:loadXMLRep" xmlns:operNS="urn:xmlwrapper" returnQName="loadXMLRepReturn" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" >
+        <parameter name="action" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="loadXMLRep"/>
+      <parameter name="scope" value="Application"/>
+
+  </service>
+</deployment>

@@ -1,0 +1,27 @@
+1)need to run grid-proxy-init
+
+to get a new proxy credential
+
+2)need to make sure database (acmisis at time of writing) has correct user priveledges in (not DN formats can change):
+
+ssh -l root volga.dl.ac.uk
+
+su - postgres
+
+psql acmisis
+
+\dt
+
+select * from usertable
+
+insert into usertable (username,facility,metadata,data) values ('/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi','t','t','t') ;
+
+to update for testing:
+
+update usertable set metadata='f' where username='/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi' ;
+
+update usertable set metadata='t' where username='/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi' ;
+
+select * from usertable
+
+3)need to make sure the acm module being accessed is up and running (in this case on acmematn on volga)
