@@ -451,6 +451,47 @@ public class ISISCsmdMapper implements CsmdMapper
 
       return ;
    }
+
+   void buildMDStudyInformation(String key, StringBuffer sbr, String ii, String type) throws SQLException //some where you might use type as
+   {
+      String start_date = place_holder ;
+      String funding = place_holder ;
+      String end_date = place_holder ;
+      String purpose = place_holder ;
+      String status = place_holder ;
+
+      r = s.executeQuery("select funding_info, start_date, end_date, purpose, status from study where id='" + key + "'") ;
+      if(r.next())
+      {
+         funding = sr.LitWithEnt(xt.makeValid(r.getString("FUNDING_INFO") ));
+         start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
+         end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
+         purpose = sr.LitWithEnt(xt.makeValid(r.getString("PURPOSE") ));
+         status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
+      }
+      r.close()
+  
+      sbr.append(ii+"<StudyInformation>\n") ;
+      sbr.append(ii+li+"<Funding>" + funding + "</Funding>\n") ;
+      sbr.append(ii+li+"<TimePeriod>\n") ; 
+      sbr.append(ii+li+li"<StartDate>\n") ; 
+      sbr.append(ii+li+li+li"<Date>"+ start_date_date + "</Date>\n") ; 
+      sbr.append(ii+li+li+li"<Time>"+ start_date_time + "</Time>\n") ; 
+      sbr.append(ii+li+li"</StartDate>\n") ; 
+      sbr.append(ii+li+li"</EndDate>\n") ; 
+      sbr.append(ii+li+li+li"<Date>"+ start_date_date + "</Date>\n") ; 
+      sbr.append(ii+li+li+li"<Time>"+ start_date_time + "</Time>\n") ; 
+      sbr.append(ii+li+li"</EndDate>\n") ; 
+      sbr.append(ii+li+"</TimePeriod>\n") ; 
+      sbr.append(ii+li+"<Purpose>\n") ; 
+      sbr.append(ii+li+li+"<Abstract>" + purpose + "</Abstract>\n")  ; 
+      sbr.append(ii+li+"</Purpose>\n") ; 
+      sbr.append(ii+li+"<Status>" + status + "</Status>\n") ; 
+     
+
+      return ;
+   }
+
    void buildMDNameRole(String key, StringBuffer sbr, String ii, String type) throws SQLException //some where you might use type as
    {
       String ii = indentToStr(initial_indent) ;
