@@ -410,11 +410,6 @@ public class ISISCsmdMapper implements CsmdMapper
       String topic_id = place_holder ;
       String subject = place_holder ;
 
-      //need another statement handle for nested queries
-      Connection c = ss.getConnection() ;
-      Statement t_s = c.createStatement() ;
-      ResultSet t_r = null ; 
-
       r = s.executeQuery("select topic_id from  topic_list where study_id = '" + key + "'") ;  
 
       sbr.append(ii + "<Subjects>\n") ;
@@ -425,25 +420,19 @@ public class ISISCsmdMapper implements CsmdMapper
       while(r.next())
       {
          topic_id = sr.LitWithEnt(xt.makeValid(r.getString("TOPIC_ID") ));
-
-         t_r = t_s.executeQuery("select name, parent_id, level from topic where topic_id='" + topic_id + "'") ; 
  
-         while(t_r.next())
-         {
-            buildMDSubjectList(key, sbr, ii+li, null, name, parent_id, level) ;
-         }
+         //note following needs own statement and resulset handles as called from a nested context 
+         buildMDSubjectList(topic_id, sbr, ii+li, null) ;
          
       }
       r.close() ;
-      t_r.close() ;
-      t_s.close() ;
 
       sbr.append(ii + "</Subjects>\n") ;
 
       return ;
    }
 
-   void buildMDSubjectList(String key, StringBuffer sbr, String ii, String type,  String name, String parent_id, String level) throws SQLException 
+   void buildMDSubjectList(String topic_id, StringBuffer sbr, String ii, String type) throws SQLException 
    {
       //as this is called from a nested context 
       Connection c = ss.getConnection() ;
@@ -452,22 +441,22 @@ public class ISISCsmdMapper implements CsmdMapper
  
       List listy = new ArrayList() ;
 
-      listy.add(name) ;
+      int level = 99 ;
 
       //recursion would have been better - but writing that stuff hurts my head !!
       while(level > 0) 
       {
-         t_r = t_s.execute("select name, parent_id, level from topic where topic_id = '" + parent_id +") ;
+         t_r = t_s.execute("select name, parent_id, level from topic where topic_id = '" + topic_id +") ;
  
          if(t_r.next())
          {
             name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
-            parent_id = sr.LitWithEnt(xt.makeValid(r.getString("PARENT_ID") ));
+            topic_id = sr.LitWithEnt(xt.makeValid(r.getString("PARENT_ID") ));
             level = sr.LitWithEnt(xt.makeValid(r.getString("LEVEL") ));
 
             listy.add(name) ;
          
-            if(parent_id < 0 )
+            if(topic_id < 0 )
             {
                level = 0 ;
             }
@@ -676,9 +665,23 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDInvestigation(String key, StringBuffer sbr, String ii, String type) throws SQLException
    {
-      String ii = indentToStr(initial_indent) ;
+////////////      
+      String surname = place_holder ;
+      String forename = place_holder ;
+      String middle_initial = place_holder ;
+      String title = place_holder ;
+      String email = place_holder ;
+
+      r = s.executeQuery ("select first_name, middle_name, last_name, title, email_address from party where party.id in " +
+                            "(select party_id from investigator_list where investigation_id in " +
+                                "(select investigation_id from investigation_list where study_id = '" + key + "')" +
+                             ")") ;
+
+      while(r.next())
+      {
 
       return ;
+/////////////
    }
 
    void buildMDDataHolding(String key, StringBuffer sbr, String ii, String type) throws SQLException
