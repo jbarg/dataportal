@@ -820,13 +820,63 @@ public class ISISCsmdMapper implements CsmdMapper
       //HERE - what does related reference get the info from - note essentially redundant as investigation and dataholding are
       //synonymous - but put in here at the moment anyway - as may change
       buildMDRelatedReferance(key, sbr, ii+li, "dataholding", true) ;
-      buildMDDataCollection(key, sbr, ii+li, null) ;
       buildMDAtomicDataObject(key, sbr, ii+li, null) ;
+      buildMDDataCollection(key, sbr, ii+li, null, true) ;
 
       sbr.append(ii+"</DataHolding>\n") ; 
 
       return ;
    }
+
+   void buildMDDataCollection(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
+   {
+      Connection c = ss.getConnection() ;
+      Statement t_s = null ;
+      Resultset t_r = null ;
+
+      if(nested == true)
+      {
+         t_s=c.createStatement() ;
+      }
+      else
+      {
+         t_s=s ;
+      }
+
+      String dataset_id = place_holder ;
+      String name = place_holder ;
+      String dataset_type = place_holder ;
+      String dataset_status  = place_holder ;
+      String description = place_holder ;
+      String name = place_holder ;
+
+      t_r = t_s.exectuteQuery("select dataset.id \"DATASETID\", name, dataset_type, dataset_status, description from dataset where "+
+                              "dataset.id in (select datasetid from dataset_list where investigationid ='" + key "')") ;
+
+      while(t_r.next()) 
+      {
+         dataset_id = sr.LitWithEnt(xt.makeValid(r.getString("DATASETID") ));
+         name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+         dataset_type = sr.LitWithEnt(xt.makeValid(r.getString("dataset_type") ));
+         dataset_status = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+         description = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+
+         sbr.append(ii+"<DataCollection dataid=\""+dataset_id+"\">\n") ;
+         //HERE - remember dataholding->ado call needs revisit
+         //atomic do - needs a recursive call more temp statement handles perhaps
+         buildMDDataDescription(dataset_id, sbr, ii+li, "datacollection" , true) ;
+         buildMDDataCollectionLocator(key, sbr, ii+li, null, true) ;
+         buildMDRelatedReferance(key, sbr, ii+li, null, true) ;
+         buildMDAtomicDataObject(key, sbr, ii+li, null, true) ;
+         buildMDDataCollection(key, sbr, ii+li, null, true) ;
+
+      }
+
+      t_s.close() ;
+
+      return ;
+   }
+         
 
    void buildMDDataDescription(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
    {
@@ -861,6 +911,35 @@ public class ISISCsmdMapper implements CsmdMapper
          //leave it like this for now - not sure what else we can fill in
          sbr.append(ii+"</DataDescription>\n") ;
       }
+      else if (type.compareTo("datacollection")==0) 
+      {
+         String name=place_holder ;
+         String dataset_type=place_holder ;
+         String dataset_status=place_holder ;
+         String description=place_holder ;
+
+         t_r=t_s.executeQuery("select name, dataset_type, dataset_status, description from dataset where id='"+key+"'") ;
+
+         if(t_r.next())
+         {
+            name = sr.LitWithEnt(xt.makeValid(r.getString("NAME") ));
+            dataset_type = sr.LitWithEnt(xt.makeValid(r.getString("DATASET_TYPE") ));
+            dataset_status = sr.LitWithEnt(xt.makeValid(r.getString("DATASET_STATUS") ));
+            description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
+         }
+
+         t_r.close() ;
+
+         sbr.append(ii+"<DataDescription>\n") ;
+         sbr.append(ii+li+"<DataName>"+name+"</DataName>\n") ;
+         sbr.append(ii+li+"<Description>"+description+"</Description>\n") ;
+         sbr.append(ii+li+"<TypeOfData>"+dataset_type+"</TypeOfData>\n") ;
+         sbr.append(ii+li+"<Status>"+dataset_status+"</Status>\n") ;
+         sbr.append(ii+"</DataDescription>\n") ;
+
+      }
+        
+      t_s.close() ;   
 
       return ;
    }
