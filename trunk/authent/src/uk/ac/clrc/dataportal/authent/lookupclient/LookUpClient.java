@@ -16,8 +16,9 @@ public class LookUpClient {
         LookUpModuleService service = new LookUpModuleServiceLocator();
         
         LookUpModule port = service.getLookUpService();
-        String[] results = port.getFacilities();
-        String[] results2 = port.lookupEndpoint(results, "ACL");
+        //String[] results = port.getFacilities();
+        String[] results = { "Dataportal" };
+        String[] results2 = port.lookupEndpoint(results, "SESSION");
         
         for (int i=0;i<results2.length;i++) {
             System.out.println(results2[i]);
