@@ -466,7 +466,42 @@ public class ISISCsmdMapper implements CsmdMapper
    }
    void buildMDStudyPerson(String key, StringBuffer sbr, String ii, String type) throws SQLException //similar to buildMDContact template
    {
-      String ii = indentToStr(initial_indent) ;
+      String surname = place_holder ;
+      String forename = place_holder ;
+      String middle_initial = place_holder ;
+      String title = place_holder ;
+      String email = place_holder ;
+
+      r = s.executeQuery ("select first_name, middle_name, last_name, title, email_address from party where party.id in " +
+	                    "(select party_id from investigator_list where investigation_id in " +
+	   		        "(select investigation_id from investigation_list where study_id = '" + key + "')" +
+                             ")") ;
+
+      while(r.next())
+      {
+         surname = sr.LitWithEnt(xt.makeValid(r.getString("LAST_NAME") ));
+         forename = sr.LitWithEnt(xt.makeValid(r.getString("FIRST_NAME") ));
+         middle_initials = sr.LitWithEnt(xt.makeValid(r.getString("MIDDLE_NAME") ));
+         title = sr.LitWithEnt(xt.makeValid(r.getString("TITLE") ));
+         email = sr.LitWithEnt(xt.makeValid(r.getString("EMAIL_ADDRESS") ));
+
+         //if data not present than data will be filled in with an empty string this may need changing
+
+         sbr.append(ii+"<StudyPerson\n") ;
+         sbr.append(ii+li"<Name>\n") ;
+         sbr.append(ii+li+li"<Surname>" + surname + "</Surname>\n") ;
+         sbr.append(ii+li+li"<MiddleInitials>" + middle_initials + "</MiddleInitials>\n") ;
+         sbr.append(ii+li+li"<Forename>" + forename + "</Forename>\n") ;
+         sbr.append(ii+li+li"<Title>" + title + "</Title>\n") ;
+         sbr.append(ii+li"</Name>\n") ;
+         sbr.append(ii+li"<ContactDetails>\n") ;
+         sbr.append(ii+li+li"<Email>" + email + "</Email>\n") ;
+         sbr.append(ii+li"</ContactDetails>\n") ;
+         sbr.append(ii+li"<RoleInStudy>not available</RoleInStudy>\n") ;
+         sbr.append(ii+"</StudyPerson\n") ;
+
+      }
+      r.close() ;
 
       return ;
    }
