@@ -45,9 +45,13 @@ public class SessionSingleton
    //perhaps there are some templates for this
    
    // some constants
-   public String place_holder = "Not Available" ;
-   public int i_place_holder = -9999 ;
-   public int indent = 3 ;
+   public final String place_holder = "Not Available" ;
+   public final int i_place_holder = -9999 ;
+   public final float f_place_holder = -999.00f ;
+   public final int indent = 3 ;
+
+   //database name
+   public String dbs = "" ;
 
    //path to read log config file from and read/write <x>map.data to
    //-i.e. serialized hashmap will compressed xml doclets as values
@@ -257,6 +261,20 @@ public class SessionSingleton
    DBHelper getDBHelper()
    {
       return dbh ;
+   }
+
+   //
+   //
+
+   void setDbs(String dbs)
+   {
+      this.dbs = dbs ;
+      return ;
+   }
+
+   String getDbs()
+   {
+      return dbs ;
    }
 
    //

@@ -7,9 +7,14 @@
 
 package uk.ac.cclrc.xmlwrapper.ws.mpim;
 
+import uk.ac.cclrc.xmlwrapper.XmlWrapperMPIM ;
+
 public class Xmlwrapper_MpimSoapBindingImpl implements uk.ac.cclrc.xmlwrapper.ws.mpim.XmlWrapperMPIM{
+
+    XmlWrapperMPIM xwm = new XmlWrapperMPIM() ;
+	
     public org.w3c.dom.Element getXML(java.lang.String query) throws java.rmi.RemoteException {
-        return null;
+        return xwm.getXML(query);
     }
 
 }

@@ -7,9 +7,14 @@
 
 package uk.ac.cclrc.xmlwrapper.ws.badc;
 
+import uk.ac.cclrc.xmlwrapper.XmlWrapperBADC ;
+
 public class Xmlwrapper_BadcSoapBindingImpl implements uk.ac.cclrc.xmlwrapper.ws.badc.XmlWrapperBADC{
+
+    XmlWrapperBADC xwb = new XmlWrapperBADC() ;
+	
     public org.w3c.dom.Element getXML(java.lang.String query) throws java.rmi.RemoteException {
-        return null;
+        return xwb.getXML(query);
     }
 
 }

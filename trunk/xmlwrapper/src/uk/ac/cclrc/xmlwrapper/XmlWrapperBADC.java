@@ -25,7 +25,7 @@ public class XmlWrapperBADC
    //
    
    
-   XmlWrapperBADC()
+   public XmlWrapperBADC()
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
 

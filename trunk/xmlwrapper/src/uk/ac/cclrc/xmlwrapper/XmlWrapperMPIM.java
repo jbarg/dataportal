@@ -26,7 +26,7 @@ public class XmlWrapperMPIM
    
    
    //change
-   XmlWrapperMPIM()
+   public XmlWrapperMPIM()
    {
       SessionSingleton ss = SessionSingleton.getInstance() ;
 
@@ -42,11 +42,14 @@ public class XmlWrapperMPIM
       
       //setup login details
       //change
-      ss.SetDbConnectionInfo("136.172.44.21",
+      ss.SetDbConnectionInfo("neptun.dkrz.de",
  	                     "1521",
  	     		     "a804",
 			     "clrc_portal",
 			     "clrc4all") ;
+
+      //set database name
+      ss.setDbs("CERA2.") ;
 
       //connect to the database
       DBHelper dbh = ss.getDBHelper() ;
