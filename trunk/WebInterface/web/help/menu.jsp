@@ -115,7 +115,7 @@ document.onmousedown=click*/
 <br />
 <input type="button" class="button" value="Close" onclick="parent.close();" />
 </form>-->
-<a href="Dataportal.html" target="footer" id="headmenu2" > Help</a>
+<a href="Dataportal.html" target="footer" id="headmenu2" > Usage</a>
 <br />
 <a href="#" onclick="parent.close();" id="headmenu2"/>Close</a> 
 
