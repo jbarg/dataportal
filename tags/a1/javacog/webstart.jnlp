@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?> 
+     <!-- JNLP File for Demo CoG Application --> 
+     <jnlp 
+       spec="0.2 1.0"
+       codebase="http://cluster2.dl.ac.uk/daniel/"
+       href="GramTest.jnlp"> 
+       <information> 
+         <title>Gram test</title> 
+         <vendor>DL</vendor>
+		 <homepage href="http://cluster2.dl.ac.uk/daniel/index.html"/>
+		 <description>AA</description>
+		 <description kind="short">A test of the Java CoG kit via the Java webstart mechanism</description>
+		 <icon href="images/globus.gif"/>
+         <offline-allowed/> 
+       </information> 
+       <resources>
+		 <j2se version="1.3 1.2"/>
+         <jar href="webstart.jar" main="true" download="eager"/>
+       </resources>
+       <application-desc main-class="MyGramTest"/>
+</jnlp> 
