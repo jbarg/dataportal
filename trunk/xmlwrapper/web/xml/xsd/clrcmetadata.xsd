@@ -257,7 +257,8 @@
    <xsd:complexType name="TopicType">
       <xsd:sequence>
          <xsd:element name="Keywords" type="cmd:KeywordsType" minOccurs="0" maxOccurs="unbounded" />
-	 <xsd:element name="Subjects"    type="cmd:SubjectsType" minOccurs="1" maxOccurs="unbounded" />
+	 <!-- following had to be changed from minOccurs="1" as e.g. ISIS only have keywords and not taxonomies -->
+	 <xsd:element name="Subjects"    type="cmd:SubjectsType" minOccurs="0" maxOccurs="unbounded" />
       </xsd:sequence>
    </xsd:complexType> 
 
