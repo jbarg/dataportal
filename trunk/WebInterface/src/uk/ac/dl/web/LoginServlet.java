@@ -13,7 +13,8 @@ import java.math.*;
 import java.net.*;
 import javax.xml.parsers.*;
 import org.jdom.*;
-
+import javax.mail.*;
+import javax.mail.internet.*;
 import java.util.Properties;
 //log classes
 import org.apache.log4j.*;
@@ -195,12 +196,12 @@ public class LoginServlet extends HttpServlet {
                     String meta_username = prop.getProperty("meta_username");
                     //Document mydoc = TopicManager.buildTopics("jdbc:oracle:thin:@elektra.dl.ac.uk:1521:emat1","emat","tame");
                     Document mydoc = TopicManager.buildTopics(meta_url,meta_username,meta_passwd);
-                  //  org.jdom.output.XMLOutputter serializer = new org.jdom.output.XMLOutputter();
-                   // serializer.setIndent("  "); // use two space indent
-                   // serializer.setNewlines(true);
-                   // serializer.output(mydoc, System.out);
-                  //  Saver.save(mydoc,new File("c:/mydoc.cxml"));
-                  //  System.out.println("this is dir of the file "+workingDir+File.separator+"xml"+File.separator+"emin"+sessionid);
+                    //  org.jdom.output.XMLOutputter serializer = new org.jdom.output.XMLOutputter();
+                    // serializer.setIndent("  "); // use two space indent
+                    // serializer.setNewlines(true);
+                    // serializer.output(mydoc, System.out);
+                    //  Saver.save(mydoc,new File("c:/mydoc.cxml"));
+                    //  System.out.println("this is dir of the file "+workingDir+File.separator+"xml"+File.separator+"emin"+sessionid);
                     Saver.save(mydoc,new File(workingDir+File.separator+"profiles"+File.separator+"emat"+sessionid));
                     //hard code list fac
                     /*ArrayList facs1  = new ArrayList();
@@ -208,7 +209,7 @@ public class LoginServlet extends HttpServlet {
                     session.removeAttribute("facs");
                     //System.out.println("removing facs and adding emin");
                     session.setAttribute("facs",facs1);*/
-                   // if(new File(workingDir+File.separator+"xml"+File.separator+"emin"+sessionid).exists()) System.out.println("file here");
+                    // if(new File(workingDir+File.separator+"xml"+File.separator+"emin"+sessionid).exists()) System.out.println("file here");
                 }
                 catch(Exception e){
                     logger.warn("Unable to get the topics",e);
@@ -534,4 +535,7 @@ public class LoginServlet extends HttpServlet {
         }
         
     }
+  
+        
+    
 }

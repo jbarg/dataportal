@@ -46,6 +46,12 @@ public class Explore extends HttpServlet{
                 
                 String sid = (String)session.getAttribute("sessionid");
                 
+                File xml = null;
+                //get users username
+                
+                xml = new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml");
+                //check if user has alredy done a search
+                         
                 
                 //get the stylesheet for the decreasing the xml
                 File temp =  new File(wd+File.separator+"profiles"+File.separator+"explore"+sid+".xsl");
@@ -78,10 +84,7 @@ public class Explore extends HttpServlet{
                 //transform xml with the xsl using new classes from ac.dl.xml
                 //SAXBuilder builder = new SAXBuilder();
                 //org.jdom.Document doc = null;
-                File xml = null;
-                //get users username
                 
-                xml = new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml");
                 XSLTransformer.transformFiletoFile(xml,temp,new File(wd+File.separator+"profiles"+File.separator+sid+"3.xml"));
                 
                 temp.delete();
