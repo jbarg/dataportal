@@ -109,10 +109,6 @@
          <property name="basedir" value="${basedir}/facility"/>
       </ant>
 
-      <ant antfile="acm/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/acm"/>
-      </ant>
-
       <ant antfile="acmbadc/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/acmbadc"/>
       </ant>
