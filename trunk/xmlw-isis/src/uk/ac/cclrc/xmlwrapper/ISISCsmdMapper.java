@@ -937,6 +937,32 @@ public class ISISCsmdMapper implements CsmdMapper
          t_s=s ;
       }
 
+      //at the moment use a simeple ADOLocator rather that FileADOL - as do not need the features as yet
+      String uri = place_holder ;
+      String datafile_format = place_holder ;
+
+      t_r=t_s.executeQuery("select uri, datafile_format from datafile where id='"+key"'") ;
+
+      if(t_r.next())
+      {
+         uri=sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
+         datafile_format=sr.LitWithEnt(xt.makeValid(r.getString("DATAFILE_FORMAT") ));
+      }
+
+      t_r.close() ;
+      if(nested==true)
+      {
+         t_s.close() ;
+      }
+      //need to put some NS stuff here when doing checking vs the schema 
+      sbr.append(ii+"<ADOLocator>\n") ; 
+      sbr.append(ii+li"<Locator>"+uri+"</Locator>\n") ; 
+      sbr.append(ii+li"<Filetype>"+datafile_format+"</Filetype>\n") ; 
+      sbr.append(ii+"</ADOLocator>\n") ; 
+         
+      return ;
+
+   }
 
    //
    void buildMDDataCollectionLocator(String key, StringBuffer sbr, String ii, String type,  boolean nested) throws SQLException
