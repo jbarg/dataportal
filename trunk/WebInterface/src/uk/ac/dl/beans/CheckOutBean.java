@@ -63,7 +63,7 @@ public class CheckOutBean {
             doc  = new org.jdom.Document(el);
             isEmpty = false;
             if(doc == null) {
-                isEmpty = false;                
+                //isEmpty = false;                
             }
             else{
                 Element root = this.doc.getRootElement();
@@ -72,7 +72,7 @@ public class CheckOutBean {
                 if(list.size() == 0){
                     isEmpty = true;                    
                 }
-                isEmpty = false;
+                //isEmpty = false;
             }
             
             
