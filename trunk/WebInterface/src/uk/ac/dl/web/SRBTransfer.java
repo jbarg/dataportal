@@ -151,7 +151,7 @@ public class SRBTransfer extends HttpServlet {
                 
                 
                 //read in the message
-                URL  urlservlet = new URL("http://"+InetAddress.getLocalHost().getCanonicalHostName()+":8080/datatransfer/servlet/TransferDataServlet?cred="+save+"&from="+url+"&to="+urlTo+"&passwd=dpu()3^");
+                URL  urlservlet = new URL("http://"+InetAddress.getLocalHost().getCanonicalHostName()+":8080/datatransfer/servlet/TransferDataServlet?cred="+save+"&from="+tarFile+"&to="+urlTo+"&passwd=dpu()3^");
                               
                 URLConnection urlc = urlservlet.openConnection();
                 InputStream input = urlc.getInputStream();
