@@ -4,7 +4,7 @@
  * Created on 06 April 2004, 14:35
  */
 
-package dataportal.facility.src.uk.ac.clrc.dataportal.facility.facilityAdmin;
+package uk.ac.clrc.dataportal.facility.facilityAdmin;
 //log classes
 import org.apache.log4j.*;
 //web axis stuff

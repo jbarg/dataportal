@@ -191,10 +191,10 @@
 	<!-- UPDATE THIS! -->
 	<property name="dist.home" value="${basedir}/dist"/>
 	<property name="docs.home" value="${basedir}/docs"/>
-	<property name="manager.username" value="manager"/>
+	<property name="manager.username" value="${manager.username}"/>
 	<!-- UPDATE THIS! -->
-	<property name="manager.url" value="http://localhost:8080/manager"/>
-	<property name="manager.password" value="tomcat"/>
+	<property name="manager.url" value="http://${server.name}/manager"/>
+	<property name="manager.password" value="${manager.password}"/>
 	<!-- UPDATE THIS! -->
 	<property name="src.home" value="${basedir}/src"/>
 	<property name="web.home" value="${basedir}/web"/>
@@ -532,6 +532,9 @@
 			</fileset>
 			<fileset dir="${catalina.home}/common/lib">
 				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${catalina.home}/shared/lib">
+							<include name="*.jar"/>
 			</fileset>
 			<pathelement location="${catalina.home}/shared/classes"/>
 			<fileset dir="${catalina.home}/shared/lib">
