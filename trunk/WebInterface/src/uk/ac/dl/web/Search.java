@@ -65,10 +65,10 @@ public class Search {
             
             
             ArrayList res1 = new ArrayList();
-           ArrayList res2 = new ArrayList();
-           ArrayList res3 = new ArrayList();
+            ArrayList res2 = new ArrayList();
+            ArrayList res3 = new ArrayList();
             for(int i = 1; i<el.length;i++){
-               
+                
                 Element build = builder.build(el[i]);
                 List list = build.getContent();
                 Iterator it = list.iterator();
@@ -78,8 +78,8 @@ public class Search {
                         org.jdom.Element e = (org.jdom.Element)o;
                         String name  = e.getName();
                         if(i==1) res1.add(name);
-                         if(i==2) res2.add(name);
-                         if(i==3) res3.add(name);
+                        if(i==2) res2.add(name);
+                        if(i==3) res3.add(name);
                     }
                 }
             }
@@ -125,7 +125,8 @@ public class Search {
                 wr.write("<td><a href='../servlet/ResendQuery?discipline="+discipline+"&wait="+waiting+""+buff2.toString()+"'>Ok</a></td></tr>\n");
                 wr.close();
             }
-            return res;
+            ArrayList[] listsarray=  new ArrayList[]{res1,res2,res3};
+            return listsarray;
         }
         catch(Exception e){
             logger.warn("Coulld not do basic search",e);
