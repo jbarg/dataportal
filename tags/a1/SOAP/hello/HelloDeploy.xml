@@ -1,5 +1,0 @@
-<isd:service xmlns:isd="http://xml.apache.org/xml-soap/deployment" id="urn:Hello">
-	<isd:provider type="java" scope="Application" methods="sayHelloTo">
-		<isd:java class="hello.HelloServer" static="false"/>
-	</isd:provider>
-</isd:service>
