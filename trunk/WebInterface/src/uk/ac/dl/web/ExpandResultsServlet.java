@@ -130,6 +130,8 @@ public class ExpandResultsServlet extends HttpServlet{
             
             else{
                 //user wants to see results
+                File temp = null;
+                FileWriter f = null;
                 try {
                     //String[] values = new String[100];
                     //get values to expand
@@ -161,8 +163,8 @@ public class ExpandResultsServlet extends HttpServlet{
                     String sid = (String)session.getAttribute("sessionid");
                     
                     // create new temp file
-                    File temp = new File(wd+File.separator+"profiles"+File.separator+"expand"+sid+".xsl");
-                    FileWriter f = new FileWriter(temp);
+                     temp = new File(wd+File.separator+"profiles"+File.separator+"expand"+sid+".xsl");
+                     f = new FileWriter(temp);
                     
                     f.write("<?xml version='1.0'?>\n");
                     f.write("<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n");
@@ -211,15 +213,20 @@ public class ExpandResultsServlet extends HttpServlet{
                     XSLTransformer.transformFiletoFile(xml,temp,new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml"));
                     
                     //attempt to delete the file
-                   // if(!temp.delete()){
-                   //     logger.warn("Could no delete temp file");
-                   // }
-                    
+                    // if(!temp.delete()){
+                    //     logger.warn("Could no delete temp file");
+                    // }
+                    temp.delete();
                     response.sendRedirect("../jsp/Expand.jsp");
                 }
                 
                 
                 catch(Exception r){
+                    try{
+                        f.close();
+                    }
+                    catch(Exception ignore){}
+                    temp.delete();
                     logger.fatal("Error in the transfomation",r);
                     response.sendRedirect("../jsp/error.jsp");
                 }
