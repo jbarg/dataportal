@@ -4,6 +4,7 @@
     <target name="init">
         <property name="src" value="${basedir}/src"/>
         <property name="web" value="${basedir}/web"/>
+        <property name="docs" value="${basedir}/docs"/>
         <property name="webinf" value="${web}/WEB-INF"/>
         <property name="dest" value="${webinf}/classes"/>
         <property name="warfile" value="lookup.war"/>
@@ -36,4 +37,12 @@
         <delete file="${warfile}"/>
     </target>
 
+        <target name="javadoc" depends="init">
+        <javadoc packagenames="uk.ac.clrc.dataportal.lookup" destdir="${docs}">
+            <sourcepath>
+                <pathelement location="${src}"/>
+            </sourcepath>
+        </javadoc>
+    </target>
+    
 </project>
