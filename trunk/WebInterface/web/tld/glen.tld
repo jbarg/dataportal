@@ -12,6 +12,9 @@
     <short-name>xtags</short-name>
     <uri>/xtags</uri>
     <display-name>glen</display-name>
+    <small-icon></small-icon>
+    <large-icon></large-icon>
+    <description></description>
 
 <tag>
 
@@ -100,6 +103,59 @@
 </attribute>
 
 </tag>
+
+
+<tag>
+
+<name>menu</name>
+        <tag-class>ac.dl.taglib.Menu</tag-class>
+        <body-content>JSP</body-content>
+        <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
+        <tldx>
+            <packagename>ac.dl.taglib</packagename>
+            <extendsSupportClass>TRUE</extendsSupportClass>
+            <supportClass>BodyTagSupport</supportClass>
+            <implementsTryCatchFinally>FALSE</implementsTryCatchFinally>
+            <findparent>FALSE</findparent>
+        </tldx>
+        -->
+
+<attribute>
+
+<name>netscapefile</name>
+
+<required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>String</type>
+            <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
+            <tldx>
+                <IsReferenceID>FALSE</IsReferenceID>
+                <ReferencesTag>FALSE</ReferencesTag>
+                <ReferenceScope>Session</ReferenceScope>
+                <ReferencesTagReferentFirst>TRUE</ReferencesTagReferentFirst>
+            </tldx>
+            -->
+
+</attribute>
+<attribute>
+
+<name>iefile</name>
+
+<required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>String</type>
+            <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
+            <tldx>
+                <IsReferenceID>FALSE</IsReferenceID>
+                <ReferencesTag>FALSE</ReferencesTag>
+                <ReferenceScope>Session</ReferenceScope>
+                <ReferencesTagReferentFirst>TRUE</ReferencesTagReferentFirst>
+            </tldx>
+            -->
+
+</attribute>
+</tag>
+
 
 <tag>
 
