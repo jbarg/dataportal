@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><title>Security library compatibility</title><meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"></head><body><b><big>Security library compatibility </big></b><br>
+<br>
+The Java CoG Kit 1.1 alpha contains a totally new security library. Since the new
+library uses different API this version of CoG is not backwards
+compatible with previous versions.<br>
+<br>
+First, why the new library?
+<ol>
+  <li>The old security library was based on a commercial SSL library</li>
+  <li>The old security library was socket-oriented (it was difficult to write
+non-socket based security modules e.g. for ftp, mds, etc.)</li>
+  <li>The old security library API was not designed to work with multiple
+security protocols, represent different types of credentials, etc.</li>
+</ol>
+The new security library is based on GSS-API and is implemented entirely
+with open-source SSL and certificate processing libraries. With the GSS-API
+abstractions we can provide transport and security protocol independence.
+Also, the new library supports a few new features such as the new proxy certificate
+format and delegation-at-any-time API (see GSS Extensions document)<br>
+<br>
+What has changed:
+<ul>
+  <li>GSS abstractions are used through out the code instead of the old security
+API (e.g. before setCredential(org.globus.security.GlobusProxy) and now setCredential(<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/ietf/jgss/GSSCredential.html">org.ietf.jgss.GSSCredential</a>))</li>
+  <li>All the security classes in the org.globus.security package and all sub-packages
+(except org.globus.security.gridmap package) are now deprecated.</li><li>grid-proxy-init
+by default generates GSI-3 style proxies that are not compatible with older
+GT and CoG versions. To generate the old style proxy add "-old" argument
+to the command line.<br>
+  </li>
+
+</ul>
+The functionality of the org.globus.security.GlobusProxy class is mostly
+replaced by <a href="http://www-unix.mcs.anl.gov/%7Egawor/jglobus-nightly/doc/org/globus/gsi/GlobusCredential.html">org.globus.gsi.GlobusCredential</a> class. However, we strongly recommend
+(if possible) not using org.globus.gsi.GlobusCredential class as it is security-protocol
+specific representation of (PKI) credentials. Instead, we recommend using
+the GSS abstractions as much as possible as shown here.<br>
+<br>
+<b>To get default (user proxy) credentials:</b><br>
+<br>
+Before:
+<blockquote>
+  <pre>GlobusProxy cred = GlobusProxy.getDefaultUserProxy();</pre>
+</blockquote>
+Now (recommended):
+<blockquote>
+  <pre>ExtendedGSSManager manager = (ExtendedGSSManager)ExtendedGSSManager.getInstance();<br>GSSCredential cred = manager.createCredential(GSSCredential.INITIATE_AND_ACCEPT);</pre>
+</blockquote>
+<br>
+Please note that by default if you don't set the credentials explicitly on a library (or pass <i>null </i>in place of GSSCredential) the default user credentials (proxy) will automatically be used.<b><br>
+<br>
+To save credentials:</b><br>
+<br>
+Before:
+<blockquote>
+  <pre>GlobusProxy cred = ...<br><br>FileOutputStream out = new FileOutputStream("file");<br>cred.save(out);<br>out.close();</pre>
+</blockquote>
+Now (recommended - using GSS Extensions API):<br>
+<blockquote>
+  <pre>ExtendedGSSCredential cred = ...<br>byte [] data = cred.export(ExtendedGSSCredential.IMPEXP_OPAQUE);<br><br>FileOutputStream out = new FileOutputStream("file");<br>out.write(data);<br>out.close();</pre>
+</blockquote>
+<b>To load user proxy from a file:</b><br>
+<br>
+Before
+<blockquote>
+  <pre>FileInputStream in = new FileInputStream("file");<br>GlobusProxy cred = GlobusProxy.load(in, null);<br>in.close();</pre>
+</blockquote>
+Now (recommended - using GSS Extensions API):
+<blockquote>
+  <pre>File f = new File("file");<br>byte [] data = new byte[(int)f.length()];<br>FileInputStream in = new FileInputStream(f);<br>// read in the credential data<br>in.read(data);<br>in.close();</pre>
+  <pre>ExtendedGSSManager manager = (ExtendedGSSManager)ExtendedGSSManager.getInstance();<br>GSSCredential cred = <br>		manager.createCredential(data,<br>		&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ExtendedGSSCredential.IMPEXP_OPAQUE,<br>       &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GSSCredential.DEFAULT_LIFETIME,<br>       &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; null, // use default mechanism - GSI<br>       &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GSSCredential.ACCEPT_ONLY);</pre>
+</blockquote>
+
+  
+<b>To get remaining lifetime of the credential:</b><br>
+<br>
+Before:
+<blockquote>
+  <pre>GlobusProxy cred = ...<br>int time = cred.getTimeLeft();</pre>
+</blockquote>
+Now (recommended):
+<blockquote>
+  <pre>GSSCredential cred = ...<br>int time = cred.getRemainingLifetime();<br></pre>
+</blockquote>
+<b><br>
+To get the identity of the credential (in Globus format):</b><br>
+
+<br>
+Before:<br>
+<blockquote>
+  <pre>GlobusProxy cred = ...<br>String identity = CertUtil.toGlobusID(cred.getSubject());</pre>
+</blockquote>
+Now (recommended):
+<blockquote>
+  <pre>GSSCredential cred = ...<br>String identity = cred.getName().toString();<br></pre>
+</blockquote>
+<b><br>
+GlobusCredential/GSSCredential conversion:</b><br>
+<br>
+To convert org.globus.gsi.GlobusCredential to GSSCredential instance (in
+cases where you need to work with GlobusCredential object directly) you must
+first wrap it in org.globus.gsi.gssapi.GlobusGSSCredentialImpl class:
+<blockquote>
+  <pre>GlobusCredential cred = ...<br>GSSCredential cred = new GlobusGSSCredentialImpl(cred, GSSCredential.ACCEPT_ONLY);</pre>
+</blockquote>
+It is also possible to retrieve the org.globus.gsi.GlobusCredential object
+from the GSSCredential instance if it is of the right type:
+<blockquote>
+  <pre>GSSCredential cred = ...<br>if (GSSCredential instanceof GlobusGSSCredentialImpl) {<br>  GlobusCredential globusCred = ((GlobusGSSCredentialImpl)cred).getGlobusCredential();<br>&nbsp; ...<br>}</pre>
+</blockquote>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body></html>

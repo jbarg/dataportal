@@ -1,0 +1,10 @@
+GRAM Job Launcher Tool for NGS Portal
+=====================================
+
+GRAM Job Launcher Tool for NGS Portal is designed as a CHEF tool to perform GRAM
+job submission to remote computing resource. It supports both interactive and
+batch job submission.
+
+
+CCLRC e-Science Centre
+http://www.e-science.clrc.ac.uk/

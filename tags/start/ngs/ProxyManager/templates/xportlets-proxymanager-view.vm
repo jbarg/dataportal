@@ -1,0 +1,76 @@
+## Xiaobo Yang, CCLRC e-Science Centre, 14 December 2004
+##
+<div class="chefPortletContainer">
+  #if ($menu)
+    #toolbar($menu)
+  #end
+  <div class="chefPortletContent">
+    #if ($alertMessage)
+      <div class="chefAlertBox">
+        Alert: $validator.escapeHtml($alertMessage)
+      </div>
+    #end
+    <div class="chefPageviewTitle">
+      View GSI proxy credential.
+    </div>
+##
+    <form name="$form-name" id="$form-name" action="#toolForm("$action")" method="post">
+      <fieldset>
+        <legend>View GSI Proxy Credential</legend>
+        <table class="chefEditItem" summary="View GSI Proxy Credential">
+          <tr>
+            <td class="chefLabel">
+              <label for="subject">Subject:</label>
+            </td>
+            <td class="chefLabel">
+              <label for="subject">$proxy.Subject</td>
+            </td>
+          </tr>
+          <tr>
+            <td class="chefLabel">
+              <label for="issuer">Issuer:</label>
+            </td>
+            <td class="chefLabel">
+              <label for="issuer">$proxy.Issuer</td>
+            </td>
+          </tr>
+          <tr>
+            <td class="chefLabel">
+              <label for="bits">Bits:</label>
+            </td>
+            <td class="chefLabel">
+              <label for="bits">$proxy.Strength</td>
+            </td>
+          </tr>
+          <tr>
+            <td class="chefLabel">
+              <label for="timeleft">Time Left:</label>
+            </td>
+            <td class="chefLabel">
+              <label for="timeleft">$time_left</td>
+            </td>
+          </tr>
+          <tr>
+            <td class="chefLabel">
+              <label for="limited">Limited:</label>
+            </td>
+            <td class="chefLabel">
+              <label for="limited">
+                #if ($proxy.IsLimitedProxy)
+                  yes
+                #else
+                  no
+                #end
+              </label>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+##
+      <div class="chefButtonRow">
+        <input type="submit" name="eventSubmit_doReturn" value="Click here to continue">
+      </div>
+##
+    </form>
+  </div>
+</div>

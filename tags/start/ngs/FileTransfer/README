@@ -1,0 +1,12 @@
+File Transfer Tool for NGS Portal
+=================================
+
+File Transfer Tool for NGS Portal is based on gridftpclient xportlet from the
+Extreme! Computing Lab (http://www.extreme.indiana.edu). It is now re-designed
+as a CHEF tool to perform uploading, downloading, third party transferring,
+deleting for both files and directories. For third party transferring, all files
+larger than 1 MB will be transferred in parallel mode for better performance.
+
+
+CCLRC e-Science Centre
+http://www.e-science.clrc.ac.uk/
