@@ -81,7 +81,7 @@ public class Transfer extends HttpServlet {
                 Call  call    = (Call) service.createCall();
                 
                 call.setTargetEndpointAddress( new java.net.URL(lookup) );
-                call.setOperationName( "transferFile" );
+                call.setOperationName( "urlCopy" );
                 call.addParameter( "url", XMLType.XSD_STRING, ParameterMode.IN );
                 call.addParameter( "urlTo", XMLType.XSD_STRING, ParameterMode.IN );
                 call.addParameter( "cert", XMLType.XSD_STRING, ParameterMode.IN );
