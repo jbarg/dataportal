@@ -32,7 +32,7 @@ public class SaveCartServlet extends HttpServlet{
             if(session == null) {
                 //terminate the session
                 //session.invalidate();
-                response.sendRedirect("../html/SessionTimedOut.jsp");
+                response.sendRedirect("../jsp/SessionTimedOut.jsp");
                  return;
             }
             else{
