@@ -67,7 +67,7 @@ html/netscape.html file from the content root.-->
 <xtags:menu netscapefile="html/netscape.html" iefile="html/ie.html">
 
 </xtags:menu>
-<!--<xtags:HPC /> -->
+
 </td>
 
 <td valign="top">

@@ -49,7 +49,7 @@ function openwindow(page){
 </xtags:menu>
 
 
-<!--<xtags:HPC /> -->
+
 <br />
 
 		</td>

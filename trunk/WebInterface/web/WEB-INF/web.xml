@@ -328,7 +328,8 @@
   </servlet-mapping>
 -->
 	<welcome-file-list id="WelcomeFileList_1">
-		<welcome-file>ematerials.html</welcome-file>
+        <welcome-file>frontpage.html</welcome-file>
+		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>index.jws</welcome-file>
 	</welcome-file-list>
@@ -356,7 +357,7 @@
 	      <transport-guarantee>NONE</transport-guarantee>
 	    </user-data-constraint>
 	  </security-constraint>-->
-	  <security-constraint>
+	<!--  <security-constraint>
 	    <web-resource-collection>
 	      <web-resource-name>DataPortal</web-resource-name>
 	      
@@ -368,5 +369,5 @@
 	    <user-data-constraint>
 	      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
 	    </user-data-constraint>
-  </security-constraint>
+  </security-constraint>-->
 </web-app>

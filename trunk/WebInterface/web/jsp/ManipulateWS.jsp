@@ -454,7 +454,6 @@ html/netscape.html file from the content root.-->
 
 </xtags:menu>
 
-<!--<xtags:HPC /> -->
 </td><td valign="top">
 
 <h1>Results</h1>

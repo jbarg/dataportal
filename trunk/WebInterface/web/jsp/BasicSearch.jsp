@@ -16,13 +16,14 @@
     ArrayList facs = (ArrayList)session.getAttribute("facs");
     String facility = null;
     if(facs == null) facility = "No_Access";
+    else if(facs.size() ==  0) facility = "No_Access";
     else{ facility = (String)facs.get(0);}
    
-    String topics  = "";
+    /*String topics  = "";
     String isTopics = (String)session.getAttribute("topics");
     
     if(isTopics == null){}
-    else if(isTopics.equals("true")) topics = "emat";
+    else if(isTopics.equals("true")) topics = "emat";*/
 
     //get the topic mana
 %>
@@ -50,7 +51,7 @@
   	<frame name="qinetiq_logo"  src="menu.jsp" scrolling="no" target="parent" />
        <frameset border="0"  frameborder="0" bgcolor="white" bordercolor="black" rows="98,*">
         <frame name="header" src="../html/top.html"   scrolling="no" />
-        <frame name="footer" src="dataxmlform<%=topics%>.jsp?list=<%=facility%>"   scrolling="no" />
+        <frame name="footer" src="dataxmlformemat.jsp?list=<%=facility%>"   scrolling="no" />
         
         </frameset>
    </frameset>

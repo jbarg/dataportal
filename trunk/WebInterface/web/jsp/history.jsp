@@ -69,7 +69,7 @@ html/netscape.html file from the content root.-->
 <xtags:menu netscapefile="html/netscape.html" iefile="html/ie.html">
 
 </xtags:menu>
-<!--<xtags:HPC /> -->
+
 </td>
 
 <td valign="top">
@@ -104,6 +104,7 @@ html/netscape.html file from the content root.-->
             StringBuffer h = new StringBuffer();
             for(int i = 0; i<n; i++){
                 if( dn.charAt(i) == '/') h.append("_");
+else if( dn.charAt(i) == ' ') h.append("_");
                 else h.append(dn.charAt(i));
             }
             dn = h.toString();

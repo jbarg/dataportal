@@ -65,20 +65,18 @@ End If
     
     /* Note that the logic below always launches the JNLP application *if the browser is Gecko based. This is because it is not possible *to detect MIME type application/x-java-jnlp-file on Gecko-based browsers.  */
     if (javawsInstalled || (navigator.userAgent.indexOf("Gecko") !=-1)) {
-                document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
                  //
-              document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start.");
-                          
+    document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start.");
+                   
     } else {
          document.write("You do not have Java Web Start installed on your machine<br /> ");
         document.write("Click ");
         document.write("<a href=http://java.sun.com/PluginBrowserCheck?pass=download.html&fail=http://java.sun.com/j2se/1.4.2/download.html>here</a> ");
 
         document.write("to download and install JRE 1.4.2 and the application.<br /><br />");
-  document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
-                 //
-              document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start.");
-               }
+                //
+   document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start.");
+              }
 }
 
 
@@ -89,18 +87,27 @@ function check(){
 var username = document.logon.username.value;
 var password = document.logon.password.value;
 var lifetime = document.logon.lifetime.value;
+var dn = document.logon.lifetime.dn.value;
+var servername = document.logon.lifetime.servername.value;
+var port = document.logon.port.value;
+
+if(port == "" ||servername == ""||dn == ""){
+    alert("Please enter a server name, dn and/or port");
+    return false;
+
+}
 
 if(username == "" ||password == ""||lifetime == ""){
     alert("Please enter a username, password and/or lifetime");
     return false;
 
 }
-else if(parseInt(lifetime) && lifetime>0){
+else if(parseInt(lifetime) && lifetime>0 && parseInt(port) && port>0 ){
 
 return true;
 }
 else{
-alert("Enter a number for the lifetime");
+alert("Enter a number for the lifetime and port");
 return false;}
 }
 
@@ -108,6 +115,39 @@ function openHelp(){
     window.open("../help/Help.jsp","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
 
 }
+function help(){
+ window.open("http://tiber.dl.ac.uk:8080/myproxy/Help_tiber.html","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=530,left=0,top=0");
+
+
+}
+function myproxyHelp(help){
+ window.open("../help/"+help+"","Help","toolbar=no, width=300, height=300");
+
+}
+
+
+var win;
+function seenoteWS(help){
+
+    if(navigator.appVersion.indexOf("MSIE") !=-1 ){
+        
+        if(win) win.close();
+        var x = event.screenX+15;
+        var y = event.screenY-150;
+        win = window.open("../help/"+help+"","Help","toolbar=no, width=300,height=140, left="+x+",top="+y+"");
+
+    }
+    else if(navigator.userAgent.indexOf("Mozilla/4") != -1 && navigator.appName.indexOf("Netscape") !=-1 && parseInt(navigator.appVersion) < 5){
+       
+        win =
+window.open("../help/"+help+"","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=300,height=140,left=0,top=0");
+    }
+    else{
+        win = window.open("../help/"+help+"","Help","toolbar=no, width=300,height=140");
+    }
+}
+
+
 </script>
 
 <title>CCLRC DataPortal - Login</title>
@@ -126,15 +166,15 @@ function openHelp(){
 
 <style type="text/css">
 
-@import url(../style/main.css); /*IE and NN6x styles*/
+@import url(../style/mainmenu.css); /*IE and NN6x styles*/
 
 </style>
 
 </head>
-<body background="../img/redbg.gif" onload="document.forms['logon'].username.focus();">
+<body onload="document.forms['logon'].username.focus();">
 <table width="100%" cellspacing="3" border="0"><tr>
 <td valign="top" width="20%" align="left">
-<a href="http://www.clrc.ac.uk"><img src="../img/clrc.gif"  alt="E-minerals" border="0" /></a>
+
 
 
 <!--<form name="top-search_form" action="">
@@ -145,50 +185,77 @@ value="Home page" />
 </form>-->
 </td>
 <td valign="top">
-<h1>Login to the CCLRC DataPortal</h1>
+<p id="topheader">Login to the CCLRC DataPortal</p>
 <br />
 <br />
 <br />
+<hr/>
 <br />
 <br />
+<p>You will need a valid Proxy Credential in a MyProxy Server to log on to the
+Data Portal.<br />  If you have not got on use the MyProxy Tool below to upload your credentials into
+a MyProxy server or click
+Help for further information.</p>
+
+
 <form class="mess" name="logon" method="post" onsubmit="return check();"
 action="../servlet/LoginServlet">
 <table cellspacing="0" border="0" cellpadding="3">
 
+<td width="130">MyProxy Server</td>
+<td ><input type="text" tabindex="1" name="servername"  size="23" value="myproxy.grid-support.ac.uk"
+/>&nbsp;&nbsp;<a href="#"  onclick="seenoteWS('servername.html',event); return false;" /><font
+size="1">Info</font></a></td>
+</tr><tr>
+<td width="130">MyProxy DN</td>
+<td><input type="text" tabindex="2" name="dn" size="23" value="/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/myproxy.grid-support.ac.uk/E=a.j.richards@dl.ac.uk" />&nbsp;&nbsp;<a href="#"
+onclick="seenoteWS('dn.html',event); return false;" /><font size="1">Info</font></a></td>
+</tr>
 <tr>
-<td width="100">Username</td>
-<td><input type="text" name="username" /></td>
+<td width="130">MyProxy Port</td>
+<td><input type="text" name="port" tabindex="3"  size="23" value="7512" />&nbsp;&nbsp;<a href="#" onclick="seenoteWS('port.html',event); return false;" /><font size="1">Info</font></a></td>
+</tr>
+<tr>
+<td width="130">Username</td>
+<td><input type="text" name="username" tabindex="4" size="23"/>&nbsp;&nbsp;<a href="#"
+onclick="seenoteWS('username.html',event); return false;" /><font size="1">Info</font></a></td>
 </tr>
 <tr>
 <td align="left">Passphrase</td>
 
-<td><input type="password" name="password" /></td>
+<td><input type="password" name="password" tabindex="5" size="23" />&nbsp;&nbsp;<a href="#"
+onclick="seenoteWS('password.html',event); return false;" /><font size="1">Info</font></a></td>
 
 </tr>
 <tr>
 <td width="100">Lifetime (hours)</td>
-<td><input type="text" name="lifetime" /></td>
+<td><input type="text" name="lifetime" size="23"  tabindex="6" value="2" />&nbsp;&nbsp;<a href="#"
+onclick="seenoteWS('lifetime.html',event); return false;" /><font size="1">Info</font></a></td>
 </tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td><input type="submit" value="Login" /></td></tr>
+
+<tr><td>&nbsp;</td><td><input type="submit" tabindex="7" value="Login" />&nbsp;&nbsp;<input
+type="reset" value="Clear" /></td></tr>
 </table>
 </form>
 <br />
-<br />
-<br />
+
+
 <script  language="Javascript">
 
-    insertLink("../proxy/proxy1.jnlp", "DataPortal Proxy");
+    insertLink("http://tiber.dl.ac.uk:8080/myproxy/myproxy.jnlp", "MyProxy Upload Tool");
 </script>
-<br />
-Or download the application:&nbsp;
-<a href="../proxy/Proxy.tar">Proxy.tar</a>&nbsp;
-&nbsp;
-<a
-href="../proxy/Proxy.zip">Proxy.zip</a>
+&nbsp;&nbsp;
+<a href="#" onclick="help();return false;" ><font size="2">Help</font></a>&nbsp;&nbsp;<a href="http://tiber.dl.ac.uk:8080/myproxy/" >Tool Home</a>
 <br />
 
-   <a href='installation.html'>Installation notes</a>.
+Or download the application:&nbsp;
+<a href="http://tiber.dl.ac.uk:8080/myproxy/Proxy.tar">Proxy.tar</a>&nbsp;
+&nbsp;
+<a
+href="http://tiber.dl.ac.uk:8080/myproxy/Proxy.zip">Proxy.zip</a>
+&nbsp;
+<br />
+   <a href='installation.html'>Installation instuctions</a>.
   <br />
 <br />
 <a href="#" onclick="openHelp();">Help pages</a>.
@@ -196,6 +263,8 @@ href="../proxy/Proxy.zip">Proxy.zip</a>
 
 <a href="../">Home page</a>.
 <br />
+<br/>
+<hr />
 
 <div id="footer" align="right"> <a href="http://validator.w3.org/check/referer"><img
 
@@ -203,9 +272,7 @@ href="../proxy/Proxy.zip">Proxy.zip</a>
 
         alt="Valid XHTML 1.0!" border="0" height="31" width="88" /></a>
 
-<br />
-<br />
-<br />
+
 <br />
 <a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top">&copy;
 2004 CCLRC DataPortal</a></div>
