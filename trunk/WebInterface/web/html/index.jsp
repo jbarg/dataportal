@@ -5,6 +5,7 @@
  %>
 <%@ include file="loggedin.jsp" %>
 <%@ include file="logger.jsp" %>
+<html>
 <head>
 <title>E-minerals Mini Grid</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
