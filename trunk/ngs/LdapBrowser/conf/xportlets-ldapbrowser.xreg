@@ -3,18 +3,18 @@
     <portlet-entry name="xportlets:LdapBrowser" hidden="false"
         type="ref" parent="chef.tool" application="false">
         <meta-info>
-            <title>xportlets : LdapBrowser</title>
+            <title>xportlets: LdapBrowser</title>
             <description>LDAP Web Browser by Velocity</description>
         </meta-info>
         <classname>org.apache.jetspeed.portal.portlets.CustomizerVelocityPortlet</classname>
-        <parameter name="template" value="xportlets-ldapbrowser" hidden="false"
+        <parameter name="template" value="xportlets-ldapbrowser-customize" hidden="false"
             cachedOnName="true" cachedOnValue="true"/>
-        <parameter name="customizeTemplate"
+<!--        <parameter name="customizeTemplate"
             value="xportlets-ldapbrowser-customize" hidden="false"
-            cachedOnName="true" cachedOnValue="true"/>
+            cachedOnName="true" cachedOnValue="true"/> -->
         <parameter name="action" value="xportlets.LdapBrowserAction"
             hidden="false" cachedOnName="true" cachedOnValue="true"/>
-         <media-type ref="html"/>
+        <media-type ref="html"/>
         <url cachedOnURL="true"/>
         <category group="Jetspeed">CHEF</category>
     </portlet-entry>
