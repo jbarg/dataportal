@@ -27,7 +27,7 @@
      from which Ant executes the requested task.  This is normally
      set to the current working directory.
 -->
-<project name="Web Interface" default="compile" basedir=".">
+<project name="Shopping Cart" default="compile" basedir=".">
 	<!-- ===================== Property Definitions =========================== -->
 	<!--
 
@@ -107,7 +107,8 @@
 	<property name="manager.url" value="http://${server.name}/manager"/>
 	<property name="src.home" value="${basedir}/src"/>
 	<property name="web.home" value="${basedir}/web"/>
-	<property name="common.lib" value="${basedir}/../common/lib"/>
+        
+         <property name="common.lib"  value="${basedir}/../common/lib"/>
 	<!-- ================== Custom Ant Task Definitions ======================= -->
 	<!--
 
@@ -179,6 +180,7 @@
   that you explicitly added.
 
 -->
+	
 	<!-- ==================== All Target ====================================== -->
 	<!--
 
@@ -305,27 +307,27 @@
 -->
 	<target name="postprepare" depends="prepare">
 		<path id="compile.classpath">
-			<!-- Include all JAR files that will be included in /WEB-INF/lib -->
-			<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-			<!--
+		<!-- Include all JAR files that will be included in /WEB-INF/lib -->
+		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+		<!--
     <pathelement location="${foo.jar}"/>
 -->
-			<fileset dir="${build.home}/WEB-INF/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<!-- Include all elements that Tomcat exposes to applications -->
-			<pathelement location="${catalina.home}/common/classes"/>
-			<fileset dir="${catalina.home}/common/endorsed">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${catalina.home}/common/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<pathelement location="${catalina.home}/shared/classes"/>
-			<fileset dir="${catalina.home}/shared/lib">
-				<include name="*.jar"/>
-			</fileset>
-		</path>
+		<fileset dir="${basedir}/web/WEB-INF/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<!-- Include all elements that Tomcat exposes to applications -->
+		<pathelement location="${catalina.home}/common/classes"/>
+		<fileset dir="${catalina.home}/common/endorsed">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${catalina.home}/common/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${catalina.home}/shared/classes"/>
+		<fileset dir="${catalina.home}/shared/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
 		<!-- Copy static files from external dependencies as needed -->
 		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
 	</target>
@@ -356,8 +358,13 @@
 	compiles and reloads
 	
 	-->
-	<!-- ==================== Prepare Target ================================== -->
-	<!--
+        
+        
+        <!-- ==================== Prepare Target ================================== -->
+
+
+
+<!--
 
 
 
@@ -376,37 +383,48 @@
 
 
 -->
-	<target name="prepare">
-		<!-- Create build directories as needed -->
-		<mkdir dir="${build.home}"/>
-		<mkdir dir="${build.home}/WEB-INF"/>
-		<mkdir dir="${build.home}/WEB-INF/classes"/>
-		<mkdir dir="${build.home}/WEB-INF/lib"/>
-		<!-- copy common.lib jar first so any in ${web.homea/}lib can overwrite them -->
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/axis.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-logging.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-discovery.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/dom4j.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xalan.jar"/>
-		<!-- copy to Proay tool -->
-		<!-- Copy static content of this web application -->
-		<copy todir="${build.home}">
-			<fileset dir="${web.home}"/>
-		</copy>
-		<!-- Copy external dependencies as required -->
-		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-		<!--
+
+
+
+  <target name="prepare">
+
+    <!-- Create build directories as needed -->
+    <mkdir  dir="${build.home}"/>
+    <mkdir  dir="${build.home}/WEB-INF"/>
+    <mkdir  dir="${build.home}/WEB-INF/classes"/>
+    <mkdir  dir="${build.home}/WEB-INF/lib"/> 
+
+   <!-- copy common.lib jar first so any in ${web.homea/}lib can overwrite them -->
+
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/axis.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>
+      <!-- Copy static content of this web application -->
+
+    <copy todir="${build.home}">
+      <fileset dir="${web.home}"/>
+    </copy>
+
+    <!-- Copy external dependencies as required -->
+
+    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+
+<!--
 
     <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
 
 -->
-		<!-- Copy static files from external dependencies as needed -->
-		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-		<!-- log.properties files and the .map serialised cache for wrapper copied to correct places -->
-		<!-- <copy todir="${catalina.home}/conf">
+
+    <!-- Copy static files from external dependencies as needed -->
+
+    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+
+
+
+    <!-- log.properties files and the .map serialised cache for wrapper copied to correct places -->
+
+    <!-- <copy todir="${catalina.home}/conf">
 
        <fileset dir="${web.home}/conf">
 
@@ -417,19 +435,20 @@
        </fileset>
 
     </copy> -->
-	</target>
-	
-	
-	
-	<target name="index" depends="compile" description="Re-index's the help pages">
-		<java classname="uk.ac.dl.web.Indexer" fork="false">
-			<arg value="create"/>
-			<arg value="${basedir}/build/help/xml"/>
-			<arg value="${basedir}/build/help/xml/index"/>
-			<classpath refid="compile.classpath"/>
-			<classpath>
-				<pathelement path="${basedir}/build/WEB-INF/classes"/>
-			</classpath>
-		</java>
-	</target>
+
+  </target>
+  
+  
+  <target name="index" depends="compile" description="Re-index's the help pages">
+    <java classname="uk.ac.dl.web.Indexer" fork="false">
+        <arg value="create" />
+     
+       <!--  <arg value="build/help/xml" />
+        <arg value="build/help/xml/index" />-->
+        <classpath refid="compile.classpath"/>
+        <classpath>
+        <pathelement path="build/WEb-INF/classes"/>
+        </classpath>
+    </java>
+  </target>
 </project>

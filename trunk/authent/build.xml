@@ -107,7 +107,6 @@
 	<property name="manager.url" value="http://${server.name}/manager"/>
 	<property name="src.home" value="${basedir}/src"/>
 	<property name="web.home" value="${basedir}/web"/>
-	<property name="common.lib" value="${basedir}/../common/lib"/>
 	<!-- ================== Custom Ant Task Definitions ======================= -->
 	<!--
 
@@ -179,6 +178,28 @@
   that you explicitly added.
 
 -->
+	<path id="compile.classpath">
+		<!-- Include all JAR files that will be included in /WEB-INF/lib -->
+		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+		<!--
+    <pathelement location="${foo.jar}"/>
+-->
+		<fileset dir="${basedir}/web/WEB-INF/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<!-- Include all elements that Tomcat exposes to applications -->
+		<pathelement location="${catalina.home}/common/classes"/>
+		<fileset dir="${catalina.home}/common/endorsed">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${catalina.home}/common/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${catalina.home}/shared/classes"/>
+		<fileset dir="${catalina.home}/shared/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
 	<!-- ==================== All Target ====================================== -->
 	<!--
 
@@ -207,7 +228,7 @@
   unpacked directory hierarchy under "/WEB-INF/classes".
 
 -->
-	<target name="compile" depends="postprepare,prepare" description="Compile Java sources">
+	<target name="compile" depends="prepare" description="Compile Java sources">
 		<!-- Compile Java classes as necessary -->
 		<mkdir dir="${build.home}/WEB-INF/classes"/>
 		<javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
@@ -301,65 +322,26 @@
   Normally, this task is executed indirectly when needed.
 
 -->
-	<target name="postprepare" depends="prepare">
-		<path id="compile.classpath">
-			<!-- Include all JAR files that will be included in /WEB-INF/lib -->
-			<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-			<!--
-    <pathelement location="${foo.jar}"/>
--->
-			<fileset dir="${build.home}/WEB-INF/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<!-- Include all elements that Tomcat exposes to applications -->
-			<pathelement location="${catalina.home}/common/classes"/>
-			<fileset dir="${catalina.home}/common/endorsed">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${catalina.home}/common/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<pathelement location="${catalina.home}/shared/classes"/>
-			<fileset dir="${catalina.home}/shared/lib">
-				<include name="*.jar"/>
-			</fileset>
-		</path>
-		<!-- Copy static files from external dependencies as needed -->
-		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-	</target>
-	<!-- ============== copy common.lib jar first so any in ${web.homea/}lib can overwrite them ================-->
 	<target name="prepare">
 		<!-- Create build directories as needed -->
 		<mkdir dir="${build.home}"/>
 		<mkdir dir="${build.home}/WEB-INF"/>
 		<mkdir dir="${build.home}/WEB-INF/classes"/>
-		<mkdir dir="${build.home}/WEB-INF/lib"/>
-		<!-- ============== copy common.lib jar first so any in ${web.homea/}lib can overwrite them ================-->
-		<!--<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/axis.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-discovery.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-logging.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
-		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>-->
 		<!-- Copy static content of this web application -->
 		<copy todir="${build.home}">
 			<fileset dir="${web.home}"/>
 		</copy>
 		<!-- Copy external dependencies as required -->
 		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+		<mkdir dir="${build.home}/WEB-INF/lib"/>
+		<copy todir="${build.home}/WEB-INF/lib">
+			<fileset dir="${basedir}/web/WEB-INF/lib"/>
+		</copy>
 		<!--
-    <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
-
+    
 -->
 		<!-- Copy static files from external dependencies as needed -->
 		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
-		<!-- log.properties files and the .map serialised cache for wrapper copied to correct places -->
-		<!-- <copy todir="${catalina.home}/conf">
-       <fileset dir="${web.home}/conf">
-          <include name="*.properties"/>
-	  <include name="*.data"/>
-       </fileset>
-    </copy> -->
 	</target>
 	<!-- ==================== Reload Target =================================== -->
 	<!--

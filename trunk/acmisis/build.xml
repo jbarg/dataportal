@@ -27,7 +27,7 @@
      from which Ant executes the requested task.  This is normally
      set to the current working directory.
 -->
-<project name="ACMISIS" default="compile" basedir=".">
+<project name="ACMSRD" default="compile" basedir=".">
 	<!-- ===================== Property Definitions =========================== -->
 	<!--
 
@@ -95,7 +95,7 @@
                        commands via the "/manager" web application)
 
 -->
-	<property name="app.name" value="acmisis"/>
+	<property name="app.name" value="acmsrd"/>
 	<property name="app.path" value="/${app.name}"/>
 	<property name="app.version" value="0.1-dev"/>
 	<property name="build.home" value="${basedir}/build"/>
