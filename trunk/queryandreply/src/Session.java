@@ -64,7 +64,7 @@ public class Session {
         call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"Dataportal"};
+        String[] name = {"Dataportal-EMIN"};
         Object[] ob = new Object[]{name,serviceTypes[0]};
         
         String[] url = (String[]) call.invoke(ob );
