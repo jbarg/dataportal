@@ -69,6 +69,15 @@
 	</servlet>
         
           <servlet>
+		<servlet-name>ResendQuery</servlet-name>
+		<display-name>ResendQuery</display-name>
+		<servlet-class>
+
+       uk.ac.dl.web.ResendQuery
+    </servlet-class>
+
+	</servlet>
+          <servlet>
 		<servlet-name>SRBDownload</servlet-name>
 		<display-name>SRBDownload</display-name>
 		<servlet-class>
@@ -381,7 +390,10 @@
 		<servlet-name>Transfer</servlet-name>
 		<url-pattern>/servlet/Transfer</url-pattern>
 	</servlet-mapping>
-   
+   <servlet-mapping>
+		<servlet-name>ResendQuery</servlet-name>
+		<url-pattern>/servlet/ResendQuery</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>TestTransfer</servlet-name>
 		<url-pattern>/servlet/TestTransfer</url-pattern>
