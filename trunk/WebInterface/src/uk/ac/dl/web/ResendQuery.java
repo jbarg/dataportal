@@ -25,7 +25,7 @@ public class ResendQuery extends HttpServlet{
     static Logger logger = Logger.getLogger(ResendQuery.class);
     
     
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
         
         //get session
