@@ -167,7 +167,7 @@ public class AuthCtl {
         }
         
         org.w3c.dom.Element accessRightsDOM = domOut.output(accessRights);
-        //        System.out.println(XMLUtils.ElementToString(accessRightsDOM));
+        System.out.println(XMLUtils.ElementToString(accessRightsDOM));
         
         return accessRightsDOM;
         
