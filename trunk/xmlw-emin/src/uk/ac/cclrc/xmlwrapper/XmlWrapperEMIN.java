@@ -208,6 +208,7 @@ public class XmlWrapperEMIN
             try 
             {
 	       //allows us to see the state of xml incase of sql error 
+               log.info("the value of the key at this point is \t:" + tmp_tok) ;
                cm.buildMetadataRecord(tmp_tok, sbr) ;
             } 
             catch (SQLException se) 
