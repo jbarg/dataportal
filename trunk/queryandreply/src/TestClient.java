@@ -1,3 +1,4 @@
+package dataportal.queryandreply.src;
 
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
@@ -11,25 +12,26 @@ import ac.dl.xml.Saver;
 import java.sql.*;
 
 
-/* Usage: OutsideServiceClient doBasicQuery "BADC,MPIM" "/earth sciences/atmosphere/atmospheric
-   temperature/temperature"*/
+// Arguments example:
+// doBasicQuery 9 30 "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'" BADC MPIM ISIS SRD */
 
 public class TestClient {
     public static void main(String [] args) throws Exception {
         Options options = new Options(args);
         
         // TEST SERVICE
-        String endpoint = "http://localhost:8080/test/services/QueryAndReply";
+        String endpoint = "http://localhost:8080/axis/services/QueryAndReply";
         // LIVE SERVICE
-        //String endpoint = "http://localhost:8080/axis/services/QueryAndReply";
+        
         
         args = options.getRemainingArgs();
         
         String method = args[0];
         Integer sid = new Integer(args[1]);
-        String[] facility = {args[2],args[3],args[4],args[5]};
-        String topic = args[6];
-                
+        Integer timeoutSecs = new Integer(args[2]);
+        String topic = args[3];
+        String[] facility = {args[4],args[5],args[6],args[7]};
+        
         Service service = new Service();
         Call call = (Call) service.createCall();
         
@@ -38,9 +40,10 @@ public class TestClient {
         call.addParameter( "sid", XMLType.XSD_INTEGER, ParameterMode.IN );
         call.addParameter( "facility", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "topic", XMLType.XSD_STRING, ParameterMode.IN );
+        call.addParameter( "timeoutSecs", XMLType.XSD_INTEGER, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ELEMENT );
         
-        org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( new Object [] {sid, facility, topic});
+        org.w3c.dom.Element ret = (org.w3c.dom.Element) call.invoke( new Object [] {sid, facility, topic, timeoutSecs});
         
         org.jdom.input.DOMBuilder builder = new org.jdom.input.DOMBuilder();
         org.jdom.Element el = builder.build(ret);

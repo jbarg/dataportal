@@ -19,9 +19,10 @@ import java.util.Properties;
  */
 public class Query {
     
-    //set static log for the class
     static Logger logger = Logger.getLogger(Query.class);
+    static Properties prop = new Properties();
     
+    int maxWait;
     String[] facilities;
     String[] getFacilities() {return facilities;};
     String topic;
@@ -33,10 +34,11 @@ public class Query {
     public org.w3c.dom.Element getResult() { return result; };
     
     /** Creates a new instance of Query */
-    public Query(String[] facilities, String topic, Permissions permissions) {
+    public Query(String[] facilities, String topic, Permissions permissions, Integer timeoutSecs) {
         this.facilities = facilities;
         this.topic = topic;
         this.p = permissions;
+        this.maxWait = timeoutSecs.intValue();
     }
     
     public org.w3c.dom.Element execute() throws JDOMException {
@@ -50,6 +52,8 @@ public class Query {
             
             // Check if user is allowed to access this facility
             qThread[i] = new QueryThread(facilityName, getTopic(), p);
+            qThread[i].setDaemon(true);
+            
             if (p.hasAccess(facilityName)) {
                 qThread[i].start();
                 qThread[i].setQuerySent(true);
@@ -64,8 +68,7 @@ public class Query {
         // Wait for wrappers to finish or break if it takes too long
         // (temp) may wait for query that hasn't been sent due to the user not allowed access
         int current = 0;
-        int maxWait = 20000; // temp solution
-        int oneSec = 1000;
+        final int oneSec = 1000;
         
         for (int i  = 0 ; i < getFacilities().length ; i++){
             logger.info("Checking status of "+qThread[i].getFacilityName()
@@ -75,15 +78,15 @@ public class Query {
                 try {
                     // sleep 1 second
                     Thread.sleep(oneSec);
-                    current += oneSec;
-                    logger.info("Sleeping for 1 second");
+                    current++;
+                    logger.info("Waited "+current+" seconds so far");
                 }
                 catch(Exception e) {
                     System.out.println(e);
                 }
                 
                 if (current > maxWait) {
-                    logger.error("Timed out - waited for " + maxWait/oneSec + " seconds");
+                    logger.error("Timed out - waited for " + maxWait + " seconds");
                     break;
                 }
             }
@@ -114,7 +117,7 @@ public class Query {
         }
         
         org.w3c.dom.Document d = Converter.JDOMtoDOM(newdoc);
-        logger.info("RESULTS COLLATED "+d);
+        logger.info("RESULTS COLLATED");
         return(d.getDocumentElement());
     }
 }

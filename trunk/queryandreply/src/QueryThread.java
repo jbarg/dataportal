@@ -44,9 +44,9 @@ public class QueryThread extends Thread {
     /** Creates a new instance of QueryThread */
     public QueryThread(String facilityName, String topic) {
         
-        logger.info(getFacilityName()+":creating thread");
         this.facilityName = facilityName;
         this.topic = topic;
+        logger.info(getFacilityName()+":creating thread");
         
     }
 
@@ -66,8 +66,7 @@ public class QueryThread extends Thread {
         try {
             String wrapperAddress = lookup();
             sendQuery(wrapperAddress, p.hasMetadataAccess(), p.hasDataAccess());
-            QUERY_SENT = true;
-            logger.info(getFacilityName()+":"+"sent query");
+            
         } catch (Exception e) {
             logger.error(getFacilityName()+":"+e);
             return;
@@ -123,14 +122,15 @@ public class QueryThread extends Thread {
         
         // Call service
         org.w3c.dom.Element domElem = (org.w3c.dom.Element) call.invoke( new Object [] {topic});
-        logger.info(getFacilityName()+":received XML ***"+domElem+"***");
-        
+                
         // Save xml results in a JDOM element
         DOMBuilder builder = new DOMBuilder();
         Element jdomElem = builder.build(domElem);
-        List list = jdomElem.getContent();
-        iterator = list.iterator();
         
+        List list = jdomElem.getContent();
+        logger.info(getFacilityName()+":received XML ***"+list.size()+" elements***");
+        iterator = list.iterator();
+                
         GOT_REPLY = true;
     }
 }
