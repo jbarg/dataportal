@@ -1,94 +1,96 @@
-/*
- * Query.java
- *
- * Created on 13 December 2002, 14:15
- */
+// XML
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Text;
 import org.jdom.JDOMException;
-
 import ac.dl.xml.Converter;
+
+// Logger
 import org.apache.log4j.Logger;
-import java.util.Properties;
 
-
-/**
- *
- * @author  ljb53
- */
 public class Query {
     
-    static Logger logger = Logger.getLogger(Query.class);
-    static Properties prop = new Properties();
+    private static Logger logger = Logger.getLogger(Query.class);
+    private int maxWait;
+    private static int MAX_FACILITIES = 10;
     
-    int maxWait;
-    String[] facilities;
-    String[] getFacilities() {return facilities;};
-    String topic;
-    String getTopic() {return topic;};
-    Permissions p;
-    Permissions getPermissions() {return p;};
-    org.w3c.dom.Element result;
-    org.w3c.dom.Element noConn;
-    org.w3c.dom.Element noRes;
+    private String[] facilities;
+    private String topic;
+    private String[][] p;
+    
+    public String[] getFacilities() { return facilities; };
+    public String getTopic() { return topic; };
+    public String[][] getPermissions() { return p; };
+    
+    private org.w3c.dom.Element result;
+    private org.w3c.dom.Element noConn;
+    private org.w3c.dom.Element noRes;
+    
     void setResult(org.w3c.dom.Element result) { this.result = result; }
     public org.w3c.dom.Element getResult() { return result; };
     
     /** Creates a new instance of Query */
-    public Query(String[] facilities, String topic, Permissions permissions, Integer timeoutSecs) {
+    public Query(String[] facilities, String topic, String[][] permissions, int timeoutSecs) {
         this.facilities = facilities;
         this.topic = topic;
         this.p = permissions;
-        this.maxWait = timeoutSecs.intValue();
+        this.maxWait = timeoutSecs;
     }
     
-    public org.w3c.dom.Element[] execute() throws JDOMException {
+    public org.w3c.dom.Element[] execute() throws Exception {
         
-        QueryThread[] qThread = new QueryThread[10]; //temp solution
+        QueryThread[] qThread = new QueryThread[MAX_FACILITIES];
         
         // Send requests to XML wrappers
-        for (int i  = 0 ; i < getFacilities().length ; i++){
+        for (int i  = 0 ; i < facilities.length ; i++){
             
-            String facilityName = getFacilities()[i];
+            String facilityName = facilities[i];
             
-            // Check if user is allowed to access this facility
-            qThread[i] = new QueryThread(facilityName, getTopic(), p);
+            // Get the user's permissions for the facility to send with query
+            String facilityPermission = null;
+            
+            for (int j = 0; j < p.length; j++) {
+                if (facilityName.equals(p[j][1])) {
+                    facilityPermission = p[j][0];
+                    break;
+                }
+            }
+            
+            // Start a thread for this query
+            qThread[i] = new QueryThread(facilityName, getTopic(), facilityPermission);
             qThread[i].setDaemon(true);
             
-            if (p.hasAccess(facilityName)) {
-                qThread[i].start();
-                qThread[i].setQuerySent(true);
-            }
-            else {
-                logger.info("User has no access to facility "+facilityName);
-            }
+            qThread[i].start();
+            qThread[i].QUERY_SENT = true;
         }
         
         logger.info("User requested info from "+getFacilities().length+ " facilities");
         
         // Wait for wrappers to finish or break if it takes too long
-        // (temp) may wait for query that hasn't been sent due to the user not allowed access
         int current = 0;
         final int oneSec = 1000;
         
         for (int i  = 0 ; i < getFacilities().length ; i++){
-            logger.info("Checking status of "+qThread[i].getFacilityName()
-            +" request: sent?"+qThread[i].querySent());
-            if (!qThread[i].querySent()) {continue;};
-            while (!qThread[i].gotReply()) {
+            
+            logger.info("Checking status of "+qThread[i].getFacilityName()+
+            " request: sent?"+qThread[i].QUERY_SENT);
+            
+            if (!qThread[i].QUERY_SENT) {
+                continue;
+            }
+            
+            while (!qThread[i].GOT_REPLY) {
                 try {
                     // sleep 1 second
                     Thread.sleep(oneSec);
                     current+= 1000;
-                    //logger.info("Waited "+current+" seconds so far");
                 }
                 catch(Exception e) {
                     logger.error("Error",e);
                 }
                 
                 if (current > maxWait) {
-                    logger.error("Timed out - waited for " + maxWait + " seconds");
+                    logger.error("Timed out - waited for " + maxWait/1000 + " seconds");
                     break;
                 }
             }
@@ -110,12 +112,12 @@ public class Query {
         Element timedOutRoot = timedOut.getRootElement();
         
         // Loop through results and put them in one XML document
-        for (int i  = 0 ; i < getFacilities().length ; i++) {
-            if(!qThread[i].gotReply()) {
+        for (int i  = 0 ; i < facilities.length ; i++) {
+            if(!qThread[i].GOT_REPLY) {
                 System.out.println("timed out");
                 timedOutRoot.addContent(new Element(qThread[i].getFacilityName()));
             }
-            else if (qThread[i].gotReply()) {
+            else if (qThread[i].GOT_REPLY) {
                 
                 //dont need this i think
                 if(!qThread[i].getIterator().hasNext()){
@@ -167,7 +169,6 @@ public class Query {
             
         }
         
-        
         org.w3c.dom.Document d = Converter.JDOMtoDOM(newdoc);
         org.w3c.dom.Document d2 = Converter.JDOMtoDOM(noConn);
         org.w3c.dom.Document d3 = Converter.JDOMtoDOM(noRes);
@@ -175,5 +176,14 @@ public class Query {
         org.w3c.dom.Element[]  elements = {d.getDocumentElement(),d2.getDocumentElement(),d3.getDocumentElement(),d4.getDocumentElement()};
         logger.info("RESULTS COLLATED");
         return(elements);
+    }
+    
+    // Testing stub
+    public static void main(String[] args) throws Exception {
+        String[] facList = {"BADC","MPIM"};
+        String topic = "'Discipline=/earth sciences/atmosphere/atmospheric temperature/Temperature'";
+        String[][] permList = {{"xml permissions for MPIM","MPIM"}, {"permissions for BADC","BADC"}};
+        Query q = new Query(facList, topic, permList, 30000);
+        System.out.println(q.execute());
     }
 }
