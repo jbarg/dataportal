@@ -97,7 +97,7 @@ public class AuthCtl {
         GlobusProxy delegateUserProxy = null;
         
         try {
-            delegateUserProxy = DelegateProxy.getProxy( "rty", "test", portalProxy );
+            delegateUserProxy = DelegateProxy.getProxy( userName, userPassword, portalProxy );
             //            System.out.println( "Successfully retrieved proxy" );
             loggedIn = true;
         }

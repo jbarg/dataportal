@@ -22,10 +22,10 @@ import java.security.cert.X509Certificate;
 public abstract class PortalProxy
 {
     // won't be here when using portal proxy
-    private static final String privateKeyPassPhrase = "";
+    private static final String privateKeyPassPhrase = "portaltest";
 
-    private static final String portalCertFilename = "/home/rty/.globus/usercert.pem";
-    private static final String portalPrivateKeyFilename = "/home/rty/.globus/userkey.pem";
+    private static final String portalCertFilename = "/home/tomcat4/.globus/usercert.pem";
+    private static final String portalPrivateKeyFilename = "/home/tomcat4/.globus/userkey.pem";
     private static final String caCertFilename = "/etc/grid-security/certificates/01621954.0";
 
     private static GlobusProxy portalProxy;
