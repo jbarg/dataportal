@@ -78,7 +78,7 @@ public class Query {
                 try {
                     // sleep 1 second
                     Thread.sleep(oneSec);
-                    current++;
+                    current+= 1000;
                     logger.info("Waited "+current+" seconds so far");
                 }
                 catch(Exception e) {
