@@ -7,7 +7,7 @@
 package uk.ac.clrc.dataportal.authent;
 
 import org.ietf.jgss.*;
-
+import org.globus.common.*;
 import org.gridforum.jgss.ExtendedGSSManager;
 import org.gridforum.jgss.ExtendedGSSCredential;
 import org.globus.myproxy.*;
@@ -31,7 +31,7 @@ public abstract class DelegateCredential
         {
             throw new Exception( "Invalid portal proxy" );
         }
-
+         
         org.globus.myproxy.MyProxy proxy = new org.globus.myproxy.MyProxy( servername, lifetime.intValue() );
          
         GSSCredential delegateUserProxy = proxy.get( servername, 

@@ -24,6 +24,7 @@ import org.apache.axis.encoding.XMLType;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 import java.io.*;
+import org.globus.common.*;
 import org.apache.log4j.*;
 import org.apache.axis.utils.XMLUtils;
 
@@ -39,7 +40,8 @@ public class AuthCtl {
     public static int delegateProxyLifetime = 0; // seconds?
     public static String portalCertFilename = null;
     public static String portalPrivateKeyFilename = null;
-    public static String caCertFilename = null;
+    public static String UserCACertFilename = null;
+      public static String MyProxyCACertFilename = null;
     public static String uDDILookUpService = null;
     public static String defaultid = null;
     public static String[] facilities;
@@ -70,9 +72,10 @@ public class AuthCtl {
                 facilities[i] =   facilities[i].trim();
                 
             }*/
-            //Data Portal needs both the user cert and the myproxy Root CAs present fro GSI handshake
-            CoGProperties.getDefault().setCaCertLocations(AuthCtl.UserCACertFilename +" , "+AuthCtl.MyProxyCACertFilename);
-            
+            //does not work yet!!
+              //Data Portal needs both the user cert and the myproxy Root CAs present fro GSI handshake
+        CoGProperties.getDefault().setCaCertLocations(AuthCtl.UserCACertFilename + " , "+ AuthCtl.MyProxyCACertFilename);
+       
             
         } catch ( Exception e ) {
            logger.error("Cannot read config file "+Config.getContextPath()+"authent.conf" );
