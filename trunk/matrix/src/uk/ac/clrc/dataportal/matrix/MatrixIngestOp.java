@@ -60,10 +60,12 @@ public class MatrixIngestOp {
             IngestDataSetParams ingestParams = objFactory.createIngestDataSetParams();
             ingestParams.setContentMIMEID("INGESTFILE"); // Hardcoded for now but should match MIMEIDs from each file attached by the client
             ingestParams.setDataDestination(dataSet);
+            ingestParams.setOverWrite(true); // Force upload even if it's already there
+            //ingestParams.setUpdateAllReplicas(true);  // We may want to add this as a parameter?
             
             IngestDataSetOp ingestOp = objFactory.createIngestDataSetOp();
             ingestOp.setStdParams(ingestParams);
-            
+
             Operation op = objFactory.createOperation();
             op.setIngestOp(ingestOp);
             
