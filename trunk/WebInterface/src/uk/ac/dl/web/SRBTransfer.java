@@ -69,7 +69,7 @@ public class SRBTransfer extends HttpServlet {
                 PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
                 //load properties
                 Properties props = new Properties();
-                props.load(new FileInputStream(wd+File.separator+"WEB-INF"+File.separator+"webserviceslocation.conf"));
+                props.load(new FileInputStream(wd+File.separator+"WEB-INF"+File.separator+"web.conf"));
                 srb_location = props.getProperty("srb_location");
                 srb_password = props.getProperty("srb_password");
                 data_transfer_location = props.getProperty("data_transfer_location");
