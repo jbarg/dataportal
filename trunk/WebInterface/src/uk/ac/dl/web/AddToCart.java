@@ -9,6 +9,7 @@ import ac.dl.taglib.*;
 //log classes
 import org.apache.log4j.*;
 import ac.dl.xml.*;
+import java.util.Properties;
 //web axis stuff
 import javax.xml.rpc.ParameterMode;
 import org.apache.axis.client.Call;
@@ -49,7 +50,7 @@ public class AddToCart extends HttpServlet{
         //System.out.println("shop cart url is "+url);
         try{
             RecordDB db = createDB(request);
-            Document doc = createDoc(db);
+            Document doc = createDoc(db,session);
             
             //Saver.save(doc,"c:/cart.xml");
             //System.out.println("document to pass to thingy is "+doc);
@@ -96,7 +97,7 @@ public class AddToCart extends HttpServlet{
         }
     }
     
-    public Document createDoc(RecordDB db){
+    public Document createDoc(RecordDB db, HttpSession session){
         
         //iterate through the list, get the record from the db. and add to the cart
         Iterator it = db.iterator();
@@ -156,6 +157,32 @@ public class AddToCart extends HttpServlet{
             item.addContent(date);
             item.addContent(StudyName);
             item.addContent(url);
+            
+            //add query to the shopping cart
+            
+            Object[] object = (Object[])session.getAttribute("query");
+            String[] facs = (String[])object[1];
+            String dis = (String)object[2];
+            String max_wait  = (String)object[3];
+            Element query = new Element("query");
+            Element facility = new Element("facility");
+            StringBuffer Sfacs = new StringBuffer();
+            for(int i = 0;i <facs.length;i++){
+                Sfacs.append("facs[i] ");
+                
+            }
+           // facility.setAttribute(new Attribute("facs",Sfacs.toString()));
+            facility.addContent(Sfacs.toString());
+            Element discipline =new Element("discipline");
+            //discipline.setAttribute(new Attribute("dis",dis));
+            discipline.addContent(dis);
+            Element wait = new Element("wait");
+           /// wait.setAttribute(new Attribute("wait",max_wait));
+            wait.addContent(max_wait);
+            query.addContent(facility);
+            query.addContent(discipline);
+            query.addContent(wait);
+            item.addContent(query);
             
             //add all thestart and end dates on
             String startday = record.getStartDay();
