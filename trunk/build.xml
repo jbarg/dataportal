@@ -92,10 +92,9 @@
          <property name="basedir" value="${basedir}/RasGrib"/>
       </ant>
 
-      <!-- 
       <ant antfile="WebInterface/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/WebInterface"/>
-      </ant> to be re-instated sometime -->
+      </ant> 
 		
       <ant antfile="xmlwrapper/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/xmlwrapper"/>
