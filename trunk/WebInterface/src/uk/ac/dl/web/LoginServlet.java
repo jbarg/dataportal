@@ -143,6 +143,9 @@ public class LoginServlet extends HttpServlet {
             //logger.warn("User "+reName+" has logged on", new Exception("this"));
             
             //if correct add info to the thier session
+            String dn = getDN(sessionid, locations.getProperty("SESSION"));
+            session.setAttribute("dn", dn); 
+            
             session.setAttribute("username", reName);
             session.setAttribute("passphrase", rePass);
             session.setAttribute("LOGIN_STATUS", new Boolean(true));
@@ -535,7 +538,30 @@ public class LoginServlet extends HttpServlet {
         }
         
     }
-  
-        
+    
+    private String getDN(String sid,String sessionUrl){
+        try{
+            //get the dn from the session manager
+            Service  service = new Service();
+            Call  call    = (Call) service.createCall();
+            
+            call.setTargetEndpointAddress( new java.net.URL(sessionUrl) );
+            call.setOperationName( "getDName" );
+            call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
+            
+            call.setReturnType( XMLType.XSD_STRING);
+            
+            Object[] ob = new Object[]{sid};
+            
+            String dn = (String) call.invoke(ob );
+            return dn;
+        }
+        catch(Exception e){
+            logger.warn("Unable to get DN from sid",e);
+            return  "Unknown";
+        }
+    }
+    
+    
     
 }
