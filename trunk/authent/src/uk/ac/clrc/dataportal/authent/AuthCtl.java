@@ -69,10 +69,10 @@ public class AuthCtl {
         //        S
         //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
         //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
-                
+        
         if ( userCert == null )
             sessionId = "-1";
-        else if(userCert.getTimeLeft() == -1) 
+        else if(userCert.getTimeLeft() == -1)
             sessionId = "-1";
         else {
             facilityEndPoints = lookupFacility();
@@ -183,8 +183,10 @@ public class AuthCtl {
         Object[] ob = new Object[]{name,"ACM"};
         
         String[] faciltyEndPoints = (String[]) call.invoke(ob );
-              
-                return faciltyEndPoints;
+        for(int i = 0; i<faciltyEndPoints.length;i++){
+            System.out.println(faciltyEndPoints[i]);
+        }
+        return faciltyEndPoints;
     }
     
     private org.w3c.dom.Element buildAccess( String userName, String[] facilityEndPoints ) throws Exception {
@@ -262,7 +264,7 @@ public class AuthCtl {
         
         String[] sessionendpoint = (String[]) call1.invoke(ob );
         
-                
+        
         // error handling in case no endpoint in returned!
         //save to file
         FileOutputStream out = new FileOutputStream(Config.getContextPath()+proxy.getSubject());
