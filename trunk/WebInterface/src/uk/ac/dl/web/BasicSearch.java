@@ -136,7 +136,7 @@ public class BasicSearch extends HttpServlet {
             for(int i =0;i<facs.length;i++){
                 buff.append(facs[i]+" ");
             }
-             StringBuffer buff2 = new StringBuffer();
+            StringBuffer buff2 = new StringBuffer();
             for(int i =0;i<facs.length;i++){
                 buff2.append("&facs="+facs[i]);
             }
