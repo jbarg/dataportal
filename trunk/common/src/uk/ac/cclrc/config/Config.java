@@ -21,9 +21,6 @@ public class Config  {
     
     public static String getContextPath(){
         
-        // Default path - change as you like (overwritten during 
-        String path = "C:\\Working\\dataportal\\queryandreply\\web\\";
-        
         MessageContext messageContext = MessageContext.getCurrentContext();
         if (messageContext != null) {
             // Get the servlet request
