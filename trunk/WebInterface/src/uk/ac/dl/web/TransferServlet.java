@@ -54,9 +54,9 @@ public class TransferServlet extends HttpServlet {
             try{
              url = request.getParameter("url");
             int position  = url.indexOf(":");
-            url = url.substring(0,position-1);
+            String urlparsed = url.substring(0,position);
             
-            if(url.equals("srb")){
+            if(urlparsed.equals("srb")){
                 response.sendRedirect("../jsp/srb.jsp?url="+url);
             }
             else response.sendRedirect("../jsp/transfer.jsp?url="+url);
