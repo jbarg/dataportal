@@ -23,6 +23,7 @@
     <target depends="init,compile" name="war">
         <jar basedir="${web}" compress="true" jarfile="${warfile}">
             <exclude name="**/*.java"/>
+            <exclude name="**/*.*~"/>
         </jar>
     </target>
 
