@@ -136,10 +136,6 @@ public class MatrixClient {
             String stepName = step.getStepName();
             
             if (stepName.equals("ingestOp")) {
-                
-                // NOTE:  There seems to be a bug in the Matrix server when ingesting large files - it seems to add a little bit extra to the of the files in some instances.
-                // It's not know if this is a server or client problem but the problem exists for both this home grown client and their example ingest program which kind of suggests the server is to blame.....
-                
                 // Get a data source, this could be a URLDataSource too or even extended further for possibly GridFTP etc
                 FileDataSource ds = new FileDataSource(dataSetId);
                 DataHandler dh = new DataHandler(ds);
