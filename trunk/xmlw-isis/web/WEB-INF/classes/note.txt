@@ -1,0 +1,12 @@
+calling testor:
+
+create environment:
+
+	use create_cp (cvs co sas27)
+	cp all jar from $CATALINA_HOME/shared/lib & xmlw-isis/build/WEB-INF/lib to e.g. $HOME/software/jars_for_testing
+	run . create_cp
+
+go to location: (as test programs part of uk.ac.cclrc.xmlwrapper package)
+	dpib (i.e. dataportal isis wrapper build/WEB-INF/classes direcory)
+
+e.g. java
