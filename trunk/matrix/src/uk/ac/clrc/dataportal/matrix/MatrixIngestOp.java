@@ -37,17 +37,19 @@ public class MatrixIngestOp {
     
     private static ObjectFactory objFactory = new ObjectFactory();
     
-    public Transaction createIngestOpTransaction() {
+    public Transaction createIngestOpTransaction(String logicalLocation, String dataId) {
+        // dataId is the data set name (i.e. filename) given to the file in SRB (does not have to be the same as the source file but would make more sense
+        // logicalLocation is the Collection name and should start with /home (e.g. /home/srbadm.matrix)
         
         Transaction tx = null;
         
         try {
             DataSet dataSet = objFactory.createDataSet();
-            dataSet.setDataIdentifier("ingest.txt");
-            dataSet.setLogicalLocation("/home/srbadm.matrix");
+            dataSet.setDataIdentifier(dataId);
+            dataSet.setLogicalLocation(logicalLocation);
             
             IngestDataSetParams ingestParams = objFactory.createIngestDataSetParams();
-            ingestParams.setContentMIMEID("INGESTFILE");
+            ingestParams.setContentMIMEID("INGESTFILE"); // Hardcoded for now but should match MIMEIDs from each file attached by the client
             ingestParams.setDataDestination(dataSet);
             
             IngestDataSetOp ingestOp = objFactory.createIngestDataSetOp();
