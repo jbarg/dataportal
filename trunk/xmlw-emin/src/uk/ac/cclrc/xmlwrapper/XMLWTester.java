@@ -113,6 +113,9 @@ public class XMLWTester {
                  "Discipline='Chemistry/Inorganic/Structure'",
                  "saved_emin4.xml") ;
 
+      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
+                 "Discipline='Geochemistry/Crystallography'",
+                 "saved_emin5.xml") ;
 
 
       return ;

@@ -168,6 +168,8 @@ public class XmlWrapperEMAT
       //get the keys in the archive for the valid studies
       String entries = cm.getKeys(query) ;
 
+      log.debug("the valid keys are \t:" + entries) ;
+
       StringTokenizer st = new StringTokenizer(entries, ", ") ;
 
       String tmp_tok = "" ;
@@ -177,14 +179,15 @@ public class XmlWrapperEMAT
 
       boolean cache_updated = false ;
       
-      int count = 0 ;
-      while (st.hasMoreTokens() && count < 1)
+      //int count = 0 ;
+      //while (st.hasMoreTokens() && count < 1)
+      while (st.hasMoreTokens())
       {
 
          if(repeat_last == false)
          {
             tmp_tok = st.nextToken() ;
-	    count++ ;
+	    //count++ ;
          }
          else
          {
@@ -199,12 +202,19 @@ public class XmlWrapperEMAT
 	 {
             entry_xml = StringZip.decompress((String)m.get(entry_id)) ;
 	 }
+         else
+         {
+            //item is not cached - need to clear entry_xml otherwise keep
+            //getting first entries xml for all entries
+            entry_xml = null ;
+         }
 
          if(entry_xml == null)
          {
             try 
             {
 	       //allows us to see the state of xml incase of sql error 
+               log.debug("the value of the key at this point is \t:" + tmp_tok) ;
                cm.buildMetadataRecord(tmp_tok, sbr) ;
             } 
             catch (SQLException se) 
