@@ -1,2 +1,2 @@
-EMIN=emin
+EMAT=emat
 
