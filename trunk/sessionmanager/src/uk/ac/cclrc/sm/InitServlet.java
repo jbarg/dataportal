@@ -104,9 +104,9 @@ public class InitServlet extends HttpServlet {
             // create a simple trigger that fires in 10s from now,
             // then repeats every 1 hour indefineatley.
             long startTime = System.currentTimeMillis() + 10000L;
-          //  long interval = (((60L*1000L)*60L)*1L);
+            long interval = (((60L*1000L)*60L)*1L);
             //evry 10 seconds
-            long interval = 10000L;
+           // long interval = 10000L;
             // startTime, endTime, number of repeats, interval.
             SimpleTrigger trigger = new SimpleTrigger("myTrigger",
             sched.DEFAULT_GROUP,
