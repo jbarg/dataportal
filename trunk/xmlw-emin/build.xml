@@ -109,7 +109,7 @@
 
 -->
 
-  <property name="app.name"      value="xmlw-emin"/>
+  <property name="app.name"      value="xmlw-em"/>
   <property name="app.path"      value="/${app.name}"/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
@@ -514,7 +514,7 @@
 
 -->
 
-  <target name="wsdl"
+  <target name="wsdl" depends="postprepare"
    description="makes wsdl and server skeltons and client stubs">
 
     <!-- have to compile the class files in place first to generate the wsdl etc -->
@@ -587,6 +587,9 @@
     <pathelement location="${log4j.jar}"/>
 -->
 
+    <!-- need to replace use of java.class.path with compile.classpath for wsdl target -->
+    <pathelement location="${src.home}"/> 
+
     <!-- Include all elements that Tomcat exposes to applications -->
     <pathelement location="${catalina.home}/common/classes"/>
     <fileset dir="${catalina.home}/common/endorsed">
@@ -600,7 +603,7 @@
       <include name="*.jar"/>
     </fileset>
 
-   <!-- thought did not need to do this - but seemed to need to -->
+    <!-- thought did not need to do this - but seemed to need to -->
     <fileset dir="${build.home}/WEB-INF/lib">
       <include name="*.jar"/>
     </fileset>
@@ -610,6 +613,10 @@
 
   </path>
 
+  <!-- un comment following to display path
+  <property name="test.string" refid="compile.classpath"/>
+  <echo message="${test.string}"/> 
+  -->
 
   </target>
 
