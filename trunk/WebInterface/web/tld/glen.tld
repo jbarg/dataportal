@@ -35,7 +35,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+         <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -53,7 +53,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+             <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -88,7 +88,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+             <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -124,7 +124,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+         <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -141,7 +141,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+           <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -195,7 +195,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+            <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -232,7 +232,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+            <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -268,7 +268,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+            <!-- <type>String</type>-->
   
 </attribute>
 <attribute>
@@ -277,7 +277,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+           <!-- <type>String</type>-->
   
 </attribute>
 <attribute>
@@ -286,7 +286,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+           <!-- <type>String</type>-->
   
 </attribute>
 <attribute>
@@ -295,7 +295,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+            <!-- <type>String</type>-->
   
 </attribute>
 <attribute>
@@ -304,7 +304,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+           <!-- <type>String</type>-->
   
 </attribute>
 </tag>
@@ -330,7 +330,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+            <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -348,7 +348,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+            <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -387,7 +387,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+            <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
@@ -407,7 +407,7 @@
 
 <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>String</type>
+           <!-- <type>String</type>-->
             <!-- Forte4J_TLDX:  This comment contains code generation information. Do not delete.
             <tldx>
                 <IsReferenceID>FALSE</IsReferenceID>
