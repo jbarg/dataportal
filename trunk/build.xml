@@ -124,10 +124,6 @@
          <property name="basedir" value="${basedir}/authent"/>
       </ant>
 
-      <ant antfile="lookup/build.xml" target="${target}"> 
-         <property name="basedir" value="${basedir}/lookup"/>
-      </ant>
-
       <ant antfile="sessionmanager/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/sessionmanager"/>
       </ant>

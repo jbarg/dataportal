@@ -6,8 +6,8 @@
       <serviceName>Authentication</serviceName>
       <serviceDescription>Authentication and Authorisation (via ACM)</serviceDescription>
       <serviceType>AUTH</serviceType>
-      <serviceEndpoint>http://escpc12.esc.rl.ac.uk:8080/axis/services/AUTH</serviceEndpoint>
-      <serviceWSDL>http://escpc12.esc.rl.ac.uk:8080/axis/services/AUTH?wsdl</serviceWSDL>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/authent/services/AUTH</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/authent/services/AUTH?wsdl</serviceWSDL>
     </service>
     <service>
       <serviceName>Facility Administration</serviceName>
@@ -27,15 +27,15 @@
       <serviceName>Query and Reply</serviceName>
       <serviceDescription>Main Dataportal query module</serviceDescription>
       <serviceType>QNR</serviceType>
-      <serviceEndpoint>http://escvig1.dl.ac.uk:8080/axis/services/QueryAndReply</serviceEndpoint>
-      <serviceWSDL>http://escvig1.dl.ac.uk:8080/axis/services/QueryAndReply?wsdl</serviceWSDL>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/queryandreply/services/QueryAndReply</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/queryandreply/services/QueryAndReply?wsdl</serviceWSDL>
     </service>
     <service>
       <serviceName>Session Manager</serviceName>
       <serviceDescription>Dataportal Session Manager</serviceDescription>
       <serviceType>SESSION</serviceType>
-      <serviceEndpoint>http://escvig1.dl.ac.uk:8080/axis/services/SessionManager</serviceEndpoint>
-      <serviceWSDL>http://escvig1.dl.ac.uk:8080/axis/services/SessionManager?wsdl</serviceWSDL>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/sessionmanager/services/SessionManager</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/sessionmanager/services/SessionManager?wsdl</serviceWSDL>
     </service>
   </createFacility>
 </fadm:facilityAdmin>
