@@ -1,9 +1,3 @@
-/*
- * DbAccess.java
- *
- * Created on 27 November 2002, 15:44
- */
-
 package uk.ac.clrc.dataportal.authent;
 
 import java.sql.*;
@@ -15,9 +9,8 @@ import java.io.*;
  */
 public class DbAccess {
     
-    public final String SERVER = "//esc3.dl.ac.uk"; //currently my computer
+    public final String SERVER = "//escpc12.esc.rl.ac.uk"; //currently my computer
     public final String PORT = "5432";
-    private final String facilityName="BADC";
     private Connection conn;
 
     /** Creates a new instance of DbAccess */
@@ -28,7 +21,7 @@ public class DbAccess {
             //                               "sa",                    // username
             //                               "");                     // password
             Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql:" + SERVER +":"+ PORT+"/authent" ,
+            conn = DriverManager.getConnection("jdbc:postgresql:" + SERVER +":"+ PORT+"/auth" ,
             "dpuser",                    // username
             "dp4all");               // password
             
