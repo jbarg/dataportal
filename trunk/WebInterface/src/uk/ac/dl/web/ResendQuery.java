@@ -46,7 +46,7 @@ public class ResendQuery extends HttpServlet{
         String sid = (String)session.getAttribute("sessionid");
         Object[] object = new Object[]{sid,facilities,discipline,max};
         session.setAttribute("query", object);
-       
+        
         try{
             Properties prop = (Properties)session.getAttribute("props");
             
@@ -77,12 +77,14 @@ public class ResendQuery extends HttpServlet{
             Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
             logHistoryFile(object, (String)session.getAttribute("dn"),wd);
             */
-            System.out.println("sid is "+sid);
-            System.out.println("facs is "+facilities);
-            System.out.println("dis "+discipline);
-            System.out.println("max is "+max);
-            Search.doBasicSearch(sid,facilities,discipline, max,endpoint,wd,(String)session.getAttribute("dn"), true);
-            
+            // System.out.println("sid is "+sid);
+            // System.out.println("facs is "+facilities);
+            // System.out.println("dis "+discipline);
+            // System.out.println("max is "+max);
+            ArrayList[] list =  Search.doBasicSearch(sid,facilities,discipline, max,endpoint,wd,(String)session.getAttribute("dn"), true);
+            session.setAttribute("noConn", list[1]);
+            session.setAttribute("noRes", list[2]);
+            session.setAttribute("timedOut", list[3]);
             
             response.sendRedirect("../jsp/SimpleSearch.jsp");
         }
@@ -110,7 +112,7 @@ public class ResendQuery extends HttpServlet{
             for(int i =0;i<facs.length;i++){
                 buff2.append("&facs="+facs[i]);
             }
-            
+      
             wr = new FileWriter(wd+File.separator+"profiles"+File.separator+"history"+File.separator+dn,true);
             wr.write("<tr><td>"+buff.toString()+" </td>");
             wr.write("<td>"+query[2]+"</td>");
@@ -121,7 +123,7 @@ public class ResendQuery extends HttpServlet{
         }
         catch(Exception e){
             logger.warn("Coulld not update history file",e);
-            
+      
             wr.close();
         }*/
     }
