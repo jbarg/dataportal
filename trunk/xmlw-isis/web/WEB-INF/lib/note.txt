@@ -1,0 +1,14 @@
+exist:
+	release:	jars taken from release eXist-1.0b2-build-1107.war
+
+	advice:		http://montag.sourceforge.net/docs/configuration.html
+
+	jars:		antlr.jar
+			commons-pool-1.1.jar
+			exist.jar
+			jakarta-oro-2.0.8.jar
+			xml-commons-resolver-1.1.jar
+			xmldb.jar 
+			xmlrpc-1.2-patched.jar
+
+
