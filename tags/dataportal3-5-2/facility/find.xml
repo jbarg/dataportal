@@ -1,0 +1,3 @@
+<fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
+  <findFacility>Dataportal</findFacility>
+</fadm:facilityAdmin>
