@@ -80,6 +80,10 @@
 
    <target name="do" description="redirects ant call to all dataportal modules">
 
+       <ant antfile="datatransfer/build.xml" target="${target}">
+         <property name="basedir" value="${basedir}/datatransfer"/>
+      </ant>
+
       <ant antfile="ShoppingCart/build.xml" target="${target}"> 
          <property name="basedir" value="${basedir}/ShoppingCart"/>
       </ant>
