@@ -54,6 +54,8 @@ import org.jdom.output.DOMOutputter ;
 //needed for authorisation framework integration
 import uk.ac.cclrc.authorisation.client.*;
 import uk.ac.cclrc.authorisation.server.*;
+//and new exceptions thrown
+import java.security.*;
 
 
 public class XmlWrapperDocSelector
@@ -326,11 +328,20 @@ public class XmlWrapperDocSelector
    } 
 
    //need to tie down which Exception are thrown
-   void isUserAuthenticated(String proxy_cert, String auth_token) throws Exception
+   void isUserAuthenticated(String proxy_cert, String auth_token) throws NoSuchAlgorithmException, 
+                                                                         InvalidKeyException, 
+                                                                         SignatureException, 
+                                                                         InvalidAuthorisationTokenException,
+                                                                         UserNotAuthorisedException
    {
       //at the moment just check the token - need to check DN with that of proxy really
       //and config of TokenReader needs to be improved to allow just sending the token and the ACM.cert public key
       // or something.
+
+      //get necessary session attributes
+      SessionSingleton ss = SessionSingleton.getInstance() ;
+
+      Logger log = ss.getLogger() ;
 
       try
       {
@@ -344,15 +355,25 @@ public class XmlWrapperDocSelector
 
          uk.ac.cclrc.authorisation.AttributeList list =  reader.getAttributes(element);
 
-         System.out.println("Data access "+list.getDataAccessGroup());
-         System.out.println("Wrapper access "+list.getWrapperGroup());
-         System.out.println("Facility access "+list.getDPView());
+         //System.out.println("Data access "+list.getDataAccessGroup());
+         //System.out.println("Wrapper access "+list.getWrapperGroup());
+         //System.out.println("Facility access "+list.getDPView());
+
+         String data_access = list.getDataAccessGroup() ;
+         String wrapper_access = list.getWrapperGroup();
+         String facility_access = list.getDPView();
+
+         if (data_access.compareTo("f") == 0 )
+         {
+            throw new UserNotAuthorisedException("User does not have priveledge to see metadata") ;
+         } //will this be caught by the Exception thing below or thrown - need to replace below with actual Exception or just
+           // list in function definition
 
             //getUserPrivilegesFromDB();
       } 
       catch (Exception e)
       {
-         System.out.println(e);
+         log.info(e);
       }
       
       return ;
@@ -364,7 +385,14 @@ public class XmlWrapperDocSelector
    //
 
    //at the moment the result returned has to be a valid xml document
-   public org.w3c.dom.Element queryMetaData(String external_xquery, String result_formatter, String proxy_cert, String auth_token)  
+   public org.w3c.dom.Element queryMetaData(String external_xquery, String result_formatter, String proxy_cert, String auth_token) throws
+                                                java.security.InvalidKeyException,
+                                                java.security.SignatureException,
+                                                uk.ac.cclrc.authorisation.client.InvalidAuthorisationTokenException,
+                                                uk.ac.cclrc.xmlwrapper.XQueryProducedNullOutputException,
+                                                uk.ac.cclrc.xmlwrapper.FormatterProducedNullOutputException,
+                                                uk.ac.cclrc.xmlwrapper.FormatterProducedInvalidXMLException,
+                                                uk.ac.cclrc.xmlwrapper.UserNotAuthorisedException 
    {
 
       //get necessary session attributes
@@ -379,9 +407,34 @@ public class XmlWrapperDocSelector
       {
          isUserAuthenticated(proxy_cert, auth_token) ;
       }
-      catch (Exception e)
+      catch (NoSuchAlgorithmException nsae)
       {
-         e.printStackTrace() ;
+         String message = nsae.getMessage() ;
+
+         if(message != null)
+         {
+            log.info(message) ;
+         }
+         else
+         {
+            nsae.printStackTrace() ;
+         }
+      }
+      catch (InvalidKeyException ike)
+      {
+         throw new InvalidKeyException(ike.getMessage()) ;
+      }
+      catch (SignatureException se)
+      {
+         throw new SignatureException(se.getMessage()) ;
+      }
+      catch (InvalidAuthorisationTokenException iate)
+      {
+         throw new InvalidAuthorisationTokenException(iate.getMessage()) ;
+      }
+      catch (UserNotAuthorisedException unae)
+      {
+         throw new UserNotAuthorisedException(unae.getMessage()) ;
       }
       
 
@@ -452,6 +505,8 @@ public class XmlWrapperDocSelector
 
       } //end of while processed all documents
 
+      // need to throw exception not send back arbitary error xml
+
       //need to serialse the result as xml before applying the formatter
       String result_xml_string = null ;
       
@@ -464,7 +519,8 @@ public class XmlWrapperDocSelector
       }
       else
       {
-         result_xml_string = "<error>xquery produced null output</error>" ;
+         //result_xml_string = "<error>xquery produced null output</error>" ;
+         throw new XQueryProducedNullOutputException() ;
       }
 
       //perhaps need to write output as org.w3c.dom.Element to make the interface richer ?
@@ -477,7 +533,8 @@ public class XmlWrapperDocSelector
          }
          else //formatter brought back null result need to send back error
          {
-            final_doc = sax.build(new StringReader("<error>formatter produced null output</error>")) ;
+            //final_doc = sax.build(new StringReader("<error>formatter produced null output</error>")) ;
+            throw new FormatterProducedNullOutputException() ;
          }
       }
       catch (org.jdom.JDOMException jdome)
@@ -488,14 +545,15 @@ public class XmlWrapperDocSelector
       //needed - somday these errors need changing to exceptions
       if (final_doc == null)
       {
-         try
-         {
-            final_doc = sax.build(new StringReader("<error>formatter produced in valid xml</error>")) ;
-         }
-         catch (org.jdom.JDOMException jdome)
-         {
-            jdome.printStackTrace() ;
-         }
+         //try {
+         
+            //final_doc = sax.build(new StringReader("<error>formatter produced invalid xml</error>")) ;
+         //}
+         //catch (org.jdom.JDOMException jdome)
+         //{
+         //   jdome.printStackTrace() ;
+         //}
+         throw new FormatterProducedInvalidXMLException() ;
 
       }
 

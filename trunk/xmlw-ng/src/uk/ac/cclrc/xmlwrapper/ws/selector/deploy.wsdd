@@ -27,5 +27,45 @@
       <parameter name="allowedMethods" value="queryMetaData"/>
       <parameter name="scope" value="Application"/>
 
+      <typeMapping
+        xmlns:ns="http://client.authorisation.cclrc.ac.uk"
+        qname="ns:InvalidAuthorisationTokenException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.InvalidAuthorisationTokenException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:UserNotAuthorisedException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.UserNotAuthorisedException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:XQueryProducedNullOutputException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.XQueryProducedNullOutputException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:FormatterProducedNullOutputException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedNullOutputException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://xmlwrapper.cclrc.ac.uk"
+        qname="ns:FormatterProducedInvalidXMLException"
+        type="java:uk.ac.cclrc.xmlwrapper.ws.selector.FormatterProducedInvalidXMLException"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
   </service>
 </deployment>
