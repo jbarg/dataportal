@@ -52,14 +52,30 @@
   <parameter name="className" value="org.apache.axis.Version"/>
  </service>
 
- <!-- put emin service here -->
+ <!-- put added services here -->
 
-<service name="xmlwrapper_emin" provider="java:RPC">
+   <!-- EMIN -->
+   <service name="xmlwrapper_emin" provider="java:RPC">
       <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
       <parameter name="wsdlServiceElement" value="XmlWrapperEMINService"/>
       <parameter name="wsdlServicePort" value="xmlwrapper_emin"/>
       <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.emin.Xmlwrapper_EminSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="XmlWrapperEMIN"/>
+      <operation name="getXML" qname="operNS:getXML" xmlns:operNS="urn:xmlwrapper" returnQName="getXMLReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
+        <parameter name="query" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="getXML"/>
+      <parameter name="scope" value="Session"/>
+
+  </service>
+
+  <!--EMAT-->
+  <service name="xmlwrapper_emat" provider="java:RPC">
+      <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperEMATService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_emat"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.emat.Xmlwrapper_EmatSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperEMAT"/>
       <operation name="getXML" qname="operNS:getXML" xmlns:operNS="urn:xmlwrapper" returnQName="getXMLReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
         <parameter name="query" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>

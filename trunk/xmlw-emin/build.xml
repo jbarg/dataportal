@@ -539,7 +539,7 @@
 
     <!-- echo a reminder to update the java files i.e. the SOAP binding one -->
     <echo>
-    Don't forget to update the *_SoapBindingImpl.java files under ws.badc and ws.mpim before
+    Don't forget to update the *_SoapBindingImpl.java files under ws.emin and ws.emat before
     compiling, installing and deploying
     </echo>
 

@@ -64,6 +64,37 @@
        <classpath refid="compile.classpath"/>
     </java>
 
+    <!-- need to generate the wsdl and the stubs & skeleton -->
+    <!-- EMAT: -->
+    <!-- 'single quotes' around values containing double quotes -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='ematxmlw.wsdl'/>
+       <arg value='-l'/>
+       <arg value='http://localhost:8080/${app.name}/xmlwrapper_emat'/>
+       <arg value='-n'/>
+       <arg value='urn:xmlwrapper'/>
+       <arg value='-p"uk.ac.cclrc.xmlwrapper=urn:xmlwrapper"'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.XmlWrapperEMAT'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java"
+          fork="true"
+          failonerror="true">
+       <arg value='-o'/>
+       <arg value='.'/>
+       <arg value='-d'/>
+       <arg value='Session'/>
+       <arg value="-s"/>
+       <arg value='-p'/>
+       <arg value='uk.ac.cclrc.xmlwrapper.ws.emat'/>
+       <arg value='ematxmlw.wsdl'/>
+       <classpath refid="compile.classpath"/>
+    </java>
+
 
   </target>
   <!-- -->
@@ -76,9 +107,16 @@
           fork="true"
           failonerror="true">
              <arg value='uk/ac/cclrc/xmlwrapper/ws/emin/deploy.wsdd'/>
-             <classpath>
-                <pathelement path="${java.class.path}"/>
-             </classpath>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+
+	  <!-- EMAT: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/emat/deploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
           </java>
 
 
@@ -92,9 +130,15 @@
           fork="true"
           failonerror="true">
              <arg value='uk/ac/cclrc/xmlwrapper/ws/emin/undeploy.wsdd'/>
-             <classpath>
-                <pathelement path="${java.class.path}"/>
-             </classpath>
+             <classpath refid="compile.classpath"/>
+          </java>
+
+	  <!-- EMAT: -->
+	  <java classname="org.apache.axis.client.AdminClient" 
+          fork="true"
+          failonerror="true">
+             <arg value='uk/ac/cclrc/xmlwrapper/ws/emat/undeploy.wsdd'/>
+             <classpath refid="compile.classpath"/>
           </java>
 
   </target>
