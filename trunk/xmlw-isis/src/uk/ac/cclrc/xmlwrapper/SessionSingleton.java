@@ -164,11 +164,11 @@ public class SessionSingleton
    //
    //
 
-   String getDTDLocation()
+   String getSchemaLocation()
    {
       String ret_val ;
 
-      String context = "/xmlw" ;
+      String context = "/xmlw" ; //default overwritten if all goes well
 
       MessageContext messageContext = MessageContext.getCurrentContext();
       if (messageContext != null)
@@ -181,7 +181,7 @@ public class SessionSingleton
          context  = request.getContextPath() ;
       }
 
-      ret_val = "http://" + server_port + context  + "/xml/dtd/clrcmetadata.dtd" ;
+      ret_val = "http://" + server_port + context  + "/xml/xsd/clrcmetadata.xsd" ;
 
       //////
 
