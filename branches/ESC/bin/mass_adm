@@ -1,0 +1,752 @@
+#!/bin/bash
+# mass_adm MASS administration tool
+# stored in $MASS_HOME/bin/mass_adm
+# MDOHERTY 16/01/2004
+#
+#
+#Set up environment variables
+#
+# Read the config file first
+if [ ! -r /etc/masstab ]; then
+        echo ""
+        echo "+=========================================================="
+        echo "| mass_adm: backup administration utility"
+        echo "| Version 2.0, MDOHERTY January 2004"
+        echo "+=========================================================="
+        echo "| "
+        echo "| MASS CRITICAL FAILURE: NO CONFIG FILE"
+        echo "| "
+        echo "+----------------------------------------------------------"
+        exit
+fi
+{ while read massvar massval ; do
+	export $massvar=$massval
+done } < /etc/masstab
+#
+#
+bold=`tput smso`
+offbold=`tput rmso`
+
+export MASS_CTL=$MASS_HOME/ctl/control.dat
+export MASS_BCTL=$MASS_HOME/ctl/control.bck
+#
+#
+#declare the arrays for use in program
+declare -a disk
+declare -a idxfile
+declare -a sday
+declare -a method
+declare -a sync
+declare -a tapp
+declare -a level
+declare -a adsfile
+declare -a adsdate
+declare -a adstime
+declare -a adstapesize
+declare -a adstapepool
+#
+#
+#Converts string(s) passed as argument(s)
+#to uppercase.
+function toupper()	{
+  if [ -z "$1" ]       #  If no argument(s) passed,
+  then                 #  send error message
+    echo "(null)"      #  (C-style void-pointer error message)
+    return             #  and return from function.
+  fi  
+  echo "$@" | tr a-z A-Z
+  # Translate all passed arguments ($@).
+  return
+}
+#
+#
+#Checks the schema name against that in the database
+function schemaTest() {
+	echo "Database Test"
+}
+#Clear the screen to look pretty
+#
+function header()	{
+	tput init
+	tput clear
+	tput cup 0 0
+	echo "  mass_adm: backup administration utility V2.0	MDOHERTY 2004"
+}
+#
+#
+function readIdx()	{
+#set up the arrays
+	unset adsfile
+	unset adsdate
+	unset adstime
+	unset adstapesize
+	unset adstapepool
+	adscount=1
+#
+#
+#Read the index file and display the current ADS Files
+#first read check for the current control file
+	if [ ! -r "$1" ]                                        
+	then                                                          
+    		echo "mass_adm: index file does not exist \    
+        	or is not readable."                                  
+	    	exit 1                                                    
+	fi                                                            
+#                                                             
+	{ while read adsfile[$adscount] adsdate[$adscount] adstime[$adscount]\
+		adstapesize[$adscount] adstapepool[$adscount]; do
+		adscount=$(($adscount+1))
+	done } < $1
+}
+#
+#
+function readCtl()	{
+#set up the arrays
+	unset disk
+	unset idxfile
+	unset sday
+	unset method
+	unset sync
+	unset tapp
+	unset level
+	count=1
+#
+#
+#Read the control file and display the current schedule
+#first read check for the current control file
+	if [ ! -r "$MASS_CTL" ]                                        
+	then                                                          
+    		echo "mass_adm: control file does not exist \    
+        	or is not readable."                                  
+	    	exit 1                                                    
+	fi                                                            
+#                                                             
+	{ while read disk[$count] idxfile[$count] sday[$count] \
+		method[$count] sync[$count] tapp[$count] level[$count]; do
+		count=$(($count+1))
+	done } < $MASS_CTL
+#	count=$(($count-1))
+}
+#
+#
+function dispCtl() {
+	tput cup 2 0
+	echo "			$1"
+	tput cup 4 0
+	echo "Disk			Index File	Day	Method	Valid"\
+	"	Append	Level"
+	tput cup 6 0
+	wcount=1
+	{ while [[ $wcount -le $count ]];do
+		if [[ ${disk[$wcount]} != $1 ]]; then
+			icurs=$(($wcount+5))
+			tput cup $icurs 0
+			echo ${disk[$wcount]}
+			tput cup $icurs 24
+			echo ${idxfile[$wcount]}
+			tput cup $icurs 40
+			echo ${sday[$wcount]}
+			tput cup $icurs 48
+			echo ${method[$wcount]}
+			tput cup $icurs 56
+			echo ${sync[$wcount]}
+			tput cup $icurs 64
+			echo ${tapp[$wcount]}
+			tput cup $icurs 72
+			echo ${level[$wcount]}
+		fi
+		wcount=$(($wcount+1))
+	done }
+	tput cup $((20)) 
+}
+#
+#
+function dispIdx() {
+	tput cup 2 0
+	echo "			$1"
+	tput cup 4 0
+	echo "ADS File	Date		Time		Size	Pool"
+	tput cup 6 0
+	adswcount=1
+	{ while [[ $adswcount -le $adscount ]];do
+		if [[ ${adsfile[$adswcount]} != $1 ]]; then
+			echo	${adsfile[$adswcount]}"		"\
+			${adsdate[$adswcount]}"	"${adstime[$adswcount]}\
+			"	"${adstapesize[$adswcount]}\
+			"	"${adstapepool[$adswcount]}
+		fi
+		adswcount=$(($adswcount+1))
+	done }
+	tput cup $((20)) 
+}
+#
+#
+#Read the control file and display the current schedule
+#using functions from above
+#
+#
+function dispQuest()	{
+	echo "Option: (A)Add (D)Delete (M)Modify (I)Immediate Backup (X)Exit:"
+	tput cup 20 66
+}
+#
+#
+function writeCtl()	{
+#Backup the control file first
+	cp $MASS_CTL $MASS_BCTL
+#Write the file in a loop using $count
+	wcount=1
+	{ while [[ $wcount -le $count ]];do
+	#if condition added in case called by repDel
+		if [[ ${disk[$wcount]} != $1 && \
+			${idxfile[$wcount]} != $2 ]]; then
+			echo	${disk[$wcount]}"	"\
+			${idxfile[$wcount]}"	"${sday[$wcount]}"	"\
+			${method[$wcount]}"	"${sync[$wcount]}"	"\
+			${tapp[$wcount]}"	"${level[$wcount]}
+		else
+			rm "$MASS_HOME"/ctl/"${idxfile[$wcount]}".idx
+		fi
+		wcount=$(($wcount+1))
+	done }  > $MASS_CTL
+}
+#
+#
+function writeIdx()	{
+#Write the indxex file in a loop using $adscount
+	adswcount=1
+	{ while [[ $adswcount -le $adscount ]];do
+		if [[ "$2" != "DEL" ]]; then
+			echo	${adsfile[$adswcount]}"		"\
+			${adsdate[$adswcount]}"	"\
+			${adstime[$adswcount]}"	"\
+			${adstapesize[$adswcount]}"	"\
+			${adstapepool[$adswcount]}"	"
+		fi
+		adswcount=$(($adswcount+1))
+	done }  > "$1"
+}
+#
+#
+function newAdsFile () {
+	stopnow=0
+	adscount=1
+	header
+	dispIdx "New ADS Tape Pool"
+	echo "Create new ADS Tape Pool? (Y/N): "
+	tput cup 20 35
+	until [[ $stopnow -eq 1 ]] ; do
+		read poolans
+		case $poolans in
+			y*|Y*)
+				header
+				dispIdx "New ADS Tape Pool"
+				echo "NEW ADS Tape Pool Name: "
+				tput cup 20 30
+				read newtapepool
+				newtapepool=`toupper $newtapepool`
+				validpool=`datastore pool query "$TOWNER" \
+				| grep -i "$newtapepool" | wc -l`
+				if [ "$validpool" -eq  "0" ]; then
+					datastore pool add $TOWNER $newtapepool
+					sleep 5
+				else
+					header
+					dispIdx "New ADS Tape Pool"
+					echo "Pool "$newtapepool" exists!"
+					sleep 5
+				fi
+				header
+				dispIdx "New ADS Tape Pool"
+				echo "Create new ADS Tape Pool? (Y/N): "
+				tput cup 20 35
+			;;
+			n*|N*)
+				stopnow=1
+			;;
+			*)
+				header
+				dispIdx "New ADS Tape Pool"
+				echo "Create new ADS Tape Pool? (Y/N): "
+				tput cup 20 35
+			;;
+		esac
+	done	
+	stopnow=0
+	header
+	dispIdx "New ADS File (Virtual Tape) - Index File $2"
+	echo "NEW ADS File Name (6 chars max) - X to stop: " 
+	tput cup 20 50
+	until [[ $stopnow -eq 1 ]] ; do
+		read adsfile[$adscount]
+		adsfile[$adscount]=`toupper ${adsfile[$adscount]}`
+		validfile=`datastore query owner="$TOWNER" \
+		name | grep -i "${adsfile[$adscount]}" | wc -l`
+		if [ "$validfile" -ne "0" ]; then
+			dupfile=${adsfile[$adscount]}
+			adsfile[$adscount]="V"
+		fi
+		case ${adsfile[$adscount]} in
+			x*|X*)
+				adsfile[$adscount]=" "
+				stopnow=1
+			;;
+			v*|V*)
+				adsfile[$adscount]=" "
+				header
+				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				echo "ADS File "$dupfile" exists!"
+				sleep 5
+				header
+				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				echo "NEW ADS File Name (6 chars max) - X to stop: " 
+				tput cup 20 45
+			;;
+			*)
+				header
+				adsdate[$adscount]="00/00/00"
+				adstime[$adscount]="00:00:00"
+				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				echo "Virtual Tape Size (1-48Gb): "
+				tput cup 20 45
+				read adstapesize[$adscount]
+				header
+				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				echo "ADS Tape Pool: "
+				tput cup 20 45
+				read adstapepool[$adscount]
+				adstapepool[$adscount]=`toupper ${adstapepool[$adscount]}`
+				datastore create $TOWNER ${adsfile[$adscount]} \
+				${adstapesize[$adscount]}Gb pool\
+				${adstapepool[$adscount]}
+				sleep 5
+				writeIdx $1 new
+				adscount=$(($adscount+1))
+				header
+				dispIdx "New ADS File Name (Virtual Tape) - Index File $2"
+				echo "NEW ADS File Name (6 chars max) - X to stop: " 
+				tput cup 20 45
+			;;
+		esac
+	done	
+	stopnow=0
+}
+#
+#
+function newIdxFile ()	{
+	stopnow=0
+	adscount=1
+	header
+	dispIdx "New Index File: $2"
+	echo "Create New ADS Files?: "
+	tput cup 20 35
+	until [[ $stopnow -eq 1 ]] ; do
+		read idxans
+		case $idxans in
+			y*|Y*)
+				newAdsFile $1 $2
+				stopnow=1
+			;;
+			n*|N*)
+				stopnow=1
+			;;
+			*)
+				header
+				dispIdx "New Index File: $2"
+				echo "Create New ADS Files? "
+				tput cup 20 35
+			;;
+		esac
+	done	
+	stopnow=0
+	#touch $1
+	header
+	dispIdx "New Index File: $2"
+	echo "EXISTING ADS File Name (or X to stop): "
+	tput cup 20 50
+	until [[ $stopnow -eq 1 ]] ; do
+		read adsfile[$adscount]
+		adsfile[$adscount]=`toupper ${adsfile[$adscount]}`
+		validfile=`grep -i "${adsfile[$adscount]}"\
+		 "$MASS_HOME"/ctl/*.idx | wc -l`
+		if [ "$validfile" -ne "0" ]; then
+			if [ ${adsfile[$adscount]} != "X" ]; then
+				dupfile=${adsfile[$adscount]}
+				adsfile[$adscount]="V"
+			fi
+		fi
+		case ${adsfile[$adscount]} in
+			x*|X*)
+				stopnow=1
+			;;
+			v*|V*)
+				adsfile[$adscount]=" "
+				header
+				dispIdx "New Index File: $2"
+				echo "ADS File "$dupfile" already in use!"
+				sleep 5
+				header
+				dispIdx "New Index File: $2"
+				echo "EXISTING ADS File Name (or X to stop): "
+				tput cup 20 45
+			;;
+			*)
+				adsdate[$adscount]="00/00/00"
+				adstime[$adscount]="00:00:00"
+				header
+				dispIdx "New Index File: $2"
+				echo "Virtual Tape Size (1-48Gb): "
+				tput cup 20 45
+				read adstapesize[$adscount]
+				header
+				dispIdx "New Index File: $2"
+				echo "ADS Tape Pool: "
+				tput cup 20 45
+				read adstapepool[$adscount]
+				adstapepool[$adscount]=`toupper \
+					${adstapepool[$adscount]}`
+				writeIdx $1 new
+				header
+				dispIdx "New Index File: $2"
+				echo "EXISTING ADS File Name (or X to stop): "
+				tput cup 20 50
+				adscount=$(($adscount+1))
+			;;
+		esac
+	done	
+	stopnow=0
+	#set up the arrays for new index files
+	unset adsfile
+	unset adsdate
+	unset adstime
+	unset adstapesize
+	unset adstapepool
+	adscount=1
+}
+#
+#
+function checkIdx ()	{
+	idxans=""
+	stopnow=0
+	if [ ! -r "$MASS_HOME"/ctl/"$1".idx ]; then
+		header
+		dispCtl "New Index File"
+		echo "Index file does not exist. Create new? (Y/N): "
+		tput cup 20 50 
+		until [[ $stopnow -eq 1 ]] ; do
+			read idxans
+			case $idxans in
+				y*|Y*)
+					newIdxFile "$MASS_HOME"/ctl/"$1".idx $1
+					stopnow=1
+				;;
+				n*|N*)
+					stopnow=1
+				;;
+				*)
+					header
+					dispCtl "New Index File"
+					echo "Index file does not exist. Create new? (Y/N)"
+					tput cup 20 45 
+				;;
+			esac
+		done	
+	fi
+	stopnow=0
+}
+#
+#
+function repAdd()	{
+	header
+	dispCtl "New Backup Schedule"
+	echo "Enter Disk:"
+	tput cup 20 18
+	read disk[$count]
+	header
+	dispCtl "New Backup Schedule"
+	echo "Enter Index File Name:"
+	tput cup 20 25
+	read idxfile[$count]
+	checkIdx ${idxfile[$count]}
+	header
+	dispCtl "New Backup Schedule"
+	echo "Enter DAY:"
+	tput cup 20 25
+	read sday[$count]
+	sday[$count]=`toupper ${sday[$count]}`
+	header
+	dispCtl "New Backup Schedule"
+	echo "Enter Method (TAR/DUMP):"
+	tput cup 20 25
+	read method[$count]
+	method[$count]=`toupper ${method[$count]}`
+	header
+	dispCtl "New Backup Schedule"
+	echo "Is Backup Active?:"
+	tput cup 20 25
+	read sync[$count]
+	sync[$count]=`toupper ${sync[$count]}`
+	header
+	dispCtl "New Backup Schedule"
+	echo "Append to tape?:"
+	tput cup 20 25
+	read tapp[$count]
+	tapp[$count]=`toupper ${tapp[$count]}`
+	header
+	dispCtl "New Backup Schedule"
+	echo "Dump Level:"
+	tput cup 20 25
+	read level[$count]
+	writeCtl new new
+}
+#
+#
+function repDel()	{
+	count=$(($count-1))
+	header
+	dispCtl "Delete Backup Schedule"
+	echo "Enter Disk Name:"
+	tput cup 20 17 
+	read ddisk
+	header
+	dispCtl "Delete Backup Schedule"
+	echo "Enter Index File: "
+	tput cup 20 25 
+	read didxfile
+#Rather than do anything fancy, best way is just to skip writing the
+#line to the control file
+	writeCtl $ddisk $didxfile
+}
+function repMod()	{
+	count=$(($count-1))
+	header
+	dispCtl "Modify Backup Schedule"
+	echo "Enter Disk: "
+	tput cup 20 17 
+	read mdisk
+	header
+	dispCtl "Modify Backup Schedule"
+	echo "Enter Index File: "
+	tput cup 20 25 
+	read midxfile
+#wcount is just a loop counter
+#modindex is the value we want
+	wcount=1
+	modindex=0
+	match="N"
+# loop through the array to pick up index
+	{ while [[ $wcount -le $count ]];do
+		if [[ ${disk[$wcount]} = $mdisk && \
+			 ${idxfile[$wcount]} = $midxfile ]]; then
+			modindex=$wcount
+			wcount=$(($count))
+			match="Y"
+		fi
+		wcount=$(($wcount+1))
+	done }
+
+	if [  $match = "N" ]; then
+		return
+	fi
+
+# for loop for modification
+	header
+	dispCtl "Modify Backup Schedule"
+	echo "Option: (D)Day (S)Synch (I)Index (M)Method (A)Append (L)Dump Level:"
+	tput cup 20 70 
+	modans=""
+	stopnow=0
+	until [[ $stopnow -eq 1 ]] ; do
+		read modans
+		case $modans in
+			d*|D*)
+				dayok=0
+				while [ "$dayok" -eq 0 ]
+				do
+					header
+					dispCtl "Modify Backup Schedule"
+					echo "Enter Sync Day:"
+					tput cup 20 25 
+					oldday[$modindex]=sday[$modindex]
+					read sday[$modindex]
+					sday[$modindex]=`toupper ${sday[$modindex]}`
+					for day in MON TUE WED THU FRI SAT \
+					 SUN ALL CAL
+					do
+						if [ "${sday[$modindex]}" = $day ]
+						then
+							dayok=1
+							break
+						fi
+					done
+					if [ "$dayok" -eq 0 ]
+					then
+						sday[$modindex]="INVALID"
+					fi
+				done
+				stopnow=1
+			;;	
+			s*|S*)
+				header
+				dispCtl "Modify Backup Schedule"
+				echo "Enter Sync Flag:"
+				tput cup 20 25 
+				read sync[$modindex]
+				sync[$modindex]=`toupper ${sync[$modindex]}`
+				stopnow=1
+			;;	
+			m*|M*)
+				header
+				dispCtl "Modify Backup Schedule"
+				echo "Enter Backup Method:"
+				tput cup 20 25
+				read method[$modindex]
+				stopnow=1
+			;;	
+			i*|I*)
+				header
+				dispCtl "Modify Backup Schedule"
+				echo "Enter New Index File:"
+				tput cup 20 25
+				read idxfile[$modindex]
+				stopnow=1
+			;;	
+			a*|A*)
+				header
+				dispCtl "Modify Backup Schedule"
+				echo "Enter New Append Flag:"
+				tput cup 20 25
+				read tapp[$modindex]
+				stopnow=1
+			;;	
+			l*|L*)
+				header
+				dispCtl "Modify Backup Schedule"
+				echo "Enter New Dump Level:"
+				tput cup 20 25
+				read level[$modindex]
+				stopnow=1
+			;;	
+			*)
+				header
+				dispCtl "Modify Backup Schedule"
+				tput cup 19 
+				echo "Not a valid option"
+				tput cup 20 
+				echo "Option: (D)Day (S)Synch (L)Location:"
+				tput cup 20 40 
+			;;
+		esac
+	done	
+#now write the mod
+	writeCtl mod mod
+}
+function repNow()	{
+	count=$(($count-1))
+	sdbu=""
+	sdbp=""
+	ddbu=""
+	ddbp=""
+	header
+	dispCtl "Immediate Backup"
+	echo "Enter Disk: "
+	tput cup 20 17 
+	read ndisk
+	header
+	dispCtl "Immediate Backup"
+	echo "Enter Index File: "
+	tput cup 20 25
+	read nidxfile
+#wcount is just a loop counter
+#modindex is the value we want
+	wcount=1
+	modindex=0
+	rm -f $MASS_HOME/ctl/control.imd
+# loop through the array to pick up index
+	{ while [[ $wcount -le $count ]];do
+		if [[ ${disk[$wcount]} = $ndisk && \
+			 ${idxfile[$wcount]} = $nidxfile ]]; then
+			modindex=$wcount
+			wcount=$(($count))
+		fi
+		wcount=$(($wcount+1))
+	done }
+	wcount=$modindex
+# for loop for modification
+	header
+	dispCtl "Immediate Backup"
+	echo	${disk[$modindex]}"	"\
+	${idxfile[$modindex]}"		ALL	"\
+	${method[$modindex]}"	"${sync[$modindex]}"	"\
+	${tapp[$modindex]}"	"${level[$modindex]} \
+		> $MASS_HOME/ctl/control.imd
+	$MASS_HOME/bin/mass_ctl "$MASS_HOME/ctl/control.imd"
+}
+#
+# Now get into guts of program
+readCtl
+header
+dispCtl "Current Backup Schedule"
+dispQuest
+#
+#
+#Give admin options as to what needs to be done:
+#probably best to implement in functions
+#implement as a break out loop
+# Add a repository
+# Delete a repository
+# Modify a repository
+# Perform an immediate backup
+stopnow=0
+until [[ $stopnow -eq 1 ]] ; do
+	read  answer
+	case $answer in
+		a*|A*)
+			repAdd
+			readCtl
+			header
+			dispCtl "Current Backup Schedule"
+			dispQuest
+			;;
+		d*|D*)
+			repDel
+			readCtl
+			header
+			dispCtl "Current Backup Schedule"
+			dispQuest
+			;;
+		m*|M*)
+			repMod
+			readCtl
+			header
+			dispCtl "Current Backup Schedule"
+			dispQuest
+			stopnow=0
+			;;
+		i*|I*)
+			repNow
+			header
+			dispCtl "Current Backup Schedule"
+			dispQuest
+			stopnow=0
+			;;
+		x*|X*)
+			#assume the user wants to quit
+			stopnow=1
+			tput init
+			tput clear
+			;;
+		*)
+			#echo 'Not valid'
+			header
+			dispCtl
+			dispQuest
+			;;
+	esac
+done
+#
+#
+#Backup the existing file
+#
+#
+#Write the new file
