@@ -1,0 +1,28 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from XmlWrapperEMATService WSDL service -->
+
+  <service name="xmlwrapper_emat" provider="java:RPC">
+      <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperEMATService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_emat"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.emat.Xmlwrapper_EmatSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperEMAT"/>
+      <operation name="getXML" qname="operNS:getXML" xmlns:operNS="urn:xmlwrapper" returnQName="getXMLReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
+        <parameter name="query" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="getXML"/>
+      <parameter name="scope" value="Session"/>
+
+  </service>
+</deployment>

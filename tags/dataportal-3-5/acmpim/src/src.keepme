@@ -1,0 +1,1 @@
+Java source files that generate teh servlets, beans, and other Java classes that are unique to the application. The src should also reflect the package hierarchy
