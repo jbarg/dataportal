@@ -174,7 +174,7 @@ public class ACServer {
                 rs = null;                
                 stat.close();
                 stat = null;                
-                conn.close();CVS
+                conn.close();
                 conn = null;
             }
             finally {
