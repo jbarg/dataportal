@@ -137,7 +137,7 @@
 	 <xsd:element name="InvestigationType" type="cmd:InvestigationTypes"/>
 	 <xsd:element name="Abstract" type="xsd:string"/>
 	 <!-- perhaps this should be at dataset and dataobject level also -->
-	 <xsd:element name="Resources" type="xsd:string"/>
+	 <xsd:element name="Resources" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
          <xsd:element name="RelatedReference" type="cmd:RelatedReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 	 <xsd:element name="DataHolding" type="cmd:DataHoldingType" minOccurs="0"/>
       </xsd:sequence>
@@ -305,7 +305,7 @@
                  <!-- again in the following can't find an XMLSchema equiv for #CDATA  -->
                  <!-- also perhaps we should make a type with all country codes in it  -->
                  <!-- this could even be placed in a different file and included --> 
-                    <xsd:attribute name="countryabbrev" type="xsd:string"/>
+                    <xsd:attribute name="countryabbrev" type="xsd:string" use="optional"/>
                  </xsd:extension>
               </xsd:simpleContent>
            </xsd:complexType>
@@ -324,15 +324,15 @@
 <!-- perhaps the following should be an enumerated list - even held in a different file -->
 <!-- and included here - note taken from the DTD -->
          <xsd:element name="StudyStatus" type="xsd:string"/>
-         <xsd:element name="Resources" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+         <xsd:element name="Resources" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
    </xsd:complexType>
 
 
    <xsd:complexType name="TimePeriodType">
       <xsd:sequence>
-         <xsd:element name="StartDate" type="cmd:DateTimeType"/>
-         <xsd:element name="EndDate"   type="cmd:DateTimeType"/>
+         <xsd:element name="StartDate" type="cmd:DateTimeType" minOccurs="0"/>
+         <xsd:element name="EndDate"   type="cmd:DateTimeType" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
 
@@ -410,9 +410,10 @@
 
    <xsd:complexType name="UnitsType">
       <xsd:sequence>
-	 <xsd:element name="UnitName" type="xsd:string"/>
-	 <xsd:element name="UnitAcronym" type="xsd:string"/>
+	 <xsd:element name="UnitName" type="xsd:string" minOccurs="0"/>
+	 <xsd:element name="UnitAcronym" type="xsd:string" minOccurs="0"/>
 	 <xsd:element name="UnitSystem" type ="xsd:string" minOccurs="0"/>
+	 <xsd:element name="UnitFormat" type ="xsd:string" minOccurs="0"/>
       </xsd:sequence>
    </xsd:complexType>
 	
@@ -673,7 +674,11 @@
    <xsd:simpleType name="PathTypes">
       <xsd:restriction base="xsd:string">
          <xsd:enumeration value="absolute"/>
+         <xsd:enumeration value="file_absolute"/>
          <xsd:enumeration value="relative"/>
+         <xsd:enumeration value="file_relative"/>
+         <xsd:enumeration value="database"/>
+         <xsd:enumeration value="other"/>
       </xsd:restriction>
    </xsd:simpleType>
 
