@@ -57,18 +57,21 @@ public class AuthCtl {
             //AuthCtl.delegateProxyLifetime = Integer.parseInt(config.getProperty("delegate_proxy_lifetime"));
             AuthCtl.portalCertFilename = config.getProperty("portal_cert_filename",Config.getContextPath()+"portalcert.pem");
             AuthCtl.portalPrivateKeyFilename = config.getProperty("portal_private_key_filename",Config.getContextPath()+"portalkey.pem");
-            AuthCtl.caCertFilename = config.getProperty("ca_cert_filename",Config.getContextPath()+"01621954.0");
+            AuthCtl.UserCACertFilename = config.getProperty("user_ca_cert_filename",Config.getContextPath()+"01621954.0");
+            AuthCtl.MyProxyCACertFilename = config.getProperty("myproxy_ca_cert_filename",Config.getContextPath()+"01621954.0");
             AuthCtl.uDDILookUpService = config.getProperty("uddi_lookup_service","http://localhost:8080/lookup/services/LookUpService");
             AuthCtl.defaultid = config.getProperty("defaultid" , "DataPortal");
          //   String facility = config.getProperty("facilities");
             
           /*  AuthCtl.facilities =facility.split(" ");
             
+           *
             for(int i = 0; i<AuthCtl.facilities.length;i++){
                 facilities[i] =   facilities[i].trim();
                 
             }*/
-            
+            //Data Portal needs both the user cert and the myproxy Root CAs present fro GSI handshake
+            CoGProperties.getDefault().setCaCertLocations(AuthCtl.UserCACertFilename +" , "+AuthCtl.MyProxyCACertFilename);
             
             
         } catch ( Exception e ) {
