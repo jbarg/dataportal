@@ -132,7 +132,10 @@ public class HelpSearch1 extends HttpServlet{
                 response.sendRedirect("../help/menu.jsp");  
             }
             catch(Exception e){
-                System.out.println(e);
+                logger.warn("Unable to preocess query",e);
+                response.sendRedirect("../help/menu.jsp");
+                
+                
             }
         }
     }
