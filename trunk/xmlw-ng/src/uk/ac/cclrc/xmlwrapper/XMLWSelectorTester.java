@@ -97,16 +97,16 @@ public class XMLWSelectorTester {
         Service  service = new Service();
         Call     call    = (Call) service.createCall();
         call.setTargetEndpointAddress( new java.net.URL(endpoint_url) );
-        call.setOperationName( "loadXMLRep" );
+        call.setOperationName( "queryMetaData" );
         call.addParameter( "op1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.XSD_STRING );
 
         String ret = (String) call.invoke( new Object [] {query});
 
-        System.out.println("Recieved the string from repository loader - hopefully loading complete now");
+        System.out.println("Recieved the result from the query - results in -" + file_name );
 
         //writing the output to a file
-        BufferedWriter out = new BufferedWriter(new FileWriter("file_name")) ;
+        BufferedWriter out = new BufferedWriter(new FileWriter(file_name)) ;
         out.write(ret) ;
         out.close() ;
     }
@@ -135,8 +135,17 @@ public class XMLWSelectorTester {
       XMLWSelectorTester xmlwt = new XMLWSelectorTester() ;
 
 
-      xmlwt.test_builder("http://escdmg.dl.ac.uk:9090/xmlw-ng/services/xmlwrapper_selector",
-                         "XML Query goes here!",
+      xmlwt.test_builder("http://escdmg.dl.ac.uk:8080/xmlw-ng/services/xmlwrapper_selector",
+                         "<result>\n" +
+                         "{\n" +
+                         "let $data_i := document(\"metadata.xml\")\n" +
+	                 "for $b in $data_i/MetadataRecord\n" +
+	                 "return\n" +
+	                 "<metadata id={$b/@metadataID}>\n" +
+		         "{$b/Experiment/StudyName}\n" +
+	                 "</metadata>\n" +
+                         "}\n" +
+                         "</result>",
                          "results_from_xquery.txt") ;
 
 
