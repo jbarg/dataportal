@@ -95,7 +95,7 @@
                        commands via the "/manager" web application)
 
 -->
-	<property name="app.name" value="datatransfer"/>
+	<property name="app.name" value="data"/>
 	<property name="app.path" value="/${app.name}"/>
 	<property name="app.version" value="0.1-dev"/>
 	<property name="build.home" value="${basedir}/build"/>

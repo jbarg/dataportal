@@ -113,6 +113,16 @@
 	
 		    </servlet-class>
 	</servlet>
+        
+        <servlet>
+		<servlet-name>TransferCOPServlet</servlet-name>
+		<display-name>Transfer Servlett</display-name>
+		<servlet-class>
+	
+		       uk.ac.dl.web.TransferCOPServlet
+	
+		    </servlet-class>
+	</servlet>
 	<servlet>
 		<servlet-name>DeleteSelectedWS</servlet-name>
 		<display-name>Axis Admin Servlet</display-name>
@@ -300,6 +310,10 @@
 	<servlet-mapping>
 		<servlet-name>Transfer</servlet-name>
 		<url-pattern>/servlet/Transfer</url-pattern>
+	</servlet-mapping>
+        <servlet-mapping>
+		<servlet-name>TransferCOPServlet</servlet-name>
+		<url-pattern>/servlet/TransferCOPServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>TestTransfer</servlet-name>

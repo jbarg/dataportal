@@ -308,7 +308,7 @@
 			<!--
     <pathelement location="${foo.jar}"/>
 -->
-			<fileset dir="${basedir}/web/WEB-INF/lib">
+			<fileset dir="${build.home}/WEB-INF/lib">
 				<include name="*.jar"/>
 			</fileset>
 			<!-- Include all elements that Tomcat exposes to applications -->
@@ -328,8 +328,6 @@
 		<!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
 	</target>
 	<!-- ============== copy common.lib jar first so any in ${web.homea/}lib can overwrite them ================-->
-	
-	
 	<target name="prepare">
 		<!-- Create build directories as needed -->
 		<mkdir dir="${build.home}"/>

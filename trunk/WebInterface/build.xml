@@ -27,7 +27,7 @@
      from which Ant executes the requested task.  This is normally
      set to the current working directory.
 -->
-<project name="Shopping Cart" default="compile" basedir=".">
+<project name="Web Interface" default="compile" basedir=".">
 	<!-- ===================== Property Definitions =========================== -->
 	<!--
 
@@ -310,7 +310,7 @@
 			<!--
     <pathelement location="${foo.jar}"/>
 -->
-			<fileset dir="${basedir}/web/WEB-INF/lib">
+			<fileset dir="${build.home}/WEB-INF/lib">
 				<include name="*.jar"/>
 			</fileset>
 			<!-- Include all elements that Tomcat exposes to applications -->
@@ -389,10 +389,9 @@
 		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>
 		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-logging.jar"/>
 		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-discovery.jar"/>
-                <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/dom4j.jar"/>
-                      <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xalan.jar"/>
-                      <!-- copy to Proay tool -->
-                      
+		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/dom4j.jar"/>
+		<copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xalan.jar"/>
+		<!-- copy to Proay tool -->
 		<!-- Copy static content of this web application -->
 		<copy todir="${build.home}">
 			<fileset dir="${web.home}"/>
@@ -419,6 +418,9 @@
 
     </copy> -->
 	</target>
+	
+	
+	
 	<target name="index" depends="compile" description="Re-index's the help pages">
 		<java classname="uk.ac.dl.web.Indexer" fork="false">
 			<arg value="create"/>
