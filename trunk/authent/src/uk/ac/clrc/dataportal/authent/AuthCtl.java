@@ -179,7 +179,7 @@ public class AuthCtl {
         call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
         call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.SOAP_ARRAY );
-        String[] name = {"BADC-EMIN","SRD","ISIS","MPIM","EMIN"};
+        String[] name = {"BADC-EMIN","SRD-EMIN","ISIS-EMIN","MPIM-EMIN"};
         Object[] ob = new Object[]{name,"ACM"};
         
         String[] faciltyEndPoints = (String[]) call.invoke(ob );
