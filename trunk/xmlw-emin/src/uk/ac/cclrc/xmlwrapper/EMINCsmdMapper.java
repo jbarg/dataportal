@@ -325,9 +325,9 @@ public class EMINCsmdMapper implements CsmdMapper
       //retrieve the database name
       String dbs = ss.getDbs() ;
 
-      r = s.executeQuery("select institution.name, institution_id address_line_1, address_line_2, town, region, postcode, country, " +
-                         "title, forename, surname, middle_initials, telephone, email, fax from " + dbs +
-                         "person, " + dbs + "institution where institution_id in " +
+      r = s.executeQuery("select institution.name, institution.institution_id address_line_1, address_line_2, town, region, postcode, country, " +
+                         "title, forename, surname, other_initials, telephone, email, fax from " + dbs +
+                         "person, " + dbs + "institution where institution.institution_id = person.institution_id and institution.institution_id in " +
                          "(select institution_id from study_institution where study_id in " +
                          "(select study_id from " + dbs + "study_person where study_id='" + key + "' and role like '%" + contact_type + "%')) " ) ;
 
@@ -347,7 +347,6 @@ public class EMINCsmdMapper implements CsmdMapper
 
       if(r.next())
       {
-         r.getRow() ;
          institute_name = sr.LitWithEnt(xt.makeValid(r.getString("INSTITUTION.NAME") ));
          institute_id = r.getInt("INSTITUTION_ID") ;
          i_street = sr.LitWithEnt(xt.makeValid(r.getString("ADDRESS_LINE_1") ));
@@ -395,7 +394,6 @@ public class EMINCsmdMapper implements CsmdMapper
          sbr.append(ii + ti + ti + "<Fax>" + fax + "</Fax>\n") ;
          sbr.append(ii + ti + "</ContactDetails>\n") ;
          sbr.append(ii + ti + "<Role>" + contact_type + "</Role>\n") ;
-         sbr.append(ii + "</Investigator>\n") ;
 
       if(contact_type.compareToIgnoreCase("Investigator") == 0 )
       {
@@ -465,8 +463,8 @@ public class EMINCsmdMapper implements CsmdMapper
       String status = place_holder ;
       String resources = place_holder ;
       String notes = place_holder ;
-      String related_study = place_holder ;
-      String relation_type = place_holder ;
+      //String related_study = place_holder ;
+      //String relation_type = place_holder ;
 
       r = s.executeQuery("select study_id, name, funding, start_date, end_date, access_conditions, " +
                          "purpose, status, resources, notes, related_study, relation_type from " + 
@@ -484,8 +482,8 @@ public class EMINCsmdMapper implements CsmdMapper
 	 status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
 	 resources = sr.LitWithEnt(xt.makeValid(r.getString("RESOURCES") ));
 	 notes = sr.LitWithEnt(xt.makeValid(r.getString("NOTES") ));
-	 related_study = sr.LitWithEnt(xt.makeValid(r.getString("RELATED_STUDY") ));
-	 relation_type = sr.LitWithEnt(xt.makeValid(r.getString("RELATION_TYPE") ));
+	 //related_study = sr.LitWithEnt(xt.makeValid(r.getString("RELATED_STUDY") ));
+	 //relation_type = sr.LitWithEnt(xt.makeValid(r.getString("RELATION_TYPE") ));
       }
 
       sbr.append("   <MetadataRecord metadataID=\"" + ss.getWrapperName() + "-" + key + "\">\n");
@@ -497,8 +495,8 @@ public class EMINCsmdMapper implements CsmdMapper
 
       sbr.append("      <Topic>\n") ;
 
-      r = s.executeQuery("select topic from " + dbs + "topics where topic_id in" +
-                        "(select distinct topic_id  from " + dbs + "study_topics where study_id='" + key + "')" ) ;
+      r = s.executeQuery("select topic from " + dbs + "topic where topic_id in" +
+                        "(select distinct topic_id  from " + dbs + "study_topic where study_id='" + key + "')" ) ;
      
 
       String topic_name = place_holder ;
@@ -515,20 +513,19 @@ public class EMINCsmdMapper implements CsmdMapper
       // following should the resultset handle
       r.close() ;
 
-      r = s.executeQuery("SELECT KEYWORD FROM " + dbs + "KEYWORDS WHERE KEYWORD_ID IN " +
-                        "(SELECT DISTINCT KEYWORD_ID FROM " + dbs + "STUDY_KEYWORDS WHERE " +
-                        " STUDY_ID='" + key + "' )") ;
+      //r = s.executeQuery("SELECT KEYWORD FROM " + dbs + "KEYWORD WHERE KEYWORD_ID IN " +
+      //                  "(SELECT DISTINCT KEYWORD_ID FROM " + dbs + "STUDY_KEYWORD WHERE " +
+      //                  " STUDY_ID='" + key + "' )") ;
 
       //as there can be multiple ones - i.e. Keywords - 
 
       String subject = place_holder ;
 
-      while(r.next())
-      {
-         r.getRow() ;
-         subject = sr.LitWithEnt(xt.makeValid(r.getString("KEYWORD") ));
-         sbr.append("         <Subject>" + sr.LitWithEnt(xt.makeValid(subject)) + "</Subject>\n") ;
-      }
+      //while(r.next())
+      //{
+      //   subject = sr.LitWithEnt(xt.makeValid(r.getString("KEYWORD") ));
+      //   sbr.append("         <Subject>" + sr.LitWithEnt(xt.makeValid(subject)) + "</Subject>\n") ;
+      //}
 
       // duplication needed as there maybe multiple values
       if(subject.compareTo(place_holder) == 0 )
@@ -536,13 +533,13 @@ public class EMINCsmdMapper implements CsmdMapper
          sbr.append("         <Subject>" + place_holder + "</Subject>\n") ;
       }
 
-      r.close() ;
+      //r.close() ;
 
       sbr.append("      </Topic>\n") ;
 
       // end of Topic
 
-      // start of Investigation (Experiment)
+      // start of Investigation (rxperiment)
 
       sbr.append("      <Experiment>\n") ;
 
@@ -684,7 +681,7 @@ public class EMINCsmdMapper implements CsmdMapper
          //create object references outside of the loop
          String dataset_name = place_holder ;
          String dataset_description = place_holder ;
-         String dataset_resources = place_holder ;
+         String dataset_facility = place_holder ;
          String dataset_uri = place_holder ;
          String access_method = place_holder ;
          String dataset_start_date = place_holder ;
@@ -695,13 +692,13 @@ public class EMINCsmdMapper implements CsmdMapper
 	    dataset_id = (String) g.next() ;
 	    typeofdata = "DATA_SET" ; //could replace with a search
 
-	    r = s.executeQuery("SELECT DATASET_NAME, DESCRIPTION, RESOURCES, URI, " +
+	    r = s.executeQuery("SELECT DATASET_NAME, DESCRIPTION, FACILITY_USED, URI, " +
                                "ACCESS_METHOD, START_DATE, END_DATE FROM " + dbs + "DATASET WHERE DATASET_ID  = '" + dataset_id + "'") ;
 	    if(r.next())
 	    {
 	       dataset_name = sr.LitWithEnt(xt.makeValid(r.getString("DATASET_NAME") ));
 	       dataset_description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
-	       dataset_resources = sr.LitWithEnt(xt.makeValid(r.getString("RESOURCES") ));
+	       dataset_facility = sr.LitWithEnt(xt.makeValid(r.getString("FACILITY_USED") ));
 	       dataset_uri = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
 	       access_method = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_METHOD") ));
 	       dataset_start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
@@ -727,7 +724,7 @@ public class EMINCsmdMapper implements CsmdMapper
 
 
 	    // now select the data_files associated with this data_set
-            r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATA_SET_ID = '" + dataset_id + "'") ;
+            r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATASET_ID = '" + dataset_id + "'") ;
             while(r.next())
             {
 	       r.getRow() ;
@@ -744,9 +741,9 @@ public class EMINCsmdMapper implements CsmdMapper
             //object references here
             String data_name = place_holder ;
             String data_format = place_holder ;
-            status = place_holder ;
-            String data_description = place_holder ;
-            String producing_facility = place_holder ;
+            //status = place_holder ;
+            //String data_description = place_holder ;
+            //String producing_facility = place_holder ;
             String data_uri = place_holder ;
             access_method = place_holder ;
             String data_start_date = place_holder ;
@@ -756,16 +753,18 @@ public class EMINCsmdMapper implements CsmdMapper
             {
 	       data_id = (String) ro.next() ;
 	       
-	       r = s.executeQuery("SELECT DATA_NAME, DATA_FORMAT, STATUS, DESCRIPTION, PRODUCING_FACILITY, " +
+	       r = s.executeQuery("SELECT DATA_NAME, DATA_FORMAT, DESCRIPTION, " +
                                   "URI, ACCESS_METHOD, START_DATE, END_DATE FROM " + dbs + "DATA WHERE DATA_ID = '" + data_id + "'") ;
 	       if(r.next())
 	       {
 		  data_name = sr.LitWithEnt(xt.makeValid(r.getString("DATA_NAME") ));
 		  data_format = sr.LitWithEnt(xt.makeValid(r.getString("DATA_FORMAT") ));
-		  status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
-		  data_description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
-		  producing_facility = sr.LitWithEnt(xt.makeValid(r.getString("PRODUCING_FACILITY") ));
-		  data_uri = sr.LitWithEnt(xt.makeValid(r.getString("DATA_URI") ));
+		  //most of these commented out due to null data causing null references
+		  //this needs addressing and the null value replacing with a place_holder
+		  //status = sr.LitWithEnt(xt.makeValid(r.getString("STATUS") ));
+		  //data_description = sr.LitWithEnt(xt.makeValid(r.getString("DESCRIPTION") ));
+		  //producing_facility = sr.LitWithEnt(xt.makeValid(r.getString("PRODUCING_FACILITY") ));
+		  data_uri = sr.LitWithEnt(xt.makeValid(r.getString("URI") ));
 		  access_method = sr.LitWithEnt(xt.makeValid(r.getString("ACCESS_METHOD") ));
 		  data_start_date = sr.LitWithEnt(xt.makeValid(r.getString("START_DATE") ));
 		  data_end_date = sr.LitWithEnt(xt.makeValid(r.getString("END_DATE") ));
@@ -879,6 +878,8 @@ public class EMINCsmdMapper implements CsmdMapper
 
          tmp_sb.delete(tmp_sb.length()-1, tmp_sb.length()) ;
 
+	 tmp_sb.append(")") ;
+
          dataset_in_list = tmp_sb.toString() ;
 
       }
@@ -913,6 +914,8 @@ public class EMINCsmdMapper implements CsmdMapper
          }
 
          tmp_sb.delete(tmp_sb.length()-1, tmp_sb.length()) ;
+
+	 tmp_sb.append(")") ;
        
          data_in_list = tmp_sb.toString() ;
 
@@ -927,7 +930,7 @@ public class EMINCsmdMapper implements CsmdMapper
       String param_unit = place_holder ;
       String param_value = place_holder ; 
 
-      r = s.executeQuery("SELECT NAME, UNIT, VALUE FROM " + dbs + "PARAMETER WHERE DATA_ID IN (" + data_in_list + ")") ;
+      r = s.executeQuery("SELECT NAME, UNIT, VALUE FROM " + dbs + "PARAMETER WHERE DATA_ID IN " + data_in_list ) ;
 
       while(r.next())
       {

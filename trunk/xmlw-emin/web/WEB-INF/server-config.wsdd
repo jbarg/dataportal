@@ -69,7 +69,7 @@
   </service>
 
 
- <-- //////////////////////////////////////////////////////// -->
+ <!-- //////////////////////////////////////////////////////// -->
  <service name="urn:xmltoday-delayed-quotes" provider="java:RPC">
   <requestFlow name="checks">
    <handler type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>

@@ -93,7 +93,7 @@ public class XMLWTester {
      //      "Discipline='/earth sciences/atmosphere/atmospheric temperature/Temperature'",
      //      "saved_badc.xml") ;
 		     
-      xmlwt.test("http://escvig2.dl.ac.uk:8080/xmlw-em/services/xmlwrapper_emin",
+      xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
                  "Discipline='All'",
                  "saved_emin.xml") ;
 
