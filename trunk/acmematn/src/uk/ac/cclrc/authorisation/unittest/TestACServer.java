@@ -75,14 +75,14 @@ public class TestACServer {
             //   org.w3c.dom.Element element  = doc.getDocumentElement();
             
             
-            TokenReader reader = new TokenReader();
+            //TokenReader reader = new TokenReader();
             
-            uk.ac.cclrc.authorisation.AttributeList list =  reader.getAttributes(element);
+          //  uk.ac.cclrc.authorisation.AttributeList list =  reader.getAttributes(element);
             
             // cred = GlobusProxy.load(data,caCertLocation);
-            System.out.println("Data access "+list.getDataAccessGroup());
-            System.out.println("Wrapper access "+list.getWrapperGroup());
-            System.out.println("Meta access "+list.getDPView());
+            //System.out.println("Data access "+list.getDataAccessGroup());
+            //System.out.println("Wrapper access "+list.getWrapperGroup());
+            //System.out.println("Meta access "+list.getDPView());
             
             //getUserPrivilegesFromDB();
         } catch (Exception e){
@@ -109,7 +109,7 @@ public class TestACServer {
         
     }
     
-    static String turnintoString(GlobusCredential cred)throws Exception{
+    /*static String turnintoString(GlobusCredential cred)throws Exception{
         
         
         
@@ -141,7 +141,7 @@ public class TestACServer {
         file.delete();
         return cert.toString();
         
-    }
+    }*/
     
     
     
