@@ -1,0 +1,13 @@
+<fadm:facilityAdmin xmlns:fadm="http://www.e-science.cclrc.ac.uk/schema/facilityAdmin.xsd">
+  <createFacility>
+    <facilityName>ISIS</facilityName>
+    <facilityDescription>ISIS, the worlds most powerful pulsed neutron and muon source</facilityDescription>
+    <service>
+      <serviceName>XML Wrapper</serviceName>
+      <serviceDescription>Returns XML data from remote database</serviceDescription>
+      <serviceType>XMLW</serviceType>
+      <serviceEndpoint>http://gjd37vig.dl.ac.uk:8080/wrappers/services/xml_wrapperISIS</serviceEndpoint>
+      <serviceWSDL>http://gjd37vig.dl.ac.uk:8080/wrappers/services/xml_wrapperISIS?wsdl</serviceWSDL>
+    </service>
+  </createFacility>
+</fadm:facilityAdmin>

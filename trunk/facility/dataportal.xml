@@ -3,8 +3,43 @@
     <facilityName>Dataportal</facilityName>
     <facilityDescription>CCLRC Data Portal</facilityDescription>
     <service>
+      <serviceName>Access Control Module</serviceName>
+      <serviceDescription>Returns Access Control details for user</serviceDescription>
+      <serviceType>ACM</serviceType>
+      <serviceEndpoint>http://escvig3.dl.ac.uk:8080/axis/services/ACM</serviceEndpoint>
+      <serviceWSDL>http://escvig3.dl.ac.uk:8080/axis/services/ACM?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>Authentication</serviceName>
+      <serviceDescription>Authentication and Authorisation (via ACM)</serviceDescription>
+      <serviceType>AUTH</serviceType>
+      <serviceEndpoint>http://escpc12.esc.rl.ac.uk:8080/axis/services/AUTH</serviceEndpoint>
+      <serviceWSDL>http://escpc12.esc.rl.ac.uk:8080/axis/services/AUTH?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>Facility Administration</serviceName>
+      <serviceDescription>Allows creation and destruction of Dataportal facilities and associated services</serviceDescription>
+      <serviceType>FACADM</serviceType>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/facility/services/FacilityAdminService</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/facility/services/FacilityAdminService?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>Look Up Module</serviceName>
+      <serviceDescription>Returns endpoints and WSDL urls for Dataportal Services</serviceDescription>
+      <serviceType>LOOKUP</serviceType>
+      <serviceEndpoint>http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService</serviceEndpoint>
+      <serviceWSDL>http://escdmg.dl.ac.uk:8080/lookup/services/LookUpService?wsdl</serviceWSDL>
+    </service>
+    <service>
+      <serviceName>Query and Reply</serviceName>
+      <serviceDescription>Main Dataportal query module</serviceDescription>
+      <serviceType>QNR</serviceType>
+      <serviceEndpoint>http://escvig1.dl.ac.uk:8080/axis/services/QueryAndReply</serviceEndpoint>
+      <serviceWSDL>http://escvig1.dl.ac.uk:8080/axis/services/QueryAndReply?wsdl</serviceWSDL>
+    </service>
+    <service>
       <serviceName>Session Manager</serviceName>
-      <serviceDescription>Performs Session Management</serviceDescription>
+      <serviceDescription>Dataportal Session Manager</serviceDescription>
       <serviceType>SESSION</serviceType>
       <serviceEndpoint>http://escvig1.dl.ac.uk:8080/axis/services/SessionManager</serviceEndpoint>
       <serviceWSDL>http://escvig1.dl.ac.uk:8080/axis/services/SessionManager?wsdl</serviceWSDL>
