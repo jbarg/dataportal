@@ -133,7 +133,7 @@ public class RedoBasicSearch extends HttpServlet {
                 Saver.save(doc1, new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml"));
                  */
                 
-                Search.doBasicSearh(sid,facs,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
+                Search.doBasicSearch(sid,facs,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
                 
                 
                 response.sendRedirect("../jsp/SimpleSearch.jsp");

@@ -58,6 +58,7 @@ public class SessionManager {
     
     static String lookup_url;
     static String caCertLocation;
+    static String defaultid;
     /** Creates a new instance of SessionManager */
     
     public SessionManager() throws Exception {
@@ -84,6 +85,8 @@ public class SessionManager {
         password = prop.getProperty("db_password");
         lookup_url = prop.getProperty("lookup_module");
         caCertLocation =  prop.getProperty("ca_cert_location");
+        defaultid  = prop.getProperty("defaultid");
+        
         
         Class.forName(odbcdriverName);
         
@@ -221,7 +224,7 @@ public class SessionManager {
             call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
             call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
             call.setReturnType( XMLType.SOAP_ARRAY );
-            String[] name = {"Dataportal"};
+            String[] name = {"Dataportal"+defaultid};
             Object[] ob = new Object[]{name,"AUTH"};
             
             url= (String[]) call.invoke(ob );

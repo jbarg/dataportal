@@ -114,7 +114,7 @@ public class BasicSearch extends HttpServlet {
                 logHistoryFile(object, (String)session.getAttribute("dn"),wd);
                 */
                 //use the class files
-                Search.doBasicSearh(sid,facs,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
+                Search.doBasicSearch(sid,fac,Discipline, max2,endpoint,wd,(String)session.getAttribute("dn"), true);
                 
                 
                 response.sendRedirect("../jsp/SimpleSearch.jsp");
@@ -133,7 +133,7 @@ public class BasicSearch extends HttpServlet {
     }
     
     private void logHistoryFile(Object[] query,String dn, String wd){
-        FileWriter wr = null;
+       /* FileWriter wr = null;
         try{
             String[] facs = (String[])query[1];
             StringBuffer buff = new StringBuffer();
@@ -155,9 +155,11 @@ public class BasicSearch extends HttpServlet {
         }
         catch(Exception e){
             logger.warn("Coulld not update history file",e);
-            
+            try{
             wr.close();
-        }
+            }
+            catch(Exception ignore){}
+        }*/
         
         
         

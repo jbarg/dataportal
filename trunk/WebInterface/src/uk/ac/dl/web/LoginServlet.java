@@ -110,8 +110,8 @@ public class LoginServlet extends HttpServlet {
                 prop = new Properties();
                 prop.load(new FileInputStream(workingDir+File.separator+"WEB-INF"+File.separator+"web.conf"));
                 lookup = prop.getProperty("LookupWebService");
-                
-                locations = getLocations(lookup);
+                String id = prop.getProperty("defaultid");
+                locations = getLocations(lookup,id);
                 
                 //hard code for now
                 //String shopcart= prop.getProperty("sc_url");
@@ -426,7 +426,7 @@ public class LoginServlet extends HttpServlet {
         }
     }
     
-    private Properties getLocations(String lookup) throws Exception{
+    private Properties getLocations(String lookup, String defaultid) throws Exception{
         Properties prop = new Properties();
         String[] serviceTypes = {"SESSION","QNR","AUTH","CART","RASGRIB","DTS"};
         
@@ -444,7 +444,7 @@ public class LoginServlet extends HttpServlet {
                 call.addParameter( "sid", XMLType.SOAP_ARRAY, ParameterMode.IN );
                 call.addParameter( "sid1", XMLType.XSD_STRING, ParameterMode.IN );
                 call.setReturnType( XMLType.SOAP_ARRAY );
-                String[] name = {"Dataportal"};
+                String[] name = {"Dataportal"+defaultid};
                 Object[] ob = new Object[]{name,serviceTypes[i]};
                 
                 String[] url = (String[]) call.invoke(ob );
