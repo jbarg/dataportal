@@ -8,15 +8,46 @@ import org.apache.log4j.* ;
 
 public class ISISCsmdMapper implements CsmdMapper
 {
+
+   // local variables
+   //get local values needed from SessionSingleton - set in constructor - to avoid unnecessary repitition
+   SessionSingleton ss  = null ;
+   //data masaging functions so it is xml text compliant
+   StringReplace    sr  = null ;
+   XmlText          xt  = null ;
+   //log4j logger
+   Logger           log = null ;
+   //jdbc handles
+   Statement s = null ;
+   ResultSet r = null ;
+   //default values when none are available
+   String place_holder = null ;
+   int i_place_holder = 0 ;
+   //indentation level for layout reasons (ti - tree indent - indent level for subtrees)
+   String ti = null ;
+   //retrieve the database schema name if their is a need to prepend this before the table names
+   String dbs = null ;
+
    public ISISCsmdMapper()
    {
-      SessionSingleton ss = SessionSingleton.getInstance() ;
       //setup wrapper name
-      ss.setWrapperName("isis") ;
+      ss.setWrapperName("isis") ; // perhaps this duplicates the facility name - but they could be different
+      //setup these local variables as it would be too verbose to put them at the start of each function in this class
+      //get local values needed from SessionSingleton
+      this.ss = SessionSingleton.getInstance() ;
+      this.r=ss.getStringReplace() ;
+      this.xt=ss.getXmlText() ;
       //setup logger
       ss.setLogger(ISISCsmdMapper.class.getName() + ".class" ) ;
-      //setup login details
-      Logger log = ss.getLogger() ;
+      this.log = ss.getLogger() ;
+      this.s = ss.getStatement() ;
+      this.r = ss.getResultSet() ;
+      this.place_holder = ss.place_holder ;
+      this.i_place_holder = ss.i_place_holder ;
+      this.ti = indentToStr(ss.indent) ;
+      //retrieve the database name
+      this.dbs = ss.getDbs() ;
+
 
       try
       {
@@ -31,6 +62,8 @@ public class ISISCsmdMapper implements CsmdMapper
       //connect to the database
       DBHelper dbh = ss.getRelDBHelper() ;
       dbh.connectToDB() ;
+
+
 
    }
 
@@ -328,6 +361,9 @@ public class ISISCsmdMapper implements CsmdMapper
 
    //Indexing 
    void buildMDTopic(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
+   {
+      String ii = indentToStr(initial_indent) ;
+
    void buildMDKeywords(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
    void buildMDSubjects(String key, StringBuffer sbr, int initial_indent, String type) throws SQLException
 
@@ -372,26 +408,7 @@ public class ISISCsmdMapper implements CsmdMapper
 
    void buildMDContact(String key, StringBuffer sbr, int initial_indent, String contact_type) throws SQLException
    {
-      //get local values needed from SessionSingleton
-      SessionSingleton ss = SessionSingleton.getInstance() ;
-
-      StringReplace sr=ss.getStringReplace() ;
-      XmlText xt=ss.getXmlText() ;
-
-      Logger log = ss.getLogger() ;
-
-      Statement s = ss.getStatement() ;
-      ResultSet r = ss.getResultSet() ;
-
-      String place_holder = ss.place_holder ;
-      int i_place_holder = ss.i_place_holder ;
-      int indent = ss.indent ;
-
       String ii = indentToStr(initial_indent) ;
-      String ti = indentToStr(indent) ;
-
-      //retrieve the database name
-      String dbs = ss.getDbs() ;
 
       r = s.executeQuery("select institution.name, institution.institution_id, address_1, address_2, town, region, postcode, country, " +
                          "title, forename, surname, other_initials, telephone, email, fax from " + dbs +
