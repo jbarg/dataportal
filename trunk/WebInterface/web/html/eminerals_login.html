@@ -49,12 +49,12 @@ var username = document.logon.username.value;
 var password = document.logon.password.value;
 var lifetime = document.logon.lifetime.value;
 
-if(username == "" ||password == ""||lifetime == ""){ 
+if(username == "" ||password == ""||lifetime == ""){
     alert("Please enter a username, password and/or lifetime");
     return false;
 
 }
-else if(parseInt(lifetime) && lifetime>0){  
+else if(parseInt(lifetime) && lifetime>0){
 
 return true;
 }
@@ -63,7 +63,12 @@ alert("Enter a number for the lifetime");
 return false;}
 }
 
+function openHelp(){
+    window.open("../help/Help.jsp","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=600,left=0,top=0");
+
+}
 </script>
+
 
 <title>Eminerals Mini Grid</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -75,25 +80,26 @@ return false;}
 @import url(../style/emin2.css); /*IE and NN6x styles*/
 </style>
 </head>
-<body background="../img/redbg.gif" onload="document.forms['logon'].username.focus();">
+<body  onload="document.forms['logon'].username.focus();">
 <table width="100%" cellspacing="3" border="0"><tr>
 <td valign="top" width="20%" align="left">
-<a href="http://www.clrc.ac.uk"><img src="../img/emin1.jpg" width="40%" height="40%" alt="E-minerals" border="0" /></a>
+<a href="http://www.clrc.ac.uk"><img src="../img/emin1.gif" width="70" height="90" alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin2.png" width="40%" height="40%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin2.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin3.png" width="40%" height="40%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin3.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin4.jpg" width="40%" height="40%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin4.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin5.png" width="40%" height="40%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin5.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
 <br />
 <br />
-<a href="http://eminerals.org"><img src="../img/emin6.png" width="40%" height="400%" alt="E-minerals" border="0" /></a>
+<a href="http://eminerals.org"><img src="../img/emin6.gif" width="70" height="90"  alt="E-minerals" border="0" /></a>
+
 
 
 <!--<form name="top-search_form" action="">
@@ -141,6 +147,9 @@ action="../servlet/emineralsServlet">
 </script>
 <br />
 <br />
+<a href="#" onclick="openHelp();">Help pages</a>.
+<br />
+
 Back to <a href="../eminerals.html">Home page</a>.
 <br />
 
