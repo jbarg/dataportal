@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<html>
+
+<head>
+<script>
+    var javawsInstalled = 0;
+    isIE = "false";
+
+    if (navigator.mimeTypes && navigator.mimeTypes.length)
+    {
+        x = navigator.mimeTypes['application/x-java-jnlp-file'];
+        if (x) javawsInstalled = 1;
+    }
+    else
+    {
+        isIE = "true";
+        javawsInstalled = 1;
+    }
+
+    function insertLink(url, name)
+    {
+        if (javawsInstalled)
+        {
+
+            document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
+            document.write("<br />Launch <a href=" + url + ">" + name + "</a> via Java Web Start");
+	   // document.write("<p align=center><img align=center border=0 alt=Icon height=15 width=15 src=http://www.clrc.ac.uk//img/DefaultIcon.gif> Download and install the latest version of <a href=http://www.java.sun.com/products/javawebstart>Java Web Start</a></p>");
+            //document.write("<p align=center><img align=center border=0 alt=Icon height=15 width=15 src=http://www.clrc.ac.uk//img/DefaultIcon.gif> Launch <a href=" + url + ">" + name + "</a> via Java Web Start</p>");
+
+            //document.write("<ul><li>Download and install the latest version of <a href=http://www.java.sun.com/products/javawebstart>Java Web Start</a></li></ul>");
+	    //document.writeln("<ul><li>Launch <a href=" + url + ">" + name + "</a> via Java Web Start</ul></li>");
+        }
+        else
+        {
+
+
+            document.write("If your MyProxy credentials have expired, use our Proxy Init application.");
+	    document.write("<br />Java Webstart is not detected on your machine !");
+            document.write("<br />Download and install the latest version of <a href=http://www.java.sun.com/products/javawebstart>Java Web Start</a>");
+           // document.writeln("Launch <a href=" + url + ">" + name + "</a> via Java Web Start");
+        }
+    }
+
+function check(){
+
+var username = document.logon.username.value;
+var password = document.logon.password.value;
+var lifetime = document.logon.lifetime.value;
+
+if(username == "" ||password == ""||lifetime == ""){ 
+    alert("Please enter a username, password and/or lifetime");
+    return false;
+
+}
+else if(parseInt(lifetime) && lifetime>0){  
+
+return true;
+}
+else{
+alert("Enter a number for the lifetime");
+return false;}
+}
+</script>
+
+<title>CLRC DataPortal / Estedi - Basic database search</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name="robots" content="index, nofollow" />
+
+<meta name="description" content="This site is the dataportal" />
+
+<meta name="keywords" content="Dataportal, metadata, clrc, dl, facilities,Estedi, data, search, Glen Drinkwater, Synchrotron Radiation,British Atmospheric Data Centre, shopping basket" />
+
+
+
+<link rel="stylesheet" href="../style/mainNN4.css" type="text/css" />
+
+<style type="text/css">
+
+@import url(../style/main.css); /*IE and NN6x styles*/
+
+</style>
+
+</head>
+
+<body onLoad="window.location.href='eminerals_login.html'" background="../img/redbg.gif" ></body>
+
+</html>
+
+
+

@@ -63,16 +63,16 @@ public class AuthCtl {
         
         String[] facilityEndPoints;
         org.w3c.dom.Element facilityAccess;
-        String sessionId;
+        String sessionId = "-1";
         AuthCtl.getMyConfig();
         GlobusProxy userCert = idCheck( userName, password, lifetime );
         //        S
         //        System.out.println( "---> CA:       " + userCert.getIssuerDN() );
         //        System.out.println( "---> Timeleft: " + delegateUserProxy.getTimeLeft() + " seconds.");
-        
-        
-        
+                
         if ( userCert == null )
+            sessionId = "-1";
+        else if(userCert.getTimeLeft() == -1) 
             sessionId = "-1";
         else {
             facilityEndPoints = lookupFacility();

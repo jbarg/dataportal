@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Created by gjd37 on 22 April 2002, 15:28 -->
+
+<!--<!DOCTYPE active SYSTEM "active_topics.dtd">-->
+
+<active value="start">
+
+	<level1 canSubmit="false" value="chemistry" final="">
+
+		<level2 canSubmit="false" value="bio chemistry" final="chemistry/">
+
+			<level3 canSubmit="false" value="inorganic chemistry" final="chemistry/bio chemistry/">
+
+				<level4 canSubmit="true" value="submit" final="chemistry/bio chemistry/inorganic chemistry"/>
+
+			</level3>
+
+			<level3 canSubmit="false" value="organic chemistry" final="chemistry/bio chemistry/">
+
+				<level4 canSubmit="true" value="submit" final="chemistry/bio chemistry/organic chemistry"/>
+
+			</level3>
+
+			<level3 canSubmit="false" value="computational chemistry" final="chemistry/bio chemistry/">
+
+				<level4 canSubmit="true" value="submit" final="chemistry/bio chemistry/computational chemistry"/>
+
+			</level3>
+
+		</level2>
+
+	</level1>
+
+	<level1 canSubmit="false" value="biology" final="">
+
+		<level2 canSubmit="false" value="bio-chemistry" final="chemistry/">
+
+			<level3 canSubmit="false" value="inorganic chemistry" final="chemistry/bio chemistry/">
+
+				<level4 canSubmit="true" value="submit" final="chemistry/bio chemistry/inorganic chemistry"/>
+
+			</level3>
+
+			<level3 canSubmit="false" value="organic chemistry" final="chemistry/bio chemistry/">
+
+				<level4 canSubmit="true" value="submit" final="chemistry/bio chemistry/organic chemistry"/>
+
+			</level3>
+
+			<level3 canSubmit="false" value="computational chemistry" final="chemistry/bio chemistry/">
+
+				<level4 canSubmit="true" value="submit" final="chemistry/bio chemistry/computational chemistry"/>
+
+			</level3>
+
+		</level2>
+
+	</level1>
+
+</active>
+
