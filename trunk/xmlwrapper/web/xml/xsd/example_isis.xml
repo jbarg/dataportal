@@ -27,17 +27,16 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 		<Study StudyID="SXD1009">
 			<StudyName>Benzene, variable temperature study: 150K</StudyName>
 			<StudyInstitution>
-				<Name institutionID="ISIS" institutiontype="academic">String</Name>
+				<Name institutionID="ISIS" institutiontype="academic">ISIS</Name>
 				<Role>Study Institution</Role>
 			</StudyInstitution>
-			<Investigator>
+			<StudyPerson>
 				<Name>
 					<Surname>Perimentor</Surname>
 					<MiddleInitials>X</MiddleInitials>
 					<Forename>Anne</Forename>
 					<Title>Professor</Title>
 				</Name>
-				<InstitutionId>ID-INS1</InstitutionId>
 				<ContactDetails>
 					<Address>
 						<Addressline1>Department of Organic Chemistry</Addressline1>
@@ -45,7 +44,7 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 						<Town>Some Town</Town>
 						<Region>Some Region</Region>
 						<Postcode>S12 4WE</Postcode>
-						<Country countryabbrev="en_UK">United Kindom</Country>
+						<Country countryabbrev="UK">United Kindom</Country>
 					</Address>
 					<DirectLine>01922 222 2222</DirectLine>
 					<Switchboard>01922 222 2000</Switchboard>
@@ -55,7 +54,31 @@ E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\
 				</ContactDetails>
 				<RoleInStudy>Principal Investigator</RoleInStudy>
 				<RoleInInstitution>Professor</RoleInInstitution>
-			</Investigator>
+			</StudyPerson>
+			<StudyPerson>
+				<Name>
+					<Surname>Wilson</Surname>
+					<Forename>Chick</Forename>
+					<Title>Doctor</Title>
+				</Name>
+				<ContactDetails>
+					<Address>
+						<Addressline1>ISIS</Addressline1>
+						<Addressline2>Rutherford Appleton Laboratory</Addressline2>
+						<Addressline3>Chilton</Addressline3>
+						<Town>Didcot</Town>
+						<Region>Oxon</Region>
+						<Postcode>OX11 0QX</Postcode>
+						<Country countryabbrev="UK">United Kindom</Country>
+					</Address>
+					<DirectLine>01111 111 1111</DirectLine>
+					<Switchboard>01111 111 1000</Switchboard>
+					<Fax>01111 111 2111</Fax>
+					<Email>chick.wilson@rl.ac.uk</Email>
+					<WebPage>http://www.rl.ac.uk/wilsonc</WebPage>
+				</ContactDetails>
+				<RoleInStudy>Data Holder</RoleInStudy>
+			</StudyPerson>
 			<StudyInformation>
 				<Funding>EPSRC</Funding>
 				<TimePeriod>
