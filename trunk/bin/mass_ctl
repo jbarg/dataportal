@@ -44,11 +44,25 @@ function doBackup () {
   readIdx
   if [ $tapp = "N" ]
   then
-	$MASS_HOME/bin/mass_bck $diskName $type \
-	${tapeName[1]} $tapp $level
+  	if [ $immed = "Y" ]; then
+		immed=`date +\%a_\%j_\%k_\%M_\%S`
+		$MASS_HOME/bin/mass_bck $diskName $type \
+		${tapeName[1]} $tapp $level >& \
+		"$MASS_HOME/log/mass_${immed}.log"
+	else
+		$MASS_HOME/bin/mass_bck $diskName $type \
+		${tapeName[1]} $tapp $level 
+	fi
   else	
-	$MASS_HOME/bin/mass_bck $diskName $type \
-	${tapeName[$count]} $tapp $level
+  	if [ $immed = "Y" ]; then
+		immed=`date +\%a_\%j_\%k_\%M_\%S`
+		$MASS_HOME/bin/mass_bck $diskName $type \
+		${tapeName[$count]} $tapp $level >& \
+		"$MASS_HOME/log/mass_${immed}.log"
+	else
+		$MASS_HOME/bin/mass_bck $diskName $type \
+		${tapeName[$count]} $tapp $level 
+	fi
   fi
   writeIdx
 }
@@ -157,8 +171,10 @@ fi
 #
 #
 #set up the control file
+immed="N"
 if [ $# = "1" ]; then
 	export MASS_CTL="$1"
+	immed="Y"
 else 
 	export MASS_CTL="$MASS_HOME"/ctl/control.dat
 fi
@@ -176,6 +192,7 @@ fi
 day=${day:-$(date +%a)}
 day=`toupper $day`
 enam=""
+noactivity="Y"
 #
 #
 { while read diskName tapeIndex sday type sync tapp level; do
@@ -188,20 +205,50 @@ enam=""
 		today=${today:-$(date +%d)}
 		if [ "$today" = "15" ]; then
 			doBackup $tapp $level
+			noactivity="N"
 		fi
 	else
 		doBackup $tapp $level
+		noactivity="N"
 	fi
    fi
 done } < $MASS_CTL
 #
 #
+# If there was not backup activity, then state this in log file
+# MDOHERTY 9/2/2004
+if [ $noactivity = "Y" ]; then
+	echo "|"
+	echo "| *** No activity in this backup ***"
+	echo "|"
+	echo "+----------------------------------------------------------"
+fi
+#
+#
 # Now mail the information to selected users - MDOHERTY 26/1/2004
 logtime=`date +%"D %T"`
 node=`hostname`
-cat $MASS_HOME/log/backups.l* | sort -r -k1,2 | sort -u -k4,4 -k 7,7 \
-| sort > $LGBCK
-mail -s "$node"" Last Good Backups ""$logtime" $MASS_ADMINS < $LGBCK
+#cat $MASS_HOME/log/backups.l* | sort -r -k1,2 | sort -u -k4,4 -k 7,7 \
+#| sort > $LGBCK
+
+cat $MASS_HOME/log/backups.l* | sort -r k1,2 > $LGBCK
+
+#
+# Now mail the last good backup, plus the output from this backup
+# MDOHERTY 9/2/2004
+rm -f "$MASS_HOME/tmp/mail.tmf"
+cp $LGBCK "$MASS_HOME/tmp/mail.tmf"
+echo "+----------------------------------------------------------" >> \
+"$MASS_HOME/tmp/mail.tmf"
+echo "|" >> "$MASS_HOME/tmp/mail.tmf"
+echo "| Log files for last MASS activity follow..." >> "$MASS_HOME/tmp/mail.tmf"
+echo "|" >> "$MASS_HOME/tmp/mail.tmf"
+if [ $immed = "N" ]; then
+	immed=`date +\%a_\%j`
+fi
+cat "$MASS_HOME/log/mass_${immed}.log" >> "$MASS_HOME/tmp/mail.tmf"
+mail -s "$node"" Last Good Backups ""$logtime" $MASS_ADMINS < \
+"$MASS_HOME/tmp/mail.tmf"
 #
 echo "+----------------------------------------------------------"
 exit
