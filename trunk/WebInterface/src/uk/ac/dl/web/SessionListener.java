@@ -16,15 +16,25 @@ public class SessionListener implements HttpSessionListener {
     
     private static int counter  =  0;
     private static int active  = 0;
+    private static String wd  = null;
+    
+    private ServletConfig scon = null ;
+    
+    public void init(ServletConfig config) throws ServletException {
+        
+        scon = config ;
+    }
+    
+    
     //set static log for the class
-    static Logger logger = Logger.getLogger(SessionListener.class);
+    Logger logger = Logger.getLogger(this.getClass().getName());
     String id = null;
     
     
     
     public void sessionCreated(HttpSessionEvent e){
         //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure("../logs/DataPortal.log.properties");
+        //PropertyConfigurator.configure("../logs/DataPortal.log.properties");
         
         counter++;
         active++;
@@ -34,25 +44,40 @@ public class SessionListener implements HttpSessionListener {
     
     public void sessionDestroyed(HttpSessionEvent e){
         //locate the prop file.  Normal get this from web.xml file
-        PropertyConfigurator.configure("../logs/DataPortal.log.properties");
+        //PropertyConfigurator.configure("../logs/DataPortal.log.properties");
         
         active--;
         logger.info("Sessions active:  "+active);
+        //get and set the working dir
+        ServletContext sc = scon.getServletContext();
+        wd = sc.getRealPath("");
         if(active == 0){
             try{
-                Runtime run = Runtime.getRuntime();
-                run.exec("cleanup.bat");
+                File dir = new File(wd+File.separator+"profiles");
+                String[] files = dir.list();
+                for(int i = 0;i < files.length;i++){
+                    File file = new File(wd+File.separator+files[i]);
+                    if(file.isFile()) file.delete();
+                    
+                    
+                }
             }
             catch(Exception ex){
-                logger.warn("Could not clean up dpuser folder",ex);
+                logger.warn("Could not delete files in profiles folder",ex);
             }
             
         }
         if(active < 0){
             active = 0;
             try{
-                Runtime run = Runtime.getRuntime();
-                run.exec("cleanup.bat");
+                File dir = new File(wd+File.separator+"profiles");
+                String[] files = dir.list();
+                for(int i = 0;i < files.length;i++){
+                    File file = new File(wd+File.separator+files[i]);
+                    if(file.isFile()) file.delete();
+                    
+                    
+                }
             }
             catch(Exception ex){
                 logger.warn("Could not clean up dpuser folder",ex);
