@@ -34,7 +34,7 @@ public class XmlWrapperEMIN
       ss.setWrapperName("mpim") ;
 
       //setup logger
-      ss.setLogger(XmlWrapperEMIN.class.getName()) ;
+      ss.setLogger(XmlWrapperEMIN.class.getName() + ".class" ) ;
 
       //setup login details
       Logger log = ss.getLogger() ;
