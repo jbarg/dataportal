@@ -104,6 +104,10 @@ public class XMLWTester {
       xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
                  "Discipline='Agriculture/Soils/Soil Minerology/Weathering'",
                  "saved_emin2.xml") ;
+      
+ xmlwt.test("http://escvig2.dl.ac.uk:9090/xmlw-em/services/xmlwrapper_emin",
+                 "Discipline='Geology/Minerals/Silicates'",
+                 "saved_emin3.xml") ;
 
       return ;
    }

@@ -11,36 +11,39 @@ public class XmlText
    {
       String ret = "";
 
-      byte [] in_str ;
-      byte [] out_str ;
+      if ( input != null )
+      {
+         byte [] in_str ;
+         byte [] out_str ;
    
-      try
-      {
-         in_str =  input.getBytes("ISO-8859-1");
-
-         out_str = new byte[in_str.length] ;
-
-         int j = 0 ;
-
-         for(int i = 0 ; i < in_str.length ; i++)
+         try
          {
-            // 32 - space, 9 - tab, 10 - line feed, 13 - carriage return all in decimal
-	    if(in_str[i] > 31 ||
-	       in_str[i] == 9 ||
-	       in_str[i] == 10 ||
-	       in_str[i] == 13 )
-	    {
-	       out_str[j++]=in_str[i] ;
-	    }
-         }
-	 
-	 ret = new String (out_str, 0, j, "ISO-8859-1") ;
+            in_str =  input.getBytes("ISO-8859-1");
+   
+            out_str = new byte[in_str.length] ;
 
-      }
-      catch (UnsupportedEncodingException uee)
-      {
-	 uee.printStackTrace() ;
-      }
+            int j = 0 ;
+
+            for(int i = 0 ; i < in_str.length ; i++)
+            {
+               // 32 - space, 9 - tab, 10 - line feed, 13 - carriage return all in decimal
+	       if(in_str[i] > 31 ||
+	          in_str[i] == 9 ||
+	          in_str[i] == 10 ||
+	          in_str[i] == 13 )
+	       {
+	          out_str[j++]=in_str[i] ;
+	       }
+            }
+	 
+	    ret = new String (out_str, 0, j, "ISO-8859-1") ;
+
+         }
+         catch (UnsupportedEncodingException uee)
+         {
+   	    uee.printStackTrace() ;
+         }
+      } //done if input not null
 
       return ret ;
 
