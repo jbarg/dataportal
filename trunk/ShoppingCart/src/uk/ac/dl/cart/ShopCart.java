@@ -20,7 +20,7 @@ public class ShopCart {
     public org.w3c.dom.Element getCart(Integer sid) throws Exception{
         //locate the prop file.  Normal get this from web.xml file
         PropertyConfigurator.configure(Config.getContextPath()+"logger.properties");
-        System.out.println("path given is  "+Config.getContextPath());
+        //System.out.println("path given is  "+Config.getContextPath());
         // String dn = sid;
         if(sid == null){
             //is cert valid.Check also the cert issur against the dn

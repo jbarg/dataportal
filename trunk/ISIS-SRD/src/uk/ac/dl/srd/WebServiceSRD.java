@@ -4,6 +4,7 @@ import org.jdom.*;
 import java.net.*;
 import java.io.*;
 import org.apache.log4j.*;
+import java.util.*;
 
 /** This return a xml Element from the SRD. This class is used as a web
  * service and therefore has to return a org.dom.Element because of
