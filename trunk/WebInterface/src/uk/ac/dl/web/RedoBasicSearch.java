@@ -21,6 +21,7 @@ import java.util.Properties;
 import ac.dl.xml.*;
 import org.jdom.*;
 import java.io.*;
+import java.util.*;
 /**
  *       This is called from the shopping cart.  The url is used to get the
  *  notes from the shopping cart and then resend the query
@@ -55,7 +56,7 @@ public class RedoBasicSearch extends HttpServlet {
             String[] ret =  new String[5];
             
             //add ws here
-            try{ ArrayList[]
+            try{ 
             Properties prop = (Properties)session.getAttribute("props");
             String url2 = prop.getProperty("CART");
             String endpoint = url2;
