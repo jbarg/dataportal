@@ -108,6 +108,8 @@ html/netscape.html file from the content root.-->
                 else h.append(dn.charAt(i));
             }
             dn = h.toString();
+            File historyDir = new File(wd+File.separator+"profiles"+File.separator+"history");
+            if(!historyDir.exists()) historyDir.mkdir();
             File history = new File(wd+File.separator+"profiles"+File.separator+"history"+File.separator+dn);
             if(!history.exists()) history.createNewFile();
             FileReader read = new FileReader(history);
