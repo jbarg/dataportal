@@ -1,0 +1,176 @@
+/* 
+
+  File name:  mainNN4
+
+  Created on: 14 August 2002 at 10:57
+
+  Author:     gjd37  
+
+
+
+  Description:
+
+    This is going to be used for NN4 browsers
+
+*/
+
+
+
+root { 
+
+    display: block;
+
+}
+
+
+
+body {margin: 0px 0px 0px -15px; font-family: Trebuchet, Arial, sans-serif;}
+
+
+
+
+body, div, p, blockquote,h4, ol, ul, a, dl, li, dt, dd, td {font-family: Trebuchet, Arial, sans-serif;}
+
+
+
+h1		{ text-align: right; color: #999999; }
+
+
+
+#footer	{ text-align: right; font-size: 8pt;  align: right;}
+
+span.navtext	{ color: #ffffff; text-align: left; }
+
+span.navbar	{ color: #ffffff; text-align: left; }
+
+
+
+hr		{ color: #ffcc00; height: 3px; }
+
+
+
+
+
+
+
+#button		{height: 40px; width: 100px; }
+
+
+
+.button {height: 40px; width: 100px; }
+
+
+
+th              {font: bold; font-size: 18pt;}
+
+
+
+span.NavBar1  {color: white;}
+
+
+
+span.NavBar1 {color: white;}
+
+
+
+a:link 		{ color: BLUE; text-decoration: none;  background: #FFFFFF;}
+
+
+
+a:visited 	{ color: #0000FF; text-decoration: none;  background: #FFFFFF;}
+
+
+
+a:hover		{ color: #999999; text-decoration: underline;  background: #FFFFFF;}
+
+
+
+a:active 	{ color: #9999CC; text-decoration: underline;  background: #FFFFFF;}
+
+
+
+#b               {text-align: center; font-weight: bold}
+
+ 
+
+#top_table      {border-style: solid; border-width: 0px ; width:100%}
+
+
+
+#td_top1         {text-align: left; vertical-align: text-top; width: 150px}
+
+
+
+
+
+#td_top2        {text-align: left; vertical-align: text-top}
+
+
+
+img             {border-style: solid; border-width: 0px; border: 0px }
+
+
+
+#xhtml          { width: 88; height: 31; border-style: solid; border-width: 0px}
+
+
+
+p.footer       	{ text-align: right; font-size: 8pt; }
+
+
+
+
+
+FORM.mess1 {font-family: Verdana, Arial, Helvetica, sans-serif;
+
+font-size: 13px;
+
+color: #000080;
+
+background: #DFEFF7;
+
+border: 2px solid #3499CC;
+
+
+
+
+
+
+
+}
+
+
+
+INPUT.mess1, TEXTAREA.mess1 {
+
+	font-family: Georgia, "MS Serif", "New York", serif;	
+
+	padding: 2px;
+
+	font-size: 13px;
+
+	color: #FFFFFF;
+
+	background-color: #3499CC;
+
+	border: inset 1px #C71585;
+
+}
+
+
+
+SELECT.mess1, OPTION.mess1 {
+
+	font-family: "MS Serif", Georgia, "New York", serif;
+
+	padding: 2px;
+
+	font-size: 13px;
+
+	color: #FFFFFF;
+
+	background-color: #008080;
+
+	border: outset 1px #adff2f;/*for demonstration only*/
+
+}
