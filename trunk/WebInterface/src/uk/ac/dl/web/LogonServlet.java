@@ -6,7 +6,7 @@
 //old log on servlet. See LoginServlet
 package uk.ac.dl.web;
 
-import ac.dl.xml.*;
+import uk.ac.dl.xml.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;

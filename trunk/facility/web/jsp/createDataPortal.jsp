@@ -1,4 +1,4 @@
-<%@page contentType="text/html" import="uk.ac.clrc.dataportal.facility.facilityAdmin.*, ac.dl.xml.*"%>
+<%@page contentType="text/html" import="uk.ac.clrc.dataportal.facility.facilityAdmin.*, uk.ac.dl.xml.*"%>
 <% response.setHeader("pragma","no-cache");
 
  response.setHeader("cache-control","no-store"); %>
