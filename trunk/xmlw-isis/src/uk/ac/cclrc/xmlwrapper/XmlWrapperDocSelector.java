@@ -504,6 +504,10 @@ public class XmlWrapperDocSelector
             {
                jdome.printStackTrace() ;
             }
+            catch (java.io.IOException jii)
+            {
+               jii.printStackTrace() ;
+            } 
 
             org.jdom.Element tmp_root = tmp_doc.getRootElement() ;
 
@@ -565,6 +569,10 @@ public class XmlWrapperDocSelector
       catch (org.jdom.JDOMException jdome)
       {
          jdome.printStackTrace() ;
+      }
+      catch (java.io.IOException jii)
+      {
+         jii.printStackTrace() ;
       }
 
       //needed - somday these errors need changing to exceptions
