@@ -345,7 +345,7 @@
    <xsd:complexType name="DataHoldingType">
       <xsd:sequence>
          <xsd:element name="DataDescription"    type="cmd:DataDescriptionType"/>
-         <xsd:element name="DataCollection"            type="cmd:DataCollectionType" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="DataCollection"            type="cmd:DataCollectionType" minOccurs="0" maxOccurs="1"/>
 	 <xsd:element name="RelatedStudy"       type="cmd:RelatedStudyType" minOccurs="0"/>
          <xsd:element name="DataHoldingLocator" type="cmd:DataHoldingLocatorType"/>
       </xsd:sequence>
