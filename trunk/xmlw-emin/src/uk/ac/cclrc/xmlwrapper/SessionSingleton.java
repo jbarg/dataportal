@@ -78,6 +78,9 @@ public class SessionSingleton
    //name of the server and port - so we can figure out url of the dtd / schema
    String server_port;
 
+   //should we use caching (perhaps not needed on small/fast databases
+   boolean use_caching;
+
    //
    //
    //
@@ -183,6 +186,18 @@ public class SessionSingleton
          this.pass = config.getProperty("dbpass");
          
          this.server_port = config.getProperty("catalinahost") ;
+
+	 //is caching turned on/off
+	 String tmp = config.getProperty("use_caching") ;
+         if (tmp.compareTo("false") == 0 )
+	 {
+	    this.use_caching = false ;
+	 }
+	 else
+	 {
+	    this.use_caching = true ;
+	 }
+	 
       }
       catch (IOException e)
       {
@@ -358,6 +373,11 @@ public class SessionSingleton
    }
 
    //
+
+   boolean getUseCaching()
+   {
+      return use_caching ;
+   }
    
 }
   

@@ -55,8 +55,8 @@ public class EMATCsmdMapper implements CsmdMapper
          {
             // for some reason jdbc did not like  brackets around the following - strange.
             temp_str = ("SELECT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
-                        "(SELECT STUDY_ID FROM " + dbs + "STUDY_TOPICS WHERE TOPIC_ID IN " +
-                        "(SELECT TOPIC_ID FROM " + dbs + "TOPICS WHERE lower(TOPIC) LIKE '%" + discipline + "%'))") ;
+                        "(SELECT STUDY_ID FROM " + dbs + "STUDY_TOPIC WHERE TOPIC_ID IN " +
+                        "(SELECT TOPIC_ID FROM " + dbs + "TOPIC WHERE lower(TOPIC) LIKE '%" + discipline + "%'))") ;
 	    discipline = temp_str ;
 	 }
 
@@ -64,8 +64,8 @@ public class EMATCsmdMapper implements CsmdMapper
          {
             temp_str = ("SELECT DISTINCT STUDY_ID FROM " + dbs + "STUDY WHERE STUDY_ID IN " +
                         "(SELECT STUDY_ID FROM " + dbs + "INVESTIGATION WHERE INVESTIGATION_ID IN " +
-                        "(SELECT INVESTIFGATION_ID FROM " + dbs + "DATA WHERE DATA_ID IN " +
-                        "(SELECT DATA_ID FROM " + dbs + "PARAMETERS WHERE lower(NAME) LIKE '%" + subject + "%')))") ;
+                        "(SELECT INVESTIGATION_ID FROM " + dbs + "DATA WHERE DATA_ID IN " +
+                        "(SELECT DATA_ID FROM " + dbs + "PARAMETER WHERE lower(NAME) LIKE '%" + subject + "%')))") ;
 	    subject = temp_str ;
 	 }
 
@@ -773,7 +773,7 @@ public class EMATCsmdMapper implements CsmdMapper
 
 	       sbr.append("            <File dataid=\"" + data_id + "\">\n") ;
 	       sbr.append("               <DataName>" + data_name + "</DataName>\n") ;
-	       sbr.append("               <URI>" + data_name + "</URI>\n") ;
+	       sbr.append("               <URI>" + data_uri + "</URI>\n") ;
 	       sbr.append("            </File>\n") ;
 
 	       //add dataholdinglocation info to sbr_dhl
@@ -888,62 +888,71 @@ public class EMATCsmdMapper implements CsmdMapper
          dataset_in_list = "(" + id + ")" ;
       }
 
+      String data_in_list = ")" ;
 
-      String data_in_list = place_holder ;
-
-      if (type.compareTo("experiment") == 0 || type.compareTo("dataset") == 0)
+      //if we have no dataset associated with this entry
+      if ( dataset_in_list.compareTo(")") != 0 )
       {
-         List data = new LinkedList() ;
+   
+         if (type.compareTo("experiment") == 0 || type.compareTo("dataset") == 0)
+         {
+            List data = new LinkedList() ;
+   
+            r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATASET_ID IN " + dataset_in_list ) ;
+            while(r.next())
+            {
+               data.add(Integer.toString(r.getInt("DATA_ID"))) ;
+            }
+            r.close() ;
 
-         r = s.executeQuery("SELECT DATA_ID FROM " + dbs + "DATA WHERE DATASET_ID IN " + dataset_in_list ) ;
+            Iterator e = data.iterator() ;
+            StringBuffer tmp_sb = new StringBuffer() ;
+
+            tmp_sb.append("(") ;
+
+            while(e.hasNext())
+            {
+               tmp_sb.append(((String) e.next())) ;
+               tmp_sb.append(",") ;
+            }
+
+            tmp_sb.delete(tmp_sb.length()-1, tmp_sb.length()) ;
+
+	    tmp_sb.append(")") ;
+       
+            data_in_list = tmp_sb.toString() ;
+
+         }
+         else //this is just a data object
+         {
+           data_in_list = "("+ id + ")" ;
+         }
+      }// datafiles pulled out if any associated with this entry
+
+      //dataset needs data as these contain the actual parameter data
+
+      if (data_in_list.compareTo(")") != 0)
+      {
+         //get the date for all the rows of conditions infromation for this dataset or file
+         String param_name = place_holder ;
+         String param_unit = place_holder ;
+         String param_value = place_holder ; 
+
+         r = s.executeQuery("SELECT NAME, UNIT, VALUE FROM " + dbs + "PARAMETER WHERE DATA_ID IN " + data_in_list ) ;
+
          while(r.next())
          {
-            data.add(Integer.toString(r.getInt("DATA_ID"))) ;
+            param_name = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_NAME") ));
+            param_unit = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_UNIT") ));
+            param_value = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_VALUE") ));
+
+            sbr.append(spaces + "<Condition>\n") ;
+            sbr.append(spaces + "   <ParamName>" + param_name + "</ParamName>\n") ;
+            sbr.append(spaces + "   <Units>" + param_unit + "</Units>\n") ;
+            sbr.append(spaces + "   <ParamValue>" + param_value + "</ParamValue>\n") ;
+            sbr.append(spaces + "</Condition>\n") ;
          }
-         r.close() ;
-
-         Iterator e = data.iterator() ;
-         StringBuffer tmp_sb = new StringBuffer() ;
-
-         tmp_sb.append("(") ;
-
-         while(e.hasNext())
-         {
-            tmp_sb.append(((String) e.next())) ;
-            tmp_sb.append(",") ;
-         }
-
-         tmp_sb.delete(tmp_sb.length()-1, tmp_sb.length()) ;
-
-	 tmp_sb.append(")") ;
-       
-         data_in_list = tmp_sb.toString() ;
-
-      }
-      else //this is just a data object
-      {
-        data_in_list = "("+ id + ")" ;
-      }
-
-      //get the date for all the rows of conditions infromation for this dataset or file
-      String param_name = place_holder ;
-      String param_unit = place_holder ;
-      String param_value = place_holder ; 
-
-      r = s.executeQuery("SELECT NAME, UNIT, VALUE FROM " + dbs + "PARAMETER WHERE DATA_ID IN " + data_in_list ) ;
-
-      while(r.next())
-      {
-         param_name = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_NAME") ));
-         param_unit = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_UNIT") ));
-         param_value = sr.LitWithEnt(xt.makeValid(r.getString("PARAM_VALUE") ));
-
-         sbr.append(spaces + "<Condition>\n") ;
-         sbr.append(spaces + "   <ParamName>" + param_name + "</ParamName>\n") ;
-         sbr.append(spaces + "   <Units>" + param_unit + "</Units>\n") ;
-         sbr.append(spaces + "   <ParamValue>" + param_value + "</ParamValue>\n") ;
-         sbr.append(spaces + "</Condition>\n") ;
-      }
+      } //dataset had data such that conditions have now been added
 
       return ;
    }

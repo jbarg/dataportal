@@ -57,9 +57,11 @@ public class XmlWrapperEMAT
       DBHelper dbh = ss.getDBHelper() ;
       dbh.connectToDB() ;
 
-
+      if(ss.getUseCaching() == true)
+      { 
       //load the map (i.e. the compressed entry cache)
-      loadMap() ;
+         loadMap() ;
+      }
 
    }
 
@@ -148,6 +150,8 @@ public class XmlWrapperEMAT
       Map m = ss.getMap() ;
 
       DBHelper dbh = ss.getDBHelper() ;
+
+      boolean use_caching = ss.getUseCaching() ;
  
       //get the correct mapper
       //change
@@ -161,13 +165,14 @@ public class XmlWrapperEMAT
                     "\"" + ss.getDTDLocation() + "\">\n") ;
       result.append("<CLRCMetadata>\n") ;
 
+      //get the keys in the archive for the valid studies
       String entries = cm.getKeys(query) ;
 
       StringTokenizer st = new StringTokenizer(entries, ", ") ;
 
       String tmp_tok = "" ;
       boolean repeat_last = false ;
-      String entry_xml = "" ;
+      String entry_xml = null ;
       Integer entry_id = null ;
 
       boolean cache_updated = false ;
@@ -190,7 +195,10 @@ public class XmlWrapperEMAT
          entry_id = new Integer(tmp_tok) ;
        
          // uncompress the entries
-         entry_xml = StringZip.decompress((String)m.get(entry_id)) ;
+	 if(use_caching == true)
+	 {
+            entry_xml = StringZip.decompress((String)m.get(entry_id)) ;
+	 }
 
          if(entry_xml == null)
          {
@@ -212,8 +220,11 @@ public class XmlWrapperEMAT
 
                //add this to the TreeMap entry cache
                //compress it before storing it
-               m.put(entry_id,StringZip.compress(entry_xml)) ;
-	       cache_updated = true ;
+	       if(use_caching == true )
+	       {
+                  m.put(entry_id,StringZip.compress(entry_xml)) ;
+	          cache_updated = true ;
+	       }
 
 	       result.append(entry_xml) ;
             }
@@ -231,6 +242,7 @@ public class XmlWrapperEMAT
 
      result.append("</CLRCMetadata>") ;
 
+     //HERE manual debugging as log4j gone on one
      log.debug(result.toString()) ;
 
      org.w3c.dom.Element el = null ;
@@ -267,8 +279,9 @@ public class XmlWrapperEMAT
      
      //really need some kind of destructor - e.g. destroy in servlets
      //this is the one step forward two steps back that web services seem to give you
-     if(cache_updated = true)
+     if(use_caching == true && cache_updated == true)
      {
+	//log.debug("cache_updated:" + cache_updated + "\tuse_caching:" + use_caching) ;
 	saveMap() ; 
      }
      

@@ -891,7 +891,7 @@ public class EMINCsmdMapper implements CsmdMapper
       String data_in_list = ")" ;
 
       //if we have no dataset associated with this entry
-      if ( dataset_in_list.compareTo("(") != 0 )
+      if ( dataset_in_list.compareTo(")") != 0 )
       {
    
          if (type.compareTo("experiment") == 0 || type.compareTo("dataset") == 0)
