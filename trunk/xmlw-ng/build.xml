@@ -30,7 +30,7 @@
      set to the current working directory.
 -->
 
-<project name="Dataportal E-minerals XmlWrapper" default="compile" basedir=".">
+<project name="XmlWrapper NA (New Architecture)" default="compile" basedir=".">
 
 
 
@@ -109,7 +109,7 @@
 
 -->
 
-  <property name="app.name"      value="xmlw-em"/>
+  <property name="app.name"      value="xmlw-ng"/>
   <property name="app.path"      value="/${app.name}"/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
@@ -430,6 +430,7 @@
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/wsdl4j.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xml-dl.1.3.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/xmlsec.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/kawa-1.7.jar"/>
 
     <!-- Copy static content of this web application -->
     <copy todir="${build.home}">
