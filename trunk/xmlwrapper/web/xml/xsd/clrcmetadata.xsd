@@ -117,7 +117,7 @@
       <xsd:sequence>
          <xsd:element name="StudyName"        type="xsd:string"/>
 	 <xsd:element name="StudyInstitution"     type="cmd:InstitutionType" minOccurs="0" maxOccurs="unbounded"/>
-         <xsd:element name="Investigator"     type="cmd:InvestigatorType" minOccurs="1" maxOccurs="unbounded"/>
+         <xsd:element name="StudyPerson"     type="cmd:StudyPersonType" minOccurs="1" maxOccurs="unbounded"/>
          <xsd:element name="StudyInformation" type="cmd:StudyInformationType"/>
          <xsd:element name="Notes"            type="xsd:string" minOccurs="0" maxOccurs="1"/>
 	 <!-- sc -->
@@ -201,9 +201,9 @@
 
   <xsd:complexType name="PersonType">
      <xsd:sequence>
-        <xsd:element name="Name"           type="cmd:NameType"/>
-        <xsd:element name="InstitutionId"    type="xsd:string"/>
-        <xsd:element name="ContactDetails" type="cmd:ContactDetailsType"/>
+        <xsd:element name="Name" type="cmd:NameType"/>
+        <xsd:element name="InstitutionAffiliatedTo"    type="cmd:ContactDetailsType" minOccurs="0"/>
+        <xsd:element name="ContactDetails" type="cmd:ContactDetailsType" maxOccurs="unbounded"/>
      </xsd:sequence>
   </xsd:complexType>
 
@@ -230,6 +230,9 @@
 	<xsd:enumeration value="PDRA"/>
 	<xsd:enumeration value="PI"/>
 	<xsd:enumeration value="Principal Investigator"/>
+	<xsd:enumeration value="Co-Investigator"/>
+	<xsd:enumeration value="Data Holder"/>
+	<xsd:enumeration value="Data Manager"/>
         <xsd:enumeration value="other"/>
      </xsd:restriction>
   </xsd:simpleType>
@@ -249,12 +252,12 @@
 
 <!-- some of the contact details in the DTD hinted at being overkill -->
 
-  <xsd:complexType name="InvestigatorType">
+  <xsd:complexType name="StudyPersonType">
      <xsd:complexContent>
         <xsd:extension base="cmd:PersonType">
            <xsd:sequence>
               <xsd:element name="RoleInStudy" type="cmd:StudyRoleTypes"/>
-              <xsd:element name="RoleInInstitution" type="cmd:InstitutionRoleTypes"/>
+              <xsd:element name="RoleInInstitution" type="cmd:InstitutionRoleTypes" minOccurs="0" />
            </xsd:sequence>
         </xsd:extension>
      </xsd:complexContent>
@@ -264,8 +267,8 @@
   <xsd:complexType name="NameType">
      <xsd:sequence>
         <xsd:element name="Surname" type="xsd:string"/>
-        <xsd:element name="MiddleInitials" type="xsd:string"/>
-        <xsd:element name="Forename" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="MiddleInitials" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="Forename" type="xsd:string"/>
         <xsd:element name="Title" type="cmd:TitleTypes" minOccurs="0" maxOccurs="1"/>
      </xsd:sequence>
   </xsd:complexType>
@@ -284,7 +287,9 @@
   <xsd:complexType name="AddressType">
      <xsd:sequence>
         <xsd:element name="Addressline1" type="xsd:string"/>
-        <xsd:element name="Addressline2" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Addressline2" type="xsd:string" minOccurs="0" />
+        <xsd:element name="Addressline3" type="xsd:string" minOccurs="0" />
+        <xsd:element name="Addressline4" type="xsd:string" minOccurs="0" />
         <xsd:element name="Town"         type="xsd:string"/>
         <xsd:element name="Region"       type="xsd:string" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="Postcode"     type="xsd:string" minOccurs="0" maxOccurs="1"/>
