@@ -40,8 +40,8 @@ public class Explore extends HttpServlet{
             //locate the prop file.  Normal get this from web.xml file
             PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
             //get the vales of the users request
-            String values[] = request.getParameterValues("explore");
-            
+            String values[] = request.getParameterValues("select");
+            File temp = null;
             try {
                 //get working directories
                 
@@ -55,7 +55,7 @@ public class Explore extends HttpServlet{
                          
                 
                 //get the stylesheet for the decreasing the xml
-                File temp =  new File(wd+File.separator+"profiles"+File.separator+"explore"+sid+".xsl");
+                 temp =  new File(wd+File.separator+"profiles"+File.separator+"explore"+sid+".xsl");
                 //
                 FileWriter f = new FileWriter(temp);
                 
@@ -93,6 +93,7 @@ public class Explore extends HttpServlet{
                 response.sendRedirect("../jsp/Explore.jsp");
             }
             catch(Exception e){
+                temp.delete();
                 logger.fatal("Transformation failed",e);
                 response.sendRedirect("../jsp/error.jsp");
             }
