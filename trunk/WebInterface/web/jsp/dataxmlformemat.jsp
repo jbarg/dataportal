@@ -369,10 +369,7 @@ simpleresulttableDOM4J
 </head>
 
 <body>
-
-<h1 align="right">Basic Search</h1>
-<br/>
-&nbsp;Home&nbsp;&nbsp;&nbsp;>&nbsp;<a href="#" onclick="parent.location.href='BasicSearch.jsp'">Basic Search</a>
+&nbsp;Home&nbsp;&nbsp;&nbsp;>&nbsp;<a href="#" >Basic Search</a>
 <hr />
 
 <br />

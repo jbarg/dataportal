@@ -78,7 +78,7 @@ public class SeeNoteBean {
         }
     }
     
-    private void adjust(){
+    private void adjust() throws Exception{
         //get length of discipline
         //adjust row of the textbox
         int rows = 9;
