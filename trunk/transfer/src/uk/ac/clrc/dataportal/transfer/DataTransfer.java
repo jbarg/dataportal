@@ -68,7 +68,7 @@ public class DataTransfer {
             System.out.println(os);
             Process pro = null;
             String exe = "UrlCopy.sh";
-            String result = "true";
+            String result = "";
             if(os.startsWith("Windows")){
                 exe = "UrlCopy.bat";
                 String command ="\""+Config.getContextPath()+"Transfer"+File.separator+exe+"\" "+from+" "+to+" \""+credFile+"\" \""+Config.getContextPath()+"Transfer\"";
@@ -124,8 +124,9 @@ public class DataTransfer {
             //ystem.out.println(pro.exitValue());
              //pro.waitFor();
             //pro.destroy();
-            //credFile.delete();
-            if(result.equals("true")) return "true";
+            credFile.delete();
+              if(result.equals("")) return "false";
+              else  if(result.equals("true")) return "true";
             else return result;
         }
         catch(Exception e){

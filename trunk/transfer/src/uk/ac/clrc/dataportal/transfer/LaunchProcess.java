@@ -15,29 +15,40 @@ public class LaunchProcess {
                 errorStream = error;
             }
             
-            public boolean isError = false;
-            public String error = "";
+            public boolean isError = true;
+            public String error = null;
             public String getError(){
                 return error;
             }
             
             public void run() {
+                if(errorStream){
+                    try{
+                        String line;
+                        StringBuffer buff = new StringBuffer();
+                        System.out.println("This is from error stream");
+                        while((line=br.readLine())!=null) {
+                            
+                            
+                            buff.append(line);
+                            System.out.println(line);
+                            
+                            // do nothing but read the output stream to stop the process from blocking
+                        }
+                        if(buff.toString().equals("")) isError = false;
+                        if(!buff.toString().equals("")) isError = true;
+                        error = buff.toString();
+                        //System.out.println("This is the buff ="+buff+"= and the isError is "+isError+" and test "+buff.equals(""));
+                        
+                    }catch(Exception e){
+                        error = e.getMessage();
+                        isError = true;
+                        e.printStackTrace();}
+                }
                 try{
-                    String line;
-                    StringBuffer buff = new StringBuffer();
-                    if(errorStream) System.out.println("This is from error stream");
-                    while((line=br.readLine())!=null) {
-                        buff.append(line);
-                        if(errorStream)System.out.println(line);
-                        // do nothing but read the output stream to stop the process from blocking
-                    }
-                    if(!buff.equals("")) isError = true;
-                    error = buff.toString();
-                    
-                }catch(Exception e){
-                    error = e.getMessage();
-                    isError = true;
-                    e.printStackTrace();}
+                    br.close();
+                }
+                catch(Exception e){}
             }
         }
         
@@ -55,13 +66,36 @@ public class LaunchProcess {
         to.start();
         te.start();
         p.waitFor();
-        
+        try{
+            Thread.sleep(2000);
+        }
+        catch(Exception r){}
         
         //check if there is a error
         boolean isError = e.isError;
         System.out.println("Error is "+isError);
         
-        if(isError) return e.getError();
+        if(isError) {
+            String error = e.getError();
+            //System.out.println(e.getError());
+            int i = 0;
+            while(e.getError() == null){
+                
+                try{
+                    Thread.sleep(1000);
+                    System.out.println("waiting "+i);
+                    i = i+1000;
+                    error = e.getError();
+                }
+                catch(Exception r){}
+                if(i > 4000){
+                    error = "Unknown";
+                    break;
+                }
+            }
+            System.out.println("Returning value "+error);
+            return error;
+        }
         else return "true";
     }
 }
