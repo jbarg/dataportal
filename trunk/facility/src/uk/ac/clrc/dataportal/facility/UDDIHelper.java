@@ -85,8 +85,8 @@ public class UDDIHelper {
             String fileSeparator = System.getProperty("file.separator");
             propertiesFileName = request.getPathTranslated().substring(0,request.getPathTranslated().lastIndexOf(fileSeparator));
             propertiesFileName = propertiesFileName + File.separator + "WEB-INF" + File.separator ;
-        
-              }
+            
+        }
         
         try {
             //set up the logging
@@ -143,7 +143,7 @@ public class UDDIHelper {
         AuthToken authToken = null;
         try {
             log.debug("UDDI user "+UDDIProps.getProperty("uddi_user"));
-              log.debug("UDDI password "+UDDIProps.getProperty("uddi_password"));
+            log.debug("UDDI password "+UDDIProps.getProperty("uddi_password"));
             //authToken = proxy.get_authToken("dataportal","p0rt4l");
             authToken = proxy.get_authToken(UDDIProps.getProperty("uddi_user"), UDDIProps.getProperty("uddi_password"));
         }
@@ -240,7 +240,7 @@ public class UDDIHelper {
             BusinessDetail bd = proxy.save_business(authToken.getAuthInfo().getText(), businesses);
             Vector bev = bd.getBusinessEntityVector();
             BusinessEntity be = (BusinessEntity)(bev.elementAt(0));
-           
+            
             businessKey = be.getBusinessKey();
             
             if (!cfb.getFacilityName().equalsIgnoreCase("DataPortal")) {
@@ -250,8 +250,8 @@ public class UDDIHelper {
         }
         catch (UDDIException ue) {
             log.fatal("UDDI Exception caught", ue);
-           
-          
+            
+            
             throw ue;
         }
         catch (FacilityException e) {
@@ -260,7 +260,7 @@ public class UDDIHelper {
         }
         catch (Exception e) {
             log.error("Exception caught", e);
-             throw e;
+            throw e;
         }
         
         return businessKey;
@@ -403,7 +403,11 @@ public class UDDIHelper {
             Vector names = new Vector();
             names.add(new Name(facilityName));
             
-            BusinessList businessList = proxy.find_business(names, null, null, null ,getTModelBag() , findQualifiers, 0);
+            //old version has this one
+            //this pulls a null pointer exception when finding a facility
+          //  BusinessList businessList = proxy.find_business(names, null, null, null ,getTModelBag() , findQualifiers, 0);
+            //new one works
+            BusinessList businessList = proxy.find_business(names, null, null, null ,null , findQualifiers, 0);
             Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
             
             facilities = new Element[businessInfoVector.size()];
