@@ -138,3 +138,43 @@ java org.apache.axis.client.AdminClient deploy.wsdd
 to undeploy:
 
 java org.apache.axis.client.AdminClient undeploy.wsdd
+
+
+--------------------------------------- some additional notes ones we have web-infed everything:
+
+(hmm need to compile the classes before this can be done)
+
+java org.apache.axis.wsdl.Java2WSDL -o xmlw.wsdl -l"http://localhost:8080/xmlw/xmlwrapper_badc" -n urn:xmlwrapper -p"uk.ac.cclrc.xmlwrapper" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperBADC
+
+java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p uk.ac.cclrc.xmlwrapper.ws xmlw.wsdl
+
+(hmm need different ones for mpim and badc - hence creation of two new directories and a target in build.xml)
+
+development wsdl target:
+
+1.compile classes under src
+2.generate wsdl
+3.create client stub and server skeleton
+4.edit the class files especially the soapbindingImpl_ - one
+5.delete .class files under src
+
+as the file names don't change can check them into cvs - autogenerating and filling in when necessary
+
+the commands for generating the wrappers:
+
+(note could substitute the context path the the $ variable in the ant scripts):
+
+-- BADC
+
+java org.apache.axis.wsdl.Java2WSDL -o badcxmlw.wsdl -l"http://localhost:8080/xmlw/xmlwrapper_badc" -n urn:xmlwrapper -p"uk.ac.cclrc.xmlwrapper" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperBADC
+
+java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.badc badcxmlw.wsdl
+
+--- MPIM
+
+java org.apache.axis.wsdl.Java2WSDL -o mpimxmlw.wsdl -l"http://localhost:8080/xmlw/xmlwrapper_mpim" -n urn:xmlwrapper -p"uk.ac.cclrc.xmlwrapper" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperMPIM
+
+java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.mpim mpimxmlw.wsdl
+
+
+

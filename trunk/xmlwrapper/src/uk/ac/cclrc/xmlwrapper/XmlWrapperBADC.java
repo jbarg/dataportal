@@ -31,7 +31,7 @@ public class XmlWrapperBADC
 
       //setup file paths here - as we are using AXIS we can rely upon catalina.home 
       ss.setReadPath(System.getProperty("catalina.home")) ;
-      ss.setLogPropFile("badc_xmlw.log.properties") ;
+      ss.setLogPropFile("BadcCXW.log.properties") ;
       ss.setMapFile("BADCmap.data") ;
       
       //setup logger

@@ -193,11 +193,11 @@
 
 <!-- external dependencys -->
 
-  <property name="classes.jar"
+<!-- these are picked up automcatically -->
+<!--  <property name="classes.jar"
            value="${basedir}/web/WEB-INF/lib/classes12.jar"/>
   <property name="log4j.jar"
-           value="${basedir}/web/WEB-INF/lib/log4j-1.2.7.jar"/>
-
+           value="${basedir}/web/WEB-INF/lib/log4j-1.2.7.jar"/> -->
 
 <!-- ==================== Compilation Classpath =========================== -->
 
@@ -218,9 +218,10 @@
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
 <!--
     <pathelement location="${foo.jar}"/>
--->
+    following picked up automatically as in a dir under web/WEB-INF/
     <pathelement location="${classes.jar}"/>
     <pathelement location="${log4j.jar}"/>
+-->
 
     <!-- Include all elements that Tomcat exposes to applications -->
     <pathelement location="${catalina.home}/common/classes"/>
@@ -452,11 +453,16 @@
 <!--
     <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
 -->
-    <copy todir="${build.home}/WEB-INF/lib" file="${classes.jar}"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${log4j.jar}"/>
-
     <!-- Copy static files from external dependencies as needed -->
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+
+    <!-- log.properties files and the .map serialised cache for wrapper copied to correct places -->
+    <copy todir="${catalina.home}/conf">
+       <fileset dir="${web.home}/conf">
+          <include name="*.properties"/>
+	  <include name="*.data"/>
+       </fileset>
+    </copy>
 
   </target>
 
@@ -503,5 +509,74 @@
 
   </target>
 
+<!-- ============================================================================================ -->
+<!-- ==================== Some Extra Targets for Web Services =================================== -->
+<!-- ============================================================================================ -->
+
+<!-- ==================== WSDL Target =================================== -->
+
+<!--
+
+  This target created the swdl file and client stubs and server skeleton (which needs filling in)
+  for the code under the src directory - it has to compile code for this reason but removes .class
+  files afterwards
+  
+  NOTE:  after running this code under src needs binding to the correct functions i.e. the
+  *SoapBindingImpl.java needs filling in - the the code can be rechecked into cvs and the code rebuilt
+  (after being installed it can then be 'deployed' or undeployed as neeeded).
+
+-->
+
+  <target name="wsdl"
+   description="makes wsdl and server skeltons and client stubs">
+
+    <!-- have to compile the class files in place first to generate the wsdl etc -->
+    <javac srcdir="${src.home}"
+          destdir="${src.home}"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+    </javac>
+
+    <!-- need to generate the wsdl and the stubs & skeleton -->
+    <!-- BADC: -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL">
+       <arg value="-o ${src.home}/badcxmlw.wsdl -l\"http://localhost:8080/${app.name}/xmlwrapper_badc\" -n urn:xmlwrapper -p\"uk.ac.cclrc.xmlwrapper\" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperBADC "/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java">
+       <arg value="-o ${src.home} -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.badc ${src.home}/badcxmlw.wsdl"/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+
+    <!-- MPIM: -->
+    <java classname="org.apache.axis.wsdl.Java2WSDL">
+       <arg value="-o ${src.home}/mpimcxmlw.wsdl -l\"http://localhost:8080/${app.name}/xmlwrapper_mpim\" -n urn:xmlwrapper -p\"uk.ac.cclrc.xmlwrapper\" urn:xmlwrapper uk.ac.cclrc.xmlwrapper.XmlWrapperMPIM "/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+    <java classname="org.apache.axis.wsdl.WSDL2Java">
+       <arg value="-o ${src.home} -d Session -s -p uk.ac.cclrc.xmlwrapper.ws.mpim ${src.home}/mpimxmlw.wsdl"/> 
+       <classpath>
+          <pathelement path="${java.class.path}"/>
+       </classpath>
+    </java>
+
+    <!-- delete class files -->
+    <!-- echo a reminder to update the java files i.e. the SOAP binding one -->
+
+
+
+
+  </target>
 
 </project>

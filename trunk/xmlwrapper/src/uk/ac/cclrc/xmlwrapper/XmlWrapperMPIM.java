@@ -32,7 +32,7 @@ public class XmlWrapperMPIM
 
       //setup file paths here - as we are using AXIS we can rely upon catalina.home 
       ss.setReadPath(System.getProperty("catalina.home")) ;
-      ss.setLogPropFile("badc_xmlw.log.properties") ;
+      ss.setLogPropFile("MpimCXW.log.properties") ;
       //change
       ss.setMapFile("MPIMmap.data") ;
       
