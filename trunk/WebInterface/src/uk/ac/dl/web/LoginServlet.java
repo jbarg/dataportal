@@ -158,7 +158,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("LOGIN_STATUS", new Boolean(true));
             //session.setMaxInactiveInterval(Integer.parseInt(lifetime)-300);
             
-            ClockBean clock =new ClockBean(Integer.parseInt(lifetime)-300);
+            uk.ac.dl.beans.ClockBean clock =new uk.ac.dl.beans.ClockBean(Integer.parseInt(lifetime)-300);
             session.setAttribute("clockbean", clock);
             //set clock
             //get HPC info out of the prop file
@@ -451,7 +451,7 @@ public class LoginServlet extends HttpServlet {
                 Object[] ob = new Object[]{name,serviceTypes[i]};
                 
                 String[] url = (String[]) call.invoke(ob );
-                System.out.println(url[0] + "   "+serviceTypes[i]);
+                logger.info(url[0] + "   "+serviceTypes[i]);
                 
                 prop.put(serviceTypes[i],url[0]);
             }
