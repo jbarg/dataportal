@@ -51,9 +51,10 @@ public class SRBTransfer extends HttpServlet {
         }
         else{
             //get all the attributes needed
-                String dir = request.getParameter("url");
-                String urlTo = request.getParameter("urlTo");
-                String sid = (String)session.getAttribute("sessionid");
+            File tarFile = null;
+            String dir = request.getParameter("url");
+            String urlTo = request.getParameter("urlTo");
+            String sid = (String)session.getAttribute("sessionid");
             try{
                 //locate the prop file.  Normal get this from web.xml file
                 String wd =  (String)session.getAttribute("wd");
@@ -71,7 +72,7 @@ public class SRBTransfer extends HttpServlet {
                 URLConnection yc = url.openConnection();
                 InputStream p = yc.getInputStream();
                 
-                File tarFile = new File(wd+File.separator+"xml"+File.separator+sid+".tar");
+                 tarFile = new File(wd+File.separator+"xml"+File.separator+sid+".tar");
                 BufferedInputStream myBufferedInputStream = new BufferedInputStream(p);
                 
                 BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(new FileOutputStream(tarFile));
