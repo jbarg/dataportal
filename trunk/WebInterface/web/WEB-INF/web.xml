@@ -3,34 +3,10 @@
 
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
-
-          
-
-	<display-name>Apache-Axis</display-name>
-        
-              <listener>
-                <listener-class>SessionListener</listener-class>
-        </listener>
-        
-	<servlet>
-		<servlet-name>AxisServlet</servlet-name>
-		<display-name>Apache-Axis Servlet</display-name>
-		<servlet-class>
-
-        org.apache.axis.transport.http.AxisServlet
-
-    </servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>AdminServlet</servlet-name>
-		<display-name>Axis Admin Servlet</display-name>
-		<servlet-class>
-
-        org.apache.axis.transport.http.AdminServlet
-
-    </servlet-class>
-		<load-on-startup>100</load-on-startup>
-	</servlet>
+	<display-name>Web Interface</display-name>
+<!--	<listener>
+		<listener-class>SessionListener</listener-class>
+	</listener>-->
 	<servlet>
 		<servlet-name>AddNote</servlet-name>
 		<display-name>AddNote</display-name>
@@ -48,55 +24,41 @@
        uk.ac.dl.web.LoginServlet
 
     </servlet-class>
-    </servlet>
-    <servlet>
+	</servlet>
+	<servlet>
 		<servlet-name>SRBTransfer</servlet-name>
 		<display-name>SRBTransfer</display-name>
 		<servlet-class>
 
        uk.ac.dl.web.SRBTransfer
     </servlet-class>
-
 	</servlet>
-        <servlet>
+	<servlet>
 		<servlet-name>RedoBasicSearch</servlet-name>
 		<display-name>SRBTransfer</display-name>
 		<servlet-class>
 
        uk.ac.dl.web.RedoBasicSearch
     </servlet-class>
-
 	</servlet>
-        
-          <servlet>
+	<servlet>
 		<servlet-name>ResendQuery</servlet-name>
 		<display-name>ResendQuery</display-name>
 		<servlet-class>
 
        uk.ac.dl.web.ResendQuery
     </servlet-class>
-
 	</servlet>
-          <servlet>
+	<servlet>
 		<servlet-name>SRBDownload</servlet-name>
 		<display-name>SRBDownload</display-name>
 		<servlet-class>
 
        uk.ac.dl.web.SRBDownload
     </servlet-class>
-
 	</servlet>
 	<servlet>
 		<servlet-name>emineralsServlet</servlet-name>
-		<display-name>Axis Admin Servlet</display-name>
-		<servlet-class>
-
-       uk.ac.dl.web.emineralsServlet
-
-    </servlet-class>
-    </servlet>
-    <servlet>
-		<servlet-name>SessionListener</servlet-name>
 		<display-name>Axis Admin Servlet</display-name>
 		<servlet-class>
 
@@ -132,15 +94,6 @@
 	    </servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>TestTransfer</servlet-name>
-		<display-name>Transfer Servlet</display-name>
-		<servlet-class>
-	
-		       uk.ac.dl.web.TestTransfer
-	
-		    </servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>TransferDataSet</servlet-name>
 		<display-name>Transfer DataSet</display-name>
 		<servlet-class>
@@ -158,8 +111,7 @@
 	
 		    </servlet-class>
 	</servlet>
-        
-        <servlet>
+	<servlet>
 		<servlet-name>FileTransfer</servlet-name>
 		<display-name>Transfer Servlett</display-name>
 		<servlet-class>
@@ -168,8 +120,7 @@
 	
 		    </servlet-class>
 	</servlet>
-        
-         <servlet>
+	<servlet>
 		<servlet-name>FileDownload</servlet-name>
 		<display-name>Transfer Servlett</display-name>
 		<servlet-class>
@@ -268,39 +219,9 @@
 
       </servlet-class>
 	</servlet>
-	<servlet>
-		<servlet-name>SOAPMonitorService</servlet-name>
-		<display-name>SOAPMonitorService</display-name>
-		<servlet-class>
-
-        org.apache.axis.monitor.SOAPMonitorService
-
-    </servlet-class>
-		<init-param>
-			<param-name>SOAPMonitorPort</param-name>
-			<param-value>5001</param-value>
-		</init-param>
-		<load-on-startup>100</load-on-startup>
-	</servlet>
-	<servlet>
-		<servlet-name>fghfghg</servlet-name>
-		<servlet-class>uk.ac.dl.web.BasicSearch</servlet-class>
-	</servlet>
-    
-        
-        
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>/servlet/AxisServlet</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
 		<url-pattern>/servlet/LoginServlet</url-pattern>
-	</servlet-mapping>
-        
-        <servlet-mapping>
-		<servlet-name>SessionListener</servlet-name>
-		<url-pattern>/servlet/SessionListener</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>TransferServlet</servlet-name>
@@ -330,15 +251,15 @@
 		<servlet-name>TransferDataSet</servlet-name>
 		<url-pattern>/servlet/TransferDataSet</url-pattern>
 	</servlet-mapping>
-        <servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>FileTransfer</servlet-name>
 		<url-pattern>/servlet/FileTransfer</url-pattern>
 	</servlet-mapping>
-        <servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>FileDownload</servlet-name>
 		<url-pattern>/servlet/FileDownload</url-pattern>
 	</servlet-mapping>
-          <servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>RedoBasicSearch</servlet-name>
 		<url-pattern>/servlet/RedoBasicSearch</url-pattern>
 	</servlet-mapping>
@@ -346,7 +267,7 @@
 		<servlet-name>SRBTransfer</servlet-name>
 		<url-pattern>/servlet/SRBTransfer</url-pattern>
 	</servlet-mapping>
-        <servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>SRBDownload</servlet-name>
 		<url-pattern>/servlet/SRBDownload</url-pattern>
 	</servlet-mapping>
@@ -390,25 +311,9 @@
 		<servlet-name>Transfer</servlet-name>
 		<url-pattern>/servlet/Transfer</url-pattern>
 	</servlet-mapping>
-   <servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>ResendQuery</servlet-name>
 		<url-pattern>/servlet/ResendQuery</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>TestTransfer</servlet-name>
-		<url-pattern>/servlet/TestTransfer</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>*.jws</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AxisServlet</servlet-name>
-		<url-pattern>/services/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>SOAPMonitorService</servlet-name>
-		<url-pattern>/SOAPMonitor</url-pattern>
 	</servlet-mapping>
 	<!-- uncomment this if you want the admin servlet -->
 	<!--
@@ -420,14 +325,8 @@
     <url-pattern>/servlet/AdminServlet</url-pattern>
 
   </servlet-mapping>
-
- -->
-	<servlet-mapping>
-		<servlet-name>fghfghg</servlet-name>
-		<url-pattern>/servlet/uk.ac.dl.web.fghfghg</url-pattern>
-	</servlet-mapping>
-        
-      
+-->
+ 
 	<welcome-file-list id="WelcomeFileList_1">
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
