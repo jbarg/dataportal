@@ -3,6 +3,7 @@
 <% response.setHeader("pragma","no-cache");
  response.setHeader("cache-control","no-store");
  %>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <%@ include file="../jsp/loggedin.jsp" %>
 <%@ include file="../jsp/logger.jsp" %>
 <html>
@@ -59,12 +60,32 @@ facilities,E-minerals, data, search, Glen Drinkwater, Synchrotron Radiation,Brit
 <br />
 <br />
 <a href="../jsp/BasicSearch.jsp">DataPortal</a>
+<!--<br />
+<br />
+<a href="http://wk-pc1.dl.ac.uk/HPCPortal/Session/usertransfer.cgi?session=${sessionScope.sessionid}">HPC Portal</a>-->
 <br />
 <br />
-<a href="http://wk-pc1.dl.ac.uk/HPCPortal/Session/usertransfer.cgi?session=${sessionScope.sessionid}">HPC Portal</a>
-<br />
-<br />
-<a href="../../datainsertion/SelectStudy.jsp">Insertion Tool</a>
+<c:choose>
+<c:when test="${param.meloggedin eq 'true'}" >
+<a href="../../datainsertion/FrontPage.jsp">Insertion Tool</a>
+<c:set var="isMeLoggedIn" value="true" scope="session"/>
+</c:when>
+
+
+<c:otherwise>
+        <c:choose>
+        <c:when test="${sessionScope.isMeLoggedIn eq true}">
+                <a href="../../datainsertion/FrontPage.jsp">Insertion Tool</a>
+                <c:set var="isMeLoggedIn" value="true" scope="session"/>
+        </c:when>
+        <c:otherwise>
+
+                <a href="../../datainsertion">Log into the Insertion Tool</a>
+        </c:otherwise>
+        </c:choose>
+</c:otherwise>
+</c:choose>
+
 <br />
 <br />
 <!--<a href="http://wk-ibm1.dl.ac.uk/INFOPortal">Info Portal</a>
