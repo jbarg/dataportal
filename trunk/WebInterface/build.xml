@@ -264,7 +264,7 @@
   NOTE:  This is the logical opposite of the "remove" target.
 
 -->
-	<target name="install" depends="compile" description="Install application to servlet container">
+	<target name="install" depends="compile,index" description="Install application to servlet container">
 		<install url="${manager.url}" username="${manager.username}" password="${manager.password}" path="${app.path}" war="file://${build.home}"/>
 	</target>
 	<!-- ==================== Javadoc Target ================================== -->
@@ -339,7 +339,7 @@
   the "web.xml" deployment descriptor.
 
 -->
-	<target name="reload" depends="compile" description="Reload application on servlet container">
+	<target name="reload" depends="compile,index" description="Reload application on servlet container">
 		<reload url="${manager.url}" username="${manager.username}" password="${manager.password}" path="${app.path}"/>
 	</target>
 	<!-- ==================== Remove Target =================================== -->
@@ -436,5 +436,19 @@
 
     </copy> -->
 
+  </target>
+  
+  
+  <target name="index" depends="compile" description="Re-index's the help pages">
+    <java classname="uk.ac.dl.web.Indexer" fork="false">
+        <arg value="create" />
+     
+       <!--  <arg value="build/help/xml" />
+        <arg value="build/help/xml/index" />-->
+        <classpath refid="compile.classpath"/>
+        <classpath>
+        <pathelement path="build/WEb-INF/classes"/>
+        </classpath>
+    </java>
   </target>
 </project>

@@ -161,10 +161,11 @@ public class DbAccess {
         
         // Retrieve Data from Result Set
         try {
-            userid =rs.getString(1);
-            facility=rs.getString(2);
+            userid =rs.getString("username");
+            System.out.println(userid);
+            facility=rs.getString("facility");
             metadata=rs.getString(3);
-            data=rs.getString(4);
+            data=rs.getString("data");
         } catch (SQLException e){
             System.err.println(e + " Result Set Error");
             throw e;

@@ -36,7 +36,7 @@ public class AddToCart extends HttpServlet{
         //get session
         HttpSession session = request.getSession(false);
         if(session == null){
-            response.sendRedirect("../Login.html");
+            response.sendRedirect("../html/Login.html");
         }
         
         //get working directories
@@ -64,7 +64,7 @@ public class AddToCart extends HttpServlet{
         catch(Exception e){
             e.printStackTrace();
             //System.out.println(e);
-            response.sendRedirect("../Login.html");
+            response.sendRedirect("../html/Login.html");
         }
         
         
@@ -158,12 +158,12 @@ public class AddToCart extends HttpServlet{
             item.addContent(StudyName);
             item.addContent(url);
             
-            //add query to the shopping cart
+            //add n to the shopping cart
             
             Object[] object = (Object[])session.getAttribute("query");
             String[] facs = (String[])object[1];
             String dis = (String)object[2];
-            String max_wait  = (String)object[3];
+            String max_wait  = String.valueOf(((Integer)object[3]).intValue());
             Element query = new Element("query");
             Element facility = new Element("facility");
             StringBuffer Sfacs = new StringBuffer();
