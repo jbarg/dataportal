@@ -343,4 +343,29 @@
 		<taglib-uri>/tldweb</taglib-uri>
 		<taglib-location>/tld/glen.tld</taglib-location>
 	</taglib>
+	
+	  <!--<security-constraint>
+	    <web-resource-collection>
+	      <web-resource-name>DataPortal</web-resource-name>
+	      <url-pattern>/html/proxy/*</url-pattern>
+	      <url-pattern>/html/ematerials_login.html</url-pattern>
+	      <url-pattern>/index.html</url-pattern>
+	    </web-resource-collection>
+	    <user-data-constraint>
+	      <transport-guarantee>NONE</transport-guarantee>
+	    </user-data-constraint>
+	  </security-constraint>-->
+	  <security-constraint>
+	    <web-resource-collection>
+	      <web-resource-name>DataPortal</web-resource-name>
+	      
+	      <url-pattern>/servlet/*</url-pattern>
+	     <url-pattern>/jsp/*</url-pattern>
+	    <url-pattern>/html/*</url-pattern>
+	    
+	    </web-resource-collection>
+	    <user-data-constraint>
+	      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+	    </user-data-constraint>
+  </security-constraint>
 </web-app>
