@@ -17,10 +17,10 @@ import javax.xml.namespace.QName;
 //acts as a log off servlet
 
 public class SaveCartServlet extends HttpServlet{
-    
+
     //set static log for the class
     static Logger logger = Logger.getLogger(SaveCartServlet.class);
-    
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // String workingDir = workingDir = (String)session.getAttribute("wd");;
         //username
@@ -31,20 +31,20 @@ public class SaveCartServlet extends HttpServlet{
                 //terminate the session
                 //session.invalidate();
                 response.sendRedirect("../jsp/Logoff.jsp");
-                
+
             }
             else{
                 //locate the prop file.  Normal get this from web.xml file
                 String wd =  (String)session.getAttribute("wd");
                 PropertyConfigurator.configure(wd+File.separator+"WEB-INF"+File.separator+"logger.properties");
-                
+
                 Properties prop   = (Properties)session.getAttribute("props");
                 String session_url = prop.getProperty("SESSION");
                 String sid  = (String)session.getAttribute("sessionid");
                 endSession(sid,session_url );
-                
+
                 deleteFiles(sid,wd);
-                
+
                 //workingDir = (String)session.getAttribute("wd");
                 //logger.warn("Error with logging off",e);
                 response.sendRedirect("../jsp/Logoff.jsp");
@@ -55,48 +55,51 @@ public class SaveCartServlet extends HttpServlet{
             response.sendRedirect("../jsp/Logoff.jsp");
         }
     }
-    
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         doPost(request, response);
-        
+
     }
-    
+
     private void endSession(String sid,String session_url)throws Exception{
         try{
-            
+
             Service  service = new Service();
             Call  call    = (Call) service.createCall();
-            
+
             call.setTargetEndpointAddress( new java.net.URL(session_url) );
             call.setOperationName( "endSession" );
             call.addParameter( "sid", XMLType.XSD_STRING, ParameterMode.IN );
-            
+
             call.setReturnType( XMLType.SOAP_ARRAY );
-            
+
             Object[] ob = new Object[]{sid};
-            
+
             call.invoke(ob );
-            
+
         }
-        
+
         catch(Exception e){
             logger.warn("Unable to end session "+sid,e);
             throw e;
         }
     }
-    
+
     public void deleteFiles(String sid, String wd){
-        
+
         File file = new File(wd+File.separator+"profiles"+File.separator+"emat"+sid);
         File file1 = new File(wd+File.separator+"profiles"+File.separator+sid+"1.xml");
         File file2 = new File(wd+File.separator+"profiles"+File.separator+sid+"2.xml");
         File file3 = new File(wd+File.separator+"prolfiles"+File.separator+sid+"3.xml");
-        
-        
+
+
         file.delete();
-        
+
+        file1.delete();
+        file2.delete();
+        file3.delete();
     }
-    
+
 }
 
