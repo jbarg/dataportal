@@ -99,10 +99,11 @@ public class sgetrservlet extends HttpServlet {
     throws ServletException, java.io.IOException {
         ServletOutputStream out = response.getOutputStream();
         File list = null;
+        String exe = null;
         try {
             //check password
             String password = props.getProperty("srb_passwd");
-            String exe = request.getParameter("format");
+             exe = request.getParameter("format");
             
             if(exe == null ) exe  ="tar";
             
