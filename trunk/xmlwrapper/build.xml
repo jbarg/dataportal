@@ -463,12 +463,12 @@
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
 
     <!-- log.properties files and the .map serialised cache for wrapper copied to correct places -->
-    <copy todir="${catalina.home}/conf">
+    <!-- <copy todir="${catalina.home}/conf">
        <fileset dir="${web.home}/conf">
           <include name="*.properties"/>
 	  <include name="*.data"/>
        </fileset>
-    </copy>
+    </copy> -->
 
   </target>
 
