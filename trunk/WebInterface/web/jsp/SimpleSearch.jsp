@@ -7,7 +7,6 @@
 
 <%@ include file="loggedin.jsp" %>
 
-
 <%@ include file="logger.jsp" %>
 <%
 /* Logger logger = Logger.getLogger("Manipulate3.jsp");
