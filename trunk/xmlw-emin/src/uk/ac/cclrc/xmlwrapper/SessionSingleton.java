@@ -24,7 +24,7 @@ public class SessionSingleton
    String wrapper_name ;
 
    //log for the class - using log4j
-   Logger log ;
+   static Logger log ;
 
    //replaces special characters with entities &,<,> with &amp;,&lt;,&gt;
    StringReplace sr = new StringReplace() ;

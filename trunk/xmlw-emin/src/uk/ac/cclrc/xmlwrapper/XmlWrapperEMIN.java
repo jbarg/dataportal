@@ -31,7 +31,7 @@ public class XmlWrapperEMIN
       SessionSingleton ss = SessionSingleton.getInstance() ;
       
       //setup wrapper name
-      ss.setWrapperName("mpim") ;
+      ss.setWrapperName("emin") ;
 
       //setup logger
       ss.setLogger(XmlWrapperEMIN.class.getName() + ".class" ) ;
@@ -231,6 +231,9 @@ public class XmlWrapperEMIN
 
      result.append("</CLRCMetadata>") ;
 
+     //HERE manual debugging as log4j gone on one
+     System.out.println(result.toString()) ;
+
      org.w3c.dom.Element el = null ;
 
      try
@@ -267,7 +270,7 @@ public class XmlWrapperEMIN
      //this is the one step forward two steps back that web services seem to give you
      if(cache_updated = true)
      {
-	saveMap() ;
+	saveMap() ; 
      }
      
      return el ;

@@ -113,11 +113,11 @@
   <property name="app.path"      value="/${app.name}"/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
-  <property name="catalina.home" value="c:\tomcat4.1.12"/>  <!-- UPDATE THIS! -->
+  <property name="catalina.home" value="c:\tomcat4.1.24"/>  <!-- UPDATE THIS! -->
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/docs"/>
   <property name="manager.username"   value="tomcat"/>
-  <property name="manager.url"   value="http://localhost:8080/manager"/>
+  <property name="manager.url"   value="http://localhost:9090/manager"/>
   <property name="manager.password"   value="tomcat"/>
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/web"/>
@@ -423,6 +423,7 @@
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/commons-logging.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jaxrpc.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/jdom.jar"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.4.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/log4j-1.2.8.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/saaj.jar"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${common.lib}/shop.jar"/>
