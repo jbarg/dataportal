@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 
 public class LookUpModule
 {
-    
     private UDDIProxy getUDDIProxy()
     {
         // Create a UDDI proxy based on the Apache SOAP transport
@@ -200,7 +199,7 @@ public class LookUpModule
             Vector names = new Vector();
             names.add(new Name(facility));
             
-            // Find businesses by name, restricted by TModel
+            // Find businesses by name
             BusinessList businessList = proxy.find_business(names, null, null, null ,null ,fqs, 0);
             Vector businessInfoVector  = businessList.getBusinessInfos().getBusinessInfoVector();
             names.clear();
@@ -212,10 +211,10 @@ public class LookUpModule
                 // Find the services
                 ServiceList serviceList = proxy.find_service(businessInfo.getBusinessKey(), names, null, null, null, 0);
                 Vector serviceInfoVector = serviceList.getServiceInfos().getServiceInfoVector();
-                for (int s=0; s< serviceInfoVector.size();s++)
+                for (int s=0; s < serviceInfoVector.size();s++)
                 {
                     ServiceInfo serviceInfo = (ServiceInfo)serviceInfoVector.elementAt(s);
-                    
+
                     // Get the service detail and store the wsdl path in our array
                     ServiceDetail serviceDetail = proxy.get_serviceDetail(serviceInfo.getServiceKey());
                     Vector businessServiceVector = serviceDetail.getBusinessServiceVector();
