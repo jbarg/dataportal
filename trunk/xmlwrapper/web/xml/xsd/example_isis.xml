@@ -1,178 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CLRCMetadata xmlns="http://www.escience.clrc.ac.uk/schemas/scientific" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.escience.clrc.ac.uk/schemas/scientific
 E:\DOCUME~1\sas27\MYDOCU~1\papers\CCLRCS~1\schema\dataportal\xmlwrapper\web\xml\xsd\clrcmetadata.xsd">
-<MetadataRecord metadataID="ISIS-SXD1009" facility="ISIS">
+<MetadataRecord MetadataID="ISIS-SXD1009" Facility="ISIS">
 		<Topic>
+			<Keywords>
+				<Discipline>Chemistry</Discipline>
+				<Keyword>Organic</Keyword>
+				<Keyword>Benzene</Keyword>
+				<Keyword>Denatured Benzene</Keyword>
+				<Keyword>C6H6</Keyword>
+				<Keyword>C6D6</Keyword>
+			</Keywords>
 			<Subjects>
 				<Discipline>Chemistry</Discipline>
 				<Subject>
-					<SubjectName>String</SubjectName>
+					<SubjectName>Chemsitry</SubjectName>
+					<Subject>
+						<SubjectName>Organic</SubjectName>
+						<Subject>
+							<SubjectName>Benzene</SubjectName>
+						</Subject>
+					<Subject>
 				</Subject>
 			</Subjects>
 		</Topic>
-		<Study>
-			<StudyName>String</StudyName>
+		<Study StudyID="SXD1009">
+			<StudyName>Benzene, variable temperature study: 150K</StudyName>
 			<StudyInstitution>
-				<Name institutionID="String" institutiontype="academic">String</Name>
-				<Role>String</Role>
-			</StudyInstitution>
-			<StudyInstitution>
-				<Name institutionID="String" institutiontype="academic">String</Name>
-				<Role>String</Role>
+				<Name institutionID="ISIS" institutiontype="academic">String</Name>
+				<Role>Study Institution</Role>
 			</StudyInstitution>
 			<Investigator>
 				<Name>
-					<Surname>String</Surname>
-					<Initials>String</Initials>
-					<Forename>String</Forename>
-					<Title>professor</Title>
+					<Surname>Perimentor</Surname>
+					<MiddleInitials>X</MiddleInitials>
+					<Forename>Anne</Forename>
+					<Title>Professor</Title>
 				</Name>
-				<InstitutionId>String</InstitutionId>
+				<InstitutionId>ID-INS1</InstitutionId>
 				<ContactDetails>
 					<Address>
-						<Addressline1>String</Addressline1>
-						<Addressline2>String</Addressline2>
-						<Town>String</Town>
-						<Region>String</Region>
-						<Postcode>String</Postcode>
-						<Country countryabbrev="String">String</Country>
+						<Addressline1>Department of Organic Chemistry</Addressline1>
+						<Addressline2>University of SomeWhere</Addressline2>
+						<Town>Some Town</Town>
+						<Region>Some Region</Region>
+						<Postcode>S12 4WE</Postcode>
+						<Country countryabbrev="en_UK">United Kindom</Country>
 					</Address>
-					<DirectLine>String</DirectLine>
-					<Switchboard>String</Switchboard>
-					<Fax>String</Fax>
-					<Email>String</Email>
-					<WebPage>String</WebPage>
+					<DirectLine>01922 222 2222</DirectLine>
+					<Switchboard>01922 222 2000</Switchboard>
+					<Fax>01922 222 1111</Fax>
+					<Email>a.x.perimentor@chem.someuni.ac.uk</Email>
+					<WebPage>http://www.somuni.ac.uk/axperimentor</WebPage>
 				</ContactDetails>
-				<RoleInStudy>Post Doctoral Research Assistant</RoleInStudy>
-				<RoleInInstitution>Post Doctoral Research Assistant</RoleInInstitution>
-			</Investigator>
-			<Investigator>
-				<Name>
-					<Surname>String</Surname>
-					<Initials>String</Initials>
-					<Forename>String</Forename>
-					<Title>professor</Title>
-				</Name>
-				<InstitutionId>String</InstitutionId>
-				<ContactDetails>
-					<Address>
-						<Addressline1>String</Addressline1>
-						<Addressline2>String</Addressline2>
-						<Town>String</Town>
-						<Region>String</Region>
-						<Postcode>String</Postcode>
-						<Country countryabbrev="String">String</Country>
-					</Address>
-					<DirectLine>String</DirectLine>
-					<Switchboard>String</Switchboard>
-					<Fax>String</Fax>
-					<Email>String</Email>
-					<WebPage>String</WebPage>
-				</ContactDetails>
-				<RoleInStudy>Post Doctoral Research Assistant</RoleInStudy>
-				<RoleInInstitution>Post Doctoral Research Assistant</RoleInInstitution>
+				<RoleInStudy>Principal Investigator</RoleInStudy>
+				<RoleInInstitution>Professor</RoleInInstitution>
 			</Investigator>
 			<StudyInformation>
-				<Funding>String</Funding>
+				<Funding>EPSRC</Funding>
 				<TimePeriod>
 					<StartDate>
-						<Date>1967-08-13</Date>
-						<Time>14:20:00-05:00</Time>
+						<Date>2000-11-01</Date>
+						<Time>09:00:00-00:00</Time>
 					</StartDate>
 					<EndDate>
-						<Date>1967-08-13</Date>
-						<Time>14:20:00-05:00</Time>
+						<Date>2001-11-01</Date>
+						<Time>17:30:00-00:00</Time>
 					</EndDate>
 				</TimePeriod>
 				<Purpose>
-					<Abstract>String</Abstract>
+					<Abstract>To study the structure of Benzene at a temperature of 150K</Abstract>
 				</Purpose>
-				<StudyStatus>String</StudyStatus>
-				<Resources>String</Resources>
+				<StudyStatus>Complete</StudyStatus>
+				<Resources>Beam time on ISIS using the SXD for 1 hour on 11/01/2001</Resources>
 			</StudyInformation>
-			<Notes>String</Notes>
-			<Investigation InvestigationID="ID000001">
-				<Name>String</Name>
-				<InvestigationType>experiment</InvestigationType>
-				<Abstract>String</Abstract>
-				<Resources>String</Resources>
-				<DataHolding InvestigationID="ID000002">
+			<Investigation InvestigationID="INV-SXD1009">
+				<Name>Benzene, variable temperature study: 150K</Name>
+				<InvestigationType>Experiment</InvestigationType>
+				<Abstract>To study the structure of Benzene at a temperature of 150K</Abstract>
+				<Resources>Beam time on ISIS using the SXD for 1 hour on 11/01/2001</Resources>
+				<DataHolding InvestigationID="INV-SXD1009">
 					<DataDescription>
-						<DataName>String</DataName>
-						<TypeOfData>File</TypeOfData>
-						<Status>String</Status>
-						<DataTopic>
-							<Keywords>
-								<Discipline>String</Discipline>
-								<KeywordSource>String</KeywordSource>
-								<Keyword>String</Keyword>
-							</Keywords>
-							<Keywords>
-								<Discipline>String</Discipline>
-								<KeywordSource>String</KeywordSource>
-								<Keyword>String</Keyword>
-							</Keywords>
-							<Subjects>
-								<Discipline>String</Discipline>
-								<SubjectSource>String</SubjectSource>
-								<Subject>
-									<SubjectName>String</SubjectName>
-								</Subject>
-							</Subjects>
-							<Subjects>
-								<Discipline>String</Discipline>
-								<SubjectSource>String</SubjectSource>
-								<Subject>
-									<SubjectName>String</SubjectName>
-								</Subject>
-							</Subjects>
-						</DataTopic>
+						<DataName>INV-SXD1009</DataName>
+						<TypeOfData>File Based</TypeOfData>
+						<Status>Complete</Status>
 						<LogicalDescription>
-							<Parameter>
-								<ParamName>String</ParamName>
-								<Derivation>fixed</Derivation>
-								<Units>
-									<UnitName>String</UnitName>
-									<UnitAcronym>String</UnitAcronym>
-									<UnitSystem>String</UnitSystem>
-								</Units>
-								<ParamValue>String</ParamValue>
-								<Range>
-									<Limit bound="upper">String</Limit>
-									<Limit bound="upper">String</Limit>
-									<MarginOfError>String</MarginOfError>
-								</Range>
-							</Parameter>
-							<Parameter>
-								<ParamName>String</ParamName>
-								<Derivation>fixed</Derivation>
-								<Units>
-									<UnitName>String</UnitName>
-									<UnitAcronym>String</UnitAcronym>
-									<UnitSystem>String</UnitSystem>
-								</Units>
-								<ParamValue>String</ParamValue>
-								<Range>
-									<Limit bound="upper">String</Limit>
-									<Limit bound="upper">String</Limit>
-									<MarginOfError>String</MarginOfError>
-								</Range>
-							</Parameter>
 							<TimePeriod>
 								<StartDate>
-									<Date>1967-08-13</Date>
-									<Time>14:20:00-05:00</Time>
+									<Date>2000-11-01</Date>
+									<Time>09:00:00-00:00</Time>
 								</StartDate>
 								<EndDate>
-									<Date>1967-08-13</Date>
-									<Time>14:20:00-05:00</Time>
+									<Date>2001-11-01</Date>
+									<Time>17:30:00-00:00</Time>
 								</EndDate>
 							</TimePeriod>
-							<Description>String</Description>
 							<FacilityUsed>
-								<FacilityName>String</FacilityName>
-								<Resource>String</Resource>
-								<Resource>String</Resource>
+								<FacilityName>ISIS</FacilityName>
+								<Resource>ISIS SXD</Resource>
 							</FacilityUsed>
 						</LogicalDescription>
 						<Software>
