@@ -1,0 +1,201 @@
+#**
+Grid FTP Client Portlet
+@author <a href="mailto:x.yang@dl.ac.uk">Xiaobo Yang, CCLRC e-Science Centre, 15 December 2004</a>
+**#
+<div class="chefPortletContainer">
+  #set ( $headings1 = ["Name", "Size", "Time", "", ""] )
+
+#if(!$errmsg)
+##  #set ( $link = $jslink.getPortletById($portlet.ID).addQueryData("eventSubmit_doShow_progress","") )
+##  <table width=100%>
+##    <tr>
+##	<td>
+##	   <a href= "${link}">
+##              View current transfers
+##	   </a>
+##        </td>
+##    </tr>
+##  </table>
+
+  <table width=100%>
+    <tr>
+      <td valign="top">
+        <table border="true" cellspacing="1" cellpadding="3" width=100%>
+          <form name="$form-name" id="$form-name" action="#toolForm("$action")" method="post">
+            <tr>
+              <td width="100%" colspan="5"> 
+                #if($files2)
+##                <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($home1)&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl("$port2")&path2=$validator.escapeUrl("${currdir2}")">Grid FTP Host 1: $host1:${port1}</a> ${currdir1} <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($parentdir1)&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl($port2)&path2=$validator.escapeUrl($currdir2)"><img src="images/xportlets/back.gif" border="0"></a>Up ## Xiaobo Yang, 9 November 2004, move the link "back" here
+                  Grid FTP Host 1: $host1:${port1}${currdir1} <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($parentdir1)&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl($port2)&path2=$validator.escapeUrl($currdir2)"><img src="images/xportlets/back.gif" border="0"></a>Up ## Xiaobo Yang, 9 November 2004, move the link "back" here
+                #else
+##                <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($home1)">Grid FTP Host 1: $host1:${port1}</a> ${currdir1} <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($parentdir1)"><img src="images/xportlets/back.gif" border="0"></a>Up ## Xiaobo Yang, 9 November 2004, move the link "back" here
+                  Grid FTP Host 1: $host1:${port1}${currdir1} <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($parentdir1)"><img src="images/xportlets/back.gif" border="0"></a>Up ## Xiaobo Yang, 9 November 2004, move the link "back" here
+                #end
+              </td>
+            </tr>
+            <tr bgcolor="$!{skin.Color}">
+              #foreach ($heading in $headings1)
+##                <th>$heading</th>
+                <td>$heading</td>
+              #end
+            </tr>
+            <tr/>
+            #foreach ($file in $files1)
+              <tr>
+	        #if ($file.isFile=="1") ## file
+                  <td><img src=$file.Piclink alt=file border="0">
+                #elseif ($file.isFile=="2") ## directory
+                  #if($files2)
+ 	            <td> <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl("${currdir1}/${file.Name}")&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl($port2)&path2=$validator.escapeUrl($currdir2)"><img src=$file.Piclink alt=folder border="0"></a>
+                  #else ## only one host
+ 	            <td> <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl("${currdir1}/${file.Name}")"><img src=$file.Piclink alt=folder border="0"></a>
+                  #end
+                #else ## unknow format
+                   <td>
+                #end
+                $file.Name</td>
+                #entryCell ($file.Size)
+                #entryCell ($file.Time)
+                #if ($file.isFile=="1")
+                  <td><a href=${download1}${file.Name} target=_blank><img src=images/xportlets/download.gif alt=download border="0"></a></td>
+	            <td> <input type="checkbox" name=filename value=$file.Name > </td>
+                #elseif ($file.isFile=="2") ## Xiaobo Yang, 30 November 2004, add directory
+                  <td></td>
+                  <td><input type="checkbox" name=filename value=$file.Name></td>
+                #else
+                  <td/>
+                  <td/>
+                #end
+              </tr>
+            #end 
+            <tr>
+              <td width="100%" align="right" colspan="5">
+                <input type=hidden name=srchost value=$host1>
+                <input type=hidden name=srcport value=$port1>
+                <input type=hidden name=srcpath value=$currdir1>
+
+                #if($files2)
+                  <input type=hidden name=dsthost value=$host2>
+                  <input type=hidden name=dstport value=$port2>
+                  <input type=hidden name=dstpath value=$currdir2>
+                #end
+
+##                  <div class="chefButtonRow"> ## Button "Browse..." will not be affected
+
+                <input type=reset>
+
+                #if($files2)
+                  <input type=submit name="eventSubmit_doThirdpartytransfer" value="Transfer-->">
+                #end
+
+                <input type=submit name="eventSubmit_doDelete" value="Delete"> ## Xiaobo Yang, 3 November 2004, add delete button
+##                  </div>
+              </td>
+            </tr>
+          </form>
+	  <tr>
+            <td width="100%" colspan="5">
+              <font style="font-size:14">Upload file:</font>
+              <form name="$form-name" id="$form-name" action="#toolForm("$action")" enctype="multipart/form-data" method="post">
+              <input type=file name=uploadfilename>
+              <input type=hidden name=dsthost value=$host1>
+              <input type=hidden name=dstport value=$port1>
+              <input type=hidden name=dstpath value=$currdir1>
+              <input type=submit name="eventSubmit_doUpload" value="Upload File">
+              <input type=reset value="Reset"></form>
+            </td>
+          </tr>
+        </table>
+      </td>
+      #if($files2)        
+        <td valign="top">
+          <table border="true" cellspacing="1" cellpadding="3" width=100%>  	
+            <form name="$form-name" id="$form-name" action="#toolForm("$action")" method="post">
+              <tr>
+                <td width="100%" colspan="5">
+##                  <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl("$host1")&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($currdir1)&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl($port2)&path2=$validator.escapeUrl($home2)">Grid FTP Host 2: $host2:${port2}</a> ${currdir2} <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($currdir1)&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl($port2)&path2=$validator.escapeUrl($parentdir2)"><img src="images/xportlets/back.gif" border="0"></a>Up ## Xiaobo Yang, 9 November 2004, move the link "back" here
+                  Grid FTP Host 2: $host2:${port2}${currdir2} <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($currdir1)&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl($port2)&path2=$validator.escapeUrl($parentdir2)"><img src="images/xportlets/back.gif" border="0"></a>Up ## Xiaobo Yang, 9 November 2004, move the link "back" here
+                </td>
+              </tr>
+	      <tr bgcolor="$!{skin.Color}" >
+                #foreach ($heading in $headings1) ## Xiaobo Yang, 9 November 2004, use $headings1
+##                  <th>$heading</th>
+                  <td>$heading</td>
+                #end
+              </tr>
+              #foreach ($file in $files2)
+                <tr>                  
+	          #if ($file.isFile=="1")
+                    <td><img src=$file.Piclink alt=file border="0"> $file.Name</td>
+                  #elseif ($file.isFile=="2") ## Xiaobo Yang, 8 November 2004, add directory
+ 	            <td> <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($currdir1)&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl($port2)&path2=$validator.escapeUrl("${currdir2}/${file.Name}")"><img src=$file.Piclink alt=folder border="0"></a>$file.Name</td>
+                  #else
+                    <td/>
+ 	            <td> <a href="#toolLink("$action" "doList")&host1=$validator.escapeUrl($host1)&port1=$validator.escapeUrl($port1)&path1=$validator.escapeUrl($currdir1)&host2=$validator.escapeUrl($host2)&port2=$validator.escapeUrl($port2)&path2=$validator.escapeUrl("${currdir2}/${file.Name}")"><img src=$file.Piclink alt=folder border="0"></a>$file.Name</td>
+                  #end
+                  #entryCell ($file.Size)
+                  #entryCell ($file.Time)
+                  #if ($file.isFile=="1")
+                    <td><a href=${download2}${file.Name} target="_blank"><img src=images/xportlets/download.gif alt=download border="0"></a></td>
+                  #else
+                    <td/>
+                  #end
+	          #if ($file.isFile=="1" || $file.isFile=="2") ## Xiaobo Yang, 9 November 2004, move check box to the end
+                    <td><input type="checkbox" name=filename value=$file.Name ></td>
+                  #else
+                    <td/>
+                  #end
+                </tr>
+              #end
+              #if($files1)
+                <tr>
+                  <td width=100% align="left" colspan="5">
+                    <input type=hidden name=srchost value=$host2>
+                    <input type=hidden name=dsthost value=$host1>
+                    <input type=hidden name=srcport value=$port2>
+                    <input type=hidden name=dstport value=$port1>
+                    <input type=hidden name=srcpath value=$currdir2>
+                    <input type=hidden name=dstpath value=$currdir1>
+                    <input type="reset">
+                    <input type="submit" name="eventSubmit_doThirdpartytransfer" value="<--Transfer">
+                    <input type=submit name="eventSubmit_doDelete" value="Delete"> ## Xiaobo Yang, 3 November 2004, add delete button
+                  </td>
+                </tr>
+              #end
+            </form>
+            <tr>
+              <td width=100% colspan="5">
+                <font style="font-size:14">Upload file:</font>
+                <form name="$form-name" id="$form-name" action="#toolForm("$action")" enctype="multipart/form-data" method="post">
+                <input type=file name=uploadfilename>
+                <input type=hidden name=dsthost value=$host2>
+                <input type=hidden name=dstport value=$port2>
+                <input type=hidden name=dstpath value=$currdir2>
+                <input type=submit name="eventSubmit_doUpload" value="Upload File">
+                <input type=reset value="Reset"></form>
+              </td>
+            </tr>
+          </table>
+        </td>
+      #end
+    </tr>
+  </table>
+
+  <br/><br/><hr/>
+
+  #else
+    <p><font color="red">Alert</font>:<br/> $errmsg<br/>
+  #end
+
+  #if($status)
+    Status:<br/> $status <br/>
+  #end
+
+###if($debugmsg)
+##Debug Message: $debugmsg <br/>
+###end
+
+  <br/>
+  <a href="javascript:history.back()">Back</a>
+##
+</div>

@@ -1,0 +1,752 @@
+/*Hide anything that is not portlet content,reformat things for better printing - when people have moved on to v. 6 browsers! (gsilver)*/
+/*@media print{
+#chefInsthead,#chefInstLogo,#chefInstTabBar,.chefExternalNav,.chefSideBar,#chefBottom,.chefTextOnly,div.chefToolBarWrap,.chefToolBarWrap a,td.chefActionTitleStyleClass img,td.chefTitleStyleClass img{display:none}
+div.PortletContainer{border:1px solid #ECE9D8}
+a,a:link{color:#000;text-decoration:underline}
+}*/
+/* For NGS */
+.NEWskin{background-color: #00AA00;}
+#NEWInterportLetNavLogo{
+/*	background-image: url(../images/workspaceicon.gif);
+	height:0px;
+	padding:0px;
+	margin:0px 0em;
+	width:11em; 
+	display:block;
+	background-repeat: no-repeat;
+	background-position:center top;
+*/}
+/*PART 1:CHEF-MENU.VM CHEF_NAV_TOP.VM AND CHEF_NAV_BOTTOM.VM SELECTORS*/
+#chefInstLogo{
+background-image:url(../images/logo_ngs.jpg);
+background-position:center center;
+background-repeat:no-repeat;
+border:none;
+height:60px;
+margin:0px 1.5em;
+padding:0px;
+width:11em
+}
+.chefTextOnly{display:none}
+img.chefTextOnly{border:0;display:inline;height:0;margin:0;padding:0;width:0}
+#chefInstLogoCell{
+/* For NGS */
+background-color:#FFF; 
+/* background-color:#51698D; */
+border-bottom:1px solid #2E3C52;
+font-size:x-small;
+margin:0px;
+padding:2px 0px;
+width:auto
+}
+#chefTabHolder{font-size:7px;height:1em;vertical-align:top}
+#chefInstTabBar{
+/* For NGS */
+background-color:#00AA00;
+/* background-color:#2E3C52; */
+border-left:1px solid #2E3C52;
+border-top:1px solid #fff;
+clear:both;
+color:#fff;
+font-size:small;
+margin:0px;
+padding:0px;
+width:100%
+}
+#chefMoreSelect{
+background-color:#2E3C52;
+border-bottom:1px solid #fff;
+border-left:2px solid #fff;
+color:#fff;
+display:inline;
+font-size:xx-small;
+margin:0 1em 0 0;
+padding:0
+}
+#chefMoreSelect option{
+background-color:#2E3C52;
+color:#fff;
+font-size:xx-small;
+margin:0;
+padding:0;
+vertical-align:middle
+}
+#chefInstTabs{border-left:1px solid #fff;margin:0;padding:0;white-space:nowrap}
+#chefInstTabs a,#chefInstTabs a:link,#chefInstTabs a:visited{
+border-right:1px solid #fff;
+/* For NGS */
+color:#326400;
+/* color:#fff; */
+font-weight:bold;
+line-height:1.5em;
+margin-right:-.5em;
+padding:.17em 1em;
+text-decoration:none
+}
+#chefInstTabs a:hover,#chefInstTabs a:active{
+/* For NGS */
+background-color:#E6F0E6;
+/* background-color:#FFCC00; */
+border-right:1px solid #fff;
+color:#326400;
+/* color:#2E3C52; */
+line-height:1.5em;
+margin-right:-.5em;
+padding:.17em 1em;
+text-decoration:none
+}
+#chefInstTabActive{
+border-left:1px solid #fff;
+border-right:1px solid #fff;
+/* For NGS */
+color:#326400;
+/* color:#374E73; */
+font-weight:bold;
+line-height:1.5em;
+margin-left:-1px;
+margin-right:-.5em;
+padding:.17em 1em
+}
+#chefInstTabActiveFloat{
+border-bottom-color:transparent;
+border-bottom-style:solid;
+border-bottom-width:1px;
+border-left:1px solid #fff;
+border-right:1px solid #000;
+border-top:1px solid #000;
+color:#374E73;
+font-size:small;
+font-weight:bold;
+line-height:1.5em;
+margin-left:-1px;
+margin-right:-.5em;
+margin-top:0px;
+padding:.17em 1em
+}
+#chefInstTitle{height:28px;margin:0px;padding:.4em 0px;vertical-align:middle;width:233px}
+#chefInsthead{
+/* For NGS */
+background-color:#FFFFFF;
+/* background-color:#51698D; */
+background-image:url(../images/banner_ngs.gif);
+background-position:left center;
+background-repeat:no-repeat;
+border-bottom:1px solid #2E3C52;
+color:#fff;
+font-size:x-small;
+font-weight:bold;
+margin:0px;
+padding:0px 1em 0px 0px;
+text-align:center;
+vertical-align:middle;
+white-space:nowrap;
+width:auto
+}
+/* For NGS */
+#chefInsthead a,#chefInsthead a:link,#chefInsthead a:visited{color:#326400;margin:0px 0px 0px 1em;text-decoration:none}
+#chefInsthead a:hover,#chefInsthead a:active{color:#326400;margin:0px 0px 0px 1em;text-decoration:underline overline}
+/* 
+#chefInsthead a,#chefInsthead a:link,#chefInsthead a:visited{color:#fff;margin:0px 0px 0px 1em;text-decoration:none}
+#chefInsthead a:hover,#chefInsthead a:active{color:#fff;margin:0px 0px 0px 1em;text-decoration:underline overline} 
+*/
+/* For NGS */
+#chefContentCell{background-color:#E6F0E6;vertical-align:top;width:100%}
+#chefInstCell{background-color:#FFFFFF;vertical-align:bottom;width:100%}
+/*
+#chefContentCell{background-color:#EFEDED;vertical-align:top;width:100%}
+#chefInstCell{background-color:#51698D;vertical-align:bottom;width:100%}
+*/
+.chefExternalNav{
+background-color:#555;
+color:#FCEC7E;
+font-size:xx-small;
+margin:0px;
+padding:.5em;
+width:auto
+}
+/* For NGS */
+.chefExternalNav A,.chefExternalNav A:link,.chefExternalNav A:visited{color:#408E3A;text-decoration:none}
+/* .chefExternalNav A,.chefExternalNav A:link,.chefExternalNav A:visited{color:#FCEC7E;text-decoration:none} */
+.chefExternalNav A:hover{color:#408E3A;text-decoration:underline}
+/* .chefExternalNav A:hover{color:#FFBF00;text-decoration:underline} */
+.chefSideBar{}
+#chefInterportLetNavMenu{list-style:none;margin:0px;padding:0px}
+#chefInterportLetNavMenu span{border-bottom:1px solid #fff}
+/* For NGS */
+#chefInterportLetNav a,#chefInterportLetNav a:link,#chefInterportLetNav a:visited{color:#326400;font-weight:bold;text-decoration:none}
+/* #chefInterportLetNav a,#chefInterportLetNav a:link,#chefInterportLetNav a:visited{color:#374E73;font-weight:bold;text-decoration:none} */
+#chefInterportLetNav a:hover,#chefInterportLetNav a:active{background-color:#E6F0E6;color:#326400;font-weight:bold}
+/* #chefInterportLetNav a:hover,#chefInterportLetNav a:active{background-color:#EFEDED;color:#374E73;font-weight:bold} */
+#chefInterportLetNavLogoCell{border-bottom:1px solid #fff;margin:0px;padding:1.5em 0px;width:100%}
+.chefInterportLetNavTextItem p{
+/* For NGS */
+color:#FFF;
+/* color:#374E73; */
+font-size:xx-small;
+font-weight:normal;
+margin:1em 2em;
+text-align:left
+}
+.chefInterportLetNavBox{margin:0px 0px 5px 0px;padding:0px;text-align:center;width:100%}
+.chefInterportLetNavBoxContent{border-bottom:1px solid #666;border-top:1px solid #666;margin:0px;padding:0px}
+.chefInterportLetNavBoxTitle{
+/* For NGS */
+color:#FFF;
+/* color:#374E73; */
+font-size:80%;
+margin:0px;
+padding:.5em .5em .25em .5em;
+text-align:center;
+white-space:nowrap
+}
+.chefPresence{border:none;height:12em;margin:0px;padding:0px;width:100%}
+#chefBottom{
+background-color:#FFF;
+font-size:xx-small;
+padding:.5em 2em 0 2em;
+text-align:center
+}
+.chefInterportLetNavItem{display:block;margin:0px;padding:0px;text-decoration:none;width:100%}
+.chefInterportLetNavItem a,.chefInterportLetNavItem a:link,.chefInterportLetNavItem a:visited{display:block;font-weight:bold;margin:0px;padding:.5em;text-align:left}
+.chefInterportLetNavItem a:hover,.chefInterportLetNavItem a:active{display:block;font-weight:bold;margin:0px;padding:.5em;text-align:left}
+.chefInterportLetNavItemSelected{
+/* For NGS */
+background-color:#E6F0E6;
+/* background-color:#EFEDED; */
+color:#326400;
+/* color:#374E73; */
+display:block;
+font-weight:bold;
+margin:0px;
+padding:.5em;
+text-align:left
+}
+.chefInterportLetNavTextItem{display:block;margin:0px;padding:.5em 0px;width:100%}
+/* PART 2:GENERIC SELECTORS*/
+body{
+margin:0px;
+padding:0px;
+font-family:Verdana,Arial,Helvetica,sans-serif;
+voice-family: "\"}\"",inherit;
+font-size: .8em;
+}
+html>body { font-size: 90%;}
+TD{text-align:left}
+TR{}
+FONT{}
+I{font-style:italic}
+BIG{font-weight:bold}
+TH{}
+/* For NGS */
+A:link,A:visited{color:#408E3A;text-decoration:none}
+A:hover{color:#408E3A;text-decoration:underline}
+/* A:link,A:visited{color:#51698D;text-decoration:none} */
+/* A:hover{color:#62739E;text-decoration:underline} */
+H1{font-size:30pt}
+STRONG{font-size:9pt}
+H2{font-size:12pt}
+H3{font-size:9pt}
+/* PART 3:CHEF-MAIN.VM AND PORTLET SELECTORS*/
+.chefWaitMessage{height:1500px;width:100%}
+table.ControllerStyleClass{margin:0px;padding:0px}
+table.chefPortletStyleClass{}
+table.chefPortletStyleClass td{}
+td.chefTitleStyleClass{
+/* For NGS */
+background-color:#00AA00;
+/* background-color:#51698D; */
+color:#FFF;
+font-weight:bold;
+padding:2px 4px 2px 2px;
+vertical-align:middle
+}
+td.chefActionTitleStyleClass{
+/* For NGS */
+background-color:#00AA00;
+/* background-color:#51698D; */
+color:#FFF;
+padding:2px 4px 2px 2px;
+text-align:right;
+vertical-align:top
+}
+.chefPortletContainer .chefToolBarWrap{
+background-color:#DDE3EB;
+border-color:#DDE3EB;
+border-style:solid;
+border-width:1px 0px 1px 0px;
+display:block;
+font-size:.8em;
+margin:5px 0px 0px 8px;
+padding:1px 0px 1px 0px;
+text-align:left;
+line-height: 1.7em;
+width:auto
+}
+.chefPortletToolBarMessage{
+background-color:#fff;
+border-bottom:1px dotted #778CBF;
+border-top:1px dotted #778CBF;
+display:block;
+font-size:.8em;
+margin:5px 0px 0px 8px;
+padding:4px 0px 4px 0px;
+text-align:left;
+width:auto
+}
+.chefToolBarWrap  a{
+/* For NGS */
+border:1px solid #408E3A;
+color:#408E3A;
+/* 
+border:1px solid #B0BED0;
+color:#51698D;
+*/
+margin:0px 1px 0px 1px;
+padding:1px;
+text-decoration:none
+}
+
+.chefToolBarWrap  a:hover{
+background-color:#FFF8DF;
+border-color:#630;
+border-style:solid;
+border-width:1px;
+color:#630;
+text-decoration:none
+}
+.chefToolBarWrap a:active{border-color:#630;border-style:solid;border-width:1px;color:#630}
+
+.searchField {font-size:.9em;margin:0px;border:1px solid #B0BED0;}
+.toolbarForm {margin:0px;padding:0px;display: inline;}
+.chefPortletContainer .chefToolBarWrapForm{
+background-color:#DDE3EB;
+border-color:#DDE3EB;
+border-style:solid;
+border-width:1px 0px 1px 0px;
+display:block;
+font-size:.8em;
+margin:5px 0px 0px 8px;
+padding:1px 0px 1px 0px;
+text-align:left;
+line-height: 1.7em;
+width:auto
+}
+.chefToolBarWrapForm a{
+/* For NGS */
+border:1px solid #408E3A;
+color:#408E3A;
+/*
+border:1px solid #B0BED0;
+color:#51698D;
+*/
+margin:0px 1px 0px 1px;
+padding:1px;
+text-decoration:none
+}
+.chefToolBarWrapForm a:hover{
+background-color:#FFF8DF;
+border-color:#630;
+border-style:solid;
+border-width:1px;
+color:#630;
+text-decoration:none
+}
+.chef2ndToolbarWrap
+{
+background-color:#fff;
+display:block;
+margin:4px 0px 0px 8px;
+padding:0px;
+text-align:left;
+}
+table.chef2ndToolbar{
+color:#51698D;
+margin:0px 0px 10px 0px;
+text-align:left;
+width:100%;
+font-size:.8em;
+}
+table.chef2ndToolbar td.right {text-align:right;padding:3px 3px 0px 0px;vertical-align: middle;}
+table.chef2ndToolbar td.right a {
+border:1px solid #B0BED0;
+color:#51698D;
+margin:0px 1px 0px 1px;
+padding:1px;
+text-decoration:none
+}
+table.chef2ndToolbar td.right a:hover {
+background-color:#FFF8DF;
+border-color:#630;
+border-style:solid;
+border-width:1px;
+color:#630;
+text-decoration:none
+}
+table.chef2ndToolbar td.left {vertical-align: middle;padding:0px 5px 0px 5px;}
+table.chef2ndToolbar tr.first {background-color:#FFF}
+table.chef2ndToolbar tr.first td {padding-bottom:5px}
+table.chef2ndToolbar tr.second td.right {border-top:1px solid #51698D;color:#000}
+table.chef2ndToolbar tr.second td.left {border-top:1px solid #51698D}
+table.chef2ndToolbar td.left select {font-size:1em;vertical-align: middle;background-color:#FFF;color:#51698D}
+table.chef2ndToolbar td.right input {font-size:1em;vertical-align: middle;background-color:#DDE3EB;color:#51698D;border:1px solid #B0BED0}
+.chefPortletContainer{margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;width:98%}
+.chefPortletContent{background-color:#fff;clear:both;margin-right:0px;padding:6px;width:98%}
+.chefAlert{color:#CA0000}
+.chefAlertBox{
+background-color:#FFF8DF;
+background-image:url(../images/chef/warn.gif);
+background-position:3px;
+background-repeat:no-repeat;
+border:1px solid #B8B88A;
+clear:both;
+color:#663300;
+float:left;
+font-size:x-small;
+margin:5px 0px 5px 0px;
+padding:5px 5px 5px 25px
+}
+.chefInfoBox{
+background-color:#FFF;
+border:1px solid #778CBF;
+clear:both;
+float:left;
+font-size:x-small;
+margin:5px 0px 5px 0px;
+padding:5px 5px 5px 5px
+}
+.chefInlineInstructions{color:#62739E;display:block;font-size:.9em}
+.chefInlineAlert{
+background-image:url(../images/chef/arrowUpWarn.gif);
+background-position:center left;
+background-repeat:no-repeat;
+color:#CA0000;
+font-size:.9em;
+margin:0px 0px 0px 5px;
+padding:0px 0px 0px 10px
+}
+.chefAccessError{color:#CA0000;font-size:18pt;font-weight:bold}
+.chefPageviewTitle{clear:both;display:block;margin:0px 0px 5px 0px;width:70%}
+.chefListMessage{font-size:small;margin:0px 0px 5px 0px}
+.chefPortletContainer .chefBreadCrumb{clear:both;margin:5px 5px 5px 0px}
+.chefSectionMessage{font-size:small;margin:0px 0px 5px 10px}
+.chefSectionTitle{display:block;font-weight:normal;margin:5px 0px 5px 0px}
+.chefHonorPledge{color:#62739E;font-size:x-small;font-weight:bold}
+table.calendar{}
+table.calendar th{background-color:#FFFFCC;font-weight:normal;text-align:center}
+.bgActivity{background-color:#FFFFCA;border:1px solid #dadada;text-align:right}
+.bgWithoutActivity{background-color:#fff;border:1px solid #dadada;text-align:right}
+.borderFullGray{border:1px solid #dadada}
+.borderGrayYear{background-color:#ccc;border:1px solid #dadada;text-align:right}
+.borderGrayMonth{border:1px solid #dadada}
+.borderGrayDayWeek{
+border-bottom:none;
+border-collapse:collapse;
+border-left:1px solid #dadada;
+border-right:1px solid #dadada;
+border-top:1px solid #dadada
+}
+.borderGrayBackground{
+background-color:#FFFF99;
+border-bottom:none;
+border-left:1px solid #dadada;
+border-right:1px solid #dadada;
+border-top:1px solid #dadada
+}
+.borderGrayTodayBgCenter{
+background-color:#FFFFCA;
+border-left:1px solid #000;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderGrayTodayBottom{
+border-bottom:1px solid #000;
+border-left:1px solid #000;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderGrayTodayCenter{
+border-left:1px solid #000;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderGrayTodayEmptyMiddleBottom{background-color:white;border:1px solid #dadada}
+.borderGrayTodayEmptyMiddleCenter{
+background-color:white;
+border-left:1px solid #dadada;
+border-right:1px solid #dadada;
+border-top:1px solid #dadada
+}
+.borderGrayTodayEmptyRightBottom{
+background-color:white;
+border-left:1px solid #dadada;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderGrayTodayEmptyRightCenter{
+background-color:white;
+border-left:1px solid #dadada;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderGrayTodayLeftBottom{
+border-bottom:1px solid #dadada;
+border-left:1px solid #000;
+border-right:1px solid #dadada;
+border-top:1px solid #dadada
+}
+.borderGrayTodayLeftCenter{
+border-left:1px solid #000;
+border-right:1px solid #dadada;
+border-top:1px solid #dadada
+}
+.borderGrayTodayMiddleBottom{border:1px solid #dadada}
+.borderGrayTodayMiddleCenter{
+border-left:1px solid #dadada;
+border-right:1px solid #dadada;
+border-top:1px solid #dadada
+}
+.borderGrayTodayRightBottom{
+border-bottom:1px solid #dadada;
+border-left:1px solid #dadada;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderGrayTodayRightCenter{
+border-left:1px solid #dadada;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderOnlyLeftDay{background-color:#FFFF99;border-left:1px solid #dadada}
+.borderOnlyLeft{border-left:1px solid #dadada}
+.borderOnlyLeftTodayBottom{
+border-bottom:1px solid #000;
+border-left:1px solid #000;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderOnlyLeftTodayCenter{
+border-left:1px solid #000;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderToday{border:1px solid #000}
+.borderTodayBottom{
+border-bottom:1px solid #000;
+border-left:1px solid #000;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderTodayCenter{
+border-bottom:1px solid #dadada;
+border-left:1px solid #000;
+border-right:1px solid #000;
+border-top:1px solid #dadada
+}
+.borderTodayTop{
+border-bottom:1px solid #dadada;
+border-left:1px solid #000;
+border-right:1px solid #000;
+border-top:1px solid #000
+}
+.borderTodayWithActivity{background-color:#FFFFCA;border:1px solid #000;text-align:right}
+.borderTodayWithoutActivity{background-color:#FFF;border:1px solid #000;text-align:right}
+.borderTopLeft{
+background-color:#FFFF99;
+border-left:1px solid #dadada;
+border-right:1px solid  #dadada;
+border-top:1px solid #dadada
+}
+.borderTopLeftWhite{
+border-left:1px solid #dadada;
+border-right:1px solid  #dadada;
+border-top:1px solid #dadada
+}
+.borderWhiteYear{background-color:#FFFFCA;border:1px solid #fff;text-align:center}
+.borderWhite{
+border-bottom:none;
+border-left:1px solid #fff;
+border-right:1px solid #fff;
+border-top:1px solid #fff
+}
+/* PART 4:INPUTS*/
+.chefPortletContainer input.text{border:1px solid #A9A9A9;margin:2px;padding:0px 2px 0px 2px}
+.chefPortletContainer input.upload{border:1px solid #A9A9A9;margin:2px;padding:2px}
+.chefPortletContainer select{background-color:#FFF;border:1px solid #A9A9A9;margin:2px}
+.chefPortletContainer textarea{
+font-family:Verdana,Arial,Helvetica,sans-serif;
+font-size: 1em;
+background-color:#FFFFFF;
+border:1px solid #A9A9A9;
+margin:2px;
+padding:2px 0px 2px 2px
+}
+.chefPortletContainer  input.radio{}
+.chefPortletContainer input.checkbox{}
+.chefButtonRow{clear:both;margin:10px 0px 10px 0px}
+.chefButtonRowRight{clear:both;float:right;margin:5px 0px 5px 0px}
+.chefButtonRowRight input,.chefButtonRow input{
+/* For NGS */
+background-color:#E6F0E6;
+border:1px solid #408E3A;
+color:#408E3A;
+/*
+background-color:#DDDCD7;
+border:1px solid #4A5573;
+color:#4A5573;
+*/
+padding:1px 3px 1px 3px
+}
+.chefButtonRow	input:hover,.chefButtonRowRight	input:hover{
+/* For NGS */
+background-color:#E6F0E6;
+border:1px dashed #408E3A;
+color:#408E3A;
+/*
+background-color:#DDDCD7;
+border:1px dashed #4A5573;
+color:#4A5573;
+*/
+padding:1px 3px 1px 3px
+}
+.chefPortletContainer .chefRequiredInline{
+background-image:url(../images/chef/required.gif);
+background-position:center left;
+background-repeat:no-repeat;
+padding:4px 4px 4px 14px
+}
+.chefPortletContainer td.chefRequiredInline{
+background-image:url(../images/chef/required.gif);
+background-position:.4em left;
+background-repeat:no-repeat;
+padding:4px 4px 4px 4px
+}
+.chefPortletContainer .chefRequired{
+background-image:url(../images/chef/required.gif);
+background-position:3px 3px;
+background-repeat:no-repeat;
+border:1px solid #A9A9A9;
+margin:2px;
+padding:3px 3px 3px 15px;
+text-decoration:none
+}
+/*PART 5:LAYOUTS*/
+fieldset{
+border:1px solid #AAAAAA;
+clear:both;
+display:block;
+margin:3px 0px 3px 0px;
+padding:5px;
+width:70%
+}
+legend{
+border:1px solid #AAAAAA;
+color:#AAAAAA;
+font-size:.8em;
+font-weight:bold;
+margin:3px 0px 3px 0px;
+padding:2px 10px 2px 10px
+}
+.chefAttachmentsF{border:1px solid #DDDCD7;display:block;padding:5px}
+.chefAttachmentsL{
+border:1px solid #A9A9A9;
+color:#A9A9A9;
+font-size:.8em;
+font-weight:bold;
+padding:2px 10px 2px 10px
+}
+.chefPortletContainer table.chefFlatListViewTable{border:1px solid #B8B88A;clear:both}
+.chefPortletContainer table.chefFlatListViewTable tr.bottom th{border-bottom:0px solid #B8B88A;border-top:1px solid #B8B88A}
+.chefPortletContainer  table.chefFlatListViewTable th{
+background-color:#FFF8DF;
+border-bottom:1px solid #B8B88A;
+font-size:.9em;
+font-weight:normal;
+padding:3px 8px 3px 8px;
+text-align:left;
+white-space:nowrap
+}
+.chefPortletContainer  table.chefFlatListViewTable td{padding:3px 8px 3px 8px;text-align:left;vertical-align:top}
+.chefPortletContainer  table.chefFlatListViewTable td.chefTopline{border-top:1px dotted #B8B88A}
+.chefPortletContainer  table.chefFlatListViewTable td.highLight{background-color:#EAEAE7}
+.chefLightFlatListViewTable{border:1px solid #DDDCD7;clear:both;font-size:.9em}
+.chefPortletContainer  table.chefLightFlatListViewTable th{
+border-bottom:1px solid #DDDCD7;
+font-size:.9em;
+font-weight:normal;
+padding:3px 8px 3px 8px;
+text-align:left;
+white-space:nowrap
+}
+.chefPortletContainer  table.chefLightFlatListViewTable td{padding:3px 8px 3px 8px;text-align:left;vertical-align:top}
+.chefPortletContainer table.chefHierListViewTable{border:1px solid #B8B88A;clear:both}
+.chefPortletContainer table.chefHierListViewTable tr.bottom th{border-bottom:0px solid #B8B88A;border-top:1px solid #B8B88A}
+table.chefItemDetail{font-size:.9em;margin:0px 0px 5px 20px;width:auto}
+table.chefItemDetail td.chefLabel{padding-right:4px;font-weight:bold;text-align:left;vertical-align:text-top;white-space:nowrap}
+table.chefItemDetail td{padding:3px;vertical-align:top}
+table.chefSectionContent{margin:10px 10px 0px 15px;width:98%}
+table.chefSectionContent th{
+background-color:#B4C0DB;
+font-size:.9em;
+font-weight:normal;
+padding:3px;
+text-align:left
+}
+table.chefSectionContent td.content{border:1px solid #B4C0DB}
+.chefPortletContainer   table.chefEditItem{margin:20px 10px 0px 10px;width:auto}
+.chefPortletContainer  table.chefEditItem td.chefLabel{border-right:1px solid #FFFFFF;padding-right:10px;text-align:left;vertical-align:text-top;font-weight:bold}
+.chefPortletContainer table.chefSectionContent td.content{border:1px solid #B4C0DB;padding:5px}
+.chefPortletContainer   table.chefEditItem td.chefContent{}
+.chefPortletContainer table td{padding-right:5px}
+.chefPortletContainer .chefAttachmentList{margin:5px 5px 5px 5px;padding:0px 0px 5px 0px}
+.chefPortletContainer .chefAttachmentList li{font-size:.8em;list-style:none;margin:0px;padding:0px 0px 5px 0px}
+.chefLeftIndent{clear:both;margin-left:1.3em;padding:0px}
+/*.chefPre{font-size:1em;white-space:-moz-pre-wrap}*/
+.chefPre{font-size:1em}
+.chefWorksiteUnit{
+border-bottom:1px solid #778CBF;
+border-top:10px solid #778CBF;
+padding:0px;
+width:100%
+}
+.chefPresenceText{font-size:.7em;white-space:nowrap}
+.chefPresenceListItem{
+font-family:Verdana,Arial,Helvetica,sans-serif;
+font-size:.8em;
+margin-left:3px;
+white-space:nowrap
+}
+.chefPaneHolder{
+background-color:transparent;
+/* For NGS */
+color:#FFFFFF;
+/* color:#51698D; */
+font-weight:bold;
+margin:0px;
+padding:0px 8px 8px 8px;
+text-decoration:none
+}
+.chefFloatPaneHolder{
+background-color:transparent;
+/* For NGS */
+color:#51698D;
+/* color:#51698D; */
+font-weight:bold;
+margin:0px;
+padding:5px;
+text-decoration:none
+}
+/* For NGS */
+#chefPaneTitle{color:#326400;margin:5px;padding:0px}
+/* #chefPaneTitle{color:#3A548E;margin:5px;padding:0px} */
+.chefChatUserName{font-weight:bold}
+.chefChatTimeStamp{font-size:.8em;font-weight:normal}
+.chefChatMessageBody{}
+.chefTitleIFrame{display:block;height:21px;margin:0px}
+.chefContentIFrame{display:block;height:50px;margin:0px}
+.chefCourierClock{background-color:#8A9FCA;color:#FFF;font-size:8pt;text-align:right}
+.chefCourierFrame{background-color:#8A9FCA}
+#courier{border-color:transparent;border-style:solid;border-width:0px;width:0px}
+.helpDocHeader{color:blue;font-weight:bold;padding-bottom:15px;padding-top:15px}
+.helpDocContent{padding-left:1.5em;text-align:left}
+.PortletContainer{border:1px solid #4A4A4A}
+table.chefStickTogether td {border-left: 1px solid #fff;	white-space: nowrap;	padding:0px;}

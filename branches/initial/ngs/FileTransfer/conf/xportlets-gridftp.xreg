@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registry>
+    <portlet-entry name="xportlets:FileTransfer" hidden="false"
+        type="ref" parent="chef.tool" application="false">
+        <meta-info>
+            <title>xportlets: File Transfer</title>
+            <description>File Transfer Tool for CHEF</description>
+        </meta-info>
+        <classname>org.apache.jetspeed.portal.portlets.CustomizerVelocityPortlet</classname>
+        <parameter name="template" value="xportlets-gridftp-customize"
+            hidden="false" cachedOnName="true" cachedOnValue="true"/>
+<!--        <parameter name="customizeTemplate" value="xportlets-gridftp-customize"
+            hidden="false" cachedOnName="true" cachedOnValue="true"/> -->
+        <parameter name="action" value="xportlets.GridFTPClientAction"
+            hidden="false" cachedOnName="true" cachedOnValue="true"/>
+<!--        <parameter name="cache-period-milliseconds" value="0"
+            hidden="false" cachedOnName="true" cachedOnValue="true"/>
+        <parameter name="hostlist" value="grid-compute.oesc.ox.ac.uk, grid-compute.leeds.ac.uk, grid-data.man.ac.uk, grid-data.rl.ac.uk"
+            hidden="false" cachedOnName="true" cachedOnValue="true"/>
+        <parameter name="defaulthost1" value="grid-compute.oesc.ox.ac.uk"
+            hidden="false" cachedOnName="true" cachedOnValue="true"/>
+        <parameter name="port1" value="2811" hidden="false"
+            cachedOnName="true" cachedOnValue="true"/>
+        <parameter name="defaulthost2" value="grid-data.man.ac.uk"
+            hidden="false" cachedOnName="true" cachedOnValue="true"/>
+        <parameter name="port2" value="2811" hidden="false"
+            cachedOnName="true" cachedOnValue="true"/> -->
+        <media-type ref="html"/>
+        <url cachedOnURL="true"/>
+        <category group="Jetspeed">CHEF</category>
+    </portlet-entry>
+</registry>

@@ -1,0 +1,83 @@
+REQUEST
+
+We request that you notify us so we can keep track of the use of the Java
+CoG Kit, as this directly affects our ability to motivate additional
+coding activities. Please, be so kind to send an e-mail to
+gregor@mcs.anl.gov with the following description:
+
+Project Name: 
+Institution: 
+Main Contact:
+E-mail: 
+Web Page: 
+Description of your project: 
+
+
+Furthermore, if your project uses Java CoG Kit, or you use a software
+package that uses Java CoG Kit, we require that you cite the following
+paper in your publication:
+
+A Java Commodity Grid Kit, Gregor von Laszewski, Ian Foster, Jarek
+Gawor, Peter Lane, Concurrency and Computation: Practice and
+Experience, pages 643-662, Volume 13, Issue 8-9,
+2001. {http://www.globus.org/cog/java/}
+ 
+
+We also would like to be notified about publications that you write
+while and are using Java CoG, as this will help us to document the
+usefulness. We like to feature these articles or your project information 
+with your permission on our Web site. 
+
+If you have difficulties with these requirements listed
+above please contact us.
+
+SURVEY 
+
+In order to serve the community better and to document our usefulness,
+it is important that you participate in the user survey for Java
+CoG. It would help us if you can send the following survey to
+gregor@mcs.anl.gov. This may include tools, classes, APIs, and
+applications that use CoG. If you know about components or services
+that use CoG indirectly through another package or tool this would be
+helpful as well.
+
+We like to publish a small web page with a one paragraph description
+of your project. Furthermore, we like to inquire what other features
+you like to see next. Here the suggested format with a small example:
+
+Project Name:            Computed Microtomography 
+Project Contact:         Gregor von Laszewski (gregor@mcs.anl.gov) 
+Technical Contact:   Gregor von Laszewski 
+Description: 
+ 
+This project tries to advance the infrastructure used at photon
+sources to obtain computed microtomographies in real-time. The images
+are rendered on a supercomputer accessible through the
+Grid. Collaborative display of the rendered data is possible. (you can
+write more here if you like)
+
+Web page:  http://www.mcs.anl.gov/xray 
+
+Use of CoG: We use the job startup, MDS, and
+GRAM GUI.
+
+Desired Features: Please make the Gecco workflow scheduler available
+which was once part of CoG.
+
+Do you have JavaBeans for the CoG Kit you like to share?: Yes: A bean
+for submitting multiple Gram Jobs similar to Duroc but is for GRAM
+Jobs. Thank you for integrating it in the current release.
+
+Publicity:  [x] yes, you can place this information on the Web
+
+References: 
+
+I. Foster, J. Insley, G. v. Laszewski, C. Kesselman, and M. Thiebaux,
+"Distance Visualization: Data Exploration on the Grid," IEEE Computer,
+vol. 32, pp. 36--43, 1999.
+http://www.globus.org/research/papers.html
+
+V. Getov, G. von Laszewski, M. Philippsen, and I. Foster,
+"Multi-Paradigm Communications in Java for Grid Computing,"
+Communications of ACM, vol. 44, pp. 119-125, 2001.
+http://www.globus.org/cog/documentataion/papers/

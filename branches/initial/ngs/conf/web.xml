@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2.2.dtd">
+
+<web-app>
+    <servlet>
+        <servlet-name>
+           jetspeed
+        </servlet-name>
+        <servlet-class>
+            org.apache.turbine.Turbine
+        </servlet-class>
+
+        <init-param>
+            <param-name>properties</param-name>
+            <!-- changed from WEB-INF/conf/TurbineResources.properties for CHEF -->
+            <param-value>WEB-INF/conf/chef_site_resources.properties</param-value>            
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- added for CHEF -->
+    <servlet>
+        <servlet-name>
+           access
+        </servlet-name>
+        <servlet-class>
+            org.chefproject.servlet.AccessServlet
+        </servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+      <servlet-name>chefdav</servlet-name>
+      <servlet-class>org.chefproject.servlet.ChefdavServlet</servlet-class>
+      <init-param>
+        <param-name>debug</param-name>
+        <param-value>1000</param-value>
+      </init-param>
+      <init-param>
+        <param-name>listings</param-name>
+        <param-value>true</param-value>
+      </init-param>
+      <!-- Uncomment this to enable read and write access -->
+      <init-param>
+        <param-name>readonly</param-name>
+        <param-value>false</param-value>
+      </init-param>
+      <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+       <servlet-name>
+          jetspeed
+       </servlet-name>
+       <url-pattern>
+         /portal/*
+       </url-pattern>
+    </servlet-mapping>
+
+    <!-- added for CHEF -->
+    <servlet-mapping>
+       <servlet-name>
+          access
+       </servlet-name>
+       <url-pattern>
+         /access/*
+       </url-pattern>
+    </servlet-mapping>
+
+
+    <!-- The mapping for the chefdav servlet -->
+    <servlet-mapping>
+      <servlet-name>
+        chefdav
+      </servlet-name>
+      <url-pattern>
+        /dav/*
+      </url-pattern>
+    </servlet-mapping>
+
+    <!-- servlet-mapping> Removed for CHEF
+       <servlet-name>
+          jetspeed
+       </servlet-name>
+       <url-pattern>
+         /jetspeed/*
+       </url-pattern>
+    </servlet-mapping -->
+    
+    <mime-mapping> 
+      <extension>wbmp</extension> 
+      <mime-type>image/vnd.wap.wbmp</mime-type> 
+    </mime-mapping>
+    
+    <mime-mapping> 
+      <extension>wml</extension> 
+      <mime-type>text/vnd.wap.wml</mime-type> 
+    </mime-mapping>
+    
+    <mime-mapping> 
+      <extension>wmls</extension> 
+      <mime-type>text/vnd.wap.wmlscript</mime-type> 
+    </mime-mapping> 
+
+    <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+ <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>The CHEF DAV Access Point</web-resource-name>
+      <url-pattern>/dav/*</url-pattern>
+      <http-method>GET</http-method>
+      <http-method>OPTIONS</http-method>
+      <http-method>PROPFIND</http-method>
+      <http-method>DELETE</http-method>
+      <http-method>POST</http-method>
+      <http-method>PUT</http-method>
+      <http-method>LOCK</http-method>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>tomcat</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name></realm-name>
+  </login-config>
+
+  <security-role>
+    <description>
+      An example role defined in "conf/tomcat-users.xml"
+    </description>
+    <role-name>tomcat</role-name>
+  </security-role>
+
+</web-app>
