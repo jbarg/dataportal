@@ -51,18 +51,25 @@
   <parameter name="allowedMethods" value="getVersion"/>
   <parameter name="className" value="org.apache.axis.Version"/>
  </service>
- <service name="xmlwrapper_emin" provider="java:RPC">
-  <operation name="getXML" qname="ns2:getXML" returnQName="getXMLReturn" returnType="ns1:Element" xmlns:ns1="http://xml.apache.org/xml-soap" xmlns:ns2="urn:xmlwrapper">
-   <parameter name="query" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  </operation>
-  <parameter name="allowedMethods" value="getXML"/>
-  <parameter name="wsdlPortType" value="XmlWrapperEMIN"/>
-  <parameter name="scope" value="Session"/>
-  <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.emin.Xmlwrapper_EminSoapBindingImpl"/>
-  <parameter name="wsdlServicePort" value="xmlwrapper_emin"/>
-  <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
-  <parameter name="wsdlServiceElement" value="XmlWrapperEMINService"/>
- </service>
+
+ <!-- put emin service here -->
+
+<service name="xmlwrapper_emin" provider="java:RPC">
+      <parameter name="wsdlTargetNamespace" value="urn:xmlwrapper"/>
+      <parameter name="wsdlServiceElement" value="XmlWrapperEMINService"/>
+      <parameter name="wsdlServicePort" value="xmlwrapper_emin"/>
+      <parameter name="className" value="uk.ac.cclrc.xmlwrapper.ws.emin.Xmlwrapper_EminSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="XmlWrapperEMIN"/>
+      <operation name="getXML" qname="operNS:getXML" xmlns:operNS="urn:xmlwrapper" returnQName="getXMLReturn" returnType="rtns:Element" xmlns:rtns="http://xml.apache.org/xml-soap" >
+        <parameter name="query" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="getXML"/>
+      <parameter name="scope" value="Session"/>
+
+  </service>
+
+
+ <-- //////////////////////////////////////////////////////// -->
  <service name="urn:xmltoday-delayed-quotes" provider="java:RPC">
   <requestFlow name="checks">
    <handler type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
