@@ -1,0 +1,43 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Scd.1
+.\"
+.TH Scd 1 "Jan 2002 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Scd \- change working SRB collection
+.SH SYNOPSIS
+.B Scd
+.I collection
+.SH DESCRIPTION
+.B "Scd "
+changes the working SRB collection.
+.sp
+When invoked with no operands, the mdasCollectionHome value in
+the ~/.srb/.MdasEnv file will become the new working collection.
+.sp
+When the operand
+.I collection
+does not begin with '/', '../', or '^/', the new working
+collection is changed with respect to current working collection.
+.sp
+When the operand
+.I collection
+begins with '^/' the new working collection is changed with
+respect to the mdasCollectionHome value in the ~/.srb/.MdasEnv
+file.
+.sp
+When the operand
+.I collection
+begins with '../' the new working collection is changed with
+respect to the parent of current working collection.
+.sp
+When the operand
+.I collection
+begins with '/' the new working collection is changed to the
+operand value.
+.PP
+.SH "OPTIONS"
+none
+.SH "SEE ALSO"
+.BR Spwd (1),
+.BR Sls (1)
+

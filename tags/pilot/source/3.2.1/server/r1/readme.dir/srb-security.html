@@ -1,0 +1,903 @@
+<center>
+<h2>
+Secure Operation of the SDSC Storage Resource Broker 
+</h2>
+
+<a href=http://users.sdsc.edu/~schroede>Wayne Schroeder</a>
+<p>
+<a href=http://www.npaci.edu/DICE/SRB>http://www.npaci.edu/DICE/SRB</a>
+<p>
+March, 2004
+
+</center>
+
+<h2>
+Introduction
+</h2>
+
+This is an overview of security features and considerations for
+operating the SDSC Storage Resource Broker.  For most SRB sites and
+projects, the standard level of SRB security is adequate, but for
+those sites that require a somewhat stronger security profile, this
+paper serves as an outline of SRB and supporting infrastructure
+security features, trade-offs, and operational suggestions.  A
+complete description of all the facets and nuances of computer
+security is beyond the scope of this paper, but we will attempt to
+provide some insight.
+
+<p>
+By secure, we mean a high degree of assurance that the system is
+operating as designed, with data object updates and accesses controlled
+as per the assigned user privileges.  If the SRB system indicates
+that data object F1 is owned by user U1 and was stored by user U1,
+then there is a high degree of confidence that this is so.  If the
+data object is accessible only to users in group G1, then there is a
+high degree of confidence that only those users have accessed it.
+
+<p>
+Perfect computer security does not exist.  Even a strong encryption
+system, implemented using long cryptographic keys, can be broken
+given enough computational power.  And, usually, cryptography is a
+relatively strong security component and attackers bypass the
+encryption to attempt to exploit other, weaker, aspects of the system.
+
+<p>
+Security is only as strong as the weakest link.  There are many pieces
+to the security infrastructure whole, and they all must be strong if
+the system is to be secure.
+
+<img src=srb-security.gif><br> 
+
+The above diagram illustrates the SRB environment.  Like any other
+grid application, security concerns include the host operating
+systems, and interprocess communication and authentication, locally and
+across the network.
+
+<p>
+The following discussion involves quite a few separate, largely
+disjoint, topics due to the nature of computer security.  When
+considering the overall security of a computer system, one needs to
+evaluate attributes of various sub-components where vulnerabilities
+may come into play.  In addition, there are some broader issues to
+consider, such as various social engineering attacks:
+
+<ul>
+<li><a href="#src">SRB Source Code Itself</a></li>
+<li><a href="#os">The Operating System</a></li>
+<li><a href="#sniff">The Network</a></li>
+<li><a href="#dbms">The DBMS</a></li>
+<li><a href="#gsi">Grid Security Infrastructure/OpenSSL</a></li>
+<li><a href="#ca">Operating a Certificate Authority</a></li>
+<li><a href="#otherCA">Trusting Other Certificate Authorities</a></li>
+<li><a href="#res">Resource Security</a></li>
+<li><a href="#cred">SRB Server Credentials (GSI Certificates or Passwords)</a></li>
+<li><a href="#zone">Cross Zone Authentication and Delegation</a></li>
+<li><a href="#sum">SRB Checksums</a></li>
+<li><a href="#enc">SRB Data Encryption</a></li>
+<li><a href="#otherSRB">Security Concerns Regarding Other SRB Instances</a></li>
+<li><a href="#host">Security Concerns Regarding Host Computers Running SRB</a></li>
+<li><a href="#soc">"Social Engineering" Attacks</a></li>
+<li><a href="#arch">An SRB Deep Archive</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+
+
+<h2>
+<b><a name="src">SRB Source Code Itself</a></b>
+</h2>
+
+Describing attacks against a particular piece of software is a good
+place to begin.
+<p>
+
+The SANS Institute (SysAdmin, Audit, Network, Security) 
+is a cooperative research and education organization.
+The
+<a href=http://www.sans.org/top20/>
+SANS Top 20 Internet Security Vulnerabilities 
+</a> (October, 2003) lists 10 top Windows threats and 10 top Unix
+threats, many of which involve coding errors in particular software
+packages, primarily buffer overflow problems.  Buffer overflow errors
+are aspects of Windows threats 1, 2, 4, and 6 and Unix threats 1, 2, 6
+and 9.
+<p>
+
+As described in the article <a href=
+http://searchsecurity.techtarget.com/originalContent/0,289142,sid14_gci860185,00.html>"Buffer overflows likely to be around for another decade"</a>: 
+
+"Buffer overflows in both Unix and Windows systems were common
+occurrences in the recently released SANS/FBI Top 20 List of Web
+vulnerabilities. Buffer overflows open gaping holes that attackers can
+exploit, as the recent Slapper worm showed. The worm took advantage of
+a buffer overflow in OpenSSL running on Linux Apache Web servers to
+set up peer-to-peer networks and to commandeer other computers for
+possible use in launching distributed denial-of-service attacks.
+Often buffer overflow vulnerabilities are hard to find in the minutiae
+of computer code. Additionally, the nature of the popular C
+programming language makes them an easy programming error to make,
+experts said."
+
+<p>
+
+Buffer overflow coding errors typically allow an attacker to
+execute arbitrary code on a victim machine, with the privileges of the
+attacked process.  Although exploitations of buffer overflow errors
+require a moderate level of
+knowledge and skill to create, they are often then packaged in "cook
+book" packages for use by the less sophisticated.
+<p>
+
+The SRB has a very low level of risk from buffer overflow attacks for
+three main reasons.  First, a few years ago, a major U.S. Government
+agency acquired the SRB source code, did a complete audit, and found
+and described to us a number of vulnerabilities (primarily buffer
+overflow) which we then repaired in our branch of the source code and
+since then the developers of the core SRB system code have been
+consciously attempting to avoid introducing additional buffer overflow
+problems.  Second, since the SRB source code is (currently) relatively
+unknown, the potential number of attackers that would attempt exploits
+of this form is quite small.  And third, the SRB Servers are not
+running as root (unlike the buffer-overflow problems that are top
+threats), so a compromise would provide only limited access,
+constrained by the privileges of the SRB user account.
+</p>
+
+Still, it would be worthwhile to perform another audit to attempt to
+locate and repair potential buffer overflow problems.  There are
+software tools available that can help with this.  We expect to
+do this sometime in the next few months.
+<p>
+
+The fact that SRB servers execute as a non-privileged user (not root)
+is a significant advantage, preventing the SRB system from presenting
+a potential security hole to the operating system as a whole.  If an
+SRB compromise of this sort did occur, the attacker would be able to
+execute arbitrary code, but only as the Unix SRB server login account,
+and so would not be able to take over the system.  However, this would
+compromise SRB space for the local Zone, as any SRB-administration
+command could be executed.
+
+
+<h2>
+<b><a name="os">The Operating System</a></b>
+</h2>
+
+For the SRB system to be secure, the operating systems on which it
+runs must also be secure, the server hosts in particular.  This
+involves proper configuration, keeping up with current security
+patches, and other practices.  See the following for more information:
+
+<ul>
+<li>
+<a href=http://www-uxsup.csx.cam.ac.uk/security/unix-box.html>
+So you want to run a secure Unix system, do you?</a>
+
+<li>
+<a href=http://www.unixtools.com/securecheck.html>
+Unix Computer Security Checklist</a>
+
+<li>
+A excellent reference book is <a href=
+http://www.amazon.com/exec/obidos/ASIN/1565921488/gnmgames>
+Practical Unix and Internet Security by Simson Garfinkel & Gene Spafford</a>.
+</ul>
+<p>
+
+The SRB client hosts should also be secure, however, since these hosts
+may not be under the control of the SRB administrator they may be
+compromised.  If they are not secure, then the user accounts that
+access the SRB from those hosts may be compromised.  Beyond this,
+however, the SRB is well protected as the compromise of one
+non-privileged client account does not provide the attacker with any
+significant information or access beyond that one account.
+<p>
+Of course, if the SRB Administrator account is compromised
+then the attacker will have full access to all SRB data for all SRB
+users under that administrative domain (that is, in that SRB Zone).
+Thus extra care is needed for the Administrator accounts.
+<p>
+Even GSI is vulnerable if a client host is compromised.  With root
+access, or access as a particular user, the temporary delegation
+certificates that are generated via the grid-proxy-init command could
+be copied and used for a certain period (typically a few hours),
+allowing the attacker to masquerade as the user.  In addition, there
+are attacks in which keystrokes can be recorded which could provide
+the certificate private key passphrase and this combined with access
+to the certificate file would give the attacker full access to the SRB
+account.
+<p>
+
+Other SRB authentication mechanisms would also be vunerable on
+compromised client hosts.  With ENCRYPT1, root or particular user
+access would make available the account password as stored in the
+.MdasAuth file.  We plan to improve the security of the .MdasAuth
+contents in the near future, perhaps with routines to scamble the
+password in a manner that would make it harder to decode (via
+obfuscation techniques).  But with SRB source code, or a keystroke
+record, it too could be compromised.
+<p>
+Basically, if root is compromised, any software may be vunerable as
+various system utilities and functions can be subverted.  This means
+that the only more secure client hosts should be used for SRB
+Administrator access.
+<p>
+Unfortunately, most system administrators are slow to install security
+patches.  See the paper <a
+href=http://www.rtfm.com/upgrade.pdf>"Security holes... Who cares?"</a>
+and/or the summary 
+<a
+href=http://www.rtfm.com/Upgrade-usenix.pdf>Slides</a>.
+
+<h2>
+<b><a name="sniff">The Network</a></b> </h2>
+
+Until about a decade ago, telnet was the preferred utility program to
+interactively connect to remote unix hosts.  The main problem with
+telnet was that it would transfer all communications, including the
+login password, as un-encrypted plain-text.  Since it is fairly easy
+to observe communication packets as they flow across the network, this
+became a weak-link, and many 'hackers' would run 'packet sniffing'
+software to acquire passwords and then break into accounts.  A number
+of solutions were developed, and ssh is now one of the most
+common. See <a href=http://www.openssh.com/>www.openssh.com</a> for
+one.
+<p>
+Today, network security continues to be a primary concern for
+wide-area, and in many cases local-area, communications.  One needs to
+assume that network packet data is easily acquired.  But
+encryption-based utilities and libraries, such as SSH and OpenSSL,
+prevent this from being a problem.
+<p>
+The SRB Encrypt1 and GSI authentication protocols cannot be easily
+broken even if every packet is observed.  Encrypt1 uses a one-way hash
+using the password and a challenge value (sending only this hash back
+to the server to be verified).  And GSI uses the elaborate X.509
+certificate-based protocol via OpenSSL and ultimately RSA
+public/private keys.
+<p>
+If a site is using Encrypt1 though, users will be storing the SRB
+passwords in their ~/.srb/.MdasAuth files.  If root is compromised,
+then their passwords are accessible.  In addition to that though, if
+their home directory is NFS mounted (as is commonly done), the NFS
+data packets while accessing .MdasAuth will contain the plain-text
+passwords making them vulnerable.  We are working on a solution to
+reduce this risk via SRB 'obfuscation' routines that will store these
+as non-plain-text which would be difficult to convert to plain-text
+without SRB source.
+<p>
+A similar vunerability exists when Encrypt1 users run Spasswd to change
+their password: the SRB client/server protocol message transfer the
+new password as plain-text data.  Again, we are planning to improve
+this via some 'obfuscation' routines.
+<p>
+Although SRB does not currently support Kerberos or DCE user
+authentication, such functionality could be added if needed.  Both
+Kerberos and DCE authentication are similar to GSI and ENCRYPT1 in
+that they provide network-secure authentication capabilities.  The SRB
+GSI authentication is handled by a library, called AID, that provides
+a simple API to the other SRB routines and then interfaces to the GSI
+library.  The GSI library presents a standard (and fairly complicated)
+API, the GSSAPI (Generic Security Services Application Programming
+Interface).  The AID library, at one time also supported Kerberos and
+DCE user authentication (also via GSSAPI) so it should be fairly
+straight-forward to revive this and integrate it into SRB.
+
+
+<h2>
+<b><a name="dbms">The DBMS</a></b>
+</h2> 
+
+The relational database system instance that hosts the SRB Metadata
+Catalog contains all the important SRB state information.  This
+includes user names, group memberships, access rights, user and group
+passwords, resource descriptions, locations (network hostname
+mappings), the entire logical/physical namespace (mappings of
+each individual data file from its logical name to physical locations
+and names), etc. 
+
+<p>
+The SRB system is only as secure as the MCAT.  So you need to install
+and operate your DBMS system in a secure manner, with only
+securely-authenticated access.  PostgreSQL and Sybase provide
+challenge/response systems for secure network authentication.  And
+Oracle provides multiple secure authentication systems including PKI,
+Kerberos and SSL.  This SRB MCAT-enabled server to DBMS authentication
+will be either within the same host or across a LAN, so is less
+vulnerable than WAN traffic may be.
+
+<p>
+There are various software tools available to obfuscate or encrypt the
+database contents.  These are either part of the DBMS system itself or
+are add-on components.  The freely-available PostgreSQL has a number
+of encryption options available.  See the <a
+href=http://www.postgresql.org/docs/faqs/FAQ.html#4.28>PostgreSQL
+FAQ</a>.  Depending on your DBMS preference, you should investigate
+the options available for it.
+
+<p>
+The MdasConfig, within the SRB-installation/data directory, contains
+the information needed to access the MCAT instance, including the
+password for the more secure DBMS systems.  This file will be
+installed with Unix permissions that prohibit group or other access.
+To be more secure, this should be stored on a local file system rather
+than an NFS file system so that the contents are not transmitted on
+the local network as part of the NFS protocol.  You should make sure
+that the corresponding file where you built the SRB is also
+protected, normally at a higher-level directory.
+
+<p>
+The MCAT database should be backed-up frequently (via DBMS
+mechanisms), primarily to recover in the event of hardware or software
+failures; and also to improve security.  These backups provide
+snapshots in time of the SRB state, and comparisons of them could
+detect unauthorized changes.  For example, if checksums are being
+maintained (see below) an undetected unathorized update to a data
+object is only possible by both inserting changed data on the storage
+resource and updating the corresponding MCAT checksum.  Occasional
+comparisons of the MCAT data object checksums would detect changed
+values.  You may want to secure some of these backups on off-line
+and/or write-once media.
+<p>
+Generally, the commercial DBMS systems are likely to provide more
+security than the open source ones.  Oracle would be a good choice.
+
+<h2>
+<b><a name="gsi">Grid Security Infrastructure/OpenSSL</a></b>
+</h2> 
+
+In 2002 and 2003 some security holes were discovered and subsequently
+fixed in some of the OpenSSL software.  Since GSI uses OpenSSL, it too
+was vunerable and required updates.  This is a bit like the AIDs
+virus, an attack on the immune system itself.
+
+<p>
+But like any other piece of software, buffer-overflow problems like
+this can occur (more frequently than we would like).  The important
+thing is to fix the problem soon after it is discovered and this was
+done for OpenSSL.  Being open source is generally a security asset,
+although more attacks may be attempted.
+<p>
+Like other software components that are part of a secure system, the
+administrator must be aware of new problems as they are discovered and
+install the patched versions once they are released.
+<p>
+
+<h2>
+<b><a name="ca">Operating a Certificate Authority</a></b>
+</h2>
+
+A Certificate Authority must be run in a secure manner on a secure
+system since the quality and reliability of all the certificates
+issued by that CA depend on them.  The CA private key, in particular,
+must be held in a secure location, accessible only by trusted
+administrators.
+<p>
+The CA Policy document describes various aspects of how the CA
+is run and what the certificates issued by that CA mean.
+<p>
+In addition to user authentication, CA digital signitures are often
+applied to applets so that they can operate outside of the java virtual
+machine sandbox.  See the
+<a
+href=http://www.sdsc.edu/~jtate/>SDSC Applet setup</a> page.
+<p>
+UMIACS is implementing a simplified web-based CA, embedded into a
+larger Web application in which the creation, verification and
+revocation of the certificates will be largely automated and hidden
+under the hood.  The CA part is based on the <a
+href=http://www.bouncycastle.org>Bouncy Castle Crypto API</a> and
+makes use of the standard X.509 certificate protocol (in a way, it is
+very similar to the related parts of the globus toolkit).  This is
+a Java application and Bouncy Castle is a pure Java implementation
+of the SSL cryptography library.
+<p>
+
+The <a href=http://www.npaci.edu/CA/cacl.pdf>SDSC CA system known as
+'CACL'</a> is an on-line CA that will automatically issue certificates
+to users once they confirm their password on the host system.  It is
+based on OpenSSL CA software, with client and server scripts to
+integrate the components.  This, in various forms, has been in
+production at SDSC/NPACI since 2000.  There is also a
+recently-developed installation package for CACL (including source
+code, configuration files, documentation, and an installation script)
+and a number sites outside of SDSC have installed it, including NARA.
+<p>
+
+In general, it is better to use more mature Cryptography software,
+since the verification of proper functioning is a much more involved
+process than typical software requires.  Just verifying basic
+functionality is a good start, but it must be followed up with a
+careful analysis that the software actually resists various attacks.
+Since the OpenSSL software has been around longer and reviewed, tested
+and challenged by more people, it has a somewhat higher level of
+trustworthiness than Bouncy Castle.  On the other hand, Bouncy Castle
+is probably quite reliable too.  
+<p>
+The question as to which of these or
+other CA packages to operate depends on many factors, the most
+significant of which relate to the site's model of use; that is,
+exactly how they wish to run the CA to support the functions they
+need, and how the CA packages address those particular needs.
+<p>
+
+
+<h2>
+<b><a name="otherCA">Trusting Other Certificate Authorities</b>
+</h2>
+
+The GSI system, via the OpenSSL software, uses a set of trusted
+Certificate Authority Certificates to verify the signatures on users'
+certificates.  These CA certificates need to be stored in a controlled
+directory, where only administrators can update the contents.  At SDSC
+this is /usr/local/apps/nmi-2.1/share/certificates.
+<p>
+<pre>
+% pwd
+/usr/local/apps/nmi-2.1/share/certificates
+% ls -lt
+total 26
+-r--r--r--    1 globus   install       244 Aug 21  2003 4a6cd8b1.signing_policy
+-r--r--r--    1 globus   install      1574 Jul  7  2003 4a6cd8b1.0
+-r--r--r--    1 globus   install      3458 Aug 19  2002 README
+-r--r--r--    1 globus   install       806 Aug  9  2002 42864e48.0
+-r--r--r--    1 globus   install       209 Aug  9  2002 42864e48.signing_policy
+-r--r--r--    1 globus   install      1298 Aug  9  2002 5aba75cb.0
+-r--r--r--    1 globus   install       224 Aug  9  2002 5aba75cb.signing_policy
+-r--r--r--    1 globus   install       952 Aug  9  2002 6349a761.0
+-r--r--r--    1 globus   install       336 Aug  9  2002 6349a761.signing_policy
+-r--r--r--    1 globus   install      1261 Aug  9  2002 a7792cdb.0
+-r--r--r--    1 globus   install       185 Aug  9  2002 a7792cdb.signing_policy
+-r--r--r--    1 globus   install      1419 Aug  9  2002 b2cb8d2c.0
+-r--r--r--    1 globus   install       266 Aug  9  2002 b2cb8d2c.signing_policy
+-r--r--r--    1 globus   install      1452 Aug  9  2002 b89793e4.0
+-r--r--r--    1 globus   install       175 Aug  9  2002 b89793e4.signing_policy
+-r--r--r--    1 globus   install      1440 Aug  9  2002 bc82f877.0
+-r--r--r--    1 globus   install       259 Aug  9  2002 bc82f877.signing_policy
+% ls -ltd 
+drwxr-sr-x    2 globus   install      1024 Feb 18 16:51 ./
+</pre>
+So at SDSC, the 'globus' login account owns this directory and only it
+and root can update these files.  It would also be worthwhile to keep
+a paper printout of the file names and checksums of these files, and
+to periocially check them.
+<p>
+
+If you wish to add another CA to your set, you need to install the
+CA's certificate and policy file to this directory.  Once that is
+done, users with certificates issued by that CA will be able to
+authenticate.  Thus you need to be sure that this CA is reliable and
+that the certificate does actually match the CA you wish to trust.
+<p>
+The user certificates are verified by checking the digital signatures.
+These are based on RSA public/private key encryption.  When a user
+certificate is issued, the CA signs the certificate by accessing the
+CA's private key to generate a value to be included in the
+certificate.  When the user's certificate is verified, the software
+gets the CA's public key out of the CA's certificate (by accessing
+the directory on the local computer), decrypts, and confirms the
+value; making it highly likely that the CA's private key was accessed
+in creating the user's certificate.
+<p>
+
+
+<h2>
+<b><a name="res">Resource Security</a></b> </h2>
+
+The security of SRB data stored on a particular resource can only be
+as secure as that particular resource.  Whatever storage resource we
+use, the SRB server process interacts with the storage resource as a
+client and authenticates itself as a particular user.  In some cases
+this is implicit as part of being logged in as the SRB user (for local
+file systems, for example), but many times this requires another
+explicit authentication (for HPSS, for example).  If HPSS is
+compromised and some other user can access HPSS storage as user "SRB",
+then the SRB system cannot guarantee the integrity and reliability of
+the data.  HPSS is quite secure, but one should be aware of the
+limitations of any resource that is being used.
+<p>
+
+The SRB does maintain some information that can be utilized to
+discover problems if a resource is compromised.  In some cases, the
+SRB MCAT will maintain a checksum that can be compared with the
+checksum of the data in the resource.  Also, the SRB might replicate
+data to other resources, and it would be possible to compare
+collections across resources.  And if the SRB Data Encryption system
+is being used, changes in the data would be detected upon being read,
+and the resource attackers would (likely) need SRB metadata to decrypt
+the data.  But, in general, a compromised resource would be a serious
+problem and could result in undetected access and modification of
+data.  
+<p>
+
+When an SRB server authenticates to a resource system, it needs to
+utilize an available "credential" of some sort to securely identify
+the process as the user "SRB".  For HPSS, for example, this may be a DCE
+credential that is available on the local machine.  To be more
+secure, this should be stored on a local file system rather than an
+NFS file system so that the contents are not transmitted on the
+network.  It should be kept with permissions allowing only the SRB
+user access.  And, of course, the SRB server host OS needs to be
+secure to prevent others from gaining root access and therefore access
+to the credentials.
+<p>
+
+Of course, the SRB is dependent on the reliability of the resource as
+well as its security.  If data objects are lost by the resource, they
+will be lost by the SRB, unless they are replicated to another
+resource.
+<p>
+
+<h2>
+<b><a name="cred">
+SRB Server Credentials (GSI Certificates or Passwords)</a></b>
+</h2>
+
+Generally, security staff discourage users from putting plain-text
+passwords into files since those passwords then become vulnerable to a
+variety of attacks.  But for SRB server to server authentication, we
+need to reliably authenticate between servers.  The normal mode is for
+the SRB client to authenticate the user to the local server ("A"), and
+then for server to server connections the server authenticates itself
+to the remote server ("B"), and identifies the user.  That is, user X
+connects to A and authenticates; then if/when a remote connection is
+needed, A connects to B, authenticates as the srb admin, and tells B
+that the user is X; server B trusts the identity X because it trusts
+the srb admin account.
+<p>
+If we are using GSI authentication between servers, then we could
+periodically log in and run a 'grid-proxy-init' but such a manual
+operation is unreliable.  We could create long-lasting proxy
+certificate via 'grid-proxy-init' but that is essentially the same
+thing as a plain-text password as intercepting the credential would
+give long-term access.  We could run a script to run grid-proxy-init
+daily, but that would require a password in a file anyway.
+<p>
+What we usually do is create an unencrypted private key (the one
+that goes with the public key in the certificate), and configure the
+server to access those.  This is essentially, a plain-text password though,
+and so care must be taken to prevent the disclosure of the contents of this
+file.
+<p>
+If we are not using GSI, we normally use ENCRYPT1, with a plain-text
+password in the .MdasAuth file.  Thus care must be taken with this
+file too.
+<p>
+A developing improved solution is the use of GSI delegation
+certificates.  Instead of the server to server authentication, a proxy
+certificate from the user is passed to server A and from there to
+server B.  Server B will then authenticate the user's proxy
+certificate without having to verify A's identity.  Such a system was
+developed in early 2004 by Ananta Manandhar of the CLRC e-Science
+Centre in the UK, in collaboration with the SRB team.  But it is not
+currently fully integrated such that server to server authentication
+could be bypassed.  GSI is somewhat slower than ENCRYPT1
+authentication, particularly with delegation, but on most machines
+will be completed in under a second.
+
+<h2>
+<b><a name="zone">
+Cross Zone Authentication and Delegation</a></b>
+</h2>
+The 3.0.2 release (April 2004) will include improvements in the
+handling of zone to zone authentication of both servers and clients,
+improving the security and functionality.
+<p>
+When using GSI, users will generate delegation certificates for the
+SRB server to use on their behalf.  This, in effect proves to the
+server in the remote zone that the user is who they say, instead of
+relying on the server's authentication entirely.  Also, these
+delegation certificates can be passed on to other SRB servers to
+operate on the user's behalf (for a limited time).  Some operations
+will continue to require remote administrator privilege, in which case the
+normal server to server authentication will be invoked too.
+<p>
+We are also implementing a similar mechanism for ENCRYPT1
+authentication too.  The secondary SRB server (cross Zone) will
+request futher authentication back to the client, providing a new
+challenge value for the client to respond to.  In this way, the remote
+server is sure to be dealing with a process that has access to the
+user's password.
+<h2>
+<b><a name="enc">SRB Data Encryption</a></b>
+</h2>
+
+As described in the writeup <a href=
+http://www.npaci.edu/dice/srb/SecureAndOrCompressedData.html> SRB Data
+Security and Compression System</a>, starting with SRB 2.1, there is
+now an SRB data encryption and/or compression facility.
+<p>
+
+Some key features include:
+<ul>
+<li>Data is encrypted and/or compressed on the client side and the
+files are stored in that form.  
+<li>Currently, encryption and/or compression is
+accomplished via another layer of software operating on top of the
+Unix SRB Scommands, OpenSSL encryption/decryption routines, and Gzip
+compression/decompression.
+<li>A random key is generated for encrypting each data file and this
+key is securely transfered to (and later from) the MCAT.
+<li>All of these steps are performed via two perl scripts, Sput.pl and Sget.pl
+that operate much like the Sput and Sget commands.
+</ul>
+
+This provides for greater security than a system that would encrypt
+only while the data is in transit as the data is stored, on any
+resource, in an encrypted form.  It is also higher performance since fewer
+encryption/decryption steps are performed.<p>
+
+This encryption system is also quite flexible and could be extended in various
+forms as needed.<p>
+
+Note that the keys are stored "plain-text" in the MCAT, so the
+security of the MCAT is important (of course, it always is).  See the
+above <a href="#dbms">MCAT section</a> for more information.
+<p>
+
+<h2>
+<b><a name="sum">SRB Checksums</a></b>
+</h2>
+
+The SRB has had a basic checksum capability and we are adding to
+it for the 3.0.2 release (March 2004).
+<p>
+The Sput command will have two options to store a file checksum:
+
+<pre>
+       -k   client checksum mode. Client computes  simple  checksum  (sum  -s,
+            --sysv)  of  the local file and registers with MCAT.  No verifica-
+            tion is done on the server side.
+
+       -K   checksum verification mode. After the transfer,  the  server  com-
+            putes  the checksum by reading back the file that was just stored.
+            This value is then compared with the source  checksum  value  pro-
+            vided  by  the  client  for  verification.  This verified checksum
+            value is then registered with MCAT.
+</pre>
+
+<p>
+Sbload will also be able to generate checksums.
+<p>
+The Sget command has a corresponding command to verify those checksums:
+
+<pre>
+       -k   checksum mode. Retrieves simple checksum (sum -s, --sysv) from the
+            MCAT, retrieves the file, computes it's checksum and compares both
+            checksums.
+</pre>
+
+<p>
+And the new Schksum utility will perform server-side checksum
+operations on one or more existing files stored in the SRB space.  If
+the input is a collection and the -r option is specified, a recursive
+checksum will be carried out for all files in the collection and
+subcollections.  Options will be:
+<pre>
+       -f   force mode. Forces the computation and registration of checksum.
+
+       -c   verification mode. Computes checksum without registering. Verifies
+            newly computed values with the MCAT values.
+
+       -l   list mode. Lists the checkum values stored in MCAT.
+
+       -r   recursively checksum files in the collection and subcollections.
+
+       -n   replNum checksum only the replica with replica number replNum.
+</pre>
+
+<p>
+This checksum capability can be used to increase the confidence of
+achieving successful transfers, above and beyond the tcp/ip protocol
+protections.
+<p>
+In addition, they can be used to increase the security of the SRB
+system.  If the physical image of a particular file has been corrupted
+or modified in an unauthorized manner, the Scksum and Sget commands
+will be able to detect it, as long as the MCAT is secure (see above).
+
+<h2>
+<b><a name="otherSRB">Security Concerns Regarding Other SRB Instances</a></b>
+</h2>
+In distributed computation grids, there may be risks that one site (a set
+of computers) may present to other sites.
+<p>
+For the SRB, in versions 1.x and 2.x, there were risks presented by
+the server authentication credentials.  There was a single
+MCAT-enabled server for each SRB system, and each server in that grid
+would need to authenticate as the (or one of the) SRB administrators.
+Thus if a site were compromised, and the credentials retrieved at one
+site, the attacker could compromise the entire SRB space of that SRB
+grid.
+<p>
+For zoneSRB (SRB version 3.0 and beyond), the federation of multiple
+zones eliminates that problem.  Instead of a single SRB administrator
+(with 'root'-like powers), there are now administrators for each Zone
+in a Federation, with limited capabilities in remote zones.  An SRB
+server in a Zone that is remote to the local SRB server will
+authenticate as the administrator in the remote Zone and then be
+allowed to authenticate users within that remote zone, but little
+else.  Thus a compromise of one Zone will put at risk the data objects
+owned by users of that Zone, but not the entire Federation of Zones.
+<p>
+Besides this administrator authentication issue, there is little to be
+concerned about in regards to other SRB systems.  The emphasis in
+computer security is primarily to protect oneself from outside attack.
+By taking the steps outlined in this document, your local SRB system
+will be protected, even from remote SRB systems, for the most part.
+<p>
+Of course, there could be situations where a denial-of-service type of
+attack could be mounted from a remote SRB system.  If a rogue SRB
+system were to generate a huge number of connections to another SRB
+Zone, it could prevent that SRB Zone system from responding to
+legitimate requests.  But such an attack could be mounted from any
+internet host by simply running a massive number of process connecting
+to the SRB host and port.  And the results are 'only' to bring the
+system down, not to modify or intercept information.
+
+<h2>
+<b><a name="host">Security Concerns Regarding Host Computers Running SRB</a></b>
+</h2>
+Whenever installing software on a computer, a number of security concerns
+are raised.
+<p>
+The SRB is very safe in all aspects of these.
+Installing the SRB clients or servers presents essentially no risk to
+the hosting computer or the network on which it resides.
+<p>
+For any software package, one first needs to have some level of
+assurance that this software is actually the software you expect it to
+be, without any form of malicious software (malware) included
+(spyware, viruses, distributed denial of service (DDoS) attack
+software, etc).  The SRB software is very safe in this regard for a
+number of reasons.  Since it is normally distributed as source in PGP
+or OpenSSL-Blowfish encrypted tar files, if you received the release
+decryption password from us, you can be certain that the tar file is
+our release.  Since you are building it from source, it would be
+difficult for malware to have been inserted within it (someone would 
+notice).
+<p>
+If you download pre-built software from our web site (certain SRB
+clients) the main concern is that you are actually accessing SDSC's
+web pages.  It is possible to corrupt the network host lookup system
+(Domain Name System (DNS)) such that the download site (under
+www.npaci.edu) that your browser connects to is not the real one, and
+the software could be malware.  But the risk of this type attack is
+low, with the SRB software presenting no greater risk than software
+from other reputable internet sites.  It would be possible to
+digitally sign binary files should this become a problem.
+<p>
+A large collection of very serious security concerns are raised if a
+software package requires root access, but the SRB avoids these
+completely by running exclusively as non-root users.  Since root
+processes have unlimited privileges, malware or a compromise could
+result in a cascade of security problems.  A buffer-overflow exploit
+could insert malware into commonly used system utilities ('ls', for
+example) compromising every account on the system.  For this reason,
+any root-level software needs to be very carefully analyzed, and
+engineers attempt to limit the code that executes at root.
+<p>
+Since the the SRB servers run as non-root users, the possible
+compromise of that server (which, as explained, is itself very
+unlikely) would only provide access as that user.  An OS is designed
+to protect itself from most anything non-root users can do and thus
+would be quite safe.
+<p>
+
+
+
+<h2>
+<b><a name="soc">"Social Engineering" Attacks</a></b>
+</h2>
+As described in "The Threat of Social Engineering and Your Defense
+Against It" by Radha Gulati (<a href=
+http://www.sans.org/rr/catindex.php?cat_id=51>available as an item
+here at sans.org</a>),
+"Social engineering is the 'art' of utilizing human behavior to
+breach security without the participant (or victim) even realizing that
+they have been manipulated."
+<p>
+As described in, <a
+href=http://www.securityfocus.com/infocus/1527>Social Engineering
+Fundamentals, Part I: Hacker Tactics</a>, social engineering is
+generally a hacker's clever manipulation of the natural human tendency
+to trust.  Their example begins with: "One morning a few years back, a
+group of strangers walked into a large shipping firm and walked out
+with access to the firm's entire corporate network. How did they do
+it? By obtaining small amounts of access, bit by bit, from a number of
+different employees in that firm.  First, they did research about the
+company for two days before even attempting to set foot on the
+premises. For example, they learned key employees names by calling
+HR. Next, they pretended to lose their key to the front door, and a
+man let them in. Then they "lost" their identity badges when entering
+the third floor secured area, smiled, and a friendly employee opened
+the door for them. "  Please see the article for more, as it is a good
+example of these types of attacks.
+<p>
+
+As described in <a href=
+http://www.seas.rochester.edu:8080/CNG/docs/Security/node9.html>Social
+Engineering</a>, "A classic social engineering trick is for a hacker
+to send email claiming to be a system administrator. The hacker will
+claim to need your password for some important system administration
+work, and ask you to email it to him/her. As we explain later, it's
+possible for a hacker to forge email, making it look like it came from
+somebody you know to be a legitimate system administrator. Often the
+hacker will send this message to every user on a system, hoping that
+one or two users will fall for the trick." 
+<p>
+
+Today, the email attack is largely ineffective, but similar types of
+social engineering present major vulnerabilities.
+
+<p>
+A recent San Diego ComputorEdge article
+<a href=http://www.computoredge.com/Archive/Editorial%20Archive/ARCHIVE%202210.pdf>
+"Social Engineering: Hacking People"</a>, (see page 12 of the PDF file) 
+describes two of the most common
+common social-engineering attacks.  The first
+involves convincing a user to disclose his or her user ID and password
+by appearing to be someone from the support team, and the other
+is impersonating a legitimate employee. 
+<p>
+
+Also see Bruce Schneier's excellent article,
+<a href=http://www.schneier.com/crypto-gram-0010.html#1>
+ "Semantic Attacks: The Third Wave of Network Attacks"</a>
+
+<p>
+These are examples of systems that may be strong in other respects
+(say, cryptographically) can be subverted via alternative means.
+Sometimes the weakest links can be people, via their expectations that
+others are trustworthy.
+<p>
+
+As described in 
+<a href=http://www.rickjohnson.org/writing/itworld/msg00049.html>
+Linux Security -- Social Engineering</a> there are three main rules
+to protect against many of these type of attacks:
+<ul>
+<li>"Have clear policies in place to allow for verification of user
+identities."
+<li>"The entire company must adhere to the policies, including management."
+<li>"End users must be educated on proper password management."
+</ul>
+See the above links for additional information and suggestions.
+
+
+<h2>
+<b><a name="arch">An SRB Deep Archive</a></b>
+</h2>
+Another useful approach to consider is the use of SRB Zones to create
+a "Deep Archive", an SRB Zone configured such that:
+<ul>
+<li>Only one administrator account exists
+<li>No user accounts exist
+<li>All new writes would create new versions
+</ul>
+With some modifications, the SRB system could also:
+<ul>
+<li>Not allow deletes
+<li>Not allow certain types of metadata changes
+</ul>
+
+This would create a preservation environment that would:
+<ul>
+<li>significantly reduce the risks associated with user or 
+administrator error
+<li>provide an off-site backup for the collection
+<li>reduce the risks from possible
+system administrator attempts to corrupt collections
+</ul>
+
+<h2>
+<b><a name="conclusion">Conclusion</a></b>
+</h2>
+
+The SRB software itself is quite secure, but running a secure SRB
+installation requires attention to a wide range of computer, network,
+and site security issues, policies, and procedures.  Much of what has
+been described here is applicable to the secure installation and
+operation of many other network-resident and/or grid-enabled software
+systems.
+
+</html>

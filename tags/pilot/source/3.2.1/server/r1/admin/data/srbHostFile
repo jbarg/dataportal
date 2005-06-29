@@ -1,0 +1,10 @@
+# This is the srbHostFile file which specifies all the SRB master servers
+# in the federation. Each SRB master server is represented by a line of
+# input. Each line may consist of 3 or 4 entries seperated by one or more 
+# blanks. The 1st entry = hostname:[port]. 2nd entry = the SRB user login.
+# 3rd entry = The full directory path name where the startup script - runsrb
+# is located.
+# 4th entry = and optional field containing the string "MDAS_ENABLED". If
+# this string is present, this SRB server is MCAT enabled.
+# mda-18.sdsc.edu srb /projects/diglib/srb/SRB1_1_5aix/bin MDAS_ENABLED
+ghidorah.sdsc.edu srb /projects/diglib/srb/SRB1_1_7t/bin MDAS_ENABLED

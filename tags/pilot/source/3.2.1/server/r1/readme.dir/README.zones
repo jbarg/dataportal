@@ -1,0 +1,431 @@
+This README file contains three sections; section 1.0 gives a quick summary 
+of using the Scommands with the SRB zone implementation so that users can start
+using the Scommands right away.  Section 2.0 gives a primer of the SRB zone
+implementation which gives a more detailed explanation of the design behind
+the Federated MCAT implementation.  And section 3.0 answers some SRB Zone 
+Administration questions.
+
+1.0 SRB Zone implementation in Scommands
+----------------------------------------
+
+The Federated MCAT implementation allows users to access resources and data 
+across zones. In version 3.0, most existing operations including Sput, Sget, 
+Scp, Sbload, Sbunload, Sregister, container operations, etc are supported 
+across zones. The only cross zones command not supported is Sreplicate.
+For now, users should use Scp to copy data across zones.
+
+Most of the modifications in the Scommands for the Federated MCAT
+implementation involve providing options or defaults for determining a
+zone for the command and the user's home zone.
+
+The user's home zone can be specified in the .MdasEnv file using the
+keyword 'mcatZone' or using the env variable mcatZone. If these methods
+were not used to specify the user's home zone, the srbServer will query
+the MCAT for it which causes the srbConnect() call to be a bit slower.
+
+In addition to the user's home zone, most operations can involve
+certain interzone operations. The zoneName of an operation is
+determined in three ways:
+
+1) Implicitly specified by the SRB paths involved in the commands - 
+As described in more detail below, the first entry in a SRB path specifies 
+the zoneName where the metadata is stored. e.g., for a SRB file with path 
+/z1/x/y/z, z1 is the zoneName of the file. Therefore, for operations involving 
+files and collections, the zoneName of the operation is implicitly specified 
+by the SRB paths. 
+
+Examples:
+
+"Sput -S s1 foo /z1/x/y/z"  - upload the local file foo to SRB and create 
+foo in mcat Zone 'z1', in resource 's1' of 'z1'. 
+
+"Sget /z1/x/y/z/foo"  - download the SRB file foo stored in zone 'z1' to 
+the local file system.
+
+"Scp -S s2 /z1/x/y/z/foo /z2/a/b/c" - copy the SRB file foo in zone 'z1' to 
+the resource 's2' of zone 'z2' and register the new file /z2/a/b/c with 
+mcat 'z2'.
+
+2) Explicitly specified with the -z option -
+Some Scommands do not involve any SRB path, so one needs to use a new -z 
+option. The -z zoneName option explicitly specifies a zoneName.  
+
+Examples:
+
+"SgetR -z z1" - list the resources in zone 'z1'
+
+"Smkcont -z z1 -S s1 cont1" - make a container named 'cont1' in zone 'z1'
+ 
+3) Use the cwd (current working directory) to implicitly specify the zone -
+if the -z option is not used, the Scommands will try to get the zone through
+the cwd of the Scommand session.
+
+For example, if the current working directory is /z2/x/y/z, then Slscont will
+list all containers belonging to the user in zone 'z2'.
+
+NOTE: If the SRB path begins with /home or /container, the file or collection
+is assumed to be stored in the local zone and all commands will still work
+when the user is connected to the local zone. But these file/collecions 
+will no longer be visible from a foreign zone.
+
+2.0 SRB Zone  - A Primer
+------------------------
+
+
+What is an SRB Zone?
+   An SRB Zone (or zone for short) is a set of SRB servers 'brokered'  or 
+   administered through a single MCAT. Hence a zone consists of one or 
+   more SRB servers along with one MCAT-enabled server.  Any existing 
+   SRB system (version 2.x.x and below) can be viewed as an SRB zone.
+
+
+Why are there SRB Zones?
+   The idea is to allow both local control and at the same time
+   broad-area collaboration.  With previous SRB versions, collaboration
+   is done via one MCAT for the virtual organization.  But even if a site
+   has local data (a non-MCAT SRB server) and local users, their SRB MCAT
+   interactions would still go to a central MCAT, which could be very
+   remote.  This slows the interactions and makes the local site
+   dependent on a remote site (e.g. they can't run SRB operations during
+   preventive maintenance at the MCAT site).  While this is acceptable
+   for many, it can be a problem for some SRB projects.  The solution is
+   the federated SRB, where multiple MCAT system can collaborate, and
+   also function independently.
+
+Is MCAT Zone a purely administrative concept?
+   A MCAT zone is both administrative and physical - physical in the 
+   sense that each MCAT zone has exactly one MCAT. It is also
+   administrative as it gives a autonomous administrative features
+   to each zone. One zone can join a federation of other zones
+   only if they agree to do so.
+
+
+
+
+What is the idea in defining a zone?
+   With a zone-based implementation, one can now view individual SRB 
+   system as a zone and SRB Version 3.0 (and above) will allow for 
+   federating  across zones.
+
+What are the main  emphasis on for designing this zoned-SRB system?
+Is it  Improving reliability, search effectiveness and/or storage 
+capacity of MCAT metadata?
+   In the order of importance
+   1) Performance - large latency for a worldwide grid with a single MCAT
+   2) Local control - organizations want to have more control on the data
+      and resources that they are share worldwide.
+   3) Scalability of the MCAT.
+
+In the zone design, is it only for replicating MCAT data or can it also
+be used for fragmenting MCAT metadata and linking them between 
+federated MCATs?  
+   The first version of the federated MCAT design is going to be a very 
+   basic design. Each MCAT zone can operate entirely independently from 
+   other zone. Most MCAT metadata is not replicated except for the zone, 
+   user and user group info. The basic functionality provided by this 
+   design is to allow a user in one zone to access data and use resources 
+   in other zones in the federation. 
+   In the first version, we are providing basic zone-to-zone access
+   mechanism. In later development, we plan to make it more transparent
+   to use resources, build collection, manage data and apply methods
+   seamlessly  across zones.
+
+Can you briefly give an insight to the federation algorithm that you 
+have devised for zone federation?
+   It is difficult to describe the federation algorithm. Maybe
+   an example is the best way to do it. Suppose there are 2 zones, 
+   A and B in the federation. A user in zone A wants to copy a file
+   /A/home/john.sdsc/foo in zone A to a collection /B/home/john.sdsc/foo1 
+   in zone B in the resource RB in zone B. She will issue the following 
+   Scommand to a server in zone A:
+     Scd /A/home/john.sdsc
+     Scp -S RB foo /B/home/john.sdsc/foo1
+  Then, the SRB servers will do the following steps:
+     1) The server in zone A which we will call server A, upon 
+        receiving the user request, parses the source and destination 
+	file names.
+     2) With the /A root path, it knows the source path is a zone A file 
+        so it queries the zone A MCAT for the needed metadata for this file 
+        (file location, file type, access control, etc).
+     3) With the /B root path, it knows the destination path is a zone B 
+        path which implies resource RB is a zone B resource. so it queries 
+        the zone B MCAT for the needed metadata for source RB (the host 
+        address of the  resource, type of resource, etc).
+     4) Once these info are known, server A will open the source file 
+        in its own zone and remotely create the destination path. Then 
+        it can start moving data.
+     5) When the transfer is done, server A will do a remote registration 
+        of the file just created with MCAT B.
+
+Can users connect to remote zones directly?
+    They can but shouldn't.  If they do, they can operate OK within
+    that zone but will not be able to do cross-zone data movement.  If
+    they first connect to their own local zone server, then all zone
+    operations will work fine.
+
+How does one identify a zone?
+   There is a zone-name given to each SRB zone. This is a char-string
+   which identifies uniquely a zone. 
+
+How do I name my zone? How can I be sure that no other zone exists with 
+the same name?
+   There is a Zone Authority which can be queried to see if a name is
+   already in use. We also ask every SRB administrator to register  their
+   SRB zone-name with the Zone Authority.  The Zone Authority is available
+   at http://www.npaci.edu/dice/srb/zoneAuthority.html
+
+Are there user name restrictions?
+   In the current version, it is assumed that there are no user name
+   (name@domain) collisions between zones.  For example, there will never
+   be a jane@sdsc from zone A and also from zone B.  So, you need to keep
+   the domain names unique too.
+
+What do you mean by federating across zones?
+   In a SRB federation there will be multiple zones (each with their own
+   MCAT administration). In such a set up, one can register users across
+   zones (i.e, in multiple MCATs) and these users can access data across
+   zones (i.e.e, access data from two or more zones).  Hence a federation 
+   provides a means for  SRB systems (zones)  to allow interactions 
+   between the zones without foregoing their autonomous nature.
+
+How does a SRB system as it is currently run (Versions 2.x.x and below)
+different from the zone-system advocated by the SRB Versions 3 and above.
+   The old SRB systems (of one MCAT and multiple resource servers) is
+   the definition of a zone. The main difference between the old system
+   and the new one is that the new one allows for interactions between 
+   two such systems whereas in the old system no interaction is allowed
+   and also if one wants to copy files between them, one needs to
+   do that outside the SRB (eg. do an Sget from one SRB system and
+   do an Sput into the other system).
+
+Are all new SRB MCAT installations also Zones?
+   Yes.  Starting with SRB 3.0, each SRB-MCAT installation will also be
+   a Zone.  You can start with it as a non-federated SRB system and then
+   later, if you wish, federate with any of the other MCATs. 
+   For existing SRB systems, they can run as is but will need to have a
+   zone-name when they upgrade to 3.0.
+
+Does one zone know about users in another zone?
+   Yes. If two SRB zones federate, then they will exchange their
+   user identifications. Hence one zone knows about users in the other zone.
+
+Does a user have a home zone?
+   Yes. Every SRB  user has one and only one home zone. They are aliens
+   in other zones.  (no dual citizenship in SRB zones)
+
+Does it mean that my certificate or passwords get copied in multiple zones?
+   No. All sensitive information about a user is kept only in the
+   home zone. 
+
+How do zones exchange user information?
+   There will be zone-user information exchange routines which can
+   be launched periodically to do this.
+
+Does one zone know about a srbObject in another zone?
+   Yes, provided a user uses /zone-name/home/..... to access the file.
+
+What is the authentication mechanism used between zones?
+   For starters, we need to give a bit of background on how authentication 
+   and authorization work in the current single MCAT system. Currently,
+   there can be any number of SRB data servers run by SRB users with 
+   "admin user" privileges. A normal SRB user can log onto any SRB 
+   server using his/her own credential and will be able to access data 
+   residing on any servers in the system. To be able to do this, we have 
+   a fairly robust set of server-server operations including all the 
+   basic posix I/O operations, third party transfer, server-directed 
+   parallel I/O, etc. For server-server operations, the initiating 
+   server authenticates itself using its "admin user" credential and 
+   issue requests on behalf of the normal user. In a nutshell, the only 
+   difference in privilege between a normal user and an admin user 
+   is admin users can perform operation on behalf of other users but 
+   normal users cannot. The implication though is admin users can
+   do everything, including reading and modifying other user's data.
+
+   Hence, in a zone-based system, we need to be very careful about 
+   extending the "admin user" privilege across zones. A zone probably does
+   not want any foreign admin user to have full admin privilege in 
+   its zone , i.e., don't want foreign admin users to be able to perform 
+   task on behalf of all users. So, we limit the privilege of a foreign 
+   admin user to be able to perform task on behalf of only users from its 
+   own zone. But the implication is if a normal user logon to a foreign 
+   zone, he/she can access only data and resources in this zone. To access 
+   data and resources in all zones, the normal user has to logon through
+   their own zone. Briefly, a user logged into his/her home zone 
+
+
+What operations can a user perform, when connected to one zone, on an 
+srbObject in another zone?
+   The user can perform copy, get, put, posix type functions such as  open,
+   close, read, write, and metadata access.
+   These translate to Sput, Sget, SgetD, Smeta, Sufmeta.
+
+Can a user put a file into another zone?
+   Yes.
+
+Can one zone talk to another zone which is using a different port number?
+   In the current implementation we expect all federating zones to 
+   use the same port numbers. We will relax this restriction
+   in a future release.
+   
+How can a user know about resources, data, collections or containers 
+in another zone?
+   Many of the Scommands (eg. SgetR, SgetD, SgetColl, etc) have been
+   augmented with a -z option which can be used to query across zones.
+
+A  zone contains information about Domains, Resources and Metadata of
+srbObjects,  list of administrators  within the Zone etc.
+Does it contain other information too.  Could you also briefly explain 
+how is this information structured within a zone?
+   A MCAT zone has a fully functional MCAT which contains all metadata
+   of everything that it manages locally including Domains, Resources 
+   and Metadata of srbObjects, list of administrators within the Zone. 
+   In addition, in a federated environment, it also contains information 
+   on other  zones (a zone table which contains info such as zoneName, 
+   the address of the MCAT enabled server in that zone, etc), 
+   external user and user group info from other zones , etc.
+
+Also where is the information of administrators account is stored within 
+a zone? Is there a special kind of administrator user-type?
+   Administrators info is stored in the user table. They are just a special
+   kind of user. Sensitive info such as passwords are only stored locally
+   for local administrators.
+
+When you federate metadata stored on MCAT server, do all information such
+as Domains, Resources, Administrators and File description get equally
+federated or can they be selectively federated? E.g.. replication/federation
+of only File Description metadata portion of MCAT metadata.
+   They are selectively federated, not by functionality as you suggested, 
+   but by data and resource controlled by the zone.
+
+
+
+They are selectively federated, not by functionality as you suggested, but
+by data and resource controlled by the zone.
+
+Can a user register a srbObject in one zone in another zone?
+
+Can a user register a Collection in one zone in another zone?
+
+Can a user see user-defined metadata for a srbObject across zones?
+
+Can I register a resource in more than one zone?
+
+Is a zone-name attached to each srbObject?
+   Not in the initial phases of the implementation. We plan to do that
+   at a later stage as we add more features to the zone system.
+
+Can I use the zone-SRB to provide scalability for MCATs?
+   This is one of the design goals for the zone-SRB. One should be able
+   use multiple MCATs and load-balance them by having them run at
+   geographically different locations and distributing users across them
+   in different  home-zones. 
+
+I have a MCAT which is getting awfully big, how can the zone-SRB help me?
+   This is a a good application for the zone-SRB.
+   What you can do in this case is "semi-retire" the old MCAT (i.e.,
+   no more additions are allowed except querying) and start using a 
+   new MCAT for  ingestion/registration of new srbObjects and collections.
+   With this setup, one can access the old collection and srbObjects 
+   through the new MCAT (with some delay) but get access to new srbObjects
+   and collections faster than would have been possible with a single
+   large MCAT. Hence, a large system, might "retire" an MCAT every year
+   and start using a new MCAT with good level of performance. 
+
+How can I get some information about zones?
+   Two of the Scommands have been extended to provide Zone information.
+   Stoken Zone [value]     will provide metadata about Zones.
+   SgetU -Z <user>         will show the Zone Name for a user.
+
+   The Java admin tool (under MCAT/java) can also be used to
+   display Zone information.
+
+
+3.0 SRB Zone  - Administration
+------------------------------
+
+(Administrators will also need to be familiar with the other sections
+of this document.)
+
+Who can ingest a new Zone name or modify Zone information?
+   Only a SRB administrator can do that.
+   
+How can a SRB administrator perform these tasks?
+   If the SRB Administrator is using the Scommands interface, then
+   she can do this using the Szone command.
+   Using this command, an SRB administrator can ingest a new zone 
+   (both local and remote), modify the metadata about existing zones, 
+   change or insert a zone for a user, modify all the metadata about a zone.
+
+   The Java admin tool (under MCAT/java) can also be used to more easily
+   perform these tasks via its GUI.  It can be used to create zones,
+   modify zones, display zone information (local and remote, overview
+   and in detail), and delete zones.  There is also an option to modify
+   modify a user's zone (under modify user).  New users are ingested as 
+   local-zone users, but the remote admin account will need to be modified 
+   to be of the remote zone.
+
+How does one set up a federation of zones?
+   You use either the admin command-line utilities (Szone for most functions, 
+   and 'Stoken Zone' to list Zones) or the Java admin tool to do this (see
+   the new set of Zone operations and new Zone option under modify user).
+
+   Or, if you are using the install.pl script for testing, it can
+   perform these steps (1-6) for you.  In the example below, the remote
+   zone is 'B'.
+
+   1) Create a local zone with a name of your choosing.  If you've
+      installed a new MCAT or if you've upgraded an existing MCAT to
+      3.0, a local zone called 'demozone' will exist.  You can rename
+      it to your zone name.  You may also wish to update some of the
+      other attributes of your zone.
+   2) Add a Domain matching the one used by the admin at B.
+   3) Add the Zone B admin user in the B domain (e.g. srbAdmin@B), as
+         a sysadmin user type; use an arbitrary (and long) password, as
+         their real password is in the MCAT at B.
+   4) Add a Location for the remote zone host B
+   5) Add a Zone (of type remote) for B
+   6) Change the zone for the B admin user to zone B.  This will give
+      the admin user limited access to the local MCAT; they will be able 
+      to read it to synchronize.
+
+   The remote Zone administrator will need to perform these steps for
+   your zone on the remote MCAT.
+
+   If your Zone is to be real (i.e. not just for testing), you need
+   to register it with the Zone Authority (as described in an above 
+   section).
+
+   Run zonesync.pl as described below.
+
+How does one upgrade an existing MCAT to version 3.0?
+
+   Like other upgrades, use one of the scripts provided in the MCAT/data
+   directory (such as 212to300patch.psg), using it as the standard-input
+   for the command-line sql utility, for example 'psql < 212to300patch.psg'.
+
+   Once that completes, your local zone will be called "demozone".
+
+   You can operate a 3.0 system like this if you wish.  That is, you
+   can run the current SRB software but without doing inter-zone
+   operations.  You'll have a zone called "demozone" which will be
+   largely unnoticed.
+
+   If you then want to make use of the zone capabilities (form a
+   federation with other zones), you need to perform the steps outlined
+   above under "How does one set up a federation of zones?".
+
+   
+What other administrative tasks are required?
+   Once you have multiple zones federated together, you need to 
+   periodically run a script, zonesync.pl, to ingest information from
+   the remote zones.  This could be done as a cron job.  See the
+   script for more information.  This is highly configurable since
+   zones can be run in various modes (see FedMcat.html).
+
+Also see FedMcat.html which is included in the release and is on-line
+at http://www.npaci.edu/dice/srb/FedMcat.html .
+
+See the README.zones.testing writeup for a description of how one
+might test SRB zones and more information on how zones should operate.
+
+

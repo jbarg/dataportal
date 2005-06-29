@@ -1,0 +1,64 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii S.1
+.\"
+.TH Spullmeta 1 "Sept 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Spullmeta \- accesses metadata in bulk from a SRB.
+.SH SYNOPSIS
+.B Spullmeta
+.BI  "[-Fh] " queryInfo " [ " fromDate " ] "
+.SH DESCRIPTION
+.B "Spullmeta is a SRB Admininstration utility for accessing core MCAT system metadata for synchronizing metadata from one zone to another. The utility serves metadata about zones, tokens used by the SRB such as the Data Types, User Type, etc, and also metadata about primary entities such as users, resources, collections, containers and data objects. The utilty can be used only with SRB Admin privelege."
+.sp
+The utility outputs the result through stdout.
+.sp
+.B The 
+.IR  fromDate " is a timeStamp of the format YYY-MM-DD-HH.MM.SS that is used by the MCAT to send entities that have been created or modified after "  fromDate  "."
+.sp
+.B The supported values for 
+.IR  queryInfo " are"
+.sp
+     GET_USER_TYPE
+     GET_USER_DOMAIN
+     GET_USER_AUTH_SCHEME
+     GET_LOCATION_INFO
+     GET_RESOURCE_TYPE
+     GET_RESOURCE_CLASS
+     GET_RESOURCE_ACCESS_CONSTRAINT
+     GET_DATA_TYPE
+     GET_DATA_ACCESS_CONSTRAINT
+     GET_CHANGED_ZONE_INFO
+     GET_CHANGED_USER_INFO
+     GET_CHANGED_USER_AUTHMAP
+     GET_CHANGED_USER_GROUPS
+     GET_CHANGED_USER_UDEF_METADATA
+     GET_CHANGED_PHYSICAL_RESOURCE_CORE_INFO
+     GET_CHANGED_LOGICAL_RESOURCE_CORE_INFO
+     GET_CHANGED_RESOURCE_OTHER_INFO
+     GET_CHANGED_RESOURCE_UDEF_METADATA
+     GET_CHANGED_RESOURCE_ACCESS
+     GET_CHANGED_COLL_CORE_INFO
+     GET_CHANGED_DATA_CORE_INFO
+     GET_CONTAINER_INFO
+     GET_CHANGED_DATA_ACCESS
+     GET_CHANGED_COLL_ACCESS
+     GET_CHANGED_COLLCONT_INFO
+     GET_CHANGED_DATA_UDEFMETA_INFO
+     GET_CHANGED_COLL_UDEFMETA_INFO
+     GET_CHANGED_DATA_ANNOTATION_INFO
+     GET_CHANGED_COLL_ANNOTATION_INFO
+     GET_CHANGED_OTHERDATA_INFO
+     GET_CHANGED_DATA_GUID_INFO
+
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-F " 
+option formats the output in such a way that it can be used by Spushmeta.
+.PP
+.SH "SEE ALSO"
+.BR Spushmeta (1),
+.BR Szone (1)

@@ -1,0 +1,42 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sreplcont.1
+.\"
+.TH Sreplcont 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sreplcont \- Replicate a container copy.
+.SH SYNOPSIS
+.B Sreplcont
+.RB [ \-z
+.IR mcatZone ]
+.RB [ \-S
+.IR resource "] " container
+.SH DESCRIPTION
+.B "Sreplcont "
+Replicates a container copy to a specific resource. For containers
+that have multiple "permanent" and "cache" copies, this is a way
+to put a copy of the container on a specific resource. For
+example, if a container was created in multiple "cache" resources,
+this is a way to stage this container on a "cache" resource that
+is not designated as "primary". The specified
+.I resource
+must be one of the physical resources used to recreate the
+container (i.e., the specified resource must belong to the logical
+resource used to create the container).
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-z mcatZone "
+The MCAT zone where the container resides
+.TP 0.5i
+.B "\-S "
+.I resource
+the resource where the container copy is to be created.
+.SH "SEE ALSO"
+.BR Srmcont (1),
+.BR Smkcont (1),
+.BR Slscont (1),
+.BR Ssyncont (1)
+

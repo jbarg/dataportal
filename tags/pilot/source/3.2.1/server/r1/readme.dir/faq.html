@@ -1,0 +1,1368 @@
+<HTML>
+<HEAD>
+<TITLE>SRB FAQ</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#AAFFFFFA" LINK="#0000EE" VLINK="#551A8B" ALINK="#FF0000">
+ 
+<CENTER>
+<H1>
+<FONT FACE="Arial,Helvetica"><FONT COLOR="#000000">FAQ: Frequently Asked Questions on SRB</FONT></FONT></H1></CENTER>
+<center><I>Last Modified June 3, 2004</I></center>
+
+<p>
+This is the current SDSC Storage Resource Broker (SRB) Frequently Asked
+Questions (FAQ) page.  The intent is to provide a good introduction to
+the SRB as well as more extensive and complete information and links
+for more experienced evaluators, administrators, and users.  This had
+been seriously out of date (circa April 1998) until mid-2003 but is
+now being actively maintained.
+
+
+<li><a href="#Gen">General Information<a>
+<ol>
+<li><A HREF="#Gen1">What does the SRB do?</A>
+<li><A HREF="#Gen1.1">What is zoneSRB? or How can I federate SRB systems?</A>
+<li><A HREF="#Gen2">What kinds of resources does the SRB support?</A>
+<li><A HREF="#Gen3">Is the SRB Open Source?</A>
+<li><A HREF="#Gen4">How does the SRB compare to commercial software?</A>
+<li><A HREF="#Gen5">Is there a commercial version?</A>
+<li><A HREF="#Gen6">How does the SRB relate to Grid technologies?</A>
+<li><A HREF="#Gen7">Is the SRB middle-ware?</A>
+<li><A HREF="#Gen7.5">How secure is the SRB?</A>
+<li><A HREF="#Gen7.7">How fast is the SRB?</A>
+<li><A HREF="#Gen8">How was the SRB developed?</A>
+<li><A HREF="#Gen9">How many people work on the SRB?</A>
+<li><A HREF="#Gen10">What support is provided?</A>
+<li><A HREF="#34">What operating systems does the SRB run on?</A>
+<li><A HREF="#32">What authentication mechanisms are available for SRB?</A>
+<li><A HREF="#Gen11">What are the future plans for the SRB?</A>
+<li><A HREF="#Gen12">Where can I find more information about SRB and related systems?</A>
+</ol>
+
+
+<li><a href="#Tools">Interfaces and Tools<a>
+<ol>
+<li><A HREF="#T2">What are the Scommands?</A>
+<li><A HREF="#T3">What is inQ?</A>
+<li><A HREF="#T4">What is mySrb?</A>
+<li><A HREF="#T5">What APIs are available?</A>
+<li><A HREF="#T6">What is the SrbBrowser?</A>
+<li><A HREF="#T7">What is the mcatAdmin (Java Admin Tool)?</A>
+<li><A HREF="#T8">What is Jargon (Java API)?</A>
+<li><A HREF="#T9">What is the SDSC Matrix?</A>
+<li><A HREF="#T10">Does MCAT functionality vary from one client to another?</A>
+<li><A HREF="#T11">Is one client better than another for entering metadata?</A>  
+</ol>
+
+<li><a href="#MCAT">MetaData Catalog (MCAT)<a>
+
+<ol>
+<li><A HREF="#3"> What is MCAT?</A>
+<li><A HREF="#4"> What is meta data?</A>
+<li><A HREF="#5"> What is  system-level meta data?</A>
+<li><A HREF="#6"> Since there are primitive MCAT objects, are there other MCAT objects?</A>
+<li><A HREF="#7"> What is application-level meta data?</A>
+<li><A HREF="#8"> What is domain-dependent meta data?</A>
+<li><A HREF="#9"> Does SRB/MCAT support application-level meta data?</A>
+<li><A HREF="#51"> What databases can be used for installing MCAT?</A>
+<li><A HREF="#M10"> Is there a way to load attribute/value pairs from another application into the MCAT?</A>
+
+
+</ol>
+
+<li><a href="#Admin">Administration/Operation<a>
+<ol>
+<li><A HREF="#68"> What do I need to run SRB?</A>
+<li><A HREF="#10"> What is a data object (data set)?</A>
+<li><A HREF="#12"> Who is a registered SRB user?</A>
+<li><A HREF="#13"> What is a method?</A>
+<li><A HREF="#14"> Who is SRBadmin?</A>
+<li><A HREF="#15"> What is a (data object) collection?</A>
+<li><A HREF="#15b"> What is the SRB logical name space?</A>
+<li><A HREF="#11"> What is a resource?</A>
+<li><A HREF="#16"> What is a physical SRB resource?</A>
+<li><A HREF="#17"> What is a logical SRB resource?</A>
+<li><A HREF="#18"> What is a logical SRB resource set?</A>
+<li><A HREF="#19new">What is a compound SRB resource?</A>
+
+<li><A HREF="#20"> What is a user group?</A>
+<li><A HREF="#21"> Who can form a user group?</A>
+<li><A HREF="#22"> Who can register a user group?</A>
+<li><A HREF="#22.5"> What is a domain?</A>
+<li><A HREF="#22.6"> What are tokens?</A>
+<li><A HREF="#23"> What is a replicated data object? </A>
+<li><A HREF="#24"> How can one read a replicated data object?</A>
+<li><A HREF="#25"> How can one create a replicated data object?</A>
+<li><A HREF="#25.5">What is a Container?</A>
+<li><A HREF="#25.7">How do Containers work?</A>
+<li><A HREF="#25.81">Does Sget work properly for files that are in containers?</A>
+<li><A HREF="#25.82">How do you discover the container information?</A>
+<li><A HREF="#25.83">Once I know which container a file is in, what is the
+most efficient way to download the data?</A>
+<li><A HREF="#26"> Who can register SRB users?</A>
+<li><A HREF="#28"> Who can register physical or logical resources?</A>
+<li><A HREF="#36"> How does SRB provide access to remote storage systems?</A>
+<li><A HREF="#37"> Can multiple SRB servers be federated?</A>
+<li><A HREF="#38"> How does one SRB know about another SRB?</A>
+<li><A HREF="#40"> What are the different setup configurations that I can have at my site?</A>
+<li><A HREF="#41"> Is MCAT needed to run SRB?</A>
+<li><A HREF="#42"> Where can I get SRB?</A>
+<li><A HREF="#43"> What is a SRB Vault?</A>
+<li><A HREF="#44"> What is a SRB Space?</A>
+<li><A HREF="#46"> What are the various data object interfaces supported by SRB?</A>
+<li><A HREF="#a1"> How do I backup SRB data and metadata?</A>
+<li><A HREF="#firewall"> What ports does the SRB use?  What ports do I 
+need to open in a firewall to run the SRB?</A>
+
+</ol>
+<li><a href="#User">User Operations<a>
+<ol>
+
+<li><A HREF="#29"> Who can register data objects?</A>
+<li><A HREF="#30"> Who can create data object collections?</A>
+<li><A HREF="#31"> Who can use SRB?</A>
+<li><A HREF="#39"> How does SRB deal with unregistered or anonymous users?</A>
+<li><A HREF="#47"> What are the types of access control provided by SRB/MCAT?</A>
+<li><A HREF="#48"> What are the different modes of access control, supported by SRB?</A>
+<li><A HREF="#49"> What is the 'all' mode of access control?</A>
+<li><A HREF="#50"> Can only one user have 'all' permission on a data object?</A>
+<li><A HREF="#52"> What are the system-level entities that are captured in MCAT?</A>
+<li><A HREF="#52.5">Since data objects can be  stored in remote storage devices, should I remember the
+path names or location information of my data object?</a>
+
+<li><A HREF="#53"> How do I know in which collection to store my data?</A>
+<li><A HREF="#54"> How useful are collections?</A>
+<li><A HREF="#55"> Should my data always be in a collection?</A>
+<li><A HREF="#56"> Can I have the same data object in more than one collection?</A>
+<li><A HREF="#57"> How do I identify a data object?</A>
+<li><A HREF="#58"> What is the srbObjOpen() API?</A>
+<li><A HREF="#59"> What is the srbGetDataDirInfo() API?</A>
+<li><A HREF="#62"> How do I know what are the available resources that I can use?</A>
+<li><A HREF="#63"> How do I get information about a data object?</A>
+<li><A HREF="#64"> What are tickets? How can one issue them? use them?</A>
+<li><A HREF="#65"> Can I issue ticket only for data objects?</A>
+<li><A HREF="#66"> If a ticket is issued for a collection will that allow access to all data objects in that collection.</A>
+<li><A HREF="#67"> Can I issue a ticket for a 'future' data object.</A>
+</ol>
+
+<HR SIZE =6>
+
+
+<a name="Gen"><h3>General Information</h3></a>
+
+<DL>
+<DT><A NAME="Gen1"> </A> What does the SRB do?
+<dd>As the name implies the Storage Resource Broker, brokers storage
+resources (sorry, couldn't resist).  It provides access, via a uniform
+API, to various types of data storage across local and wide-area
+networks, and maintains meta-data (data about the data) about each
+stored object (files).  SRB, in conjunction with MCAT, provides a
+means for accessing data objects and resources through querying their
+attributes instead of knowing their physical names and/or locations.
+<p>
+The SDSC Storage Resource Broker (SRB) provides the abstraction
+mechanisms needed to implement data grids, digital libraries, and
+persistent archives for data sharing, data publication, and data
+preservation. 
+<p>
+Many people, using only a subset of the features, find that
+using the SRB as global file system is its most compelling function.
+Users of multiple distributed computing systems find it to be an essential tool
+to easily and quickly access files from various locations.  With the SRB's
+parallel I/O capabilities, the SRB will transfer files at least as quickly
+as any other mechanism, and usually faster.
+<p>
+<dt><A NAME="Gen1.1"></A>What is zoneSRB? or How can I federate SRB systems?
+<dd> ZoneSRB (or federated MCAT SRB) is the next generation of the SRB 
+released as Version 3.0. It provides facilties for two or more independent 
+SRB systems to interact with each other and allow for seamless access of data 
+and metadata across these SRB systems. These systems are called the 'zones.
+More information about zoneSRB can be found at:
+<a href=http://www.npaci.edu/DICE/SRB/FedMcat.html>http://www.npaci.edu/DICE/SRB/FedMcat.html</a> and
+<a href=http://www.npaci.edu/DICE/SRB/README.zones>http://www.npaci.edu/DICE/SRB/README.zones</a>.
+
+<p>
+<dt><A NAME="Gen2"></A>What kinds of resources does the SRB support?
+<dd>Storage resources can be directories in Unix file systems,
+directories in Windows file systems, 
+archival storage systems such as HPSS (and, previously,
+UniTree and DMF), binary large objects stored in a DBMS (DB2, Oracle, 
+Illustra), database SQL-queriable objects in DB2 or Oracle, 
+and tape library systems.  Tape systems can be combined with disk
+cache into Compound Resources, and the SRB can function as a complete
+basic archival storage system.
+<p>
+
+<dt><A NAME="Gen3"></A>Is the SRB Open Source?
+<dd>No, not exactly,
+although the source code is readily available to academic
+organizations and government agencies and we encourage commercial
+organizations to evaluate and test it via a simple agreement.  The
+normal distribution is via source.  The UCSD business office 
+wishes to maintain
+the SRB as proprietary and license it for commercial use and resale.
+See 
+<a href=http://www.npaci.edu/dice/srb/srbOpenSource.html>
+http://www.npaci.edu/dice/srb/srbOpenSource.html
+</a>.
+
+<p>
+
+<dt><A NAME="Gen4"></A>How does the SRB compare to commercial software?
+<dd>As far as we know, there is no commercial product much like
+the SRB (except for the commercial version of the SRB, see below).
+The biggest difference between commercial software and research
+products like the SRB is the lack of a Quality Assurance testing
+group.  But we do a lot of testing of new features, as do our
+collaborative sites.  It is also a mature product as it has been in
+production use since 1997.  In 2000, a government agency
+thoroughly examined the code and provided us with fixes (memory
+overruns, etc).  The design is such that most problems are fail-safe,
+due the the client/server design, and cross-checks within our MCAT
+library and of the DMBS systems themselves.  We build on the quality
+and robust-features of modern DBMSs.
+<p>
+
+<dt><A NAME="Gen5"></A>Is there a commercial version?
+<dd>Yes, General Atomics is commercializing a version that split from the
+SDSC version in 2001.  This was SRB 1.1.8.  See
+<a href= http://www.nirvanastorage.com>
+ http://www.nirvanastorage.com</a>
+<p>
+
+<dt><A NAME="Gen6"></A>How does the SRB relate to Grid technologies?
+<dd>In many ways:
+<br>
+a) The SRB is a complete data Grid system in itself, and has been
+since SRB 1.0 in 1997.  It operates, in production, as collections of
+client and server hosts distributed across local and/or wide-area
+networks, cooperating to provide transparent
+access to storage resources, data, and
+meta-data (data about data).
+<br>
+b) We are participating in many data grid research and development /
+production collaborations, including PPDG, GriPhyN, BaBar, CDL, NASA
+Information Power Grid and many more.  
+The SRB is either used in production or is being
+evaluated across multiple projects at NSF, NASA, DOE, DOD, NIH, NLM,
+NARA, and the Library of Congress.
+See
+<a href=http://www.npaci.edu/dice/srb/Projects/main.html>
+http://www.npaci.edu/dice/srb/Projects/main.html</a>.
+<br>
+c) We support the Globus Grid Security Infrastructure (GSI) as an
+optional method of authentication.
+<br>
+d) The <A HREF="#T9">SDSC Matrix</A> workflow management system is
+a grid-based system and uses a Web Service Definition Language (WSDL)
+interface.
+<br>
+e) We plan to develop an OGSA-compliant SRB.
+
+<p>
+
+<dt><A NAME="Gen7"></A>Is the SRB middle-ware?
+<dd>Yes and no.  It can be considered middle-ware like other grid
+technologies as it can be combined with higher level software and can
+interoperate with other grid components.  But it is also a complete
+solution itself and does not require other software to be a functional whole,
+except for a DBMS for
+the metadata catalog.
+<p>
+
+<dt><A NAME="Gen7.5"></A>How secure is the SRB?
+
+<dd>The SRB is quite secure.
+No computer system is perfectly secure,
+but the SRB provides a reasonable level of security while
+still providing convenience features and high performance.
+The Encrypt1 challenge/response is secure
+against network eavesdropping, while the use of user passwords is
+convenient and straight-forward for both users and administrators.  
+Placing user passwords into files on
+host systems is a convenience, although if a host is compromised,
+those files could be read and the user's SRB identity assumed.  
+GSI is also secure against network
+eavesdropping and somewhat less vulnerable against compromised hosts as
+only temporary delegation certificates are stored in files.
+<p>
+Generally, 
+the SRB is as secure as the DBMS used to store the MCAT and the
+physical resources used to store the data.  User identity is as secure
+as the client host system.
+<p>
+Since the SRB server runs as a non-root user, it does not present a
+vulnerability to the OS if compromised.  This is a big advantage over
+software systems that need to be run as root.
+<p>
+Starting in April 2004, SRB releases include a paper describing
+how to run a secure SRB system: readme.dir/srb-security.html.
+<p>
+Starting with SRB 2.1 (late May, 2003), we provide a mechanism by which
+SRB data files can be encrypted for both network transmission and storage.
+This system provides security against network eavesdropping for
+the data objects exchanged via the SRB and also improves the security 
+of the data objects as they reside on any of the various physical resources.  
+This system was implemented
+to be efficient, although the encryption and decryption is always a
+compute-intensive operation and there will be some unavoidable performance
+penalty.
+See <a href=http://www.npaci.edu/dice/srb/SecureAndOrCompressedData.html>
+http://www.npaci.edu/dice/srb/SecureAndOrCompressedData.html</a>
+for more information.
+<p>
+
+<dt><A NAME="Gen7.7">How fast is the SRB?
+
+<dd>For transferring large files, SRB will normally be significantly
+faster than FTP, SCP, or NFS and the like, because of the SRB's
+parallel I/O capabilities (multiple threads each sending a data stream
+on the network).  Sreplicate and Scp use parallel I/O for large-file
+data transfers by default, and you can use the -m option on Sput and
+Sget to select parallel I/O.
+<p>
+For small files, transfers can be a little slower due to the
+additional interaction with the MCAT (especially to a remote MCAT),
+but you can use Containers and/or Sbload (Bulk load) and Sbunload
+(Bulk unload) to greatly speed these.  For more information see, the
+man pages and Container questions in this FAQ.  We are working toward
+enhancing Sget and Sput to do bulk operations to non-container files
+to speed them up too.
+<p>
+
+<dt><A NAME="Gen8"></A>How was the SRB developed?
+<dd>We were funded through a series of research/development proposals.
+After the initial version, we used the SRB as a basis for additional
+proposals and applied research projects.  Because of this, the SRB is
+very customer driven, as we strive to meet the specific needs of
+current projects.  Since the projects are similar in nature (at the SRB
+level), they often share a similar set of requirements, and we can
+usually leverage the development for one project to assist in other
+current and/or future projects.  In this sense, the SRB provides a 
+uniform data management fabric layer to build large applications.
+<p>
+
+<dt><A NAME="Gen9"></A>How many people work on the SRB?
+<dd>The SDSC SRB group is currently 11 people.  We also encourage others
+to develop and share new features.  We have integrated a number
+of capabilities developed outside the core group.  We receive a lot of
+advice and suggestions from the community, both formally and not.
+<p>
+
+<dt><A NAME="Gen10"></A>What support is provided?</A>
+
+<dd>We will freely provide answers and provide some limited support to
+help get sites up and running with the SRB.  There is now a
+<a href=https://lists.sdsc.edu/mailman/listinfo.cgi/srb-chat>
+srb-chat email list</a> for SRB admins, developers and users to discuss
+questions, problems, and solutions (it includes an archive of previous posts).
+<a href=http://www.npaci.edu/dice/srb>Our web site</a> 
+includes information
+on current bugs, future plans, current projects, etc.  The SRB tar
+release contains many README files to explain installation and
+operation.  Of course, many of our activities are collaborative funded
+projects which include specific development tasks and more extensive 
+support.
+<p>
+
+<DT><A NAME="34"> </A> What operating systems does the SRB run on?
+
+<DD> SRB has been ported to 
+        a variety of Unix
+	platforms including Linux, Mac OS X, AIX (ex. SP-2 machines),
+	Solaris, SunOS, SGI Irix
+        and to Windows.
+        The Windows version of the Server cannot
+        be configured with an MCAT (so it talks to one that is), but can
+        store and retrieve data from the Windows file system.
+        SRB is easily portable to Unix-type OSes.
+<p>
+
+<DT><A NAME="32"> </A>What authentication mechanisms are available for SRB?
+<DD>	SRB supports three types of authentication:  1) A basic password-based 
+	authentication, 2) password-based authentication in which the password
+        is used in a challenge-response protocol so no plain-text password
+        is sent on the network ("encrypt1"), and 3) GSI authentication.
+        Encrypt1 is a simple and secure stand-alone authentication system.
+In both password-based systems, user passwords are stored in the MCAT and
+users can record their passwords into their ~/.srb/.MdasAuth file to provide
+convenient and reasonably-secure access.
+        <a href=http://www.globus.org/security/>GSI (Globus Grid 
+        Security Infrastructure)</a> is convenient when using other Globus
+        tools but requires users to acquire Certificates (i.e. a Public
+        Key Infrastructure is needed).
+        Previously we also supported SEA authentication (SDSC
+        Encryption and Authentication system) but now GSI provides similar
+        functionality.
+<p>
+
+
+
+<dt><A NAME="Gen11"></A>What are the future plans for the SRB?
+<dd>We'd like to see the use of the SRB continue to expand, and expect
+that it will.  We will continue to add new features.  We are currently
+participating in many collaborative projects under various funding
+agencies, and have every reason to believe that this will continue
+long term.  See our plans for the near future web page (off of our
+home page) for current specifics.
+<p>
+
+<dt><A NAME="Gen12"></A>Where can I find more information about SRB and related systems?
+<DD>	We maintain a set of 
+        web-pages at <a href=http://www.npaci.edu/dice/srb>http://www.npaci.edu/dice/srb</a>
+	where a lot information about the SRB is available.  This FAQ also
+        contains many links to additional information on specific topics.  
+        There are also many documents included with the release under
+        the MCAT and readme.dir directories.
+<p>
+<br>
+
+<DT><a name="Tools"><h3>Interfaces and Tools</h3></a>
+
+<DT><A NAME="T2"> </A>What are the Scommands?
+<DD>	Scommands refers to a set of utility routines that can be used in a
+	Unix shell or Windows DOS command shell 
+        and access data and meta data information from SRB and MCAT.
+	For more information on Scommands see README.utilities. Scommands
+	also have a set of man pages describing each of the commands.  
+        One first logs in via a Sinit, and can then do Sls, Scd, Sput, Sget, etc.
+Man pages are available at
+<a href=http://nbirn.ucsd.edu/ForUsers/Tutorials/SRB/manpagesv20.html>
+http://nbirn.ucsd.edu/ForUsers/Tutorials/SRB/manpagesv20.html
+</a>
+and 
+<a href=http://www.npaci.edu/DICE/SRB/srbcommands.html>
+http://www.npaci.edu/DICE/SRB/srbcommands.html</a>
+.
+
+
+<p>
+<DT><A NAME="T3"> </A>What is inQ?  
+<DD> inQ is a graphical SRB client for Windows 98/Me/NT/2k/XP.
+
+In a nutshell, inQ provides a familiar file-manager-like interface that SRB
+users can use to manage their data stored on SRB; actually it's more like a
+file-manager interface on steroids. inQ looks and acts a lot like Windows
+Explorer or Nautilus but also throws in features found in several web
+browsers like Internet Explorer or Netscape Navigator. It offers an easy way
+to manage metadata and access permissions, as well as a query builder
+capable of performing nested queries. It also throws in friendly,
+context-sensitive buttons that show you which actions can be performed on
+any given item in SRB.
+
+ For more
+     information, visit the inQ Homepage at
+<a
+     href=http://www.npaci.edu/dice/srb/inQ/inQ.html>
+http://www.npaci.edu/dice/srb/inQ/inQ.html</a>.
+<p>
+
+<DT><A NAME="T4"> </A>What is MySRB?  
+<dd>MySRB is a web-based browse and search interface to the SRB.
+See the mySRB home page at 
+<a href=http://www.npaci.edu/dice/srb/mySRB/mySRB.html>
+http://www.npaci.edu/dice/srb/mySRB/mySRB.html
+</a> for more information.
+<p>
+
+<DT><A NAME="T5"> </A>What APIs are available?</A>
+<dd>   The most comprehensive programmatic API is the SRB
+	C library which can be linked with any application program.
+We also have a pure Java client
+        library, which contains the most commonly used function calls
+(See <A HREF="#T8">Jargon</a>.
+Almost all of the
+        C library calls can be accessed through our Python binding.
+Some sample programs for using the API can be found at
+<a href=http://www.sdsc.edu/MDAS/SRBhello>
+http://www.sdsc.edu/MDAS/SRBhello</a>.
+Also see the SRB Technical Information page at
+<a href=http://www.npaci.edu/dice/srb/srb.html>
+http://www.npaci.edu/dice/srb/srb.html</a>.
+There is also an old Java client library, which interfaces
+to the C library via JNI and is used by the java admin tool and
+SrbBrowser (which 
+we plan to migrate to use Jargon).
+<p>
+
+<DT><A NAME="T6"> </A>What is the srbBrowser?  
+<DD> The srbBrowser is a java-based graphical SRB client.  It provides a subset
+     of the functionality of inQ but can be used as a graphical client on Unix
+     systems.
+<p>
+
+<DT><A NAME="T7"> </A>What is the mcatAdmin (Java Admin Tool) ?  
+<DD> mcatAdmin (also commonly called the Java Admin Tool) is a
+     java-based graphical (GUI) srb-mcat Administration tool.
+     It assists in the administration by making clear the available functions
+     (like most GUIs) and presenting available
+     values from which to choose.  For example, when adding a new user, the
+     existing domains are listed and the adminstrator clicks on the
+     domain to use for the new user.  And when modifying a user, one
+     clicks on a domain and is given a list of the users in that
+     domain to choose from.  The GUI includes windows to create,
+     display, and modify zones, users, resources, locations, domains,
+     and other tokens.  There are also command-line
+     utilities that perform administrative functions.
+<p>
+
+<DT><A NAME="T8"> </A>What is Jargon (Java API)?
+<DD>
+JARGON is a pure Java API for developing SRB (or other) datagrid interfaces.
+The API currently handles file I/O for
+local and SRB file systems and is easily extensible to other file
+systems.  File handling with JARGON closely matches file handling in
+Sun's java.io API, a familiar API to most java programmers.  
+<a href=http://www.npaci.edu/DICE/SRB/jargon>
+http://www.npaci.edu/DICE/SRB/jargon</a> for more information.
+
+<p>
+<DT><A NAME="T9"> </A>What is the SDSC Matrix?
+<DD>
+SDSC Matrix is a data grid workflow management system. Matrix can be used to
+create, access and manage workflow process pipelines. Matrix internally uses
+the Data Grid Language, which can be used to describe, query and control
+process-flow pipelines. 
+See <a href=http://www.npaci.edu/DICE/SRB/matrix>
+http://www.npaci.edu/DICE/SRB/matrix</a> for more information.
+<p>
+Matrix API can be used to define multiple SRB commands (and non-SRB grid
+services) as a single dataflow process and execute it on multiple servers.
+Matrix is available as a (SOAP/WSDL) web service. Matrix client programming
+for SRB is made very simple using a developer friendly Java API (less
+learning curve).
+
+<p>
+<DT><A NAME="T10"> </A>Does MCAT functionality vary from one client to another?
+<DD>
+
+All functionalities are supported in the Scommand utilities for
+Unix/Linux/MacOSX and Windows. This is because we do all development on
+Unix clients and they get ported to other platforms.  The MySRB provides a
+different perspective to metadata management but on a single-file level
+and collection level.  It provides a good way of browsing and querying
+of metadata across collections, and also allows for ingesting,
+extracting, updating and  deleting metadata and user annotations for
+single SRBobject or SRB collection. The inQ provides a unique capability
+where one can associate metadata to SRB objects and collections in an
+intuitive way and also query across collection and form (temporary)
+query-collections. This allows one to query based on attribute-metadata
+and then get a collection and slowly refine the query to drill down to
+a sub-collection that is of interest.
+<p>
+
+Hence, each client provides a  unique way of handling  metadata and their
+management. One of our goals is to provide uniform functionality across
+all client interfaces. But this requires a huge amount of programming
+which we are unable to dedicate at this time.
+
+<p>
+<DT><A NAME="T11"> </A>Is one client better than another for entering metadata?
+<DD>
+
+The Scommands client is very good for entering metadata.  As mentioned
+before one can use inQ or MySRB for entering/updating metadata of
+individual SRB object and SRB collection. But the Scommands provide
+for Bulk ingestion of metadata for multiple SRB objects possibly
+residing in more than one SRB collection.
+
+<p>
+For cutting and pasting, there are utilities in both MySRB and in
+Scommands for copying metadata from one SRBobject to another, from one
+SRB collection to another and from one SRB collection to an SRB
+object. This is different from cutting and pasting as it is done
+internal to the SRB and not at the user-GUI.
+
+<p>
+<DT><A NAME="M10"> </A>Is there a way to load attribute/value pairs from another application into the MCAT?
+<DD>
+
+Yes. SRB allows one to bulk ingest metadata associated with one or
+more SRB objects. This is done by writing a metadata file in a
+particular format. Hence, if an application can generate a file in
+that format or one can write a wrapper which takes the application
+output and creates the file in the SRB metadataFile format then we can
+ingest the metadata attribute/value pairs. Actually, if you are doing
+this in Unix-based systems you can do that by writing simple scripts
+or by piping multiple applications together with the final pipe going
+to the SRB Scommand for ingesting metadata.
+<p>
+Also another unique way of associating metadata for SRB objects is to
+do automatic extraction INSIDE SRB and storing them in the MCAT. This is
+done by writing simple templates (basically rules) that allows one to
+identify the metadata values in the SRB object and then extracting them
+and storing them as attribute-value pairs in the MCAT. We have done this
+type of templates for multiple file formats including DICOM, FITS, email,
+NSFAwardAbstracts and HTML files. This can be launched through the MySRB
+or through the Scommands.
+<p>
+<br>
+<DT><a name="MCAT"><h3>MetaData Catalog (MCAT)</h3></a>
+
+<DT><A NAME="3"> </A> What is MCAT?
+<DD>	MCAT, or Meta data Catalog, is a meta data repository system 
+	implemented at SDSC to provide a mechanism for storing and querying 
+	system-level and domain-dependent meta data using a uniform interface.
+	MCAT provides a resource and data object discovery mechanism that can be
+	effectively used to identify and discover resources and data objects
+	of interest using a combination of their characteristic attributes
+	instead of their physical names and/or locations.
+<p>
+<DT><A NAME="4"> </A> What is meta data?
+<DD>	Meta data is information about data. 
+<p>
+
+<DT><A NAME="5"> </A> What is  system-level meta data?
+<DD>	MCAT considers five kinds of entities as primitive objects on which
+	it keeps additional information. These are: data objects, resources,
+        collections,
+	users and methods.  The system-level MCAT meta data items
+        are these primitive objects and others derived from these.
+<p>
+
+<DT><A NAME="6"> </A> Since there are primitive MCAT objects, are there other MCAT objects?
+<DD>	There are many derived MCAT objects. For example, MCAT,
+	in the current release,  supports notions of  
+	logical resources, compound resources, user groups, etc.
+<p>
+	
+<DT><A NAME="7"> </A> What is application-level meta data?
+<DD>	Application-level meta data are information about data objects 
+	that pertain to the non-systemic description of the data objects.
+	Application-level meta data  are characterized by information
+	that is particular to the data for that application and are not
+	generalizable across all data objects. For example, location, size, 
+	creation date information are systemic as they are available for
+	every data object where as	information about how the data object was 
+	created and what parameters were used in its creation may not 
+	be easily generalized across all data objects and hence form part
+	of application-level meta data.
+        Also, certain applications might have metadata specific to the
+        data object such as FITS metadata used in Astronomy and DICOM
+        metadata for medical images.
+ 
+<p>
+<DT><A NAME="8"> </A> What is domain-dependent meta data?
+<DD>	Domain-dependent meta data  is another name for application-level 
+	meta data.
+<p>
+<DT><A NAME="9"> </A> Does SRB/MCAT support application-level meta data?
+
+<DD>    Yes, the SRB does support application-level meta data.  There are
+        two ways in which the SRB can support application-level meta data:
+        First, as user-defined metadata and second as schema-extended 
+        metadata.
+<p>
+<DT><A NAME="51"> </A> What databases can be used for installing MCAT?
+<DD>	MCAT can be installed on either Oracle, DB2, Sybase, Postgres, or
+        Informix.  SQLServer, since it is so similar to Sybase, should be
+        fairly straight-forward to implement too.
+<p>
+
+<br>
+<DT><a name="Admin"><h3>Administration/Operation</h3></a>
+
+<DT><A NAME="68"> </A> What do I need to run SRB?
+<DD>	As noted elsewhere, one can have many different setups
+	of SRB. You can get the source code for any of these setups and
+	build your SRB server or client as needed. SRB has been ported on to
+	several platforms (see appropriate FAQ question) and we recommend 
+	that you use one of these. If you port to other platforms, we would
+	be glad to include it in our subsequent releases. 
+	If you are setting up an MCAT-enabled SRB, you will require either 
+	an Oracle, DB2, Sybase, or Postgres database to 
+	which MCAT has been ported. 
+	We also recommend having a separate user-account called 'srb'
+	(or any variant such as "ucsdsrb") which can be used for setting, administrating and 
+	running the system. Once you have the source for SRB and/or MCAT, 
+	separate readme files are included to take you through the build, 
+	setup and test process.
+<p>
+
+<DT><A NAME="10"> </A> What is a data object (data set)?
+<DD>	In the terminology of SRB, a data object is a "stream-of-bytes"
+	entity that can	be uniquely identified. For example, a file
+	in HPSS or Unix is a data object, or a LOB stored in a SRB Vault
+	database is a data object. Importantly, note that a data object is 
+	not a set of data objects/files.  Each data object in SRB is given
+	a unique internal identifier by SRB. 
+        A data object is associated with a collection (see below).
+        Previously, we used the term "data set" for this, but are phasing
+        it out (as it was often confusing) and instead using "SRB data object".
+<p>
+
+
+<DT><A NAME="12"> </A> Who is a registered SRB user?
+<DD>	
+SRB users are registered in the MCAT catalog and are given unique SRB ids.
+These identifiers are independent of the location or system ids, such as 
+Unix ids.
+<p>
+
+<DT><A NAME="13"> </A> What is a method?
+<DD>	In the terminology of SRB, a method is any executable piece of code
+	that is registered in the MCAT catalog.
+
+Methods can be defined to operate on data on the server before being
+returned to the client.  This can be quite efficient in cases where
+the data object is being reduced by the method (for example, the method
+selects a subset of the data object based on inputs, such as metadata
+extractors (FITS, DICOM, etc)).  Format converters, such as
+tiff2gif and tex2ps can also be useful SRB methods.
+
+<p>
+
+<DT><A NAME="14"> </A> Who is SRBadmin?
+<DD> 	SRBadmin is the person who creates and  manages SRB and
+	MCAT systems. A SRBadmin is also a registered SRB user who
+	has additional privileges compared to normal users.  A SRBadmin
+        does NOT need to have "root" privilege.
+<p>
+
+<DT><A NAME="15"> </A> What is a (data object) collection?
+<DD>	A collection is a logical name given to a set of data objects. All 
+	data objects stored in SRB/MCAT are stored in some collection. A 
+	collection can have sub-collections, and hence provides a 
+	hierarchical structure. As a simple analogy, a collection in 
+	SRB/MCAT can be equated to a directory in a Unix file system. But 
+	unlike a file system, a collection is not limited to a single
+	device (or partition). A collection is logical but the data objects
+	grouped under a collection can be stored in heterogeneous storage
+	devices. There is one obvious restriction, the name given to a data 
+        object
+ 	in a collection or sub-collection should be unique in that collection.
+<p>
+
+<DT><A NAME="15b"> </A> What is the SRB logical name space?
+
+<DD> It is easy to think of SRB Collections as Unix directories (or Windows
+ folders), but there is a fundamental difference.  Each individual data
+ object (file) in a collection can be stored on a different physical
+ device.  Unix directories and Windows folders use space from the
+ physical device on which they reside, but SRB collections are part of
+ a "logical name space" that exists in the MCAT and maps individual
+ data objects (files) to physical files.
+ <p>
+
+ The logical name space is the set of names of collections
+ (directories) and data objects (files) maintained by the SRB.  Users see
+ and interact with the logical name space, and the physical location is
+ handled by the SRB system and administrators.  The SRB system adds
+ this logical name space on top of the physcial name space, and derives
+ much of its power and functionality from that.
+<p>
+
+<DT><A NAME="11"> </A> What is a resource?
+<DD>	In the terminology of SRB, a resource is a software/hardware
+	system that provides the storage functionalities.  The term
+        is equivalent to "physical resource".  For example, HPSS can be 
+        a resource, as can a Unix file system.
+ <p>
+
+<DT><A NAME="16"> </A> What is a physical SRB resource?
+
+<DD>	A physical SRB resource is a system that is capable of storing
+        data objects and is accessible to the SRB 
+       (see <a href="#Gen2">What kinds of resources does the SRB support?</a>.
+        It is registered in SRB with its physical characteristics such as 
+        its physical location, resource type, latency, and maximum file size.
+<p>
+
+<DT><A NAME="17"> </A> What is a logical SRB resource?
+<DD>	A logical SRB resource is a SRB resource that is derived from
+	physical SRB resources. A logical SRB resource might be derived
+	with further constraints on a registered physical resource or by
+	combining more than one physical resource as an entity. For example,
+	if a physical resource 'A' is defined using a particular
+	directory in a HPSS, a logical resource A-bar might be defined as
+	a resource that restricts to a further sub-directory in 'A'.
+<p>
+
+<DT><A NAME="18"> </A> What is a logical SRB resource set?
+<DD>	A 'logical SRB resource set' is kind of logical SRB resource. It is
+	defined as a set of physical SRB resources. The aim is for this is to
+	give a unique (logical) name to a set of resources and when SRB 
+	opens or writes a buffer to the logical resource it opens or writes 
+	to every resource in that set.  A logical resource containing multiple
+        physical resources can be treated as a 'single' resource when using it.
+<p>
+
+<DT><A NAME="19new"> </A>What is a compound SRB resource?
+<DD>	A compound resource allows the SRB to function as a complete (although
+basic) archival storage system.  A compound resource
+may be configured to contain a pool of cache
+resources and a tape resource. When a user creates a file using a compound
+resource, the object created becomes a "compound object". The actual data
+of a "compound object" may reside on cache or tape or both. Unlike the
+SRB replica, a "compound object" always appears as a single object even though
+there may be multiple copies of the data. It is a simple hierarchical system
+where data migrate automatically between cache and tape. Data is always
+staged on cache automatically whenever it is accessed and migrates to tape
+by the system administrator when more cache space is needed.  The cache and
+tape resources can be distributed across a WAN.
+<p>
+
+
+<DT><A NAME="20"> </A> What is a user group?
+<DD>	A user group is a uniquely identifiable name given to a set
+	of SRB registered users. 
+<p>
+
+<DT><A NAME="21"> </A> Who can form a user group?
+<DD> 	Any set of mutually agreeable users can form a user group.
+<p>
+
+<DT><A NAME="22"> </A> Who can register a user group?
+<DD> 	SRBadmin has the authority to register user groups. 
+<p>
+
+
+<DT><A NAME="22.5"> </A> What is a domain?
+<DD> 	A domain is a string used to identify a 
+        site or project.
+        Users are uniquely identified by their usernames combined with their
+        domain 'smith@npaci'.
+        SRBadmin has the authority to create domains.
+<p>
+
+<DT><A NAME="22.6"> </A> What are tokens?
+<DD> 	Tokens are string items stored in the MCAT used as root
+        items when creating other items (resources, etc).
+        We have quite a few predefined tokens.
+        SRBadmin has the authority to create tokens.
+<p>
+
+<DT><A NAME="23"> </A> What is a replicated data object? 
+<DD>	In SRB, one can make copies of a data object and store the copies
+	in different locations. But, all these copies in SRB are 
+	considered to be identifiable by the same identifier. That is,
+	each copy is considered to be equivalent to each other. 
+<p>
+
+
+<DT><A NAME="24"> </A> How can one read a replicated data object?
+<DD>	When a 	user reads a replicated data object, SRB cycles through all 
+	the copies of the data object and reads the one that is accessible at
+	that time.  It uses a simple replica identificatoin mechanism to
+        order this list of replicated data objects.
+<p>
+
+<DT><A NAME="25"> </A> How can one create a replicated data object?
+<DD>	There are three ways of creating a replicated data object. 
+	In the first method, which can be viewed as asynchronous replication,
+	one can create a data object (using Sput Scommand or srbObjCreate API),
+	and then replicate the data object using the Sreplicate Scommand or the 
+	srbObjReplicate API. In the second method, which can be viewed as
+	synchronous replication, one can define a 'logical resource set'
+	as a set of resources and then create a data object in that logical
+	resource set (using Sput Scommand or srbObjCreate API). SRB
+	automatically replicates the data object as it gets written.
+
+One can also off-line create two data objects separately in a physical
+resource and then register them as replicas of each other.  This is called
+out-of-band replication.  SRB provides the means to replicate
+collections of data objects recursively.
+
+<p>
+Also see "Replicated Data Management user SRB" (GGF-4, February, 2002) at 
+<a href=http://www.npaci.edu/dice/Pubs/SRBReplication.ppt>
+http://www.npaci.edu/dice/Pubs/SRBReplication.ppt</a>.
+
+<p>
+<DT><A NAME="25.5"> </A> What is a Container?
+<DD>	
+A Container is a way to put together a lot of small files into one
+larger file to improve performance.  This works very well with
+resources that include tapes (such as HPSS).  The whole container
+is retrieved from tape, cached on SRB disk, and then multiple files
+can be quickly read and written on the container copy on disk.
+The SRB handles the book-keeping for the container.
+<p>
+
+<p>
+<DT><A NAME="25.7"> </A> How do Containers work?
+<DD>
+	The SRB container is a like a tarball in the sense that
+it stores multiple files as a one single file. It grows the container on
+the fly by adding new files as they are ingested into the  container.
+Hence, unlike a tarball, the container can be grown as needed. Also,
+unlike a tarball, users can  read individual files without downloading
+the container on to their desktops.
+<p>
+The SRB keeps all the information about how the container is laid out in
+its Metadata Catalog (MCAT) and uses it when retrieving individual files.
+One can also modify and delete files in a container as though they are doing
+these operations on a normal file and the SRB takes care of the operation.
+<p>
+
+To answer a related question, the container is not "made" on the
+desktop and then loaded into the SRB. Instead it is constructed in situ
+on the resource.  But what happens is that containers are normally
+assigned a logical resource which has two physical components: an archive
+resource such as the HPSS or  roadnet-sam, and a cache resource
+such as a unix file system (eg. roadnet-unix). All the construction,
+file access  and  modifications are done on the cache resource and the
+storage of a full container or a non-needed container is done on the
+archive resource.
+<p>
+Hence, the archive sees a single file and the construction is done before
+getting into the archive on the cache resource (not on the users desktop)
+which is also a resource controlled by the SRB.
+<p>
+
+Containers grow in size and are pinched off into physical pieces by the
+SRB so that a container might look really long, but are actually multiple
+files of smaller sizes.  Normally we recommend these pinching off to be
+around 100 MBytes or 200 MBytes but then can be in the GB range also.
+This is akin to blocks in a tape system.
+<p>
+What this means is that the user sees one container where they "put" in
+their data, but like a goods-train, the container is physically divided.
+Obviously individual files are much smaller than the container size.
+To give an example, in one of our collections, we have containers of size
+around 50 MBytes, storing files of sizes 2 MBytes each. Each container
+stores about 25 files in its physical blocks.
+<p>
+
+
+<DT><A NAME="25.81"> </A>Does Sget work properly for files that are in containers?
+<DD>Yes, Sget works fine for files in containers.  The MCAT stores all
+the file offsets for each file in a container, and Sget will download
+just the portion of the container that has the file you are trying to
+download.  Since Sget (currently) doesn't support any bulk operations
+it's still slow trying to download a lot of small files.  
+<p>
+
+<DT><A NAME="25.82"> </A>How do you discover the container information?
+<DD>If you're on a windows machine InQ is the easiest, the file details
+show the container information.  In Scommands, SgetD on a file prints
+container_name and the respective container (if any) that the file is
+contained in.
+<p>
+
+<DT><A NAME="25.83"> </A>Once I know which container a file is in, what is the
+most efficient way to download the data?
+<DD>If you just need a few small files, then running Sget on each will
+be the quickest.  If you want all or most of the container, and you
+know the container you want to download, then simply running 'Sbunload
+<container>' will be much faster.
+<p>
+
+<DT><A NAME="26"> </A> Who can register SRB users?
+<DD> 	SRBadmin can add new users to
+	the MCAT catalog.
+<p>
+<DT><A NAME="28"> </A> Who can register physical or logical resources?
+<DD> 	SRBadmin has the authority and the required privileged utilities to register
+	physical and  logical resources.
+<p>
+
+<DT><A NAME="36"> </A> How does SRB provide access to remote storage systems?
+<DD>	SRB provides access to remote storage systems through a proxy
+	mechanism. When one stores a data object under SRB, the data object is 
+	stored and accessed by SRB acting as a proxy for the user. Because 
+	of this mechanism, a user can store data objects on remote storage 
+	systems without having personal accounts at these site. In this mode, 
+	SRB acts as a 'system privileged proxy' user. The above proxy mode 
+	also allows for SRB to SRB authentication enabling servers to 
+	access files that are under the control of another SRB server. 
+<p>
+
+<DT><A NAME="37"> </A> Can multiple SRB servers be federated?
+<DD>	Yes. SRB servers can communicate to other servers and
+	can form a federation. More than one federation can also exist
+	with one SRB federation being unaware of another.
+	A user can access data objects stored under any SRB in the federation
+	provided the user has proper permissions.
+<p>
+
+For 3.0 (September, 2003), we plan to release a Federated MCAT capability, where
+complete MCAT-enabled SRB systems can be integrated with other SRB
+federations.  Each MCAT member of such a federation is called an SRB
+Zone.
+
+<p>
+
+<DT><A NAME="38"> </A> How does one SRB know about another SRB?
+<DD>	A SRB server knows about another SRB through the MCAT.  When
+        the SRBAdmin creates a location, a SRB host is specified.  When
+        the SRBAdmin ingests a resource at a location, that resource is
+        associated with that SRB host.
+<p>
+
+<DT><A NAME="40"> </A> What are the different setup configurations that I can have at my site?
+<DD>	First, there are three basic configurations for the SRB/MCAT system:
+	 (1) client-only,
+	 (2) server without MCAT and
+	 (3) server with MCAT.
+
+	Each of these three setups can be enabled with password,
+	password-encrypt1, and/or GSI authentication.
+<p>
+	In the simplest configuration, one can use the SRB client components
+        (client utilities, GUI applications, and 
+	libraries) at a site and use SRB servers running at remote sites or 
+	hosts. A SRB client can connect to a specific (possibly remote) SRB 
+	server and access data objects that are under the control of that server 
+	and/or other servers in the federation. With the 
+	client-only setup one cannot access any data object at the local site 
+	through SRB. In the second setup, a site can have a SRB server
+	running locally but without any MCAT service. In this setup, the local
+	SRB server can provide access to local resources and 
+        contacts another SRB server that has MCAT service for
+	retrieving the meta data about data objects.
+        In the third configuration,
+	one can have a SRB server and a MCAT database running locally.
+        Any  client can talk to any SRB server
+	and need not necessarily talk to a local or 'nearest'  server.
+<p>
+<DT><A NAME="41"> </A> Is MCAT needed to run SRB?
+<DD>	Yes, an MCAT is needed but you do not need to install one yourself.
+        Many sites use the SDSC MCAT-enabled SRB to support their SRB system.
+<p>
+
+<DT><A NAME="42"> </A> Where can I get SRB?
+<DD>	Source code and related material for SRB and MCAT can be obtained 
+	from the web-site at <a href=http://www.npaci.edu/dice/srb>
+	http://www.npaci.edu/dice/srb></a>. The tar files
+	are PGP encrypted and one can get the passwords for decrypting them by
+	sending email to srb@sdsc.edu.
+<p>
+
+<DT><A NAME="43"> </A> What is a SRB Vault?
+<DD>	SRB vault is a data repository system that SRB can maintain in any 
+	of the storage systems that it can access. For example, the SRB 
+	running	at sdsc (host: srb.sdsc.edu) runs a SRB vault in its Unix
+	file system, and another SRB running at sdsc (host: hpss47.sdsc.edu)
+	runs SRB vaults in HPSS, a unix file system and a DB2 database.
+	SRB vaults provide a convenient storage area for storing data objects.
+	A data object stored in a SRB vault is stored as a SRB-written object 
+	and its access is controlled through the MCAT catalog. This is 
+	different to legacy data objects that can be accessed by SRB but which 
+	are still owned by previous owners of the data. One can define SRB 
+	vaults in any storage device that can be accessed by a SRB server. 
+	In the	case of file systems such as Unix and HPSS, a separate 
+	directory is used for the purpose, and in case of databases such as 
+	Oracle, DB2 or	Illustra, a system-defined table with LOB-space is 
+	used for the purpose.
+<p>
+<DT><A NAME="44"> </A> What is a SRB Space?
+<DD>	SRB space is a union of all SRB Vaults that can
+	be accessed by a system of SRB servers. Users registered in the
+	system can store, retrieve and modify data objects (provided owners of 
+	the data objects grant appropriate permits) in this space. Hence, one
+	can visualize SRB space as a logical storage volume that is
+	distributed and heterogeneous.
+<p>
+
+
+<DT><A NAME="46"> </A> What are the various data object interfaces supported by SRB?
+<DD>	The SRB supports four types of interfaces. The first type is a 
+	stream interface. It allows Unix file operations such as open, close,
+	read, write and  seek on SRB data objects. The second is an
+	object-level interface. It provides means to
+	create, modify and destroy collections of objects, move, copy
+	and replicate objects, and apply user-defined proxy operations on 
+	objects	to obtain a new type of the object. The third type is a
+	discovery-level interface for obtaining
+	meta data information about data objects (eg., replication information, 
+	ownership, access, location, type information, etc), resources and  
+	users. These operations access	the information located in MCAT 
+	catalog. Finally, SRB provides an interface for modifying the 
+	data about data objects in SRB, and for performing access 
+	control and auditing on various SRB objects.
+<p>
+
+<DT><A NAME="a1"> </A> How do I backup SRB space, both SRB data and MCAT metadata?
+<DD> 
+
+   It is a good idea to backup the MCAT database daily.  If your MCAT
+   DBMS (Oracle, DB2, etc) can do hot backups, then you can do it when
+   the system is being used.  Otherwise, you will need to stop the SRB
+   (killsrb), do the cold backup and then restart the SRB.
+<p>
+   
+    As for the files stored under the SRB, one can do it in multiple
+    ways: The first and easist is to backup the storage resource
+    directory (for example, the SRBVault directory), as an incremental
+    backup.  Depending upon your system, you can do it on the fly or
+    during PMs.  Weekly PMs will be helpful.
+<p>
+    A second startegy is to make sure that there are replicated copies of the
+    file in two distributed storage systems which hopefully don't share any
+    hardware and are geographically separated. This can be done either under
+    user-control (replicate only those that are needed) or under srbAdmin
+    control (possible with 3.0.2 release soon) which will replicate all
+    files that are modified to a particular backup resource.
+<p>
+    A third strategy, is to use the zoneSRB is to run a backupZone at a
+    remote site and back up to this zone from your zone. We are testing and
+    finalizing some protocols for doing this.
+<p>
+<DT><A NAME="firewall">What ports does the SRB use?  What ports do I 
+need to open in a firewall to run the SRB?</A> 
+<DD> 
+
+The firewall needs to open some ports on the server side, and possibly
+on the client side too.
+<p>
+On the SRB server server-side, you must open the port that the
+srbMaster is listening on plus at least 100 configurable ports.
+<p>
+The srbMaster listens on the port defined in srb.h or specified in
+srbPort environment variable (often set in the runsrb script).  By
+default, srb.h has DefaultPort "5544" but this can be changed via the
+configure --enable-srbport=value option.  Regardless of the
+DefaultPort value, the srbMaster will listen on the port specified in
+the srbPort environment variable value if it is defined.  You can edit
+the runsrb script to change this.
+<p>
+(The clients also need to know the port number to connect to.  For the
+Scommands they will default to the value in srb.h or will use the
+number specified in the srbPort line in each user's ~/.MdasEnv file.)
+<p>
+By default, the configurable ports are 20000 to 20199 (see
+mk/mk.config COMM_PORT_NUM_START and COMM_PORT_NUM_COUNT).  You can
+change them via configure, for example: ./configure
+--enable-commstart=21000 --enable-commnum=200
+<p>
+
+On SRB client side, if you use the Sput or Sget -m option (server
+initiated connection for parallel I/O), the client's firewall needs to
+open at least 16 configurable ports.  These are the same ports as the
+server uses, i.e. 20000 to 20199 by default and can be changed via
+configure, for example ./configure --enable-commstart=21000
+--enable-commnum=16
+<p>
+But starting with 3.1.1, users can now use the -M option (client
+initiated connection for parallel I/O) which does not require the
+opening of ports on the client side.
+
+<p>
+
+
+<br>
+<DT><a name="User"><h3>User Operation</h3></a>
+<br>
+
+
+<DT><A NAME="29"> </A> Who can register data objects?
+<DD> 	Any SRB user can register data objects. When a user creates a data object
+	in SRB, the data object is automatically registered in SRB.
+	A user can also register legacy data objects that they own and
+	created outside SRB using the Sregister Scommand or the
+	srbRegisterDataSet API.
+<p>
+
+<DT><A NAME="30"> </A> Who can create data object collections?
+<DD> 	A collection is always created as a sub-collection
+	under an existing collection (SRB/MCAT when it is initialized
+	starts with a root level collection). Any SRB user can  create data 
+	set sub-collections provided they have permission to create 
+	sub-collections under the pertaining collection.
+<p>
+
+<DT><A NAME="31"> </A> Who can use SRB?
+<DD> 	To use SRB one needs to be a registered SRB user. One can
+	register themselves by sending email to a SRBadmin.
+	If there is a local SRB system administrator then requests should 
+	be to them, otherwise applications can be made to srb@sdsc.edu.
+	There is one mechanism, called ticket-based access, that allows 
+	unregistered users to access (read only) data objects stored under 
+	SRB's control. Owners of data objects can issue tickets on their
+	data objects that can allow everyone to access the data objects. Separate 
+	APIs have been developed that can be used by unregistered users.
+<p>
+
+
+
+<DT><A NAME="39"> </A> How does SRB deal with unregistered or anonymous users?
+<DD>	SRB provides access to unregistered  users using a second
+	kind of proxy mechanism. In this mode, SRB acts as a 'ticket user 
+	proxy' and facilitates  access to  data objects through the ticket 
+	mechanism. 
+	
+	
+<DT><A NAME="47"> </A> What are the types of access control provided by SRB/MCAT?
+<DD>	SRB supports two types of access control. The first type is
+	similar to Unix-type access control. In this type, the owner can
+	provide read, write and all access to other users or user groups
+	at the level of individual data objects and collections. Unlike Unix,
+	one can control access  to as many users as needed and as many
+	groups as needed. The second type of access control is controlled 
+	through tickets. Tickets are issued by owners of a
+	data object (or collection) to other users, groups and everyone.
+	One can use these tickets to access data objects that they control.
+	A ticket user need not be a registered SRB user. There are 
+	APIs and Scommands that can permit non-registered users to access
+	ticketed data objects. 
+<p>
+
+<DT><A NAME="48"> </A> What are the different modes of access control, supported by SRB?
+<DD>	SRB supports the following modes: read(r), write(w), all(a), annotate(t), and none(n).
+        Read and write permissions refer to the data, annotate to metadata, and
+        all means ownership.  A user with 'all'
+        permissions can change the permissions.
+<p>
+
+
+<DT><A NAME="49"> </A> What is the 'all' mode of access control?
+<DD>	The 'all' mode provides a complete access control to a user.
+	A user with this permission can not only read and write the data object
+	(or collection) but also grant and revoke access permits for others 
+	for the object. The user can also issue tickets on the data object.
+	At the collection-level, the mode grants sub-collection creation 
+	permission to the holder.
+<p>
+
+<DT><A NAME="50"> </A> Can only one user have 'all' permission on a data object?
+<DD>	No. Any number of users can have 'all' permission on a data object.
+	When a data object is registered, the registrar is considered to
+	be the owner of the data object and is given the 'all' permission
+	for access. Subsequently, the owner can grant this permission
+	to other users and these users can grant the same to others.
+<p>
+
+<DT><a Name="52.5"> </a>Since data objects can be  stored in remote storage devices, should I remember the
+path names or location information of my data object?
+
+<DD>	No. SRB along with MCAT relieves you of the necessity to remember
+	physical locational details for your data object. For each data object, MCAT
+	stores all the physical details abouts its location (and indeed 
+	about locations, since a data object can be replicated) and details
+	about access  mechanisms that are needed to open that location. 
+<p>
+
+<DT><A NAME="53"> </A> How do I know in which collection to store my data?
+<DD>	Each SRB-registered user is started with a 'home' collection.
+	They are given read, write and create-sub collection and grant
+	permits	in that collection.  But, SRB/MCAT can also maintain
+	project-level collections that can be shared by users and groups.
+	Hence, one can store their data objects either in their home-collection
+	hierarchy or in a project collection hierarchy in which thet have
+	appropriate access permissions.
+<p>
+
+<DT><A NAME="54"> </A> How useful are collections?
+<DD>	Collections provide a logical grouping mechaism. Assume that you
+	have several data objects coming out of an experiment and further
+	assume that few of the data objects are very large containing raw
+	data (or image) generated by the experiment and a few other
+	data objects are small and possibly containing some meta data information
+	about the experiment. One can logically group these data in a 
+	collection (possibly by its experiment name and timestamp) and
+	place the collection with other ones of similar kind. Physically, 
+	the large data objects may be stored in archival storage systems or in a 
+	large-scale disk system closer to where you are planning to perform
+	some studies on the data (ex. a disk attached to a T3E system) and
+	the smaller data objects may be stored in a local file or database
+	system. By logically bundling the data objects in one collection,
+	one has a single point of access for the experimental data.
+<p>
+
+<DT><A NAME="55"> </A> Should my data always be in a collection?
+<DD>	Yes. Every data object  under SRB/MCAT is associated with a collection.
+<p>
+<DT><A NAME="56"> </A> Can I have the same data object in more than one collection?
+<DD>	Yes, the SRB does support soft-linking of data objects across collections.
+<p>
+
+<DT><A NAME="57"> </A> How do I identify a data object?
+<DD>	In the simplest case, a user can access a data object by knowing its 
+	name and its collection name. The SRB/MCAT system also provides 
+	a rich discovery system for identifying data objects. They provide a
+	query-based capability to identify dataets using srbObjOpen() 
+	and srbGetDataDirInfo() APIs. In these two calls, the objID parameter 
+	provides the
+	means to provide the characteristics for the data object(s) of interest.
+	The objId parameter can be a data object name or can be a set of
+	attribute-condition-value triplets. These triplets are viewed as
+	providing a conjunctive characteristic that defines the data object of
+	interest. For example one can provide in objId a string of the form
+	"&DTYPE='C code' &DTIME>'1998-01-26-10.00.00' &DCOMMENTS like '%test%'"
+	will get information about a C program that was created after 10 AM 
+	on January 26, 1998 and has been commented as  test.
+<p>
+	
+<DT><A NAME="58"> </A> What is the srbObjOpen() API?
+<DD>	The srbObjOpen() API allows one to open a data object for further
+	operation, such as read, write, seek, etc.
+<p>
+<DT><A NAME="59"> </A> What is the srbGetDataDirInfo() API?
+<DD>	The srbGetDataDirInfo() API allows one to access information
+	about data objects, stored in the MCAT catalog. 
+<p>
+
+<DT><A NAME="62"> </A> How do I know what are the available resources that I can use?
+<DD>	The Scommand called SgetR provides an easy means of finding 
+	the resources that are accessible in your SRB system. 
+<p>
+
+<DT><A NAME="63"> </A> How do I get information about a data object?
+<DD>	Scommands provide a few ways of getting this information. Using SgetD,
+	Sls and  using  SgetU  and SgetR  with appropriate flags, one can 
+	access meta information about data objects. 
+See <A HREF="#T2">What are the Scommands?</A>
+<p>
+
+<DT><A NAME="64"> </A> What are tickets? How can one issue them? use them?
+<DD>	The ticket system is
+        a mechanism to control access to data objects. Tickets can be
+	issued on a data object by a SRB user who has 'all' mode of access
+	permission. SRB creates	a ticket (which is an ASCII string) and 
+	associates with	the concerned data object (or collection). The issuer
+	can attach some	conditions on the use of the ticket. One can control 
+	the user base of the ticket by giving a list of user names and/or 
+	user-group names. One can issue a ticket to all users (both registered
+	and  un-registered SRB users) using a special user-name called 
+	'ticket-user' (the APIs do it automatically if no user is mentioned).
+	If one wants to allow access to only SRB registered users, then 
+	issuing a ticket to 'public' would serve the purpose.
+	One can provide a begin and end date-time for the validity of 
+	the ticket. One can also provide a maximum count (which 
+        can be infinity,
+	denoted	by -1) for using the ticket. One can issue a ticket to a
+	single data object or to a collection or to a recursive collection (i.e.,
+	collection and sub-collections ad infinitum). When a ticket is used,
+	for a data object SRB/MCAT checks  whether the issuer of the ticket
+	still owns the data object before providing access to the data object.
+	If a ticket issuer no longer has 'all' access permission at the
+	time when the ticket is used, the data object access is denied.
+	Note that if more than one data object is associated with a ticket and/or 
+	more than one user is allowed to use a ticket, the count of usage is 
+	at the ticket-level and not at per user or per data object level. 
+<p>
+<DT><A NAME="65"> </A> Can I issue ticket only for data objects?
+<DD>	Tickets are associated with data objects. Even though one can issue a
+	ticket to collections or recursively to collections and 
+	sub-collections underneath collections, the tickets are still
+	associated with data objects in those collections. 
+<p>
+<DT><A NAME="66"> </A> If a ticket is issued for a collection will that allow access to all data
+sets in that collection.
+<DD> 	No. A ticket issued on a collection allows access ONLY to data objects
+	in that collection for which the issuer has 'all' permission.
+	Other data objects that belong to others are not accessible using
+	that ticket. The same logic applies when tickets are issued for
+	recursive collections.
+<p>
+
+<DT><A NAME="67"> </A> Can I issue a ticket for a 'future' data object.
+<DD>	No and Yes. A ticket issued to a data object requires that the data object 
+	be registered at the time of issue. But, a ticket issued on a 
+	collection can allow acess to data objects that are created in the 
+	future but for which the issuer has 'all' access permission.
+<p>
+
+</DL>
+<i>
+For suggestions, comments, or questions concerning this FAQ, email
+Wayne Schroeder at <a href=mailto:schroede@sdsc.edu>schroede@sdsc.edu</a>
+or the srb group at <a href=mailto:srb@sdsc.edu>srb@sdsc.edu</a>.
+<p>
+<I>Last Modified on June 3, 2004</I>
+</i>
+</BODY>
+</HTML>
+
+

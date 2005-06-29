@@ -1,0 +1,640 @@
++ cat ResourcesToTest 
+storeset=unix-sdsc du-unix
++ [  = Windows_NT ] 
+binDir=../../utilities/bin
+DATA_FILES=data_1 data_2 data_3 data_4 datadb1.xml dataempty
+TMP_DIR=../TMP
++ [ 20030714160339 =  ] 
+testid=20030714160339
++ date +%Y-%m-%d 
+testdate=2003-07-14
++ echo TESTID = 20030714160339 
+TESTID = 20030714160339
++ echo TESTDATE = 2003-07-14 
+TESTDATE = 2003-07-14
++ ../../utilities/bin/Sinit -v 
+Client Release = SRB-2.1.1, API version = D. Using Port 6666
+Server Release = SRB-2.1.1, API version = D.
++ ../../utilities/bin/SgetU -d -Y 0 
+--------------------------- RESULTS ------------------------------
+user_name :srb
+domain_desc :sdsc
+-----------------------------------------------------------------
++ ../../utilities/bin/Smkdir Stest2Dir20030714160339 
++ ../../utilities/bin/Scd Stest2Dir20030714160339 
++ ../../utilities/bin/Smkdir S_sub1 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+/home/srb/Stest2Dir20030714160339/S_sub1:
++ ../../utilities/bin/Scd S_sub1 
++ ../../utilities/bin/Smkcont -S unix-sdsc Container20030714160339 
++ ../../utilities/bin/Sput -c Container20030714160339 -S unix-sdsc data_1 data_1&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S unix-sdsc data_2 data_2&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S unix-sdsc data_3 data_3&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S unix-sdsc data_4 data_4&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S unix-sdsc datadb1.xml datadb1.xml&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S unix-sdsc dataempty dataempty&COPIES=all 
++ ../../utilities/bin/Scd .. 
++ ../../utilities/bin/Slscont Container20030714160339 
+Containers:
+/container/srb.sdsc/Container20030714160339
+  InContainer Objects                                                                                   Offset      Size      
+  /home/srb/Stest2Dir20030714160339/S_sub1/data_1                                                       0           2792      
+  /home/srb/Stest2Dir20030714160339/S_sub1/data_2                                                       2792        5584      
+  /home/srb/Stest2Dir20030714160339/S_sub1/data_3                                                       8376        8376      
+  /home/srb/Stest2Dir20030714160339/S_sub1/data_4                                                       16752       11168     
+  /home/srb/Stest2Dir20030714160339/S_sub1/datadb1.xml                                                  27920       5147      
+  /home/srb/Stest2Dir20030714160339/S_sub1/dataempty                                                    33067       0         
++ ../../utilities/bin/SgetD -Y 0 -L 500 S_sub1/* 
+--------------------------- RESULTS ------------------------------
+repl_enum :0
+data_name :data_1
+data_typ_name :generic
+path_name :/misc/srb/srb/SRBVault/srb.sdsc/96/12/TEST.Container20030714160339.1885716214.1058223824
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :2792
+phy_rsrc_name :unix-sdsc
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :data_2
+data_typ_name :generic
+path_name :/misc/srb/srb/SRBVault/srb.sdsc/96/12/TEST.Container20030714160339.1885716214.1058223824
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :5584
+phy_rsrc_name :unix-sdsc
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :data_3
+data_typ_name :generic
+path_name :/misc/srb/srb/SRBVault/srb.sdsc/96/12/TEST.Container20030714160339.1885716214.1058223824
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :8376
+phy_rsrc_name :unix-sdsc
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :data_4
+data_typ_name :generic
+path_name :/misc/srb/srb/SRBVault/srb.sdsc/96/12/TEST.Container20030714160339.1885716214.1058223824
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :11168
+phy_rsrc_name :unix-sdsc
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :datadb1.xml
+data_typ_name :generic
+path_name :/misc/srb/srb/SRBVault/srb.sdsc/96/12/TEST.Container20030714160339.1885716214.1058223824
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :5147
+phy_rsrc_name :unix-sdsc
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :dataempty
+data_typ_name :generic
+path_name :/misc/srb/srb/SRBVault/srb.sdsc/96/12/TEST.Container20030714160339.1885716214.1058223824
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :0
+phy_rsrc_name :unix-sdsc
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+/home/srb/Stest2Dir20030714160339/S_sub1:
+  srb         0 unix-sdsc            IC     2792 2003-07-14-16.03   data_1
+  srb         0 unix-sdsc            IC     5584 2003-07-14-16.03   data_2
+  srb         0 unix-sdsc            IC     8376 2003-07-14-16.03   data_3
+  srb         0 unix-sdsc            IC    11168 2003-07-14-16.03   data_4
+  srb         0 unix-sdsc            IC     5147 2003-07-14-16.03   datadb1.xml
+  srb         0 unix-sdsc            IC        0 2003-07-14-16.03   dataempty
++ ../../utilities/bin/Sget S_sub1/data_1 ../TMP/data_1.20030714160339.tmp 
++ diff data_1 ../TMP/data_1.20030714160339.tmp 
++ wc data_1 ../TMP/data_1.20030714160339.tmp 
+      70     407    2792 data_1
+      70     407    2792 ../TMP/data_1.20030714160339.tmp
+     140     814    5584 total
++ rm ../TMP/data_1.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_2 ../TMP/data_2.20030714160339.tmp 
++ diff data_2 ../TMP/data_2.20030714160339.tmp 
++ wc data_2 ../TMP/data_2.20030714160339.tmp 
+     140     814    5584 data_2
+     140     814    5584 ../TMP/data_2.20030714160339.tmp
+     280    1628   11168 total
++ rm ../TMP/data_2.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_3 ../TMP/data_3.20030714160339.tmp 
++ diff data_3 ../TMP/data_3.20030714160339.tmp 
++ wc data_3 ../TMP/data_3.20030714160339.tmp 
+     210    1221    8376 data_3
+     210    1221    8376 ../TMP/data_3.20030714160339.tmp
+     420    2442   16752 total
++ rm ../TMP/data_3.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_4 ../TMP/data_4.20030714160339.tmp 
++ diff data_4 ../TMP/data_4.20030714160339.tmp 
++ wc data_4 ../TMP/data_4.20030714160339.tmp 
+     280    1628   11168 data_4
+     280    1628   11168 ../TMP/data_4.20030714160339.tmp
+     560    3256   22336 total
++ rm ../TMP/data_4.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
++ diff datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
++ wc datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
+     443     612    5147 datadb1.xml
+     443     612    5147 ../TMP/datadb1.xml.20030714160339.tmp
+     886    1224   10294 total
++ rm ../TMP/datadb1.xml.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/dataempty ../TMP/dataempty.20030714160339.tmp 
++ diff dataempty ../TMP/dataempty.20030714160339.tmp 
++ wc dataempty ../TMP/dataempty.20030714160339.tmp 
+       0       0       0 dataempty
+       0       0       0 ../TMP/dataempty.20030714160339.tmp
+       0       0       0 total
++ rm ../TMP/dataempty.20030714160339.tmp 
++ ../../utilities/bin/Smkdir S_sub2 
++ ../../utilities/bin/Smv S_sub1/data_1 S_sub2 
++ ../../utilities/bin/Smv S_sub1/data_2 S_sub2 
++ ../../utilities/bin/Smv S_sub1/data_3 S_sub2 
++ ../../utilities/bin/Smv S_sub1/data_4 S_sub2 
++ ../../utilities/bin/Smv S_sub1/datadb1.xml S_sub2 
++ ../../utilities/bin/Smv S_sub1/dataempty S_sub2 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+  C-/home/srb/Stest2Dir20030714160339/S_sub2
+/home/srb/Stest2Dir20030714160339/S_sub1:
+/home/srb/Stest2Dir20030714160339/S_sub2:
+  srb         0 unix-sdsc            IC     2792 2003-07-14-16.03   data_1
+  srb         0 unix-sdsc            IC     5584 2003-07-14-16.03   data_2
+  srb         0 unix-sdsc            IC     8376 2003-07-14-16.03   data_3
+  srb         0 unix-sdsc            IC    11168 2003-07-14-16.03   data_4
+  srb         0 unix-sdsc            IC     5147 2003-07-14-16.03   datadb1.xml
+  srb         0 unix-sdsc            IC        0 2003-07-14-16.03   dataempty
++ ../../utilities/bin/Smkcont -S unix-sdsc Container20030714160339.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/data_1 S_sub1/data_1.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/data_2 S_sub1/data_2.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/data_3 S_sub1/data_3.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/data_4 S_sub1/data_4.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/datadb1.xml S_sub1/datadb1.xml.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/dataempty S_sub1/dataempty.unix-sdsc 
++ ../../utilities/bin/Ssyncont Container20030714160339.unix-sdsc 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+  C-/home/srb/Stest2Dir20030714160339/S_sub2
+/home/srb/Stest2Dir20030714160339/S_sub1:
+  srb         0 unix-sdsc            IC     2792 2003-07-14-16.04   data_1.unix-sdsc
+  srb         0 unix-sdsc            IC     5584 2003-07-14-16.04   data_2.unix-sdsc
+  srb         0 unix-sdsc            IC     8376 2003-07-14-16.04   data_3.unix-sdsc
+  srb         0 unix-sdsc            IC    11168 2003-07-14-16.04   data_4.unix-sdsc
+  srb         0 unix-sdsc            IC     5147 2003-07-14-16.04   datadb1.xml.unix-sdsc
+  srb         0 unix-sdsc            IC        0 2003-07-14-16.04   dataempty.unix-sdsc
+/home/srb/Stest2Dir20030714160339/S_sub2:
+  srb         0 unix-sdsc            IC     2792 2003-07-14-16.03   data_1
+  srb         0 unix-sdsc            IC     5584 2003-07-14-16.03   data_2
+  srb         0 unix-sdsc            IC     8376 2003-07-14-16.03   data_3
+  srb         0 unix-sdsc            IC    11168 2003-07-14-16.03   data_4
+  srb         0 unix-sdsc            IC     5147 2003-07-14-16.03   datadb1.xml
+  srb         0 unix-sdsc            IC        0 2003-07-14-16.03   dataempty
++ ../../utilities/bin/Sget S_sub1/data_1.unix-sdsc ../TMP/data_1.20030714160339.tmp 
++ diff data_1 ../TMP/data_1.20030714160339.tmp 
++ wc data_1 ../TMP/data_1.20030714160339.tmp 
+      70     407    2792 data_1
+      70     407    2792 ../TMP/data_1.20030714160339.tmp
+     140     814    5584 total
++ rm ../TMP/data_1.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_2.unix-sdsc ../TMP/data_2.20030714160339.tmp 
++ diff data_2 ../TMP/data_2.20030714160339.tmp 
++ wc data_2 ../TMP/data_2.20030714160339.tmp 
+     140     814    5584 data_2
+     140     814    5584 ../TMP/data_2.20030714160339.tmp
+     280    1628   11168 total
++ rm ../TMP/data_2.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_3.unix-sdsc ../TMP/data_3.20030714160339.tmp 
++ diff data_3 ../TMP/data_3.20030714160339.tmp 
++ wc data_3 ../TMP/data_3.20030714160339.tmp 
+     210    1221    8376 data_3
+     210    1221    8376 ../TMP/data_3.20030714160339.tmp
+     420    2442   16752 total
++ rm ../TMP/data_3.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_4.unix-sdsc ../TMP/data_4.20030714160339.tmp 
++ diff data_4 ../TMP/data_4.20030714160339.tmp 
++ wc data_4 ../TMP/data_4.20030714160339.tmp 
+     280    1628   11168 data_4
+     280    1628   11168 ../TMP/data_4.20030714160339.tmp
+     560    3256   22336 total
++ rm ../TMP/data_4.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/datadb1.xml.unix-sdsc ../TMP/datadb1.xml.20030714160339.tmp 
++ diff datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
++ wc datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
+     443     612    5147 datadb1.xml
+     443     612    5147 ../TMP/datadb1.xml.20030714160339.tmp
+     886    1224   10294 total
++ rm ../TMP/datadb1.xml.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/dataempty.unix-sdsc ../TMP/dataempty.20030714160339.tmp 
++ diff dataempty ../TMP/dataempty.20030714160339.tmp 
++ wc dataempty ../TMP/dataempty.20030714160339.tmp 
+       0       0       0 dataempty
+       0       0       0 ../TMP/dataempty.20030714160339.tmp
+       0       0       0 total
++ rm ../TMP/dataempty.20030714160339.tmp 
++ ../../utilities/bin/Scd S_sub1 
++ ../../utilities/bin/Srm data* 
++ ../../utilities/bin/Scd .. 
++ ../../utilities/bin/Srmcont Container20030714160339.unix-sdsc 
++ ../../utilities/bin/Smkcont -S unix-sdsc Container20030714160339.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/data_1 S_sub1/data_1.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/data_2 S_sub1/data_2.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/data_3 S_sub1/data_3.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/data_4 S_sub1/data_4.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/datadb1.xml S_sub1/datadb1.xml.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/dataempty S_sub1/dataempty.du-unix 
++ ../../utilities/bin/Ssyncont Container20030714160339.du-unix 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+  C-/home/srb/Stest2Dir20030714160339/S_sub2
+/home/srb/Stest2Dir20030714160339/S_sub1:
+  srb         0 unix-sdsc            IC     2792 2003-07-14-16.04   data_1.du-unix
+  srb         0 unix-sdsc            IC     5584 2003-07-14-16.04   data_2.du-unix
+  srb         0 unix-sdsc            IC     8376 2003-07-14-16.04   data_3.du-unix
+  srb         0 unix-sdsc            IC    11168 2003-07-14-16.04   data_4.du-unix
+  srb         0 unix-sdsc            IC     5147 2003-07-14-16.04   datadb1.xml.du-unix
+  srb         0 unix-sdsc            IC        0 2003-07-14-16.04   dataempty.du-unix
+/home/srb/Stest2Dir20030714160339/S_sub2:
+  srb         0 unix-sdsc            IC     2792 2003-07-14-16.03   data_1
+  srb         0 unix-sdsc            IC     5584 2003-07-14-16.03   data_2
+  srb         0 unix-sdsc            IC     8376 2003-07-14-16.03   data_3
+  srb         0 unix-sdsc            IC    11168 2003-07-14-16.03   data_4
+  srb         0 unix-sdsc            IC     5147 2003-07-14-16.03   datadb1.xml
+  srb         0 unix-sdsc            IC        0 2003-07-14-16.03   dataempty
++ ../../utilities/bin/Sget S_sub1/data_1.du-unix ../TMP/data_1.20030714160339.tmp 
++ diff data_1 ../TMP/data_1.20030714160339.tmp 
++ wc data_1 ../TMP/data_1.20030714160339.tmp 
+      70     407    2792 data_1
+      70     407    2792 ../TMP/data_1.20030714160339.tmp
+     140     814    5584 total
++ rm ../TMP/data_1.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_2.du-unix ../TMP/data_2.20030714160339.tmp 
++ diff data_2 ../TMP/data_2.20030714160339.tmp 
++ wc data_2 ../TMP/data_2.20030714160339.tmp 
+     140     814    5584 data_2
+     140     814    5584 ../TMP/data_2.20030714160339.tmp
+     280    1628   11168 total
++ rm ../TMP/data_2.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_3.du-unix ../TMP/data_3.20030714160339.tmp 
++ diff data_3 ../TMP/data_3.20030714160339.tmp 
++ wc data_3 ../TMP/data_3.20030714160339.tmp 
+     210    1221    8376 data_3
+     210    1221    8376 ../TMP/data_3.20030714160339.tmp
+     420    2442   16752 total
++ rm ../TMP/data_3.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_4.du-unix ../TMP/data_4.20030714160339.tmp 
++ diff data_4 ../TMP/data_4.20030714160339.tmp 
++ wc data_4 ../TMP/data_4.20030714160339.tmp 
+     280    1628   11168 data_4
+     280    1628   11168 ../TMP/data_4.20030714160339.tmp
+     560    3256   22336 total
++ rm ../TMP/data_4.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/datadb1.xml.du-unix ../TMP/datadb1.xml.20030714160339.tmp 
++ diff datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
++ wc datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
+     443     612    5147 datadb1.xml
+     443     612    5147 ../TMP/datadb1.xml.20030714160339.tmp
+     886    1224   10294 total
++ rm ../TMP/datadb1.xml.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/dataempty.du-unix ../TMP/dataempty.20030714160339.tmp 
++ diff dataempty ../TMP/dataempty.20030714160339.tmp 
++ wc dataempty ../TMP/dataempty.20030714160339.tmp 
+       0       0       0 dataempty
+       0       0       0 ../TMP/dataempty.20030714160339.tmp
+       0       0       0 total
++ rm ../TMP/dataempty.20030714160339.tmp 
++ ../../utilities/bin/Scd S_sub1 
++ ../../utilities/bin/Srm data* 
++ ../../utilities/bin/Scd .. 
++ ../../utilities/bin/Srmcont Container20030714160339.du-unix 
++ ../../utilities/bin/Srmdir S_sub1 
++ ../../utilities/bin/Srm -r S_sub* 
++ ../../utilities/bin/Srmcont Container20030714160339 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
++ ../../utilities/bin/Smkdir S_sub1 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+/home/srb/Stest2Dir20030714160339/S_sub1:
++ ../../utilities/bin/Scd S_sub1 
++ ../../utilities/bin/Smkcont -S du-unix Container20030714160339 
++ ../../utilities/bin/Sput -c Container20030714160339 -S du-unix data_1 data_1&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S du-unix data_2 data_2&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S du-unix data_3 data_3&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S du-unix data_4 data_4&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S du-unix datadb1.xml datadb1.xml&COPIES=all 
++ ../../utilities/bin/Sput -c Container20030714160339 -S du-unix dataempty dataempty&COPIES=all 
++ ../../utilities/bin/Scd .. 
++ ../../utilities/bin/Slscont Container20030714160339 
+Containers:
+/container/srb.sdsc/Container20030714160339
+  InContainer Objects                                                                                   Offset      Size      
+  /home/srb/Stest2Dir20030714160339/S_sub1/data_1                                                       0           2792      
+  /home/srb/Stest2Dir20030714160339/S_sub1/data_2                                                       2792        5584      
+  /home/srb/Stest2Dir20030714160339/S_sub1/data_3                                                       8376        8376      
+  /home/srb/Stest2Dir20030714160339/S_sub1/data_4                                                       16752       11168     
+  /home/srb/Stest2Dir20030714160339/S_sub1/datadb1.xml                                                  27920       5147      
+  /home/srb/Stest2Dir20030714160339/S_sub1/dataempty                                                    33067       0         
++ ../../utilities/bin/SgetD -Y 0 -L 500 S_sub1/* 
+--------------------------- RESULTS ------------------------------
+repl_enum :0
+data_name :data_1
+data_typ_name :generic
+path_name :/misc/srb/srb/du/SRBVault/srb.sdsc/84/47/TEST.Container20030714160339.415957547.1058223908
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :2792
+phy_rsrc_name :du-unix
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :data_2
+data_typ_name :generic
+path_name :/misc/srb/srb/du/SRBVault/srb.sdsc/84/47/TEST.Container20030714160339.415957547.1058223908
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :5584
+phy_rsrc_name :du-unix
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :data_3
+data_typ_name :generic
+path_name :/misc/srb/srb/du/SRBVault/srb.sdsc/84/47/TEST.Container20030714160339.415957547.1058223908
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :8376
+phy_rsrc_name :du-unix
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :data_4
+data_typ_name :generic
+path_name :/misc/srb/srb/du/SRBVault/srb.sdsc/84/47/TEST.Container20030714160339.415957547.1058223908
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :11168
+phy_rsrc_name :du-unix
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :datadb1.xml
+data_typ_name :generic
+path_name :/misc/srb/srb/du/SRBVault/srb.sdsc/84/47/TEST.Container20030714160339.415957547.1058223908
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :5147
+phy_rsrc_name :du-unix
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
+repl_enum :0
+data_name :dataempty
+data_typ_name :generic
+path_name :/misc/srb/srb/du/SRBVault/srb.sdsc/84/47/TEST.Container20030714160339.415957547.1058223908
+data_grp_name :/home/srb/Stest2Dir20030714160339/S_sub1
+data_size :0
+phy_rsrc_name :du-unix
+is_dirty :0
+container_name :/container/srb.sdsc/Container20030714160339
+-----------------------------------------------------------------
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+/home/srb/Stest2Dir20030714160339/S_sub1:
+  srb         0 du-unix              IC     2792 2003-07-14-16.05   data_1
+  srb         0 du-unix              IC     5584 2003-07-14-16.05   data_2
+  srb         0 du-unix              IC     8376 2003-07-14-16.05   data_3
+  srb         0 du-unix              IC    11168 2003-07-14-16.05   data_4
+  srb         0 du-unix              IC     5147 2003-07-14-16.05   datadb1.xml
+  srb         0 du-unix              IC        0 2003-07-14-16.05   dataempty
++ ../../utilities/bin/Sget S_sub1/data_1 ../TMP/data_1.20030714160339.tmp 
++ diff data_1 ../TMP/data_1.20030714160339.tmp 
++ wc data_1 ../TMP/data_1.20030714160339.tmp 
+      70     407    2792 data_1
+      70     407    2792 ../TMP/data_1.20030714160339.tmp
+     140     814    5584 total
++ rm ../TMP/data_1.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_2 ../TMP/data_2.20030714160339.tmp 
++ diff data_2 ../TMP/data_2.20030714160339.tmp 
++ wc data_2 ../TMP/data_2.20030714160339.tmp 
+     140     814    5584 data_2
+     140     814    5584 ../TMP/data_2.20030714160339.tmp
+     280    1628   11168 total
++ rm ../TMP/data_2.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_3 ../TMP/data_3.20030714160339.tmp 
++ diff data_3 ../TMP/data_3.20030714160339.tmp 
++ wc data_3 ../TMP/data_3.20030714160339.tmp 
+     210    1221    8376 data_3
+     210    1221    8376 ../TMP/data_3.20030714160339.tmp
+     420    2442   16752 total
++ rm ../TMP/data_3.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_4 ../TMP/data_4.20030714160339.tmp 
++ diff data_4 ../TMP/data_4.20030714160339.tmp 
++ wc data_4 ../TMP/data_4.20030714160339.tmp 
+     280    1628   11168 data_4
+     280    1628   11168 ../TMP/data_4.20030714160339.tmp
+     560    3256   22336 total
++ rm ../TMP/data_4.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
++ diff datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
++ wc datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
+     443     612    5147 datadb1.xml
+     443     612    5147 ../TMP/datadb1.xml.20030714160339.tmp
+     886    1224   10294 total
++ rm ../TMP/datadb1.xml.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/dataempty ../TMP/dataempty.20030714160339.tmp 
++ diff dataempty ../TMP/dataempty.20030714160339.tmp 
++ wc dataempty ../TMP/dataempty.20030714160339.tmp 
+       0       0       0 dataempty
+       0       0       0 ../TMP/dataempty.20030714160339.tmp
+       0       0       0 total
++ rm ../TMP/dataempty.20030714160339.tmp 
++ ../../utilities/bin/Smkdir S_sub2 
++ ../../utilities/bin/Smv S_sub1/data_1 S_sub2 
++ ../../utilities/bin/Smv S_sub1/data_2 S_sub2 
++ ../../utilities/bin/Smv S_sub1/data_3 S_sub2 
++ ../../utilities/bin/Smv S_sub1/data_4 S_sub2 
++ ../../utilities/bin/Smv S_sub1/datadb1.xml S_sub2 
++ ../../utilities/bin/Smv S_sub1/dataempty S_sub2 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+  C-/home/srb/Stest2Dir20030714160339/S_sub2
+/home/srb/Stest2Dir20030714160339/S_sub1:
+/home/srb/Stest2Dir20030714160339/S_sub2:
+  srb         0 du-unix              IC     2792 2003-07-14-16.05   data_1
+  srb         0 du-unix              IC     5584 2003-07-14-16.05   data_2
+  srb         0 du-unix              IC     8376 2003-07-14-16.05   data_3
+  srb         0 du-unix              IC    11168 2003-07-14-16.05   data_4
+  srb         0 du-unix              IC     5147 2003-07-14-16.05   datadb1.xml
+  srb         0 du-unix              IC        0 2003-07-14-16.05   dataempty
++ ../../utilities/bin/Smkcont -S du-unix Container20030714160339.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/data_1 S_sub1/data_1.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/data_2 S_sub1/data_2.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/data_3 S_sub1/data_3.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/data_4 S_sub1/data_4.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/datadb1.xml S_sub1/datadb1.xml.unix-sdsc 
++ ../../utilities/bin/Scp -c Container20030714160339.unix-sdsc -S unix-sdsc S_sub2/dataempty S_sub1/dataempty.unix-sdsc 
++ ../../utilities/bin/Ssyncont Container20030714160339.unix-sdsc 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+  C-/home/srb/Stest2Dir20030714160339/S_sub2
+/home/srb/Stest2Dir20030714160339/S_sub1:
+  srb         0 du-unix              IC     2792 2003-07-14-16.05   data_1.unix-sdsc
+  srb         0 du-unix              IC     5584 2003-07-14-16.05   data_2.unix-sdsc
+  srb         0 du-unix              IC     8376 2003-07-14-16.05   data_3.unix-sdsc
+  srb         0 du-unix              IC    11168 2003-07-14-16.05   data_4.unix-sdsc
+  srb         0 du-unix              IC     5147 2003-07-14-16.05   datadb1.xml.unix-sdsc
+  srb         0 du-unix              IC        0 2003-07-14-16.05   dataempty.unix-sdsc
+/home/srb/Stest2Dir20030714160339/S_sub2:
+  srb         0 du-unix              IC     2792 2003-07-14-16.05   data_1
+  srb         0 du-unix              IC     5584 2003-07-14-16.05   data_2
+  srb         0 du-unix              IC     8376 2003-07-14-16.05   data_3
+  srb         0 du-unix              IC    11168 2003-07-14-16.05   data_4
+  srb         0 du-unix              IC     5147 2003-07-14-16.05   datadb1.xml
+  srb         0 du-unix              IC        0 2003-07-14-16.05   dataempty
++ ../../utilities/bin/Sget S_sub1/data_1.unix-sdsc ../TMP/data_1.20030714160339.tmp 
++ diff data_1 ../TMP/data_1.20030714160339.tmp 
++ wc data_1 ../TMP/data_1.20030714160339.tmp 
+      70     407    2792 data_1
+      70     407    2792 ../TMP/data_1.20030714160339.tmp
+     140     814    5584 total
++ rm ../TMP/data_1.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_2.unix-sdsc ../TMP/data_2.20030714160339.tmp 
++ diff data_2 ../TMP/data_2.20030714160339.tmp 
++ wc data_2 ../TMP/data_2.20030714160339.tmp 
+     140     814    5584 data_2
+     140     814    5584 ../TMP/data_2.20030714160339.tmp
+     280    1628   11168 total
++ rm ../TMP/data_2.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_3.unix-sdsc ../TMP/data_3.20030714160339.tmp 
++ diff data_3 ../TMP/data_3.20030714160339.tmp 
++ wc data_3 ../TMP/data_3.20030714160339.tmp 
+     210    1221    8376 data_3
+     210    1221    8376 ../TMP/data_3.20030714160339.tmp
+     420    2442   16752 total
++ rm ../TMP/data_3.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_4.unix-sdsc ../TMP/data_4.20030714160339.tmp 
++ diff data_4 ../TMP/data_4.20030714160339.tmp 
++ wc data_4 ../TMP/data_4.20030714160339.tmp 
+     280    1628   11168 data_4
+     280    1628   11168 ../TMP/data_4.20030714160339.tmp
+     560    3256   22336 total
++ rm ../TMP/data_4.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/datadb1.xml.unix-sdsc ../TMP/datadb1.xml.20030714160339.tmp 
++ diff datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
++ wc datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
+     443     612    5147 datadb1.xml
+     443     612    5147 ../TMP/datadb1.xml.20030714160339.tmp
+     886    1224   10294 total
++ rm ../TMP/datadb1.xml.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/dataempty.unix-sdsc ../TMP/dataempty.20030714160339.tmp 
++ diff dataempty ../TMP/dataempty.20030714160339.tmp 
++ wc dataempty ../TMP/dataempty.20030714160339.tmp 
+       0       0       0 dataempty
+       0       0       0 ../TMP/dataempty.20030714160339.tmp
+       0       0       0 total
++ rm ../TMP/dataempty.20030714160339.tmp 
++ ../../utilities/bin/Scd S_sub1 
++ ../../utilities/bin/Srm data* 
++ ../../utilities/bin/Scd .. 
++ ../../utilities/bin/Srmcont Container20030714160339.unix-sdsc 
++ ../../utilities/bin/Smkcont -S du-unix Container20030714160339.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/data_1 S_sub1/data_1.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/data_2 S_sub1/data_2.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/data_3 S_sub1/data_3.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/data_4 S_sub1/data_4.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/datadb1.xml S_sub1/datadb1.xml.du-unix 
++ ../../utilities/bin/Scp -c Container20030714160339.du-unix -S du-unix S_sub2/dataempty S_sub1/dataempty.du-unix 
++ ../../utilities/bin/Ssyncont Container20030714160339.du-unix 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
+  C-/home/srb/Stest2Dir20030714160339/S_sub1
+  C-/home/srb/Stest2Dir20030714160339/S_sub2
+/home/srb/Stest2Dir20030714160339/S_sub1:
+  srb         0 du-unix              IC     2792 2003-07-14-16.05   data_1.du-unix
+  srb         0 du-unix              IC     5584 2003-07-14-16.05   data_2.du-unix
+  srb         0 du-unix              IC     8376 2003-07-14-16.05   data_3.du-unix
+  srb         0 du-unix              IC    11168 2003-07-14-16.05   data_4.du-unix
+  srb         0 du-unix              IC     5147 2003-07-14-16.05   datadb1.xml.du-unix
+  srb         0 du-unix              IC        0 2003-07-14-16.05   dataempty.du-unix
+/home/srb/Stest2Dir20030714160339/S_sub2:
+  srb         0 du-unix              IC     2792 2003-07-14-16.05   data_1
+  srb         0 du-unix              IC     5584 2003-07-14-16.05   data_2
+  srb         0 du-unix              IC     8376 2003-07-14-16.05   data_3
+  srb         0 du-unix              IC    11168 2003-07-14-16.05   data_4
+  srb         0 du-unix              IC     5147 2003-07-14-16.05   datadb1.xml
+  srb         0 du-unix              IC        0 2003-07-14-16.05   dataempty
++ ../../utilities/bin/Sget S_sub1/data_1.du-unix ../TMP/data_1.20030714160339.tmp 
++ diff data_1 ../TMP/data_1.20030714160339.tmp 
++ wc data_1 ../TMP/data_1.20030714160339.tmp 
+      70     407    2792 data_1
+      70     407    2792 ../TMP/data_1.20030714160339.tmp
+     140     814    5584 total
++ rm ../TMP/data_1.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_2.du-unix ../TMP/data_2.20030714160339.tmp 
++ diff data_2 ../TMP/data_2.20030714160339.tmp 
++ wc data_2 ../TMP/data_2.20030714160339.tmp 
+     140     814    5584 data_2
+     140     814    5584 ../TMP/data_2.20030714160339.tmp
+     280    1628   11168 total
++ rm ../TMP/data_2.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_3.du-unix ../TMP/data_3.20030714160339.tmp 
++ diff data_3 ../TMP/data_3.20030714160339.tmp 
++ wc data_3 ../TMP/data_3.20030714160339.tmp 
+     210    1221    8376 data_3
+     210    1221    8376 ../TMP/data_3.20030714160339.tmp
+     420    2442   16752 total
++ rm ../TMP/data_3.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/data_4.du-unix ../TMP/data_4.20030714160339.tmp 
++ diff data_4 ../TMP/data_4.20030714160339.tmp 
++ wc data_4 ../TMP/data_4.20030714160339.tmp 
+     280    1628   11168 data_4
+     280    1628   11168 ../TMP/data_4.20030714160339.tmp
+     560    3256   22336 total
++ rm ../TMP/data_4.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/datadb1.xml.du-unix ../TMP/datadb1.xml.20030714160339.tmp 
++ diff datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
++ wc datadb1.xml ../TMP/datadb1.xml.20030714160339.tmp 
+     443     612    5147 datadb1.xml
+     443     612    5147 ../TMP/datadb1.xml.20030714160339.tmp
+     886    1224   10294 total
++ rm ../TMP/datadb1.xml.20030714160339.tmp 
++ ../../utilities/bin/Sget S_sub1/dataempty.du-unix ../TMP/dataempty.20030714160339.tmp 
++ diff dataempty ../TMP/dataempty.20030714160339.tmp 
++ wc dataempty ../TMP/dataempty.20030714160339.tmp 
+       0       0       0 dataempty
+       0       0       0 ../TMP/dataempty.20030714160339.tmp
+       0       0       0 total
++ rm ../TMP/dataempty.20030714160339.tmp 
++ ../../utilities/bin/Scd S_sub1 
++ ../../utilities/bin/Srm data* 
++ ../../utilities/bin/Scd .. 
++ ../../utilities/bin/Srmcont Container20030714160339.du-unix 
++ ../../utilities/bin/Srmdir S_sub1 
++ ../../utilities/bin/Srm -r S_sub* 
++ ../../utilities/bin/Srmcont Container20030714160339 
++ ../../utilities/bin/Sls -lr 
+/home/srb/Stest2Dir20030714160339:
++ ../../utilities/bin/Scd .. 
++ ../../utilities/bin/Srmdir Stest2Dir20030714160339 
++ ../../utilities/bin/Sexit 
++ exit 0 

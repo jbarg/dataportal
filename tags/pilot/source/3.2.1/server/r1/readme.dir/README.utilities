@@ -1,0 +1,94 @@
+NOTE: Check http://www.npaci.edu/DICE/srb for an updated version of this 
+document.
+For Installation and Use of Client Utilities:
+ a. In the following, we assume that a SRB Client has been 
+	compiled successfully on a host machine. 
+    In the discussion, the directory where CL utilities reside is 
+	called utilities.
+ b. We call the commands that can be issued as Client Utilities 
+	as Scommands.
+ 
+(2) To run any of the Scommands, one needs to setup some environment 
+parameters. There are two ways to accomplish this:
+   a) Have an environment file called
+	.MdasEnv. This file is  located in the .srb sub-directory in your 
+	home directory. This file contains information for initializing the 
+	SRB client environment.	When running in any Unix shell, a new, unique
+	copy of the file is created for its use. The .MdasEnv file contains 
+	the following information
+------------------------- .MdasEnv ------------------------
+mdasCollectionHome <home-collection-name>
+mdasDomainHome <user-home-domain-name>
+srbUser <user-name>
+srbHost <SRB-server-host-name>
+AUTH_SCHEME <authentication-scheme-to-use> 
+SERVER_DN <server-user-distinguished-name>
+------------------------- .MdasEnv ------------------------
+Note: The strings below are quoted in the .MdasEnv file.
+<home-collection-name> = the name of the SRB collection that is given as the
+		home collection of the user. This can be any default collection
+		that the user wants to be in, when initializing the user's
+		S-environment.
+<user-home-domain-name> = MCAT domain name given to the user. Each user is
+		associated with at least one domain and the domain-name
+		given here is used as the default domain  when initializing
+		 the user's S-environment.
+<user-name> =  The name of the user in the MCAT catalog
+<SRB-server-host-name> =  The net address of the host machine of the SRB 
+		server. Example 'mda-18.sdsc.edu'
+<authentication-scheme-to-use> - valid values are 'PASSWD_AUTH', 'ENCRYPT1', 
+		and 'GSI_AUTH'.
+<server-user-distinguished-name> - The distinguished name of the server user 
+		(valid only for GSI authentication).
+
+   b) Use the UNIX environment variables to specify these parameters.
+   Environment variables recognized by the Scommands are:
+
+   srbUser - The client user
+
+   mdasDomainName - The domain of the client user
+   
+   srbHost - The hostname of the SRB-server
+
+   srbPort - The port number of the SRB-server (optional)
+
+   mdasResourceName or defaultResource - The default resource
+
+   mdasCollectionName - The current working collection.
+
+   srbAuth - The password.
+
+   AUTH_SCHEME - The authentication scheme to be used. Valid values are 
+   'PASSWD_AUTH', 'ENCRYPT1', and 'GSI_AUTH' 
+
+ 
+   SERVER_DN - The distinguished name of the server user (valid only for
+   GSI authentication).
+
+   Other relevant environment variables :
+
+   mdasEnvFile - Instead of the .srb/.MdasEnv file, this env variable
+   specifies the alternative path for this file.
+
+   mdasAuthFile - Instead of the .srb/.MdasAuth file, this env variable
+   specifies the alternative path for this file.
+
+
+(3) Everytime, you use the Client Utilities, from a new shell,
+	run 'Sinit' to initialize the environment and to check
+	connection with SRBMaster. Running Sinit in the middle
+	of a session will reset the client environmental file 
+	variables.
+(4) Use Sexit when finished with using Scommands.
+
+(4) Use Serror to find the meaning of error numbers generated
+        when running Scommands. The SRB_SRC env variable which defines the
+        SRB source directory must be defined to be the 'src' sub-directory 
+	in the SRB's directory.
+
+(6) Man pages for Scommands are in directory utilities/man.
+	Set MANPATH appropriately or use "man -M CLUTILDIR/man" to see the 
+	man pages.
+
+
+ 

@@ -1,0 +1,125 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sannotate.1
+.\"
+.TH Sannotate 1 "Jan 2002 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sannotate \- modifies annotation information about SRB data objects.
+.SH SYNOPSIS
+.B Sannotate [\-c] \-w
+.I position annotation dataName | collectionName
+.br
+.B Sannotate [\-c] \-u
+.I timestamp newAnnotation dataName | collectionName
+.br
+.B Sannotate [\-c] \-d
+.I timestamp dataName | collectionName
+.br
+.B Sannotate
+.RB [\-c] [ \-R ]
+.RB [ \-t
+.IR timestamp ]
+.RB [ \-p
+.IR position ]
+.RB [ \-U
+.IR userName@domainName ]
+.RB [ \-Y
+.IR n ]
+.RB [ \-L
+.IR n ]
+.RB [ \-T
+.IR dataType "] " dataName | collectionName
+.SH DESCRIPTION
+.B "Sannotate "
+provides a facility for inserting, deleting, updating, and
+accessing annotations on data objects
+.IR dataName .
+.sp
+The annotations can be made for a data object by noting a
+particluar position at which this annotation holds (eg. Page 3,
+para 5). The user who has 'annotate' or better permission can
+only insert annotations. Annotations can be deleted and updated
+only by the person who inserted the annotation. Anyone who
+has 'read' or better permission can view annotations on a data
+object.
+.sp
+The
+.B Stoken
+utility can be used to find the current data types
+supported.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-c "
+action performed on collection
+.TP 0.5i
+.B "\-w "
+insert annotation
+.TP 0.5i
+.B "\-u "
+update annotation
+.TP 0.5i
+.B "\-d "
+delete annotation
+.TP 0.5i
+.B "\-h "
+displays command options
+.TP 0.5i
+.B "\-R "
+recursively view annotation under
+.IR collectionName .
+If this option is not used then the annotations are given for
+.I dataName
+(the value can have wild cards).
+.TP 0.5i
+.B "\-T "
+.I dataType
+gets annotations of a particular data type (the value can have
+wild cards)
+.TP 0.5i
+.B "\-p "
+.I position
+gets annotations at a particular position (the value can
+have wild cards)
+.TP 0.5i
+.B "\-U "
+.I userName@domainName
+gets annotations inserted by a particular user
+(the value can have wild cards)
+.TP 0.5i
+.B "\-t "
+.I timestamp
+gets annotations inserted at a particular time stamp (with
+or without wildcards) as well as with SQL conditions.
+.br
+Ex. "> '2000-01-20'"
+.br
+Ex. " between '2000-01-19' and '2000-01-20-17'"
+.TP 0.5i
+.B "\-Y "
+.I number
+controls display format.
+.br
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+.br
+With -Y 0 will display in vertical, one attribute-per-line format.
+.br
+With Y n, n > 0, information is displayed one item-per-line with
+each attribute spaced at
+.I number
+characters.
+.br
+With Y -1, information is displayed without headers, with each
+item quoted and separated by a blank and with no row control.
+.TP 0.5i
+.B "\-L "
+.I number
+controls the number of items displayed at a time under user's
+control. Without -L, DEFAULT_ROW_COUNT items of information is
+displayed at a time.
+.br
+With L n, n > 0, n items are displayed at a time.
+.SH "SEE ALSO"
+.BR SgetD (1),
+.BR Schmod (1)
+

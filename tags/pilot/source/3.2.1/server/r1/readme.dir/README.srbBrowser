@@ -1,0 +1,179 @@
+NOTE: Check http://www.npaci.edu/Research/DI/srb/docs.html for an updated 
+version of this document.
+
+This is a short note on how to build and use the srbBrowser software.
+
+This software must be built using JDK 1.2.2 or later. 
+It uses the SRB client library native codes to communication with the SRB 
+server.
+
+Building srbBrowser
+-------------------
+To build the srbBrowser software:
+
+1) configuring the build - type in:
+    . cd SRB2_0_0
+    . configure --enable-javagui=yes --enable-jdkhome=/usr/local/apps/jdk1.4.1
+
+where /usr/local/apps/jdk1.4.1 is the directory where the JAVA JDK 1.4.1
+is installed. This directory should be changed based on your site 
+installation. This will set the parameters "JAVA_GUI and "javaDir" 
+in the mk/mk.config file. If the configure script failed, these parameters
+can be set manually by editing the mk/mk.config file.
+
+2) You must first build the "srb" and "util" before the srbBrowser can
+be built.
+
+3) You can either "cd" to the main SRB directory and type in 
+"gmake clean_browser" and then "gmake browser" or,
+"cd java" and type in "gmake clean" and then "gmake".
+
+
+Running srbBrowser
+------------------
+To run the srbBrowser, 
+	. setenv DISPLAY to your workstation.
+	. include the JAVA JDK bin path to you default path. e.g.,
+	  set path = ( $path /usr/local/apps/jdk1.4.1/bin)
+	. cd SRB2_0_0rel/java
+	. type in "bin/srbBrowser". 
+
+The srbBrowser will always work from a working directory (pwd) of  
+SRB2_0_0rel/java and for platforms except Linux, it will work from any 
+working directory. For the Linux platform to work from any working
+directory, two env variables need to be set. The CLASSPATH env variable
+needs to be set to the full path of the "classes" directory and the
+LD_LIBRARY_PATH variable needs to be set to the full path of the "lib" 
+directory. e.g.,
+
+    setenv CLASSPATH /projects/diglib/srb/SRB2_0_0rel/java/classes
+    setenv LD_LIBRARY_PATH /projects/diglib/srb/SRB2_0_0rel/java/lib
+
+A srbBrowser GUI should come up on your screen.
+
+A quick rundown of what it can do.
+
+1) The "Default" pull down menu allow a client to set the "default
+storage resource", the "default container" and the "default comment". The 
+"default resource" will be used for all subsequent dataset creation until it 
+is changed. The "default container" will be use to store data created by
+operations originated from the "Container" menu. The "default comment" 
+can be used for creating new comments for datasets.
+
+2) The "Operations" menu shows the type of operations that can be
+performed depending what was selected. The following operations have been
+implemented:
+
+	o "New" - make a new  "Collection" 
+	o "Replicate" - Replicate a dataset or collection (recursively). 
+	   Two choices are allowed: replicate to the default storage resource 
+	   or choose a resource for replication.
+
+	o Copy a dataset or collection - The following steps should be taken:
+	    1) Select a dataset or a collection to be copied (source).
+	    2) Select the "Copy" menu from the "Operation" pulldown menu.
+	    3) Select the destination dataset or collection.
+	    4) Select the "Paste" menu from the "Operation" pulldown menu.
+
+	o "Delete" - Delete a dataset or a collection recursively.
+
+	o Import a file or directory from a local file system. 
+	  The following steps should be taken:
+	    1) Select the destination dataset or collection. 
+	    2) Select the "Import from Local FS" menu from the "Operation" 
+	    pulldown menu.
+	    3) A file chooser dialog box should appear. Browse through the
+	    local FS and selection a file or a directory to be imported
+	    from (source). Click on the "Open" button of the file chooser 
+	    dialog box.
+	       
+        o Export a dataset or collection to a local file system.  
+          The following steps should be taken:
+            1) Select the source dataset or collection to be exported.
+            2) Select the "Export to Local FS" menu from the "Operation" 
+            pulldown menu.
+            3) A file chooser dialog box should appear. Browse through the
+            local FS and selection a file or a directory to export to
+            (destination). Click on the "Open" button of the file chooser 
+            dialog box.
+
+	o "Register" and "Unregister" local files and directory. 
+	  These functions may be recursive. Comparing to the "Import" and 
+	  "Export" functions, registering a local file does not involve
+          the the copying of the file physically. Rather, the file is
+          registered with MCAT and hence becomes visible to the SRB world.
+	  For "Register" to work, your local file must be accessible by
+	  one of the SRB server in the federation. The following three steps
+	  must be taken to register a local file: 
+
+		1) Set the default resource (through the "Default" menu)
+		to the resource controlled by the SRB server that can
+		access your local file.
+
+		2) Select a collection where you want this registered
+		dataset or collection to reside.
+
+		3) Select the "Register Local FS" menu item from the 
+		"Operation" pull down menu and then selection the
+		local file or directory you wish to register.
+
+	o "Rename" - Rename a dataset.
+
+	o "Display" - allows graphical (jpeg, gif, etc) and text 
+	  (C, html, etc) files to be displayed in the srbBrowser window.
+          This can also be achieved by double clicking the file displayed 
+	  in the metadata window.
+
+3) The "Container" menu shows the type of "container" operations that can be
+performed. The following operations have been
+implemented:
+
+        o "New Container" - make a new "Container"
+
+	o "Delete Container" - delete a "Container"
+
+	o "Sync Container" - Synchronize the "permanent" copy of the container
+	  with the "cache" copy. 
+
+	o "Copy" and "Paste to Container" operations are the same as the 
+	  "Copy" and "Paste" operations in the "Operation" menu except
+	  all objects created by the "Paste to Container" operation are
+	  stored in the "default container".
+
+	o "Import to Container" operation is the same as the "Import  
+	  from Local FS" operation originated from the "Operations" menu
+	  except all objects created by the "Import" operation are
+          stored in the "default container".
+
+4) The "Metadata" menu allows the manipulation and querying of system 
+level metadata. Manipulation of two attributes - "Access Control" and 
+"Comments" has been implemented thus far.
+
+	o The "Set Access Cntl" menu can be used to grant access permission 
+	  of a dataset or a collection to individual users or group of 
+	  users. Recursive operation is allowed for setting the access 
+	  permission of a collection.
+
+	o The "List Access Cntl" menu can be used to list the access 
+	  permission of datasets and collections.
+
+	o The "New Comment" menu can be used to attach a new "comment"
+          to a dataset. A new comment can be created completely new or
+	  by adding to the default comment.
+
+	o The "Modify Comment" menu can be used to modify an existing
+	  comment. Modification can be done by replacing the entire
+	  comment or appending to the current comment. The menu also
+	  allows the deletion of a comment.
+
+	o The "Query Comment" menu can be used to query datasets based
+          on the content of these comments. If a collection is selected
+	  for querying, the query will be done for all descendants of
+	  the collection. If a dataset is selected for querying, the
+	  content the comment for this dataset will be listed.
+
+5) The "View" menu has only one sub-menu - "Refresh". The srbBrowser
+always try to update the tree structure and the metadata displayed in
+the window whenever changes were made by the srbBrowser. The "Refresh"
+function allowed the display to be refreshed after changes were made
+external to the srbBrowser. 

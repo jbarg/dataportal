@@ -1,0 +1,91 @@
+alter table MDAS_TD_DATA_GRP add (
+	coll_owner integer, 
+	coll_cr_timestamp varchar(32),
+	coll_comments varchar(700));
+alter table MDAS_AD_REPL add (
+	datalock       integer DEFAULT 0,
+ 	lockowner      integer DEFAULT  0,
+        version_num    varchar(250) DEFAULT '0',
+ 	container_td_id integer,
+        d_comment varchar(250));
+alter table MDAS_AD_REPL add (
+	datalock       integer,
+ 	lockowner      integer,
+ 	container_td_id integer);
+
+-- primary key should include version_number also
+
+create synonym MDAS_AD_1COLLMDATA   for MDAS_AD_COLLMDATA;
+create synonym MDAS_AD_1MDATA       for MDAS_AD_MDATA;
+create synonym MDAS_AD_2COLLMDATA   for MDAS_AD_COLLMDATA;
+create synonym MDAS_AD_2MDATA       for MDAS_AD_MDATA;
+create synonym MDAS_AD_3COLLMDATA   for MDAS_AD_COLLMDATA;
+create synonym MDAS_AD_3MDATA       for MDAS_AD_MDATA;
+create synonym MDAS_AD_4COLLMDATA   for MDAS_AD_COLLMDATA;
+create synonym MDAS_AD_4MDATA       for MDAS_AD_MDATA;
+create synonym MDAS_AD_ANNO_USER    for MDAS_CD_USER;
+create synonym MDAS_AD_DCRELREPL    for MDAS_AD_REPL;
+create synonym MDAS_AD_GRP_2ACCS    for MDAS_AD_GRP_ACCS;
+create synonym MDAS_AD_VOCHNLREPL   for MDAS_AD_REPL;
+create synonym MDAS_AD_VOTNAILRPL   for MDAS_AD_REPL;
+create synonym MDAS_TD_IDGRPUSER1   for MDAS_AU_GROUP;
+create synonym MDAS_TD_IDGRPUSER2   for MDAS_AU_GROUP;
+create synonym MDAS_TD_WC_ACTION    for MDAS_TD_ACTN;
+create synonym MDAS_ADCONT_REPL     for MDAS_AD_REPL;
+create synonym MDAS_CD_COOWN_USER   for MDAS_CD_USER;
+create synonym MDAS_CD_DLOWN_USER   for MDAS_CD_USER;
+create synonym MDAS_TD_LCK_ACCS     for MDAS_TD_DS_ACCS;
+create synonym MDAS_TD_DLOWN_DOMN   for MDAS_TD_DOMN;
+create synonym MDAS_TD_COOWN_DOMN   for MDAS_TD_DOMN;
+create synonym MDAS_AU_COOWN_DOMN   for MDAS_AU_DOMN;
+create synonym MDAS_AU_DLOWN_DOMN   for MDAS_AU_DOMN;
+
+alter table mdas_ad_repl add unique (repl_enum, version_num, data_name, data_grp_id);
+
+-- drop constraint for this one: alter table mdas_ad_repl add unique (repl_enum, data_name, data_grp_id);
+-- drop constraint for this one :alter table mdas_ad_repl add unique (data_id,rsrc_id);
+
+
+insert into mdas_td_data_typ values ('0001.0001.0001.0001.000l','URL');
+insert into MDAS_TD_LOCN (locn_id,locn_desc) values ('0000','null');
+insert into MDAS_AR_PHYSICAL values (0,0,'null','0000','0000','1997-08-15-00.00.00',2,'',0,0);
+insert into MDAS_AR_REPL values (0,0,'null','0000','0000','1997-08-15-00.00.00',2,0,'',0,0);
+
+
+select 'update mdas_td_data_grp set COLL_OWNER ='||user_id||',COLL_CR_TIMESTAMP=''2001-10-24-10:57:01'',COLL_COMMENTS=''''  where data_grp_name  like ''/home/'||user_name||'.%'';' 
+from mdas_cd_user ;
+
+
+select 'update mdas_td_data_grp set COLL_OWNER ='||user_id||',COLL_CR_TIMESTAMP=''2001-10-24-10:57:01'',COLL
+_COMMENTS=''''  where data_grp_name  like ''/home/'||user_name||'.%'';' 
+from mdas_cd_user ;
+
+select 'update mdas_td_data_grp set COLL_OWNER ='user_id||',COLL_CR_TIMESTAMP=''2001-10-24-10:57:01'',COLL
+_COMMENTS=''''  where data_grp_name  like ''/home/'||user_name||'.%'';' 
+from mdas_cd_user ;
+update mdas_td_data_grp set COLL_OWNER =4,COLL_CR_TIMESTAMP='2001-10-24-10:57:01',COLL_COMMENTS='' where data_grp_name  like '/home/sekar.sdsc/%';
+
+update mdas_td_data_grp set COLL_OWNER =4,COLL_CR_TIMESTAMP='2001-10-24-10:57:01',COLL_COMMENTS='' where data_grp_name  like '%sekar%';
+update mdas_td_data_grp set COLL_OWNER =425,COLL_CR_TIMESTAMP='2001-10-24-10:57:01',COLL_COMMENTS='' where data_grp_name  like '%axon.rutgers%';
+update mdas_td_data_grp set COLL_OWNER =303,COLL_CR_TIMESTAMP='2001-10-24-10:57:01',COLL_COMMENTS='' where data_grp_name  like '%bzhu.sdsc%';
+
+
+
+-- make relp_enum=-1 in mdas_ad_repl for all inContainer Objects
+
+
+select user_name, user_id, repl_enum, count(data_id) from mdas_ad_repl A, mdas_cd_user B
+ where data_id <> container_id and A.data_owner = B.user_id
+group by user_name,user_id, repl_enum;
+
+
+select data_id,repl_enum, container_id from mdas_ad_repl A where data_id <> container_id and data_owner = 2 and data_id > 100;
+
+update mdas_ad_repl set repl_enum = -1 where data_id in (select data_id from mdas_ad_repl A where data_id <> container_id and data_owner = 2 and data_id > 100);
+
+update mdas_ad_repl set repl_enum = -1 where data_id in (select data_id from mdas_ad_repl A where data_id <> container_id and data_owner = 7 and data_id between 1000000 and 2000000);
+
+update mdas_ad_repl set repl_enum = -1 where data_id in (select data_id from mdas_ad_repl A where data_id <> container_id and data_owner = 7 and data_id between 1000000 and 2000000);
+update mdas_ad_repl set repl_enum = -1 where data_id in (select data_id from mdas_ad_repl A where data_id <> container_id and data_owner = 7 and data_id > 4000000);
+ commit;
+

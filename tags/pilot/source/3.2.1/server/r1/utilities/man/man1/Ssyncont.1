@@ -1,0 +1,54 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Ssyncont.1
+.\"
+.TH Ssyncont 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Ssyncont \- Synchronizes the "permanent" copy of the container
+with the "cache" copies.
+.SH SYNOPSIS
+.B Ssyncont
+.RB [ \-adhp ]
+.RB [ \-z
+.IR mcatZone ]
+.I container
+.SH DESCRIPTION
+.B "Ssyncont "
+synchronizes the "permanent" copy of the container with
+the "cache" copies. When an inContainer object is created or
+opened for I/O, all I/O is done only to the "cache" copy. If
+the "cache" copy is newer than the "permanent" copy, this command
+will cause the content of the "cache" copy to be copied to
+the "permanent" copy. If the -d option is set, the "cache" copy
+will be purged once the copies have been synchronized.
+.sp
+When a container is full, the SRB server automatically renames the
+full container "myContainer" to "myContainer.NNNN" where NNNN is a
+random integer number. The server then creates an empty container
+with the original container name "myContainer". In effect, this
+scheme creates a family of containers. The -a option can be used to
+synchronize all containers in a family.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-a "
+synchronize all containers in a container family.
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-d "
+delete the cache copy once the copies have been synchronized.
+.TP 0.5i
+.B "\-p "
+one or more "permanent" container copies can be designated
+as "primary". If this option is used, the synchronization will
+be done to the "primary" copy only.
+.TP 0.5i
+.B "\-z mcatZone "
+The MCAT zone where the container resides
+.SH "SEE ALSO"
+.BR Srmcont (1),
+.BR Smkcont (1),
+.BR Slscont (1),
+.BR Sreplcont (1)
+
