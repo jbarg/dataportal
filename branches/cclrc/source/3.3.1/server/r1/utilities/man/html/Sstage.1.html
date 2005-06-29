@@ -1,0 +1,87 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sstage</TITLE>
+</HEAD><BODY>
+<H1>Sstage</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2003 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sstage - Stage an SRB object stored in Sun's SamFs type resources 
+(not applicable to other resource types) from offline to online.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Sstage</B>
+
+[<B>-r</B>] <B>-S</B>
+
+<I>stageResource</I> <I>srbObj</I>|<I>collection</I> ...
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Sstage </B>
+
+stages the srb data/collection stored in SamFs type resources from offline 
+to online. This will be helpful to someone who wants to download or copy
+(Sget,Scp, etc) a large number of files that have been migrated to tapes
+(offline). The Sstage command does not block waiting for the completion of
+the actual staging. It issues all the staging commands to the SamFs at once
+so that the SamFs can optimize a staging strategy. 
+The Sstage command should be run before Sget or Scp is run.
+If an SRB data object contains multiple copies, the -S option can be used to specify
+the resource of the copy to be staged. 
+<P>
+The
+<I>srbObj</I> or <I>collection</I>
+
+arguments can be path names in the SRB collection hierarchy.
+<P>
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-r </B>
+
+<DD>
+recursively stage the collection.
+<DT><B>-S </B>
+
+<DD>
+<I>stageResource </I>
+
+is the resource of the copy to be staged.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sget.1.html">Sget</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sreplicate.1.html">Sreplicate</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Scp.1.html">Scp</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

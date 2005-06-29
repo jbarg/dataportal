@@ -1,0 +1,36 @@
+<html><HEAD>
+<TITLE>MYSRB - A TransSystem Data Explorer </TITLE>
+<body background="srb2.jpg">
+<TABLE>
+<TR valign=top ><TD>
+<!--#include file="mysrbmenu.html" --> 
+</TD><TD>
+<CENTER> <B><FONT COLOR=#0000FF>SRB Change Pass Phrase</FONT></B>
+<FORM METHOD="POST" ACTION="http://sasa.sdsc.edu/cgi-bin/mysrb2.cgi" >
+<TABLE>
+<input type=hidden name="function" value="chpasswd">
+<TR><TD ALIGN=RIGHT>
+<STRONG><FONT COLOR=#FF0000>SRB User Name:</FONT></STRONG></TD><TD>
+<INPUT TYPE="TEXT" NAME="username", VALUE= "" , SIZE=24,12>
+</TD></TR><TR><TD ALIGN=RIGHT>
+<STRONG><FONT COLOR=#FF0000>SRB User Domain Name:</FONT></STRONG></TD><TD>
+<INPUT TYPE="TEXT" NAME="domainname", VALUE= "" , SIZE=24,12>
+</TD></TR><TR><TD ALIGN=RIGHT>
+<STRONG><FONT COLOR=#FF0000>Old SRB Password:</FONT></STRONG></TD><TD>
+<INPUT TYPE="PASSWORD" NAME="password", VALUE= "" , SIZE=24,12>
+</TD></TR><TR><TD ALIGN=RIGHT>
+<STRONG><FONT COLOR=#FF0000>New SRB Password:</FONT></STRONG></TD><TD>
+<INPUT TYPE="PASSWORD" NAME="password1", VALUE= "" , SIZE=24,12><BR>
+Password can be any alphanumeric string<BR> upto 120 characters (possibly with blanks).
+</TD></TR><TR><TD ALIGN=RIGHT>
+<STRONG><FONT COLOR=#FF0000>New Password Again:</FONT></STRONG></TD><TD>
+<INPUT TYPE="PASSWORD" NAME="password2", VALUE= "" , SIZE=24,12>
+</TD></TR><TR><TD ALIGN=RIGHT>
+</TD><TD>
+<INPUT TYPE="submit" VALUE="Change MySRB Password">
+</TD></TR></TABLE>
+</FORM>
+</TD></TR>
+</TABLE>
+</CENTER></BODY>
+</HTML>

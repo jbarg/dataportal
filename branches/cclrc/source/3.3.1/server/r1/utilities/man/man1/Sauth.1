@@ -1,0 +1,57 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sauth.1
+.\"
+.TH Sauth 1 "Sept 2004 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+
+Sauth \- Create an SRB password file with scrambled contents
+
+.SH SYNOPSIS
+.B Sauth [-ehv]
+
+.SH DESCRIPTION
+.B "Sauth "
+creates an individual password file, like the .MdasAuth file, but with
+scrambled (non-plain-text) contents to improve security.  By default,
+this will be stored in ~/.srb/.srbAuthFile but you can change this by
+defining in a "SRB_AUTH_FILE" environment variable, which can be any
+file you wish (preferably, on a local file system).
+.sp
+To increase security more, you can also define environment variable
+"SRB_AUTH_KEY" to be any value you wish.  If you set "SRB_AUTH_KEY"
+when you run Sauth, it must also be defined later as the same value
+for subsequent authentication to succeed.  Do not set this to your
+password, simply use some arbitrary string.  It is used internally as
+part of the scrambling algorithm.
+.sp
+Sauth will prompt for your existing SRB password and write it in an 
+obfuscated form into the srbAuthFile.  If the srbAuthFile file already 
+exists, Sauth
+will prompt for permission to overwrite it (respond with yes or y).
+.sp
+After writing the .srbAuthFile file, Sauth will also prompt for
+permission to remove your .MdasAuth file since it is no longer needed.
+.sp
+For added security, you can remove the srbAuthFile and later recreate it
+by re-running Sauth.
+.sp
+If you run Sauth and later run Spasswd to create a new SRB password,
+Spasswd will update your .srbAuthFile 
+instead of the .MdasAuth file.
+
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-e "
+echo the password as you type it in; normally echo is disabled.
+.TP 0.5i
+.B "\-h "
+display usage information.
+.TP 0.5i
+.B "\-v "
+verbose mode.
+
+.SH "SEE ALSO"
+.BR Sinit (1),
+.BR Spasswd (1),
+.BR Senv (1)
