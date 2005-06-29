@@ -1,0 +1,113 @@
+
+
+CREATE TABLE MDAS_TD_RSQUOTA
+       (rsrc_id      integer,
+        user_id      integer,
+        usage        integer,
+        quota_size   integer,
+        max_limit    integer
+       );
+
+CREATE TABLE MDAS_TD_RSQUO_LIM
+       (rsrc_id      integer,
+	quota_size   integer,	-- in 100MB chunks 
+	max_limit    integer    -- in 100MB chunks 
+       );
+
+insert into MDAS_TD_RSQUO_LIM 
+   select phy_rsrc_id, 10,20 
+    from mdas_ar_physical;
+
+insert into MDAS_TD_RSQUOTA
+   select A.rsrc_id, data_owner,sum(data_size),quota_size,max_limit
+   from mdas_ad_repl A,  mdas_td_rsquo_lim B
+   where data_id = container_id and A.rsrc_id = B.rsrc_id
+   group by  A.rsrc_id, data_owner,quota_size,max_limit;
+
+
+CREATE OR REPLACE TRIGGER mcat_ins_quo_lim
+AFTER INSERT  
+ON mdas_ar_physical
+REFERENCING NEW AS new
+FOR EACH ROW
+begin
+   insert into MDAS_TD_RSQUO_LIM values
+   (:new.phy_rsrc_id, 10,20);
+end;
+
+
+CREATE OR REPLACE TRIGGER mcat_ins_quota
+AFTER INSERT  
+ON mdas_ad_repl 
+REFERENCING NEW AS new
+FOR EACH ROW
+WHEN (new.data_id = new.container_id)
+begin
+    update MDAS_TD_RSQUOTA 
+    set usage = usage + :new.data_size
+    where rsrc_id = :new.rsrc_id and user_id = :new.data_owner;
+exception
+    when NO_DATA_FOUND then
+      insert into MDAS_TD_RSQUOTA 
+      select :new.rsrc_id,:new.data_owner,:new.data_size,quota_size,max_limit
+        from MDAS_TD_RSQUO_LIM
+        where rsrc_id = :new.rsrc_id;
+end;
+
+CREATE OR REPLACE TRIGGER mcat_upd1_quota
+AFTER UPDATE OF data_size  
+ON mdas_ad_repl 
+FOR EACH ROW
+WHEN (old.data_id = old.container_id
+    AND old.rsrc_id = new.rsrc_id)
+begin
+    update MDAS_TD_RSQUOTA 
+    set usage = usage + :new.data_size  - :old.data_size
+    where rsrc_id = :old.rsrc_id and user_id = :old.data_owner;
+end;
+
+CREATE OR REPLACE TRIGGER mcat_upd2_quota
+AFTER UPDATE OF data_size  
+ON mdas_ad_repl 
+FOR EACH ROW
+WHEN (old.data_id = old.container_id
+    AND old.rsrc_id <> new.rsrc_id)
+begin
+    update MDAS_TD_RSQUOTA 
+    set usage = usage  - :old.data_size
+    where rsrc_id = :old.rsrc_id and user_id = :old.data_owner;
+    update MDAS_TD_RSQUOTA 
+    set usage = usage + :new.data_size
+    where rsrc_id = :new.rsrc_id and user_id = :old.data_owner;
+end;
+
+CREATE OR REPLACE TRIGGER mcat_upd3_quota
+AFTER 
+UPDATE OF rsrc_id  
+OR UPDATE OF data_owner
+ON mdas_ad_repl 
+FOR EACH ROW
+WHEN (old.data_id = old.container_id)
+begin
+    update MDAS_TD_RSQUOTA 
+    set usage = usage  - :old.data_size
+    where rsrc_id = :old.rsrc_id and user_id = :old.data_owner;
+    update MDAS_TD_RSQUOTA 
+    set usage = usage + :new.data_size
+    where rsrc_id = :new.rsrc_id and user_id = :new.data_owner;
+end;
+
+
+CREATE OR REPLACE TRIGGER mcat_del_quota
+AFTER DELETE
+ON mdas_ad_repl 
+REFERENCING OLD AS old 
+FOR EACH ROW
+WHEN (old.data_id = old.container_id)
+begin
+    update MDAS_TD_RSQUOTA 
+    set usage = usage - :old.data_size
+    where rsrc_id = :old.rsrc_id and user_id = :old.data_owner;
+end;
+
+

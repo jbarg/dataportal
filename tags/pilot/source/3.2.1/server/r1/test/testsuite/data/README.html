@@ -1,0 +1,935 @@
+<HTML>
+
+<HEAD>
+<TITLE>SRBhello - SRB client example programs</TITLE>
+</HEAD>
+<body bgcolor=#FFFFFF>
+<CENTER>
+<H2>README file for "SRBhello" sample programs</H2>
+<P> <I> Last Update 9/4/97 </I> </P>
+</CENTER>
+
+
+<H2>What's here?</H2>
+<ul>
+<li> <a href="SRBhello.tar.gz">SRBhello.tar.gz</a> -  entire suite in compressed tar file
+<li> <a href="#Client_Index">Index to client library routines</a>
+<li> <a href="#Source_Index">Index to individual source files</a>
+<li> <a href="#UserArgs_Index">Argument parsing routines</a>
+<li> <a href="#HOST"> Host connection and information interface </a>
+<li> <a href="#AUDIT"> Audit trail interface </a>
+<li> <a href="#FTP"> FTP browsing </a>
+<li> <a href="#FILE"> Extended file interface </a>
+<li> <a href="#OBJECT"> Object interface </a>
+<li> <a href="#LOBJ"> DBMS LOBJ interface </a>
+</ul>
+
+<p><hr></p>
+
+<H2>Documentation</H2>
+
+<p>
+The SRBhello suite contains 30 or more programs which demonstrate the
+Storage Resource Broker (SRB) client library and an argument parsing
+package for command-line program development.  These programs can be
+executed by the script 'testsuite' to run a battery of validation tests
+on a SRB installation.
+</p>
+
+<p>
+Documentation Notes:
+</p>
+
+<p>
+The <a href="#UserArgs_Index">srbUserArgs</a> argument parsing routines
+are required for all programs in this suite.  See below for source
+code information.
+</p>
+
+<p>
+Command line arguments or argument values listed in square brackets
+are optional.
+</p>
+
+<p>
+Command line argument values listed in curly braces are exclusive choices.
+</p>
+
+<p>
+The -help flag is valid for all programs.  Use this flag to
+obtain usage information.
+</p>
+
+<p>
+The -verbose flag is also valid for all programs.  Specifying
+this flag will cause many comments to be output to stderr.
+</p>
+
+<p>
+Some arguments allow the listing of multiple values
+e.g., -to srb_file_name [name2 ... nameN].  The absolute maximum 
+number of values that may be supplied is given by SRB_USERARG_MAXC
+in srbUserArgs.h.
+</p>
+
+<p><hr></p>
+
+<a name="Client_Index"><H3>Index to client library routines</H3></a>
+
+<table noborder>
+<tr><td>  ROUTINE            </td><td>  WHERE USED </td>
+<tr><td>  clConnect          </td><td>  (all) </td>
+<tr><td>  clErrorMessage     </td><td>  (all) </td>
+<tr><td>  clFinish           </td><td>  (all) </td>
+<tr><td>  clStatus           </td><td>  (all) </td>
+<tr><td>  srbChkMdasAuth     </td><td>  <a href="#srbchkauth">srbchkauth</a> </td>
+<tr><td>  srbClosedir        </td><td>  <a href="#srblsdir">srblsdir</a> </td>
+<tr><td>  srbCreateCollect   </td><td>  <a href="#srbmkcoll">srbmkcoll</a> </td>
+<tr><td>  srbDbLobjClose     </td><td>  <a href="#srbdbcreate">srbdbcreate</a> </td><td> <a href="#srbdbget">srbdbget</a> </td><td> <a href="#srbdbseek">srbdbseek</a> </td>
+<tr><td>  srbDbLobjCreate    </td><td>  <a href="#srbdbcreate">srbdbcreate</a> </td>
+<tr><td>  srbDbLobjOpen      </td><td>  <a href="#srbdbget">srbdbget</a> </td><td> <a href="#srbdbseek">srbdbseek</a> </td>
+<tr><td>  srbDbLobjRead      </td><td>  <a href="#srbdbget">srbdbget</a> </td><td> <a href="#srbdbseek">srbdbseek</a> </td>
+<tr><td>  srbDbLobjSeek      </td><td>  <a href="#srbdbseek">srbdbseek</a> </td>
+<tr><td>  srbDbLobjUnlink    </td><td>  <a href="#srbdbdel">srbdbdel</a> </td>
+<tr><td>  srbDbLobjWrite     </td><td>  <a href="#srbdbcreate">srbdbcreate</a> </td>
+<tr><td>  srbFileChmod       </td><td>  <a href="#srbchmod">srbchmod</a> </td>
+<tr><td>  srbFileClose       </td><td>  <a href="#srbfcreate">srbfcreate</a> </td><td> <a href="#srbfget">srbfget</a> </td><td> <a href="#srbfseek">srbfseek</a> </td>
+<tr><td>  srbFileCreate      </td><td>  <a href="#srbfcreate">srbfcreate</a> </td>
+<tr><td>  srbFileMkdir       </td><td>  <a href="#srbmkdir">srbmkdir</a> </td>
+<tr><td>  srbFileOpen        </td><td>  <a href="#srbfget">srbfget</a> </td><td> <a href="#srbfseek">srbfseek</a> </td>
+<tr><td>  srbFileRead        </td><td>  <a href="#srbfget">srbfget</a> </td><td> <a href="#srbfseek">srbfseek</a> </td>
+<tr><td>  srbFileRmdir       </td><td>  <a href="#srbrmdir">srbrmdir</a> </td>
+<tr><td>  srbFileSeek        </td><td>  <a href="#srbfseek">srbfseek</a> </td>
+<tr><td>  srbFileStat        </td><td>  <a href="#srbfget">srbfget</a> </td><td> <a href="#srbfseek">srbfseek</a> </td><td> <a href="#srbfstat">srbfstat</a> </td>
+<tr><td>  srbFileSync        </td><td>  <a href="#srbfcreate">srbfcreate</a> </td><td> <a href="#srbfget">srbfget</a> </td><td> <a href="#srbfseek">srbfseek</a> </td>
+<tr><td>  srbFileUnlink      </td><td>  <a href="#srbfdel">srbfdel</a> </td>
+<tr><td>  srbFileWrite       </td><td>  <a href="#srbfcreate">srbfcreate</a> </td>
+<tr><td>  srbFreeHostInfo    </td><td>  <a href="#srbhostinfo">srbhostinfo</a> </td>
+<tr><td>  srbFreeVaultInfo   </td><td>  <a href="#srbvaultinfo">srbvaultinfo</a> </td>
+<tr><td>  srbGetDataDirInfo  </td><td>  <a href="#srboddinfo">srboddinfo</a> </td><td> <a href="#srboget">srboget</a> </td>
+<tr><td>  srbGetDatasetInfo  </td><td>  <a href="#srbodsinfo">srbodsinfo</a> </td>
+<tr><td>  srbHostConfig      </td><td>  <a href="#srbhostinfo">srbhostinfo</a> </td>
+<tr><td>  srbListCollect     </td><td>  <a href="#srblscoll">srblscoll</a> </td>
+<tr><td>  srbModifyCollect   </td><td>  <a href="#srbmodcoll">srbmodcoll</a> </td>
+<tr><td>  srbObjClose        </td><td>  <a href="#srbocreate">srbocreate</a> </td><td> <a href="#srboget">srboget</a> </td><td> <a href="#srboseek">srboseek</a> </td>
+<tr><td>  srbObjCopy         </td><td>  <a href="#srbocopy">srbocopy</a> </td>
+<tr><td>  srbObjCreate       </td><td>  <a href="#srbocreate">srbocreate</a> </td>
+<tr><td>  srbObjMove         </td><td>  <a href="#srbomove">srbomove</a> </td>
+<tr><td>  srbObjOpen         </td><td>  <a href="#srboget">srboget</a> </td><td> <a href="#srboseek">srboseek</a> </td>
+<tr><td>  srbObjRead         </td><td>  <a href="#srboget">srboget</a> </td><td> <a href="#srboseek">srboseek</a> </td>
+<tr><td>  srbObjSeek         </td><td>  <a href="#srboseek">srboseek</a> </td>
+<tr><td>  srbObjUnlink       </td><td>  <a href="#srbodel">srbodel</a> </td>
+<tr><td>  srbObjWrite        </td><td>  <a href="#srbocreate">srbocreate</a> </td>
+<tr><td>  srbOpendir         </td><td>  <a href="#srblsdir">srblsdir</a> </td>
+<tr><td>  srbPrintHostInfo   </td><td>  <a href="#srbhostinfo">srbhostinfo</a> </td>
+<tr><td>  srbPrintVaultInfo  </td><td>  <a href="#srbvaultinfo">srbvaultinfo</a> </td>
+<tr><td>  srbReaddir         </td><td>  <a href="#srblsdir">srblsdir</a> </td>
+<tr><td>  srbSetAuditTrail   </td><td>  <a href="#srbaudittrail">srbaudittrail</a> </td>
+<tr><td>  srbSetStorAttr     </td><td>  <a href="#srbftpbrowse">srbftpbrowse</a> </td>
+<tr><td>  srbVaultInfo       </td><td>  <a href="#srbvaultinfo">srbvaultinfo</a> </td>
+</table>
+
+<p><hr></p>
+
+<a name="Source_Index"><H3>Index to individual source files</H3></a>
+
+
+<table noborder>
+<tr><td> SOURCE ITEM </td> <td> DESCRIPTION </td> 
+<tr><td><a href="Makefile">Makefile</a> </td><td> Example Makefile </td>
+<tr><td><a href="testsuite">testsuite</a> </td><td> Bourne shell script to run test battery.  Provides example usage of all routines. </td>
+<tr><td><a href="helpsuite">helpsuite</a> </td><td> Bourne shell script to output help information from all routines. </td>
+<tr><td> </td>
+<tr><td><a href="#srbhello">srbhello.c</a> </td><td> tests connection to SRB </td>
+<tr><td><a href="#srbchkauth">srbchkauth.c</a> </td><td> tests user authentication </td>
+<tr><td><a href="#srbhostinfo">srbhostinfo.c</a> </td><td> retreives information on host </td>
+<tr><td><a href="#srbvaultinfo">srbvaultinfo.c</a> </td><td> retreives information on host vaults </td>
+<tr><td> </td>
+<tr><td><a href="#srbaudittrail">srbaudittrail.c</a> </td><td> tests audit trail toggle </td>
+<tr><td> </td>
+<tr><td><a href="#srbftpbrowse">srbftpbrowse.c</a> </td><td> performs ftp login and directory change </td>
+<tr><td> </td>
+<tr><td><a href="#srblsdir">srblsdir.c</a> </td><td> lists the contents of an SRB directory </td>
+<tr><td><a href="#srbmkdir">srbmkdir.c</a> </td><td> creates unix-like directories in the SRB </td>
+<tr><td><a href="#srbrmdir">srbrmdir.c</a> </td><td> removes unix-like directories in the SRB </td>
+<tr><td><a href="#srbfcreate">srbfcreate.c</a> </td><td> creates a SRB file </td>
+<tr><td><a href="#srbfchmod">srbfchmod.c</a> </td><td> modifies file or directory mode </td>
+<tr><td><a href="#srbfstat">srbfstat.c</a> </td><td> gets unix-like file status </td>
+<tr><td><a href="#srbfget">srbfget.c</a> </td><td> gets a SRB file </td>
+<tr><td><a href="#srbfseek">srbfseek.c</a> </td><td> retrieves bytes from a SRB file </td>
+<tr><td><a href="#srbfdel">srbfdel.c</a> </td><td> deletes unix-like files in the SRB </td>
+<tr><td> </td>
+<tr><td><a href="#srbmkcoll">srbmkcoll.c</a> </td><td> creates directory-like collection in the SRB </td>
+<tr><td><a href="#srblscoll">srblscoll.c</a> </td><td> lists the contents of an SRB collection </td>
+<tr><td><a href="#srbmodcoll">srbmodcoll.c</a> </td><td> modifies directory-like collection in the SRB </td>
+<tr><td><a href="#srbocreate">srbocreate.c</a> </td><td> creates an object </td>
+<tr><td><a href="#srbodsinfo">srbodsinfo.c</a> </td><td> lists specific SRB object info </td>
+<tr><td><a href="#srboddinfo">srboddinfo.c</a> </td><td> lists all SRB object info </td>
+<tr><td><a href="#srboget">srboget.c</a> </td><td> gets an object from the SRB </td>
+<tr><td><a href="#srboseek">srboseek.c</a> </td><td> retrieves bytes from an object </td>
+<tr><td><a href="#srbomove">srbomove.c</a> </td><td> moves an object between resources </td>
+<tr><td><a href="#srbocopy">srbocopy.c</a> </td><td> copies an object between resources </td>
+<tr><td><a href="#srbodel">srbodel.c</a> </td><td> deletes objects in the SRB </td>
+<tr><td> </td>
+<tr><td><a href="#srbdbcreate">srbdbcreate.c</a> </td><td> creates a DBMS LOBJ </td>
+<tr><td><a href="#srbdbget">srbdbget.c</a> </td><td> gets a DBMS LOBJ </td>
+<tr><td><a href="#srbdbseek">srbdbseek.c</a> </td><td> retrieves bytes from a DBMS LOBJ </td>
+<tr><td><a href="#srbdbdel">srbdbdel.c</a> </td><td> deletes DBMS LOBJ's </td>
+</table>
+
+<p><hr></p>
+
+<p><a name="UserArgs_Index">ARGUMENT PARSING ROUTINES</a></p>
+
+<a href="srbUserArgs.h">srbUserArgs.h</a> - C include file.<br>
+<a href="srbUserArgs.c">srbUserArgs.c</a> - C source file.<br>
+<pre>
+API routines:
+      srbUserArgs
+      srbFreeArgs
+</pre>
+Example Usage: <a href="testargs.c">testargs.c</a>
+
+<p><hr></p>
+
+<p><a name="HOST"> HOST CONNECTIONS </a></p>
+
+<a name="srbhello" href="srbhello.c">srbhello.c</a> : tests connection to SRB<br>
+<pre>
+Usage.
+  srbhello
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+SRB API routines:
+      clConnect                       (srbhello)
+      clStatus                        (srbhello)
+      clErrorMessage                  (srbhello)
+      clFinish                        (srbhello)
+</pre>
+
+<a name="srbchkauth" href="srbchkauth.c">srbchkauth.c</a> : tests user authentication
+<pre>
+Usage.
+  srbchkauth
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -user user_name                         (string)     (Requires 1 values)
+    -domain domain_name                     (string)     (Requires 1 values)
+SRB API routines:
+      clConnect                       (srbchkauth)
+      clStatus                        (srbchkauth)
+      clErrorMessage                  (srbchkauth)
+      clFinish                        (srbchkauth)
+      srbChkMdasAuth                  (srbchkauth)
+</pre>
+
+<a name="srbhostinfo" href="srbhostinfo.c">srbhostinfo.c</a> : retreives information on host<br>
+<pre>
+Usage.
+  srbhostinfo
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+SRB API routines:
+      clConnect                       (srbhostinfo)
+      clStatus                        (srbhostinfo)
+      clErrorMessage                  (srbhostinfo)
+      clFinish                        (srbhostinfo)
+      srbHostConfig                   (srbhostinfo)
+      srbPrintHostInfo                (srbhostinfo)
+      srbFreeHostInfo                 (srbhostinfo)
+</pre>
+
+<a name="srbvaultinfo" href="srbvaultinfo.c">srbvaultinfo.c</a> : retreives information on host vaults<br>
+<pre>
+Usage.
+  srbvaultinfo
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+SRB API routines:
+      clConnect                       (srbvaultinfo)
+      clStatus                        (srbvaultinfo)
+      clErrorMessage                  (srbvaultinfo)
+      clFinish                        (srbvaultinfo)
+      srbVaultInfo                    (srbvaultinfo)
+      srbPrintVaultInfo               (srbvaultinfo)
+      srbFreeVaultInfo                (srbvaultinfo)
+</pre>
+
+
+<p><hr></p>
+
+<p><a name="AUDIT"> AUDIT TRAIL INTERFACE </a></p>
+
+<a name="srbaudittrail" href="srbaudittrail.c">srbaudittrail.c</a> : tests audit trail toggle<br>
+<pre>
+Usage.
+  srbaudittrail
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -on                                     (null)       (Optional)
+    -off                                    (null)       (Optional)
+SRB API routines:
+      clConnect                       (srbaudittrail)
+      clStatus                        (srbaudittrail)
+      clErrorMessage                  (srbaudittrail)
+      clFinish                        (srbaudittrail)
+      srbSetAuditTrail                (srbaudittrail)
+</pre>
+
+
+<p><hr></p>
+
+<p><a name="FTP"> FTP BROWSING </a></p>
+
+<a name="srbftpbrowse" href="srbftpbrowse.c">srbftpbrowse.c</a> : performs ftp login and directory change<br>
+<pre>
+Usage.
+  srbftpbrowse
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -dir dir1                               (string)     (Requires 1 values)
+SRB API routines:
+      clConnect                       (srbftpbrowse)
+      clStatus                        (srbftpbrowse)
+      clErrorMessage                  (srbftpbrowse)
+      clFinish                        (srbftpbrowse)
+      srbSetStorAttr                  (srbftpbrowse)
+</pre>
+
+
+<p><hr></p>
+
+<p><a name="FILE"> EXTENDED FILE INTERFACE </a></p>
+
+<a name="srblsdir" href="srblsdir.c">srblsdir.c</a> : lists the contents of an SRB directory.<br>
+<pre>
+Usage.
+  srblsdir
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -dir srb_dir1 [dir2 ... dirN]           (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+Default is users home directory.
+SRB API routines:
+      clConnect                       (srblsdir)
+      clStatus                        (srblsdir)
+      clErrorMessage                  (srblsdir)
+      clFinish                        (srblsdir)
+      srbOpendir                      (srblsdir)
+      srbReaddir                      (srblsdir)
+      srbClosedir                     (srblsdir)
+</pre>
+
+<a name="srbmkdir" href="srbmkdir.c">srbmkdir.c</a> : creates unix-like directories in the SRB<br>
+<pre>
+Usage.
+  srbmkdir
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -dir srb_dir1 [dir2 ... dirN]           (string)     (Required)
+    -mode unix_like_mode                    (int)        (Requires 1 values)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+SRB API routines:
+      clConnect                       (srbmkdir)
+      clStatus                        (srbmkdir)
+      clErrorMessage                  (srbmkdir)
+      clFinish                        (srbmkdir)
+      srbFileMkdir                    (srbmkdir)
+</pre>
+
+<a name="srbrmdir" href="srbrmdir.c">srbrmdir.c</a> : removes unix-like directories in the SRB.<br>
+<pre>
+Usage.
+  srbrmdir
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -dir srb_dir1 [dir2 ... dirN]           (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+SRB API routines:
+      clConnect                       (srbrmdir)
+      clStatus                        (srbrmdir)
+      clErrorMessage                  (srbrmdir)
+      clFinish                        (srbrmdir)
+      srbFileRmdir                    (srbrmdir)
+</pre>
+
+<a name="srbfcreate" href="srbfcreate.c">srbfcreate.c</a> : creates a
+unix-like file in the SRB from existing file on local system.  Sync's
+SRB file after close.<br>
+<pre>
+Usage.
+  srbfcreate
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -from local_file1 [file2 ... fileN]     (string)     (Required)
+    -file srb_file1 [file2 ... fileN]       (string)     (Optional)
+    -dir srb_dir1 [dir2 ... dirN]           (string)     (Optional)
+    -mode unix_like_mode                    (int)        (Requires 1 values)
+    -bufsize i/o_buffer_size                (int)        (Optional)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+SRB API routines:
+      clConnect                       (srbfcreate)
+      clStatus                        (srbfcreate)
+      clErrorMessage                  (srbfcreate)
+      clFinish                        (srbfcreate)
+      srbFileCreate                   (srbfcreate)
+      srbFileWrite                    (srbfcreate)
+      srbFileClose                    (srbfcreate)
+      srbFileSync                     (srbfcreate)
+</pre>
+
+<a name="srbfchmod" href="srbfchmod.c">srbfchmod.c</a> : modifies file or directory mode<br>
+<pre>
+Usage.
+  srbfchmod
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -file srb_file1 [file2 ... fileN]       (string)     (Required)
+    -mode unix_like_mode                    (int)        (Requires 1 values)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+SRB API routines:
+      clConnect                       (srbchmod)
+      clStatus                        (srbchmod)
+      clErrorMessage                  (srbchmod)
+      clFinish                        (srbchmod)
+      srbFileChmod                    (srbchmod)
+</pre>
+
+<a name="srbfstat" href="srbfstat.c">srbfstat.c</a> : gets unix-like file status<br>
+<pre>
+Usage.
+  srbfstat
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -file srb_file1 [file2 ... fileN]       (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+SRB API routines:
+      clConnect                       (srbfstat)
+      clStatus                        (srbfstat)
+      clErrorMessage                  (srbfstat)
+      clFinish                        (srbfstat)
+      srbFileStat                     (srbfstat)
+</pre>
+
+<a name="srbfget" href="srbfget.c">srbfget.c</a> : gets a unix-like
+file from the SRB.  Sync's file prior to open.
+The number of arguments given in the optional -to argument must match the number
+given in -file.<br>
+<pre>
+Usage.
+  srbfget
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -file srb_file1 [file2 ... fileN]       (string)     (Required)
+    -to local_file1 [file2 ... fileN]       (string)     (Optional)
+    -bufsize i/o_buffer_size                (int)        (Optional)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+SRB API routines:
+      clConnect                       (srbfget)
+      clStatus                        (srbfget)
+      clErrorMessage                  (srbfget)
+      clFinish                        (srbfget)
+      srbFileStat                     (srbfget)
+      srbFileSync                     (srbfget)
+      srbFileOpen                     (srbfget)
+      srbFileRead                     (srbfget)
+      srbFileClose                    (srbfget)
+</pre>
+
+<a name="srbfseek" href="srbfseek.c">srbfseek.c</a> : retrieves bytes from a specified offset in a SRB file and sends data to stdout.<br>
+<pre>
+Usage.
+  srbfseek
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -file srb_file1                         (string)     (Requires 1 values)
+    -seek seek_location (in bytes)          (int)        (Required)
+    -to local_file1 [file2 ... fileN]       (string)     (Optional)
+    -bytes #bytes                           (int)        (Required)
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+SRB API routines:
+      clConnect                       (srbfseek)
+      clStatus                        (srbfseek)
+      clErrorMessage                  (srbfseek)
+      clFinish                        (srbfseek)
+      srbFileStat                     (srbfseek)
+      srbFileSync                     (srbfseek)
+      srbFileOpen                     (srbfseek)
+      srbFileSeek                     (srbfseek)
+      srbFileRead                     (srbfseek)
+      srbFileClose                    (srbfseek)
+</pre>
+
+<a name="srbfdel" href="srbfdel.c">srbfdel.c</a> : deletes unix-like files in the SRB.<br>
+<pre>
+Usage.
+  srbfdel
+    -verbose                                (null)       (Optional)
+    -file srb_file1 [file2 ... fileN]       (string)     (Required)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -host host_name                         (string)     (Requires 1 values)
+    -syst {unix,unicos,hpss,ftp}            (int)        (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-syst" values:
+    unix  unitree  hpss  ftp
+SRB API routines:
+      clConnect                       (srbfdel)
+      clStatus                        (srbfdel)
+      clErrorMessage                  (srbfdel)
+      clFinish                        (srbfdel)
+      srbFileUnlink                   (srbfdel)
+</pre>
+
+
+<p><hr></p>
+
+<p><a name="OBJECT"> OBJECT INTERFACE </a></p>
+
+<a name="srbmkcoll" href="srbmkcoll.c">srbmkcoll.c</a> : creates directory-like collection in the SRB.<br>
+<pre>
+Usage.
+  srbmkcoll
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -cattype catalog_type                   (int)        (Requires 1 values)
+    -parent parent_collection               (string)     (Requires 1 values)
+    -coll collection_name                   (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-cattype" values:
+    MDAS  LDAP  FILE
+SRB API routines:
+      clConnect                       (srbmkcoll)
+      clStatus                        (srbmkcoll)
+      clErrorMessage                  (srbmkcoll)
+      clFinish                        (srbmkcoll)
+      srbCreateCollect                (srbmkcoll)
+</pre>
+
+<a name="srblscoll" href="srblscoll.c">srblscoll.c</a> : lists the contents of an SRB collection.<br>
+<pre>
+Usage.
+  srblscoll
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -cattype catalog_type                   (int)        (Requires 1 values)
+    -coll collection_name                   (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-cattype" values:
+    MDAS  LDAP  FILE
+SRB API routines:
+      clConnect                       (srblscoll)
+      clStatus                        (srblscoll)
+      clErrorMessage                  (srblscoll)
+      clFinish                        (srblscoll)
+      srbListCollect                  (srblscoll)
+</pre>
+
+<a name="srbmodcoll" href="srbmodcoll.c">srbmodcoll.c</a> : modifies directory-like collection in the SRB.<br>
+<pre>
+Usage.
+  srbmodcoll
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -cattype catalog_type                   (int)        (Requires 1 values)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -op operation                           (int)        (Required)
+    -a1 attribute1                          (string)     (Optional)
+    -a2 attribute2                          (string)     (Optional)
+    -a3 attribute3                          (string)     (Optional)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-cattype" values:
+    MDAS  LDAP  FILE
+Possible "-op" values:
+    D_DELETE_ONE  D_DELETE_DOMN  D_INSERT_DOMN  D_CHANGE_SIZE
+    D_CHANGE_TYPE  D_CHANGE_GROUP  D_CHANGE_SCHEMA  D_INSERT_ACCS
+    D_DELETE_ACCS  D_DELETE_ALIAS  D_INSERT_ALIAS  D_DELETE_COMMENTS
+    D_INSERT_COMMENTS  D_INSERT_AUDIT  D_CHANGE_OWNER
+    U_CHANGE_PASSWORD  U_DELETE  U_DELETE_DOMN  U_INSERT_DOMN
+    U_DELETE_GROUP  U_INSERT_GROUP  U_CHANGE_TYPE  U_DELETE_ALIAS
+    U_INSERT_ALIAS  U_CHANGE_VERKEY  U_CHANGE_ENCKEY
+    D_INSERT_COLL_ACCS  D_DELETE_COLL_ACCS  D_CHANGE_DNAME
+    D_CHANGE_COLL_NAME  D_DELETE_COLL
+SRB API routines:
+      clConnect                       (srbmodcoll)
+      clStatus                        (srbmodcoll)
+      clErrorMessage                  (srbmodcoll)
+      clFinish                        (srbmodcoll)
+      srbModifyCollect                (srbmodcoll)
+</pre>
+
+<a name="srbocreate" href="srbocreate.c">srbocreate.c</a> : creates an object in
+the SRB from existing file on local system.  The number of values given
+in the optional -obj argument must match the number given in -from.
+An obj_id is required for each new object.<br>
+<pre>
+Usage.
+  srbocreate
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -cattype catalog_type                   (int)        (Requires 1 values)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -from local_file1 [file2 ... fileN]     (string)     (Required)
+    -obj srb_obj1 [obj2 ... objN]           (string)     (Optional)
+    -id obj_id (user supplied string)       (string)     (Required)
+    -type data_type_name                    (string)     (Requires 1 values)
+    -bufsize i/o_buffer_size                (int)        (Optional)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-cattype" values:
+    MDAS  LDAP  FILE
+SRB API routines:
+      clConnect                       (srbocreate)
+      clStatus                        (srbocreate)
+      clErrorMessage                  (srbocreate)
+      clFinish                        (srbocreate)
+      srbObjCreate                    (srbocreate)
+      srbObjWrite                     (srbocreate)
+      srbObjClose                     (srbocreate)
+</pre>
+
+<a name="srbodsinfo" href="srbodsinfo.c">srbodsinfo.c</a> : lists SRB object info.<br>
+<pre>
+Usage.
+  srbodsinfo
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -id obj_id (user supplied string)       (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+SRB API routines:
+      clConnect                       (srbodsinfo)
+      clStatus                        (srbodsinfo)
+      clErrorMessage                  (srbodsinfo)
+      clFinish                        (srbodsinfo)
+      srbGetDatasetInfo               (srbodsinfo)
+</pre>
+
+<a name="srboddinfo" href="srboddinfo.c">srboddinfo.c</a> : lists SRB object info.<br>
+<pre>
+Usage.
+  srboddinfo
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -id obj_id (user supplied string)       (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+SRB API routines:
+      clConnect                       (srboddinfo)
+      clStatus                        (srboddinfo)
+      clErrorMessage                  (srboddinfo)
+      clFinish                        (srboddinfo)
+      srbGetDataDirInfo               (srboddinfo)
+</pre>
+
+<a name="srboget" href="srboget.c">srboget.c</a> : gets an object from the SRB.
+The number of arguments given in the optional -to argument must match the number
+given in -id.<br>
+<pre>
+Usage.
+  srboget
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -id obj_id (user supplied string)       (string)     (Required)
+    -to local_file1 [file2 ... fileN]       (string)     (Optional)
+    -bufsize i/o_buffer_size                (int)        (Optional)
+Up to 128 values permitted for arguments allowing multiple values.
+SRB API routines:
+      clConnect                       (srboget)
+      clStatus                        (srboget)
+      clErrorMessage                  (srboget)
+      clFinish                        (srboget)
+      srbGetDataDirInfo               (srboget)
+      srbObjOpen                      (srboget)
+      srbObjRead                      (srboget)
+      srbObjClose                     (srboget)
+</pre>
+
+<a name="srboseek" href="srboseek.c">srboseek.c</a> : retrieves bytes from a
+specified offset in a SRB object.<br>
+<pre>
+Usage.
+  srboseek
+    -verbose                                (null)       (Optional)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -host host_name                         (string)     (Requires 1 values)
+    -bufsize i/o_buffer_size                (int)        (Optional)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -seek seek_location (in bytes)          (int)        (Required)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -id obj_id (user supplied string)       (string)     (Required)
+    -to local_file1 [file2 ... fileN]       (string)     (Optional)
+    -bytes #bytes                           (int)        (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+SRB API routines:
+      clConnect                       (srboseek)
+      clStatus                        (srboseek)
+      clErrorMessage                  (srboseek)
+      clFinish                        (srboseek)
+      srbObjOpen                      (srboseek)
+      srbObjSeek                      (srboseek)
+      srbObjRead                      (srboseek)
+      srbObjClose                     (srboseek)
+</pre>
+
+<a name="srbomove" href="srbomove.c">srbomove.c</a> : moves an object between resources<br>
+<pre>
+  srbomove
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name1 resource_name2     (string)     (Requires 2 values)
+    -cattype catalog_type                   (int)        (Requires 1 values)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -obj srb_obj1 srb_obj2                  (string)     (Requires 2 values)
+    -id obj_id (user supplied string)       (string)     (Requires 1 values)
+Possible "-cattype" values:
+    MDAS  LDAP  FILE
+SRB API routines:
+      clConnect                       (srbomove)
+      clStatus                        (srbomove)
+      clErrorMessage                  (srbomove)
+      clFinish                        (srbomove)
+      srbObjMove                      (srbomove)
+</pre>
+
+<a name="srbocopy" href="srbocopy.c">srbocopy.c</a> : copies an object between resources<br>
+<pre>
+Usage.
+  srbocopy
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name1 resource_name2     (string)     (Requires 2 values)
+    -cattype catalog_type                   (int)        (Requires 1 values)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -obj srb_obj1 srb_obj2                  (string)     (Requires 2 values)
+    -id obj_id (user supplied string)       (string)     (Requires 1 values)
+Possible "-cattype" values:
+    MDAS  LDAP  FILE
+SRB API routines:
+      clConnect                       (srbocopy)
+      clStatus                        (srbocopy)
+      clErrorMessage                  (srbocopy)
+      clFinish                        (srbocopy)
+      srbObjCopy                      (srbocopy)
+</pre>
+
+<a name="srbodel" href="srbodel.c">srbodel.c</a> : deletes objects in the SRB.<br>
+<pre>
+  srbodel
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -coll collection_name                   (string)     (Requires 1 values)
+    -id obj_id (user supplied string)       (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+SRB API routines:
+      clConnect                       (srbodel)
+      clStatus                        (srbodel)
+      clErrorMessage                  (srbodel)
+      clFinish                        (srbodel)
+      srbObjUnlink                    (srbodel)
+</pre>
+
+
+<p><hr></p>
+
+<p><a name="LOBJ"> DBMS LOBJ INTERFACE </a></p>
+
+<a name="srbdbcreate" href="srbdbcreate.c">srbdbcreate.c</a> : creates a DBMS LOBJ from existing file on local system.<br>
+<pre>
+Usage.
+  srbdbcreate
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -dbms {db2,illustra}                    (int)        (Requires 1 values)
+    -from local_file1 [file2 ... fileN]     (string)     (Required)
+    -table table_name                       (string)     (Optional)
+    -id obj_id (user supplied string)       (string)     (Required)
+    -mode unix_like_mode                    (int)        (Requires 1 values)
+    -bufsize i/o_buffer_size                (int)        (Optional)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-dbms" values:
+    db2  illustra
+SRB API routines:
+      clConnect                       (srbdbcreate)
+      clStatus                        (srbdbcreate)
+      clErrorMessage                  (srbdbcreate)
+      clFinish                        (srbdbcreate)
+      srbDbLobjCreate                 (srbdbcreate)
+      srbDbLobjWrite                  (srbdbcreate)
+      srbDbLobjClose                  (srbdbcreate)
+</pre>
+
+<a name="srbdbget" href="srbdbget.c">srbdbget.c</a> : gets a DBMS LOBJ<br>
+<pre>
+Usage.
+  srbdbget
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -dbms {db2,illustra}                    (int)        (Requires 1 values)
+    -table table_name                       (string)     (Optional)
+    -id obj_id (user supplied string)       (string)     (Required)
+    -mode unix_like_mode                    (int)        (Requires 1 values)
+    -to local_file1 [file2 ... fileN]       (string)     (Optional)
+    -bufsize i/o_buffer_size                (int)        (Optional)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-dbms" values:
+    db2  illustra
+SRB API routines:
+      clConnect                       (srbdbget)
+      clStatus                        (srbdbget)
+      clErrorMessage                  (srbdbget)
+      clFinish                        (srbdbget)
+      srbDbLobjOpen                   (srbdbget)
+      srbDbLobjRead                   (srbdbget)
+      srbDbLobjClose                  (srbdbget)
+</pre>
+
+<a name="srbdbseek" href="srbdbseek.c">srbdbseek.c</a> : retrieves bytes from a specified offset in a DBMS LOBJ.<br>
+<pre>
+Usage.
+  srbdbseek
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -dbms {db2,illustra}                    (int)        (Requires 1 values)
+    -table table_name                       (string)     (Optional)
+    -id obj_id (user supplied string)       (string)     (Required)
+    -mode unix_like_mode                    (int)        (Requires 1 values)
+    -seek seek_location (in bytes)          (int)        (Requires 1 values)
+    -bytes #bytes                           (int)        (Requires 1 values)
+    -to local_file1 [file2 ... fileN]       (string)     (Optional)
+    -bufsize i/o_buffer_size                (int)        (Optional)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-dbms" values:
+    db2  illustra
+SRB API routines:
+      clConnect                       (srbdbseek)
+      clStatus                        (srbdbseek)
+      clErrorMessage                  (srbdbseek)
+      clFinish                        (srbdbseek)
+      srbDbLobjOpen                   (srbdbseek)
+      srbDbLobjSeek                   (srbdbseek)
+      srbDbLobjRead                   (srbdbseek)
+      srbDbLobjClose                  (srbdbseek)
+</pre>
+
+<a name="srbdbdel" href="srbdbdel.c">srbdbdel.c</a> : deletes DBMS LOBJ's.<br>
+<pre>
+Usage.
+  srbdbdel
+    -verbose                                (null)       (Optional)
+    -host host_name                         (string)     (Requires 1 values)
+    -port port#                             (string)     (Requires 1 values)
+    -auth authentication_key                (string)     (Requires 1 values)
+    -rsrc resource_name                     (string)     (Requires 1 values)
+    -dbms {db2,illustra}                    (int)        (Requires 1 values)
+    -table table_name                       (string)     (Optional)
+    -id obj_id (user supplied string)       (string)     (Required)
+Up to 128 values permitted for arguments allowing multiple values.
+Possible "-dbms" values:
+    db2  illustra
+SRB API routines:
+      clConnect                       (srbdbdel)
+      clStatus                        (srbdbdel)
+      clErrorMessage                  (srbdbdel)
+      clFinish                        (srbdbdel)
+      srbDbLobjUnlink                 (srbdbdel)
+</pre>
+
+
+</BODY>
+</HTML>

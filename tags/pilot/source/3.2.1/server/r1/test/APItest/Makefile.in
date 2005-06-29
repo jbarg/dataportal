@@ -1,0 +1,99 @@
+# Makefile - This is the main makefile for the SRB software
+
+include ../../mk/mk.config
+include ../../mk/mk.common
+
+buildDir = ../..
+exampleSrcDir=$(buildDir)/test/APItest/src
+binDir=$(buildDir)/test/APItest/bin
+objDir=$(buildDir)/test/APItest/obj
+libDir=$(buildDir)/obj
+
+vpath %.c $(exampleSrcDir)
+
+CL_CFLAGS+=$(MY_CFLAG)
+CL_CFLAGS+= -I$(buildDir)/src/include -I$(buildDir)/tape/include
+
+# HOST_BASED_AUTH for use the host based authorization
+
+CL_CFLAGS+= -I$(buildDir)/src/catalog/include
+
+clientObjDir=$(buildDir)/obj
+CL_LDADD=$(LDADD)
+CL_LDADD+=-L$(clientObjDir) -lSrbClient
+
+# SGI doesn't like -lm in the middle of the CC line
+ifeq ($(PORTNAME), PORTNAME_osx)
+else
+ifeq ($(PORTNAME), PORTNAME_sgi)
+else
+LDADD+=-lm
+endif
+endif
+
+ifdef PARA_OPR
+LDADD+=-lpthread
+endif
+
+EXOBJ = $(objDir)/testtape.o $(objDir)/hello1.o $(objDir)/testPcommand.o 	\
+	$(objDir)/testsync.o $(objDir)/testget.o \
+	$(objDir)/testput.o $(objDir)/testcopy.o 	\
+	$(objDir)/testexf.o $(objDir)/testhttp.o	\
+        $(objDir)/testsrb.o $(objDir)/srbcat.o   \
+        $(objDir)/testLobj.o  \
+        $(objDir)/exfls.o     \
+        $(objDir)/testftp.o $(objDir)/testddir.o  \
+        $(objDir)/testcre.o $(objDir)/testrepl.o $(objDir)/testmove.o	\
+	$(objDir)/testunlink.o $(objDir)/testunreg.o $(objDir)/testcoll.o \
+	$(objDir)/testuser.o $(objDir)/testtick.o	\
+	$(objDir)/issuetick.o $(objDir)/rmtick.o $(objDir)/usetick.o \
+	$(objDir)/testwrrepl.o \
+	$(objDir)/testcontIng.o 	\
+	$(objDir)/testPackMsg.o  $(objDir)/testTableSID.o 
+
+ifdef PARA_OPR
+	EXOBJ+= $(objDir)/threads.o
+endif
+
+ifeq ($(PORTNAME), PORTNAME_c90)
+else
+EXOBJ+= $(objDir)/testmem.o
+endif
+
+EXAMBIN =$(binDir)/testtape $(binDir)/hello1 $(binDir)/testPcommand 	\
+$(binDir)/testsync $(binDir)/testget 	\
+$(binDir)/testput $(binDir)/testcopy	\
+$(binDir)/testexf $(binDir)/testhttp $(binDir)/testsrb 	\
+$(binDir)/srbcat $(binDir)/testLobj  \
+$(binDir)/exfls      \
+$(binDir)/testftp $(binDir)/testddir $(binDir)/testcre	\
+$(binDir)/testrepl $(binDir)/testmove $(binDir)/testunlink $(binDir)/testunreg \
+$(binDir)/testcoll $(binDir)/testuser	\
+$(binDir)/testtick $(binDir)/issuetick $(binDir)/rmtick $(binDir)/usetick \
+$(binDir)/testwrrepl \
+$(binDir)/testcontIng $(binDir)/testPackMsg  \
+$(binDir)/testTableSID
+
+ifdef PARA_OPR
+EXAMBIN+=$(binDir)/threads
+endif
+
+ifeq ($(PORTNAME), PORTNAME_c90)
+else
+EXAMBIN+= $(binDir)/testmem
+endif
+
+TARGETS:= $(EXAMBIN)
+
+all:: $(TARGETS)
+	test -d bin || mkdir bin
+	test -d obj || mkdir obj
+
+clean:
+	rm -f $(TARGETS) $(EXOBJ)
+ 
+$(EXOBJ): $(objDir)/%.o: %.c
+	$(CC) -g -c $(CL_CFLAGS) -o $@ $<
+
+$(EXAMBIN): $(binDir)/%: $(objDir)/%.o
+	$(CC) -o $@ $^ $(CL_LDADD)

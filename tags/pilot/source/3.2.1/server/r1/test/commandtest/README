@@ -1,0 +1,72 @@
+This is the S-command test suite, two maybe three things need to be done to run these tests:
+
+1) run the Makefile; "make"
+2) edit the file ResourcesToTest to include the resources you wish to test.
+3) Make new comparison files for the mydiff: "sh commandsuite.sh new"
+
+Step 3 is normally not needed, as the existing comparison files should
+be correct, at least for Oracle MCATs.  For Postgres, currently, you
+may need to run step 3 to get accurate comparison files; although this
+generates new comparison files and then tests against those results,
+this can still detect some problems.  You should manually check new
+comparison files for SRB errors, as they should not have any (see the
+original comparison files for the general pattern).
+
+The comparison files are set up for two resources.  If you have only
+one, you should list it two times in the ResourcesToTest file.  If you
+have more than two resources, test just two at a time.
+
+If the runtest?.sh script succeeds, it will print "THERE WERE NO
+ERRORS!!! =)" near the end.  If you don't see that, it failed.  This
+is coming from the mydiff program that is comparing the log with the
+comparison reference file.  The mydiff program (mydiff.c) attempts to
+compare two log files while ignoring differences in fields that will
+change from run to run.
+
+To test SRB operations, use:
+  m = mute mode
+  num = replace num with a number (default num=1), for how many errors you wish displayed (if there are any)
+
+*  sh runtest1.sh [m] [num]    runs one invocation of test1 for testing non-container SRB operations
+*  sh runtest2.sh [m] [num]    runs one invocation of test2 for testing container SRB operations
+*  sh runtest3.sh [m] [num]    runs one invocation of test3 for testing ticket SRB operations
+
+*  sh runtest?.sh n            makes a new comparison file to test against for that particular test
+                               (Manually check them!) they are called "test?.result.out"
+___________________________________________________________________________________________________
+
+
+To run all of the above tests in one suite, use:
+  d = display mode
+  num = replace num with a number (default num=1), for how many errors you wish displayed (if there are any)
+
+*  sh commandsuite.sh [d] [num]  runs one invocation of test1,test2,and test3
+
+*  sh commandsuite.sh new      makes new comparison files for all three tests (Manually check them!)
+                               they are called "test?.result.out"
+___________________________________________________________________________________________________
+
+
+To run any or all tests in background, in parallel, and in mute mode, use:
+  num = replace num with a number, for how many tests you wish to run concurrently
+  num2 = replace num2 with a number (default num2=1), for how many errors you wish displayed (if there are any)
+
+*  parruntest?.sh num [num2]     runs test? <n> times in parallel
+*  parsuite.sh num [num2]        runs test1,test2,and test3 <n> times in parallel
+
+
+  You can run several of run*  concurrently, but make sure that
+	each invocation is started at least 1 second apart.
+  To run several par* concurrently make sure that same par*'s dont overlap in time during startup.
+	(each of the par* command exits after starting the associated run* processes.)
+
+
+########################################################################################################
+If you want to play around with the test scripts, there are developer scripts available for this purpose.
+These scripts also have more extensive testing, but without comparsion files due to changing output.
+
+*  sh runtest1.dev.sh      runs one invocation of test1 developer edition for testing non-container SRB operations
+*  sh runtest2.dev.sh      runs one invocation of test2 developer edition for testing container SRB operations
+*  sh runtest3.dev.sh      runs one invocation of test3 developer edition for testing ticket SRB operations
+
+After testing ends, the output is diplayed for you to proof, and also saved in test?.dev.out

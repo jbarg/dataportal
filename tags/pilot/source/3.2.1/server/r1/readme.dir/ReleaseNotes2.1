@@ -1,0 +1,115 @@
+SRB 2.1
+-------
+
+This document describes the new features of SRB 2.1, released on June
+3, 2003.  For additional information, see the SRB home page at
+http://www.npaci.edu/DICE/SRB.  Also see ReleaseNotes2.0 for more
+information on the SRB 2.0.0 (released 2/18/2003), and intermediate
+releases 2.0.1, and 2.0.2.
+
+The GridFTP driver, which we had planned to include in this release,
+is being postponed to the next sub-release (probably a few weeks).  We
+have seen problems when transferring more than a few files, which seem
+to be related to the GridFTP servers.
+
+The other planned features listed on our future plans page at
+http://www.npaci.edu/dice/srb/srbFuture.html are included in this
+release, and are items 1, 2, and 3 below.  The additional items were
+more recently included for this release.
+
+A few bugs have been fixed, the more significant of which are
+described off of our bugs page at:
+http://www.npaci.edu/dice/srb/bugs.html
+
+New features:
+
+1) Better support for GSI (Grid Security Infrastructure).  This was
+actually released early, as part of 2.0.2, but is included here as it
+was listed on the srbFuture.html page for 2.1.  It is now easier to
+build SRB with support for GSI, via some new configure options.  The
+separate AID library is no longer needed as the SRB release contains
+the needed source code that interfaces to the GSI libraries.  We had
+expected that other changes would be needed to interface to GSI 2.2
+(NMI 2), but found that none were.
+
+2) Optional data encryption and compression.  We had planned to
+implement GSI data encryption on network traffic, but found we could
+make it more secure, higher-performance, and also include data
+compression via a different approach.  This system is accessed via
+scripts that operate on top of SRB Scommands and OpenSSL commands.
+Some of the SRB commands have been enhanced to encrypt key fields
+(file encryption keys) as they are transferred to/from the
+MCAT-enabled SRB server.  This SRB field encryption is performed via
+OpenSSL libraries, which are the also the foundation of GSI.  For more
+information, see README.dataEncryptionCompression and
+http://www.npaci.edu/dice/srb/SecureAndOrCompressedData.html.
+
+3) SDSC Matrix, a service (SOAP/WSDL) oriented architecture of SRB.
+SDSC Matrix is a W3C standards based approach to deliver
+multi-organizational Information Storage Management Services, which
+can be used to provide a (web) service oriented architecture for
+datagrids, digital libraries and persistent archives.  These include
+services for data movement, replication, access control, data set
+ingestion, retrieval and, container support.  SDSC Matrix it is a
+protocol layer on top of the SRB protocol stack providing
+value-addition in terms of interoperability, asynchronous messages and
+stateful services.  Matrix internally converts the SOAP protocol based
+messages to native SRB protocol messages.  This is the first of a
+series of releases for SDSC Matrix, as it is under active development.
+See http://www.npaci.edu/DICE/SRB/matrix for more information.
+
+4) JARGON, a pure Java API.  JARGON is a pure java API for developing
+programs with a grid interface. The API currently handles file I/O for
+local and SRB file systems and is easily extensible to other file
+systems.  File handling with JARGON closely matches file handling in
+Sun's java.io API, a familiar API to most java programmers.  The
+previous SRB Java client library (used by SrbBrowser and the admin
+tool) was implemented via JNI, which connects to the C client code.
+See http://www.npaci.edu/DICE/SRB/jargon for more information.
+
+5) Bulk load without requiring the use of a container.  The Sbload
+utility has been modified to allow the bulk load of the content of a
+local directory to SRB without requiring the use of containers. If the
+[-c container] option is not specified in the command line, the bulk
+load is assumed to be carried out without the use of a container. In
+addition, a new API - srbBulkLoad() has been created for such
+operations.  The performance improvement without the use of a container
+is not as great as a bulk load using a container since the container
+design fits the bulk load operation perfectly.  Nevertheless,
+improvement up to a factor of 5 can be achieved.  The Sbunload of
+files that are not in containers will be next.
+
+6) Listing of host-specific resources.  A [-H hostname] option has
+been added to the SgetR utility to list all resources on the specified
+host.
+
+7) Parallel transfer configuration.  Two configurable parameters,
+MAX_THREAD and SIZE_PER_THREAD, were added to determine the number of
+threads for parallel transfer.  These can be adjusted in the runsrb
+script, before starting a server.
+
+8) SRB Python binding.  The new SRB Python binding exposes some SRB
+client APIs which allow any Python program to access SRB systems via
+POSIX style file I/O calls, to query SRB system metadata for files,
+and to manipulate SRB systems such as creating and deleting a
+collection.  A file, README.python, included in SRB source tree,
+provides an overview of SRB Python binding and an example of using SRB
+Python binding APIs.
+
+9) Sput/Sget checksum, status, and retry features added.  Sput -M will
+store the checksum of the original file into the MCAT as it is being
+stored.  Sget -M will verify this checksum on the data as the file is
+retrieved.  Both of these operate within the Sput/Sget programs,
+without additional disk I/O.  Sget or Sput -V displays a progress bar.
+-v shows a final message.  -V forces -v.  Sput or Sget -R number, will
+cause it to retry up to 'number' times if an error occurs, with an
+exponential backoff sleep in between.
+
+10) SRB_Install_Notes.doc - This is an excellent SRB installation note written 
+by Dr. Michael Doherty of the e-Science Group at the Rutherford Appleton 
+Laboratory of UK. It describes from start to finish the installation of MCAT, 
+MES (MCAT enable server), other SRB resource servers and client softwares.
+The install note is based on a Linux system with Oracle 9i as the database
+for MCAT. However, most of the note is applicable to other OS and
+DMBS.
+

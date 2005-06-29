@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Mac version of script to shutdown SRB master and server
+# Kills ANY srbMaster and srbServer processes.
+#
+MASTER_STR=srbMaster
+SERVER_STR=srbServer
+
+# Display all srbMasters and srbServers that are running
+ps -ax | egrep "srb[S|M]"
+
+# Find all srbServers
+masterPid=`ps -ax | grep "$MASTER_STR" | grep -v grep | awk '{ print $1 }'`
+
+listServers=`ps -ax | grep "$SERVER_STR" | grep -v grep | awk '{ print $1 }'`
+
+echo "Will kill srbServers with pid = $listServers" 
+echo "Will kill srbMaster with pid = $masterPid"
+echo "Enter y to do so:"
+read ttyinput
+if [ "$ttyinput" != "y" ]
+then
+    exit
+fi
+
+# Kill all srbServers
+if [ -n "$listServers" ]
+then
+       echo "kill: $listServers"
+       /bin/kill $listServers
+fi
+
+# Kill srbMaster
+if [ -n "$masterPid" ]
+then
+        echo "kill: $masterPid"
+        /bin/kill $masterPid
+fi

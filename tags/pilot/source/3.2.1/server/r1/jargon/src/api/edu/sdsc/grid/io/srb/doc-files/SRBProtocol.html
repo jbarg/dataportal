@@ -1,0 +1,339 @@
+<style>
+body,td,a,p,.h{font-family:times,serif;}
+#client {color:#0000cc;font-family:arial,sans-serif;}
+#server {color:#00cc00;font-family:arial,sans-serif;}
+</style>
+<body color="#FFFFFF">
+<h2>The SRB socket protocol</h2>
+
+<br><B><! TODO can it really be MSBF during SRB commands, but LSBF during connection? > </b>
+<!-------------------------------------------------------------------------->
+
+
+<h3>An example case, Connecting:</h3>
+
+<div id="client">
+(Client output)
+</div>
+<div id="Server">
+(Server output)
+</div>
+Most significant byte first, unless otherwise noted.
+<br>
+<P>
+<h4>Connect to the SRB:</h4>
+
+startup header=
+<table cellpadding="3"><tr><td><div id="client"><tt><font size="+1">
+"START SRB\0"
+</font></tt></div>
+</td><td><tt><font size="+1">
+startup header, 10 byte string<br></font></tt>
+</td></tr></table>
+
+port =
+<table cellpadding="3"><tr><td><div id="server"><tt><font size="+1">
+23486
+</font></tt></div>
+</td><td><tt><font size="+1">
+4 byte int<br></font></tt>
+</td></tr></table>
+
+<P>
+<h4>Disconnect and reconnect to host at new port:</h4>
+
+user info buffer=
+<table cellpadding="3"><tr><td><div id="client"><tt><font size="+1">
+400 <br>
+0 <br>
+"testuser", '\0' (repeats 24 times)<br>
+"sdsc", '\0' (repeats 28 times)<br>
+"testuser", '\0' (repeats 24 times)<br>
+"sdsc", '\0' (repeats 28 times)<br>
+"0", '\0' (repeats 127 times)<br>
+"SRB1.1.8&C", '\0' (repeats 122 times)<br>
+</font></tt></div>
+</td><td><tt><font size="+1">
+4 byte int, LSBF<br>
+4 byte int, LSBF<br>
+proxy user name, 32 byte string<br>
+proxy domain name, 32 byte string<br>
+client user name, 32 byte string<br>
+client domain name, 32 byte string<br>
+options, 128 bytes<br>
+version, 128 bytes<br></font></tt>
+</td></tr></table>
+<br>
+
+status =
+<table cellpadding="3"><tr><td><div id="server"><tt><font size="+1">
+0
+</font></tt></div>
+</td><td><tt><font size="+1">
+4 byte int<br></font></tt>
+</td></tr></table>
+<br>
+
+mdas password =
+<table cellpadding="3"><tr><td><div id="client"><tt><font size="+1">
+"TESTUSER", '\0' (repeats 24 times)<br>
+</font></tt></div>
+</td><td><tt><font size="+1">
+password, 32 byte string<br></font></tt>
+</td></tr></table>
+<br>
+
+status =
+<table cellpadding="3"><tr><td><div id="server"><tt><font size="+1">
+0
+</font></tt></div>
+</td><td><tt><font size="+1">
+4 byte int<br></font></tt>
+</td></tr></table>
+<br>
+<br>
+<P>
+<!-------------------------------------------------------------------------->
+
+
+<h3>Using the SRB server commands, Opening a file - returns an primitive type</h3>
+
+<h4>Send the function arguments to the server to start the command</h4>
+
+function buffer =
+<table cellpadding="3"><tr><td><div id="client"><tt><font size="+1">
+"F \0"<br>
+2001<br>
+3<br>
+8<br>
+"testfile"<br>
+4<br>
+0<br>
+6<br>
+"/test/"<br>
+</font></tt></div>
+</td><td><tt><font size="+1">
+start function, 3 byte string<br>
+function id, 4 byte int<br>
+number of arguments, 4 byte int<br>
+argument length, 4 byte int<br>
+file name, [see previous argument length] byte string<br>
+argument length, 4 byte int<br>
+Unix type open flag, 4 byte int<br>
+argument length, 4 byte int<br>
+collection name, [see previous argument length] byte string<br></font></tt>
+</td></tr></table>
+<br>
+
+command status =
+<table cellpadding="3"><tr><td><div id="server"><tt><font size="+1">
+'V'<br>
+'G'<br>
+</font></tt></div>
+</td><td><tt><font size="+1">
+1 byte char<br>
+1 byte char<br></font></tt>
+</td></tr></table>
+<br>
+
+command return value =
+<table cellpadding="3"><tr><td><div id="server"><tt><font size="+1">
+/004<br>
+3
+</font></tt></div>
+</td><td><tt><font size="+1">
+return length, 4 byte int<br>
+the file descriptor, 4 byte int<br></font></tt>
+</td></tr></table>
+<br>
+<br>
+<!-------------------------------------------------------------------------->
+
+<h3>Using the SRB server commands, Reading a file - returns a byte array</h3>
+
+<h4>Send the function arguments to the server to start the command</h4>
+
+function buffer =
+<table cellpadding="3"><tr><td><div id="client"><tt><font size="+1">
+"F \0"<br>
+2003<br>
+2<br>
+4<br>
+3<br>
+4<br>
+10000<br>
+</font></tt></div>
+</td><td><tt><font size="+1">
+start function, 3 byte string<br>
+function id, 4 byte int<br>
+number of arguments, 4 byte int<br>
+argument length, 4 byte int<br>
+file descriptor, 4 byte int<br>
+argument length, 4 byte int<br>
+byte length to read, 4 byte int<br></font></tt>
+</td></tr></table>
+<br>
+
+command status =
+<table cellpadding="3"><tr><td><div id="server"><tt><font size="+1">
+'V'<br>
+'G'<br>
+</font></tt></div>
+</td><td><tt><font size="+1">
+1 byte char<br>
+1 byte char<br>
+</td></tr></table>
+<br>
+
+command return value =
+<table cellpadding="3"><tr><td><div id="server"><tt><font size="+1">
+10000<br>
+0<br>
+(10000 bytes here)<br>
+0<br>
+</font></tt></div>
+</td><td><tt><font size="+1">
+return length, 4 byte int<br>
+(I don't know, perhaps the return length is really a long), 4 bytes<br></font></tt>
+the file data<br>
+1 byte, the final '0'<br></font></tt>
+</td></tr></table>
+<br>
+<br>
+<!-------------------------------------------------------------------------->
+
+
+<h3>Using the SRB server commands, listing a collection - sends SRB qval and selval arrays and returns the myresult "struct"</h3>
+
+<h4>Send the function arguments to the server to start the command</h4>
+
+function buffer =
+<table cellpadding="3" border="1"><tr><td><div id="client"><tt><font size="+1">"F \0"</td>
+<td><tt><font size="+1">start function, 3 byte string</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">2101</td>
+<td><tt><font size="+1">function id, 4 byte int</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">4</td>
+<td><tt><font size="+1">number of arguments, 4 byte int</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">4</td>
+<td><tt><font size="+1">argument length, 4 byte int</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">0</td>
+<td><tt><font size="+1">MDAS_CATALOG - catalog type, 4 byte int</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">36000</td>
+<td><tt><font size="+1">argument length, 4 byte int</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">
+"&nbsp;=&nbsp;'testFile'"<br>
+"&nbsp;=&nbsp;'testuser'"<br><br></td>
+<td><tt><font size="+1">fixed length String array. qVal, where of an SQL query <br>
+2nd row, (DATA_NAME = 2), 13 byte string<br>
+7th row, (USER_NAME = 7), 13 byte string<br>
+(Everything in the double quotes, including the spacing and single quotes must be sent exactly as shown.)<br>
+All other rows are null. 36000 bytes.</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">720</td>
+<td><tt><font size="+1">argument length, 4 byte int</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">
+1<br>1<br>1</td>
+<td><tt><font size="+1">fixed length integer array with 180 rows. selVal, Select of an SQL query <br>
+17th row, DATA_GRP_NAME, 4 byte int LSBF<br>
+18th row, SIZE, 4 byte int LSBF<br>
+35th row, DATA_OWNER, 4 byte int LSBF<br>
+All other rows equal zero. 720 bytes</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">4</td>
+<td><tt><font size="+1">argument length, 4 byte int</td></tr>
+
+<tr><td><div id="client"><tt><font size="+1">50</td>
+<td><tt><font size="+1">rows wanted, 4 byte int</font></tt>
+</div>
+</td></tr></table>
+<br>
+
+
+command status =
+<table cellpadding="3"><tr><td><div id="server"><tt><font size="+1">
+'V'<br>
+'G'<br></font></tt>
+</div>
+</td><td><tt><font size="+1">
+1 byte char<br>
+1 byte char<br></font></tt>
+</td></tr></table>
+<br>
+
+command return value =
+<table cellpadding="3" border="1"><tr><td><div id="server"><tt><font size="+1">2492</td>
+<td><tt><font size="+1">buffer length, 8 byte long</td></tr>
+<tr><td><div id="server"><tt><font size="+1">3</td>
+<td><tt><font size="+1">result count, 4 byte unsigned int, LSBF</td></tr>
+<tr><td><div id="server"><tt><font size="+1">4</td>
+<td><tt><font size="+1">row count, 4 byte unsigned int, LSBF</td></tr>
+<tr><td><div id="server"><tt><font size="+1">0</td>
+<td><tt><font size="+1">continuation index, 4 byte unsigned int, LSBF</td></tr>
+<th>result 1</th>
+<tr><td><div id="server"><tt><font size="+1">
+"srb.MDAS_TD_DATA_GRP\0"</td>
+<td><tt><font size="+1">tabName, null terminated string</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">"data_grp_name\0"</td>
+<td><tt><font size="+1">attName, null terminated string</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">"/home/testuser.sdsc/SRB4J-Test", '\0' (repeats 162 times)<br>
+"windows ntfs file system", '\0' (repeats 184 times)</td>
+<td><tt><font size="+1">value, the total value string length is 400 bytes, <br>
+but data_grp_name lists the file system type at the 192nd byte.</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">"/home/testuser.sdsc/SRB4J-Test/test", '\0' (repeats 157 times)<br>
+"unix file system", '\0' (repeats 192 times)</td>
+<td><tt><font size="+1">value, the total value string length is 400 bytes, <br>
+but data_grp_name lists the file system type at the 192nd byte.</font></tt></div>
+</td></tr>
+<th>result 2</th>
+<tr><td><div id="server"><tt><font size="+1">"srb.MDAS_AD_REPL\0"</td>
+<td><tt><font size="+1">tabName, null terminated string</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">"data_size\0"</td>
+<td><tt><font size="+1">attName, null terminated string</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">3798, '\0' (repeats 392 times)</td>
+<td><tt><font size="+1">value, (the data size) 400 bytes, fixed length.</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">92, '\0' (repeats 392 times)</td>
+<td><tt><font size="+1">value, (the data size) 400 bytes, fixed length.</font></tt></div>
+</td></tr>
+<th>result 3</th>
+<tr><td><div id="server"><tt><font size="+1">"srb.MDAS_CD_OWNER_USER\0"</td>
+<td><tt><font size="+1">tabName, null terminated string</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">"user_name\0"</td>
+<td><tt><font size="+1">attName, null terminated string</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">"testuser", '\0' (repeats 392 times)</td>
+<td><tt><font size="+1">value, (the data owner) 400 bytes, fixed length.</font></tt></div>
+</td></tr>
+<tr><td><div id="server"><tt><font size="+1">"testuser", '\0' (repeats 392 times)</td>
+<td><tt><font size="+1">value, (the data owner) 400 bytes, fixed length.</font></tt></div>
+</td></tr></table>
+<br>
+<br>
+<!-------------------------------------------------------------------------->
+
+
+<h3>Closing the SRB server</h3>
+
+<h4>Send "X" to the server</h4>
+
+<table cellpadding="3"><tr><td><div id="client">
+'X'
+</div>
+</td><td>
+1 byte, notice of last function.
+</td></tr></table>
+<br>
+
