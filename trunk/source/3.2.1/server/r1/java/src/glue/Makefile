@@ -1,0 +1,106 @@
+# Makefile - This is the makefile for libSrbJavaGlue.so, SrbJavaGlue.class. 
+SHELL=/bin/csh
+
+include ../../../mk/mk.config
+include ../../../mk/mk.common
+
+buildDir = ../../..
+CLASSDIR = ../../classes
+CLASSDIR_LONG = ../../classes/edu/sdsc/SrbGlue
+LIBDIR = ../../lib
+myCLASSPATH = $(javaDir)/lib/classes.zip:$(javaDir)/classes:$(CLASSPATH):$(CLASSDIR)
+
+SLIB = $(LIBDIR)/libSrbJavaGlue.so
+OBJ  = $(LIBDIR)/SrbJavaGlue.o
+
+srbObjDir = $(buildDir)/obj
+utilObjDir = $(buildDir)/utilities/obj
+OBJS = \
+	$(srbObjDir)/clAuth.o \
+	$(srbObjDir)/clConnect.o \
+	$(srbObjDir)/clExec.o \
+	$(srbObjDir)/clMisc.o \
+	$(srbObjDir)/clStub.o \
+        $(srbObjDir)/packMsg.o \
+	$(srbObjDir)/clGlobal.o	\
+	$(srbObjDir)/clChksum.o	\
+	$(srbObjDir)/mcatgeneral.o	\
+	$(srbObjDir)/srb_perror.o $(srbObjDir)/crypt1.o	\
+	$(srbObjDir)/srbSecureComm.o \
+	$(utilObjDir)/srbClientUtil.o	\
+	$(LIB_SEA) $(LIB_GSI_AUTH) $(KRB_LIBS)
+
+ifdef GSI_AUTH
+OBJS+=$(srbObjDir)/aid.o
+endif
+
+# CC = /opt/SUNWspro/bin/cc -DPORTNAME_solaris -DDEBUG
+# CC = /opt/SUNWspro/bin/cc -DPORTNAME_solaris
+# ifeq ($(PORTNAME), PORTNAME_solaris)
+# CC=gcc
+# endif
+
+CFLAGS=$(MY_CFLAG)
+
+ifeq ($(PORTNAME), PORTNAME_solaris)
+PLATFORM=solaris
+endif 
+
+ifeq ($(PORTNAME), PORTNAME_linux)
+PLATFORM=linux
+endif
+
+ifeq ($(PORTNAME), PORTNAME_aix)
+PLATFORM=aix
+CFLAGS+=-c -M -I.
+endif
+
+ifeq ($(PORTNAME), PORTNAME_sgi)
+PLATFORM=irix
+endif
+
+INC =	-I$(buildDir)/src/include \
+		-I$(buildDir)/src/catalog/include \
+		-I$(buildDir)/utilities/include \
+		-I$(javaDir)/include \
+		-I$(javaDir)/include/$(PLATFORM)
+
+.SUFFIXES: .c .o .so .java .class .h
+
+
+all: $(SLIB)
+	@ echo $(SLIB) and SrbJavaGlue.class are up to date.
+
+$(SLIB): $(OBJ)
+ifeq ($(PORTNAME), PORTNAME_aix)
+	grep " JNICALL " *.c|sed "s/.* JNICALL //g">$@.exp
+	$(LDR) -lm -bnoentry -bM:SRE -bE:$@.exp -lc_r -blibpath:/usr/lib/threads:/usr/lib:/lib -L/usr/local/apps/Java/lib/aix/native_threads -o $(SLIB) $(OBJS) $(OBJ)
+	rm $@.exp
+else
+ifeq ($(PORTNAME), PORTNAME_sgi)
+	$(LDR) -shared -o $(SLIB) $(OBJS) $(OBJ)
+else
+ifeq ($(PORTNAME), PORTNAME_linux)
+	$(LDR) -shared -o $(SLIB) $(OBJS) $(OBJ)
+else
+	$(LDR) -G -o $(SLIB) $(OBJS) $(OBJ)
+endif
+endif
+endif
+
+$(LIBDIR)/SrbJavaGlue.o: SrbJavaGlue.c 
+	gmake SrbJavaGlue.h
+	$(CC) -c $(CFLAGS) $(INC) -o $@ $<
+
+test: test.c
+	$(CC) $(INC) $(CFLAGS) -o test -lnsl -lsocket -lSrbJavaGlue test.c
+
+SrbJavaGlue.h: $(CLASSDIR)/SrbJavaGlue.class
+	$(javaDir)/bin/javah -jni -classpath $(myCLASSPATH) edu.sdsc.SrbGlue.$*
+
+$(CLASSDIR)/SrbJavaGlue.class: SrbJavaGlue.java
+	$(javaDir)/bin/javac -g -d $(CLASSDIR) -classpath $(myCLASSPATH) SrbJavaGlue.java
+
+clean:
+	rm -f $(OBJ) $(CLASSDIR_LONG)/SrbJavaGlue.class SrbJavaGlue.h $(SLIB) $(SLIB).exp
+

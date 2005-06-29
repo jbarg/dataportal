@@ -1,0 +1,437 @@
+The following describes how to install an SRB Metadata Catalog (MCAT),
+i.e. an MCAT-enabled SRB server.
+
+See the README.databases file for background information on the MCAT,
+how it interacts with database systems, and how to set up the
+environment for the SRB server to interact with the MCAT database.
+
+If you are using Postgres on Linux, Mac OS X, or Solaris, this entire
+procedure can be done for you automatically via the install.pl perl
+script.  We recommend you use install.pl, especially if you want to do
+a basic stand-alone installation.  There are many steps, and this
+script simplifies the procedure considerably.  See the beginning of
+the script for documentation; you will need to set a few parameters by
+editing the script.
+
+For SRB 3.0 (SRB Zones, the Federated MCAT), some additional steps are
+needed to set up local and remote zones, and syncronize MCAT
+information between them.  These are described in the README.zones
+writeup (see especially the last section 3.0).  The SRB 3.0 install.pl
+script will handle this setup for you, if you'd like to set up a
+couple MCATs/Zones for testing and experimentation.  We recommend this
+as a safe and efficient way to understand how Zones work.  See
+README.zones.testing.
+
+In the following, we assume that there is a database called MCAT
+installed on either DB2, ORACLE, PostgreSQL, or Sybase (see
+README.build and mk.config for more information).  Also, the user-id
+installing SRB and MCAT must have privileges for the creation of
+objects in the database.  (See README.databases for how to check this.
+For Postgres also see below and the Postgres installation
+documentation.)
+
+The database should have roll-forward-recovery set and backups done so
+as to enable recovery from crashes. If you give another name for the
+database, please refer to section on MCAT CONFIGURATION.
+
+Starting with SRB 2.0.0, Postgres (PostgreSQL) can now be used to host
+an MCAT database.  Postgres is open source and is relatively easy to
+install and operate, so for simple tests and experimentation with the
+SRB, it may be preferred (unless you have ready access to a managed
+Oracle or DB2 system).
+
+If you are building on Mac OS X, you may need to alias gmake to make
+in your .cshrc file:
+  alias gmake make
+since the SRB makefiles run 'gmake'.  On the Macs, make is gmake.
+
+----- Postgres notes ------------
+
+If you are using older versions of Postgres, such as version 7.2.2 or
+7.2.3, ODBC is included, but more recent versions such as 7.3.3
+(spring 2003) have a separate release of ODBC, such as
+psqlodbc-07.03.0100.
+
+For this separate psqlodbc release, copy the unpacked files into
+your postgres source directory: src/interfaces/odbc.  You'll need
+to mkdir the odbc part.
+
+When you configure Postgres, include --enable-odbc and probably
+--without-readline, for example:
+
+% ./configure --prefix=/scratch/slocal/pgsql --enable-odbc --without-readline
+
+--without-readline is needed for the separate ODBC if you don't have
+the readline package installed (whatever that is).
+
+You will need to copy Postgres include files iodbc.h isql.h isqlext.h
+into the Postgres install include directory before building the
+srb/mcat software, for example:
+% cd postgresql-7.3.3/src/interfaces/odbc 
+% cp iodbc.h isql.h isqlext.h /scratch/slocal/pgsql/include/
+
+# Begin separate-ODBC additional steps (recent Postgres)
+
+For the separate ODBC versions, in addition to configure, gmake, and
+gmake install at the top level, you will also need to configure and
+gmake after you cd to src/interfaces/odbc.  For example:
+% cd src/interfaces/odbc
+% ./configure --prefix=/Users/schroeder/srb/postgres
+% gmake
+
+For Linux, you should include --enable-static on the configure line
+to create static libraries.  
+For example:
+% ./configure --prefix=/Users/schroeder/srb/postgres --enable-static
+
+On the Mac OS X, this doesn't seem to work right so you need to
+create the static libraries by hand:
+% cd src/interfaces/odbc
+% cp psqlodbc.lo psqlodbc.o  # avoid missing _globals
+% libtool -o libpsqlodbc.a *.o
+% cp libpsqlodbc.a /Users/schroede/postgres/lib
+% cd /Users/schroede/postgres/lib
+% ranlib libpsqlodbc.a  
+
+The Linux, the ODBC build has a different (odd) problem, in that it
+creates a file psqlodbc.a instead of libpsqlodbc.a.  The workaround here
+is to just copy it after you install it.
+% cp psqlodbc.a libpsqlodbc.a
+
+# End separate-ODBC
+
+Before you run srb/mcat software that accesses Postgres (either
+interactively while installing or when the srb server is started), you
+need to adjust PATH to include the postgres bin directory, adjust
+LD_LIBRARY_PATH to include the postgres library directory, and perhaps
+define a PGDATA environment variable to refer to the postgres
+directory. (PGDATA is part of Postgres; if defined you don't need to
+specify the data directory on command lines.)  It is convenient to put
+this in a file and source it.  For example:
+:
+set path=($path /scratch/slocal/pgsql/bin)
+setenv LD_LIBRARY_PATH /scratch/slocal/pgsql/lib
+setenv PGDATA /scratch/slocal/pgsql/data
+
+You also need a .odbc.ini file in the home directory with a few
+settings including the name of the host running the postgres server,
+the database name, and username.  For example:
+% more ~/.odbc.ini
+[PostgreSQL]
+Debug=0
+CommLog=1
+Servername=testbrick.sdsc.edu
+Database=mcat
+Username=schroede
+
+Before starting up postmaster (the postgres server), modify
+data/pg_hba.conf (for example /scratch/slocal/pgsql/data/pg_hba.conf)
+to allow the local host to have tcp/ip access to the database.  Use
+nslookup to find the IP address of your SRB host and add it to the
+file.  The line is
+host       all         xxx.yyy.zzz.aaa 255.255.255.255    trust
+For example, for a host with IP 132.249.20.58:
+host       all         132.249.20.58 255.255.255.255    trust
+For newer versions for Postgres (7.3.3) there is another field so now
+the form is:
+host       all  all    xxx.yyy.zzz.aaa 255.255.255.255    trust
+See the lines at the end of the pg_hba.conf file.
+
+When you run postmaster (the postgres server), include the -i option
+to enable tcp/ip, for example:
+% ./postmaster -D /scratch/slocal/pgsql/data -i
+     or
+% ./pg_ctl start -o '-i'  -l /tmp/mypgsql.log
+
+The MdasConfig needs to have postgres as the MDASDBTYPE and PostgreSQL
+as the MDASDBNAME (the actual database name that you chose (createdb
+Name) is in the .odbc.ini file).  You can use MdasConfig.psg as a
+template.  An example MdasConfig for Postgres is:
+% more MdasConfig
+MDASDBTYPE        postgres
+MDASDBNAME        PostgreSQL
+MDASINSERTSFILE  /scratch/slocal/srb2_0f/data/mdas_inserts
+METADATA_FKREL_FILE metadata.fkrel
+DB2USER            schroede
+DB2LOGFILE       /scratch/slocal/Install_f/data/pgsql.log
+DBHOME        /scratch/slocal/pgsql/data
+
+
+----- End Postgres-specific notes ------------
+
+
+In the following discussion SRBDIR stands for the directory in which
+the SRB software package has been unpacked for building (i.e. up one
+level from where this file is).
+
+
+1) Before building and installing MCAT software, you should build the
+client and server software at the top level (SRBDIR).  See the
+README.build document for a description of this general SRB build
+procedure.  As part of that SRB build, if you are running an
+MCAT-enabled SRB, you will select the MCAT DBMS system (oracle, DB2,
+or postgres) and version.  You will also need to enable Javagui (build
+the Java components) and specify the jdk home (see README.MCAT.ADMIN).
+
+(On Mac OS X, the Javagui currently does not build due to differences
+in how java is installed there, so skip the --enable--javagui and
+--enable-jdkhome and see a later section on the command-line admin.)
+
+For example (for Oracle):
+./configure --enable-oraver=815 --enable-oraconn=TNS --enable-oramcat
+--enable-mcatver=20 --enable-orahome=/usr/local/apps/oracle
+--enable-javagui --enable-jdkhome=/usr/local/apps/jdk1.4.1
+
+Or for Postgres:
+./configure --enable-psgmcat --enable-psghome=/scratch/slocal/pgsql
+--enable-installdir=/scratch/slocal/SRB_Install
+--enable-javagui --enable-jdkhome=/usr/local/apps/jdk1.4.1
+
+followed by:
+gmake
+
+Or ('gmake clean' and 'gmake' or 'gmake all')
+
+
+2) 'cd data' (SRBDIR/data, not SRBDIR/MCAT/data) and update the
+following files:
+       hostConfig
+       mcatHost
+       MdasConfig
+
+There are comments within these describing the needed fields.
+
+See a later section of this document for more on MdasConfig.
+
+(In 2.0.0 metadata.fkrel and MdasConfig in SRBDIR/MCAT/data/ no longer
+need to be checked; they will always match what is in SRBDIR/data
+because configure creates the SRBDIR/MCAT/data files as softlinks into
+SRBDIR/data.)
+
+3) cd ../MCAT/data  (i.e. SRBDIR/MCAT/data)
+
+There are scripts and input files for the supported DBMSs: Oracle
+(*.ora), DB2 (*.db2), and Postgres (*.psg).  In the example below, we
+use ora but substitute the DB type you are using.
+
+Oracle:
+sqlplus user/pass@DBName @catalog.install.ora >& myinstall.results.ora
+(This runs sqlplus taking the input commands from catalog.install.ora)
+
+Or Postgres:
+psql mcatTest < catalog.install.psg > & myinstall.results.psg
+
+diff myinstall.results.ora install.results.ora
+   or
+diff myinstall.results.psg install.results.psg
+Make sure the differences were explainable.
+
+(There are scripts, such as installmcat.ora, that performs step 3 and
+some of 4 but we recommend doing them as separate steps as described
+here.)
+
+
+4) cd .. (to be in SRBDIR/MCAT)
+
+gmake  (to build the MCAT utilities and test programs)
+
+cd bin (i.e SRBDIR/MCAT/bin; or else add this bin directory to your path)
+../data/test.catalog >& ../data/mytest.results.ora
+
+cd ../data
+diff mytest.results.ora test.results.ora
+Make sure the differences are explainable.
+
+There is no test.results.psg file as Postgres results should be the
+same as Oracle.  So:
+diff mytest.results.psg test.results.ora
+
+Error messages in the results file are normal parts of this test.  In
+fact, the tests are designed to see that correct errors are returned
+when appropriate.  So you can't just look through the results file for
+errors, but instead must compare it with the provided reference file.
+
+To convert error codes to descriptions, use Serror.  For example, to
+explain error code -3219:
+   % ../../utilities/bin/Serror -3219
+   DATA_SUBCOLLECTION_NOT_UNIQUE: DATA_SUBCOLLECTION_NOT_UNIQUE
+So this means that, most likely, one is attempting to insert an item
+into the database that already exists.
+
+If the first command fails (test_srb_mdas_create_user), and all
+commands fail, then there is probably a basic communication problem
+with the DBMS.  Most likely, the MdasConfig file has a problem;
+recheck it to make sure it is configured for your database, your user
+id for the database, etc.  Recheck the above setup descriptions and
+README.databases.
+
+Note that you cannot run this script twice and get correct results
+(unless all commands fail), as some items (such as users) are created
+and not deleted.  If there are problems at this point, you may want to
+remove the database and reinstall it when you are ready to try again
+(see uninstalling the MCAT database, below).  For Postgres it is
+easiest to just drop the database and create it again (dropdb and
+createdb).
+
+Also, you may notice 14 or so "unexpected EOF" debug messages in the
+DBMS server logs, but these are normal and can be ignored.  The test
+programs, in some cases,  exit without closing the connection 
+
+
+5) Create a privileged SRB account using the pre-defined 'srb' user:
+
+Choose a domain name for your SRB system (YOURDOMAIN below), an
+Admin user name for your domain (YOUR_ADMIN_NAME), and a password
+for the admin account (A_PASSWD).
+
+Then set up environment variables with for the user 'srb':
+% setenv srbUser srb
+% setenv srbAuth CANDO
+% setenv mdasDomainName sdsc
+
+And create your domain:
+% bin/ingestToken Domain YOURDOMAIN gen-lvl4
+(gen-lvl4 is a pre-defined token that can be used as the parent.)
+
+And then create the admin user account:
+% bin/ingestUser YOUR_ADMIN_NAME A_PASSWD YOURDOMAIN sysadmin '' '' ''
+
+And unset the environment variables:
+% unsetenv srbUser srbAuth mdasDomainName
+
+(It would also be possible to create this account with the Srb Admin
+Tool, but the above is easier, since you would then have to start the
+SRB server, and then restart it after creating and changing to the
+admin user.)
+
+
+6) Update the SRB user's authentication settings.
+
+Using the username and password for the sysadmin account you have
+just created in step 5, update the ~/.srb/.MdasEnv and
+~/.srb/.MdasAuth files for the Unix user under which the SRB server
+will run.
+
+
+7) Install and run the SRB server
+
+See the README.INSTALL file, but basically:
+
+cd back to the top level of your source tree (SRBDIR) and:
+gmake install
+
+cd to the install directory/bin.  
+Then:
+  runsrb
+(If you are running the srb on an alternative port, configure now
+updates the srb.h include file to set it, so nothing else is needed.)
+
+
+
+8) Use the SRB Admin Tool to complete the setup
+
+Once the SRB server starts up OK, use the Srb Admin Tool (SAT) to
+change the password of the user 'srb' (the bootstrap admin user).
+After that, use the SAT to create resources, add users and groups,
+etc.  See readme.dir/README.MCAT.ADMIN.
+
+8b) If you have trouble with Java (OS X, for example), you can use the
+command line tools for admin (like ingestToken ingestUser above).
+Creating a local resource so you can Sput, it is fairly straight
+forward.
+
+You'll need to create a storage directory, into which the data will be
+stored.  We used /scratch/slocal/srb/srbVault/ in the following
+example.
+
+First you need to create a "location", which describes your server
+that will handle the resource:
+  % bin/ingestLocation 'YOURHOST' 'YOURHOST.INTERET.DOMAIN:NULL:NULL' 'level4' YOUR_ADMIN_NAME YOURDOMAIN
+for example:
+  % bin/ingestLocation 'miner' 'miner.sdsc.edu:NULL:NULL' 'level4' srb sdsc
+
+Then you create the resource:
+  % bin/ingestResource 'resource name' 'unix file system' 'YOURHOST' '/fullpath/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC' permanent 0
+for example:
+  % bin/ingestResource 'ux-miner' 'unix file system' 'miner' '/scratch/slocal/srb/srbVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC' permanent 0
+
+The above ?Variables are used by the SRB when creating files in the
+storage directory, and the above example is a standard way to do it.
+Sput a file and explore the storage directory to see how it works.
+
+-------------------------------
+
+Uninstalling the MCAT database.
+
+
+Normally, you would never want to uninstall the MCAT database;
+particularly once users, resources and data are making use of the
+system.  But for testing, one may want to.  This is essentially the
+reverse of step 3.  Instead of installing the MCAT tables into the
+database we are removing them.
+
+uninstallmcat.ora is an example.  The key line is to run sqlplus
+taking the input from data/catalog.cleanup.ora.  The
+catalog.cleanup.ora contains a list of sql commands to remove the MCAT
+tables.  So to remove MCAT, run that command line with the
+catalog.cleanup.ora (or .db2 or .psg) file for your database system.
+For example:
+
+sqlplus dbadminuser/passwd @data/catalog.cleanup.ora
+
+For Postgres it is easiest to just drop the database and create it
+again (dropdb and createdb).
+
+
+-------------------------------
+
+MCAT CONFIGURATION (MdasConfig file)
+
+The file MdasConfig holds all the system-level details tailoring each sites
+MCAT installation. The file contains the following information:
+	MDASDBTYPE        <database-type>
+	MDASSCHEMENAME    <schema-name> 
+	MDASDBNAME        <database-name>
+	MDASINSERTSFILE   <insertion-log-file-name>
+	METADATA_FKREL_FILE <schema-semantics-file>
+	DB2INSTANCE          <database-instance-name>
+	DB2PASSWORD       <owner-password>
+	DB2USER           <owner-name>
+	DB2LOGFILE        <log-file-name>
+	DBHOME            <database-home-directory>
+
+
+<database-type> can be either db2, oracle, or postgres
+
+<schema-name>   If your Oracle or db2 schema is "MCAT" then the
+        value should be 'MCAT.'.  Note that a period (.) is 
+        needed at the end of the value.  Sometimes this is the
+        same as the schema administrator name '<srbadminuser-name>.'.
+        This line ('MDASSCHEMENAME <schema-name>') is not used
+        for postgres but then appears in the .odbc.ini file (see above).
+<database-name> mcat or other name that you want to give the catalog database.
+<database-instance-name> instance name if needed can be null if not needed
+<owner-name>   <srbadminuser-name> creating and using MCAT
+<owner-password> password of above. A few systems allow null passsword and
+			use Unix-authentication.
+              if password is given here make sure that the file is not
+		readable by others.
+<database-home-directory> home directory of the database
+<schema-semantics-file> set to 'metadata.fkrel'
+<insertion-log-file-name>   file for logging insertions and updates. can be 
+			/dev/null
+<log-file-name>     file for logging database error messages. Recommened to
+		be in $(SRBDIR)/MCAT/data for the MCAT installation copy
+		and $(SRBDIR)/data for the SRB system copy.
+
+For both DB2, Oracle, and Postgres, the user and passwords are in the
+fields: DB2PASSWORD and DB2USER.  DB2INSTANCE is just for DB2
+databases.
+
+See README.databases for Oracle and Postgres examples.
+
+
+------------------------------------
+
+NOTE: Also see http://www.npaci.edu/DICE/srb for additional information.
+

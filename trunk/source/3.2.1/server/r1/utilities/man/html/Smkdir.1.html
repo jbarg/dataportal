@@ -1,0 +1,92 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Smkdir</TITLE>
+</HEAD><BODY>
+<H1>Smkdir</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2003 <BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Smkdir - creates a new SRB collection
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Smkdir</B>
+
+[<B>-N</B>]
+
+[<B>-c</B>
+
+<I>container</I>] <I>collection</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Smkdir </B>
+
+creates a new SRB collection.
+<P>
+<I>collection</I>
+
+is of the format [path_name/]new_collection_name, where an absolute
+path can be given, or a relative path name with respect to the
+current working directory, or just the new_collection_name in
+which case the current working directory will be used.
+<P>
+When creating the collection, the call also associates the new
+collection with a parent collection's container (if one exists).
+Using the -N option overrides this default.
+<P>
+The -c option can be used to associate a container with the collection being made. The specified container must already exist. If the command is executed successfully, all subsequent files put underneath this collection will be automatically put in the container.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-N </B>
+
+<DD>
+overrides automatic inheritance of container from parent
+collection.
+<DT><B>-c container</B>
+
+<DD>
+associate a container with the collection being made. 
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Spwd">Spwd</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Scd">Scd</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Sls">Sls</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Srmdir">Srmdir</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 18:44:15 GMT, July 02, 2004
+</BODY>
+</HTML>

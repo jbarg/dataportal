@@ -1,0 +1,26 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sexit.1
+.\"
+.TH Sexit 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sexit \- Ends a SRB session
+.SH SYNOPSIS
+.B Sexit
+.SH DESCRIPTION
+.B "Sexit "
+routine ends a SRB session started with Sinit. It cleans up
+any non-persistent environment files created during the
+session. User should have write permissions in the path where
+the Client Environment files are located.
+.sp
+If not invoked, it will result in having several session
+Client Environment files unfreed.
+.sp
+Recommended to have it as part of logout script.
+.PP
+.SH "OPTIONS"
+none
+.SH "SEE ALSO"
+.BR Sinit (1)
+
+

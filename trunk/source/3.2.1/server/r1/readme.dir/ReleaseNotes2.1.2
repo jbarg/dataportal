@@ -1,0 +1,134 @@
+<HTML>
+<HEAD>
+<TITLE>SRB</TITLE>
+<BODY bgcolor=#BBFF00FA>
+<IMG SRC="http://www.npaci.edu/images/DI.gif" WIDTH="555" HEIGHT="90"></P>
+<FONT FACE="Courier New" SIZE=4>
+<pre>
+SRB 2.1.2
+---------
+
+This document describes changes for SRB 2.1.2, released on August 12,
+2003.  This is an intermediate release containing mostly bug fixes.
+
+Although it has only been about a month since our previous release
+(2.1.1, July 14), we wanted to distribute this now in preparation for
+our SRB 3.0 release in a few weeks.  The 3.0 release will contain many
+changes to support the Federated MCAT/SRB "Zones" capabilities.  (We
+were going to call this SRB 2.2, but changed to 3.0 since it will
+contain significant new features.)
+
+This current release also contains SRB Matrix 1.1.2 (matching SRB
+2.1.2, one major version number different) as described later in this
+document.
+
+Very briefly, the more significant bug fixes are:
+
+  Fixed the configure script to remove the inaccurate portions of
+  the --help output.
+
+  Sbload parsing improved to handle command-line wildcards that expand
+  to very large numbers of files.
+
+  Sbunload parsing improved to handle blanks in file names.
+
+  For parallel Sget -f, files will always be correct size (it will
+  truncate the local file first, if it already exists, in case the
+  replacement is smaller).
+
+  Schmod fixed to handle a large (>300) number of subcollections in
+  a collection (avoid a core dump).
+  
+  Fixed a problem where a parallel transfer would 
+  occasionally fail with a INP_ERR_DESC error (added a lock).
+
+  Fixed a problem where the srbMaster would occasionally hang on a
+  pipe read from the srbServer causing everything to hang.
+
+  Fix a problem where files stored to a postgres MCAT with the string
+  'offset' as part of the filename, would fail.
+
+  Configure now checks for another type of Globus installation, gcc32dbg,
+  for sites using a debug build of GSI (five installation types are now
+  checked for).
+
+Also see our bugs page at: http://www.npaci.edu/dice/srb/bugs.html
+for current bugs as well as links to lists of fixed bugs.
+
+
+New features:
+
+  The system now supports access to HPSS from Linux SRB servers.  This
+  is the DCEless HPSS driver.
+
+  There is a new Sufmeta command, for User Friendly Meta data management.
+  'Sufmeta' provides usage information (there is not yet a man page).
+
+
+As always, also see our home page at http://www.npaci.edu/dice/srb/
+for additional information.  Also see
+http://www.npaci.edu/dice/srb/CurrentSRB/ReleaseNotes2.1.1.htm for the
+previous, 2.1.1, release notes.
+
+
+
+Matrix New Features: (version 1.1.2)
+~~~~~~~~~~~~~~~~~~~~
+1) Java Matrix Client API:
+A java client API has been added. The java API and the java docs can
+be built using the Ant script provided with the matrix release. This
+API allows Java developers to develop data grid applications and XML
+Web services without any prior knowledge of web services or XML
+Schema.  The API prepares the SOAP message as an XML document oriented
+web services. The SRB operations could be invoked using this
+API. Refer the Client-Readme.html file in the matrix/docs directory.
+
+2) Multiple Flow support:
+Matrix uses "Data Grid Language (DGL)" to support execution of
+operations on a data grid. This could be considered analogous to long
+run transactions using the "Structured Query Language" (SQL) on a
+database.
+
+SQL:data base ::=:: DGL: data grid
+
+In DGL, a data grid transaction request consists of multiple
+flows. Each flow could be either parallel or sequential and can have
+multiple steps (operations). The current release supports multiple
+flows which could be either sequential or parallel.
+
+3) Tomcat / Any servlet container
+The previous version required downloading JWSDP. The current version
+can be used on any servlet container like Apache Tomcat or JBoss,
+etc.,.  We have tested only on Apache Tomcat (Catalina).
+
+
+Matrix Bugs Cleared:
+~~~~~~~~~~~~~~~~~~~
+1) Schema
+Changes in schema to facilitate user-defined meta data schema (out
+side MCAT). Even though the Matrix design had this as a requirement,
+the schema did not reflect it earlier.
+
+2) Connection Bug
+Previously there was bug that made an unnecessary Datagrid request the
+first time a connection was made. This has been removed.
+
+Matrix Next release:
+~~~~~~~~~~~~~~~~~~~~
+We are growing fast and trying to make our selves as first in "datagrid
+services". We also helping other institutions with our ideas do develop
+similar infrastructure. The next release of Matrix will be version 2.0
+along with SRB 3.0 (Matrix versions are 1.0 behind SRB). It will have
+facilities to:
+- An Overview of Matrix Architecture and features
+- Query SRB MCAT using a subset of W3C XQuery
+- OGSA preliminary release (Matrix Factory)
+- JSP reference implementation for developers (Web Interface)
+- Improved logging control
+- Sample Web Interface for demo-ing the use of "Data Grid Language" in data
+grids and scientific pipeline processing.
+
+</PRE>
+</BODY>
+</HTML>
+

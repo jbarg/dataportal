@@ -1,0 +1,220 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of SgetD</TITLE>
+</HEAD><BODY>
+<H1>SgetD</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+SgetD - display information about SRB data objects.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>SgetD</B>
+
+[<B>-phPrReagsdDcCt</B>] [<B>-I</B>] [<B>-W</B>|<B>-U</B>
+
+<I>userName</I>]
+
+[<B>-Y</B>
+
+<I>number</I>]
+
+[<B>-L</B>
+
+<I>number</I>]
+
+[<B>-P</B>
+
+<I>dataType</I>]
+
+[<B>-A</B>
+
+<I>condition</I>] [<I>dataName</I>]
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>SgetD </B>
+
+displays information about data objects
+<I>dataName</I>.
+
+<P>
+If
+<I>dataName</I>
+
+is not given, SgetD displays information about all data
+objects that can be associated with the user, unless -U or -W
+option is exercised.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-p </B>
+
+<DD>
+display dataset basic parameters such as collection, type,
+creation time and size (default)
+<DT><B>-e </B>
+
+<DD>
+display dataset basic parameters with replication number, data checksum and data
+identifier
+<DT><B>-t </B>
+
+<DD>
+drill down and display the content of a compound object
+<DT><B>-f </B>
+
+<DD>
+display dataset parameters for pin, expiry,compression and encryption
+<DT><B>-g </B>
+
+<DD>
+display dataset parameters for guid (global unique identifier)
+<DT><B>-r </B>
+
+<DD>
+display storage information
+<DT><B>-R </B>
+
+<DD>
+display verbose storage information
+<DT><B>-a </B>
+
+<DD>
+display access permissions
+<DT><B>-s </B>
+
+<DD>
+display verbose access permissions
+<DT><B>-d </B>
+
+<DD>
+display audit information
+<DT><B>-D </B>
+
+<DD>
+display verbose audit information
+<DT><B>-c </B>
+
+<DD>
+display collection information
+<DT><B>-C </B>
+
+<DD>
+display comments
+<DT><B>-W </B>
+
+<DD>
+display information for all users
+<DT><B>-U </B>
+
+<DD>
+display information for user/group
+<I>userName</I>
+
+<DT><B>-P </B>
+
+<DD>
+display information type only for
+<I>dataType</I>
+
+<DT><B>-I </B>
+
+<DD>
+display information about
+<I>dataName</I>
+
+in all collections.
+<DT><B>-Y </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls display format.
+<BR>
+
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+<BR>
+
+With -Y 0 will display in vertical, one attribute-per-line format.
+<BR>
+
+With Y n, n &gt; 0, information is displayed one item-per-line with each
+attribute spaced at
+<I>number</I>
+
+characters.  
+<BR>
+
+With Y -1, information is displayed without headers, with each item
+quoted and separated by a blank and with no row control.
+<DT><B>-L </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls number of items displayed at a time under user's
+control. 
+<BR>
+
+Without  -L, DEFAULT_ROW_COUNT items of information is displayed
+at a time.
+<BR>
+
+With L n, n &gt; 0, n items are displayed at a time.
+<DT><B>-A </B>
+
+<DD>
+<I>condition</I>
+
+option is an '&amp;' separated condition which will be applied
+in choosing the object to be listed. The separated condition
+is of the form &quot;&lt;Attr&gt; &lt;CompOp&gt; &lt;Value&gt;&quot;, where &lt;Attr&gt; is an
+MCAT attribute found by 
+<B>Sattrs</B>
+
+command, &lt;CompOp&gt; is a comparison operator and &lt;Value&gt; is a
+numeric or string value. The entire condition should be within
+a set of double quotes. Example: SgetD -A &quot;COPY = 0&quot;
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+SgetU">SgetU</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+SgetR">SgetR</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Sattrs">Sattrs</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 18:44:15 GMT, July 02, 2004
+</BODY>
+</HTML>

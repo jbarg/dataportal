@@ -1,0 +1,92 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sreplcont</TITLE>
+</HEAD><BODY>
+<H1>Sreplcont</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2003 <BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sreplcont - Replicate a container copy.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Sreplcont</B>
+
+[<B>-z</B>
+
+<I>mcatZone</I>]
+
+[<B>-S</B>
+
+<I>resource</I>] <I>container</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Sreplcont </B>
+
+Replicates a container copy to a specific resource. For containers
+that have multiple &quot;permanent&quot; and &quot;cache&quot; copies, this is a way
+to put a copy of the container on a specific resource. For
+example, if a container was created in multiple &quot;cache&quot; resources,
+this is a way to stage this container on a &quot;cache&quot; resource that
+is not designated as &quot;primary&quot;. The specified
+<I>resource</I>
+
+must be one of the physical resources used to recreate the
+container (i.e., the specified resource must belong to the logical
+resource used to create the container).
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-z mcatZone </B>
+
+<DD>
+The MCAT zone where the container resides
+<DT><B>-S </B>
+
+<DD>
+<I>resource</I>
+
+the resource where the container copy is to be created.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Srmcont">Srmcont</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Smkcont">Smkcont</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Slscont">Slscont</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Ssyncont">Ssyncont</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 18:44:15 GMT, July 02, 2004
+</BODY>
+</HTML>

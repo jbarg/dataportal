@@ -1,0 +1,5 @@
+alter table mdas_ar_physical add fs_timestamp varchar(32);
+alter table mdas_ar_physical alter column fs_timestamp set default '';
+alter table mdas_ar_physical add free_space      integer;
+alter table mdas_ar_physical alter column free_space set default 0;
+exit;

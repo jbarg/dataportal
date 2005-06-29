@@ -1,0 +1,37 @@
+NOTE : This list has been obtained from the method modifyMetaData() in 
+	   edu.sdsc.grid.io.srb.SRBFile
+
+FIELD NAME									COMMENTS
+------------------------------------------------------------------
+SRBMetaDataSet.FILE_COMMENTS	
+SRBMetaDataSet.SIZE
+SRBMetaDataSet.FILE_TYPE_NAME
+SRBMetaDataSet.DIRECTORY_NAME
+SRBMetaDataSet.OFFSET
+SRBMetaDataSet.IS_DIRTY
+SRBMetaDataSet.FILE_REPLICATION_ENUM		//oldReplNum:newReplNum, oldVerNum:newVerNum	use -1 for new values for using internal	generated number
+SRBMetaDataSet.FILE_LOCK_NUM				//accessName, not_used	use read, write  or null for accessName	read= readLock not even read is allowed	write= writeLock write not allowed	null= remove lock.
+SRBMetaDataSet.FILE_CHECKSUM
+SRBMetaDataSet.FILE_HIDE					//hidevalue=0 for not hiding @@@@@@@
+SRBMetaDataSet.FILE_AUDITFLAG
+SRBMetaDataSet.FILE_PIN_VAL					//pinNumber, pinExpiryDate	pinNumber = 0 for no pin	pinExpiryDate = YYYY-MM-DD-HH.MM.SS
+SRBMetaDataSet.FILE_EXPIRY_DATE				//expiryDate = YYYY-MM-DD-HH.MM.SS
+SRBMetaDataSet.FILE_EXPIRE_DATE_2			//expiryDate = YYYY-MM-DD-HH.MM.SS
+SRBMetaDataSet.FILE_IS_COMPRESSED			//compressionInfo is a string
+SRBMetaDataSet.FILE_IS_ENCRYPTED			//encryptionInfo is a string
+SRBMetaDataSet.FILE_NAME					//same as renameTo(GeneralFile)//newDataName, unused
+SRBMetaDataSet.FILE_ANNOTATION_TIMESTAMP
+SRBMetaDataSet.FILE_ANNOTATION				//newAnn[@@@newPosition, newAnnotationDate
+SRBMetaDataSet.OWNER						//newOwnerName, newOwnerDomain[|Zone]
+SRBMetaDataSet.PATH_NAME					//newPathName, not_used	(be careful how you use this!)
+SRBMetaDataSet.MODIFICATION_DATE			//newTimeStamp, not_used	newTimeStamp=YYYY-MM-DD-HH.MM.SS
+SRBMetaDataSet.FILE_LAST_ACCESS_TIMESTAMP	//newAccessTime, not_used	newAccessTime=YYYY-MM-DD-HH.MM.SS
+SRBMetaDataSet.FILE_CLASS_NAME				//classTypeString,classNameString	(user-defined)
+SRBMetaDataSet.INDEX_NAME_FOR_FILE			//srbObjName, not_used	srbObjName contains the index values	used by the data_name
+SRBMetaDataSet.INDEX_NAME_FOR_DATATYPE		//dataTypeName,not_used	dataType for which the data_name cane be	used as index
+SRBMetaDataSet.INDEX_NAME_FOR_DIRECTORY		//collectionName,not_used	Collection for which the data_name can be	used as index
+SRBMetaDataSet.METHOD_NAME_FOR_FILE			//srbObjName, not_used	srbObjName contains the method applicable	to  the data_name
+SRBMetaDataSet.METHOD_NAME_FOR_DATATYPE		//dataTypeName,not_used	dataType for which the data_name cane be	used as a method
+SRBMetaDataSet.METHOD_NAME_FOR_DIRECTORY	//collectionName, not_used	collection for whose data  the data_name	can be used as a method
+SRBMetaDataSet.DIRECTORY_ANNOTATION			//sourceColName, sourceDataName	annotation copied from source to data_name
+SRBMetaDataSet.CONTAINER_FOR_DIRECTORY		//oldContainerName, not_used	if the oldContainerNameis used as a	container forsome collection(s) then	the data_name	will replace it.	(used internally by SRB server)

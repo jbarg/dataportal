@@ -1,0 +1,101 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Ssyncd</TITLE>
+</HEAD><BODY>
+<H1>Ssyncd</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2003 <BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Ssyncd - synchronizes copies of an SRB object
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Ssyncd</B>
+
+[<B>-ar</B>] [<B>-S</B>
+
+<I>resourceName</I>] <I>srbObj</I>|<I>collection</I> ...
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Ssyncd </B>
+
+synchronizes all copies (replica) of an SRB object with the most
+recently modified (dirty) copy. 
+<P>
+If the 
+<I>resourceName</I>
+
+is given using the -S option, in addition to synchronizing to all
+existing copies, a copy will be made in the specified resource if a
+copy does not already exist in the resource.
+<P>
+If the 
+<I>resourceName</I>
+
+is a logical resource consisting of multiple resources, only one copy
+will be made to one of the resources in the group. The -a option can
+be used to make a copy in each resources in the group.
+<P>
+For synchronizing collections, the recursive option (r) must be set.
+<P>
+The
+<I>srbObj</I> or <I>collection</I>
+
+arguments can be path names in the SRB collection hierarchy.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-a </B>
+
+<DD>
+If the target resource is a logical resource consisting of more than
+one resources, then make a copy in each resources in the group.
+<DT><B>-r </B>
+
+<DD>
+recursively synchronizing the collection.
+<DT><B>-S </B>
+
+<DD>
+<I>resourceName </I>
+
+is the target resourceName.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Sreplicate">Sreplicate</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Sphymove">Sphymove</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Smv">Smv</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Scp">Scp</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 18:44:15 GMT, July 02, 2004
+</BODY>
+</HTML>

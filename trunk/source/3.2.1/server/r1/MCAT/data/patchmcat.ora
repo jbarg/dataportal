@@ -1,0 +1,12 @@
+#!/bin/csh
+source $HOME/.cshrc
+setenv ORACLE_HOME /dbms/oracle/v01/app/oracle/product/8.1.5
+setenv ORACLE_SID mcat816
+echo "Patching MCAT: Please make sure that this patch has not been applied previously"
+echo "Patching in 20 seconds"
+echo "Ctrl-C to abort"
+sleep 20
+echo "patch started"
+sqlplus sekar/beer@mcat816 @data/catalog.patch.ora.118rel
+echo "patch ended"
+

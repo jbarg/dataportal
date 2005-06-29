@@ -1,0 +1,293 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sufmeta</TITLE>
+</HEAD><BODY>
+<H1>Sufmeta</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sufmeta - modifies attribute-value-unit triplets of user-defined metadata information about SRB data objects.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<DL COMPACT>
+<DT><B>Sufmeta </B><I>AttName  AttVal</I><B> [ </B><I>AttUnit</I><B> ] </B><I>datasetName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -c </B><I>AttName  AttVal</I><B> [ </B><I>AttUnit</I><B> ] </B><I>collectionName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta </B><I>-u</I><B>AttName  AttVal</B><I> [ </I><B>AttUnit</B><I> ] </I><B><A HREF="mailto:userName@somainName">userName@somainName</A></B>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -r </B><I>AttName  AttVal</I><B> [ </B><I>AttUnit</I><B> ] </B><I>resourceName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta [-d] -f </B><I>metadataFileName separator datasetName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -c -f </B><I>metadataFileName separator collectionName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -r -f </B><I>metadataFileName separator resourceName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -u -f </B><I>metadataFileName separator</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -D -f </B><I>metadataFileName separator</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta [-d|-c|-u|-r] -Q </B>
+
+<DD>
+<I>AttName Op AttVal</I> [ <I>AttName Op AttVal</I> ]^4
+
+<BR>
+
+<DT><B>Sufmeta </B><I>datasetName|collectionName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -u </B><I><A HREF="mailto:userName@domainName">userName@domainName</A></I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -r </B><I>resourceName</I>
+
+<DD>
+<DT><B>Sufmeta -R -d  </B><I>AttName AttValue  datasetName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -R -c  </B><I>AttName AttValue  collectionName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -R -r  </B><I>AttName AttValue resourceName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -R -u  </B><I>AttName AttValue <A HREF="mailto:userName@domainName">userName@domainName</A></I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -e [ </B><I>inSRBMetadataFileName</I><B> ]</B>
+
+<DD>
+<I>inSRBExtractorStyleSheet datasetName</I>
+
+<BR>
+
+<DT><B>Sufmeta -C 1  </B><I>sourceCollectionName targetDataName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -C 2  </B><I>sourceCollectionName targetCollectionName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -C 3  </B><I>sourceDataName targetDataName</I>
+
+<DD>
+<BR>
+
+<DT><B>Sufmeta -C 4  </B><I>sourceDataName targetCollectionName</I>
+
+<DD>
+<BR>
+
+<P>
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Sufmeta </B>
+
+provides the facility for inserting, deleting, updating and
+accessing attribute-value type user-defined meta-data on SRB objects
+<I>dataName</I>, <I>collectionName</I>, <I>resourceName</I>
+
+<B> or </B><I><A HREF="mailto:userName@domainName">userName@domainName</A>.</I>
+
+<P>
+<P>
+The first four synopses ingest
+<I>AttName  AttValue  [AttUnit]</I>triplets into a single dataObject, collection user or resource.
+
+<P>
+The next four synopses is used to  bulk ingest metadata from 
+<I>metadataFileName</I> for a single dataObject, collection, resource or user. The <I>separator</I> is a single character used to separate the triples in  a line in <I>metadataFileName.</I> 
+
+<P>
+The seventh synopsis is used to bulk ingest triplets into multiple dataObjects.
+<P>
+The eighth synopsis allows querying of the four types of srbObjects separately using upto
+five conditions of the form
+<I>AttName Op AttVal.</I> AttVal
+
+can be  a number or a  single-quoted character
+strings with possible wild-card characters,  *  and  ?. The
+conditions supported are  =, &gt;, &lt;,  &gt;=, &lt;=, &lt;&gt;, like, not like,
+in, not in, between and not between.
+<P>
+The next three synopses show metadata triplets for a given 
+<I>dataName</I>, <I>collectionName</I>, <I>resourceName</I>
+
+<B> or </B><I><A HREF="mailto:userName@domainName">userName@domainName</A>.</I>
+
+The next four synopses (-R option)  used to delete AttName AttValue pair metadata from
+<I>dataName</I>, <I>collectionName</I>, <I>resourceName</I>
+
+<B> or </B><I><A HREF="mailto:userName@domainName">userName@domainName</A>.</I>
+
+<P>
+The next synopsis (-e option) allows for (remote) extracting of metadata using a T-language template stored in the SRB by extracting the metadata  either from the dataset itself or from another metadata file which is also stored in the SRB.
+<P>
+The next four synopses (-C option)  are used to copy metadata from
+one SRB object/collection to another SRB object/collection.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-d </B>
+
+<DD>
+operate on metadata for data objects
+<DT><B>-c </B>
+
+<DD>
+operate on metadata for collections
+<DT><B>-u </B>
+
+<DD>
+operate on metadata for users
+<DT><B>-r </B>
+
+<DD>
+operate on metadata for resources
+<DT><B>-Q </B>
+
+<DD>
+defines a query operation
+<DT><B>-f </B>
+
+<DD>
+defines bulk load option with metadata stored in a file.
+<B>-e </B>
+
+defines bulk load option with metadata extracted from a  srbObject or extracted from the targetObject itself.
+<DT></DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<DD>
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Smeta">Smeta</A></B>(1)
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>Examples</H2>
+
+The first four  synopses [-dcur] are used to ingest metadata
+<BR>&nbsp;&nbsp;&nbsp;for&nbsp;srbData,&nbsp;srbCollections&nbsp;&nbsp;srbUsers&nbsp;and&nbsp;srbResources&nbsp;&nbsp;respectively.
+The next four synopses [-dcur -f] are used to ingest bulk metadata
+<BR>&nbsp;&nbsp;&nbsp;for&nbsp;srbData,&nbsp;srbCollections,srbUsers&nbsp;and&nbsp;srbResources&nbsp;&nbsp;respectively.
+The next  synopsis [-D -f]are used to ingest bulk metadata
+<BR>&nbsp;&nbsp;&nbsp;for&nbsp;srbData&nbsp;for&nbsp;many&nbsp;datasets&nbsp;.
+The next four synopses [-dcur -Q] are used to query metadata
+<BR>&nbsp;&nbsp;&nbsp;for&nbsp;srbData&nbsp;and&nbsp;srbCollections&nbsp;respectively.
+The last three synopses are used to get all metadata values
+<BR>&nbsp;for&nbsp;srbData,&nbsp;srbCollections,&nbsp;srbUsers&nbsp;and&nbsp;srbResources.
+Use '*' and '?' for wildcards; assumes an and between conditions
+Sample Usage:
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;alpha&nbsp;200&nbsp;foo.dat
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-c&nbsp;alpha&nbsp;200&nbsp;myColl
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-c&nbsp;beta&nbsp;bar&nbsp;myColl
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-c&nbsp;beta&nbsp;200&nbsp;myColl
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-Q&nbsp;&nbsp;alpha&nbsp;=&nbsp;200
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-Q&nbsp;&nbsp;-c&nbsp;alpha&nbsp;=&nbsp;200&nbsp;beta&nbsp;=&nbsp;bar
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-Q&nbsp;&nbsp;-c&nbsp;alpha&nbsp;=&nbsp;200&nbsp;beta&nbsp;like&nbsp;'*a*'&nbsp;
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-Q&nbsp;&nbsp;-c&nbsp;alpha&nbsp;'&gt;'&nbsp;100&nbsp;beta&nbsp;like&nbsp;'*a*'&nbsp;
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;foo.dat
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-f&nbsp;mdFile&nbsp;'|'&nbsp;ticket123.dat
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-c&nbsp;-f&nbsp;mdFile&nbsp;'|'&nbsp;ticket123.dat
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;mdFile&nbsp;is&nbsp;of&nbsp;the&nbsp;form:
+<BR>&nbsp;&nbsp;&nbsp;ticketnum|es2345
+<BR>&nbsp;&nbsp;&nbsp;car&nbsp;name|ford&nbsp;escort
+<BR>&nbsp;&nbsp;&nbsp;driver&nbsp;name|john&nbsp;q.&nbsp;public
+<BR>&nbsp;&nbsp;&nbsp;numplate|123455
+<BR>&nbsp;&nbsp;&nbsp;speed|89|kmph|overspeed
+<BR>&nbsp;&nbsp;&nbsp;fine|55|dollars
+<P>
+<BR>&nbsp;&nbsp;&nbsp;Sufmeta&nbsp;-D&nbsp;-f&nbsp;mdFileMult&nbsp;'|'
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;mdFileMultis&nbsp;of&nbsp;the&nbsp;form:
+<BR>&nbsp;&nbsp;&nbsp;SETMINMETADATANUM=GIVENPERDATA
+<BR>&nbsp;&nbsp;&nbsp;/home/srb/rajatest|Sput.c|11|ticketnum|es2345
+<BR>&nbsp;&nbsp;&nbsp;/home/srb/rajatest|Sput.c|12|car&nbsp;name|ford&nbsp;escort
+<BR>&nbsp;&nbsp;&nbsp;/home/srb/rajatest|Sput.c|13|driver&nbsp;name|john&nbsp;q.&nbsp;public
+<BR>&nbsp;&nbsp;&nbsp;/home/srb/rajatest|Srm.c|11|numplate|123455
+<BR>&nbsp;&nbsp;&nbsp;/home/srb/rajatest|Srm.c|12|speed|89|kmph|overspeed
+<BR>&nbsp;
+<BR>&nbsp;&nbsp;&nbsp;The&nbsp;value&nbsp;for&nbsp;SETMINMETADATANUM&nbsp;can&nbsp;be&nbsp;GIVENPERDATA&nbsp;in&nbsp;which&nbsp;case,&nbsp;the&nbsp;value&nbsp;for
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;metadatanum&nbsp;field&nbsp;is&nbsp;to&nbsp;be&nbsp;given&nbsp;in&nbsp;the&nbsp;third&nbsp;value&nbsp;in&nbsp;each&nbsp;line.&nbsp;
+<BR>&nbsp;&nbsp;&nbsp;The&nbsp;value&nbsp;for&nbsp;SETMINMETADATANUM&nbsp;can&nbsp;be&nbsp;GETFROMMCAT&nbsp;in&nbsp;which&nbsp;case&nbsp;the&nbsp;value&nbsp;is
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;generated&nbsp;internally&nbsp;by&nbsp;the&nbsp;SRB&nbsp;system.&nbsp;In&nbsp;this&nbsp;case&nbsp;there&nbsp;is&nbsp;no&nbsp;need&nbsp;for&nbsp;the&nbsp;metadatanum
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field&nbsp;in&nbsp;the&nbsp;metadatfile.
+<BR>&nbsp;&nbsp;&nbsp;The&nbsp;value&nbsp;for&nbsp;SETMINMETADATANUM&nbsp;can&nbsp;be&nbsp;a&nbsp;number&nbsp;(say&nbsp;0),&nbsp;then&nbsp;the&nbsp;value&nbsp;is&nbsp;used
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;the&nbsp;first&nbsp;triplet&nbsp;for&nbsp;each&nbsp;given&nbsp;data&nbsp;object&nbsp;and&nbsp;incremented&nbsp;for&nbsp;subsequent
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metadata&nbsp;triplets&nbsp;for&nbsp;that&nbsp;object.&nbsp;This&nbsp;is&nbsp;useful&nbsp;when&nbsp;you&nbsp;know&nbsp;that&nbsp;the&nbsp;metadata
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;being&nbsp;freshly&nbsp;loaded&nbsp;and&nbsp;you&nbsp;can&nbsp;start&nbsp;at&nbsp;0&nbsp;or&nbsp;some&nbsp;constant&nbsp;number.&nbsp;This&nbsp;will
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;speedup&nbsp;the&nbsp;load&nbsp;compared&nbsp;to&nbsp;the&nbsp;GETFROMMCAT&nbsp;option.&nbsp;
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+<DT><A HREF="#lbAG">Examples</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 18:44:15 GMT, July 02, 2004
+</BODY>
+</HTML>
