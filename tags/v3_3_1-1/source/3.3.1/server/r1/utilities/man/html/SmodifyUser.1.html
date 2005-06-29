@@ -1,0 +1,125 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of SmodifyUser</TITLE>
+</HEAD><BODY>
+<H1>SmodifyUser</H1>
+Section: Admin SRB Commands (1)<BR>Updated: April 2004 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+SmodifyUser - Modify user account settings.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>SmodifyUser &lt;</B>operationType<B>&gt;</B>
+
+<I>UserName UserDomain Value</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>SmodifyUser </B>
+
+modifies an account setting for a SRB user.
+<B>&lt;</B>operationType<B>&gt;</B>
+
+determines which setting is to be operated on.
+<I>UserName</I>
+
+is the account,
+<I>UserDomain</I>
+
+is the accounts domain,
+<I>Value</I>
+
+is the new/additional setting for this account.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPERATIONTYPES</H2>
+
+<DL COMPACT>
+<DT><B>addToGroup </B>
+
+<DD>
+Adds this account to an already existing group.
+<DT><B>addDN </B>
+
+<DD>
+Adds a Distinguished Name (DN string) to this account for GSI Authentication purposes.
+<DT><B>password </B>
+
+<DD>
+Changes the login password for this account.
+<DT><B>delFromGroup </B>
+
+<DD>
+Remove the user from the specified group.
+<DT><B>delDN </B>
+
+<DD>
+Deletes the specified DN string
+<DT><B>changeType </B>
+
+<DD>
+Changes the type of this account (staff, sysadmin, etc...)
+<DT><B>addUserGroupOwner</B>
+
+<DD>
+Adds the user as the owner of the userGroup given in
+<I>Value.</I>
+
+A user Group owner can add/delete users from the group and also add/delete owners
+from the group.    
+<DT><B>delUserGroupOwner</B>
+
+<DD>
+Removes the user as the owner of the userGroup given in
+<I>Value.</I>
+
+<DT><B>changeZone</B>
+
+<DD>
+Changes the zone for the user. 
+<DT><B>changeUserAddress</B>
+
+<DD>
+Changes the address information for the user.
+<DT><B>changeUserEmail</B>
+
+<DD>
+Changes the email information for the user.
+<DT><B>changeUserPhone</B>
+
+<DD>
+Changes the phone number information for the user.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Singestuser.1.html">Singestuser</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/SgetU.1.html">SgetU</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Stoken.1.html">Stoken</A></B>(1)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPERATIONTYPES</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

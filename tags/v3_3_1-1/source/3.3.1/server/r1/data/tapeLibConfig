@@ -1,0 +1,6 @@
+# This file configure the tape library servers. Each line represent
+# a server configuration and has three parameters. The first parameter
+# is an integer representing the TapeLib Index. The second parameter is
+# host name where this server run and the third parameter is the port
+# number of this server.
+0	srb.sdsc.edu	12345

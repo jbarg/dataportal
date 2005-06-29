@@ -1,0 +1,605 @@
++ storeset=unix-sdsc  ora-sdsc
++ [  = Windows_NT ]
++ binDir=../../utilities/bin
++ DATA_FILES=data1 data2 data3 data4 datadb1.xml dataempty
++ TMP_DIR=../../../TMP
++ [ 20000830154945 =  ]
++ testid=20000830154945
+++ date +%Y-%m-%d
++ testdate=2000-08-30
++ echo TESTID = 20000830154945
+TESTID = 20000830154945
++ echo TESTDATE = 2000-08-30
+TESTDATE = 2000-08-30
++ ../../utilities/bin/Sinit -v
+Client Release = SRB1.1.7, API version = B.
+Server Release = SRB1.1.7, API version = B.
++ ../../utilities/bin/SgetU -d -Y 0
+--------------------------- RESULTS ------------------------------
+user_name :testuser
+domain_desc :sdsc
+-----------------------------------------------------------------
++ ../../utilities/bin/Smkdir Stest2Dev20000830154945
++ ../../utilities/bin/Scd Stest2Dev20000830154945
++ ../../utilities/bin/Smkdir Ssub1
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
++ ../../utilities/bin/Scd Ssub1
++ ../../utilities/bin/Smkcont Container20000830154945
++ ../../utilities/bin/Sput -c Container20000830154945 -S unix-sdsc data1 data1&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/data1&COPIES=all/data1 (source=data1) 	2792 bytes stored in 0.64 seconds 	(0.004 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S unix-sdsc data2 data2&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/data2&COPIES=all/data2 (source=data2) 	5584 bytes stored in 0.46 seconds 	(0.012 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S unix-sdsc data3 data3&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/data3&COPIES=all/data3 (source=data3) 	8376 bytes stored in 0.46 seconds 	(0.017 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S unix-sdsc data4 data4&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/data4&COPIES=all/data4 (source=data4) 	11168 bytes stored in 0.48 seconds 	(0.022 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S unix-sdsc datadb1.xml datadb1.xml&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/datadb1.xml&COPIES=all/datadb1.xml (source=datadb1.xml) 	5147 bytes stored in 0.46 seconds 	(0.011 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S unix-sdsc dataempty dataempty&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/dataempty&COPIES=all/dataempty (source=dataempty) 	0 bytes stored in 0.36 seconds 	(0.000 Mbytes/s) 
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Slscont -l Container20000830154945
+Containers:
+  Container Name                  Resource         Size        MaxSize     Count  
+  /container/testuser.sdsc/Container20000830154945  test-unix        33067       67108864    6      
++ ../../utilities/bin/SgetD -Y 0 -L 500 Ssub1/*
+--------------------------- RESULTS ------------------------------
+data_name :data1
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/24/80/Container20000830154945.1501523960.967675790
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :data2
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/24/80/Container20000830154945.1501523960.967675790
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :data3
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/24/80/Container20000830154945.1501523960.967675790
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :data4
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/24/80/Container20000830154945.1501523960.967675790
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :datadb1.xml
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/24/80/Container20000830154945.1501523960.967675790
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :dataempty
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/24/80/Container20000830154945.1501523960.967675790
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
++ ../../utilities/bin/SgetD -c -Y 0 -L 500
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.49  data1
+  testuser    0 test-unix    IC     5584 2000-08-30-15.49  data2
+  testuser    0 test-unix    IC     8376 2000-08-30-15.49  data3
+  testuser    0 test-unix    IC    11168 2000-08-30-15.49  data4
+  testuser    0 test-unix    IC     5147 2000-08-30-15.49  datadb1.xml
+  testuser    0 test-unix    IC        0 2000-08-30-15.49  dataempty
++ ../../utilities/bin/Sget Ssub1/data1 ../../../TMP/data1.20000830154945.tmp
++ diff data1 ../../../TMP/data1.20000830154945.tmp
++ wc data1 ../../../TMP/data1.20000830154945.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830154945.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data2 ../../../TMP/data2.20000830154945.tmp
++ diff data2 ../../../TMP/data2.20000830154945.tmp
++ wc data2 ../../../TMP/data2.20000830154945.tmp
+    140     814    5584 data2
+    140     814    5584 ../../../TMP/data2.20000830154945.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data2.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data3 ../../../TMP/data3.20000830154945.tmp
++ diff data3 ../../../TMP/data3.20000830154945.tmp
++ wc data3 ../../../TMP/data3.20000830154945.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830154945.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data4 ../../../TMP/data4.20000830154945.tmp
++ diff data4 ../../../TMP/data4.20000830154945.tmp
++ wc data4 ../../../TMP/data4.20000830154945.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830154945.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
++ diff datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830154945.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/dataempty ../../../TMP/dataempty.20000830154945.tmp
++ diff dataempty ../../../TMP/dataempty.20000830154945.tmp
++ wc dataempty ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830154945.tmp
++ ../../utilities/bin/Smkdir Ssub2
++ ../../utilities/bin/Smv Ssub1/data1 Ssub2
++ ../../utilities/bin/Smv Ssub1/data2 Ssub2
++ ../../utilities/bin/Smv Ssub1/data3 Ssub2
++ ../../utilities/bin/Smv Ssub1/data4 Ssub2
++ ../../utilities/bin/Smv Ssub1/datadb1.xml Ssub2
++ ../../utilities/bin/Smv Ssub1/dataempty Ssub2
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.49  data1
+  testuser    0 test-unix    IC     5584 2000-08-30-15.49  data2
+  testuser    0 test-unix    IC     8376 2000-08-30-15.49  data3
+  testuser    0 test-unix    IC    11168 2000-08-30-15.49  data4
+  testuser    0 test-unix    IC     5147 2000-08-30-15.49  datadb1.xml
+  testuser    0 test-unix    IC        0 2000-08-30-15.49  dataempty
++ ../../utilities/bin/Smkcont Container20000830154945.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/data1 Ssub1/data1.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/data2 Ssub1/data2.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/data3 Ssub1/data3.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/data4 Ssub1/data4.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/datadb1.xml Ssub1/datadb1.xml.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/dataempty Ssub1/dataempty.unix-sdsc
++ ../../utilities/bin/Ssyncont Container20000830154945.unix-sdsc
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.50  data1.unix-sdsc
+  testuser    0 test-unix    IC     5584 2000-08-30-15.50  data2.unix-sdsc
+  testuser    0 test-unix    IC     8376 2000-08-30-15.50  data3.unix-sdsc
+  testuser    0 test-unix    IC    11168 2000-08-30-15.50  data4.unix-sdsc
+  testuser    0 test-unix    IC     5147 2000-08-30-15.50  datadb1.xml.unix-sdsc
+  testuser    0 test-unix    IC        0 2000-08-30-15.50  dataempty.unix-sdsc
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.49  data1
+  testuser    0 test-unix    IC     5584 2000-08-30-15.49  data2
+  testuser    0 test-unix    IC     8376 2000-08-30-15.49  data3
+  testuser    0 test-unix    IC    11168 2000-08-30-15.49  data4
+  testuser    0 test-unix    IC     5147 2000-08-30-15.49  datadb1.xml
+  testuser    0 test-unix    IC        0 2000-08-30-15.49  dataempty
++ ../../utilities/bin/Sget Ssub1/data1.unix-sdsc ../../../TMP/data1.20000830154945.tmp
++ diff data1 ../../../TMP/data1.20000830154945.tmp
++ wc data1 ../../../TMP/data1.20000830154945.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830154945.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data2.unix-sdsc ../../../TMP/data2.20000830154945.tmp
++ diff data2 ../../../TMP/data2.20000830154945.tmp
++ wc data2 ../../../TMP/data2.20000830154945.tmp
+    140     814    5584 data2
+    140     814    5584 ../../../TMP/data2.20000830154945.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data2.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data3.unix-sdsc ../../../TMP/data3.20000830154945.tmp
++ diff data3 ../../../TMP/data3.20000830154945.tmp
++ wc data3 ../../../TMP/data3.20000830154945.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830154945.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data4.unix-sdsc ../../../TMP/data4.20000830154945.tmp
++ diff data4 ../../../TMP/data4.20000830154945.tmp
++ wc data4 ../../../TMP/data4.20000830154945.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830154945.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/datadb1.xml.unix-sdsc ../../../TMP/datadb1.xml.20000830154945.tmp
++ diff datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830154945.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/dataempty.unix-sdsc ../../../TMP/dataempty.20000830154945.tmp
++ diff dataempty ../../../TMP/dataempty.20000830154945.tmp
++ wc dataempty ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830154945.tmp
++ ../../utilities/bin/Scd Ssub1
++ ../../utilities/bin/Srm data*
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Srmcont Container20000830154945.unix-sdsc
++ ../../utilities/bin/Smkcont Container20000830154945.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/data1 Ssub1/data1.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/data2 Ssub1/data2.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/data3 Ssub1/data3.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/data4 Ssub1/data4.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/datadb1.xml Ssub1/datadb1.xml.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/dataempty Ssub1/dataempty.ora-sdsc
++ ../../utilities/bin/Ssyncont Container20000830154945.ora-sdsc
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.50  data1.ora-sdsc
+  testuser    0 test-unix    IC     5584 2000-08-30-15.50  data2.ora-sdsc
+  testuser    0 test-unix    IC     8376 2000-08-30-15.50  data3.ora-sdsc
+  testuser    0 test-unix    IC    11168 2000-08-30-15.50  data4.ora-sdsc
+  testuser    0 test-unix    IC     5147 2000-08-30-15.50  datadb1.xml.ora-sdsc
+  testuser    0 test-unix    IC        0 2000-08-30-15.50  dataempty.ora-sdsc
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.49  data1
+  testuser    0 test-unix    IC     5584 2000-08-30-15.49  data2
+  testuser    0 test-unix    IC     8376 2000-08-30-15.49  data3
+  testuser    0 test-unix    IC    11168 2000-08-30-15.49  data4
+  testuser    0 test-unix    IC     5147 2000-08-30-15.49  datadb1.xml
+  testuser    0 test-unix    IC        0 2000-08-30-15.49  dataempty
++ ../../utilities/bin/Sget Ssub1/data1.ora-sdsc ../../../TMP/data1.20000830154945.tmp
++ diff data1 ../../../TMP/data1.20000830154945.tmp
++ wc data1 ../../../TMP/data1.20000830154945.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830154945.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data2.ora-sdsc ../../../TMP/data2.20000830154945.tmp
++ diff data2 ../../../TMP/data2.20000830154945.tmp
++ wc data2 ../../../TMP/data2.20000830154945.tmp
+    140     814    5584 data2
+    140     814    5584 ../../../TMP/data2.20000830154945.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data2.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data3.ora-sdsc ../../../TMP/data3.20000830154945.tmp
++ diff data3 ../../../TMP/data3.20000830154945.tmp
++ wc data3 ../../../TMP/data3.20000830154945.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830154945.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data4.ora-sdsc ../../../TMP/data4.20000830154945.tmp
++ diff data4 ../../../TMP/data4.20000830154945.tmp
++ wc data4 ../../../TMP/data4.20000830154945.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830154945.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/datadb1.xml.ora-sdsc ../../../TMP/datadb1.xml.20000830154945.tmp
++ diff datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830154945.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/dataempty.ora-sdsc ../../../TMP/dataempty.20000830154945.tmp
++ diff dataempty ../../../TMP/dataempty.20000830154945.tmp
++ wc dataempty ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830154945.tmp
++ ../../utilities/bin/Scd Ssub1
++ ../../utilities/bin/Srm data*
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Srmcont Container20000830154945.ora-sdsc
++ ../../utilities/bin/Srmdir Ssub1
++ ../../utilities/bin/Srm -r Ssub*
++ ../../utilities/bin/Srmcont Container20000830154945
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
++ ../../utilities/bin/Smkdir Ssub1
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
++ ../../utilities/bin/Scd Ssub1
++ ../../utilities/bin/Smkcont Container20000830154945
++ ../../utilities/bin/Sput -c Container20000830154945 -S ora-sdsc data1 data1&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/data1&COPIES=all/data1 (source=data1) 	2792 bytes stored in 0.67 seconds 	(0.004 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S ora-sdsc data2 data2&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/data2&COPIES=all/data2 (source=data2) 	5584 bytes stored in 0.46 seconds 	(0.012 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S ora-sdsc data3 data3&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/data3&COPIES=all/data3 (source=data3) 	8376 bytes stored in 0.45 seconds 	(0.018 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S ora-sdsc data4 data4&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/data4&COPIES=all/data4 (source=data4) 	11168 bytes stored in 0.43 seconds 	(0.025 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S ora-sdsc datadb1.xml datadb1.xml&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/datadb1.xml&COPIES=all/datadb1.xml (source=datadb1.xml) 	5147 bytes stored in 0.48 seconds 	(0.010 Mbytes/s) 
++ ../../utilities/bin/Sput -c Container20000830154945 -S ora-sdsc dataempty dataempty&COPIES=all
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1/dataempty&COPIES=all/dataempty (source=dataempty) 	0 bytes stored in 0.33 seconds 	(0.000 Mbytes/s) 
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Slscont -l Container20000830154945
+Containers:
+  Container Name                  Resource         Size        MaxSize     Count  
+  /container/testuser.sdsc/Container20000830154945  test-unix        33067       67108864    6      
++ ../../utilities/bin/SgetD -Y 0 -L 500 Ssub1/*
+--------------------------- RESULTS ------------------------------
+data_name :data1
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/32/32/Container20000830154945.1800319015.967675875
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :data2
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/32/32/Container20000830154945.1800319015.967675875
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :data3
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/32/32/Container20000830154945.1800319015.967675875
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :data4
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/32/32/Container20000830154945.1800319015.967675875
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :datadb1.xml
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/32/32/Container20000830154945.1800319015.967675875
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
+data_name :dataempty
+data_typ_name :generic
+path_name :/misc/srb/srbdev/testunixvault/testuser.sdsc/32/32/Container20000830154945.1800319015.967675875
+data_grp_name :/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+phy_rsrc_name :test-unix
+container_name :/container/testuser.sdsc/Container20000830154945
+-----------------------------------------------------------------
++ ../../utilities/bin/SgetD -c -Y 0 -L 500
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.51  data1
+  testuser    0 test-unix    IC     5584 2000-08-30-15.51  data2
+  testuser    0 test-unix    IC     8376 2000-08-30-15.51  data3
+  testuser    0 test-unix    IC    11168 2000-08-30-15.51  data4
+  testuser    0 test-unix    IC     5147 2000-08-30-15.51  datadb1.xml
+  testuser    0 test-unix    IC        0 2000-08-30-15.51  dataempty
++ ../../utilities/bin/Sget Ssub1/data1 ../../../TMP/data1.20000830154945.tmp
++ diff data1 ../../../TMP/data1.20000830154945.tmp
++ wc data1 ../../../TMP/data1.20000830154945.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830154945.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data2 ../../../TMP/data2.20000830154945.tmp
++ diff data2 ../../../TMP/data2.20000830154945.tmp
++ wc data2 ../../../TMP/data2.20000830154945.tmp
+    140     814    5584 data2
+    140     814    5584 ../../../TMP/data2.20000830154945.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data2.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data3 ../../../TMP/data3.20000830154945.tmp
++ diff data3 ../../../TMP/data3.20000830154945.tmp
++ wc data3 ../../../TMP/data3.20000830154945.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830154945.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data4 ../../../TMP/data4.20000830154945.tmp
++ diff data4 ../../../TMP/data4.20000830154945.tmp
++ wc data4 ../../../TMP/data4.20000830154945.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830154945.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
++ diff datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830154945.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/dataempty ../../../TMP/dataempty.20000830154945.tmp
++ diff dataempty ../../../TMP/dataempty.20000830154945.tmp
++ wc dataempty ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830154945.tmp
++ ../../utilities/bin/Smkdir Ssub2
++ ../../utilities/bin/Smv Ssub1/data1 Ssub2
++ ../../utilities/bin/Smv Ssub1/data2 Ssub2
++ ../../utilities/bin/Smv Ssub1/data3 Ssub2
++ ../../utilities/bin/Smv Ssub1/data4 Ssub2
++ ../../utilities/bin/Smv Ssub1/datadb1.xml Ssub2
++ ../../utilities/bin/Smv Ssub1/dataempty Ssub2
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.51  data1
+  testuser    0 test-unix    IC     5584 2000-08-30-15.51  data2
+  testuser    0 test-unix    IC     8376 2000-08-30-15.51  data3
+  testuser    0 test-unix    IC    11168 2000-08-30-15.51  data4
+  testuser    0 test-unix    IC     5147 2000-08-30-15.51  datadb1.xml
+  testuser    0 test-unix    IC        0 2000-08-30-15.51  dataempty
++ ../../utilities/bin/Smkcont Container20000830154945.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/data1 Ssub1/data1.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/data2 Ssub1/data2.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/data3 Ssub1/data3.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/data4 Ssub1/data4.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/datadb1.xml Ssub1/datadb1.xml.unix-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.unix-sdsc -S unix-sdsc Ssub2/dataempty Ssub1/dataempty.unix-sdsc
++ ../../utilities/bin/Ssyncont Container20000830154945.unix-sdsc
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.51  data1.unix-sdsc
+  testuser    0 test-unix    IC     5584 2000-08-30-15.51  data2.unix-sdsc
+  testuser    0 test-unix    IC     8376 2000-08-30-15.51  data3.unix-sdsc
+  testuser    0 test-unix    IC    11168 2000-08-30-15.51  data4.unix-sdsc
+  testuser    0 test-unix    IC     5147 2000-08-30-15.51  datadb1.xml.unix-sdsc
+  testuser    0 test-unix    IC        0 2000-08-30-15.51  dataempty.unix-sdsc
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.51  data1
+  testuser    0 test-unix    IC     5584 2000-08-30-15.51  data2
+  testuser    0 test-unix    IC     8376 2000-08-30-15.51  data3
+  testuser    0 test-unix    IC    11168 2000-08-30-15.51  data4
+  testuser    0 test-unix    IC     5147 2000-08-30-15.51  datadb1.xml
+  testuser    0 test-unix    IC        0 2000-08-30-15.51  dataempty
++ ../../utilities/bin/Sget Ssub1/data1.unix-sdsc ../../../TMP/data1.20000830154945.tmp
++ diff data1 ../../../TMP/data1.20000830154945.tmp
++ wc data1 ../../../TMP/data1.20000830154945.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830154945.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data2.unix-sdsc ../../../TMP/data2.20000830154945.tmp
++ diff data2 ../../../TMP/data2.20000830154945.tmp
++ wc data2 ../../../TMP/data2.20000830154945.tmp
+    140     814    5584 data2
+    140     814    5584 ../../../TMP/data2.20000830154945.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data2.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data3.unix-sdsc ../../../TMP/data3.20000830154945.tmp
++ diff data3 ../../../TMP/data3.20000830154945.tmp
++ wc data3 ../../../TMP/data3.20000830154945.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830154945.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data4.unix-sdsc ../../../TMP/data4.20000830154945.tmp
++ diff data4 ../../../TMP/data4.20000830154945.tmp
++ wc data4 ../../../TMP/data4.20000830154945.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830154945.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/datadb1.xml.unix-sdsc ../../../TMP/datadb1.xml.20000830154945.tmp
++ diff datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830154945.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/dataempty.unix-sdsc ../../../TMP/dataempty.20000830154945.tmp
++ diff dataempty ../../../TMP/dataempty.20000830154945.tmp
++ wc dataempty ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830154945.tmp
++ ../../utilities/bin/Scd Ssub1
++ ../../utilities/bin/Srm data*
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Srmcont Container20000830154945.unix-sdsc
++ ../../utilities/bin/Smkcont Container20000830154945.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/data1 Ssub1/data1.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/data2 Ssub1/data2.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/data3 Ssub1/data3.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/data4 Ssub1/data4.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/datadb1.xml Ssub1/datadb1.xml.ora-sdsc
++ ../../utilities/bin/Scp -c Container20000830154945.ora-sdsc -S ora-sdsc Ssub2/dataempty Ssub1/dataempty.ora-sdsc
++ ../../utilities/bin/Ssyncont Container20000830154945.ora-sdsc
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1
+  C-/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub1:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.52  data1.ora-sdsc
+  testuser    0 test-unix    IC     5584 2000-08-30-15.52  data2.ora-sdsc
+  testuser    0 test-unix    IC     8376 2000-08-30-15.52  data3.ora-sdsc
+  testuser    0 test-unix    IC    11168 2000-08-30-15.52  data4.ora-sdsc
+  testuser    0 test-unix    IC     5147 2000-08-30-15.52  datadb1.xml.ora-sdsc
+  testuser    0 test-unix    IC        0 2000-08-30-15.52  dataempty.ora-sdsc
+/home/testuser.sdsc/Stest2Dev20000830154945/Ssub2:
+  testuser    0 test-unix    IC     2792 2000-08-30-15.51  data1
+  testuser    0 test-unix    IC     5584 2000-08-30-15.51  data2
+  testuser    0 test-unix    IC     8376 2000-08-30-15.51  data3
+  testuser    0 test-unix    IC    11168 2000-08-30-15.51  data4
+  testuser    0 test-unix    IC     5147 2000-08-30-15.51  datadb1.xml
+  testuser    0 test-unix    IC        0 2000-08-30-15.51  dataempty
++ ../../utilities/bin/Sget Ssub1/data1.ora-sdsc ../../../TMP/data1.20000830154945.tmp
++ diff data1 ../../../TMP/data1.20000830154945.tmp
++ wc data1 ../../../TMP/data1.20000830154945.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830154945.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data2.ora-sdsc ../../../TMP/data2.20000830154945.tmp
++ diff data2 ../../../TMP/data2.20000830154945.tmp
++ wc data2 ../../../TMP/data2.20000830154945.tmp
+    140     814    5584 data2
+    140     814    5584 ../../../TMP/data2.20000830154945.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data2.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data3.ora-sdsc ../../../TMP/data3.20000830154945.tmp
++ diff data3 ../../../TMP/data3.20000830154945.tmp
++ wc data3 ../../../TMP/data3.20000830154945.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830154945.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/data4.ora-sdsc ../../../TMP/data4.20000830154945.tmp
++ diff data4 ../../../TMP/data4.20000830154945.tmp
++ wc data4 ../../../TMP/data4.20000830154945.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830154945.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/datadb1.xml.ora-sdsc ../../../TMP/datadb1.xml.20000830154945.tmp
++ diff datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830154945.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830154945.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830154945.tmp
++ ../../utilities/bin/Sget Ssub1/dataempty.ora-sdsc ../../../TMP/dataempty.20000830154945.tmp
++ diff dataempty ../../../TMP/dataempty.20000830154945.tmp
++ wc dataempty ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830154945.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830154945.tmp
++ ../../utilities/bin/Scd Ssub1
++ ../../utilities/bin/Srm data*
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Srmcont Container20000830154945.ora-sdsc
++ ../../utilities/bin/Srmdir Ssub1
++ ../../utilities/bin/Srm -r Ssub*
++ ../../utilities/bin/Srmcont Container20000830154945
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest2Dev20000830154945:
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Srmdir Stest2Dev20000830154945
++ ../../utilities/bin/Sexit
++ exit 0
