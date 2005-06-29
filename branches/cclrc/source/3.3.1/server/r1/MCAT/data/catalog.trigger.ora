@@ -1,0 +1,57 @@
+
+
+CREATE OR REPLACE TRIGGER delReplTrig
+    BEFORE DELETE ON MDAS_AD_REPL
+    FOR EACH ROW
+    BEGIN
+       INSERT INTO MDAS_AD_DEL_REPL values (
+         :old.data_id,
+         :old.repl_enum,
+         :old.data_name,
+         :old.data_typ_id,
+         :old.path_name,
+         :old.rsrc_id,
+         :old.repl_timestamp,
+         :old.data_grp_id,
+         :old.data_size,
+         :old.is_deleted,
+         :old.data_owner,
+         :old.is_dirty,
+         :old.offset,
+         :old.container_id,
+         :old.modify_timestamp,
+         :old.last_accs_time,
+         :old.datalock,
+         :old.lockowner,
+         :old.version_num,
+         :old.container_td_id,
+         :old.d_comment,
+         :old.dlockexpiry,
+         :old.dchecksum,
+         :old.dhide,
+         :old.auditflag,
+         :old.seg_num);
+    END;
+.
+run
+
+CREATE OR REPLACE TRIGGER delDataGrpTrig
+   BEFORE DELETE ON MDAS_TD_DATA_GRP
+   FOR EACH ROW
+   BEGIN
+      INSERT INTO MDAS_TD_DEL_DATA_GRP values (
+        :old.data_grp_id,
+        :old.data_grp_name,
+        :old.parent_grp_name,
+        :old.coll_owner,
+        :old.coll_cr_timestamp,
+        :old.coll_comments,
+        :old.coll_lock,
+        :old.coll_lockowner,
+        :old.coll_lockexpiry,
+        :old.coll_link,
+        :old.coll_mod_timestamp);
+   END;
+.
+run
+

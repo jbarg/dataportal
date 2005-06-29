@@ -1,0 +1,274 @@
+# Makefile - This is the main makefile for the SRB software
+
+include mk/mk.config
+
+backSrcDir=$(buildDir)/src/back
+frontSrcDir=$(buildDir)/src/front
+libSrcDir=$(buildDir)/src/lib
+mdasSrcDir=$(buildDir)/src/catalog/mdas
+mdas-srbSrcDir=$(buildDir)/src/catalog/mdas-srb
+srb-httpSrcDir=$(buildDir)/src/catalog/srb-http
+clientSrcDir=$(buildDir)/src/client
+testSrcDir=$(buildDir)/src/test
+objDir=$(buildDir)/obj
+binDir=$(buildDir)/bin
+dataDir=$(buildDir)/data
+
+vpath %.c $(backSrcDir) $(frontSrcDir) $(libSrcDir) $(mdasSrcDir)       \
+$(mdas-srbSrcDir) $(srb-httpSrcDir) $(clientSrcDir) $(testSrcDir)
+
+ifeq ($(PORTNAME), PORTNAME_aix)
+# INSTALL= /usr/ucb/install
+INSTALL= /bin/cp
+endif
+
+ifeq ($(PORTNAME), PORTNAME_sunos)
+INSTALL = /bin/install
+endif
+
+ifeq ($(PORTNAME), PORTNAME_solaris)
+INSTALL= /usr/ucb/install
+endif
+
+ifeq ($(PORTNAME), PORTNAME_c90)
+INSTALL= /bin/cp
+endif
+
+ifeq ($(PORTNAME), PORTNAME_alpha)
+INSTALL= /usr/ucb/install
+endif 
+
+CC=cc
+# On aix, need xlc_r4 to link with HPSS library.
+ifeq ($(PORTNAME), PORTNAME_aix)
+CC=xlc_r4
+endif 
+
+ifeq ($(PORTNAME), PORTNAME_sunos)
+CC=gcc
+endif
+
+ifeq ($(PORTNAME), PORTNAME_solaris)
+CC=gcc -g
+endif
+
+ifeq ($(PORTNAME), PORTNAME_sunos)
+AR=/usr/5bin/ar
+else
+AR=ar
+endif
+
+ifeq ($(PORTNAME), PORTNAME_c90)
+AROPT=              -cr
+else
+AROPT=              -crs
+endif
+
+RANLIB=                touch
+
+ifdef UTREE
+LIB_NSL=$(UTREEDIR)/lib/libnsltree.a $(UTREEDIR)/lib/libnsl.a   \
+$(UTREEDIR)/lib/libint64.a $(UTREEDIR)/lib/liblinket.a  \
+$(UTREEDIR)/lib/librpclib.a $(UTREEDIR)/lib/comlib.a
+endif
+
+ifdef HPSS
+LIB_HPSS=$(HPSS_LIB_DIR)/libmetadata.a \
+      $(HPSS_LIB_DIR)/libhpssapi.a \
+      $(HPSS_LIB_DIR)/libhpsscs.a \
+      $(HPSS_LIB_DIR)/libhandles.a \
+      $(HPSS_LIB_DIR)/libhpsscomm_nolog.a \
+      $(HPSS_LIB_DIR)/libhsec_nolog.a \
+      $(HPSS_LIB_DIR)/libgss_nolog.a \
+      $(HPSS_LIB_DIR)/libpdata.a \
+      $(HPSS_LIB_DIR)/libhpsslog.a \
+      $(HPSS_LIB_DIR)/libhpssipi3.a \
+      -L$(ENCINA_LIB_DIR) \
+      -lEncSfs \
+      -lEncina \
+      -lEncClient \
+      -ldce \
+      -ldcepthreads -lc_r	\
+      -lpthreads \
+      -lipi3 
+endif
+
+# for the SRB client.
+
+SVR_CFLAGS = -g
+SVR_CFLAGS+= -I$(buildDir)/src/include
+
+# HOST_BASED_AUTH for use the host based authorization
+
+ifdef HOST_BASED_AUTH
+SVR_CFLAGS+= -DHOST_BASED_AUTH
+endif
+
+# MDAS_AUTH uses MDAS for authorization
+
+ifdef MDAS_AUTH
+SVR_CFLAGS+= -DMDAS_AUTH
+endif
+
+SVR_CFLAGS+= -DSRB_DATADIR='"$(installDir)/data"'
+
+SVR_CFLAGS+=-D$(PORTNAME)
+
+CL_CFLAGS= $(SVR_CFLAGS)
+
+ifdef UTREE
+SVR_CFLAGS+= -DUTREE=1
+endif
+
+ifdef UTREE
+SVR_CFLAGS+= -I$(UTREE_HDR_DIR)
+endif
+
+ifdef HPSS
+SVR_CFLAGS+= -I$(DCE_HDR_DIR) -I$(ENCINA_HDR_DIR) -I$(HPSS_HDR_DIR)
+endif
+
+ifdef HPSS
+SVR_CFLAGS+= -DHPSS=2
+endif
+
+ifdef EXFILE
+SVR_CFLAGS+= -DEXFILE=1
+endif
+
+SVR_CFLAGS+= -I$(buildDir)/src/catalog/include
+CL_CFLAGS+= -I$(buildDir)/src/catalog/include
+
+ifeq ($(PORTNAME), PORTNAME_solaris)
+LDADD+=-lnsl -lsocket
+CL_LDADD+=-lnsl -lsocket
+endif
+
+ifdef UTREE
+LDADD+= $(LIB_NSL)
+endif
+
+ifdef HPSS
+LDADD+= $(LIB_HPSS)
+endif
+
+ifdef SRB_MDAS
+SVR_CFLAGS+= -DSRB_MDAS=1
+endif
+
+ifdef DEMO
+SVR_CFLAGS+= -DDEMO=1
+endif
+
+ifdef DB_DB2
+SVR_CFLAGS+= -DDB_DB2=0 -I$(DB2_HDR_DIR)
+LDADD+= -L$(DB2_LIB_DIR) -ldb2
+endif
+
+ifdef DB_Illustra
+SVR_CFLAGS+= -DDB_Illustra=1 -I$(ILLUS_HDR_DIR)
+LDADD+= -L$(ILLUS_LIB_DIR) -lmi -L/usr/lib -ldl
+endif
+
+BOBJS = $(objDir)/exfSw.o $(objDir)/unixFileDvr.o 	\
+$(objDir)/utFileDvr.o   \
+$(objDir)/hpssFileDvr.o $(objDir)/exfFunct.o 	\
+$(objDir)/srbServer.o   \
+$(objDir)/functionHandler.o $(objDir)/srbObjFunct.o 	\
+$(objDir)/dbLobj.o $(objDir)/distrib.o
+
+ifdef DB_Illustra
+BOBJS+= $(objDir)/illustraDB.o
+endif
+
+ifdef DB_DB2
+BOBJS+= $(objDir)/srbC_db2_library.o
+endif
+
+ifdef FTP
+BOBJS+= $(objDir)/ftpFileDvr.o
+SVR_CFLAGS+= -DFTP=3
+endif
+
+FOBJS = $(objDir)/srbMaster.o $(objDir)/auth.o
+
+LOBJS = $(objDir)/misc.o $(objDir)/comm.o 	\
+$(objDir)/elog.o $(objDir)/dllist.o 
+
+COBJS = $(objDir)/clAuth.o $(objDir)/clConnect.o	\
+$(objDir)/clExec.o $(objDir)/clMisc.o	\
+$(objDir)/clStub.o
+
+SOBJS = $(BOBJS) $(FOBJS) $(LOBJS)
+
+ifdef SRB_MDAS
+MDAS_OBJ = $(objDir)/srbC_mdas_library.o  \
+$(objDir)/srbC_mdas_library2.o	\
+$(objDir)/mdasC_db2_internal.o $(objDir)/mdasC_db2_conn.o	\
+$(objDir)/mdasC_db2_dcon.o $(objDir)/mdasC_db2_info_inquire.o	\
+$(objDir)/mdasC_api.o $(objDir)/strct_lib.o 	\
+$(objDir)/table_names_to_sql.o $(objDir)/sockutil.o
+SOBJS += $(MDAS_OBJ)
+endif
+
+TOBJS = $(objDir)/testexf.o \
+        $(objDir)/testsrb.o $(objDir)/srbcat.o   \
+        $(objDir)/testLobj.o $(objDir)/testrem.o \
+        $(objDir)/exfrm.o $(objDir)/exfls.o     \
+        $(objDir)/testftp.o $(objDir)/testddir.o  \
+        $(objDir)/testcre.o $(objDir)/testcopy.o $(objDir)/testmove.o	\
+	$(objDir)/testunlink.o $(objDir)/testcoll.o $(objDir)/testuser.o
+
+TESTBINS = $(binDir)/testexf $(binDir)/testsrb 	\
+$(binDir)/srbcat $(binDir)/testLobj  \
+$(binDir)/testrem $(binDir)/exfls $(binDir)/exfrm       \
+$(binDir)/testftp $(binDir)/testddir $(binDir)/testcre	\
+$(binDir)/testcopy $(binDir)/testmove $(binDir)/testunlink 	\
+$(binDir)/testcoll $(binDir)/testuser
+
+TARGETS:= $(binDir)/srbTest $(binDir)/srbServer 	\
+$(objDir)/libSrbClient.a 	\
+$(TESTBINS)
+
+CONFIG_FILES = $(dataDir)/MdasConfig $(dataDir)/defAuthConfig	\
+$(dataDir)/hostConfig $(dataDir)/metadata.fkrel		\
+$(dataDir)/vaultConfig
+
+all:: $(TARGETS)
+
+install:: $(TARGETS)
+	-mkdir $(installDir) $(installDir)/bin $(installDir)/data;	\
+	$(INSTALL) $(TARGETS) $(binDir)/runsrb $(installDir)/bin;	\
+	$(INSTALL) $(CONFIG_FILES) $(installDir)/data;	\
+	chmod 755 $(installDir) $(installDir)/data $(installDir)/bin	\
+	$(installDir)/bin/*; 	\
+	chmod 644 $(installDir)/data/*; 	\
+	chmod 600 $(installDir)/data/MdasConfig
+
+clean:
+	rm -f $(TARGETS) $(SOBJS) \
+	$(COBJS) $(objDir)/libSrbClient.a $(TOBJS)
+ 
+$(SOBJS): $(objDir)/%.o: %.c
+	$(CC) -c $(SVR_CFLAGS) -o $@ $<
+
+$(binDir)/srbServer: $(BOBJS) $(LOBJS) $(MDAS_OBJ) 	\
+$(objDir)/libSrbClient.a
+	$(CC) -o $@ $^ $(LDADD) 
+
+$(binDir)/srbTest: $(FOBJS) $(LOBJS) $(MDAS_OBJ) $(objDir)/libSrbClient.a
+	$(CC) -o $@ $^ $(LDADD)
+
+$(COBJS): $(objDir)/%.o: %.c
+	$(CC) -c $(CL_CFLAGS) -o $@ $<
+
+$(objDir)/libSrbClient.a: $(COBJS) $(objDir)/dllist.o
+	cd $(objDir); $(AR) $(AROPT) libSrbClient.a $^;  \
+	$(RANLIB) libSrbClient.a
+
+$(TOBJS): $(objDir)/%.o: %.c
+	$(CC) -c $(CL_CFLAGS) -o $@ $<
+
+$(TESTBINS): $(binDir)/%: $(objDir)/%.o $(objDir)/libSrbClient.a
+	$(CC) -o $@ $(CL_LDADD) $^
+

@@ -1,0 +1,55 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Smkcont.1
+.\"
+.TH Smkcont 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Smkcont \- creates a new SRB container
+.SH SYNOPSIS
+.B Smkcont
+.RB [ \-S
+.IR resourceName ]
+.RB [ \-D
+.IR dataType ]
+.RB [ \-z
+.IR mcatZone ]
+.RB [ \-s
+.IR containerSize "] " container
+.SH DESCRIPTION
+.B "Smkcont "
+creates a new SRB container.
+.sp
+The
+.I container
+may be an absolute path or a relative path in
+the SRB name space. If it is a relative path, the
+.I container
+will be created in the user's container collection path - 
+/container/userName.domainName.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-S "
+.I resourceName
+\- This is the target logical resource. This logical resource
+should contain two physical resources: a "permanent" and 
+a "temporary" resource type.
+.TP 0.5i
+.B "\-D "
+.I dataType
+\- The data type of this container.
+.TP 0.5i
+.B "\-s "
+.I containerSize
+\- The maximum container size in bytes. The value must not be
+greater than 2 GB. The default size will be used if this
+option is not specified or if the input value is zero or negative.
+.TP 0.5i
+.B "\-z mcatZone "
+The MCAT zone where this container will be made.
+.SH "SEE ALSO"
+.BR Srmcont (1),
+.BR Slscont (1)
+

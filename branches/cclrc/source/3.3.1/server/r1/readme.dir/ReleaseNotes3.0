@@ -1,0 +1,94 @@
+<HTML>
+<HEAD>
+<TITLE>SRB</TITLE>
+<BODY bgcolor=#BBFF00FA>
+<IMG SRC="http://www.npaci.edu/images/DI.gif" WIDTH="555" HEIGHT="90"></P>
+
+<h3>
+SRB 3.0
+</h3>
+
+
+This document describes changes for SRB 3.0, released on October 1,
+2003.  
+<p>
+
+This the initial release of our latest major new version, SRB 3.0, the
+Federated MCAT, also known as the zoneSRB.  <p>
+
+This is a BETA release.  We recommend that you install it in a test
+environment, as a way to get familiar with zone SRB capabilities and
+operations, and to test the Zone functionality.
+<p>
+
+We recommend that you do not upgrade existing production MCATs to 3.0
+at this time, but rather hold off for a few weeks, for a subsequent
+release.  <p>
+
+The primary descriptions of the Federated MCAT system are: 
+<ul> 
+<li>
+
+readme.dir/README.zones, which is also on-line at <a
+href=http://www.npaci.edu/DICE/SRB/README.zones>
+http://www.npaci.edu/DICE/SRB/README.zones</a>.  This includes a quick
+summary of using the Scommands with the SRB zone implementation, a
+primer of the SRB zone implementation (in a FAQ format), and a section
+on Zone administration.
+
+
+<li>  readme.dir/FedMcat.html
+  which is also online at <a href=http://www.npaci.edu/DICE/SRB/FedMcat.html>http://www.npaci.edu/DICE/SRB/FedMcat.html</a>.  This is brief paper, describing
+the models of operation, design goals, and architecture.
+
+</ul>
+
+There are also some updates in a few of the other readme files, and a few
+new man pages.
+<p>
+For instructions on how to build, install, and administer this version
+of the SRB, see the README.zones document, section 3 in particular.
+<p>
+<p>
+
+
+Addtional Features:
+<p>
+
+In addition to the major features of SRB Zones, this release also includes
+the following.
+<ul>
+
+<li>A number of bugs have been fixed and small improvements made.  One
+set of fixes involved problems in the way that many Scommands were
+checking the user's response after prompting (for example, "rm
+collection %s (y/n)?"; yes responses were not being recognized.
+
+<li> A new utility, Sufmeta (user friendly metadata) is included which
+provides a more straight-forward interface to metadata.  See the man
+page and help text for more information.
+
+<li>The install.pl script now optionally creates local and remote Zones.
+It has also been ported to Solaris, so it now does a full postgres MCAT
+installation on either Solaris, Linux, or Mac OS X. 
+</ul>  
+
+This release includes the 3.0 core system (client Scommands, server,
+and MCAT software) but does not include Matrix, Jargon, MySrb, or inQ.
+We plan to release versions of those that will support 3.0 within a
+few weeks.  <p>
+
+As always, also see our home page at <a
+href=http://www.npaci.edu/dice/srb/>
+href=http://www.npaci.edu/dice/srb/</a> for additional information.
+<p>
+
+Also see <a
+href=http://www.npaci.edu/dice/srb/CurrentSRB/ReleaseNotes2.1.2.htm>
+http://www.npaci.edu/dice/srb/CurrentSRB/ReleaseNotes2.1.2.htm</a> for
+release notes of the previous version.
+
+
+</BODY>
+</HTML>
+

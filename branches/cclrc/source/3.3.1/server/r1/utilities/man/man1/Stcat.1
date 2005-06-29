@@ -1,0 +1,72 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Stcat.1
+.\"
+.TH Stcat 1 "Jan 2002 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Stcat \- display files read from SRB space for a ticketuser
+.SH SYNOPSIS
+.B Stcat
+.RB [ \-T
+.I ticketFile
+.RB | " \-t"
+.IR ticket ]
+.RB "[" \-H
+.IR hostName "]"
+.RB [ \-A
+.IR condition ] " srbObj " ...
+.SH DESCRIPTION
+.B "Stcat "
+reads each
+.I srbObj
+from SRB space and writes it on the standard output. Stcat is
+used by users who do not have accounts on SRB. Only
+.I ticket
+issued for 'ticketuser' name is usable through Stcat.
+.sp
+One need not give a
+.I srbObj
+name if the ticket is issued for a particular dataset.
+.sp
+With -A option, only
+.I srbObj which conforms to the
+.I condition are chosen.
+.sp
+If any
+.I srbObj
+is replicated then only one of the copies is displayed.
+.sp
+The
+.I srbObj
+argument can be a path name in the SRB collection hierarchy.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-T "
+option to give a filename containing a ticket
+.TP 0.5i
+.B "\-t "
+option for giving a ticket directly
+.TP 0.5i
+.B "\-H "
+.I hostName
+is the host name where a server SRB is running. If not given
+it exopects the environment files or variables to provide the information.
+.TP 0.5i
+.B "\-A "
+.I condition 
+option is an '&' separated condition which will be applied
+in choosing the object to be accessed. The separated condition
+is of the form "<Attr> <CompOp> <Value>", where <Attr> is an
+MCAT attribute found by
+.B Sattrs
+command, <CompOp> is a comparison operator and <Value> is a
+numeric or string value. The entire condition should be within
+a set of double quotes.
+.SH "SEE ALSO"
+.BR Sticket (1),
+.BR Scat (1),
+.BR Sattrs (1)
+

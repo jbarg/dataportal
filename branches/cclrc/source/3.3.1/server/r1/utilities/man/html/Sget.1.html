@@ -1,0 +1,263 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sget</TITLE>
+</HEAD><BODY>
+<H1>Sget</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2003 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sget - exports one or more objects from SRB space into the
+local file system
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Sget</B>
+
+[<B>-n</B>
+
+<I>n</I>]
+
+[<B>-N</B>
+
+<I>numThreads</I>]
+
+[<B>-pbfrvsmMV</B>]
+
+[<B>-T</B>
+
+<I>ticketFile</I> |
+
+<B>-t</B>
+
+<I>ticket</I>]
+
+[<B>-A</B>
+
+<I>condition</I>]
+
+[<B>-W</B>
+
+<I>versionString</I>]
+
+[<B>-R</B>
+
+<I>retry_count</I>]
+
+[<B>-k</B>]
+
+<I>srbObj</I>|<I>Collection</I> ... <I>[localFile</I>|<I>localDirectory]</I>
+
+<P>
+<B>Sget</B>
+
+[<B>-aChl</B>]
+
+[<B>-c</B>
+
+<I>condition</I>] localFile | localDirectory
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Sget </B>
+
+reads one or more Objects and|or Collections from SRB space and
+writes them to the user's local file system. If any
+<I>srbObj</I>
+
+is replicated then only one of the copies is read. With -A option, only
+<I>srbObj</I>
+
+which conform to the
+<I>condition</I>
+
+are chosen.
+<P>
+The second synopsis applies the 
+<I>condition</I>
+
+and copies the resultant list of objects.
+<P>
+The<I> srbObj </I>and|or<I> Collection </I>
+
+argument can be a path name in the SRB collection hierarchy
+and can also contain patterns with '*' and '?' symbols
+as  wildcards. The user should have at least 'read' permission
+for each item being copied.
+<P>
+If the source object is a single dataset then it is copied to
+the localFile. If the source consists of multiple objects
+(datasets and collections), then the target should be a directory
+in the local file system. '.' can be used to denote current working
+directory. If at least one of the source objects is a Collection,
+the -r option must be used.
+<P>
+The bulk unload option (-b) can be used to greatly improve the efficiency of recursively downloading a large number of small files stored in a collection. 
+The source files can be regular SRB files and/or files stored in containers. The -r option is implied and does not need to be specified if the -b option is used. 
+<P>
+By default, Sget uses the serial I/O API to do the download.
+The -m option or setting the environment variable &quot;srbParallel&quot; to any value can be used to set the transfer mode to the &quot;server initiated connection&quot; parallel I/O mode.
+In this mode, the server is the active partner. The client listens passively on the control socket for instructions from the servers. Upon receiving the client's initial  request, the server with the help of informations from the MCAT, plans the execution of the data download.
+Typically it sends data transfer instructions to the server where the export resource is located. The resource server then subdivides the file to be exported into segments and spawns threads to handle the export of each segment in parallel.
+One advantage of this scheme is data transfer is always directly between the resource server and client with no intermediate server in between.
+<P>
+A drawback of this mode is the client could be sitting behind a firewall and a server outside the firewall may not be able to connect to this client control soc
+ket.
+<P>
+The -M option which sets the transfer mode to the &quot;client initiated connection&quot; parallel I/O mode, was designed to get around the client's firewall issue.
+This mode is very similar to the &quot;server initiated&quot; mode except for the initial handshakes.
+In this mode, the control socket is on the resource server and the client spawns multiple threads, each initiating connection to the server control socket. After the connections have been established, the data transfer mechanism is the same as the &quot;server initiated&quot; mode.
+<P>
+Comparing with the &quot;server initiated&quot; mode, the overhead of the &quot;client initiated&quot; mode is slightly higher because of the more complicated initial handshakes. But for large file transfer, the difference is practically nothing.
+<P>
+In addition, with the -M option set, the [-N numthreads] can be used to suggest to the server on the number of threads to use for the parallel transfer. If this option is not used, the server will decide the number of threads based on an internal algorithm.
+<P>
+The -m/M and -b options are mutually exclusive. -b is
+designed to process a large number of small files by concatinating many
+small files together and sending it to the client at once. It does not
+use parallel I/O. The -m/M option specifies parallel I/O which is designed
+to transfer large files. So, if you have one or more large files, the -m or -M
+options should be used. If you have several small files, the -b option
+should be used. If both -m/M and -b options are specified, then -b takes
+precedent.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-p </B>
+
+<DD>
+prompts before reading each object from SRB space.
+<DT><B>-b </B>
+
+<DD>
+use bulk unload to recursively download the source SRB collection.
+<DT><B>-n </B>
+
+<DD>
+<I>n </I>
+
+is an integer denoting the replica number of the object to be copied.
+<DT><B>-f </B>
+
+<DD>
+force copying even if the file exists.
+<DT><B>-r </B>
+
+<DD>
+copy SRB collections recursively to the local file system.
+<DT><B>-W </B>
+
+<DD>
+selects the copy with the given version.
+<DT><B>-v </B>
+
+<DD>
+verbose mode. print out file size and transfer rate. If the transfer mode is parallel, the output contains one additional item - the number of threads used. 
+<DT><B>-V </B>
+
+<DD>
+verbose progress mode. print out progress status and ETA for sequential transfers. Does nothing for parallel transfers. It forces '-v' switch on.
+<DT><B>-k </B>
+
+<DD>
+checksum mode. Retrieves simple checksum (sum -s, --sysv) from the MCAT and comp
+ares with the checksum of the local file just downloaded.
+<DT><B>-R </B>
+
+<DD>
+<I>number of retries </I>
+
+retry mode. Retries on any Sget error. The max retry count has to be specified. Sleeps 2,4,8,16,32,... seconds between retries.
+<DT><B>-s </B>
+
+<DD>
+force I/O mode to serial (default).
+<DT><B>-m </B>
+
+<DD>
+force I/O mode to parallel. Setting the environment variable &quot;srbParallel&quot; to any value achieves the same result. 
+<DT><B>-M </B>
+
+<DD>
+set I/O mode to &quot;client initiated&quot; parallel I/O mode.
+<DT><B>-N </B>
+
+<DD>
+<I>numThreads</I>
+
+The number of threads to use for the parallel transfer. Only valid with the -M option.
+<DT><B>-T </B>
+
+<DD>
+option to give a filename containing a ticket
+<DT><B>-t </B>
+
+<DD>
+option for giving a ticket directly
+<DT><B>-A </B>
+
+<DD>
+<I>condition </I>
+
+option is an '&amp;' separated condition which will be applied
+in choosing the object to be accessed. The separated condition
+is of the form &quot;&lt;Attr&gt; &lt;CompOp&gt; &lt;Value&gt;&quot;, where &lt;Attr&gt; is an
+MCAT attribute found by the 
+<B>Sattrs</B>
+
+command, &lt;CompOp&gt; is a comparison operator and &lt;Value&gt; is a
+numeric or string value. The entire condition should be within
+a set of double quotes. Example: Sget -A &quot;COPY = 0&quot; foo foo
+<DT><B>-c </B>
+
+<DD>
+<I>condition</I>
+
+option applies to the whole SRB system instead of relative to the 
+current working collection.  Example: Sget -c &quot;GUID='123'&quot; will copy all 
+objects  that have their Guid set to 123. See 
+<I>Sattrs </I>
+
+for details of applicable conditions.
+<P>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sappend.1.html">Sappend</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sput.1.html">Sput</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Srsync.1.html">Srsync</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Scat.1.html">Scat</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

@@ -1,0 +1,194 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of SgetT</TITLE>
+</HEAD><BODY>
+<H1>SgetT</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+SgetT - display information about SRB tickets
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>SgetT</B>
+
+[<B>-h</B>] [<B>-u</B>] [<B>-v</B>] [<B>-L</B>
+
+<I>n</I>]
+
+[<B>-Y</B>
+
+<I>n</I>]
+
+[<B>-F</B>
+
+<I>fileName</I>
+
+|<B>-T</B>
+
+<I>ticket</I>
+
+|<B>-D</B>
+
+<I>dataName</I>
+
+|<B>-C</B>
+
+<I>collection</I>
+
+|<B>-U</B>
+
+[<B>-c</B>]
+
+<I>userName domainName</I>]
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>SgetT </B>
+
+displays information about SRB tickets for a given
+<I>ticket</I>, <I>dataName</I> or <I>collection</I>
+
+for tickets given by the issuer.
+<P>
+With -u option, SgetT displays information for tickets issued to
+the user. In this case, the user and domain names denote a user
+who issued tickets to current user.
+<P>
+With -c option inside -U option, the information is for tickets
+given for collections; otherwise, it is for tickets issued for
+particular datasets.
+<P>
+A ticket can be either typed directly (-T option), or given by
+pointing to a file containing it (-F option)
+<P>
+If
+<I>ticket</I>, <I>collection</I>, and <I>dataName</I>
+
+are not given, SgetT displays information about all tickets
+owned or given to the user, based on the -u option.
+<P>
+<I>collection</I> and <I>dataName</I>
+
+can have wildcard characters * and ?.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-v </B>
+
+<DD>
+verbose mode
+<DT><B>-u </B>
+
+<DD>
+displays information from a ticket-users perspective.
+<DT><B>-F </B>
+
+<DD>
+<I>FileName </I>
+
+specifies the file in which the ticket is stored
+<DT><B>-T </B>
+
+<DD>
+<I>ticket</I>
+
+specifies a particular ticket
+<DT><B>-D </B>
+
+<DD>
+<I>dataName</I>
+
+specifies a particluar SRB object
+<DT><B>-C </B>
+
+<DD>
+<I>collection </I>
+
+specifies a particluar SRB collectio
+<DT><B>-U </B>
+
+<DD>
+display information for user/group 
+<I>userName</I>
+
+<DT><B>-Y </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls display format.
+<BR>
+
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+<BR>
+
+With -Y 0 will display in vertical, one attribute-per-line format.
+<BR>
+
+With Y n, n &gt; 0, information is displayed one item-per-line with each
+attribute spaced at
+<I>number</I>
+
+characters.  
+<BR>
+
+With Y -1, information is displayed without headers, with each item
+quoted and separated by a blank and with no row control.
+<DT><B>-L </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls number of items displayed at a time under user's
+control. 
+<BR>
+
+Without  -L, DEFAULT_ROW_COUNT items of information is displayed
+at a time.
+<BR>
+
+With L n, n &gt; 0, n items are displayed at a time.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/SgetD.1.html">SgetD</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sticket.1.html">Sticket</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Stls.1.html">Stls</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Srmticket.1.html">Srmticket</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

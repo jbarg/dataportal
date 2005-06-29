@@ -1,0 +1,348 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Smeta</TITLE>
+</HEAD><BODY>
+<H1>Smeta</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Smeta - modifies metadata information about SRB data objects.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<DL COMPACT>
+<DT><B>Smeta</B>
+
+<DD>
+<B>-i -I </B><I>metaAttrNameEqValue</I>
+
+[ [<B>-I</B>
+
+<I>metaAttrNameEqValue</I>] ... ] <I>dataName</I>
+
+<BR>
+
+<DT><B>Smeta</B>
+
+<DD>
+<B>-u </B><I>metadataIndex metaAttrNameEqValue dataName</I>
+
+<BR>
+
+<DT><B>Smeta</B>
+
+<DD>
+<B>-d </B><I>metadataIndex dataName</I>
+
+<BR>
+
+<DT><B>Smeta</B>
+
+<DD>
+<B>-c -i -I </B><I>metaAttrNameEqValue</I>
+
+[ [<B>-I</B>
+
+<I>metaAttrNameEqValue</I>] ... ] <I>collectionName</I>
+
+<BR>
+
+<DT><B>Smeta</B>
+
+<DD>
+<B>-c -u </B><I>metadataIndex metaAttrNameEqValue collectionName</I>
+
+<BR>
+
+<DT><B>Smeta</B>
+
+<DD>
+<B>-c -d </B><I>metadataIndex collectionName</I>
+
+<BR>
+
+<DT><B>Smeta</B>
+
+<DD>
+[<B>-R</B>] [<B>-I</B>
+
+<I>metaAttrNameOrCondition</I>
+
+[<B>-I</B>
+
+<I>metaAttrNameOrCondition</I>] ... ]
+
+[<B>-Y</B>
+
+<I>n</I>]
+
+[-L
+
+<I>n</I>]
+
+[<B>-T</B>
+
+<I>dataType</I>]<I> dataName</I>|<I>collectionName</I>
+
+<BR>
+
+<DT><B>Smeta</B>
+
+<DD>
+<B>-c </B>[<B>-R</B>]
+
+[<B>-I</B>
+
+<I>metaAttrNameOrCondition</I>
+
+[<B>-I</B>
+
+<I>metaAttrNameOrCondition</I>] ... ]
+
+[<B>-Y</B>
+
+<I>n</I>]
+
+[<B>-L</B>
+
+<I>n</I>]
+
+[<B>-T</B>
+
+<I>dataType</I>] [<I>collectionName</I>]
+
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Smeta </B>
+
+provides the facility for inserting, deleting, updating and
+accessing meta-data on data object
+<I>dataName</I> or collection <I>collectionName</I>.
+
+<P>
+Currently, we support ten string attributes for data objects
+visible as 
+<B>UDSMD0, UDSMD1, ... UDSMD9</B>
+
+and two integer  attributes visible as
+<B>UDIMD0 and UDIMD1</B>.
+
+Similarly, we support ten string attributes for collections
+visible as
+<B>UDSMD_COLL0, UDSMD_COLL1, ... UDSMD9_COLL</B>
+
+and two integer attributes visible as
+<B>UDIMD_COLL0 and UDIMD_COLL1</B>.
+
+Note that the sets may increase over time per user requests.
+The names are generic with the idea that users remap them at
+the application level. Owners and users with 'all' access
+permission are permitted to insert, delete, and update the
+metadata. Users with 'read' permission can view the metadata.
+<P>
+For insertion,
+<I>metaAttrNameEqValue</I>
+
+is used to provide the metadata as a pair of meta-attribute
+name and value conjoined with '=' sign. When inserted,  a new
+metadata row is created and a unique integral identifier
+<I>metadataIndex</I>
+
+is created. This identifier can be used during updates and
+deletion of specific rows of metadata.
+<P>
+When Querying, the user has two options for specifying the
+names of meta attributes: the meta-attribute name can be
+specified by itself in which case, the value for that name is
+retrieved, or a meta-attribute condition can be specified as
+a pair of meta-attribute name and value conjoined with
+conditional sign. Values can be numbers or single-quoted character
+strings with possible wild-card characters,  *  and  ?. The
+conditions supported are  =, &gt;, &lt;,  &gt;=, &lt;=, &lt;&gt;, like, not like,
+in, not in, between and not between.
+<P>
+A user can query to discover datasets, using both collection and
+dataset metadata. When the 'c' option is used, discovery is
+limited only to collections, and metadata relevant to collections
+are only required. With the 'c' option, if
+<I>collectionName</I>
+
+is not given, then the search is made for all collections in the
+catalog.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-i </B>
+
+<DD>
+insert meta-data
+<DT><B>-u </B>
+
+<DD>
+update meta-data
+<DT><B>-d </B>
+
+<DD>
+delete meta-data
+<DT><B>-c </B>
+
+<DD>
+defines that the insert, update, and deletes are for collection
+metadata; in query mode the option implies that only collections
+need to be displayed.
+<DT><B>-R </B>
+
+<DD>
+recursively view meta-data under
+<I>collectionName</I>.
+
+If this option is not used then the meta-data is given for
+<I>dataName</I>
+
+(the value can have wild cards).
+<DT><B>-T </B>
+
+<DD>
+<I>dataType</I>
+
+gets meta-data of particular data type (the value can have
+wild cards)
+<DT><B>-Y </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls display format.
+<BR>
+
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+<BR>
+
+With -Y 0 will display in vertical, one attribute-per-line format.
+<BR>
+
+With Y n, n &gt; 0, information is displayed one item-per-line with each
+attribute spaced at
+<I>number</I>
+
+characters.  
+<BR>
+
+With Y -1, information is displayed without headers, with each item
+quoted and separated by a blank and with no row control.
+<DT><B>-L </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls number of items displayed at a time under user's
+control. 
+<BR>
+
+Without  -L, DEFAULT_ROW_COUNT items of information is displayed
+at a time.
+<BR>
+
+With L n, n &gt; 0, n items are displayed at a time.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sls.1.html">Sls</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Schmod.1.html">Schmod</A></B>(1)
+
+<A NAME="lbAG">&nbsp;</A>
+<H2>Examples</H2>
+
+Insert a new set of metadata for the
+<I>dataObject</I>
+
+foo.txt in current collection:
+<BR>
+
+<B>Smeta -i -I UDSMD1=abcedeff -I UDSMD5 = 'rrrr' -I UDIMD1=5577 foo.txt</B>
+
+<BR>
+
+Insert another set of metadata for the same object:
+<BR>
+
+<B>Smeta -i -I UDIMD0=2222 -I UDIMD1=5555 foo.txt</B>
+
+<BR>
+
+Display all the metadata  for the object:
+<BR>
+
+<B>Smeta foo.txt</B>
+
+<BR>
+
+Display all the metadata for all objects in current collection:
+<BR>
+
+<B>Smeta .</B>
+
+<BR>
+
+Delete metadata for the object which has the metadata index = 1
+(all sets of metadata for an object are given integral numbers
+for identification):
+<BR>
+
+<B>Smeta -d 1 foo.txt</B>
+
+<BR>
+
+Update the value of the 7th string metadata for the object:
+<BR>
+
+<B>Smeta -u 0 UDSMD6='trert' foo.txt</B>
+
+<BR>
+
+Display the first and second string metadata for all objects
+in the collection where the second metadata has a 'c'
+(possibly  later) followed by 'e':
+<BR>
+
+<B>Smeta -I UDSMD1 like '*c*e*' -I UDSMD0 .</B>
+
+<A NAME="lbAH">&nbsp;</A>
+<H2>BUGS</H2>
+
+Currently there is no access control on metadata.
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+<DT><A HREF="#lbAG">Examples</A><DD>
+<DT><A HREF="#lbAH">BUGS</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

@@ -1,0 +1,280 @@
+****************
+****************
+****************
+****************
+****************
+****************
+****************
+****************
+****************
+****************
+Welcome to SRB
+Home Collection Name:
+Change collection name if you want to start at another existing collection
+Take Me to My Collection
+Online Help
+Exit MySRB
+View All Metadata
+Options
+Choose Your Session Options
+Language
+MySRB Mode
+DisConnected Successfully
+MYSRB - A TransSystem Data Explorer
+Advanced
+Light
+Parent Collection:
+Collection:
+Owner:
+No Metadata Found
+No Annotations Found
+Move<BR>Up
+Ingest<BR>File
+Create<BR>File
+Register<BR>File
+Register<BR>Directory
+Register<BR>URL
+Register<BR>SQL
+Register<BR>ORBData
+Register<BR>Command
+Make<BR>Collection
+Make<BR>Container
+Browse<BR>Query
+Other<BR>Info
+Online<BR>Help
+Exit<BR>MySRB
+Function
+Data Name
+Creation Time
+Owner
+Replica<BR>Number
+Version<BR>Number
+Size
+Data Type
+Resource
+In<BR>Container
+SubCollection
+mySrbHelp.html
+Metadata describing entity
+Metadata describing contents of
+User Annotations about
+Field Name
+Value
+Units
+Explanation
+Default Value
+Type
+Annotation
+Author, Date
+SRB Object Name:
+Collection Name
+Container Name overrides Resource Name
+or Container Name:
+Resource Name:
+Other MetData
+Ingest File Name:
+Ingest
+Browse Query By MetaData for Collection
+MetaData Name
+MetaData Value
+Show
+Clear
+Find
+Annotator
+More Options
+Get File
+Show All Metadata
+Metadata For This Entity
+Show Annotations
+Download File
+Reingest File
+Extract Metadata
+Insert MyMetadata
+Insert DublinCore
+Insert Annotation
+Update Comment
+Modify Metadata
+Modify Annotation
+Copy Metadata
+Copy Annotation
+Delete All Metadata
+Delete All Annotation
+Rename File
+Replicate
+Ingest Replica
+register Replica
+Ingest New Version
+Create Snapshot
+Copy File
+Move File
+SoftLink File
+Control Access
+Issue Ticket Access
+Dataset Ingestion in
+Creation of New File in
+Read Lock
+Write Lock
+Unlock
+Delete File
+Copy URL
+Move URL
+SoftLink URL
+Unlink URL
+Copy Command
+SoftLink Command
+Delete Command
+Execute SQL
+Copy SQL
+Move SQL
+Softlink SQL
+Delete SQL
+Get URL
+Rename URL
+Edit File
+Append to File
+Rename SQL Object
+Rename Command Obj.
+Execute Command
+Open Directory
+Copy Collection
+Move Collection
+Softlink Collection
+Rename Collection
+Delete Collection
+Open Collection
+Show Content Metadata
+Insert Text:
+Create New File
+Register File Path:
+Register
+File Registration in
+Registering URL:
+Register Directory Path:
+Directory Registration in
+Registering SQL:
+URL Registration in
+SQL Registration in
+ORB Registration in
+Registering ORB Name:
+Sensor Name:
+Starting Packet:
+Time Out Wait (secs):
+Num. of Packets in Result:
+Output Presentation Format:
+Parameters (if any):
+Bulk Read Size (in pkts):
+Registering Executable:
+Note that the executable should be available in the commands directory of the resource host
+Command Registration in
+Container Name:
+New Collection Name:
+Note: 'Metadata for Data' is used to provide metadata names that are needed for data ingested into the new collection. Any, none or all of the metadata can be 'Metadata for Data'.
+Sub-Collection Creation in
+Create Collection
+New Container Creation
+Container Collection:
+Container Size:
+Data Type:
+Create Container
+Basic Resource Info
+My Basic Info
+All User Info
+My Container Info
+Other Info Page
+Collection Metadata
+Search Recursively From Collection:
+File Metadata
+Move Up
+Browse Query
+Online Help
+Exit MySRB
+Local File Name:
+Data Object:
+Extract Metadata Info for Data Object:
+Annotation &lt; Author, Date &gt;
+Position/Type:
+Comments:
+Show Meta For
+View Annotation
+in Collection:
+<br>No Extraction Method Found for the Data Type of the chosen SRB Object
+Enter Metadata for Data Object:
+Insert Metadata
+Enter Dublin Core Metadata for Data Object:
+Add User Annotation
+Insert Comments
+Enter Comments
+Comments Insertion For Data Object:
+Modify Metadata for
+Please check the Change boxes of lines that have been changed before submitting
+Submit Query
+To delete a metadata delete all contents in the corresponding line
+Change
+Modify User Annotation
+Modify Annotation for
+To delete an annotation delete the corresponding 'Annotation' string
+Position
+Copy Metadata from Data Object:
+Copy To Data Object:
+OR
+Copy To Collection:
+Choose Another Dataset In Collection:
+Copy Metadata to Data Object
+Copy Metadata to Collection
+Get Data Object List in the Collection
+Copy Annotation
+Copy Annotation to Data Object
+Copy Annotation from Data Object:
+Do You Want to Delete All Metadata for
+Yes
+Use Back Button if you do not want to delete now
+Do You Want to Delete All Annotations for
+ReName
+choose if different
+Replicate
+SRB Replication
+Target Collection:
+Target Data Name:
+Target Resource Name:
+Target Container Name:
+(can be empty)
+Copy
+Move
+Move Up To Collection:
+ Go 
+Do You Want to Delete
+Navigation Within SRB
+Jump To Collection:
+Explore SRB
+Zones & Collections
+userHomeZone:
+connectingZone:
+Zones:
+Location
+Host
+Host not reachable
+Resources
+Users
+Zone out of Contact
+No Permit to Enter Zone
+Shared Collections:
+CurrentZone:
+Zone
+No answer from Host
+Parametric Argument Values:
+Local Collections:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
