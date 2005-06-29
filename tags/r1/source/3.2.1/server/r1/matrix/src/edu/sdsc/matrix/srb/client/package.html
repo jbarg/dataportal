@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<body bgcolor="white">
+Provides classes for easy use of Matrix Web Services without needing to go to
+the low level of JAXB and SOAP. These client docs are still under construction,
+and will be updated significantly in the next release. As such, there are a few
+holes right now in the documentation. Of course, any questions can be directed
+to https://lists.sdsc.edu/mailman/listinfo.cgi/srb-chat.
+
+
+<h2>Matrix Client API</h2>
+
+The Matrix Client API addresses the inherent tedium in using JAXB auto-generated
+classes when using the DataGridLanguage. Using JAXB classes involve the process
+of getXXX and setXXX methods that lead to a large amount of code and keeps the
+user tied up.<br/><br/>
+Gotcha: DGResponse, might want to get ssResponse, so use clientGetSSResponse if
+direct. 
+
+If want to use a client method like getResultString of metadataresult, must
+first cast to metadataresult.<br/><br/>
+<pre>
+(wont work) return X.getMetaDataResult.getResultString()<br/>
+
+(instead) return ((MetaDataResult)X.getMetaDataResult).getResultString
+                    ^^^^^^^^^^^^
+                    Cast to a Client API MetaDataResult vs parser.MetadataResult
+</pre>
+<br/><br/>
+
+Component objects of DGresponses (which are of type Interface
+edu.sdsc.matrix.srb.parser.Class) returned by MatrixCOnnection are meant to be
+guaranteed to be castable to Client API classes of the same name. However, as of
+this release, there is still some wrapping to do left, and not all of the
+components of a DataGridResponse can be guaranteed to be an instance of a Client
+class of the same name. In other words, most are, but some aren't. In the next
+release, they should all be guaranteed to be castable to the client
+classes.<br/><br/>
+
+This casting to use client classes is there because of the inherent "weakness" of using 
+auto generated interface instead of custom written classes, which sacrifices
+specific usage patterns for generic usability.<br/><br/>
+
+Stuff like AnyType or AnyDirectory: If you dont know what it is you probably don't need
+it.<br/><br/>
+
+Usage pattern for DataGridResponse components - user communication with a Matrix
+server wont actually create any objects. Instead the returned DataGridResponse
+holds all its contents as these class objects and the user uses the getXXX
+methods to retrieve them and cast them to client API classes.<br/><br/>
+
+When a call to MatrixConnection.send is made and a DataGridResponse is received
+from the Matrix Server, the DataGridResponse is wrapped internally into
+instances of the client API classes. However, since the interface still
+specifies objects of the parser.&lt;Class&gt; type, the user must cast them into
+client objects if the user wants to use them as such.<br/><br/>
+TransactionStatusResponse tsr =
+   (TransactionStatusResponse)DataGridResponse.getTransactionStatusResponse();
+<br/><br/>
+
+<h2>Related Documentation</h2>
+Look in the examples directory for examples of using the Client API.<br/><br/>
+
+For information, contact arun@sdsc.edu.
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>

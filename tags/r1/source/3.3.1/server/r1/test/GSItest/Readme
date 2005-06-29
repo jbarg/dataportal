@@ -1,0 +1,44 @@
+These source files are some old test routines that I (Wayne) had
+written and used when I developed the AID library back in 1999.  More
+recently (early 2004) Ananta used and modified these for the
+extensions he made to the AID library for delegation.  Since they may
+come in handy, both for developers and others, I decided to include
+them in the source repository.  Of course, they are just test
+programs, with sections added and commented out, etc.
+
+aidc.c is an AID Client test program
+aids.c is an AID Server test program
+aids2.c is a 2nd AID Server test program
+../../src/lib/aid.c is the AID library; it is built again via this
+    Makefile (producing a aid.o in this directory to use) 
+    to give it the -DAID_TIMING option on the cc line.
+
+Before running, you need to set your GSI environment.  At
+SDSC this would be accomplished via something like this:
+  setenv GLOBUS_LOCATION /usr/local/apps/nmi-2.1
+  source $GLOBUS_LOCATION/etc/globus-user-env.csh
+
+The Makefile here should work OK, at least on Linux:
+  gmake clean
+and
+  gmake
+should work fine and produce aidc, aids, and aids2.
+
+Before running them, do a grid-proxy-init to get a proxy certificate.
+
+As a test, we run three windows.  In our case, we were running
+each window on host "zuri" and the following commandlines worked:
+
+  aids -p 31002 -g
+
+  aids2 -p 31001 -p2 31002 -g -server2DN "notNecessaryNow" -host2 "zuri" -msg "hellooo"
+
+and
+
+  aidc -port 31001 zuri "notNecessaryNow" hello1
+
+The programs display some messages about what they are doing, along with
+some timing information.
+
+Wayne Schroeder
+03/2004

@@ -1,0 +1,20 @@
+#!/bin/sh
+echo $PWD
+
+MASTER_STR=`grep MASTER_STR= killsrb | awk '{print substr($0,12) " "}'`
+
+# Print the master
+ps -ef | egrep "$MASTER_STR" | grep -v grep
+
+# Find all srbServers that are part of THIS srbMaster
+masterPid=`ps -elf | egrep "$MASTER_STR" | egrep -v grep | awk '{ print $4 }'`
+
+# If $masterPid is "", then it selects everything owned by srb
+# This is NOT what we want
+if [ "$masterPid" != "" ]
+then
+       ps -ef | egrep "$masterPid" | egrep -v "$MASTER_STR" | egrep -v grep
+fi
+
+exit 0
+

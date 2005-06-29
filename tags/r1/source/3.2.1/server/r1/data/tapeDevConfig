@@ -1,0 +1,9 @@
+# This is the tapeDrvConfig file which configures the tape device. 
+# The data is entered as onetape device per line.
+# The first entry of each line is the device is the device path of the tape 
+# device. The second entry is the address of the tape device in the stk silo.
+# The third entry is the tape cartridge type. Vaild tape cartridge type are
+# T_3480 and T_3590.
+
+/dev/rmt/0  0:0:7:0    T_3590
+/dev/rmt/1  0:0:7:1    T_3590

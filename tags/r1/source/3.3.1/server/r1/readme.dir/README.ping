@@ -1,0 +1,36 @@
+
+SRB PING: pingall   -- pingallloop
+
+pingall  provides an easy way for checking SRB zone and resource status through 
+the web. 
+
+To run the status  web page, please run the shell script 'pingallloop'
+located in utilities/ping. 
+
+Th pingallloop  script uses the co-located file called
+'pingall.conf' as a configuration file.  This file consists of
+one line per zone and has the format (for each line):
+HOSTNAME PORTNUMBER ZONE RSRC1 RSRC2 ...  RSRC[N<20]
+
+One can have as many zones to be pinged configured in this file though we have 
+a limitation of  20 resources per zone. To over come this limitation, one can 
+add additional lines having the same  HOSTNAME PORTNUMBER ZONE information.
+A sample configuration file is provided at pingall.conf.
+
+If resource or zone names have blanks in them please enclose them with single quotes.
+
+The script uses the executable 'pingall' located in utilities/admin-bin 
+which is built out of utilities/ping/pingall.c.
+
+------------------------------------------------------
+
+BEFORE running the pingallloop script, please modify the variable
+    'webPagePath'
+used in this file to point to the location where you want the status page 
+to be moved.
+
+The script pingallloop is configured to sleep for 1 hour between pings. 
+Please change this, if necessary, to a desirable number. We recommend 
+that pinging be done at healthy intervals to keep down the system load.
+
+

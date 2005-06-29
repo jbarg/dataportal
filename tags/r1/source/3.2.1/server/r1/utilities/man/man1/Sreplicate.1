@@ -1,0 +1,71 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sreplicate.1
+.\"
+.TH Sreplicate 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sreplicate \- replicates an SRB object
+.SH SYNOPSIS
+.B Sreplicate
+.RB [ \-n
+.IR replicaNum ]
+.RB [ \-prv "] [" \-S
+.IR resourceName ]
+.RB [ \-P
+.IR pathName "] " srbObj | collection " ..."
+.SH DESCRIPTION
+.B "Sreplicate "
+makes one more copy of
+.IR srbObj " or " collection .
+The replica is also registered in MCAT.
+.sp
+The user should have at least 'read' access permission for
+.IR srbObj " or " collection .
+.sp
+For replicating collections, the recursive option (r) must be set.
+.sp
+If given, the object is stored in
+.IR resourceName .
+Otherwise the object is stored in the default resource given by
+DEFRESOURCE in the user environment file: ~/.srb/.MdasEnv.
+If the 
+.IR resourceName
+is a logical resource consisting of multiple resources, only one replica will be made to one of the resources in the group. The cache type resource will be used first before the archival type resources. Unlike the Ssyncd command, an additional copy will be made even though one or more replica already exist in the resource.
+.sp
+If given, the object is stored in
+.IR pathName .
+Otherwise the object is stored in the default path for the
+resource stored in MCAT.
+.sp
+The
+.IR srbObj " or " collection
+arguments can be path names in the SRB collection hierarchy.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-p "
+prompts before replicating each object.
+.TP 0.5i
+.B "\-r "
+recursively replicating the collection.
+.TP 0.5i
+.B "\-v "
+verbose mode. print out file size and transfer rate.
+.TP 0.5i
+.B "\-n "
+.I replicaNum
+is an integer denoting the COPY of the object to be replicated.
+.TP 0.5i
+.B "\-P "
+full or relative newpathName to move the object.
+.TP 0.5i
+.B "\-S "
+new resourcename
+.SH "SEE ALSO"
+.BR Ssyncd (1),
+.BR Sphymove (1),
+.BR Smv (1),
+.BR Scp (1)
+

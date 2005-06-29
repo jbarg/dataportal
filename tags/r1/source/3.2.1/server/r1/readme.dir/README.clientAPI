@@ -1,0 +1,247 @@
+NOTE: Check http://www.npaci.edu/Research/DI/srb/docs.html for an updated 
+version of this document.
+
+This file lists and categorizes the SRB client API. For full documentation 
+and related articles, read the web page at 
+http://www.npaci.edu/Research/DI/srb. In addition, comments and prototyping 
+of the client API given in the clStubExtern.h and clConnectExtern.h files 
+may be useful.
+
+1) Client/server connection API :
+
+clConnect - Establishes a connection to a SRB server
+
+tiUserConnect - Establishes a connection to a SRB server by a TICKET USER. 
+Normal authentication will be bypassed for a TICKET USER.
+
+clFinish - Close the current connection and free the srbConn data structure.
+
+clErrorMessage - Returns the ErrorMessage of a connection. This is the
+error message returned by the SRB server from the current client call.
+
+2) Low Level Extended File API : 
+
+srbFileOpen - Opens an extended file
+
+srbFileCreate - Create an extended file.
+
+srbFileUnlink - Unlink an extended file
+
+srbFileClose - close an extended file
+
+srbFileRead - Read a a block of data from a extended file into buffer.
+
+srbFileWrite - Write content of a buffer to a extended file. 
+
+srbFileSeek - Change the current read or write location on an extended file.
+
+srbFileSync - Sync an extended file
+
+srbFileStat - Stat an extended file
+
+srbFileFstat - Fstat an extended file
+
+srbFileMkdir - create a new directory
+
+srbFileChmod - Change the mode of a file or directory.
+
+srbFileRmdir - Remove a directory.
+
+srbOpendir - Opens a directory
+
+srbClosedir - close an opened directory
+
+srbReaddir - Stat a directory entry
+
+srbSetStorAttri - Set Attributes for a Storage System; establish connection.
+Only used by FTP file type,
+
+3) Lower level DB Large Object API :
+
+srbDbLobjOpen - Open a DB Large Object.
+
+srbDbLobjCreate Create a DB Large Object.
+
+srbDbLobjClose - close a DB Large Object.
+
+srbDbLobjRead - Read a block of data from a DB large object into buffer.
+
+srbDbLobjWrite - Write content of a buffer to a DB large object.
+
+srbDbLobjSeek - Change the current read or write location of a DB large object.
+
+srbDbLobjUnlink - Unlink a DB large object.
+
+4) Lower level DB  Table Object API :
+
+srbDbTableOpen - Open a DB Table Object.
+
+srbDbTableCreate - Create a DB Table Object.
+
+srbDbTableClose - Close a DB Table Object.
+
+srbDbTableRead - Read a block of data from a DB Table Object.
+
+srbDbTableWrite - Write a block of data to a DB Table Object.
+
+srbDbTableSeek - Change the current read or write location of a DB Table Object.
+
+srbDbTableUnlink - Unlink a DB table object.
+
+5) High Level Object API :
+
+srbObjOpen - Open a SRB data object.
+
+srbObjOpenWithTicket - Open a SRB data object using a ticket.
+
+srbObjCreate - Create a SRB data object.
+
+srbObjClose - Close an opened object
+
+srbObjUnlink - Unlink an SRB object
+
+srbObjRead - Read a a block of data from a SRB object into buffer.
+
+srbObjWrite - Write content of buffer to a SRB object.
+
+srbObjSeek - Change the current read or write location on an SRB object.
+
+srbObjSync - Sync an opened SRB object.
+
+srbObjStat - Stat an SRB object.
+
+srbObjStat64 - Stat an SRB object and put results in a stat64 struct.
+
+srbObjGetdents - The SRB equivalent of the UNIX getdents call.
+
+srbObjGetdents64 - The SRB equivalent of the UNIX getdents64 call.
+
+srbObjProxyOpr - Proxy Operation request.
+
+srbObjReplicate - Make a copy of an SRB object
+
+srbObjMove - Move a copy of an SRB object to a new location
+
+srbCreateCollect - Create a SRB collection
+
+srbListCollect - List a SRB collection
+
+srbModifyCollect - Modify a SRB collection
+
+srbIssueTicket - Issue a ticket.
+
+srbRemoveTicket - Cancel a ticket.
+
+srbContainerCreate - Create a container
+
+srbGetContainerInfo - Get Info on a SRB container
+
+srbRmContainer - remove a container
+
+srbSyncContainer - Sync a container.
+
+srbReplContainer - Replicate a container.
+
+srbObjGet - export a file from SRB to local file system using parallel I/O.
+
+srbObjPut - import a file from local file system to SRB using parallel I/O.
+
+srbSyncData - synchronize all copies (replica) of an SRB object with the 
+most recently modified version.
+
+6) API that interact with MCAT
+
+srbGetDatasetInfo - Get Info on a SRB data object.
+
+srbGetDataDirInfo - Get metadata info by querying the MCAT catalog.
+
+srbRegisterDataset - Register a SRB data object.
+
+srbUnregisterDataset - Unregister a SRB data object.
+
+srbSetAuditTrail - Setting and Unsetting Audit Trail.
+
+srbModifyDataset - Modify a SRB dataset
+
+srbChkMdasAuth - Authenticate a userName/passwd.
+
+srbChkMdasSysAuth - Authenticate a userName/passwd for sys admin access.
+
+srbRegisterUserGrp - Register a user group
+
+srbRegisterUser - Register a user.
+
+srbModifyUser - Modify a user info.
+
+srbGetPrivUsers - Read the privileged users list.
+
+srbGetMoreRows - Get more rows of result from a srbGetDatasetInfo,
+srbGetDataDirInfo, srbListCollect or srbGetPrivUsers calls.
+
+freeSqlResult - Free any memory associated with a SQL result struct including 
+the SQL result struct itself.
+
+clearSqlResult - Clear the memory associated with a SQL result struct, but
+the SQL result struct is not freed.
+
+printSqlResult - Print the content of a SQL result struct.
+
+srbBulkRegister - enable registration of several hundred files with one call.
+
+srbRegisterLocation - Register/create a new location.
+
+srbIngestToken - Ingest/create a new Token of type ResourceType, DataType,
+UserType, Domain, or Action.
+
+srbRegisterResource - Register/create a new resource (physical or compound).
+
+srbRegisterLogicalResource - Register/create a new logical resource.
+
+srbRegisterReplicateResourceInfo - Add another physical resource to a
+logical or compound resource.
+
+srbDeleteValue - Delete/remove a value of type location, user, or
+resource (other types are implemented but untested).
+
+srbSetupSessionPublicKey - Get the MCAT-enabled server's public key in
+preparation for transferring encryptioned information.
+
+srbSetupSession - set up a session (for encryption) with the
+MCAT-enabled server.
+
+5) APIs that deal with compound objects:
+
+srbRegInternalCompObj -  register an internal compound object.
+
+srbRmIntCompObj - unregister an internal compound objects.
+
+srbModInternalCompObj - Modify the metadata of an internal comp object.
+
+srbRmCompObj - unregister a compound object.
+
+6) APIs that deals with tape and cache management:
+
+srbTapelibMntCart - Request the Tape Library server to mount a tape.
+
+srbTapelibDismntCart Request the Tape Library server to dismount a tape.
+
+srbGetTapeCartPri - Get the priorities for each tape type depending on the 
+availability of tape drives.
+
+srbDumpFileList - Dump a list of files to tape.
+
+srbStageCompObj - Stage a compound Object from tape to cache
+
+5) Miscellaneous SRB API :
+
+srbVaultInfo - Get Info on the SRB storage vault.
+
+srbFreeVaultInfo - Free memory taken by the vaultQueElement link list.
+
+srbPrintVaultInfo - Print out the VaultInfo link list.
+
+srbHostConfig - Get the storage vault information on a SRB host.
+
+srbPrintHostInfo - Print the VaultInfo link list.
+
+srbFreeHostInfo - Free memory taken by the clHostElement link list.

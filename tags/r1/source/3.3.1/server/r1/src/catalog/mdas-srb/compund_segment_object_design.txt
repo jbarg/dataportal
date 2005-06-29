@@ -1,0 +1,426 @@
+
+  Note on Compound Resource and Segmented File Handling in the GDB
+
+Compound Resource: A Compound Resource (CR) is a resource that is designated 
+ as a complex consisting of more than one underlying physical 
+ resource.  These resources form a group and are used
+ by the compound resource  manager CRM routines - eg. the
+ GDB's own  Intelleginet Tape System (ITS).  The CR by itself
+ is seen as a 'single' physical resource to the user (aka HPSS)
+ and hence can be part of a logical resource definition. The compound
+ resources are designated to be of type "compound".  
+ In the future we will have multiple "compound" resources typees 
+ but for the present we have only one: 'compound'. 
+ 
+ The designation of compound resources is done in three steps:
+  (1) First a new resource is registered to be of the compound type:
+      Ex. ingestResource 'myCmpRsrc' 'compound' 'compound' '' 'archival' 0
+         Note that no pathname is given.
+
+  (2) The physical resources that form part of the compound resource
+      are registered:
+      Ex. ingestResource 'comp-cache-sdsc' 'unix file system' 'srb sdsc' '/file/srbVault' 'cache' 0
+
+  (3) The physical resources are designated as  components of
+         the new compound resource
+      Ex. makeCompoundResource myCmpRsrc comp-cache-sdsc
+          makeCompoundResource myCmpRsrc comp-tape-sdsc
+          makeCompoundResource myCmpRsrc comp-cache-caltech
+ The CRM's will use the resource types of the component resoorces of CR
+ and use them  according to their internal policies.
+
+ Note that a logical resource (LR) and compound resource (CR) are two 
+ distinct entities. A CR is treated by special CRMs whereas an LR is
+ taken care of  by the GDB itself. Moreover, a CR might be part of a LR but
+ not the other way around. 
+ The compound resource can be used in many ways. As an example usage 
+ a compound resource is used to perform hierarchical storage function.
+ That is one can designate a tape and a cache as a compound resource and 
+ use the CRM to use them as a hierarchical storage system. Hence the 
+ objects stored in a compound resource might have multiple copies (one in
+ cache and one in tape). Other ways of using compound resources will be
+ specialized CRMs for providing distributed RAID, intelligent data placement
+ management, automatic replication with master-slave or delayed replication,
+ tandem storage management, concurrent storage management, etc.
+
+Compound Object: Objects stored in a Compound Resource are 
+ called Compound Objects. A compound object is stored at two levels.
+ AT the first level, the compound object is registered as a DGB object using 
+ register_dataset_info API. This will be a virtual object 
+ which does not have a path name. It should have size and offset
+ set correctly since those information will be exposed to the user.
+ The datatype should also be set correctly according to the type
+ of the real object. At the second level, the 'real' replicas of the 
+ compound object are stored in physical storage systems. Internally the
+ 'real' object might by themselves be segmented (say across multiple tapes)
+ and hence segmentation  information  about these real replicas are also
+ supported. At the real level, data size and offest information is stored
+ apart from physical location attributes. But other metadata about these
+ real replicas (possibly segmented) are inherited from the 'virtual' DGB
+ object. The internal segmentation,  replication, datasize and
+ physical storage information are transparent to the user. 
+ 
+ The creation of a compound object is in two steps: In the first step
+ the 'virtual' compound object is registered using the registerDataSegmentInfo
+ API ore the register_dataset_info API. At the second step, the 'real' 
+ object are registered using the registerInternalReplicaOfCompoundObject API. 
+ Deletion of the compound object is done in the reverse direction, first by
+ deleting the 'real' objects using the removeInternalReplicaOfCompoundObject
+ API and then the 'virtual' object using the removeCompoundObject API.
+ Information about the 'real' objects can be obtained using the
+ getInternalReplicaInfo API.
+
+Segmented File: A segmented file is a file that is split into more than 
+ one piece and stored in the GDB. This is useful when one has a very large 
+ file and may need to split to accomodate storing in small file systems.
+ Sometimes  a file might be segmented for other reasons such as to provide
+ better performance through access to multiple resources, or just based
+ on usage patterns. 
+ 
+ To this effect a new attribute is being added to files called 'SegNum'
+ which provides the segment numbers of the file. An unsegmented file
+ will have this number set to -1. Segment numbers are integers starting 
+ from 0. 
+
+ To store segmented files in GDB, one needs to create and write
+ each segment separately using the gdbObjCreate call. The first
+ segment has to be written created first (at least the create call
+ should be performed, before storing the rest of the segments. Like any
+ non-segmented fileeach of the created segments will have replication
+ number set to zero. At the API level each segment is replicated separately.
+ As stated earlier, the segments need not be in the same resource. 
+ Obviously the segments share the same dataName and  collectionName.
+ Deletion of the segment is performed seperately at the API level. The 
+ segments also share user-defined metadata and access permissions. 
+ Each segment can have their own separate dataType (i.e., GDB does not
+ enforce that they have the same dataType) and comments.
+ The registerDataSegmentInfo is used for regietering the segments of
+ a DGB object.
+
+ Ex. We are assuming that the segmentation has been done outside.  
+     The -K option in Sput will designate the segment number 
+    Gput -D 'FITS header' -K 0  -S unix-sdsc file1.1 file1.fits
+    Gput -D 'FITS data'   -K 1  -S hpss-sdsc file1.2 file1.fits
+    Gput -D 'FITS data'   -K 2  -S hpss-sdsc file1.3 file1.fits
+ 
+ Ex. The segmenmtation is being done inside the Gput call.
+    The user designates the segment number, size and resource
+    as a string separeted by ':' (X implies that the rest are same sized 
+    segments  stored in same resource)
+
+    Gput -D 'FITS data' -K '0:20M:unix-sdsc' -K '1:300M:hpss-sdsc' -K 'X:200M:hpss-caltech' file.fits file1.fits
+
+ The following APIs
+     get_dataset_info 
+     modify_dataset_info  
+     copy_dataset
+     move_dataset
+ will be modified to include segNum.
+
+The following APIs
+     register_dataset_info 
+     copy_dataset
+     move_dataset
+ will be changed to send back the repl_num on success;
+
+
+
+
+
+
+API definitions for handling compound resources and segmentation:
+
+	    
+/***************************************************************************
+  NAME   : registerCompoundResourceInfo
+  PURPOSE: To register physical resources (PRs) for a Compound Resource
+           Can be used as many times as needed for a CR
+	   The CR should be of compound resource type.
+	   The CR and PRs are regietered using registerResourceInfo
+  INPUT  :  compoundResourceName - name of the CR
+            physicalResourceName - name of the Physical Resource
+				   that is being added as a componet 
+				   of the CR
+            registrarName        - name of registering SRB administrator
+	    registrarDomain      - domain of the SRB administrator
+	    registrarPassword    - password of the SRB administrator
+  OUTPUT : none
+  RETURN : 0 for SUCCESS negative for failure
+****************************************************************************/
+extern int
+registerCompoundResourceInfo(
+	char *compoundResourceName,
+        char *physicalResourceName,
+	char *registrarName,
+	char *registrarDomain,
+	char *registrarPassword);
+
+/***************************************************************************
+  NAME   : getCompoundResInfo
+  PURPOSE: To get information about the physical components of  
+           a Compound Resource.
+           use getResInfo for getting info about CR itself.
+  INPUT  :  conn                 - connection Information
+	    compoundResourceName - name of the CR
+            resInfo              - holder for pointer to result structure that 
+                                   returns the results.
+  OUTPUT : resInfo      - updated with the component information
+  RETURN : 0 for SUCCESS negative for failure
+  NOTE   : round-robin or get the 'best' cache first
+****************************************************************************/
+extern int 
+getCompoundResInfo (
+       srvConn  *conn,
+       int catType, 
+       char *compoundResourceName,
+       struct mdasResInfo **resInfo);
+
+
+/***************************************************************************
+  NAME   : isCompoundObjectByName
+  PURPOSE: To check whether a given DGB object (or a segment of a given object
+	   is in a Compound Resource.
+  INPUT  :  conn         - connection Information
+	    objName      - name of the DGB object
+	    objCollName  - name of the collection of the DGB object
+	    objReplNum      - replica number of the DGB object
+	    objSegNum       - segment number of the DGB object
+  OUTPUT : none
+  RETURN : 0 for SUCCESS negative for failure
+****************************************************************************/
+extern int 
+isCompoundObjectByName(
+       srvConn  *conn,
+       char *objName, 
+       char *objCollName
+       int   objReplNum,
+       int   objSegNum
+);
+
+
+/***************************************************************************
+  NAME   : registerInternalCompoundObject
+  PURPOSE: To register an internal  replica of a virtual DGB Object that 
+           is a compound object stored in a Compound Resource.
+
+	   Note that the compound object (the virtual DGB object) by itself
+	   is stored using register_dataset_info
+	   intReplNum  >= 0 means use that number
+	   intReplNum NEW_INT_REPL_NUM   means generate next replica number
+	   intSegNum  NO_INT_SEGMENTATION    means non-segmented object
+	   intSegNum  NEW_INT_SEG_NUM  means generate  the next segment number
+	   This API should not be visible at the client-level.
+  INPUT  :  conn           - connection Information
+	    objName        - name of the DGB object
+	    objCollName    - name of the collection of the DGB object
+	    objReplNum     - replica number of the DGB object
+	    objSegNum      - segment number of the DGB object
+	    resourceName   - resource where the internal replica
+			     of the DGB object is stored.
+	    dataPathName   - path/tapeinfo where the internal replica
+			     is stored
+	    dataSize       - size of the internal replica
+	    offset	   - offset of the internal replica
+	    intReplNum     - replica number of the internal replica
+	    intSegNum      - segment number of the internal replica
+	    userName	   - name of the registering user
+	    domainName	   - domain of the registering user
+  OUTPUT : none
+  RETURN : intReplNum  or  negative for failure
+****************************************************************************/
+#define NEW_INT_REPL_NUM        -1      /* if intReplNum == NEW_INT_REPL_NUM,
+                                         * MCAT will generate a new intReplNum.
+                                         * For intReplNum >= 0, MCAT will
+                                         * just use it as is
+                                         */
+#define NEW_INT_SEG_NUM         -2      /* if intSegNum == NEW_INT_SEG_NUM,
+                                         * MCAT will generate a new intSegNum.
+                                         * /
+#define NO_INT_SEGMENTATION     -1      /* if intSegNum == NO_INT_SEGMENTATION,
+                                         * MCAT will store it directly which
+                                         * means no segmentation.
+                                         * /
+
+extern int 
+registerInternalCompoundObject
+       srvConn  *conn,
+       char *objName, 
+       char *objCollName, 
+       int   objReplNum,
+       int   objSegNum,
+       char *resourceName,
+       char *dataPathName, 
+       srb_long_t dataSize,
+       srb_long_t offset,
+       int   intReplNum,
+       int   intSegNum,
+       char *userName, 
+       char *domainName);
+     
+
+/***************************************************************************
+  NAME   : getInternalReplicaInfo
+  PURPOSE: To get information about the internal replicas of a compound object.
+	   This API should not be visible at the client-level.
+  INPUT  :  conn           - connection Information
+	    objName        - name of the DGB object
+	    objCollName    - name of the collection of the DGB object
+	    objReplNum     - replica number of the DGB object
+	    objSegNum      - segment number of the DGB object
+	    myresult       - holder for pointer to result structure that 
+                               returns the results.
+            rows_required    - maximum number of result rows required
+                               for this call
+                               if zero then no rows are returned and
+                               the query structures are closed.
+                               (see also get_more_rows)
+  OUTPUT : myresult          - updated with compound object information, 
+  RETURN : 0 for SUCCESS negative for failure
+****************************************************************************/
+extern int
+getInternalReplicaInfo(
+       srvConn  *conn,
+       char *objName, 
+       char *objCollName,
+       int   objReplNum,
+       int   objSegNum,
+       mdasC_sql_result_struct **myresult, 
+       int rowsWanted);
+
+
+/***************************************************************************
+  NAME   : removeCompoundObject
+  PURPOSE: To delete a GDB object DGB Object that 
+           is a compound object stored in a Compound Resource.
+           This API checks to see if all the real internal replicas have
+	   been deleted. See also removeInternalReplicaOfCompoundObject
+	   This API should not be visible at the client-level and should
+	   be called by server when athe object being removed is a 
+	   compound object.
+  INPUT  :  conn           - connection Information
+	    objName        - name of the DGB object
+	    objCollName    - name of the collection of the DGB object
+	    objReplNum     - replica number of the DGB object
+	    objSegNum      - segment number of the DGB object
+	    userName	   - name of the deleting user
+	    domainName	   - domain of the deleting user
+
+  OUTPUT : none
+  RETURN : 0 for SUCCESS negative for failure
+****************************************************************************/
+extern int
+removeCompoundObject(
+       srvConn  *conn,
+       char *objName, 
+       char *objCollName,
+       int   objReplNum,
+       int   objSegNum,
+       char *obj_user_name,
+       char *domain_name);
+
+/***************************************************************************
+  NAME   : removeInternalCompoundObject
+  PURPOSE: To delete an internal replica of a compound object.
+	   See also removeCompoundObject
+	   This API should not be visible at the client-level.
+  INPUT  :  conn           - connection Information
+	    objName        - name of the DGB object
+	    objCollName    - name of the collection of the DGB object
+	    objReplNum     - replica number of the DGB object
+	    objSegNum      - segment number of the DGB object
+            intReplNum     - replica number of the internal replica
+            intSegNum      - segment number of the internal replica
+	    userName	   - name of the deleting user
+	    domainName	   - domain of the deleting user
+
+  OUTPUT : none
+  RETURN : 0 for SUCCESS negative for failure
+****************************************************************************/
+extern int
+removeInternalCompoundObject(
+       srvConn  *conn,
+       char *objName, 
+       char *objCollName,
+       int   objReplNum,
+       int   objSegNum,
+       int   intReplNum,       
+       int   intSegNum,       
+       char *obj_user_name,
+       char *domain_name);
+
+/***************************************************************************
+  NAME   : modifyInternalCompoundObject
+  PURPOSE: To modify information about an internal replica of a 
+           compound object.
+	   This API should not be visible at the client-level.
+  INPUT  :  conn           - connection Information
+	    objName        - name of the DGB object
+	    objCollName    - name of the collection of the DGB object
+	    objReplNum     - replica number of the DGB object
+	    objSegNum      - segment number of the DGB object
+            intReplNum     - replica number of the internal replica
+            intSegNum      - segment number of the internal replica
+	    userName	   - name of the deleting user
+	    domainName	   - domain of the deleting user
+	    data_value_1   - info to be used for modification
+	    data_value_2   - info to be used for modification
+	    data_value_3   - info to be used for modification
+	    data_value_4   - info to be used for modification
+	    retraction_type - modification to be performed.
+
+  OUTPUT : none
+  RETURN : 0 for SUCCESS negative for failure
+****************************************************************************/
+extern int
+modifyInternalCompoundObject(
+       srvConn  *conn,
+       char *objName, 
+       char *objCollName,
+       int   objReplNum,
+       int   objSegNum,
+       int   intReplNum,       
+       int   intSegNum,       
+       char *obj_user_name,
+       char *domain_name,
+       char *data_value_1, 
+       char *data_value_2,
+       char *data_value_3,
+       char *data_value_4,
+       int retraction_type);
+
+
+
+/***************************************************************************
+  NAME   :  registerDataSegmentInfo
+  PURPOSE: To register the segment of a DGB object. The first
+	   segment (segNum=0) should be registered first followed
+	   by other segments in any order. Note that register_dataset_info
+	   should be used for registering non-segmented objects.
+  INPUT  :  conn           - connection Information
+	    objName        - name of the DGB object
+	    objCollName    - name of the collection of the DGB object
+	    objSegNum      - segment number of the DGB object
+	    resourceName   - resource where the  DGB object is stored.
+	    dataPathName   - path/tapeinfo of the DGB object
+	    dataSize       - size of the DGB object
+	    offset	   - offset of the DGB object
+	    dataTypeName   - data type of the DGB object
+	    userName	   - name of the registering user
+	    domainName	   - domain of the registering user
+  OUTPUT : none
+  RETURN : 0 for SUCCESS negative for failure
+****************************************************************************/
+extern int
+registerDataSegmentInfo(
+       srvConn  *conn,
+       char *objName, 
+       char *objCollName,
+       int   objSegNum,
+       char *resourceName,
+       char *dataPathName, 
+       srb_long_t dataSize,
+       srb_long_t offset,
+       char *dataTypeName,
+       char *userName, 
+       char *domainName);
+

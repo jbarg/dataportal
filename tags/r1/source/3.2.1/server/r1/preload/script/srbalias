@@ -1,0 +1,10 @@
+setenv SrbDir /projects/diglib/srb/SRB1_1_8Lock
+setenv PrelAliasDir ~/.srb
+setenv SrbUtilDir $SrbDir/utilities/bin
+setenv SrbPrelLibDir $SrbDir/preload/obj
+alias setprel 'setenv CWD_FS_FLAG LOCAL_FS; setenv LOCAL_CWD `pwd`; setenv LD_PRELOAD $SrbPrelLibDir/srbPreload.so;set prompt = prel-\!\%-;source $PrelAliasDir/cdalias'
+alias unsetprel "unsetenv LD_PRELOAD; unalias cd; unalias ss; unalias sl; setenv CWD_FS_FLAG LOCAL_FS;set prompt = `hostname`-\!\%-;"
+setenv SRB_CWD /srb`$SrbUtilDir/Spwd`
+setenv LOCAL_CWD `pwd`
+alias spwd 'echo $SRB_CWD'
+alias spwd '$SrbUtilDir/Spwd'

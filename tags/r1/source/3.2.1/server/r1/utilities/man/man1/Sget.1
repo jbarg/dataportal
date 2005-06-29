@@ -1,0 +1,156 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sget.1
+.\"
+.TH Sget 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sget \- exports one or more objects from SRB space into the
+local file system
+.SH SYNOPSIS
+.B Sget
+.RB [ \-n
+.IR n ]
+.RB [ \-N
+.IR numThreads ]
+.RB [ \-pbfrvsmMV ]
+.RB [ \-T
+.IR ticketFile " |"
+.B \-t
+.IR ticket ]
+.RB [ \-A
+.IR condition ]
+.RB [ \-R
+.IR  retry_count ]
+.RB [ \-k ]
+.IR srbObj | Collection " ... " [localFile | localDirectory]
+.sp
+.B Sget
+.RB [ \-aChl ]
+.RB [ \-c
+.IR condition "] localFile | localDirectory
+.SH DESCRIPTION
+.B "Sget "
+reads one or more Objects and|or Collections from SRB space and
+writes them to the user's local file system. If any
+.I srbObj
+is replicated then only one of the copies is read. With -A option, only
+.I srbObj
+which conform to the
+.I condition
+are chosen.
+.sp
+The second synopsis applies the 
+.IR condition
+and copies the resultant list of objects.
+.sp
+.RI The " srbObj " and|or " Collection "
+argument can be a path name in the SRB collection hierarchy
+and can also contain patterns with '*' and '?' symbols
+as  wildcards. The user should have at least 'read' permission
+for each item being copied.
+.sp
+If the source object is a single dataset then it is copied to
+the localFile. If the source consists of multiple objects
+(datasets and collections), then the target should be a directory
+in the local file system. '.' can be used to denote current working
+directory. If at least one of the source objects is a Collection,
+the -r option must be used.
+.sp
+The bulk unload option (-b) can be used to greatly improve the efficiency of recursively downloading a large number of small files stored in a collection. 
+The source files can be regular SRB files and/or files stored in containers. The -r option is implied and does not need to be specified if the -b option is used. 
+.sp
+By default, Sget uses the serial I/O API to do the download.
+The -m option or setting the environment variable "srbParallel" to any value can be used to set the transfer mode to the "server initiated connection" parallel I/O mode.
+In this mode, the server is the active partner. The client listens passively on the control socket for instructions from the servers. Upon receiving the client's initial  request, the server with the help of informations from the MCAT, plans the execution of the data download.
+Typically it sends data transfer instructions to the server where the export resource is located. The resource server then subdivides the file to be exported into segments and spawns threads to handle the export of each segment in parallel.
+One advantage of this scheme is data transfer is always directly between the resource server and client with no intermediate server in between.
+.sp
+A drawback of this mode is the client could be sitting behind a firewall and a server outside the firewall may not be able to connect to this client control soc
+ket.
+.sp
+The -M option which sets the transfer mode to the "client initiated connection" parallel I/O mode, was designed to get around the client's firewall issue.
+This mode is very similar to the "server initiated" mode except for the initial handshakes.
+In this mode, the control socket is on the resource server and the client spawns multiple threads, each initiating connection to the server control socket. After the connections have been established, the data transfer mechanism is the same as the "server initiated" mode.
+.sp
+Comparing with the "server initiated" mode, the overhead of the "client initiated" mode is slightly higher because of the more complicated initial handshakes. But for large file transfer, the difference is practically nothing.
+.sp
+In addition, with the -M option set, the [-N numthreads] can be used to suggest to the server on the number of threads to use for the parallel transfer. If this option is not used, the server will decide the number of threads based on an internal algorithm.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-p "
+prompts before reading each object from SRB space.
+.TP 0.5i
+.B "\-b "
+use bulk unload to recursively download the source SRB collection.
+.TP 0.5i
+.B "\-n "
+.I "n "
+is an integer denoting the replica number of the object to be copied.
+.TP 0.5i
+.B "\-f "
+force copying even if the file exists.
+.TP 0.5i
+.B "\-r "
+copy SRB collections recursively to the local file system.
+.TP 0.5i
+.B "\-v "
+verbose mode. print out file size and transfer rate. If the transfer mode is parallel, the output contains one additional item - the number of threads used. 
+.TP 0.5i
+.B "\-V "
+verbose progress mode. print out progress status and ETA for sequential transfers. Does nothing for parallel transfers. It forces '-v' switch on.
+.TP 0.5i
+.B "\-k "
+checksum mode. Retrieves simple checksum (sum -s, --sysv) from the MCAT and comp
+ares with the checksum of the local file just downloaded.
+.TP 0.5i
+.B "\-R "
+.I "number of retries "
+retry mode. Retries on any Sget error. The max retry count has to be specified. Sleeps 2,4,8,16,32,... seconds between retries.
+.TP 0.5i
+.B "\-s "
+force I/O mode to serial (default).
+.TP 0.5i
+.B "\-m "
+force I/O mode to parallel. Setting the environment variable "srbParallel" to any value achieves the same result. 
+.TP 0.5i
+.B "\-M "
+set I/O mode to "client initiated" parallel I/O mode.
+.TP 0.5i
+.B "\-N "
+.I "numThreads"
+The number of threads to use for the parallel transfer. Only valid with the -M option.
+.TP 0.5i
+.B "\-T "
+option to give a filename containing a ticket
+.TP 0.5i
+.B "\-t "
+option for giving a ticket directly
+.TP 0.5i
+.B "\-A "
+.I condition 
+option is an '&' separated condition which will be applied
+in choosing the object to be accessed. The separated condition
+is of the form "<Attr> <CompOp> <Value>", where <Attr> is an
+MCAT attribute found by the 
+.B Sattrs
+command, <CompOp> is a comparison operator and <Value> is a
+numeric or string value. The entire condition should be within
+a set of double quotes. Example: Sget -A "COPY = 0" foo foo
+.TP 0.5i
+.B "\-c "
+.I condition
+option applies to the whole SRB system instead of relative to the 
+current working collection.  Example: Sget -c "GUID='123'" will copy all 
+objects  that have their Guid set to 123. See 
+.I Sattrs 
+for details of applicable conditions.
+
+.SH "SEE ALSO"
+.BR Sappend (1),
+.BR Sput (1),
+.BR Srsync (1),
+.BR Scat (1)
+

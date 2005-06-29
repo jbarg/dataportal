@@ -1,0 +1,168 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of SgetR</TITLE>
+</HEAD><BODY>
+<H1>SgetR</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+SgetR - display information about SRB resource(s).
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>SgetR</B>
+
+[<B>-lchdDp</B>] [<B>-L</B>
+
+<I>number</I>]
+
+[<B>-Y</B>
+
+<I>number</I>]
+
+[<B>-H</B>
+
+<I>hostname</I>]
+
+[<B>-z</B>
+
+<I>mcatZone</I>]
+
+[<B>-T</B>
+
+<I>resourceType</I>] [<I>resourceName</I>]
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>SgetR </B>
+
+displays information about resource
+<I>resourceName</I>.
+
+<P>
+If
+<I>resourceName</I>
+
+is not given, SgetR displays information about all
+resources.
+<I>resourceName</I>
+
+can have wildcards * and ?.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-l </B>
+
+<DD>
+display comprehensive list of resource parameters
+<DT><B>-d </B>
+
+<DD>
+list objects stored in resource
+<DT><B>-c </B>
+
+<DD>
+list all physical resources in a compound resource
+<DT><B>-D </B>
+
+<DD>
+list objects stored in resource with details
+<DT><B>-p </B>
+
+<DD>
+list resource parameters for physical resources only
+<DT><B>-H </B>
+
+<DD>
+<B>[</B><I>hostname</I><B>] </B>
+
+List all resources located on the given hostname.
+<BR>
+
+<B>-T </B>
+
+<I>resourceType</I>
+
+list for the given type.
+<DT><B>-Y </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls display format.
+<BR>
+
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+<BR>
+
+With -Y 0 will display in vertical, one attribute-per-line format.
+<BR>
+
+With Y n, n &gt; 0, information is displayed one item-per-line with each
+attribute spaced at
+<I>number</I>
+
+characters.
+<BR>
+
+With Y -1, information is displayed without headers, with each item
+quoted and separated by a blank and with no row control.
+<DT><B>-L </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls number of items displayed at a time under user's
+control.
+<BR>
+
+Without  -L, DEFAULT_ROW_COUNT items of information is displayed
+at a time.
+<BR>
+
+With L n, n &gt; 0, n items are displayed at a time.
+<DT><B>-z mcatZone </B>
+
+<DD>
+The MCAT zone to query for the resource info
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+SgetU">SgetU</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+SgetD">SgetD</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+SgetR">SgetR</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 18:44:15 GMT, July 02, 2004
+</BODY>
+</HTML>

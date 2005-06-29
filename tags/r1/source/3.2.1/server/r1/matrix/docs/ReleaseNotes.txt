@@ -1,0 +1,151 @@
+SDSC Matrix - The dataflow-process management system (services)
+
+<<<READ the "RunningTheMatrix.html" to get started>>>
+
+Matrix New Features/Additions: (Version 2.0 - Release September 2003)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1) Data Grid Queries using W3C XQuery
+W3C XQuery is supposed to be successor of SQL. A new operation for querying metadata has been 
+developed. The query is based on a W3C XQuery. System defined and user defined meta data can 
+be queried. The query results are returned in a format defined by the user in the Query 
+Request (as part of the XQuery Grammar). Further information on query functionality can be 
+seen in the document Metadata Query Implementation for Matrix.doc in the "docs" directory.
+
+2) Granular Pipe-line Status Queries
+Matrix uses "Data Grid Language (DGL)" to support execution of operations on a data grid. 
+This could be considered analogous to long run transactions using the "Structured Query 
+Language" (SQL) on a database.
+
+SQL:data base ::=:: DGL: data grid
+
+In DGL, a Data Grid Request consists of multiple flows (like a process pipeline). Each flow 
+could be either parallel or sequential and can have multiple steps (operations). Each flow 
+or step or the whole transaction (request) is associated with an unique identifier, which can
+be used to query on its status.  Once the request is made, the status or result of a 
+transaction or flow or status is known (asynchronously) using status requests using their 
+respective unique identifiers.
+
+The status of a specific transaction, flow or step can be requested at any granular level. 
+The Status Request could be made by the process (or user) who originally made the Data Grid 
+Request or by any other third party.
+
+3) Metadata Ingestion
+Ingestion of system defined and user-defined metadata has been introduced in this release. 
+
+4)Matrix Server Configuration
+Configuration properties for the Matrix server can be dynamically loaded from a file given in 
+the %MATRIX_HOME%/conf/matrix.properties.  The properties for file cache, log level, 
+deployment level , log file location, etc can be specified in this file.  
+
+5) Logging Functionality
+Logs can now be optionally written now to a file whose location is specified in the 
+configuration properties file (mentioned in #4 above). The logs can be written to the console 
+or file based on the properties set. There are currently 5 logging levels now - DEBUG, INFO, 
+WARNING, ERROR and FATAL. 
+
+6) Ingest URLs (HTTP, FTP)
+The Matrix operation to ingest data can now support external URLs as the data to be ingested. 
+External URLs can be inserted as data (snapshot) into the data grid. These are also 
+asynchrnous matrix operations. Ingestion of HTTP and FTP are currently supported. Future 
+implementations should support more elaborate authentication schemes.
+
+7) Client API Additions
+The Client API has been significantly updated with many useful methods and better
+documentation. We are also improving the documentation. To learn more, read the client 
+README and also run the ant target 'ant client-docs'. This builds up the javadoc for the 
+client API which should be the primary source of information. The client API has also been 
+updated to reflect changes in the schema (specifically, the removal of stepname from a step 
+and metadata components newly added)
+
+8) API Programming Examples
+New examples for using the Client API have been added. For more information look in
+the RunningTheMatrix.html to run the examples. The examples are a good place to start with.
+
+9) License for free academic and research use
+We can't help it - we need to add a license to our work as part of University rules to avoid
+any other person taking a commercial advantage. Look at our license - you are free to use this
+in your code and development any time (as long as you dont make commercial advantage of this).
+
+10) Open source View
+If you would look at our code you can look it up at:
+http://www.npaci.edu/DICE/SRB/matrix/cvs.cgi/
+Warning #1: The code is not clean with less documentation.
+Warning #2: Look at our license before you look into our code
+
+
+Matrix Bugs Cleared:
+~~~~~~~~~~~~~~~~~~~
+1) Mandatory Step Name removed
+Our previous version required the user to specify the name of the step or operation he wants 
+to perform. This is no longer needed. 
+
+2) Tomcat and temporary file cache
+In Microsoft Windows if the Apache Tomcat was started from the shortcut (instead of the 
+regular command line prompt), there was a file not found problems during ingest or download.
+This happened because of the temporary file written to disk could not be read back again. 
+This bug was fixed by ensuring that all temporary files were written to a pre-defined
+file cache specified in the properties file. 
+
+3) Accessing multiple Attachments in a single request
+When a flow was executed in parallel, and multiple steps tried to retrieve the attachments
+from the attachment iterator concurrently, they were not thread-safe. This defect was fixed 
+by storing all the attachments in a thread-safe hashtable, where they can still run 
+concurrently or in parallel.
+
+
+Known issues (a.k.a Bugs) in this release:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1) Selection of multiple user-defined meta data fields
+There is a problem in this release when we use XQuery to select more than one user-defined 
+meta data field. This is a bug from the underlying Jargon code which was removed on the 
+release date (we have not added this in release as we have not tested it).
+
+2) The Data Grid Language Schema for ingestion of a dataset (file) has 'logical identifier' 
+as an optional element. But, our Matrix implementation currently requires this to be present.
+
+3) License: We dont know how to write this currently, just did a cut and paste of Apache
+license. Technically, it needs to say no to commercial exploitation (by redistribution, 
+re-use, design/idea stealing(?), and what not). If translated to english, we want the license 
+to say that the university folks need a share of the pie before you can make money ;).
+
+4) Meta-data insert has not been given a full testing for performance and functionality.
+
+5) We still dont have persistence. We wanna design conditional process pipelines in grid.
+This will change our existing store (or persistence). We will connect this to a RDBMS once we
+have finished adding "conditional process pipelines".
+
+Matrix Future releases:
+~~~~~~~~~~~~~~~~~~~~~~
+We are growing fast and trying to make our selves as first in "datagrid services". We also 
+helping other institutions with our ideas do develop similar infrastructure. We are open to 
+join forces with other projects or institutions who might be interested. New features we 
+have planned (released based on demand by users):
+- Extend Metadata Query Functionality
+- Upgrade Matrix code to work with latest Apache jar files
+- Persistence layer using RDBMS
+- Matrix agents to invoke any WSDL web service (during data-flow process)
+- Matrix agents to invoke any GGF OGSA service (during data-flow process)
+- An overview document of the architecture.
+- OGSA Grid File System, OGSA Data Services interfaces 
+- Look into 
+http://users.sdsc.edu/~arun/Research/dataGrid/Data%20Grid%20Services%20and%20Pipelines.ppt
+for a short course on SDSC Matrix.
+
+ACKNOWLEDGMENT:
+~~~~~~~~~~~~~~~
+SDSC Matrix Project is partly funded by:
+- NSF GriPhyN Project 	   (Research and Architecture)
+- NSF SCEC project 		   (Matrix Core Development)
+- NIH BIRN Project 		   (Jargon)
+- DOE Web Services Project (Jargon)
+- NPACI REU 			   (Client API, Matrix Applications)
+
+Matrix Team (who took part in this release):
+- Allen Ding (client development)
+- Arun Jagatheesan (All talk no work a.k.a Research ;)
+- Reena Mathew (server development)
+- (Lucas Gilbert for Jargon developement)
+
+Hey, If you are reading this line, you probably are a developer. If you wanna use/participate
+in our code development - feel free to jumpin by e-mailing arun@sdsc.edu. Arun will send you 
+the red-pill needed to be in Matrix ;).

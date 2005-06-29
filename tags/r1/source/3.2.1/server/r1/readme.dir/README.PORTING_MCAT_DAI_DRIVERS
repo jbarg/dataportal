@@ -1,0 +1,279 @@
+This file provides a brief set of things that need to be added to SRB files
+that will help in porting MCAT and adding new DAI drivers to SRB.
+The file provides text that were added when the Informix table and Informix 
+MCAT were added to SRB. Use this as an illustration when adding new drivers.
+
+See README.DAI for a description of DAI (Database Access Interface).
+
+
+======================================== $SRB/Makefile.in ========================================
+
+ifdef DB_Informix
+#BOBJS+= $(objDir)/srbC_ifmx_library.o $(objDir)/ifmxTableDvr.o $(objDir)/ifmxDvrLib.o
+# use above if LOBJ is also supported
+# Just the table driver is supported so we can talk DAI to it, blobs aren't
+BOBJS+= $(objDir)/ifmxTableDvr.o $(objDir)/ifmxDvrLib.o
+endif
+
+
+ifdef IFMXMCAT
+MDAS_OBJ += $(objDir)/mdasC_ifmx_internal.o
+endif
+
+======================================== $SRB/MCAT/Makefile.in ======================================== 
+ifdef IFMXMCAT
+MS_OBJS += $(msBinDir)/mdasC_ifmx_internal.o
+endif
+
+======================================== $SRB/MCAT/data/catalog.cleanup.inf.sql ======================================== 
+    copy and change as required
+======================================== $SRB/MCAT/data/catalog.install.inf.sql ======================================== 
+    copy and change as required
+======================================== $SRB/MCAT/data/install.results.inf ======================================== 
+    copy and change as required
+
+
+======================================== $SRB/data/TableConfig ======================================== 
+InformixUser '' 'whomcat'
+InformixPasswd '' 'whymcat'
+
+======================================== $SRB/data/metadata.fkrel.ifmx ======================================== 
+    copy  from db2
+
+======================================== $SRB/mk/mk.config.in ======================================== 
+
+# IFMXMCAT defines that this SRB server being built is MDAS enabled and the  
+# MCAT is stored in Informix DBMS. Normally, only one SRB server is MDAS enabled.
+#
+# new way -> send --enable-ifmxmcat flag to .configure, e.g.
+#     ./configure --enable-ifmxmcat
+IFMXMCAT = @MCAT_Informix@
+#
+# old way -> Uncomment out the following field if the Server is to be MCAT enabled with an Informix MCAT.
+#     IFMXMCAT = 1
+#
+ifdef IFMXMCAT
+SRB_MDAS = 1
+IFMX_DBMS = 1
+DBMS_INCLUDE+= -DIFMXMCAT
+endif
+
+
+
+  
+# DB_Informix defines whether this SRB server supports INFORMIX_LOBJ or TABLE access.
+# Comment it out if the SRB server does not support INFORMIX_LOBJ or TABLE Access.
+#
+# new way -> send --enable-ifmxlobj flag to .configure, e.g.
+#     ./configure --enable-ifmxlobj
+DB_Informix=@IFMXLOBJ@
+#
+# old way -> Uncomment out the following field if the Server is to support INFORMIX_LOBJ or TABLE access
+#     DB_Informix = 1
+#
+# currently the informix driver does NOT support this
+ifdef DB_Informix
+IFMX_DBMS = 1
+DBMS_INCLUDE+= -DDB_Informix=0
+endif
+
+
+
+# The following is needed only if IFMX_DBMS is defined. IFMX_LIB_DIR
+# specifies where the Informix libraries are located and IFMX_HDR_DIR
+# specifies where the Informix header directory is located.
+ifdef IFMX_DBMS
+IFMX_HOME=@IFMXHOME@
+IFMX_LIB_DIR = $(IFMX_HOME)/lib/cli
+IFMX_HDR_DIR = $(IFMX_HOME)/incl/cli
+ifeq ($(PORTNAME), PORTNAME_linux)
+DBMS_LIB+= -L$(IFMX_LIB_DIR) -lcli -ldl -lm -lodbc -lcrypt
+else
+DBMS_LIB+= -L$(IFMX_LIB_DIR) -R$(IFMX_LIB_DIR) -lcli -ldl -lm -lodbc -lnsl -ls
+endif
+DBMS_INCLUDE+= -I$(IFMX_HDR_DIR)
+endif
+
+
+
+
+
+======================================== $SRB/configure.in ======================================== 
+# To build Informix MCAT enabled SRB server, use:
+#                   --enable-ifmxmcat
+#
+# To support IFMXLOBJ access, use:
+#                   --enable-ifmxlobj
+#
+# To specify path to Informix (IFMXHOME), use:
+#                   --enable-ifmxhome=<path>
+#
+
+AC_ARG_ENABLE(ifmxmcat,    [  --enable-ifmxmcat           Compile Informix MCAT enabled server (default is disabled)], , enable_ifmxmcat="no")
+AC_ARG_ENABLE(ifmxlobj,     [  --enable-ifmxlobj          Compile MCAT enabled server to support IFMX_LOBJ access (default is disabled)], , enable_ifmxlobj="no")
+AC_ARG_ENABLE(ifmxhome,     [  --enable-ifmxhome=<path>   Specify path to Informix (IFMX_HOME) (default is /informix)], , enable_ifmxhome="/informix")
+
+if test "$enable_ifmxmcat" != "no"
+then
+     echo "Configuring to build Informix MCAT enabled SRB server . . . "
+     MCAT_Informix=1
+     rm -f data/metadata.fkrel
+     ln -s metadata.fkrel.ifmx data/metadata.fkrel
+     AC_SUBST(MCAT_Informix)
+fi
+
+
+if test "$enable_ifmxlobj" != "no"
+then
+     echo "Configuring SRB server that supports IFMX_LOBJ access. . . "
+     IFMXLOBJ=1
+     AC_SUBST(IFMXLOBJ)
+fi
+
+IFMXHOME=$enable_ifmxhome
+AC_SUBST(IFMXHOME)
+
+
+======================================== $SRB/src/catalog/include/mdasC_ifmx_externs.h ======================================== 
+   make a new one
+
+
+======================================== $SRB/src/catalog/mdas/mdasC_ifmx_internal.c ======================================== 
+   make a new one
+
+
+
+
+
+
+
+======================================== $SRB/src/include/dbTable.h ======================================== 
+static char *InformixUser = NULL;
+static char *InformixPasswd = NULL;
+
+======================================== $SRB/src/include/dbTableDefines.h ======================================== 
+#define INFORMIX_USER_KEYWD   "InformixUser"
+#define INFORMIX_PASSWD_KEYWD "InformixPasswd"
+
+
+======================================== $SRB/src/include/ifmxDvrLib.h ======================================== 
+   copy from db2 and make the appropriate mappings  as given/mapped by the databases for the variables
+   also change the values for   MAXDATATYPELISTSIZE
+======================================== $SRB/src/include/ifmxTableDvr.h ======================================== 
+   copy from db2 and make the appropriate mappingschanges from db2 -> ifmx
+======================================== $SRB/src/include/srb.h.in ======================================== 
+#ifndef IFMX_LOBJ
+#define IFMX_LOBJ     6       /* Informix LOBJ - Not supported */
+#endif
+#ifndef IFMX_TABLE
+#define IFMX_TABLE     6       /* Informix TABLE */
+#endif
+
+======================================== $SRB/src/include/srbMisc.h ======================================== 
+	{"informix table",      DB_TABLE_TYPE,  IFMX_TABLE,     NO_CHKDIR},
+	{"informix dblobj",    	DB_LOBJ_TYPE,   IFMX_LOBJ,	NO_CHKDIR},
+======================================== $SRB/src/back/dbTable.c ======================================== 
+#ifdef DB_Informix
+          case IFMX_TABLE:
+          descInx = newDbTableDesc (hostTabPtr, LOCAL_HOST, dbSystemType, 0);
+          if (descInx < 0) return descInx;
+            if (InformixUser == NULL) {  /*  read from config file */
+                InformixUser = readTableConfig (dbInstance, INFORMIX_USER_KEYWD);
+                InformixPasswd = readTableConfig (dbInstance, INFORMIX_PASSWD_KEYWD);
+            }
+          retVal = ifmxTableOpen (&gDbTableDesc[descInx], 
+          resourceLoc, dataPath, InformixUser, InformixPasswd);
+          if (retVal != 0) {  /* open failed */
+                elog(NOTICE,"cannot open Informix TABLE. resLoc=%s, dataPath=%s, status=%d", 
+              resourceLoc, dataPath, retVal);
+                return retVal;
+          }
+          break;
+#endif            
+
+
+#ifdef DB_Informix
+          case IFMX_TABLE:
+          descInx = newDbTableDesc (hostTabPtr, LOCAL_HOST, dbSystemType, 0);
+          if (descInx < 0) return descInx;
+            if (InformixUser == NULL) {   /* read from config file */
+                InformixUser = readTableConfig (dbInstance, INFORMIX_USER_KEYWD);
+                InformixPasswd = readTableConfig (dbInstance, INFORMIX_PASSWD_KEYWD);
+            }
+          retVal = ifmxTableCreate (&gDbTableDesc[descInx], 
+          resourceLoc, dataPath, InformixUser, InformixPasswd);
+          if (retVal != 0) {  /* create failed */
+                elog(NOTICE,
+                "cannot create Informix TABLE. resLoc=%s dataPath=%s status=%d", 
+                  resourceLoc, dataPath, retVal);
+                return retVal;
+          }
+          break;
+#endif
+
+
+#ifdef DB_Informix
+          case IFMX_TABLE:
+            retval = ifmxTableClose (&gDbTableDesc[descInx]);
+            break;
+#endif
+
+
+#ifdef DB_Informix
+          case IFMX_TABLE:
+            return (ifmxTableRead (&gDbTableDesc[descInx], buf, len));
+#endif
+
+
+#ifdef DB_Informix
+          case IFMX_TABLE:
+            status = ifmxTableWrite (&gDbTableDesc[descInx], buf, len);
+          if (status < 0)
+              elog (NOTICE, "dbTableWrite: DB2 dbTableWrite ERROR. status = %d",
+                status);
+          return (status);
+            break;
+#endif
+          
+
+#ifdef DB_Informix
+          case IFMX_TABLE:
+            return (ifmxTableSeek (&gDbTableDesc[descInx], offset, whence));
+#endif
+
+#ifdef DB_Informix
+          case IFMX_TABLE:
+            if (InformixUser == NULL) {   /* read from config file */
+                InformixUser = readTableConfig (dbInstance, INFORMIX_USER_KEYWD);
+                InformixPasswd = readTableConfig (dbInstance, INFORMIX_PASSWD_KEYWD);
+            }
+            retVal = ifmxTableUnlink ( resourceLoc, dataPath, 
+            InformixUser, InformixPasswd);
+            if (retVal != 0) { 
+                elog(NOTICE,
+              "cannot unlink Informix TABLE. resLoc=%s, dataPath=%s, status=%d",
+                resourceLoc, dataPath, retVal);
+                return retVal;
+            }
+            break;
+#endif
+
+======================================== $SRB/src/back/ifmxDvrLib.c ======================================== 
+      copy db2DvrLib.c
+       and change db2 -->  ifmx
+      (we recommend  using ifmxDvrLib.c   and changing all   ifmx  --> ????
+
+======================================== $SRB/src/back/ifmxTableDvr.c ======================================== 
+      copy 
+    $SRB/src/catalog/mdas/mdasC_ifmx_internal.c   and then change 
+		db2 --> ifmxTab
+		filterQuery --> filterQueryifmx   (if exists)
+     also addat beginning
+	  #include "ifmxDvrLib.h"
+
+     add   the following routines from db2TableDvr.c   to ifmxTableDvr.c 
+     and change db2 --> ifmx
+               getDataTypeFromMap_db2Tab
+	       getColTypeFromColNamedb2Tab
+	       getColumnInfoFordb2Table
+======================================== ======================================== 
