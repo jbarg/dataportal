@@ -24,6 +24,7 @@ char *containerName, char *dataType, srb_long_t dataSize)
     int lockFd = -1;
     int remoteFlag;
     struct hostElement  *hostTabPtr;
+    srb_long_t lstatus;
 
     /* Check for TicketUser should have been done by the calling routine */
 
@@ -99,11 +100,11 @@ char *containerName, char *dataType, srb_long_t dataSize)
 
     /* Seek to the baseOffset */
 
-    status = _svrObjSeek (descInx, 0, SEEK_SET);
+    lstatus = _svrObjSeek (descInx, 0, SEEK_SET);
 
-    if (status < 0) {
-	elog(NOTICE, "inContainerObjCreate: _svrObjSeek error, status = %d ",
-	 status);
+    if (lstatus < 0) {
+	elog(NOTICE, "inContainerObjCreate: _svrObjSeek error, status = ll%d ",
+	 lstatus);
 	svrObjClose (descInx);
 	return status;
     }
@@ -152,6 +153,7 @@ int contFd, char *dataType, srb_long_t dataSize)
     char fullContName[MAX_TOKEN];
     int remoteFlag;
     struct hostElement  *hostTabPtr;
+    srb_long_t lstatus;
 
     /* Check for TicketUser should have been done by the calling routine */
 
@@ -196,12 +198,13 @@ int contFd, char *dataType, srb_long_t dataSize)
 
     /* Seek to the baseOffset */
 
-    status = _svrObjSeek (descInx, 0, SEEK_SET);
+    lstatus = _svrObjSeek (descInx, 0, SEEK_SET);
 
-    if (status < 0) {
-	elog(NOTICE, "inContainerObjCreate: _svrObjSeek error, status = %d ",
-	 status);
+    if (lstatus < 0) {
+	elog(NOTICE, "inContainerObjCreate: _svrObjSeek error, status = %lld ",
+	 lstatus);
 	svrObjClose (descInx);
+	status = lstatus;
 	return status;
     }
 
@@ -1118,8 +1121,12 @@ char *logResName, srb_long_t containerSize)
     int remoteFlag;
     struct hostElement  *hostTabPtr;
     struct resCache *myResCache;
+    srb_long_t maxContSize;
 
-    if (containerSize > MAX_CONTAINER_SIZE) {
+    maxContSize = MAX_CONTAINER_SIZE;
+    maxContSize = maxContSize * 1024*1024;
+
+    if (containerSize > maxContSize) {
 	return (OBJ_ERR_MAX_SIZE_EXCEEDED);
     } else if (containerSize <= 0) {
 	containerSize = DEF_CONTAINER_SIZE;
@@ -1335,6 +1342,7 @@ _svrContainerOpen (int catType, char *containerName, int openFlag)
     int contInx, retVal;
     char *accessMode;
     int lockFd = -1;
+    int creatFlag = 0;	/* used to see if container needs extended */ 
 
     if (TicketUserFlag) {
         elog (NOTICE, "Illegal operation for a ticket user");
@@ -1343,14 +1351,19 @@ _svrContainerOpen (int catType, char *containerName, int openFlag)
 
     /* Take out flag such as O_APPEND, O_TRUNC etc for container IO
      */
-    if (openFlag & O_WRONLY)
+    if (openFlag & O_WRONLY) {
         myOpenFlag = O_WRONLY;
-    else if (openFlag & O_RDWR)
+	creatFlag = 1;
+    } else if (openFlag & O_RDWR) {
         myOpenFlag = O_RDWR;
-    else if (openFlag & O_RDONLY)
+	creatFlag = 1;
+    } else if (openFlag & O_RDONLY) {
         myOpenFlag = O_RDONLY;
-    else
+	creatFlag = 0;
+    } else {
         myOpenFlag = O_RDONLY;
+	creatFlag = 0;
+    }
 
     accessMode = openFlagLookUp (myOpenFlag);
     if (accessMode == NULL) {
@@ -1383,8 +1396,8 @@ _svrContainerOpen (int catType, char *containerName, int openFlag)
 
     /* Do a mdasGetInfo on the container */
 
-    contInx = resolveContainer (MDAS_CATALOG, myOpenFlag, 1, outContName,
-     contCollection);
+    contInx = resolveContainer (MDAS_CATALOG, myOpenFlag, creatFlag, 
+     outContName, contCollection);
 
 #ifdef LOCK_OBJ
     if (contInx >= 0) {
@@ -1442,6 +1455,7 @@ struct mdasInfoOut *infoOutHead)
     int descInx, contInx;
     char outContName[MAX_TOKEN], contCollection[MAX_TOKEN];
     int myOpenFlag;
+    srb_long_t lstatus;
 
     /* Take out flag such as O_APPEND, O_TRUNC etc for container IO
      */
@@ -1500,12 +1514,13 @@ struct mdasInfoOut *infoOutHead)
 
     /* Seek to the baseOffset */
 
-    status = _svrObjSeek (descInx, 0, SEEK_SET);
+    lstatus = _svrObjSeek (descInx, 0, SEEK_SET);
 
-    if (status < 0) {
-        elog(NOTICE, "inContainerObjOpen: _svrObjSeek error, status = %d ",
-         status);
+    if (lstatus < 0) {
+        elog(NOTICE, "inContainerObjOpen: _svrObjSeek error, lstatus = %lld ",
+         lstatus);
 	svrObjClose (descInx);
+	status = lstatus;
         return status;
     }
 

@@ -1865,6 +1865,7 @@ _svrObjWrite (int descInx, char *buf, int bytestowrite)
     int tinx;
     int status;
     int contInx = -1;
+    srb_long_t lstatus;
 
     if (descInx < 0 || descInx >= MAX_SRBO_DESC ||
     srbObjDesc[descInx].lowLevelDescInx < 0) {
@@ -1889,12 +1890,12 @@ _svrObjWrite (int descInx, char *buf, int bytestowrite)
 			srbObjDesc[descInx].baseOffset = 
 			 srbObjDesc[contInx].contInfo->curContainerSize;
 			/* Seek to the baseOffset */
-    			status = _svrObjSeek (descInx, 0, SEEK_SET);
+    			lstatus = _svrObjSeek (descInx, 0, SEEK_SET);
 
-    			if (status < 0) {
+    			if (lstatus < 0) {
         		    elog(NOTICE, 
-			     "svrObjWrite: _svrObjSeek error, status = %d ", 
-			      status);
+			     "svrObjWrite: _svrObjSeek error, status = %lld ", 
+			      lstatus);
         		    return status;
     			}
 			chgBaseOffset = 1;
