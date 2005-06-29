@@ -1,0 +1,79 @@
+XQuery Implementation
+
+
+Functionalities
+1) Parse For Clause
+	- Generate File System / File depending on query type
+	
+2) Parse Where Clause
+	- Parse Conditional Clauses
+	- Parse Condtion Variable , Operator and Condition Value
+	- Create User Defined Meta Data Table
+
+3) Parse Return Clause
+	- Parse Selection Fields
+	- Mapping of Selection Fields to Query Result	
+
+4) Map Matrix Variables to SRB Variables
+	- Map Matrix Variable to the list of 100 or so variables
+	- Distinguish User Defined Meta Data
+
+5) Format Query Result
+	- Reiterate the formatting for the query result
+
+6) Exceptions
+	- No Query Results
+	- Wrong Query Request
+	- Indicate Not Supported Functionality
+********************************************************************************
+
+ISSUES
+------------
+
+Grammar
+-------
+1) Not Supported Functionality
+	- Not Supporting a Whole Clause
+	- Supporting a part of a clause
+
+For Clause
+----------
+2) Collection Function
+	- How does the user define a query for a file ? 
+	- Can the user specify a collection ? 
+
+3) File System Used For SRB Query
+	- Should it be the file system from SRBConnection ? 
+
+WhereClause & ReturnClause
+--------------------------
+4) Mapping of Matrix Variables to SRB Jargon Variables
+	- Whole list of SRB Meta Data Parameters (100 or so)
+
+5) Distinguish System Meta Data and User Defined Meta Data variables
+
+6) Operators to Support
+	BETWEEN  - Not Supported
+        ENUM - Not Supported
+        EQUAL 
+        GREATER_OR_EQUAL 
+        GREATER_THAN 
+        IN - Not Supported
+	LESS_OR_EQUAL 
+        LESS_THAN 
+        LIKE - Not Supported
+        NOT_BETWEEN - Not Supported
+        NOT_EQUAL 
+        NOT_IN - Not Supported
+        NOT_LIKE - Not Supported
+        RANGEPAIR - Not Supported
+        SCALAR - Not Supported
+        SOUNDS_LIKE - Not Supported
+        SOUNDS_NOT_LIKE - Not Supported
+        TABLE - Not Supported
+
+ To support non-Xquery operators, grammar has to be modified
+
+7) Distinguish between StringLiteral and NumericLiteral - Grammar has to be modified
+
+8) Parsing Return Clause For Selection Fields

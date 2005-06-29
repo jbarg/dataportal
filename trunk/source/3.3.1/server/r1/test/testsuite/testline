@@ -1,0 +1,2 @@
+srboticket -host srb.sdsc.edu -port 5533 -auth TESTUSER -verbose -rsrc demo-ufs-sdsc -id testObjID -coll /home/testuser.sdsc/testColl.15503 -to tmpOFile.15503.f 
+

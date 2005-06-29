@@ -1,0 +1,414 @@
+NOTE: Check http://www.npaci.edu/Research/DI/srb/docs.html for an updated 
+version of this document.
+
+This is a note on how to configure and start the SRB servers. 
+
+For full documentation and related articles, read the web page at 
+http://www.npaci.edu/Research/DI/srb.
+
+i) Quick setup
+-----------
+
+This section provides short notes on quick setup and startup of the
+SRB server. For more detail descriptions of setup, please read the
+section on "Setup details".
+
+Setup for servers with UNIX driver only:
+
+	1) Configure the SRB user environment with the  ~/.srb/.MdasEnv
+	and ~/.srb/.MdasAuth files. Templates of these files can be 
+	found in the utilities/envFiles directory.  
+
+	2) Configure the data/mcatHost file. If you are going to use SDSC's
+	MCAT, no change is needed.
+
+	3) Configure the data/hostConfig file. Normally the configuration
+	of this file is not needed unless the host has a complicated
+	network alias scheme and the SRB server may not be able to get all
+	the aliases associated with the host. When a SRB server is started,
+	it outputs a line in the data/srbLog file specifying all the
+	host name and aliases understood by the server. This information
+	should be checked.
+
+	4) To run the SRB server, type in:
+		cd bin
+		runsrb
+
+	This should start the SRB server. If it is not running, 
+	the data/srbLog file should give hint on why it is not
+	running.
+	
+	5) Check the data/srbLog file - The first line should contain
+	something like:
+
+	LocalHostName:  ghidorah, localhost, .....
+
+	followed by:
+
+	Local storage vault conf:
+	storSysType: 0, vaultPath: /projects/mdas/srb/SRBVaultTest
+	    .
+	    .
+
+	The LocalHostName list shows all the addresses of your local host
+	recognized by the SRB server. It uses the gethostbyname() call
+	to get the local addresses. There are situations where the 
+	local host address registered with MCAT may not show up with this 
+	call. Then, the "Local storage vault conf" will be empty.
+	In this case, use the data/hostConfig file to include the MCAT 
+	registered host address to your local addresses.
+
+ii) Datailed server setup
+-------------------------
+
+The SRB architecture supports multiple SRB servers running on various
+hosts. Metadata of data sets, resources and users managered by the SRB
+is stored in the MCAT catalog maintained in a relational database (DBMS). 
+Therefore, a SRB installation may consist of multiple SRB servers running
+on various host, but only one SRB server is designated to interface with 
+the MCAT database server. This server is built by defining the ORAMCAT or 
+DB2MCAT keyword in the mk/mk.config file. This server is marked by the 
+MDAS_ENABLED keyword in the data/hostConfig file.
+
+1) MCAT setup - Before any SRB server can be started, the MCAT catalog
+must be built and the MCAT server (DBMS) running. In addition, the user
+starting the SRB servers must have already been registered as a privileged
+user in MCAT. Currently at SDSC, we are running the MCAT server on a DB2 
+database and the MDAS_ENABLED SRB server running on host gabor.sdsc.edu.
+Please email Arcot Rajasekar at sekar@sdsc.edu if you wish to use
+our MCAT server for your SRB metadata. If you wish to setup and run your own 
+MCAT catalog, the MCAT directory of this distribution contains the 
+required informations and codes for installing MCAT.
+
+2) Setting up the SRB user environment - Before a user can start the SRB
+server, the following user environment setup must be carried out:
+
+    a) The ~/.srb/.MdasEnv file - A template of the file can be found in
+    utilities/envFiles/.MdasEnv of this package. See section 2) of 
+    README.utilities for details.
+
+    b) Setting up user authentication - See section 3) of README.utilities for
+    details of authentication setup.
+
+3) Setting up the SRB configuration files - Modifications to the following 
+configuration files are needed for each SRB server installation:
+
+	data/mcatHost - This file identifies the host on which the MCAT
+        enabled server is running. This file should contain the following
+	lines:
+
+	line 1 - The host on which the MCAT enabled server is running
+	line 2 - The authentication scheme to use when connecting to
+	the MCAT enabled server. Valid schemes are : PASSWD_AUTH, ENCRYPT1,
+	GSI_AUTH and GSI_SECURE_COMM. This line is 
+	optional. If it is not present, the PASSWD_AUTH scheme will be used.
+	line 3 - If GSI_AUTH or GSI_SECURE_COMM is chosen, this line
+	represents the "Distinguish Name" of the MCAT enabled server user.
+
+	data/hpssCosConfig - This file configures the HPSS Class Of
+	Service (COS). Basically, this file contains a table with two
+	columns - "COS ID" and "Maximum file size in KBytes". It is
+	used by the HPSS driver for choosing the appropriate COS based on
+	the "dataSize" input parameter of the srbObjCreate() call.
+	
+	data/hpssNodceAuth - This file specifies the userID/passwd pair
+	for authenticating the SRB server with the NON-DCE HPSS system.
+	This file is needed only when the NO_DCE in the mk.config file
+	is set. Otherwise, for DCE HPSS authentication, create a DCE keytab 
+	file and change the srbKeytabName parameter in bin/runsrb to point 
+	to this file path.
+
+        data/MdasConfig - The MDAS configuration file. This file is 
+	required only by the MDAS_ENABLED SRB server. The current MDAS
+        catalog is kept in a DB2 database. This file contains basic
+        informations required for SRB to interface with the MDAS catalog.
+        Configurable parameters include SRB's DB2 userid, password and
+        log file location. 
+
+	data/LobjConfig - The configuration file for the DBMS Large Object
+	drivers. Basically, it contains the userID and password required for
+	authenticating the SRB server with DBMS where the large objects are 
+	stored. The parameters defined in this file are Db2User, Db2Passwd,
+	D2Home, (for DB2), IllusUser, IllusPasswd, IllusHome (for Illustra), 
+	OracleUser and OraclePasswd,OracleHome (for Oracle). Input to some of 
+	these parameters can be blank if the SRB server being started does 
+	not support a particular DBMS.  
+
+        data/hostConfig - This is the optional SRB host configuration file.
+        It is only needed when when you want to add aliases to your local
+        hostName.
+
+        data/hostAuthConfig - This is the optional host based authorization
+        configuration file. It is needed only if HOST_BASED_AUTH is
+        enabled in mk/mk.config This file specifies who and from which
+        IP address/domain the client connection may come from. The
+        parameters are self-explanatory through the comments given in
+        this file.
+
+	data/srbLog - This is not a configuration file. It is used to
+	log the activities of the current SRB server session. It is
+	a good place to check for problems.
+
+	bin/runsrb - This is the startup script for the SRB server. 
+	Modifications of some env variables defined in this file may 
+	be required. The parameters are self-explanatory through the 
+	comments given in this file. 
+
+	Many of the user environment parameters (srbPort, AUTH_SCHEME, 
+	mcatZone, etc) set in the .MdasEnv file (see 2)) can be overridden 
+	by setting these parameters in the runsrb script. This may be
+	necessary if the same UNIX account is used to run several
+	SRB servers each with different srbPort and/or AUTH_SCHEME, etc. 
+
+	Some of the more important parameters are:
+
+	  srbPort - defines the port number to use in this zone. It overrides
+	  the value defined in the .MdasEnv file.
+
+	  MaxThread - defines the maximum number of threads to use for parallel
+	  transfer. The default is 4.
+
+	  X509_USER_KEY and X509_USER_CERT specify where the SRB server's 
+	  GSI key and certificate are located. They are only relevant if
+	  the server supports GSI authentication.
+
+	  GENERATE_GUID - specifies whether a GlobalIdentifier will be
+	  generated and stored as part of a srbObject registration.
+
+	  GftpSeverDn - Valid only if GRID_FTP driver is configured in this 
+	  server.  This defines the Distinguish Name of the user for the 
+	  GridFTP server.
+
+	  PRE_SPAWN_CNT defines the number of srbServer to prespawn. 
+	  The purpose of prespawning server is to improve interactivity. 
+
+	  SingleSvrPort - onfiguring SRB servers to use a single port 
+	  for firewall consideration
+
+	  commPortNumStart - Specifies the first allowable port number for SRB
+	  client/server. This overides the value specified with the 
+	  --enable-commstart option of "configure". A zero value disable 
+	  restriction on port number.
+
+	  commPortNumCount - Specifies the number of allowable ports for SRB
+	  client/server.
+
+4) Starting the SRB server
+
+The servers in the SRB environment must be started in the following order :
+
+	i) The MCAT DBMS server.
+
+	ii) The MCAT enabled SRB server.
+
+	iii) The rest of the SRB servers.
+
+The script bin/runsrb is used to start the SRB server. To start the 
+SRB server, type in :
+
+	. cd bin
+	. runsrb
+
+
+To shutdown the SRB server, type in:
+
+        . cd bin
+        . killsrb
+
+5) SRB maintenance mode - The SRB servers can be put into maintenance mode 
+by creating a file named "srb.allow" in the "data" directory. If the
+"srb.allow" file is empty, the SRB server will not accept any additional
+connection from anyone. Existing connections are allowed to continue
+with their works. The "srb.allow" file can be edited as text file to
+add users to be allowed to make connections during maintenance mode.
+The format is userName@domainName for each user.
+
+Each individual SRB server can be put into maintenance mode 
+independently from the other SRB servers. If the MCAT server 
+is put into maintenance mode, the whole federation within the 
+zone is effectively put into maintenance mode. 
+
+iii) Driver configurations
+--------------------------
+
+A) Setup for servers with HPSS driver: 
+
+	1) Build the SRB server with the HPSS flag set in the mk/mk.config
+	file. In addition, the HPSS driver can use either the normally used
+	DCE authentication or the NON-DCE implementation developed by 
+	Mike Gleicher. Please contact Mike at mkg@san.rr.com for informations 
+	regarding the licensing of the Non-DCE HPSS client/server software. 
+	If the NON-DCE authentication is used, the NO_DCE flag in mk/mk.config
+	should be set before the build. If it is not set, DCE authentication
+	is assumed.
+ 
+	2) Go through same procedures as i).
+
+	3) Configure the data/hpssCosConfig file as described in the comment
+	fields in the file.
+
+	4) Set the variable hpssCOSId in the bin/runsrb to the default
+	class id to be used for creating hpss files.
+
+	5) If your installation's hpss library was built with no default
+	servers or location server, you may have to set env variables
+	such as HPSS_LS_NAME for version 4, or HPSS_HPNS_NAME and
+	HPSS_BFS_NAME for version 3 in the bin/runsrb script. Please check 
+	with your HPSS administrator regarding these parameters.
+
+	6a) For NON-DCE authentication, configure the data/hpssNodceAuth 
+	file as described in the comment fields in the file. Basically, 
+	this file should contain the HPSS userID/password pair of the SRB
+	user (the userID under which the SRB server runs).
+.
+	NOTE: The NON-DCE authentication works only with the Non-DCE HPSS
+	client/server implemented by Mike Gleicher.
+
+	7b) For DCE authentication, create a DCE keytab file and change the 
+	srbKeytabName parameter in bin/runsrb to point to this file path and
+	the srbPrincipalName to the UserId associated with this keytab file.
+
+    For example, the following gives the install note made by Jean-Yves Nief 
+    of IN2P3 for a NON-DCE HPSS server:
+
+    1) in mk/mk.config, set the following parameters:
+
+    HPSS=2
+    NO_DCE=1
+    within the sequence: ifdef NO_DCE, set:
+      HPSS_LIB_DIR=/opt/hpss/lib 
+      HPSS_HDR_DIR=/opt/hpss/include (whenever the HPSS lib and include paths)
+
+    and type in "gmake" to make to SRB code.
+
+    2) Install for example in "/var/hpss/etc/ndcl.keyconfig" the file
+    containing the non DCE key config file of the HPSS core server you are
+    using. Then set the following env variables 
+
+    setenv HPSS_REUSE_CONNECTIONS 1    # not mandatory
+    setenv HPSS_DEBUGPATH stderr
+    setenv HPSS_DEBUG 0     # certainly interesting to put it at 1 in a
+
+    First time in order to track down possible problems related to HPSS, set:
+
+    setenv HPSS_NDCG_SERVERS cchpstd1  # the name of your core HPSS server
+    setenv HPSS_NDCL_KEY_CONFIG_FILE /var/hpss/etc/ndcl.keyconfig.test  #
+      file path where the  key config file I mentioned in 3) can be found ==>
+      mandatory for authentication.
+
+    3) Configure the data/hpssNodceAuth and data/hpssCosConfig files as 
+    described above.
+
+B) Setup for servers with GridFTP driver:
+        1) Build the SRB server with the following configurations:
+	    a) Edit the mk/mk.config file and set:
+		GRID_FTP = 6
+
+	    b) Enable GSI authentication with the normal configure options
+	    (e.g., configure --enable-gsi-auth --enable-globus-location=<path>)
+
+	    c) Type in "gmake" to make to SRB code.
+
+	2) Use the MCAT admin tool to create a special "Location" for the 
+	GridFTP resource. This "Location" is unlike others because more
+	informations are need (The address, port number and Distinguish
+	Name of the GridFTP server) for GridFTP. The Format of the
+	netprefix (Host Address in the Java admin tool) which normally
+	contains the host address of the SRB resource, has been
+	modified as follows:
+
+	    SrbResAddr:GridFTPSvrAddr[:GridFTPSvrPortNum][GridFTPSvrDn]
+
+
+	where,
+
+	    SrbResAddr = The normal host address of the SRB resource
+	    GridFTPSvrAddr = The host address of the GridFTP server (required
+	    for GridFTP driver)      
+	    GridFTPSvrPortNum = The port number of the GridFTP server
+	    (Optional).
+	    GridFTPSvrDn = The Distinguish Name of the GridFTP server user.
+	    (Optional. If it is not specified, the server will use the
+	    GftpSeverDn value specified in the "runsrb" script). The 
+	    advantage of specifying the Dn in the "Location" is the
+	    SRB server may need to interact with more that one GridFTP servers
+	    each having a different Dn and using a single Dn specified by
+	    GftpSeverDn in the "runsrb" script will not be able to support
+	    such usage.
+	    
+	An example of a netprefix for GridFTP:
+
+	    srbbrick7.sdsc.edu:srbbrick3.sdsc.edu:8888:
+	    /C=US/O=NPACI/OU=SDSC/CN=Storage Resource Broker/USERID=srb
+
+        3) Use the MCAT admin tool to create a "Physical Resource" for the
+        GridFTP resource with the following configurations;
+
+	    Location - The special location created above.
+
+	    Resource Type - gridFTP (you may need to use the "Add New Token"
+	    function of the MCAT admin tool to create this Resource Type).
+
+	4) The server configured to support GSI authentication (see 
+	README.gsi.htm). 
+ 
+	5) File ownership in gridFTP resources - Normally, files 
+	stored in SRB are physically stored in the resource vault
+	path directory and owned by the SRB server ("server owned"). Users 
+	do not usually access these files directly using APIs and commands 
+	native to the file system but access them indirectly through the SRB 
+	server using SRB APIs and utilities. However, some users have 
+	expressed interest in a "user owned" environment where files
+	stored in SRB are physically owned by the users themselves.
+	But currently, SRB servers are not designed to run with special 
+	privileges (such as root or chown privileges for UNIX FS type 
+	resources) which makes "user owned" environment not feasibly.  
+
+	However, gridFTP servers are normally run with root privileges
+	and we can use the gridFTP resources to create a "user owned" 
+	environment. The current implementation is if a file is stored using 
+	the resource's vault path, it defaults to the usual "server owned" 
+	environment where the server's GSI credential is used for gridFTP 
+	authorization. However, if a file is stored outside of the resource's 
+	vault path, it will be in a "user owned" environment where the user's 
+	proxy certificate is used for gridFTP authorization. In this case,
+	the SRB user must use the GSI delegation authentication scheme 
+	(by setting AUTH_SCHEME to "GSI_DELEGATE"). 
+	
+C) Setup for servers with DB large object drivers:
+
+        1) Go through same procedures as i).
+
+        2) Configure the data/LobjConfig files described in the comment
+	fields of the file.
+
+iv) Configuring server timeout - The server timeout feature allows the 
+srbServer process to timeout and exit if it has not received new commands 
+from the connecting client/server for the predefined period of time. 
+The timeout allows the system to reclaim resources if the client has been
+idle for a period of time. The timeout is enabled by setting the ServerTimeOut
+environment value in the "runsrb" script. The ServerTimeOut vaule must not 
+be too small especially on a MCAT enabled server because the connecting 
+server may be busy transferring a very large file. Internally ServerTimeOut 
+defaults to 3600 sec if it is set to less than this value. Setting 
+ServerTimeOut also trigger a fixed 3600 sec timeout for the connection 
+between the MCAT enabled server and the MCAT database. This allows the 
+MCAT database to reduce the number of active connections. The connection
+to the MCAT database is re-established when a new request is received.  
+
+  
+v) Running the test suite
+
+After installing the SRB server for the first time, the test suite given
+in the test/testsuite directory should be run. To run the test suite,
+modify inputs such as AUTH, DOMAIN, HOST and PORT as required in the
+"testsuite" script file in the test/testsuite directory and type in
+the following:
+
+        . cd test/testsuite
+        . gmake clear
+        . gmake
+        . testsuite
+
+
+

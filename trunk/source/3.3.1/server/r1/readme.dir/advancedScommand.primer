@@ -1,0 +1,649 @@
+<html>
+<pre>
+The document gives a quick tutorial of using some of the advanced features of 
+Scommand for data movement.
+
+Last updated: March 10, 2005
+
+
+Table of contents
+1) Sequential and Parallel Sput/Sget
+2) Parallel I/O for third party transfer operations
+3) Bulk Operations
+4) Checksuming in SRB
+5) Srsync
+6) Using replication to backup SRB data
+7) Using Container
+8) Ssh - The SRB shell
+9) Hints for writing scripts that contain Scommands.
+
+
+1) Sequential and Parallel Sput/Sget
+. Default is sequential. e.g.,
+
+> Sput -v lfile
+LOCAL:lfile->SRB:lfile | 84.315 MB | 8.706 MB/s | 9.68 s | 2005.02.16 16:52:24 
+
+. "-M" option - Parallel I/O mode for large file transfer. e.g.,
+
+> Sput -vM lfile
+LOCAL:lfile->SRB:lfile | 84.315 MB | 13.264 MB/s | 6.36 s | 2005.02.16 16:55:20 | 3 thr
+
+Note the extra "| 3 thr" which means 3 parallel threads were used.
+
+. -m parallel I/O mode - this mode is not recommended (and may be removed at
+   some time) because of firewall issues.  -m is server-initiated parallel 
+   I/O and -M is client-initiated parallel I/O.
+
+. The -N option can be used to specify the number of threads to use. e.g.,
+
+> Sput -vMN4 lfile
+LOCAL:lfile->SRB:lfile | 84.315 MB | 14.042 MB/s | 6.00 s | 2005.03.01 12:03:35 | 4 thr
+ 
+. The options for Sget are the same as those for Sput.
+
+2) Parallel I/O for third party transfer operations such as Sreplicate, Scp, 
+Sphymove, Sbackup, SsyncD and Srsync. 
+
+The server will decide which transfer mode to use depending on the
+size of the file being transfered. If the file size is larger than 30
+MB (a server configuration parameter - SizePerThread), parallel I/O
+will be used. Otherwise, Sequential I/O will be used.
+ 
+3) Bulk Operations 
+
+. For transferring large number of small files ( < 1 MB) efficiently.
+
+. Implemented in Sput, Sget, Sphymove and Scp.
+
+. -b option to specify bulk operation. 
+
+. Bulk Sput - this example bulk uploads recursively local directory testdir
+to SRB: 
+
+> Sput -bS demoResc testdir testdir1  
+
+. Bulk Sput into a container - this example bulk uploads recursively
+local directory testdir into container "cont1":
+
+> Smkcont -S demoResc cont1
+> Sput -bc cont1 testdir testdir2
+
+. Bulk Sget - these 2 examples bulk download the two collections just
+uploaded:
+
+> Sget -b testdir1
+> Sget -b testdir2	# note that the specification of container is not needed
+
+. Bulk Scp - this example bulk copies the collection testdir1 to testdir3:
+
+> Scp -b -S demoResc1 testdir1 testdir3 
+
+. Bulk Sphymove - this example moves all files in the testdir collection 
+from the "demoResc" resource to the "demoResc1".
+
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc             3000977 2005-03-04-09.14   Sls
+  fedsrbbrick8  0 demoResc             2984132 2005-03-04-09.14   foo1
+
+> Sphymove -b -s demoResc -S demoResc1 testdir
+
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc1             3000977 2005-03-04-09.14   Sls
+  fedsrbbrick8  0 demoResc1             2984132 2005-03-04-09.14   foo1
+
+. Bulk Sphymove into a container - this example moves all files in the testdir 
+collection into container cont1:
+> Sphymove -bc cont1 testdir
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc             IC  3000977 2005-03-04-13.49   Sls
+  fedsrbbrick8  0 demoResc             IC  2984132 2005-03-04-13.49   foo1
+
+The Sphymove command may be a useful tool for the SRB administrator to
+move users files from resources to resources.
+
+4) Checksuming in SRB 
+
+. Implemented in both the SRB client and server.
+
+. The checksum parameter is a MCAT metadata associated with each SRB data file. 
+
+. Implemented in Sput, Sget, Schksum and Srsync.
+
+. Uses the SYS V checksuming algorithm.
+
+. Sput -k - uploads a file and registers the checksum value associated
+with the file. The checksum value is computed in Sput on the client
+side. The following example recursively uploads a local directory
+testdir and registers the checksum values.
+
+> Sput -kvr testdir
+LOCAL:testdir/foo1->SRB:foo1&REG_CHKSUM=35186 | 3.001 MB | 5.194 MB/s | 0.58 s | 2005.02.16 17:05:37  | chksum=35186
+LOCAL:testdir/foo2->SRB:foo2&REG_CHKSUM=56600 | 2.984 MB | 3.856 MB/s | 0.77 s | 2005.02.16 17:05:39  | chksum=56600
+
+. Sput -K - checksum verification. e.g., the following command
+recursively uploads a local directory testdir; the server then
+computes the checksum by reading back the file just uploaded and
+verifies that with the checksum value computed locally.
+
+> Sput -Kvr testdir
+LOCAL:testdir/Sls->SRB:Sls&VERIFY_CHKSUM=42018 | 3.001 MB | 5.170 MB/s | 0.58 s | 2005.03.04 16:58:12  | chksum=42018
+LOCAL:testdir/foo1->SRB:foo1&VERIFY_CHKSUM=55539 | 2.984 MB | 3.121 MB/s | 0.96 s | 2005.03.04 16:58:13  | chksum=55539
+
+. Sget -k - Download a SRB file and verify the checksum value by
+comparing the registered value with the checksum of the local file
+just downloaded. e.g.,
+
+> Sget -kvr testdir testdir1
+SRB:Sls->LOCAL:testdir1/testdir/Sls | 3.001 MB | 0.734 MB/s | 4.09 s | 2005.03.04 16:59:20  | chksum=42018
+SRB:foo1->LOCAL:testdir1/testdir/foo1 | 2.984 MB | 0.810 MB/s | 3.68 s | 2005.03.04 16:59:24  | chksum=55539
+
+. Schksum can be used to list the registered checksum value. e.g.,
+
+> Schksum -lr testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir
+    Sls                         42018   
+    foo1                        55539   
+
+. Schksum can also be used to compute and register checksum values if
+it does not already exist. e.g.,
+
+> Sput -r testdir testdir1	# did not request checksum
+> Schksum -lr testdir1		# list the checksum
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1
+    Sls                         0       
+    foo1                        0       
+
+> Schksum -vr testdir1		# compute the checksum if it does not exist 
+
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1
+    Sls                         42018      new_chksum
+    foo1                        55539      new_chksum
+
+> Schksum -fvr testdir1		# force computation and registration of checksum
+				# even though they exist
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1
+    Sls                         42018   
+    foo1                        55539   
+
+. Srsync - The Srsync command uses the checksum value to sync
+data. This command will be discussed in detail in 5).
+
+5) Srsync - Data synchronization between client's local files and SRB
+files, and between SRB files.
+ 
+. Three modes of synchronization:
+ 
+	a) From local files to SRB files. e.g.,
+
+	    > Srsync -Mvr testdir s:testdir1
+
+	Note that the target argument is prepended with "s:" indicating the
+	target is an SRB file/collection. The "M" option specifies that in
+	case an upload is needed, parallel mode I/O will be done.  The "v" is
+        for verbose.
+	
+	b) From SRB files to local files. e.g.,
+
+	    > Srsync -Mvr s:testdir1 testdir
+
+	c) SRB files to SRB files. e.g.,
+
+	    > Srsync -vr s:testdir1 s:testdir2
+
+	Note that the "M" option is not needed because this involves server to
+	server third party operations where the servers will decide the mode
+	of data transfer.
+
+. Synchronization between source and target is based on comparing the
+checksum values or the files sizes. The checksum comparison is the
+default method, and the much faster but less accurate files size
+comparison method can be specified with the "-s" option. e.g.,
+
+Srsync -mvrs s:testdir1 testdir
+
+6) Using replication to backup SRB data 
+
+. Commands that involves replica - Sreplicate, Sbkupsrb, Ssyncd, Sget, Sput
+and Scp.
+ 
+. Each SRB file can have multiple physical copies (or replica) and
+these copies can be stored in different resources.
+
+. Sreplicate - make a replica. e.g., the following example makes replica in 
+resource demoResc1:
+
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-04-16.58 % Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-04-16.58 % foo1
+> Sreplicate -rS demoResc1 testdir
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-04-16.58 % Sls
+  fedsrbbrick8  1 demoResc1                3000977 2005-03-08-09.38 % Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-04-16.58 % foo1
+  fedsrbbrick8  1 demoResc1                2984132 2005-03-08-09.38 % foo1
+
+The second column on the output is the replica number. Another copy will be
+made if Sreplicate is run again. e.g.,
+
+> Sreplicate -rS demoResc1 testdir
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-04-16.58 % Sls
+  fedsrbbrick8  1 demoResc1                3000977 2005-03-08-09.38 % Sls
+  fedsrbbrick8  2 demoResc1                3000977 2005-03-08-09.41 % Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-04-16.58 % foo1
+  fedsrbbrick8  1 demoResc1                2984132 2005-03-08-09.38 % foo1
+  fedsrbbrick8  2 demoResc1                2984132 2005-03-08-09.41 % foo1
+
+. Sbkupsrb - Make a backup replica of a file to the specified "Backup
+Resource".
+It differs from Sreplicate in that if a good copy already exists in
+the "Backup Resource", nothing will be done, while Sreplicate will
+keep on making new replica. Example:
+
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-10.25   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-10.25   foo1
+
+> Sbkupsrb -r -S demoResc1 testdir
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-10.25   Sls
+  fedsrbbrick8  1 demoResc1                3000977 2005-03-08-10.30   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-10.25   foo1
+  fedsrbbrick8  1 demoResc1                2984132 2005-03-08-10.30   foo1
+> Sbkupsrb -r -S demoResc1 testdir
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-10.25   Sls
+  fedsrbbrick8  1 demoResc1                3000977 2005-03-08-10.30   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-10.25   foo1
+  fedsrbbrick8  1 demoResc1                2984132 2005-03-08-10.30   foo1
+
+Note that the second Sbkupsrb does nothing because a good copy already
+exists in demoResc1.
+
+. Ssyncd - Synchronize all copies of a file with the last modified copy. e.g.:
+
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-10.37   Sls
+  fedsrbbrick8  1 demoResc1                3000977 2005-03-08-10.38   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-10.37   foo1
+  fedsrbbrick8  1 demoResc1                2984132 2005-03-08-10.38   foo1
+
+The following command overwrites replica 0 of foo1:
+
+> Sput -n 0 -S demoResc foo2 testdir/foo1
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-10.37   Sls
+  fedsrbbrick8  1 demoResc1                3000977 2005-03-08-10.38   Sls
+  fedsrbbrick8  0 demoResc                 2988703 2005-03-08-10.42 % foo1
+  fedsrbbrick8  1 demoResc1                2984132 2005-03-08-10.38   foo1
+
+Note that the size of foo1 for n=0 changed to 2988703 and the "%" in the 
+sixth column indicates that it is the most recently modified copy.  
+
+> Ssyncd -r testdir
+>  Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-10.37   Sls
+  fedsrbbrick8  1 demoResc1                3000977 2005-03-08-10.38   Sls
+  fedsrbbrick8  0 demoResc                 2988703 2005-03-08-10.42 % foo1
+  fedsrbbrick8  1 demoResc1                2988703 2005-03-08-10.46 % foo1
+
+Note that the copy of foo1 in resource demoResc1 has been updated.
+
+Ssyncd can also be used to broadcast a copy to all the resources in a 
+logical resource using the -a option. e.g.,
+
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc2                3000977 2005-03-14-17.12 % Sls
+  fedsrbbrick8  0 demoResc2                2984132 2005-03-14-17.12 % foo1
+  fedsrbbrick8  0 demoResc2                2988703 2005-03-14-17.12 % foo2
+> Ssyncd -r -aS demoLResc testdir
+> Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc2                3000977 2005-03-14-17.12 % Sls
+  fedsrbbrick8  1 demoResc1                3000977 2005-03-14-17.14 % Sls
+  fedsrbbrick8  2 demoResc                 3000977 2005-03-14-17.14 % Sls
+  fedsrbbrick8  0 demoResc2                2984132 2005-03-14-17.12 % foo1
+  fedsrbbrick8  1 demoResc1                2984132 2005-03-14-17.14 % foo1
+  fedsrbbrick8  2 demoResc                 2984132 2005-03-14-17.14 % foo1
+  fedsrbbrick8  0 demoResc2                2988703 2005-03-14-17.12 % foo2
+  fedsrbbrick8  1 demoResc1                2988703 2005-03-14-17.14 % foo2
+  fedsrbbrick8  2 demoResc                 2988703 2005-03-14-17.14 % foo2
+
+Note that the logical resource contains physical resources demoResc and demoResc1.
+The Ssyncd -a command makes a copy in each of these two resources.
+ 
+. Sget/Sput - The "-n replNum" option is used to specified the replica for
+which the operation is to be performed. e.g.,
+
+> Sput -n 0 -S demoResc foo2 testdir/foo1
+> Sget -n 1 testdir/foo1
+
+. For Sget, if there are more that one copy of a file and the "-n
+replNum" option is not used, the server will pick the copy to be
+downloaded based on the following rules:
+
+i) Always pick copy stored in cache/temporary class first and
+archival/permanent class last.
+
+ii) within the same class, pick the copy that is stored on the same host
+as the host where is client is connected to first.
+
+iii) If i) and ii) are the same, then pick one randomly.
+  
+
+7) Using Containers
+
+. Container - Physical grouping of small files so that they can be
+more efficiently stored on tapes.
+
+. Commands that involves containers - Smkcont, Srmcont, Slscont, Ssyncont, 
+Sreplcont, Sput, Sget, Scp and Sphymove
+
+. Smkcont - Make a container. e.g.,
+
+> Smkcont -S demoResc cont1
+> Slscont -l cont1
+  Container Name                                                          Resource         Size        MaxSize     Count  
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1                           demoResc         0           209715200   0      
+
+. Put files into container. e.g.,
+
+> Sput -r -c cont1 testdir testdir1
+> Sls -l testdir1
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1:
+  fedsrbbrick8  0 demoResc             IC  3000977 2005-03-08-11.30   Sls
+  fedsrbbrick8  0 demoResc             IC  2984132 2005-03-08-11.30   foo1
+
+Note that the 4th column "IC" indicates the file is stored in a
+container.
+ 
+. Slscont - shows information about a container. e.g.,
+
+> Slscont -l cont1
+  Container Name                                                          Resource         Size        MaxSize     Count  
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1                           demoResc         5985109     209715200   2      
+
+Note that "Count" is 2 meaning there are 2 files stored in container
+"cont1".
+
+> Slscont -F cont1 	# list all files stored in container "cont1"
+Containers:
+/sdscbrick8/container/fedsrbbrick8.sdsc/cont1
+  InContainer Objects                                                                                   Offset      Size      
+  /sdscbrick8/home/fedsrbbrick8.sdsc/testdir1/Sls                                                       0           3000977   
+  /sdscbrick8/home/fedsrbbrick8.sdsc/testdir1/foo1                                                      3000977     2984132   
+
+. Srmcont - Remove a container. e.g.,
+
+> Srmcont cont1
+Srmcont: Error removing container '/sdscbrick8/container/fedsrbbrick8.sdsc/cont1': -3295
+CONTAINER_NOT_EMPTY: CONTAINER_NOT_EMPTY
+
+Note that the container is not empty and hence the error message. The "-f" option
+will force the removal of all files stored in the container first and then
+remove the container. e.g.,
+
+> Srmcont -f cont1
+> Sls -l testdir1
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1:
+
+. Ssyncont - Synchronization of container copies. Typically, containers are
+created using a logical resource which contains two or more physical resources.
+In this example, our logical resource "demoLResc" contains two resources:
+"demoResc1" which is a "cache" class resource and "demoResc" which is a 
+"permanent" class resource. e.g.,
+
+> SgetR demoLResc
+Querying Zone=sdscbrick8
+--------------------------- RESULTS ------------------------------
+rsrc_name: demoLResc
+netprefix: srbbrick8.sdsc.edu:NULL.NULL
+rsrc_typ_name: logical
+default_path: 
+phy_default_path: /data/mwan/test/Vault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC
+phy_rsrc_name: demoResc1
+rsrc_typ_name: unix file system
+rsrc_class_name: cache
+user_name: fedsrbbrick8
+domain_desc: sdsc
+zone_id: sdscbrick8
+-----------------------------------------------------------------
+rsrc_name: demoLResc
+netprefix: srbbrick8.sdsc.edu:NULL.NULL
+rsrc_typ_name: logical
+default_path: 
+phy_default_path: /data/mwan/test/Vault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC
+phy_rsrc_name: demoResc
+rsrc_typ_name: unix file system
+rsrc_class_name: permanent
+user_name: fedsrbbrick8
+domain_desc: sdsc
+zone_id: sdscbrick8
+-----------------------------------------------------------------
+ 
+When a file is uploaded into a container, it will be put into the container copy
+on the "cache" resource first. Ssyncont synchronizes the "permanent" copy of the  
+container with the "cache" copy. e.g.,
+
+> Smkcont -S demoLResc cont1
+> Sput -r -c cont1 testdir testdir1
+> Sls -l testdir1
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1:
+  fedsrbbrick8  0 demoResc1            IC  3000977 2005-03-08-12.12   Sls
+  fedsrbbrick8  0 demoResc1            IC  2984132 2005-03-08-12.12   foo1
+
+
+Note that the copies are in "demoResc1" which is a "cache" class resource.
+
+> Ssyncont cont1
+> Sls -l testdir1
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1:
+  fedsrbbrick8  0 demoResc1            IC  3000977 2005-03-08-12.12   Sls
+  fedsrbbrick8  1 demoResc             IC  3000977 2005-03-08-12.12   Sls
+  fedsrbbrick8  0 demoResc1            IC  2984132 2005-03-08-12.12   foo1
+  fedsrbbrick8  1 demoResc             IC  2984132 2005-03-08-12.12   foo1
+> Slscont -l cont1
+  Container Name                                                          Resource         Size        MaxSize     Count  
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1                           demoResc         5985109     209715200   2      
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1                           demoResc1        5985109     209715200   2      
+
+Note that we now have two copies of the container.
+
+> Sput -c cont1 foo2 testdir1
+> Sls -l testdir1
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1:
+  fedsrbbrick8  0 demoResc1            IC  3000977 2005-03-08-12.12   Sls
+  fedsrbbrick8  1 demoResc             IC  3000977 2005-03-08-12.12   Sls
+  fedsrbbrick8  0 demoResc1            IC  2984132 2005-03-08-12.12   foo1
+  fedsrbbrick8  1 demoResc             IC  2984132 2005-03-08-12.12   foo1
+  fedsrbbrick8  0 demoResc1            IC  2988703 2005-03-08-12.17   foo2
+
+Note that foo2 is now only in the "demoResc1" which is a "cache" class resource.
+
+> Ssyncont -d cont1	# "-d" means delete the 'cache" copy after sync 
+> Sls -l testdir1
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1:
+  fedsrbbrick8  1 demoResc             IC  3000977 2005-03-08-12.12   Sls
+  fedsrbbrick8  1 demoResc             IC  2984132 2005-03-08-12.12   foo1
+  fedsrbbrick8  1 demoResc             IC  2988703 2005-03-08-12.17   foo2
+> Slscont -l cont1
+  Container Name                                                          Resource         Size        MaxSize     Count  
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1                           demoResc         8973812     209715200   3      
+
+Note that after "Ssyncont -d", there is only one container copy.
+
+. Family of containers - When a container is full, the SRB server automatically 
+renames the full container "myContainer" to "myContainer.NNNN" where NNNN is a 
+random integer number. The server then creates an  empty  container  with  the
+original container name "myContainer". In effect, this scheme creates a family of 
+containers and the container never appears to run out of space from a client
+standpoint. The "-a" option is used indicate that the operation is for the 
+whole family. e.g.,
+
+> Smkcont -S demoLResc -s 4000000 cont1 # container size is 4 MB so it will overflow
+> Sput -r -c cont1 testdir testdir1
+> Slscont -la cont1	# "-a" to indicate listing the whole family 
+  Container Name                                                          Resource         Size        MaxSize     Count  
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1                           demoResc1        2988703     4000000     1      
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1.1110315260                demoResc1        5985109     4000000     2      
+ 
+Note the first container is full and has been renamed to "cont1.1110315260"
+
+> Ssyncont -a cont1 	# sync the family of container
+> Slscont -la cont1
+  Container Name                                                          Resource         Size        MaxSize     Count  
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1                           demoResc         2988703     4000000     1      
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1                           demoResc1        2988703     4000000     1      
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1.1110315260                demoResc         5985109     4000000     2      
+  /sdscbrick8/container/fedsrbbrick8.sdsc/cont1.1110315260                demoResc1        5985109     4000000     2      
+
+> Srmcont -af cont1	# Remove all containers in the family
+
+. Bulk operations with containers - containers also work with bulk operations.
+
+Example - Bulk Sput into a container:
+> Smkcont cont1
+> Sput -bc cont1 testdir testdir1
+> Sls -l testdir1
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1:
+  fedsrbbrick8  0 demoResc             IC  3000977 2005-03-08-13.07   Sls
+  fedsrbbrick8  0 demoResc             IC  2984132 2005-03-08-13.07   foo1
+  fedsrbbrick8  0 demoResc             IC  2988703 2005-03-08-13.07   foo2
+
+Example - Bulk Phymove into a container
+> Sput -b testdir testdir2
+> Sls -l testdir2
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir2:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-13.10   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-13.10   foo1
+  fedsrbbrick8  0 demoResc                 2988703 2005-03-08-13.10   foo2
+
+> Sphymove -bc cont1 testdir2	# bulk move files in testdir2 into container "cont1"
+> Sls -l testdir2
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir2:
+  fedsrbbrick8  0 demoResc             IC  3000977 2005-03-08-13.10   Sls
+  fedsrbbrick8  0 demoResc             IC  2984132 2005-03-08-13.10   foo1
+  fedsrbbrick8  0 demoResc             IC  2988703 2005-03-08-13.10   foo2
+
+. Associating a container with a collection - The "Smkdir -c" command can
+be used to associate a container with the collection being made. Then all
+files placed in this collection will be put into the associated container.
+e.g.,
+
+> Smkcont cont1
+> Smkdir -c cont1 testdir1
+> Sput foo1 testdir1
+> Sls -l testdir1
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir1:
+  fedsrbbrick8  0 demoResc             IC  2984132 2005-03-14-17.32   foo1
+> Slscont -F cont1
+Containers:
+/sdscbrick8/container/fedsrbbrick8.sdsc/cont1
+  InContainer Objects                                                                                   Offset      Size      
+  /sdscbrick8/home/fedsrbbrick8.sdsc/testdir1/foo1                                                      0           2984132   
+
+Note that the new file "foo1" is now stored in container "cont1".
+
+8) Ssh - The SRB shell. Similar to UNIX shells, Ssh executes commands (both normal 
+UNIX commands and S-commands) read from a terminal or a file. The advantage of
+using Ssh instead of the normal sequence of Sinit->Scommands...->Sexit is
+the Ssh maintains the connection to the SRB server until the Ssh shell is
+terminated which greatly reduces the connection overhead and improves interactivity.
+In the normal Sinit->Scommands...->Sexit sequence, a new connection to the SRB 
+server is made for each individual Scommand.  
+
+. Sinit and Sexit is NOT needed when running Ssh.
+. The Ssh can be run interactively as a standalone shell. e.g.,
+> Ssh		# type in Ssh to start the shell. A "Ssh >" prompt will be displayed
+Ssh > Sput -b testdir	# start type in Scommands
+Ssh > Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-15.26   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-15.26   foo1
+  fedsrbbrick8  0 demoResc                 2988703 2005-03-08-15.26   foo2
+Ssh > Sls -l testdir > foo
+Ssh > more foo
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-15.26   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-15.26   foo1
+  fedsrbbrick8  0 demoResc                 2988703 2005-03-08-15.26   foo2
+Ssh > rm foo
+Ssh > exit
+
+The drawback of the standalone Ssh is it does not support some of the UNIX shell
+specific commands and properties. e.g.,
+Ssh > setenv foo foo1
+sh: setenv: command not found
+
+. Using Ssh to run a UNIX shell - To get around the above problem, use the Ssh to 
+run a UNIX shell to create an SRB enabled interactive shell. e.g.,
+
+> Ssh -c bash
+bash-2.05a$   # Now we are in the bash interactive shell. This bash shell 
+	      # inherited a connection to the SRB server from Ssh 
+bash-2.05a$ Sput -b testdir
+bash-2.05a$ Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-15.48   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-15.48   foo1
+  fedsrbbrick8  0 demoResc                 2988703 2005-03-08-15.48   foo2
+bash-2.05a$ !Sls	# it understands the bash special char '!'
+Sls -l testdir
+/sdscbrick8/home/fedsrbbrick8.sdsc/testdir:
+  fedsrbbrick8  0 demoResc                 3000977 2005-03-08-15.48   Sls
+  fedsrbbrick8  0 demoResc                 2984132 2005-03-08-15.48   foo1
+  fedsrbbrick8  0 demoResc                 2988703 2005-03-08-15.48   foo2
+bash-2.05a$ Sget -r testdir1
+bash-2.05a$ ls -l testdir1	# It can do normal UNIX command
+total 8768
+-rw-r-----    1 mwan     sys200    3000977 Mar  8 15:53 Sls
+-rw-r-----    1 mwan     sys200    2984132 Mar  8 15:53 foo1
+-rw-r-----    1 mwan     sys200    2988703 Mar  8 15:53 foo2
+bash-2.05a$ foo=foo1	# execute commands specific to bash
+bash-2.05a$ export foo
+bash-2.05a$ exit	# exit the srb enabled bash shell
+
+. The SRB enabled UNIX shell can only be created for shells that are
+based on the Bourne Shell, e.g., sh, bash, ksh and perl. Shells that
+are based on the C shell such as csh and tcsh will NOT work because
+these shells do not allow the inheritance of file descriptors
+(connection to the SRB server) from their parents.
+
+. Using Ssh to run script, e.g.,
+> Ssh -c myShellScript
+
+where myShellScript is a shell script written in Bourne Shell based shells. 
+myShellScript should not contain any Sinit nor Sexit statements. 
+
+9) Hints for writing scripts that contain Scommands. There are a couple ways
+to do it:
+
+    i) Ssh -c myShellScript
+    This will use a single connection to the SRB server to execute all
+    Scommands in the script. 
+
+    ii) Sinit->Scommands...->Sexit sequence in the shell script.  
+    This will work most of the time but with some combinations of OS and
+    UNIX shell, the Scommand may be confused about the session ID. In this
+    case, do the following:
+
+        a) cd to ~/.srb and type in "cp .MdasEnv .MdasEnv.script"
+
+	b) setenv mdasEnvFile ~/.srb/.MdasEnv.script
+
+</pre>
+</html>
