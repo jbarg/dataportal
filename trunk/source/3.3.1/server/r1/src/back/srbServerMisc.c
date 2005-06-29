@@ -140,7 +140,7 @@ execCommand (char *command, char *commandArgv, int lsock, int portalFlag)
     int inx = 1;
     int c;
     int len = 0;
-
+    int openQuote = 0;
 
     sprintf (commandBuf, "%s/../%s/%s", 
      (char *) getSrbDataDir(), (char *) COMMAND_DIR, command);
@@ -150,31 +150,38 @@ execCommand (char *command, char *commandArgv, int lsock, int portalFlag)
     av[0] = commandBuf;
 
     if (commandArgv != NULL) {
-      inpPtr = strdup (commandArgv);
-      outPtr = inpPtr;
-      while ((c = *inpPtr) != '\0') {
-	if (c == ' ') {
-	    if (len > 0) {	/* end of a argv */
-		*inpPtr = '\0'; /* mark the end */
-		av[inx] = outPtr;
-		/* reset inx and pointer */
-		inpPtr++;
-		outPtr = inpPtr;
-		inx ++;
-		len = 0;
-	    } else {	/* skip over blanks */
-		inpPtr++;
-		outPtr = inpPtr;
-	    }
-	} else {
-	    len ++;
-	    inpPtr++;
-	}
-      }
-      if (len > 0) {      /* handle the last argv */  
-        av[inx] = outPtr;
-	inx++;
-      }
+        if ((c == ' ' && openQuote == 0) || openQuote == 2) {
+            openQuote = 0;
+            if (len > 0) {      /* end of a argv */
+                *inpPtr = '\0'; /* mark the end */
+                av[inx] = outPtr;
+                /* reset inx and pointer */
+                inpPtr++;
+                outPtr = inpPtr;
+                inx ++;
+                len = 0;
+            } else {    /* skip over blanks */
+                inpPtr++;
+                outPtr = inpPtr;
+            }
+        } else if (c == '\'' || c == '\"') {
+            openQuote ++;
+            if (openQuote == 1) {
+                /* skip the quote */
+                inpPtr++;
+                outPtr = inpPtr;
+            }
+        } else if (c == '\'' || c == '\"') {
+            openQuote ++;
+            if (openQuote == 1) {
+                /* skip the quote */
+                inpPtr++;
+                outPtr = inpPtr;
+            }
+        } else {
+            len ++;
+            inpPtr++;
+        }
     }
 
     av[inx] = NULL;	/* terminate with a NULL */ 

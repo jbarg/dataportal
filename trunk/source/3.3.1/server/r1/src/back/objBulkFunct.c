@@ -4260,7 +4260,7 @@ char *buf, int *bufOffset)
 {
     srb_long_t retVal = 0;
     int srcExfInx;
-    int toread, space;
+    srb_long_t toread;
     srb_long_t bytesCopied;
     char *bufptr;
     int readLen, nbytes;
