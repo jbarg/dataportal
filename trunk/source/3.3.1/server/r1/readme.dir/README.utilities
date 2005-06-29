@@ -1,0 +1,164 @@
+NOTE: Check http://www.npaci.edu/DICE/srb for an updated version of this 
+document.
+For Installation and Use of Client Utilities:
+ a. In the following, we assume that a SRB Client has been 
+	compiled successfully on a host machine. 
+    In the discussion, the directory where CL utilities reside is 
+	called utilities.
+ b. We call the commands that can be issued as Client Utilities 
+	as Scommands.
+ 
+(2) To run any of the Scommands, one needs to setup some environment 
+parameters. There are two ways to accomplish this:
+
+ a) Have an environment file called .MdasEnv. This file is located in 
+ the .srb sub-directory in your home directory. This file contains 
+ information for initializing the SRB client environment. A template of 
+ the file can be found in utilities/envFiles/.MdasEnv of this package. 
+ This is a text file that contains lines of parameter/value pair where
+ each values are in quote. The parameters are given in the following:
+   
+   i) mdasCollectionHome - This is equivalent to the user's home
+   directory (collect) and is created by the MCAT administrator
+   at the time of the user registration.
+
+   ii) mdasDomainHome - This is the domain name associated with the
+   user. This domain name is assigned to the user at the time of
+   the user registration.
+   
+   iii) srbUser - This is the user name of the user. This name is assigned
+   to the user at the time of the user registration.
+
+   iv) srbHost - This is the default host address of the SRB server
+   when a SRB client initiates a SRB connection. This parameter can be
+   overridden at run time by setting the environment variable 'srbHost'.
+
+   v) srbPort (optional) - This is the port number of the SRB server.  
+   If 'srbPort' is not specified, it will default to port number 5544.
+
+   vi) AUTH_SCHEME (optional) - This parameter defines the authentication 
+   scheme to be used. Valid input values are:
+
+           'ENCRYPT1' - A password scheme with the passwords encrypted
+           going from clients to servers.
+
+           'GSI_AUTH' - Use the GSI authentication scheme. If this option
+           is chosen, an additional  parameter SERVER_DN given below is
+           required.
+
+           'GSI_DELEGATE' - Use the GSI Delegation (proxy) certificate for 
+	   authentication. The advantage is that this certificate can be 
+	   passed from server to server whereby the user's identity continues 
+	   to be maintained across servers and across zones. 
+	   This scheme solves the cross zone authentication issues. A slight 
+	   drawback is that the overhead is somewhat higher than the
+	   normal 'GSI_AUTH' scheme. If this option is chosen, an additional  
+	   parameter SERVER_DN given below is required.
+
+           'GSI_SECURE_COMM' - Use the GSI authentication scheme and use
+           the GSI I/O library for all socket communication between client
+           and server. If this option is chosen, an additional  parameter
+           SERVER_DN given below is required.
+
+           If this parameter is not defined, the ENCRYPT1 Authentication scheme
+           will be used.
+
+   vii) SERVER_DN (optional) - This is the "Distinguish Name" of the user 
+   running the SRB server. Value for this parameter can be obtained from
+   the SRB administrator. This input is meaningful only if the
+   authentication scheme 'GSI_AUTH' or 'GSI_SECURE_COMM' is chosen.
+
+   viii) defaultResource (optional but recommended) - The reosurce to use if 
+   a user does not specify a resource in some Scommands (Sput, Scp, 
+   Sreplicate, etc).
+
+   ix) mcatZone (optional but recommended) - The Zone associated with this 
+   user. If this parameter is not given, the SRB server will query the
+   MCAT for it. But this will add to the overhead.
+
+ b) Use the UNIX environment variables to specify these parameters.
+ This method of specification overrides those specified using the
+ .MdasEnv file.  Environment variables recognized by the Scommands are:
+
+   srbUser - The client user
+
+   mdasDomainName - The domain of the client user
+   
+   srbHost - The hostname of the SRB-server
+
+   srbPort - The port number of the SRB-server (optional)
+
+   mdasResourceName or defaultResource - The default resource
+
+   mdasCollectionName - The current working collection.
+
+   srbAuth - The password.
+
+   AUTH_SCHEME - The authentication scheme to be used. 
+
+ 
+   SERVER_DN - The distinguished name of the server user (valid only for
+   GSI authentication).
+
+   mcatZone (optional but recommended) - The Zone associated with this
+   user.
+
+   Other relevant environment variables :
+
+   mdasEnvFile - Instead of the .srb/.MdasEnv file, this env variable
+   specifies the alternative path for this file.
+
+   mdasAuthFile - Instead of the .srb/.MdasAuth file, this env variable
+   specifies the alternative path for this file.
+
+(3) Setting up user authentication - The SRB software can be built to
+    handle ENCRYPT1 by default or to include GSI_AUTH if the --enable-gsi-auth
+    option of the "configure" command is used when configuring the software
+    for build.
+
+    At runtime, a client may choose an authentication scheme to use by
+    defining the AUTH_SCHEME parameter in the .MdasEnv file. Each
+    authentication scheme requires a different setup by the user.
+
+    Each authentication scheme requires a different setup by the user.
+
+        i)ENCRYPT1 setup - This is a plain text password setup where 
+	the password is generated at the time of user registration with
+        the MCAT catalog. Upon receiving this password from the MCAT
+        administrator, a user should place it in a file named ~/.srb/.MdasAuth
+        which will be used by the SRB library to authenticate the user.
+
+        ii) GSI_AUTH setup -  Please read README.gsi and follow the HTTP links
+        for obtaining certificate/key and GSI server environment setup
+        suggested by in the document. Once the certification/key has been
+        obtained and converted to PEM format for GSI use, look into the cert
+        pem file with a text editor and locate the user "Distinguish Name"
+        string. The string representing the "Distinguish Name" should look
+        like the following:
+
+           subject=/C=US/O=NPACI/OU=SDSC/UID=srb/CN=Storage Resource Broker/
+           Email=srb@sdsc.edu
+
+        Copy this string and register it as the "Distinguish Name" of the
+        SRB server user. Supply this string to all clients for use as the
+        SERVER_DN input in the clients' ~/.srb/.MdasEnv files.
+ 
+
+(4) Every time, you use the Client Utilities, from a new shell,
+	run 'Sinit' to initialize the environment and to check
+	connection with SRBMaster. Running Sinit in the middle
+	of a session will reset the client environmental file 
+	variables.
+(5) Use Sexit when finished with using Scommands.
+
+(6) Use Serror to find the meaning of error numbers generated
+        when running Scommands. The SRB_SRC env variable which defines the
+        SRB source directory must be defined to be the 'src' sub-directory 
+	in the SRB's directory.
+
+(7) Man pages for Scommands are in directory utilities/man.
+	Set MANPATH appropriately or use "man -M CLUTILDIR/man" to see the 
+	man pages.
+
+
+ 

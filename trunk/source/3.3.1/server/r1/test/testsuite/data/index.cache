@@ -1,0 +1,47 @@
+owner=mailto:frost&default_document=README.html&serveall=true
+
+file=_index.html&content=text/html&title=File _index.html
+file=index.html&content=text/html&title=File index.html
+file=Makefile&content=text/plain&title=File Makefile
+file=srbhello.c&content=text/plain&title=File srbhello.c
+file=srbmkdir.c&content=text/plain&title=File srbmkdir.c
+file=srbrmdir.c&content=text/plain&title=File srbrmdir.c
+file=srbfchmod.c&content=text/plain&title=File srbfchmod.c
+file=srbfcreate.c&content=text/plain&title=File srbfcreate.c
+file=srbUserArgs.h&content=text/plain&title=File srbUserArgs.h
+file=testsuite&content=text/plain&title=File testsuite
+file=srbfstat.c&content=text/plain&title=File srbfstat.c
+file=srbfdel.c&content=text/plain&title=File srbfdel.c
+file=MDAS-logo.gif&content=image/gif&title=File MDAS-logo.gif
+file=srbUserArgs.c&content=text/plain&title=File srbUserArgs.c
+file=testargs.c&content=text/plain&title=File testargs.c
+file=MDAS-logo.rgb&content=image/rgb&title=File MDAS-logo.rgb
+file=srbdbcreate.c&content=text/plain&title=File srbdbcreate.c
+file=srbodel.c&content=text/plain&title=File srbodel.c
+file=srbfget.c&content=text/plain&title=File srbfget.c
+file=srbfseek.c&content=text/plain&title=File srbfseek.c
+file=srbhostinfo.c&content=text/plain&title=File srbhostinfo.c
+file=srbocreate.c&content=text/plain&title=File srbocreate.c
+file=README.html&title=SRBhello - SRB client example programs&content=text/html
+file=srbvaultinfo.c&content=text/plain&title=File srbvaultinfo.c
+file=srbmodcoll.c&content=text/plain&title=File srbmodcoll.c
+file=srblsdir.c&content=text/plain&title=File srblsdir.c
+file=srbftpbrowse.c&content=text/plain&title=File srbftpbrowse.c
+file=srbchkauth.c&content=text/plain&title=File srbchkauth.c
+file=srboget.c&content=text/plain&title=File srboget.c
+file=srbmkcoll.c&content=text/plain&title=File srbmkcoll.c
+file=srblscoll.c&content=text/plain&title=File srblscoll.c
+file=srbodsinfo.c&content=text/plain&title=File srbodsinfo.c
+file=srboddinfo.c&content=text/plain&title=File srboddinfo.c
+file=rs1.tiff&content=image/tiff&title=File rs1.tiff
+file=srbdbseek.c&content=text/plain&title=File srbdbseek.c
+file=srboseek.c&content=text/plain&title=File srboseek.c
+file=srbocopy.c&content=text/plain&title=File srbocopy.c
+file=srbomove.c&content=text/plain&title=File srbomove.c
+file=srbaudittrail.c&content=text/plain&title=File srbaudittrail.c
+file=srbdbdel.c&content=text/plain&title=File srbdbdel.c
+file=srbdbget.c&content=text/plain&title=File srbdbget.c
+file=SRBhello.tar.gz&encoding=x-gzip&content=application/octet-stream&title=File SRBhello.tar.gz
+file=helpsuite&content=text/plain&title=File helpsuite
+file=_index.html&content=text/html&title=File _index.html
+file=_index.html.bak&content=text/plain&title=File _index.html.bak

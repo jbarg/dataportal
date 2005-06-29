@@ -1,0 +1,161 @@
+include ../../../mk/mk.config
+
+# If javaDir is defined (via configure), then use the javac under that
+# directory, otherwise use just "javac" to use the one in the path (if
+# there is one).
+ifdef $(javaDir)
+myjavac = $(javaDir)/bin/javac
+else
+# Either just 'javac' or
+# JAVADIR/javac if the environment variable JAVADIR is defined
+myjavac = $(JAVADIR)javac
+endif
+
+
+
+.SUFFIXES: .java .class
+
+CLASSDIR = ../../../jargon/bin  # this was ../../../java/classes but now use Jargon
+THIS_CLASSDIR = ../classes
+THIS_CLASSDIR_LONG = ../classes/edu/sdsc/SrbAdmin
+THIS_CLASSDIR2_LONG = ../classes/edu/sdsc/SrbBrowser
+
+myCLASSPATH = $(THIS_CLASSDIR):$(CLASSDIR)
+
+# TARGETS
+
+TARGETS:= $(THIS_CLASSDIR_LONG)/mcatAdmin.class
+
+LIB_CLASS = \
+$(THIS_CLASSDIR2_LONG)/SrbElement.class\
+$(THIS_CLASSDIR2_LONG)/SrbCellRenderer.class\
+$(THIS_CLASSDIR_LONG)/mcatNewUser.class  	\
+$(THIS_CLASSDIR_LONG)/mcatNewLoc.class $(THIS_CLASSDIR_LONG)/mcatNewToken.class \
+$(THIS_CLASSDIR_LONG)/mcatNewResource.class  \
+$(THIS_CLASSDIR_LONG)/mcatNewLogResc.class $(THIS_CLASSDIR_LONG)/mcatAddLogResc.class \
+$(THIS_CLASSDIR_LONG)/mcatNewGroup.class \
+$(THIS_CLASSDIR_LONG)/mcatModUser.class \
+$(THIS_CLASSDIR_LONG)/mcatNewCompoundResc.class \
+$(THIS_CLASSDIR_LONG)/mcatAddToCompResc.class \
+$(THIS_CLASSDIR_LONG)/mcatDelUser.class \
+$(THIS_CLASSDIR_LONG)/mcatDelResc.class \
+$(THIS_CLASSDIR_LONG)/mcatDelLoc.class \
+$(THIS_CLASSDIR_LONG)/mcatNewDomain.class \
+$(THIS_CLASSDIR_LONG)/mcatShowZonesDetail.class \
+$(THIS_CLASSDIR_LONG)/mcatShowZones.class \
+$(THIS_CLASSDIR_LONG)/mcatModZone.class \
+$(THIS_CLASSDIR_LONG)/mcatNewZone.class \
+$(THIS_CLASSDIR_LONG)/mcatDelZone.class \
+$(THIS_CLASSDIR_LONG)/mcatShowRescsDetail.class \
+$(THIS_CLASSDIR_LONG)/mcatShowRescs.class \
+$(THIS_CLASSDIR_LONG)/mcatDelLogResc.class \
+$(THIS_CLASSDIR_LONG)/mcatShowTokens.class \
+$(THIS_CLASSDIR_LONG)/mcatShowUsers.class \
+$(THIS_CLASSDIR_LONG)/mcatRmFromLogResc.class \
+$(THIS_CLASSDIR_LONG)/mcatModUserGroup.class \
+$(THIS_CLASSDIR_LONG)/mcatConnect.class \
+
+
+all: $(TARGETS)
+
+clean:
+	rm -f $(THIS_CLASSDIR_LONG)/*.class
+	rm -f $(THIS_CLASSDIR2_LONG)/*.class
+
+# DEPENDENCIES
+
+$(THIS_CLASSDIR_LONG)/mcatAdmin.class: mcatAdmin.java mcatConnect.java $(LIB_CLASS)
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR2_LONG)/SrbElement.class: SrbElement.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR2_LONG)/SrbCellRenderer.class: SrbCellRenderer.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewZone.class: mcatNewZone.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatShowZones.class: mcatShowZones.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatShowZonesDetail.class: mcatShowZonesDetail.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatDelZone.class: mcatDelZone.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatModZone.class: mcatModZone.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewUser.class: mcatNewUser.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewLoc.class: mcatNewLoc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewToken.class: mcatNewToken.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewResource.class: mcatNewResource.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewLogResc.class: mcatNewLogResc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatAddLogResc.class: mcatAddLogResc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewGroup.class: mcatNewGroup.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatModUser.class: mcatModUser.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatModUserGroup.class: mcatModUserGroup.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewCompoundResc.class: mcatNewCompoundResc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatAddToCompResc.class: mcatAddToCompResc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatDelUser.class: mcatDelUser.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatDelResc.class: mcatDelResc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatDelLogResc.class: mcatDelLogResc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatShowTokens.class: mcatShowTokens.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatDelLoc.class: mcatDelLoc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatNewDomain.class: mcatNewDomain.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatShowRescs.class: mcatShowRescs.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatShowRescsDetail.class: mcatShowRescsDetail.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatShowUsers.class: mcatShowUsers.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatRmFromLogResc.class: mcatRmFromLogResc.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<
+
+$(THIS_CLASSDIR_LONG)/mcatConnect.class: mcatConnect.java
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $< mcatAdmin.java
+
+
+# BUILD COMMANDS
+
+.java.class:
+	$(myjavac) -g -classpath $(myCLASSPATH) -d $(THIS_CLASSDIR) $<

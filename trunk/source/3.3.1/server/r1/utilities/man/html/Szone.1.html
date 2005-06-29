@@ -1,0 +1,130 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Szone</TITLE>
+</HEAD><BODY>
+<H1>Szone</H1>
+Section: User SRB Commands (1)<BR>Updated: Jun 2004 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Szone - modifies metadata information about SRB data objects.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Szone</B>
+
+[<B>-h|-l|-r|-M</B>]
+
+<I>zone locnDesc portNumber <A HREF="mailto:adminUserName@Domain">adminUserName@Domain</A> contactInformation comment</I>
+
+<P>
+<B>Szone</B>
+
+[<B>-C</B>]
+
+<I>oldZoneName newZoneName</I>
+
+<P>
+<B>Szone</B>
+
+[<B>-U</B>]
+
+<I>zone userName DomainName</I>
+
+<P>
+<B>Szone</B>
+
+[<B>-L</B>]
+
+<I>zone newLocalFlagValue</I>
+
+<P>
+<B>Szone</B>
+
+[<B>-S</B>]
+
+<I>zone newStatusValue</I>
+
+<P>
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Szone </B>
+
+inserts and modifies information about zones
+<I>dataName</I>.
+
+<P>
+The Stoken utility can be used to find the current zone information.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-l </B>
+
+<DD>
+inserts a local zone
+<DT><B>-r </B>
+
+<DD>
+inserts a remote zone
+<DT><B>-M</B>
+
+<DD>
+modifies information about an existing zone. If you want to change a particular 
+information, put the new value at the appropriate argument position. If an item 
+is not being changed just use a quoted empty string ('') in that position.
+<DT><B>-C </B>
+
+<DD>
+changes the name of a zone. It changes the zone name for all associated users  and also their collection name if it starts with the old zone name.
+<DT><B>-U </B>
+
+<DD>
+changes the zone name for a user
+<DT><B>-L </B>
+
+<DD>
+changes whether a zone is local or remote. Use 1 to make it local and 0 to make it 
+remote. Only one zone can be local for each MCAT
+<DT><B>-S </B>
+
+<DD>
+changes the status of the zone. All zones are normally active (= 1).
+<P>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/SgetU.1.html">SgetU</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Stoken.1.html">Stoken</A></B>(1),
+
+<P>
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

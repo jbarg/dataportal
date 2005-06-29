@@ -1,0 +1,977 @@
++ HOST=torah.sdsc.edu
++ storeset=unix-sdsc  ora-sdsc
++ [  = Windows_NT ]
++ binDir=../../utilities/bin
++ DATA_FILES=data1 data2 data3 data4 datadb1.xml dataempty
++ TMP_DIR=../../../TMP
++ i=1
++ [ 20000830153215 =  ]
++ testid=20000830153215
+++ date +%Y-%m-%d
++ testdate=2000-08-30
++ echo TESTID = 20000830153215
+TESTID = 20000830153215
++ echo TESTDATE = 2000-08-30
+TESTDATE = 2000-08-30
++ ../../utilities/bin/Sinit -v
+Client Release = SRB1.1.7, API version = B.
+Server Release = SRB1.1.7, API version = B.
++ ../../utilities/bin/SgetU -d -Y 0
+--------------------------- RESULTS ------------------------------
+user_name :testuser
+domain_desc :sdsc
+-----------------------------------------------------------------
++ ../../utilities/bin/Smkdir Stest3Dev20000830153215
++ ../../utilities/bin/Scd Stest3Dev20000830153215
++ ../../utilities/bin/Smkdir Ssub1
++ ../../utilities/bin/Sls
+/home/testuser.sdsc/Stest3Dev20000830153215:
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/Scd Ssub1
++ ../../utilities/bin/Sput -S unix-sdsc data1 data1&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/data1&COPIES=all/data1 (source=data1) 	2792 bytes stored in 0.56 seconds 	(0.005 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman1.20000830153215 -N 2 -D data1
+Ticket has been generated and stored in ../../../TMP/roman1.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman1.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  data1                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman1.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  data1                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D data1
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  D9a7C3jkrr                      ticketuser                      sdsc                          
+++ expr 1 + 1
++ i=2
++ ../../utilities/bin/Sput -S unix-sdsc data2 data2&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/data2&COPIES=all/data2 (source=data2) 	5584 bytes stored in 0.44 seconds 	(0.012 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman2.20000830153215 -N 2 -D data2
+Ticket has been generated and stored in ../../../TMP/roman2.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman2.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  data2                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman2.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  data2                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D data2
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DRbwF8PPyC                      ticketuser                      sdsc                          
+++ expr 2 + 1
++ i=3
++ ../../utilities/bin/Sput -S unix-sdsc data3 data3&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/data3&COPIES=all/data3 (source=data3) 	8376 bytes stored in 0.41 seconds 	(0.019 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman3.20000830153215 -N 2 -D data3
+Ticket has been generated and stored in ../../../TMP/roman3.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman3.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  data3                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman3.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  data3                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D data3
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DycWIdokHK                      ticketuser                      sdsc                          
+++ expr 3 + 1
++ i=4
++ ../../utilities/bin/Sput -S unix-sdsc data4 data4&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/data4&COPIES=all/data4 (source=data4) 	11168 bytes stored in 0.40 seconds 	(0.027 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman4.20000830153215 -N 2 -D data4
+Ticket has been generated and stored in ../../../TMP/roman4.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman4.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  data4                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman4.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  data4                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D data4
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DibnLiURQT                      ticketuser                      sdsc                          
+++ expr 4 + 1
++ i=5
++ ../../utilities/bin/Sput -S unix-sdsc datadb1.xml datadb1.xml&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/datadb1.xml&COPIES=all/datadb1.xml (source=datadb1.xml) 	5147 bytes stored in 0.44 seconds 	(0.011 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman5.20000830153215 -N 2 -D datadb1.xml
+Ticket has been generated and stored in ../../../TMP/roman5.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman5.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  datadb1.xml                     /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman5.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  datadb1.xml                     /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D datadb1.xml
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DZcLQnrmZ3                      ticketuser                      sdsc                          
+++ expr 5 + 1
++ i=6
++ ../../utilities/bin/Sput -S unix-sdsc dataempty dataempty&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/dataempty&COPIES=all/dataempty (source=dataempty) 	0 bytes stored in 0.33 seconds 	(0.000 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman6.20000830153215 -N 2 -D dataempty
+Ticket has been generated and stored in ../../../TMP/roman6.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman6.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  dataempty                       /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman6.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  dataempty                       /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D dataempty
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DJbcTsXT8c                      ticketuser                      sdsc                          
+++ expr 6 + 1
++ i=7
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/SgetD -Y 0 -L 500 Ssub1/*
+--------------------------- RESULTS ------------------------------
+data_name :data1
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/14/55/TEST.data1.1926254207.967674740
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data2
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/13/76/TEST.data2.529585439.967674744
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data3
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/15/0/TEST.data3.1280400320.967674748
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data4
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/14/23/TEST.data4.2031215200.967674751
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :datadb1.xml
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/14/44/TEST.datadb1.xml.634546433.967674754
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :dataempty
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/15/67/TEST.dataempty.1385361313.967674758
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest3Dev20000830153215:
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1:
+  testuser    0 unix-sdsc           2792 2000-08-30-15.32  data1
+  testuser    0 unix-sdsc           5584 2000-08-30-15.32  data2
+  testuser    0 unix-sdsc           8376 2000-08-30-15.32  data3
+  testuser    0 unix-sdsc          11168 2000-08-30-15.32  data4
+  testuser    0 unix-sdsc           5147 2000-08-30-15.32  datadb1.xml
+  testuser    0 unix-sdsc              0 2000-08-30-15.32  dataempty
++ ../../utilities/bin/Smkdir Ssub2
++ ../../utilities/bin/Smv Ssub1/data1 Ssub2
++ ../../utilities/bin/Smv Ssub1/data2 Ssub2
++ ../../utilities/bin/Smv Ssub1/data3 Ssub2
++ ../../utilities/bin/Smv Ssub1/data4 Ssub2
++ ../../utilities/bin/Smv Ssub1/datadb1.xml Ssub2
++ ../../utilities/bin/Smv Ssub1/dataempty Ssub2
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest3Dev20000830153215:
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1:
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2:
+  testuser    0 unix-sdsc           2792 2000-08-30-15.32  data1
+  testuser    0 unix-sdsc           5584 2000-08-30-15.32  data2
+  testuser    0 unix-sdsc           8376 2000-08-30-15.32  data3
+  testuser    0 unix-sdsc          11168 2000-08-30-15.32  data4
+  testuser    0 unix-sdsc           5147 2000-08-30-15.32  datadb1.xml
+  testuser    0 unix-sdsc              0 2000-08-30-15.32  dataempty
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest3Dev20000830153215:
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1:
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2:
+  testuser    0 unix-sdsc           2792 2000-08-30-15.32  data1
+  testuser    0 unix-sdsc           5584 2000-08-30-15.32  data2
+  testuser    0 unix-sdsc           8376 2000-08-30-15.32  data3
+  testuser    0 unix-sdsc          11168 2000-08-30-15.32  data4
+  testuser    0 unix-sdsc           5147 2000-08-30-15.32  datadb1.xml
+  testuser    0 unix-sdsc              0 2000-08-30-15.32  dataempty
++ ../../utilities/bin/SgetD -Y 0 -L 200 Ssub1/*
++ ../../utilities/bin/SgetD -Y 0 -L 200 Ssub2/*
+--------------------------- RESULTS ------------------------------
+data_name :data1
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/14/55/TEST.data1.1926254207.967674740
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data2
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/13/76/TEST.data2.529585439.967674744
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data3
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/15/0/TEST.data3.1280400320.967674748
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data4
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/14/23/TEST.data4.2031215200.967674751
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :datadb1.xml
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/14/44/TEST.datadb1.xml.634546433.967674754
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :dataempty
+data_typ_name :generic
+path_name :/projects/mdas/srb/SRBVaultTest/testuser.sdsc/15/67/TEST.dataempty.1385361313.967674758
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :unix-sdsc
+container_name :
+-----------------------------------------------------------------
++ i=1
++ j=1
++ ../../utilities/bin/Srmticket -F ../../../TMP/roman2.20000830153215
++ [ 1 -lt 3 ]
++ ../../utilities/bin/Stcat -T ../../../TMP/roman1.20000830153215 torah.sdsc.edu
++ wc data1 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman1.20000830153215
++ wc data1 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830153215.tmp
+++ expr 1 + 1
++ i=2
++ ../../utilities/bin/Stcat -T ../../../TMP/roman2.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3238"
++ wc data2 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 data2
+      0       0       0 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data2.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman2.20000830153215
+Scat: can't open SRB obj ":-3238"
+Scat: NOTICE:Aug 30 15:32:52: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DRbwF8PPyC'", status = -3238
+NO_DATA_ACCS_TO_TICKET: NO_DATA_ACCS_TO_TICKET
+
+
++ wc data2 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 data2
+      0       0       0 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data2.20000830153215.tmp
+++ expr 2 + 1
++ i=3
++ ../../utilities/bin/Stcat -T ../../../TMP/roman3.20000830153215 torah.sdsc.edu
++ wc data3 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830153215.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman3.20000830153215
++ wc data3 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830153215.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830153215.tmp
+++ expr 3 + 1
++ i=4
++ ../../utilities/bin/Stcat -T ../../../TMP/roman4.20000830153215 torah.sdsc.edu
++ wc data4 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830153215.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman4.20000830153215
++ wc data4 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830153215.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830153215.tmp
+++ expr 4 + 1
++ i=5
++ ../../utilities/bin/Stcat -T ../../../TMP/roman5.20000830153215 torah.sdsc.edu
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830153215.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman5.20000830153215
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830153215.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830153215.tmp
+++ expr 5 + 1
++ i=6
++ ../../utilities/bin/Stcat -T ../../../TMP/roman6.20000830153215 torah.sdsc.edu
++ wc dataempty ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman6.20000830153215
++ wc dataempty ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830153215.tmp
+++ expr 6 + 1
++ i=7
++ i=1
+++ expr 1 + 1
++ j=2
++ [ 2 -lt 3 ]
++ ../../utilities/bin/Stcat -T ../../../TMP/roman1.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc data1 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 data1
+      0       0       0 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 total
++ rm ../../../TMP/data1.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman1.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:33:00: mdasGetInfo: Can't get_dataset_info obj"&TICKET='D9a7C3jkrr'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc data1 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 data1
+      0       0       0 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 total
++ rm ../../../TMP/data1.20000830153215.tmp
+++ expr 1 + 1
++ i=2
++ ../../utilities/bin/Stcat -T ../../../TMP/roman2.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3238"
++ wc data2 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 data2
+      0       0       0 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data2.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman2.20000830153215
+Scat: can't open SRB obj ":-3238"
+Scat: NOTICE:Aug 30 15:33:00: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DRbwF8PPyC'", status = -3238
+NO_DATA_ACCS_TO_TICKET: NO_DATA_ACCS_TO_TICKET
+
+
++ wc data2 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 data2
+      0       0       0 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data2.20000830153215.tmp
+++ expr 2 + 1
++ i=3
++ ../../utilities/bin/Stcat -T ../../../TMP/roman3.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc data3 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 data3
+      0       0       0 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 total
++ rm ../../../TMP/data3.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman3.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:33:02: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DycWIdokHK'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc data3 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 data3
+      0       0       0 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 total
++ rm ../../../TMP/data3.20000830153215.tmp
+++ expr 3 + 1
++ i=4
++ ../../utilities/bin/Stcat -T ../../../TMP/roman4.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc data4 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 data4
+      0       0       0 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data4.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman4.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:33:03: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DibnLiURQT'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc data4 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 data4
+      0       0       0 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data4.20000830153215.tmp
+++ expr 4 + 1
++ i=5
++ ../../utilities/bin/Stcat -T ../../../TMP/roman5.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 datadb1.xml
+      0       0       0 ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 total
++ rm ../../../TMP/datadb1.xml.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman5.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:33:04: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DZcLQnrmZ3'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 datadb1.xml
+      0       0       0 ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 total
++ rm ../../../TMP/datadb1.xml.20000830153215.tmp
+++ expr 5 + 1
++ i=6
++ ../../utilities/bin/Stcat -T ../../../TMP/roman6.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc dataempty ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman6.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:33:05: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DJbcTsXT8c'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc dataempty ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830153215.tmp
+++ expr 6 + 1
++ i=7
++ i=1
+++ expr 2 + 1
++ j=3
++ [ 3 -lt 3 ]
++ rm ../../../TMP/roman1.20000830153215 ../../../TMP/roman2.20000830153215 ../../../TMP/roman3.20000830153215 ../../../TMP/roman4.20000830153215 ../../../TMP/roman5.20000830153215 ../../../TMP/roman6.20000830153215
++ ../../utilities/bin/Srmdir Ssub1
++ ../../utilities/bin/Scd Ssub2
++ ../../utilities/bin/Srm data*
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Srmdir Ssub2
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest3Dev20000830153215:
++ ../../utilities/bin/Smkdir Ssub1
++ ../../utilities/bin/Sls
+/home/testuser.sdsc/Stest3Dev20000830153215:
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/Scd Ssub1
++ ../../utilities/bin/Sput -S ora-sdsc data1 data1&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/data1&COPIES=all/data1 (source=data1) 	2792 bytes stored in 1.42 seconds 	(0.002 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman1.20000830153215 -N 2 -D data1
+Ticket has been generated and stored in ../../../TMP/roman1.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman1.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  data1                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman1.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  data1                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D data1
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DYfXV4iF23                      ticketuser                      sdsc                          
+++ expr 1 + 1
++ i=2
++ ../../utilities/bin/Sput -S ora-sdsc data2 data2&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/data2&COPIES=all/data2 (source=data2) 	5584 bytes stored in 0.84 seconds 	(0.006 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman2.20000830153215 -N 2 -D data2
+Ticket has been generated and stored in ../../../TMP/roman2.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman2.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  data2                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman2.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  data2                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D data2
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DNATAT9Ulz                      ticketuser                      sdsc                          
+++ expr 2 + 1
++ i=3
++ ../../utilities/bin/Sput -S ora-sdsc data3 data3&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/data3&COPIES=all/data3 (source=data3) 	8376 bytes stored in 0.83 seconds 	(0.010 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman3.20000830153215 -N 2 -D data3
+Ticket has been generated and stored in ../../../TMP/roman3.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman3.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  data3                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman3.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  data3                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D data3
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  D4fztQmjyp                      ticketuser                      sdsc                          
+++ expr 3 + 1
++ i=4
++ ../../utilities/bin/Sput -S ora-sdsc data4 data4&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/data4&COPIES=all/data4 (source=data4) 	11168 bytes stored in 0.83 seconds 	(0.013 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman4.20000830153215 -N 2 -D data4
+Ticket has been generated and stored in ../../../TMP/roman4.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman4.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  data4                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman4.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  data4                           /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D data4
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DmWekNyGNg                      ticketuser                      sdsc                          
+++ expr 4 + 1
++ i=5
++ ../../utilities/bin/Sput -S ora-sdsc datadb1.xml datadb1.xml&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/datadb1.xml&COPIES=all/datadb1.xml (source=datadb1.xml) 	5147 bytes stored in 0.85 seconds 	(0.006 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman5.20000830153215 -N 2 -D datadb1.xml
+Ticket has been generated and stored in ../../../TMP/roman5.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman5.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  datadb1.xml                     /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman5.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  datadb1.xml                     /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D datadb1.xml
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  Dch9ZEqV6N                      ticketuser                      sdsc                          
+++ expr 5 + 1
++ i=6
++ ../../utilities/bin/Sput -S ora-sdsc dataempty dataempty&COPIES=all
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1/dataempty&COPIES=all/dataempty (source=dataempty) 	0 bytes stored in 0.42 seconds 	(0.000 Mbytes/s) 
++ ../../utilities/bin/Sticket -F ../../../TMP/roman6.20000830153215 -N 2 -D dataempty
+Ticket has been generated and stored in ../../../TMP/roman6.20000830153215
++ ../../utilities/bin/Stls -F ../../../TMP/roman6.20000830153215
+  data_name                       data_grp_name                 
+------------------------------------------------------------
+  dataempty                       /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
++ ../../utilities/bin/SgetT -F ../../../TMP/roman6.20000830153215
+  data_name                       data_grp_name                   user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  dataempty                       /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  ticketuser                      sdsc                          
++ ../../utilities/bin/SgetT -D dataempty
+  data_grp_name                   ticket_id                       user_name                       domain_desc                   
+------------------------------------------------------------------------------------------------------------------------
+  /home/testuser.sdsc/Stest3Dev20000830153215/Ssub1  DfhsfyrLSY                      ticketuser                      sdsc                          
+++ expr 6 + 1
++ i=7
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/SgetD -Y 0 -L 500 Ssub1/*
+--------------------------- RESULTS ------------------------------
+data_name :data1
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./data1.433396673.967674792'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data2
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./data2.321909883.967674798'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data3
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./data3.1826777125.967674802'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data4
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./data4.1184160720.967674805'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :datadb1.xml
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./datadb1.xml.541544314.967674810'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :dataempty
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./dataempty.164492716.967674814'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest3Dev20000830153215:
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1:
+  testuser    0 ora-sdsc            2792 2000-08-30-15.33  data1
+  testuser    0 ora-sdsc            5584 2000-08-30-15.33  data2
+  testuser    0 ora-sdsc            8376 2000-08-30-15.33  data3
+  testuser    0 ora-sdsc           11168 2000-08-30-15.33  data4
+  testuser    0 ora-sdsc            5147 2000-08-30-15.33  datadb1.xml
+  testuser    0 ora-sdsc               0 2000-08-30-15.33  dataempty
++ ../../utilities/bin/Smkdir Ssub2
++ ../../utilities/bin/Smv Ssub1/data1 Ssub2
++ ../../utilities/bin/Smv Ssub1/data2 Ssub2
++ ../../utilities/bin/Smv Ssub1/data3 Ssub2
++ ../../utilities/bin/Smv Ssub1/data4 Ssub2
++ ../../utilities/bin/Smv Ssub1/datadb1.xml Ssub2
++ ../../utilities/bin/Smv Ssub1/dataempty Ssub2
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest3Dev20000830153215:
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1:
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2:
+  testuser    0 ora-sdsc            2792 2000-08-30-15.33  data1
+  testuser    0 ora-sdsc            5584 2000-08-30-15.33  data2
+  testuser    0 ora-sdsc            8376 2000-08-30-15.33  data3
+  testuser    0 ora-sdsc           11168 2000-08-30-15.33  data4
+  testuser    0 ora-sdsc            5147 2000-08-30-15.33  datadb1.xml
+  testuser    0 ora-sdsc               0 2000-08-30-15.33  dataempty
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest3Dev20000830153215:
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1
+  C-/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub1:
+/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2:
+  testuser    0 ora-sdsc            2792 2000-08-30-15.33  data1
+  testuser    0 ora-sdsc            5584 2000-08-30-15.33  data2
+  testuser    0 ora-sdsc            8376 2000-08-30-15.33  data3
+  testuser    0 ora-sdsc           11168 2000-08-30-15.33  data4
+  testuser    0 ora-sdsc            5147 2000-08-30-15.33  datadb1.xml
+  testuser    0 ora-sdsc               0 2000-08-30-15.33  dataempty
++ ../../utilities/bin/SgetD -Y 0 -L 200 Ssub1/*
++ ../../utilities/bin/SgetD -Y 0 -L 200 Ssub2/*
+--------------------------- RESULTS ------------------------------
+data_name :data1
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./data1.433396673.967674792'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data2
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./data2.321909883.967674798'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data3
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./data3.1826777125.967674802'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :data4
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./data4.1184160720.967674805'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :datadb1.xml
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./datadb1.xml.541544314.967674810'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
+data_name :dataempty
+data_typ_name :generic
+path_name :/srbVault/OBJ_LOCATOR/OBJ_ID='TEST./dataempty.164492716.967674814'
+data_grp_name :/home/testuser.sdsc/Stest3Dev20000830153215/Ssub2
+phy_rsrc_name :ora-sdsc
+container_name :
+-----------------------------------------------------------------
++ i=1
++ j=1
++ ../../utilities/bin/Srmticket -F ../../../TMP/roman2.20000830153215
++ [ 1 -lt 3 ]
++ ../../utilities/bin/Stcat -T ../../../TMP/roman1.20000830153215 torah.sdsc.edu
++ wc data1 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman1.20000830153215
++ wc data1 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 data1
+     70     407    2792 ../../../TMP/data1.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data1.20000830153215.tmp
+++ expr 1 + 1
++ i=2
++ ../../utilities/bin/Stcat -T ../../../TMP/roman2.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3238"
++ wc data2 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 data2
+      0       0       0 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data2.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman2.20000830153215
+Scat: can't open SRB obj ":-3238"
+Scat: NOTICE:Aug 30 15:33:49: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DNATAT9Ulz'", status = -3238
+NO_DATA_ACCS_TO_TICKET: NO_DATA_ACCS_TO_TICKET
+
+
++ wc data2 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 data2
+      0       0       0 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data2.20000830153215.tmp
+++ expr 2 + 1
++ i=3
++ ../../utilities/bin/Stcat -T ../../../TMP/roman3.20000830153215 torah.sdsc.edu
++ wc data3 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830153215.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman3.20000830153215
++ wc data3 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 data3
+    210    1221    8376 ../../../TMP/data3.20000830153215.tmp
+    420    2442   16752 total
++ rm ../../../TMP/data3.20000830153215.tmp
+++ expr 3 + 1
++ i=4
++ ../../utilities/bin/Stcat -T ../../../TMP/roman4.20000830153215 torah.sdsc.edu
++ wc data4 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830153215.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman4.20000830153215
++ wc data4 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 data4
+    280    1628   11168 ../../../TMP/data4.20000830153215.tmp
+    560    3256   22336 total
++ rm ../../../TMP/data4.20000830153215.tmp
+++ expr 4 + 1
++ i=5
++ ../../utilities/bin/Stcat -T ../../../TMP/roman5.20000830153215 torah.sdsc.edu
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830153215.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman5.20000830153215
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 datadb1.xml
+    443     612    5147 ../../../TMP/datadb1.xml.20000830153215.tmp
+    886    1224   10294 total
++ rm ../../../TMP/datadb1.xml.20000830153215.tmp
+++ expr 5 + 1
++ i=6
++ ../../utilities/bin/Stcat -T ../../../TMP/roman6.20000830153215 torah.sdsc.edu
++ wc dataempty ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman6.20000830153215
++ wc dataempty ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830153215.tmp
+++ expr 6 + 1
++ i=7
++ i=1
+++ expr 1 + 1
++ j=2
++ [ 2 -lt 3 ]
++ ../../utilities/bin/Stcat -T ../../../TMP/roman1.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc data1 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 data1
+      0       0       0 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 total
++ rm ../../../TMP/data1.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman1.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:33:59: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DYfXV4iF23'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc data1 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 data1
+      0       0       0 ../../../TMP/data1.20000830153215.tmp
+     70     407    2792 total
++ rm ../../../TMP/data1.20000830153215.tmp
+++ expr 1 + 1
++ i=2
++ ../../utilities/bin/Stcat -T ../../../TMP/roman2.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3238"
++ wc data2 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 data2
+      0       0       0 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data2.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman2.20000830153215
+Scat: can't open SRB obj ":-3238"
+Scat: NOTICE:Aug 30 15:34:00: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DNATAT9Ulz'", status = -3238
+NO_DATA_ACCS_TO_TICKET: NO_DATA_ACCS_TO_TICKET
+
+
++ wc data2 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 data2
+      0       0       0 ../../../TMP/data2.20000830153215.tmp
+    140     814    5584 total
++ rm ../../../TMP/data2.20000830153215.tmp
+++ expr 2 + 1
++ i=3
++ ../../utilities/bin/Stcat -T ../../../TMP/roman3.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc data3 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 data3
+      0       0       0 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 total
++ rm ../../../TMP/data3.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman3.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:34:01: mdasGetInfo: Can't get_dataset_info obj"&TICKET='D4fztQmjyp'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc data3 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 data3
+      0       0       0 ../../../TMP/data3.20000830153215.tmp
+    210    1221    8376 total
++ rm ../../../TMP/data3.20000830153215.tmp
+++ expr 3 + 1
++ i=4
++ ../../utilities/bin/Stcat -T ../../../TMP/roman4.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc data4 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 data4
+      0       0       0 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data4.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman4.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:34:02: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DmWekNyGNg'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc data4 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 data4
+      0       0       0 ../../../TMP/data4.20000830153215.tmp
+    280    1628   11168 total
++ rm ../../../TMP/data4.20000830153215.tmp
+++ expr 4 + 1
++ i=5
++ ../../utilities/bin/Stcat -T ../../../TMP/roman5.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 datadb1.xml
+      0       0       0 ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 total
++ rm ../../../TMP/datadb1.xml.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman5.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:34:03: mdasGetInfo: Can't get_dataset_info obj"&TICKET='Dch9ZEqV6N'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc datadb1.xml ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 datadb1.xml
+      0       0       0 ../../../TMP/datadb1.xml.20000830153215.tmp
+    443     612    5147 total
++ rm ../../../TMP/datadb1.xml.20000830153215.tmp
+++ expr 5 + 1
++ i=6
++ ../../utilities/bin/Stcat -T ../../../TMP/roman6.20000830153215 torah.sdsc.edu
+Stcat: can't open SRB obj ":-3201"
++ wc dataempty ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830153215.tmp
++ ../../utilities/bin/Scat -T ../../../TMP/roman6.20000830153215
+Scat: can't open SRB obj ":-3201"
+Scat: NOTICE:Aug 30 15:34:05: mdasGetInfo: Can't get_dataset_info obj"&TICKET='DfhsfyrLSY'", status = -3201
+DATA_NOT_IN_CAT: DATA_NOT_IN_CAT
+
+
++ wc dataempty ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 dataempty
+      0       0       0 ../../../TMP/dataempty.20000830153215.tmp
+      0       0       0 total
++ rm ../../../TMP/dataempty.20000830153215.tmp
+++ expr 6 + 1
++ i=7
++ i=1
+++ expr 2 + 1
++ j=3
++ [ 3 -lt 3 ]
++ rm ../../../TMP/roman1.20000830153215 ../../../TMP/roman2.20000830153215 ../../../TMP/roman3.20000830153215 ../../../TMP/roman4.20000830153215 ../../../TMP/roman5.20000830153215 ../../../TMP/roman6.20000830153215
++ ../../utilities/bin/Srmdir Ssub1
++ ../../utilities/bin/Scd Ssub2
++ ../../utilities/bin/Srm data*
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Srmdir Ssub2
++ ../../utilities/bin/Sls -L 200 -lr
+/home/testuser.sdsc/Stest3Dev20000830153215:
++ ../../utilities/bin/Scd ..
++ ../../utilities/bin/Srmdir Stest3Dev20000830153215
++ ../../utilities/bin/Sexit
++ exit 0

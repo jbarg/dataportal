@@ -1,0 +1,70 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Slscont.1
+.\"
+.TH Slscont 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Slscont \- list your SRB containers
+.SH SYNOPSIS
+.B Slscont
+.RB [ \-aAFl ] 
+.RB [ \-z 
+.IR mcatZone ] [ " " Containers \ .... 
+.RB ]
+.br
+.SH DESCRIPTION
+.B Slscont
+displays all containers owned by this user. The -A option
+allows the display of all containers accessible by this user.
+.sp
+The input parameter 
+.I Containers
+is optional. If it is not given, all containers and their associated
+metadata (if the -l option is used) owned/accessible
+by the user will be listed. Otherwise, only the input  
+.I Containers
+will be listed. The
+.I Containers
+may be an absolute path or a relative path in the SRB name space and
+more than one 
+.I Container 
+may be given.
+.sp
+If the -F option is used, all inContainer objects contained
+in the given 
+.I Container
+will be listed. With this option, at least one Container input 
+must be given.
+.sp
+When a container is full, the SRB server automatically renames the
+full container "myContainer" to "myContainer.NNNN" where NNNN is a
+random integer number. The server then creates an empty container
+with the original container name "myContainer". In effect, this
+scheme creates a family of containers. The -a option can be used to
+list all containers in a family. The -a option can be used with the -F
+option to list all inContainer files contained
+in the family of containers for the given container.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-l "
+display metadata of container in long form.
+.TP 0.5i
+.B "\-A "
+display containers accessible by the user rather than owned by
+the user.
+.TP 0.5i
+.B "\-F "
+display all inContainer files contained in the given container.
+.TP 0.5i
+.B "\-a "
+display the family of containers for the given container.
+.TP 0.5i
+.B "\-z mcatZone "
+The MCAT zone to query for the container info 
+.SH "SEE ALSO"
+.BR Srmcont (1),
+.BR Smkcont (1)
+
