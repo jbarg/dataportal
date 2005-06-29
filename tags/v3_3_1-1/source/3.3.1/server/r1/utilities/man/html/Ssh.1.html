@@ -1,0 +1,146 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Ssh</TITLE>
+</HEAD><BODY>
+<H1>Ssh</H1>
+Section: User SRB Commands (1)<BR>Updated: June 2004 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Ssh - Invokes the SRB shell.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Ssh</B>
+
+[<B>-v</B>]<B>[</B>-c<B>]</B>
+
+[<B>command</B>]
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>The Ssh command executes commands (both normal UNIX commands and</B>
+
+S-commands) read from a terminal or a file. 
+<P>
+The primary goal for the design of Ssh is to reduce the 
+client/server connection overhead of S-command (the family of 
+SRB command such as Sinit, Sls, Sput, Sget, etc). Currently, after initializing 
+with the Sinit command, each S-command can be run as an independent 
+UNIX command. Within each S-command, a new connection to the SRB server 
+is created at the start of the command and the connection is disconnected 
+at the end of each command. The standalone Scommand model is simple and
+easy to use.
+However, the overhead of creating a SRB 
+client/server connection is relatively high, especially on the server side. 
+The high connection overhead causes lag time in command response especially
+when the network latency between client and server is high, and consumes 
+resources of the servers.    
+<P>
+The Ssh provides a shell for executing the S-commands such that all commands use
+the same SRB connection to communicate with the SRB server. Other
+UNIX commands (binary and shell script) can also be run within the
+shell.  
+<P>
+Like other shell commands, Ssh can be in interactive mode which reads
+and executes commands from a terminal or can be used to issue a
+single command or shell script using the &quot;-c command&quot; option. 
+<P>
+Unlike other shell commands, Ssh does not have its own scripting language
+but shell script files written for other shells can be executed by Ssh.
+<BR>&nbsp;
+Before running the Ssh command, the client's SRB environment (.MdasEnv
+and .MdasAuth files) must be setup first (see the Sinit manpage for
+SRB environment setup). 
+The Sinit command does NOT need to be run before running Ssh since Ssh
+carries out is own initialization. 
+The Ssh can be started by typing in &quot;Ssh&quot; which puts the shell in
+interactive mode. The shell begins reading and executing commands from the 
+terminal after the prompt &quot;Ssh &gt;&quot;. A &quot;exit&quot; or &quot;quit&quot; command will
+end the Ssh shell.
+<P>
+Internally, the Ssh uses other shell programs to interpret and execute  
+the input commands (read from the terminal). The default shell is &quot;sh&quot;.
+Other shells that work with Ssh include &quot;bash&quot; and &quot;ksh&quot;. &quot;csh&quot; and
+&quot;tcsh&quot; do NOT work with Ssh because they seem to close all opened
+file descriptors before executing the input commands. Hence the socket
+connection to the SRB server will not be passed on to the input commands.
+The environment variable SRB_SHELL can be used to set the shell used 
+by Ssh. If it is set to NO_SRB_SHELL, the Ssh will use the fork() and
+exec() calls to execute the input commands.
+<P>
+Another way to to start up an Scommand interactive session is
+to use the Ssh command to run an interactive shell, e.g.,
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TT>Ssh -c bash<BR>
+<P>
+An interactive bash shell session will be started with this command and
+the SRB socket connection created by Ssh will be passed onto the bash shell. 
+All Scommands executed in this bash shell will use this socket connection
+to communicate with the SRB server. The advantage of this approach is
+the full capability of the interactive shell will be maintained. 
+The socket connection to the SRB server is maintained until the shell
+is terminated. The Sexit command will not terminate the connection. 
+Also, in this mode, if a CTRL-C key stroke is used to terminate a
+Scommand, the socket connection to the SRB server will be left in an
+unknown state and the interactive shell should be terminated and 
+restarted. A better process termination handling in Ssh will be incorporated 
+in future releases.
+<P>
+The Ssh can be used to issue a single command or shell script using the 
+&quot;-c command&quot; option. e.g.,
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;Ssh&nbsp;-c&nbsp;myShellScript
+<P>
+where myShellScript can be a shell script written in &quot;sh&quot;, &quot;bash&quot;, &quot;ksh&quot; or
+&quot;perl&quot;. The advantage of using Ssh is that a socket connection to the
+SRB server is only created once and all Scommands in the script use this
+connection to communicate the the SRB server which greatly reduces the connection
+overhead. Since all Scommands in the script use the same socket connection,
+it is NOT advisable to run these Scommands in the background because they
+will be competing for the same socket connection.
+<P>
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-v </B>
+
+<DD>
+Display the client and server release versions. 
+Same output as Sinit.
+<DT><B>-c </B>
+
+<DD>
+Execute a single command or script specified by [ command ]
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sinit.1.html">Sinit</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Senv.1.html">Senv</A></B>(1)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

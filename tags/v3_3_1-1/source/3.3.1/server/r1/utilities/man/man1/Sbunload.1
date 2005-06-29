@@ -1,0 +1,76 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sbunload.1
+.\"
+.TH Sbunload 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sbunload \- exports in bulk a collection or a SRB container to
+local file system.
+.SH SYNOPSIS
+.B Sbunload \-[htk]
+.RB [ \-z
+.IR mcatZone ]
+.IR " [-c container ] | [-f incontainer_obj] source_collection "  " [" local_dir "] 
+.br
+.SH DESCRIPTION
+.B "Sbunload "
+is the counterpart of Sbload and is similar to Sget functionally. 
+It downloads files recursively stored in a SRB colection to the local file system. The source files can be regular SRB files and/or files stored in containers. 
+It is designed to greatly improve the efficiency of downloading a large number 
+of small files. 
+.sp
+The optional -c or the -f options can be used to specify the family of 
+container to be downloaded. In this case, only files stored in this family of container in the 
+source_collection will be recursively downloaded. If the -f option is used, 
+the input incontainer_obj is the name of a SRB file stored in a container 
+and the program will use this info to to query the MCAT for the container 
+and family of containers to be unloaded. 
+
+If neither the -c nor -f options were used, the program will download
+recursively all files stored in in the source_collection.
+.sp
+If the -t option is used, instead of unfolding the content of container into
+local files and directories, the whole container will be downloaded into
+a single file. It will create a local directory with the container as the name 
+of the directory. Three types of files are put in this local directory:
+.sp
+1) The content of the container represented by : AAAA.dat    where AAAA is
+the container name.
+.sp
+2) Index file represented by AAAA.inx. It is in ASCI text with each
+in-container file represented by a line with three values - SRB path,
+offset, size.
+.sp
+3) commondir file - contains a single text line representing the SRB
+directory (collection) that is common to these in-container files.
+.sp
+.I local_dir 
+is the local directory under which the unloaded files will be place. 
+If this input is not specified, it faults to ".".
+.sp
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-f "
+.I "incontainer_obj "
+A incontainer file in the srb_collection.
+.TP 0.5i
+.B "\-c "
+.I "container "
+The container to be downloaded.
+.TP 0.5i
+.B "\-h "
+displays command options
+.TP 0.5i
+.B "\-t "
+download the whole container without unfolding the content.
+.TP 0.5i
+.B "\-z mcatZone "
+.TP 0.5i
+.B "\-k "
+checksum mode. Retrieves simple checksum (sum -s, --sysv) from the MCAT and compares with the checksum of the local file just downloaded.
+.SH "SEE ALSO"
+.BR Sbload (1),
+.BR Sput (1),
+.BR Sget (1),
+.BR Smkdir (1)
+

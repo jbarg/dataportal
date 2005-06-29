@@ -1,0 +1,64 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Spcommand.1
+.\"
+.TH Spcommand 1 "Jun 2004 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Spcommand \- Proxy command operation. Request a remote SRB server
+to execute arbitrary commands on behalf of client.
+.SH SYNOPSIS
+.B Spcommand
+.RB [ \-h "] [" \-H
+.IR hostAddr " | "
+.B \-d
+.IR srbObj "] " command
+.SH DESCRIPTION
+.B "Spcommand "
+performs the remote execution of arbitrary commands (executables)
+installed in a specific predefined directory on the remote host.
+Currently, this predefined directory is hard-coded as "commands"
+in the directory where the srbMaster and srbServer executables
+are installed. For example, if the srbMaster is installed in the
+/usr/local/srb/bin directory, the proxy commands should be
+installed in the /usr/local/srb/bin/commands directory.
+.sp
+The input argument "command" specifies the proxy command to be
+executed. Input arguments for the command is supported by appending
+the argument list to the command just like any normal command.
+The only difference is the command/argument string must be in
+quotes. e.g.,
+.sp
+Spcommand "hello John"
+.br
+Spcommand "hello -xyz John"
+.br
+Proxy Op on SRB data example:
+.br
+Spcommand -d <srbObj.tiff> "convert .jpg"
+.sp
+Basically, the SRB server, upon receiving the request, forks and
+execs the input command and pipes the stdout and stderr back to
+the client.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-d "
+.I srbObj
+will discover which host the
+.I srbObj
+resides on, and will execute the proxy operation on that host. Also,
+it will pass the
+.I srbObj
+as the first argument to that proxy operation. The -d and -H flags
+can not be combined.
+.TP 0.5i
+.B "\-H "
+.I hostAddr
+specifies the host address where the proxy command is to be
+executed. If no address is specified, the default is the host
+where the client is first connected to (e.g., the srbHost defined
+in the .MdasEnv file). The -d and -H flags can not be combined.
+.SH "SEE ALSO"
+.BR Scat (1)

@@ -1,0 +1,4 @@
+#!/bin/csh -ex
+set LIBDIR = ./lib 
+cc -c -o sample_main.o sample_main.c
+cc -o mysrb2.cgi sample_main.o $LIBDIR/libMySRB.a $LIBDIR/libSrbClient.a -lm -lpthread

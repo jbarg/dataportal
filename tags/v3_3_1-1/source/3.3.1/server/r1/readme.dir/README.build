@@ -1,0 +1,197 @@
+NOTE: Check http://www.npaci.edu/Research/DI/srb/docs.html for an
+updated version of this document.  This is a short note on how to
+build the SRB software. For full documentation and related articles,
+read the web page at http://www.npaci.edu/Research/DI/srb.
+
+If you want to build a complete, stand-alone, SRB system you will need
+to build an MCAT-enabled server and install the MCAT.  Starting with
+SRB 2.0.0, this is somewhat easier now (although still involved) and
+can be done using Postgres as the DMBS (which can be freely downloaded
+and installed).  But you should start with the README.MCAT.INSTALL
+document which includes step by step procedures.  It will refer you
+back here for some of the steps.  If you are reading this on our web
+site, go back one page (or up two levels) and click on "How to install
+MCAT" or go directly to
+http://www.npaci.edu/DICE/SRB/install/README.MCAT.INSTALL .
+
+Starting with SRB 2.1.1 we now have an install script, install.pl,
+that can do a complete Postgres, MCAT and SRB installation.  See
+README.MCAT.INSTALL.  With SRB 3.0.0, this script can run on Solaris
+too, as well as the original Linux and Mac OS X.
+
+The SEA authentication system is no longer supported; for the secure
+authentication use either the ENCRYPT1 form of MDAS_AUTH
+authentication, or GSI.  For data encryption, see the new data
+encryption/compression feature.
+
+1) Build configuration 
+This version uses the configure script to configure the build.
+Most of the configurable parameters for building the SRB server and
+client can be configured using the "./configure" script.  Run
+"./configure --help" for more information.  
+
+All configurable parameters for building the SRB server and the client
+library, including those set by the configure script, are defined in
+the mk/mk.config.in file.  (The configure script automatically
+generates a third file, mk/mk.config, using mk/mk.config.in as a
+template.)  
+
+Those parameters that cannot be modified via the configure script
+(because flags for those parameters have not yet been implemented) are
+set by directly editing the mk/mk.config.in file prior to running
+"./configure".  Comments in the mk/mk.config.in file make it clear
+whether or not a particular parameter can be set through the configure
+script, and if so, how to do so.
+
+NOTE: The configure script does a number of self tests before the 
+configuration is carried out. One of the test it does is the compiler
+test which it assumes "gcc" as the default compiler. If "gcc" is not
+installed or if the test of "gcc" failed (which happened on an AIX platform),
+the configure script should be re-run with the env variable CC set to
+cc or other compilers. This will override the default in the compiler test. 
+
+If the configure script still failed, do the following:
+
+   a) cd SRB2_0_0rel
+   b) ./config.rescue
+   c) edit the mk/mk.config file
+
+2) Configure examples
+
+  a) Non-MCAT-enabled server and client, type in
+
+      configure
+
+     This will configure the mk.config file to build a non-MCAT enabled
+     server and client with the default settings.
+
+  b) Non-MCAT-enabled server and client with java enabled, type in
+
+      configure --enable-javagui=yes --enable-jdkhome=/usr/local/apps/jdk1.4.1
+ 
+     where /usr/local/apps/jdk1.4.1 is the directory where the JAVA JDK 1.4.1
+     is installed.
+
+  c) MCAT-enabled server with Oracle 8.1.5 MCAT, type in
+
+      configure --enable-oramcat --enable-oraver=815 
+	--enable-orahome=/usr/local/apps/oracle/product/8.1.7
+
+     where /usr/local/apps/oracle/product/8.1.7 is the Oracle home
+     directory.
+
+2) Parameters in the mk/mk.config file
+
+The SRB architecture supports multiple SRB servers running on various
+hosts.  Each SRB server may be built with different options, as set by
+the configure script and/or defined in the mk/mk.config.in file. For
+example, the SRB server on host A may include the driver for accessing
+HPSS and the SRB server on host B may include the driver for accessing
+the Lobj stored in DB2, etc.
+
+The parameters are self-explanatory through the comments given in this
+file. Some of the more important parameters are discussed below:
+
+installDir - The absolute path of the SRB install directory.  
+
+PORTNAME - The OS platform of this SRB port. Currently, the SRB
+software runs on 8 platforms. i.e., valid PORTNAME's are :
+PORTNAME_solaris, PORTNAME_sunos, PORTNAME_linux, PORTNAME_osx,
+PORTNAME_aix, PORTNAME_alpha, PORTNAME_c90 and PORTNAME_sgi.
+
+SRB_LARGEFILE64 - defines whether the 64 bit file size is supported by the
+underlining driver of this SRB server.  Current, 64 bit file size is 
+supported by the PORTNAME_solaris, PORTNAME_aix, PORTNAME_linux and 
+PORTNAME_c90 platforms.
+
+ORAMCAT - defines that this SRB server being built is MDAS enabled and the MCAT
+is stored in Oracle DBMS. Normally, only one SRB server is MDAS enabled.
+
+DB2MCAT - defines that this SRB server being built is MDAS enabled and the MCAT
+is stored in Oracle DBMS. Normally, only one SRB server is MDAS enabled.
+NOTE : Both ORAMCAT and DB2MCAT cannot be defined at the same time.
+
+ADDR_64BIT - defines whether to compile for 64 bits address. This option
+has only been tested for the the Solaris and Linux platforms.
+
+PARA_OPR - defines whether this SRB server support parallel operation API.
+
+MDAS_AUTH - defines whether the plain text and encrypted password MDAS
+authorization scheme will be supported. If used, the user/passwd pair
+registered with the MDAS catalog will be used to authenticate a user.
+Comment it out if the SRB server does not support MDAS authorization.
+NOTE : A server can be built to support either MDAS_AUTH (plain or
+encrypted ('ENCRYPT1')) or GSI_AUTH, or both.
+
+GSI_AUTH - defines whether the GSI authentication scheme is supported.
+This is set when --enable-gsi-auth is included on the configure line.
+NOTE : A server can be built to support either MDAS_AUTH or GSI_AUTH,
+or both.
+
+LIB_GSI_AUTH - Set by configure when --enable-gsi-auth is included
+(i.e. GSI_AUTH is defined).  LIB_GSI_AUTH specifies where the GSI
+client libraries are located.  The optional configure
+--enable-globus-location=path can also be used specify the parent
+location of the GSI libaries, and will cause LIB_GSI_AUTH to be
+adjusted.
+
+JAVA_GUI and javaDir - JAVA_GUI defines whether the srbBrowser should
+be built. javaDir specifies the directory where the JDK software is 
+installed. (e.g. /usr/local/apps/Java). See README.srbBrowser for more
+details.
+
+3) "cd" to the main SRB directory and type in "gmake clean" and then
+"gmake" to make the SRB software. The Makefile contains various options
+to make and clean all or a subset of the build. 
+	o gmake --- build all.
+	o gmake clean --- clean all.
+	o gmake srb --- build only the SRB server and client.
+	o gmake clean_srb --- clean only the SRB server and client.
+	o gmake util --- build only the utilities (S commands). See
+	  README.utilities for more details.
+	o gmake clean_util ---  clean only the utilities.
+	o gmake browser - build only the java srbBrowser GUI. See 
+	  README.srbBrowser for more details.
+	o gmake clean_browser - clean only the java srbBrowser.
+
+4) (Optional) Type in "gmake install" to install the software in the 
+$(installDir) directory. This procedure installs the following modules in 
+the $(installDir) directory:
+
+	bin/runsrb - The script that starts the SRB 
+
+	bin/srbMaster2_0_0 - The frontend server.
+
+	bin/srbServer - The backend server (forked by the srbMaster1_0 
+	for each client connection).
+
+	bin/libSrbClient.a - The client library.
+
+	data/hostAuthConfig - The optional (needed only if HOST_BASED_AUTH
+	in the mk.config file is set) host based authorization 
+	configuration file.
+
+	data/mcatHost - This file identifies the host on which the MCAT
+	enabled SRB server is running. 
+
+	data/hostConfig - This is the optional SRB host configuration file.
+	It is only needed when when you want to add aliases to your local 
+	hostName.
+
+	data/hpssCosConfig - This is the optional HPSS Class of Services
+	configuration file. It is only needed if HPSS in the mk.config file 
+	is set.
+
+	data/hpssNodceAuth - The file contains authentication info for non-dce
+	HPSS. It is only needed if the HPSS and NO_DCE flags in the mk.config 
+	file are set.
+
+	data/MdasConfig - The MDAS configuration file.
+
+	data/metadata.fkrel - This file defines the foreign key relationship
+	between the MDAS catalog tables and is used internally by the SRB
+	for query generation. This file should not be changed between releases.
+	
+	data/LobjConfig - The database configuration file for the DB Large
+	Object driver. Basically, it contains the userID and password
+	for accessing each database server.

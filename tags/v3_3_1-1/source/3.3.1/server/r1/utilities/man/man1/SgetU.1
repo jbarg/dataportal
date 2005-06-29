@@ -1,0 +1,126 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii SgetU.1
+.\"
+.TH SgetU 1 "Jan 2002 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+SgetU \- display information about SRB user(s).
+.SH SYNOPSIS
+.B SgetU
+.RB [ \-pPhdatgGcDZ "] [" \-z
+.IR zone ]
+.RB [ \-L
+.IR number ]
+.RB [ \-Y
+.IR number ]
+.RB [\-T
+.IR userType ]
+.RB [ 
+.IR userName "@" domainName  " ]"
+.sp
+.B SgetU -M|O [ \-z 
+.IR zone ]
+.I userGroupName
+.SH DESCRIPTION
+.B "SgetU "
+displays information about a group or user 
+.IR userName @ domainName .
+.sp
+In the first synposis if 
+.IR userName @ domainName 
+is not given, SgetU displays information about current user. If 
+.I domainName
+is not given then SgetU displays information for 
+.I userName
+in all domains. If 
+.I userName
+is not given then it displays information about users in 
+.IR domainName . 
+The second synposis deals with user groups.
+.IR userGroupName , " userName " and " domainName "
+can have wildcards * and ?.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-p "
+display user/group name
+.TP 0.5i
+.B "\-P "
+display verbose user/group parameters (default)
+.TP 0.5i
+.B "\-a "
+display dataset accessible by user/group along with access
+permissions
+.TP 0.5i
+.B "\-d "
+display domain(s) of user/group
+.TP 0.5i
+.B "\-t "
+display audit information for the user/group
+.TP 0.5i
+.B "\-g "
+display group(s) of user/group
+.TP 0.5i
+.B "\-G "
+display group(s) for which the user is a groupowner.
+.TP 0.5i
+.B "\-c "
+display collection access for the user/group
+.TP 0.5i
+.B "\-D "
+display distinguished name and authorization scheme  for the user/group
+.TP 0.5i
+.B "\-Z "
+display home zone name for the user/group
+.TP 0.5i
+.B "\-M "
+display members of the given user group(s).
+.TP 0.5i
+.B "\-O "
+display owners of the given user group(s).
+.TP 0.5i
+.B "\-T "
+display information for user type
+.I userType
+.TP 0.5i
+.B "\-z "
+.I zone
+option applies to the second synopsis and is used to perform the Sls operation on a particular zone.
+If ALL is used for
+.I zone
+then every zone known to the current zone will be queried.
+.I zone
+can have wild cards.
+.TP 0.5i
+.B "\-Y "
+.BI [ number "] "
+controls display format.
+.br
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+.br
+With -Y 0 will display in vertical, one attribute-per-line format.
+.br
+With Y n, n > 0, information is displayed one item-per-line with each
+attribute spaced at
+.I number
+characters.  
+.br
+With Y -1, information is displayed without headers, with each item
+quoted and separated by a blank and with no row control.
+.TP 0.5i
+.B "\-L "
+.BI [ number "] "
+controls number of items displayed at a time under user's
+control. 
+.br
+Without  -L, DEFAULT_ROW_COUNT items of information is displayed
+at a time.
+.br
+With L n, n > 0, n items are displayed at a time.
+.SH "SEE ALSO"
+.BR SgetR (1),
+.BR SgetD (1)
+.BR SmodifyUser (1)

@@ -1,0 +1,333 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sput</TITLE>
+</HEAD><BODY>
+<H1>Sput</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2003 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sput - imports one or more local files and/or directories into
+SRB space.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Sput</B>
+
+[<B>-fprabvsmMkKV</B>] [<B>-c</B>
+
+<I>container</I>]
+
+[<B>-D</B>
+
+<I>dataType</I>]
+
+[<B>-n</B>
+
+<I>replNum</I>]
+
+[<B>-N</B>
+
+<I>numThreads</I>]
+
+[<B>-S</B>
+
+<I>resourceName</I>]
+
+[<B>-P</B>
+
+<I>pathName</I>]
+
+[<B>-R</B>
+
+<I>retry_count</I>]
+
+<I>localFileName</I>|<I>localDirectory</I> ... <I>TargetName</I>
+
+<P>
+<B>Sput -i</B>
+
+[<B>-a</B>] [<B>-c</B>
+
+<I>container</I>]
+
+[<B>-D</B>
+
+<I>dataType</I>]
+
+[<B>-S</B>
+
+<I>resourceName</I>]
+
+[<B>-P</B>
+
+<I>pathName</I>]
+
+[<B>-R,--retry</B>
+
+<I>retry_count</I>]
+
+[<B>-k</B>]
+
+[<B>-K</B>]
+
+<I>TargetName</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Sput </B>
+
+reads one or more local files and|or directories and writes them
+as object(s) in SRB space. Each new SRB object is also registered
+in the MCAT.
+<P>
+The second synopsis reads data from standard input and writes it
+as an object in SRB space.
+<P>
+The
+<I>localFileName</I>
+
+and|or
+<I>localDirectory</I>
+
+can be a path name in the local file hierarchy. The user should
+have at least 'read' access permission for them. These inputs
+can have wildcards.
+<P>
+The
+<I>TargetName</I>
+
+can be a path name in the collection hierarchy. The object
+creation is done in the current collection, if
+<I>TargetName</I>
+
+is just an object-name. If a relative or absolute collection is
+given in
+<I>TargetName</I>,
+
+then the object is stored in that collection. The user should have
+write access permission for the collection. '.' can be used as a
+<I>TargetName</I>
+
+to denote the current collection.
+<P>
+If
+<I>TargetName</I>
+
+is a collection, then Sput uses the names of the local files as
+SRB object names. The directory path of
+<I>localFileName</I>
+
+is not used in making the SRB object name.
+<P>
+If
+<I>TargetName</I>
+
+is an object-name (possibly with a collection path) and there are
+more than one local file to be copied, then the
+<I>TargetName</I>
+
+is appended to the front of the local file names to make SRB
+object names.
+<P>
+If given, the data type of the object is set to
+<I>dataType</I>.
+
+Otherwise, Sput uses the file extender (i.e. string after the
+last '.') to figure out the type. If it is unable to figure out
+the data type, the 'generic' data type is used. Most popular
+extenders in Unix and DOS will be supported. The data type
+discovery is done in MCAT and hence future extenders can be
+supported without any change in or compilation of the client code.
+<P>
+If given, the object is stored in
+<I>resourceName</I>.
+
+Otherwise the object is stored in the default resource given by
+DEFRESOURCE in the user environment file, located in
+~/.srb/.MdasEnv
+<P>
+If given, the -P option and the input
+<I>pathName</I>
+
+specifies the physical path where the target will be stored 
+instead of using the default vault path associated with the resource. 
+If the source is a file,
+<I>pathName</I>
+
+specifies the full physical path of the target. If the source is a directory,
+<I>pathName</I>
+
+specifies the base directory of the target where the entire directory structure of the source will be replicated.
+Currently, the SRB server will only create new directories and subdirectories when the input 
+<I>pathName</I>
+
+is within the vault path associated with the resource.
+<P>
+<P>
+By default, Sput uses the serial I/O API to do the put.
+The -m option or setting the environment variable &quot;srbParallel&quot; to any value can be used to set the transfer mode to the &quot;server initiated connection&quot; parallel I/O mode.
+In this mode, the server is the active partner. The client listens passively on the control socket for instructions from the servers. Upon receiving the client's initial  request, the server with the help of informations from the MCAT, plans the execution of the data upload.
+Typically it sends data transfer instructions to the server where the import resource is located. The resource server then subdivides the file to be imported into segments and spawns threads to handle the import of each segment in parallel.
+One advantage of this scheme is data transfer is always directly between the resource server and client with no intermediate server in between.
+<P>
+A drawback of this mode is the client could be sitting behind a firewall and a server outside the firewall may not be able to connect to this client control socket.
+<P>
+The -M option which sets the transfer mode to the &quot;client initiated connection&quot; parallel I/O mode, was designed to get around the client's firewall issue. 
+This mode is very similar to the &quot;server initiated&quot; mode except for the initial handshakes. 
+In this mode, the control socket is on the resource server and the client spawns multiple threads, each initiating connection to the server control socket. After the connections have been established, the data transfer mechanism is the same as the &quot;server initiated&quot; mode.
+<P>
+Comparing with the &quot;server initiated&quot; mode, the overhead of the &quot;client initiated&quot; mode is slightly higher because of the more complicated initial handshakes. But for large file transfer, the difference is practically nothing.
+<P>
+In addition, with the -M option set, the [-N numthreads] can be used to suggest to the server on the number of threads to use for the parallel transfer. If this option is not used, the server will decide the number of threads based on an internal algorithm.
+<P>
+The -b option is for bulk loading of a large number of small files. It behaves like the -r option except runs a lot faster. Bulk loading of files into container is not supported in this command. Instead, the Sbload command should be used. 
+<P>
+The -m/M and -b options are mutually exclusive. -b is
+designed to process a large number of small files by concatinating many
+small files together and sending it to the server at once. It does not
+use parallel I/O. The -m/M option specifies parallel I/O which is designed
+to transfer large files. So, if you have one or more large files, the -m or -M
+options should be used. If you have several small files, the -b option
+should be used. If both -m/M and -b options are specified, then -b takes
+precedent.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-p </B>
+
+<DD>
+prompts before writing each object to SRB space.
+<DT><B>-f </B>
+
+<DD>
+force copying even if object exists.
+<DT><B>-a </B>
+
+<DD>
+If the target object does not exist and the target resource is a logical resource consisting of more than one resources, then make a copy in each resources. If
+the target object exists, force copying all replica of the target object.
+<DT><B>-b </B>
+
+<DD>
+bulk loading directories recursively to SRB space.
+<DT><B>-r </B>
+
+<DD>
+copy local directories recursively to SRB space.
+<DT><B>-v </B>
+
+<DD>
+verbose mode. print out file size and transfer rate. If the transfer mode is parallel, the output contains one additional item - the number of threads used.
+<DT><B>-V </B>
+
+<DD>
+verbose progress mode. print out progress status and ETA for sequential transfers. Does nothing for parallel transfers. It forces '-v' switch on.
+<DT><B>-k </B>
+
+<DD>
+client checksum mode. Client computes simple checksum (sum -s, --sysv) of the local file and registers with MCAT. 
+No verification is done on the server side.
+<DT><B>-K </B>
+
+<DD>
+checksum verification mode. After the transfer, the server computes the checksum by reading back the file that was just stored.
+This value is then compared with the source checksum value provided by the client for verification.
+This verified checksum value is then registered with MCAT.
+<DT><B>-R </B>
+
+<DD>
+<I>number of retries </I>
+
+retry mode. Retries on any Sput error. The max retry count has to be specified. Sleeps 2,4,8,16,32,... seconds between retries.
+<DT><B>-s </B>
+
+<DD>
+switch I/O mode to serial (default).
+<DT><B>-m </B>
+
+<DD>
+set I/O mode to &quot;server initiated&quot; parallel I/O . Setting the environment variable &quot;srbParallel&quot; to any value achieves the same result.
+<DT><B>-M </B>
+
+<DD>
+set I/O mode to &quot;client initiated&quot; parallel I/O mode.
+<DT><B>-N </B>
+
+<DD>
+<I>numThreads</I>
+
+The number of threads to use for the parallel transfer. Only valid with the -M option.
+<DT><B>-c </B>
+
+<DD>
+container is the container where the target object will be stored.
+<DT><B>-i </B>
+
+<DD>
+read data from standard input.
+<DT><B>-S </B>
+
+<DD>
+<I>resourceName </I>
+
+is the target resourceName.
+<DT><B>-n </B>
+
+<DD>
+<I>replNum</I>
+
+Overwrite only the replica with replica number replNum. This option is only valid if TargetName is a file and not a collection.
+<DT><B>-P </B>
+
+<DD>
+<I>pathname</I>
+
+Specifies the physical path where the target will be stored
+instead of using the default vault path associated with the resource.
+<P>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sappend.1.html">Sappend</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sget.1.html">Sget</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Srsync.1.html">Srsync</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Stoken.1.html">Stoken</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/SgetR.1.html">SgetR</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Smkdir.1.html">Smkdir</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>
