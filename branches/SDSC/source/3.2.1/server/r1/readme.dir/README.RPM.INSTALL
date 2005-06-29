@@ -1,0 +1,4 @@
+instructions for building SRB RPMS and/or
+configuration with ROCKS (SDSC's Lunix cluster) can be found here:
+
+SRB-2.0.0/mk/RPM/README

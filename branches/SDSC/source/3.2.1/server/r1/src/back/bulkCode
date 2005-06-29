@@ -1,0 +1,2316 @@
+int
+setupSockForBunload (char *clHostAddr, int clPort, svrComm_t *myComm, int flag)
+{
+    int myFd = -1;
+    FunctCall myFunctCall;
+
+    if (flag & CL_INIT_CONN_FLAG) {
+        int lsock = -1, lport;
+
+        lsock = setupSrvPortal (myComm, &lport);
+        if (lsock < 0) {
+            elog (NOTICE,
+             "sendBunloadData() -- setupSrvPortal() failed: status=%d",
+              lsock);
+            return lsock;
+        }
+       myFd = acceptSrvPortal (lsock, lport);
+       if (myFd < 0) {
+           return (myFd);
+       }
+    } else {
+        myFd = portalConnect (clPort, clHostAddr);
+        if (myFd < 0) {   /* error */
+            /* use fprintf intead of elog because multi error msg to client
+             * can cause core dump */
+            fprintf (stderr,
+             "sendBunloadData: Unable to connect to port %d at %s\n",
+             clPort & 0xffff, clHostAddr);
+            return myFd;
+        }
+
+        /* a hack. fake a return msg to client. From this point onward, returned
+         * value must be DONT_SEND_RETURN */
+
+        myFunctCall.retlen = SIZEOF32;
+
+        sendFunctionResult (myComm, &myFunctCall, (char *) 0);
+    }
+
+    return (myFd);
+}
+
+int 
+svrModifyForBulkMove(int catType, int operCode, struct varlena *vOperString,
+		     struct varlena *inDataInfo)
+{
+  char *operString;
+  mdasC_sql_result_struct *myresult;
+  int retVal;
+  
+  if (TicketUserFlag) {
+    elog (NOTICE, "Illegal operation for a ticket user");
+    return (ILLEGAL_OPR_TICKET_USER);
+  }
+  
+  operString = varToStr (vOperString);
+  retVal = unpackMsg (VAROUTDATA (inDataInfo), (char **) &myresult,
+		      sqlResultStruct_PF, NULL);
+  if (retVal < 0) {
+    elog(NOTICE,
+	 "svrModifyForBulkMove:unpackMsg() of myresult error, status = %d",
+	 retVal);
+    free (operString);
+    return (retVal);
+  }
+  
+  retVal = _svrModifyForBulkMove ( catType, operCode, operString, myresult);
+  free (operString);
+  freeSqlResult (myresult);
+  
+  return retVal;
+  
+  
+}
+
+
+int
+_svrModifyForBulkMove (int catType, 
+		       int operCode,  char *operString,
+		       mdasC_sql_result_struct *inDataInfo)
+{
+  int retVal;
+  int remoteFlag;
+  struct hostElement  *hostTabPtr;
+  
+  
+  if (operString[0] == '/')
+    remoteFlag = getMdasEnabledHost (operString,&hostTabPtr);
+  else
+    remoteFlag = getMdasEnabledHost (NULL,&hostTabPtr);
+  if (remoteFlag < 0) {
+    retVal = remoteFlag;
+  } 
+  else if (remoteFlag == LOCAL_HOST) {      /* Can talk to mdas */
+#ifdef SRB_MDAS
+    retVal = modify_for_bulk_move (catType,operCode,ClientUser->userName, ClientUser->domainName, 
+				   operString, inDataInfo);
+    if (retVal == 0) {
+      commit_db2_interaction (MDAS_CAT_COMMIT);
+    }
+    else {
+      elog (NOTICE,
+	    "svrModifyForBulkMove: register error involving operString %s, stat=%d",
+	    operString, retVal);
+      commit_db2_interaction (MDAS_CAT_ROLLBACK);
+    }
+#endif
+  } 
+  else {
+    if ((retVal = remoteConnect (hostTabPtr)) < 0) {
+      return retVal;
+    }
+    
+    /* Do a client call to the remote host */
+    
+    retVal = srbModifyForBulkMove (hostTabPtr->conn, catType,
+				   operCode,  operString,inDataInfo);
+  }  
+  
+  return retVal;
+  
+}
+
+
+int
+svrBulkMove (int catType, struct varlena *vCollectionName, int flag,
+struct varlena *vSrcResource, struct varlena *vDestResource,
+struct varlena *vContainerName)
+{
+    char *objID, *collectionName, *srcResource, *destResource, *containerName;
+    int status;
+
+    collectionName = varToStr (vCollectionName);
+    srcResource = varToStr (vSrcResource);
+    destResource = varToStr (vDestResource);
+    containerName = varToStr (vContainerName);
+
+    if (containerName != NULL && strlen (containerName) > 0) {
+        status = _svrBulkMoveToCont (catType, collectionName, flag,
+         srcResource, "", containerName);
+    } else {
+        status = _svrBulkMove (catType, collectionName, flag,
+         srcResource, destResource);
+    }
+
+    return (status);
+}
+
+int
+_svrBulkMove (int catType, char *collectionName, int flag,
+char *srcResource, char *destResource)
+{
+    struct resCache *myCacheRes = NULL;
+    struct mdasResInfo *destResInfo = NULL;
+    int remoteFlag;
+    char *portNum, tmpResLoc[MAX_TOKEN];
+    struct hostElement  *hostTabPtr, *tmpHostTabPtr;
+    mdasC_sql_result_struct *myresult = NULL;
+    int status = 0;
+
+    /* _svrBulkMove should be called at the target resource */
+    /* get the mdasResInfo associated with a logResName and domainName */
+
+    if (getResInfo (collectionName, catType, destResource, 
+     ClientUser->domainName, &myCacheRes) < 0) {
+        elog (NOTICE,
+          "_svrBulkMove: Input resource %s is not a registered resource",
+          destResource);
+        return (OBJ_ERR_RES_NOT_REG);
+    }
+
+    sortResForIngest (myCacheRes, -1);
+
+    destResInfo = myCacheRes->resInfoHead;
+    while (destResInfo != NULL) {
+#ifdef FED_MCAT
+        remoteFlag = chkHostAndZone (destResInfo->phyResLoc, &hostTabPtr);
+#else
+        /* Parse the hostAddr */
+        strcpy (tmpResLoc, destResInfo->phyResLoc);
+        portNum = parseAddr (tmpResLoc);
+        remoteFlag = chkHost (tmpResLoc, portNum, &hostTabPtr);
+#endif
+	if (flag & BL_LOCAL_FLAG) {
+	     if (remoteFlag == LOCAL_HOST) 
+	         break;
+	} else if (remoteFlag >= 0) {
+	    break;
+	} 
+	destResInfo = destResInfo->next;
+    }
+
+    if (destResInfo == NULL || remoteFlag < 0) {
+        elog (NOTICE, "Invalid host addr %s", 
+	  myCacheRes->resInfoHead->phyResLoc);
+        return INP_ERR_HOST_ADDR;               /* failure */
+    } else if (remoteFlag == REMOTE_HOST) {
+        if ((status = remoteConnect (hostTabPtr)) < 0) {
+            return status;
+        } else {
+	    status = srbBulkMove (hostTabPtr->conn, catType, collectionName, 
+	      flag | BL_LOCAL_FLAG, srcResource, destResInfo->phyResName, 
+	      NULL); 
+	    return (status);
+	}
+    }
+
+    /* got here when we want to do it locally. */
+
+    remoteFlag = getBestSrcForBulkMove (catType, collectionName, flag,
+      srcResource, destResource, &myresult, &tmpHostTabPtr);
+
+#ifdef foo /* done in getBestSrcForBulkMove */
+    /* get the first resource */
+
+    status = getFirstResc (srcResource, phyResName);
+
+    myresult = NULL;
+    if (status < 0) {	/* no srcResource input */
+	status = queryBulkUnloadForMove (catType, flag, collectionName,
+	  srcResource, destResource, &myresult); 
+	if (status < 0) {
+	    return (status);
+	}
+        if (myresult == NULL || myresult->result_count <= 0) {
+            elog(NOTICE,
+             "_svrBulkMove: queryBulkUnloadForMove returns no result ");
+            return SYS_ERR_MDAS_CAT_RET;
+        }
+	getBulkUnloadHost(myresult, &tmpHostTabPtr, flag);
+	if (tmpHostTabPtr == NULL) {
+	    remoteFlag = LOCAL_HOST;
+	    flag |= BL_QUERY_DONE;
+	} else {
+	    remoteFlag = REMOTE_HOST;
+	}
+    } else {
+        if (getResInfo (collectionName, catType, destResource,
+         ClientUser->domainName, &myCacheRes) < 0) {
+            elog (NOTICE,
+              "_svrBulkMove: Input resource %s is not a registered resource",
+              destResource);
+            return (OBJ_ERR_RES_NOT_REG);
+        }
+
+        sortResForIngest (myCacheRes, -1);
+
+        srcResInfo = myCacheRes->resInfoHead;
+#ifdef FED_MCAT
+        remoteFlag = chkHostAndZone (srcResInfo->phyResLoc, &tmpHostTabPtr);
+#else
+        /* Parse the hostAddr */
+        strcpy (tmpResLoc, srcResInfo->phyResLoc);
+        portNum = parseAddr (tmpResLoc);
+        remoteFlag = chkHost (tmpResLoc, portNum, &tmpHostTabPtr);
+#endif
+    }
+#endif 	/* foo */
+
+    if (remoteFlag == REMOTE_HOST) {
+	int srcFd = -1; 
+	srbConn *conn = NULL;
+
+        if (tmpHostTabPtr->mdasEnabled > 0) {
+            /* need to do this or deadlock */
+            conn = svrConnect (tmpHostTabPtr->alias->hostName,
+             tmpHostTabPtr->zoneHostTab->portNum, NULL, 0, tmpHostTabPtr);
+            status = clStatus(conn);
+            if (status != CLI_CONNECTION_OK) {
+                elog (NOTICE,"Remote connect failed to %s: status = %d", 
+		 tmpHostTabPtr->alias->hostName, status);
+                if (status < START_OF_ERR_CODE) {
+                    /* valid code */
+                    return status;
+                } else {
+                    /* generic code */
+                    return (SYS_ERR_REMOTE_CONN);
+                }
+            }
+	    srcFd = srbBulkUnloadForMove (conn, catType, flag,
+	      collectionName, srcResource, destResource, &myresult);
+        } else {
+	    status = remoteConnect (tmpHostTabPtr);
+	    if (status < 0) {
+                return (status);
+	    }
+	    srcFd = srbBulkUnloadForMove (tmpHostTabPtr->conn, catType, flag,
+	      collectionName, srcResource, destResource, &myresult);
+        }
+	if (srcFd < 0) {
+	    return (srcFd);
+	}
+	status = unfoldBulkMoveData (srcFd, destResInfo, myresult);
+	if (conn != NULL)
+	    clFinish (conn);
+    } else {
+	if (remoteFlag < 0 || myresult == NULL) {
+            status = queryBulkUnloadForMove (catType, flag, collectionName,
+              srcResource, destResource, &myresult);
+            if (status < 0) {
+                return (status);
+            }
+            if (myresult == NULL || myresult->result_count <= 0) {
+                elog(NOTICE,
+                 "_svrBulkMove: queryBulkUnloadForMove returns no result ");
+                return SYS_ERR_MDAS_CAT_RET;
+	    }
+        }
+	status = localBulkMoveData (catType, collectionName, destResInfo, 
+	 myresult);
+    }
+
+    if (status < 0) {
+        elog(NOTICE,
+	 "_svrBulkMove: BulkMoveData of %s failed. status = %d",
+	  collectionName, status);
+	return (status);
+    }
+	
+    return (0);
+}
+
+int
+svrBulkUnloadForMove(int catType, int flag, struct varlena *vClHostAddr, 
+int clPort, struct varlena *vCollection, struct varlena *vSrcResource, 
+struct varlena *vTargResource, svrComm_t *myComm)
+{
+    char *collection;
+    char *clHostAddr;
+    char *srcResource, *targResource;
+    int status;
+
+    clHostAddr = varToStr (vClHostAddr);
+    collection = varToStr (vCollection);
+    srcResource = varToStr (vSrcResource);
+    targResource = varToStr (vTargResource);
+
+    status = _svrBulkUnloadForMove (catType, flag, clHostAddr, clPort, 
+     collection, srcResource, targResource, myComm);
+
+    free (collection);
+    free (clHostAddr);
+    free (srcResource);
+    free (targResource);
+
+    return (status);
+}
+
+int
+_svrBulkUnloadForMove (int catType, int flag, char *clHostAddr,
+int clPort, char *collection, char *srcResource, char *targResource,
+svrComm_t *myComm)
+{
+    int status;
+    mdasC_sql_result_struct *myresult = NULL, *savedResult = NULL;
+    int remoteFlag;
+    struct hostElement  *hostTabPtr, *tmpHostTabPtr;
+    int fileCnt;
+    struct bunloadSort bunloadHead;
+    int continuation_index;
+    int myFd = -1;
+
+    status = queryBulkUnloadForMove (catType, flag, collection, 
+     srcResource, targResource, &myresult);
+
+    if (status < 0) {
+	return (status);
+    }
+
+    if (myresult == NULL || myresult->result_count <= 0) {
+        elog(NOTICE,
+         "_svrBulkUnloadForMove: queryBulkUnloadForMove returns no result ");
+        return SYS_ERR_MDAS_CAT_RET;
+    }
+
+    myFd = setupSockForBunload (clHostAddr, clPort, myComm, flag);
+    if (myFd < 0) {
+       if (bunloadHead.myresult != NULL)
+            freeSqlResult (bunloadHead.myresult);
+        if (bunloadHead.unloadFlag != NULL)
+            free (bunloadHead.unloadFlag);
+        return myFd;
+    }
+
+    status = sendBmoveData (myresult, clHostAddr, clPort, myComm, flag,
+     myFd);
+
+    if (status < 0) {
+        elog(NOTICE,
+         "_svrBulkUnloadForMove:sendBmoveData error ,status=%d", status);
+        freeSqlResult (myresult);
+#ifdef _WIN32
+        closesocket(myFd);
+#else
+        close (myFd);
+#endif
+        return (DONT_SEND_RETURN);
+    }
+
+    continuation_index = myresult->continuation_index;
+    savedResult = myresult;
+    myresult = NULL;
+#ifdef foo
+    if (myresult != NULL) {
+        freeSqlResult (myresult);
+        myresult = NULL;
+    }
+#endif
+
+    if (continuation_index >= 0) {
+        remoteFlag = getMdasEnabledHost (collection, &hostTabPtr);
+
+        if (remoteFlag < 0) {
+            elog(NOTICE,
+             "_svrBulkUnloadForMove:getMdasEnabledHost error for %s,status=%d",
+              collection, remoteFlag);
+#ifdef _WIN32
+            closesocket(myFd);
+#else
+            close (myFd);
+#endif
+            return (DONT_SEND_RETURN);
+	}
+    }
+
+    while (continuation_index >= 0) {
+        myresult = NULL;
+        if (remoteFlag == LOCAL_HOST) {      /* Can talk to mdas */
+#ifdef SRB_MDAS
+            status = get_more_rows (catType, continuation_index, &myresult,
+             BULK_MOVE_NUM_ROWS);
+#endif
+        } else {
+            status = remoteGetMoreRows (catType, continuation_index, &myresult, 
+             BULK_MOVE_NUM_ROWS, hostTabPtr);
+        }
+
+        if (status < 0 || myresult == NULL || myresult->row_count <= 0) {
+            break;
+        }
+	addZoneToResult (myresult, collection);
+
+        continuation_index = myresult->continuation_index;
+        status = sendBmoveData (myresult, clHostAddr, clPort, myComm,
+         flag, myFd);
+
+        if (status < 0) {
+            elog(NOTICE,
+             "_svrBulkUnloadForMove:sendBmoveData error ,status=%d", status);
+	    break;
+        }
+
+	if (savedResult != NULL) {
+	    status = readDelHeader (myFd, savedResult);
+	    if (status < 0) {
+                elog(NOTICE,
+                 "_svrBulkUnloadForMove:readDelHeader error ,status=%d",
+	          status);
+		break;
+	    }
+	    status = delMovedSrcData (savedResult);
+            if (status < 0) {
+                elog(NOTICE,
+                 "_svrBulkUnloadForMove:delMovedSrcData error ,status=%d",
+                 status);
+		break;
+            }
+            freeSqlResult (savedResult);
+            savedResult = NULL;
+	}
+#ifdef foo
+        if (myresult != NULL) {
+            freeSqlResult (myresult);
+            myresult = NULL;
+        }
+#endif
+        if (status < 0) {
+	    break;
+        }
+        savedResult = myresult;
+        myresult = NULL;
+    }
+    if (status < 0) {
+        printOrphan (savedResult);
+        printOrphan (myresult);
+        freeSqlResult (savedResult);
+        freeSqlResult (myresult);
+#ifdef _WIN32
+        closesocket(myFd);
+#else
+        close (myFd);
+#endif
+        return (DONT_SEND_RETURN);
+    }
+
+    if (savedResult != NULL) {
+        status = readDelHeader (myFd, savedResult);
+        if (status < 0) {
+            elog(NOTICE,
+             "_svrBulkUnloadForMove:readDelHeader error,status=%d",
+             status);
+            printOrphan (savedResult);
+        }
+        status = delMovedSrcData (savedResult);
+        if (status < 0) {
+            elog(NOTICE,
+             "_svrBulkUnloadForMove:delMovedSrcData error ,status=%d",
+             status);
+        }
+        freeSqlResult (savedResult);
+    }
+
+    sendDoneToPortal (myFd);
+
+#ifdef _WIN32
+    closesocket(myFd);
+#else
+    close (myFd);
+#endif
+
+    return (DONT_SEND_RETURN);
+}
+
+int
+queryBulkUnloadForMove (int catType, int flag, char *collection, 
+char *srcResource, char *targResource, mdasC_sql_result_struct **myresult)
+{
+    int i, status;
+    int remoteFlag;
+    struct hostElement  *hostTabPtr;
+    char qval[MAX_DCS_NUM][MAX_TOKEN];
+    int selval[MAX_DCS_NUM];
+    char tmpStr[MAX_TOKEN];
+    char *mcatName;
+    char *phyResLoc;
+   
+    memset (qval, 0, sizeof (qval));
+    memset (selval, 0, sizeof (selval));
+
+    if (ClientUser->privUserFlag == 0) {
+	/* need to check permission */
+	sprintf(qval[DATA_ACCESS_PRIVILEGE]," like '%%''write''%%'");
+	sprintf (qval[USER_NAME], " = '%s'", ClientUser->userName);
+	sprintf (qval[DOMAIN_DESC], " = '%s'", ClientUser->domainName);
+    }
+	
+    if (srcResource != NULL && strlen (srcResource) > 0) {
+	status = setMultiRescQuery (qval[PHY_RSRC_NAME], srcResource);
+	if (status < 0) {
+	    elog (NOTICE, 
+	     "queryBulkUnloadForMove:setMultiRescQuery of %s error,status=%d",
+	      srcResource, status);
+	    return (status);
+	}
+    } else {
+	if (targResource != NULL && strlen (targResource) > 0) { 
+	    sprintf (qval[PHY_RSRC_NAME], " not in ('%s')", targResource);
+	}
+    }
+
+    sprintf(qval[DATA_GRP_NAME],
+      " like '%s' ESCAPE '\\' || like '%s/%%' ESCAPE '\\'",
+      collection, collection);
+    sprintf(qval[CONTAINER_NAME]," is NULL || ='' ");
+
+    selval[DATA_NAME] = 1;
+    selval[DATA_GRP_NAME] = 1;
+    selval[PHY_RSRC_TYP_NAME] = 1;
+    selval[DATA_VER_NUM] = 1;
+    selval[DATA_REPL_ENUM] = 1;
+    selval[PATH_NAME] = 1;
+    selval[RSRC_ADDR_NETPREFIX] = 1;
+    selval[PHY_RSRC_NAME] = 1;
+    selval[RSRC_CLASS] = 1;
+    selval[SIZE] = 1;
+    selval[DATA_CHECKSUM] = 1;
+
+    status = queryDataInfo (collection, selval, (char (*) [MAX_TOKEN]) qval,
+     myresult, BULK_MOVE_NUM_ROWS);
+
+    if (status < 0) 
+	return status;
+
+    addZoneToResult (*myresult, collection);
+
+    return status;
+}
+
+int
+addZoneToResult (mdasC_sql_result_struct *myresult, char *mcatHint)
+{
+    int i;
+    int remoteFlag;
+    struct hostElement  *hostTabPtr;
+    char tmpStr[MAX_TOKEN];
+    char *mcatName;
+    char *phyResLoc;
+
+    if (myresult == NULL)
+	return 0;
+
+    remoteFlag = getMdasEnabledHost (mcatHint, &hostTabPtr);
+    if (remoteFlag < 0) {
+        elog (NOTICE,
+          "queryBulkUnloadForMove: getMdasEnabledHost failed for %s",
+          mcatHint);
+        return remoteFlag;
+    }
+
+    mcatName = hostTabPtr->serverAuthInfo->mcatName;
+
+    phyResLoc = (char *)get_from_result_struct(
+                  myresult,
+                  dcs_tname[RSRC_ADDR_NETPREFIX],
+                    dcs_aname[RSRC_ADDR_NETPREFIX]);
+
+    if (phyResLoc == NULL)
+	return 0;
+
+    for (i = 0; i < myresult->row_count; i++) {
+        sprintf (tmpStr, "%s&%s", mcatName, phyResLoc);
+        strcpy (phyResLoc, tmpStr);
+        phyResLoc += MAX_DATA_SIZE;
+    }
+}
+
+int
+setMultiRescQuery (char *qval, char *srcResource)
+{
+    char *tmpPtr, *startPtr;
+    int c;
+    char tmpResource[MAX_BMOVE_SRC_RESC][MAX_TOKEN];
+    int rescInx = 0, cnt = 0;
+
+    memset (tmpResource, 0, sizeof (tmpResource));
+
+    if (strlen (srcResource) >= MAX_TOKEN) {
+	elog (NOTICE, "setMultiRescQuery: Input srcResource %s too long", 
+	  srcResource);
+	return (INP_ERR_RES_FORMAT);
+    }
+	
+	
+    tmpPtr = startPtr = srcResource;
+    while ((c = *tmpPtr) != '\0') {
+	tmpPtr ++;
+        if (c == '|') {
+	    if (cnt > 0) {
+		strncpy (tmpResource[rescInx], startPtr, cnt);
+		rescInx++;
+		if (rescInx >= MAX_BMOVE_SRC_RESC) {
+		    elog (NOTICE, 
+		     "setMultiRescQuery: srcReso %s has more than %d reso",
+		      srcResource, MAX_BMOVE_SRC_RESC);
+		    return (INP_ERR_RES_FORMAT);
+		}
+	    }
+	    cnt = 0;
+	    startPtr = tmpPtr;
+	} else {
+	    cnt ++;
+	}
+    }
+    if (cnt > 0) {
+        strncpy (tmpResource[rescInx], startPtr, cnt);
+        rescInx++;
+    }
+    /* now write the qval */
+
+    sprintf (qval, "in (");
+
+    for (i = 0; i < rescInx; i++) {
+	tmpPtr = qval + strlen (qval);
+	if (i == rescInx - 1) {		/* last */
+	    sprintf (tmpPtr, "'%s')", tmpResource[i]);
+	} else {
+	    sprintf (tmpPtr, "'%s',", tmpResource[i]);
+	}
+    }
+    if (strlen (qval) >= MAX_TOKEN) {
+	elog (NOTICE, "setMultiRescQuery: qval for srcResource %s too long", 
+	  srcResource);
+	return (INP_ERR_RES_FORMAT);
+    }
+    return (0);
+}
+
+int
+sendBmoveData (mdasC_sql_result_struct *myresult, char *clHostAddr, int clPort,
+svrComm_t *myComm, int flag, int myFd)
+{
+    int status, i;
+    char *objID, *resourceType, *dataPath, *resourceLoc, *resourceName,
+    *dataType, *replNum, *offset, *size, *phyResClass, *containerName,
+    *isDirty, *collection, *chksum;
+    char *filePtr, *collPtr, *sizePtr, *offsetPtr, *chksumPtr;
+    struct varlena * packedResult;
+    byteStream myBS;
+    FunctCall myFunctCall;
+    int bufOffset;
+    char *buf, *bufptr;
+    int fileCnt = 0;
+    srb_long_t myOffset = 0;
+
+    if (myresult == NULL || myresult->row_count <= 0) {
+        elog(NOTICE,
+         "sendBmoveData: Number of files to unload is zero");
+        return SYS_ERR_MDAS_CAT_RET;
+    }
+
+    /* add offset to myresult */
+    i = myresult->result_count;
+    myresult->sqlresult[i].values = 
+      malloc (myresult->row_count * MAX_DATA_SIZE);
+    if (myresult->sqlresult[i].values == NULL) {
+        elog(NOTICE,"sendBmoveData: malloc error");
+        return SYS_ERR_MALLOC;
+    }
+    memset (myresult->sqlresult[i].values, 0, 
+     myresult->row_count * MAX_DATA_SIZE);
+    myresult->sqlresult[i].tab_name = strdup (dcs_tname[OFFSET]);
+    myresult->sqlresult[i].att_name = strdup (dcs_aname[OFFSET]);
+    myresult->result_count++;
+
+    offsetPtr = myresult->sqlresult[i].values;
+    size = (char *) get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult,
+        dcs_tname[SIZE], dcs_aname[SIZE]);
+
+    for (i = 0; i < myresult->row_count; i ++) {
+#if defined(PORTNAME_osx)
+        sprintf (&offsetPtr[i*MAX_DATA_SIZE], "%-qd", myOffset);
+#else
+        sprintf (&offsetPtr[i*MAX_DATA_SIZE], "%-lld", myOffset);
+#endif
+	myOffset += strtoll (&size[i*MAX_DATA_SIZE], 0, 0);
+    }
+    /* Send myresult */
+
+    status = packMsg ((char *) myresult, &packedResult, sqlResultStruct_PF,
+     NULL);
+
+    if (status < 0) {
+        elog (NOTICE, "sendBmoveData: packMsg error. status = %d", status);
+        freeSqlResult (myresult);
+        return status;
+    }
+
+    myBS.len = VARSIZE (packedResult) - VAROUTHDRSZ;
+    myBS.bytes = VAROUTDATA(packedResult);
+
+    /* send the packed myresult */
+
+    status = writeToPortal (myFd, myBS.bytes, 0, myBS.len);
+
+    free (packedResult);
+
+    /* send the data */
+
+    myOffset = 0;
+    bufOffset = 0;
+    buf = malloc (BL_BUFSIZE);
+    bufptr = buf;
+
+    resourceType = (char *)get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult, dcs_tname[PHY_RSRC_TYP_NAME],
+        dcs_aname[PHY_RSRC_TYP_NAME]);
+    dataPath = (char *) get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult, dcs_tname[PATH_NAME],
+      dcs_aname[PATH_NAME]);
+    resourceLoc = (char *) get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult, dcs_tname[RSRC_ADDR_NETPREFIX],
+      dcs_aname[RSRC_ADDR_NETPREFIX]);
+
+    collection = (char *) get_from_result_struct(
+     (mdasC_sql_result_struct *) myresult,
+        dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+
+    for (i = 0; i < myresult->row_count; i++) {
+        int objTypeInx, exfInx, space, readLen, nbytes;
+        srb_long_t toread;
+
+        objTypeInx = objTypeLookUp (&resourceType[i*MAX_DATA_SIZE]);
+
+#ifdef foo
+#ifdef FED_MCAT
+        tmpLoc = getAddrWithZone (&resourceLoc[i*MAX_DATA_SIZE],
+         &collection[i*MAX_DATA_SIZE]);
+#else
+        tmpLoc = &resourceLoc[i*MAX_DATA_SIZE];
+#endif
+#endif
+        exfInx = lowLevelOpen (objTypeInx, &dataPath[i*MAX_DATA_SIZE],
+         &resourceLoc[i*MAX_DATA_SIZE], O_RDONLY);
+
+#ifdef foo
+#ifdef FED_MCAT
+        free (tmpLoc);
+#endif
+#endif
+        if (exfInx < 0) {
+            fprintf (stderr,
+             "sendBmoveData: unable to open %s at %s, stat = %d\n",
+              &dataPath[i*MAX_DATA_SIZE], &resourceLoc[i*MAX_DATA_SIZE],
+              exfInx);
+            close (myFd);
+            free (buf);
+            return (DONT_SEND_RETURN);
+        }
+
+        toread = strtoll (&size[i*MAX_DATA_SIZE], 0, 0);
+
+        while (toread > 0) {
+            space = BL_BUFSIZE - bufOffset;
+
+            if (toread > space && bufOffset > 0) {
+                /* dump the buf */
+                status = writeToPortal (myFd, buf, myOffset, bufOffset);
+                if (status <= 0) {
+                    fprintf (stderr,
+                     "sendBmoveData: write data error.errno=%d\n", errno);
+                    close (myFd);
+                    free (buf);
+                    return (DONT_SEND_RETURN);
+                }
+
+                myOffset += bufOffset;
+                bufOffset = 0;
+                bufptr = buf;
+                readLen = BL_BUFSIZE;
+            } else {
+                if (toread > BL_BUFSIZE)
+                    readLen = BL_BUFSIZE;
+                else
+                    readLen = toread;
+                bufptr = buf + bufOffset;
+            }
+            nbytes = _objRead (exfInx, objTypeInx, bufptr, readLen);
+            if (nbytes <= 0) {
+                fprintf (stderr,
+                 "sendBmoveData: read error for %s at %s, toread=%d, read=%d, errno=%d\n",
+                  &dataPath[i*MAX_DATA_SIZE], &resourceLoc[i*MAX_DATA_SIZE],
+                  toread, nbytes, errno);
+                close (myFd);
+                free (buf);
+                return (DONT_SEND_RETURN);
+            }
+            toread -= nbytes;
+            bufOffset += nbytes;
+        }
+        lowLevelClose (objTypeInx, exfInx);
+    }
+    if (bufOffset > 0) {
+        status = writeToPortal (myFd, buf, myOffset, bufOffset);
+        if (status <= 0) {
+            fprintf (stderr,
+             "sendBmoveData: write data error.errno=%d\n", errno);
+        }
+    }
+    free (buf);
+
+    return (0);
+}
+
+int
+unfoldBulkMoveData (int srcFd, struct mdasResInfo *destResInfo, 
+mdasC_sql_result_struct *inresult)
+{
+    int continuation_index = 1;
+    srb_long_t offset, size;
+    srb_long_t curOffset;
+    int local_fd;
+    int status;
+    char *inCollection, *inObjID, *inSize, *inOffset, *inChksum, *inReplNum,
+      *inVerNum;
+    char *outCollection, *outObjID, *outReplNum, *outVerNum, *outPath;
+    srb_long_t totalSz = 0;
+    int toRead;
+    int destTypeInx, inx, cnt;
+    mdasC_sql_result_struct outresult;
+    char *buf;
+
+    buf = malloc (BL_BUFSIZE);
+    if (buf == NULL) {
+        fprintf (stderr, "unfoldBulkUnload: Unable to malloc buf\n");
+        close (srcFd);
+        return (CLI_ERR_MALLOC);
+    }
+
+    destTypeInx = objTypeLookUp (destResInfo->phyResType);
+
+    while (continuation_index >= 0) {
+        /* hand craft the outresult */
+        setupResultForMove (inresult, &outresult, NULL);
+
+        outCollection = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+        outObjID = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_NAME], dcs_aname[DATA_NAME]);
+        outVerNum = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_VER_NUM], dcs_aname[DATA_VER_NUM]);
+        outReplNum = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_REPL_ENUM], dcs_aname[DATA_REPL_ENUM]);
+        outPath = (char *) getFromResultStruct(&outresult,
+          dcs_tname[PATH_NAME], dcs_aname[PATH_NAME]);
+
+
+        inCollection = (char *) getFromResultStruct(
+         (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+
+        inObjID = (char *)getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[DATA_NAME],
+            dcs_aname[DATA_NAME]);
+        inSize = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[SIZE], dcs_aname[SIZE]);
+
+        inOffset = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[OFFSET], dcs_aname[OFFSET]);
+
+        inChksum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_CHECKSUM], dcs_aname[DATA_CHECKSUM]);
+
+        inReplNum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_REPL_ENUM], dcs_aname[DATA_REPL_ENUM]);
+
+        inVerNum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_VER_NUM], dcs_aname[DATA_VER_NUM]);
+
+        inx = 0;
+        curOffset = 0;
+	local_fd = localCreateForMove (inCollection, inObjID, inReplNum,
+	 inVerNum, destResInfo, destTypeInx, outCollection, outObjID, 
+	 outReplNum, outVerNum, outPath);  
+
+
+        if (local_fd < 0) {
+            elog(NOTICE,
+             "unfoldBulkMoveData: localCreate of %s/%s failed, status = %d",
+              inCollection, inObjID, local_fd);
+	    close (srcFd);
+	    free (buf);
+            return local_fd;
+        }
+
+        outresult.row_count++;
+        offset = strtoll (&inOffset[inx*MAX_DATA_SIZE], 0, 0);
+        size = strtoll (&inSize[inx*MAX_DATA_SIZE], 0, 0);
+
+
+        status = 0;
+        while ((cnt =  readDataFromPortal (srcFd, buf, BL_BUFSIZE)) > 0) {
+            char *bufptr;
+
+            if (status < 0)
+                break;
+           bufptr = buf;
+            while (cnt > 0) {
+                if (cnt >= size) {
+                    status = _objWrite (local_fd, destTypeInx, bufptr, size);
+                    if (status < size) {
+                        fprintf(stderr,
+                         "unfoldBulkMoveData: Read %lld bytes, Wrote %d bytes.\n ",
+                         size, status);
+                        lowLevelClose (destTypeInx, local_fd);
+                        status = -1;
+                        break;
+                    }
+                    cnt -= size;
+                    curOffset += size;
+                    bufptr += size;
+                    lowLevelClose (destTypeInx, local_fd);
+
+                    inx ++;
+                    if (inx >= inresult->row_count)
+                        break;
+
+                    outCollection += MAX_DATA_SIZE;
+                    outObjID += MAX_DATA_SIZE;
+                    outVerNum += MAX_DATA_SIZE;
+                    outReplNum += MAX_DATA_SIZE;
+                    outPath += MAX_DATA_SIZE;
+
+                    local_fd = localCreateForMove (
+		      &inCollection[inx*MAX_DATA_SIZE], 
+		      &inObjID[inx*MAX_DATA_SIZE], 
+		      &inReplNum[inx*MAX_DATA_SIZE], 
+		      &inVerNum[inx*MAX_DATA_SIZE], destResInfo, destTypeInx, 
+		     outCollection, outObjID, outReplNum, outVerNum, outPath);
+
+                    if (local_fd < 0) {
+                        status = local_fd;
+                        break;
+                    }
+                    outresult.row_count++;
+
+                    offset = strtoll (&inOffset[inx*MAX_DATA_SIZE], 0, 0);
+                    size = strtoll (&inSize[inx*MAX_DATA_SIZE], 0, 0);
+
+                    if (offset != curOffset) {
+                        /* something is wrong */
+                        elog (NOTICE,
+                         "unfoldBulkMoveData: offset mismatch at %s/%s, %lld:%lld\n ",
+                         outCollection, outObjID, offset, curOffset);
+                        status = -1;
+                        break;
+                    }
+                } else {        /* cnt < size */
+                    status = _objWrite (local_fd, destTypeInx, bufptr, cnt);
+                    if (status < cnt) {
+                        elog (NOTICE,
+                         "unfoldBulkMoveData: Read %d bytes,Wrote %d bytes.\n ",
+                         cnt, status);
+                        status = -1;
+                        break;
+                    }
+                    size -= cnt;
+                    curOffset += cnt;
+                    cnt = 0;
+                }
+            }
+            if (inx >= inresult->row_count)
+                break;
+        }
+        if (inx < inresult->row_count) {
+            elog (NOTICE,
+             "unfoldBulkMoveData: Need to unload %d files but done only %d\n ",
+             inresult->row_count, inx);
+            status = -1;
+            break;
+        } else {
+            status = 0;
+        }
+	/* do the registration here */
+	status = _svrModifyForBulkMove (MDAS_CATALOG, BULK_PHY_MOVE, 
+	  destResInfo->phyResName, &outresult);
+        continuation_index = inresult->continuation_index;
+        if (status < 0) {
+            elog (NOTICE,
+             "unfoldBulkMoveData: getResultForBunload error. ststus = %d\n ",
+              status);
+            break;
+        }
+
+	/* tell the source that it is OK to delete the source files */
+	status = sendDelToPortal (srcFd, inresult);
+        if (status < 0) {
+            elog (NOTICE,
+             "unfoldBulkMoveData: sendDelToPortal error. ststus = %d\n ",
+              status);
+	    printOrphan (inresult);
+            break;
+        }
+
+        freeSqlResult (inresult);
+        clearSqlResult (&outresult);
+	outresult.row_count = 0;
+
+        if (continuation_index >= 0) {
+            status = getResultForBunload (srcFd, &inresult);
+            if (status < 0) {
+                fprintf(stderr,
+                 "unfoldBulkMoveData: getResultForBunload error. ststus = %d\n ",
+                  status);
+                break;
+            }
+        } else {
+            break;
+        }
+    }
+    if (status < 0) {
+	cleanMovedData (destResInfo, &outresult);
+    }
+
+    free (buf);
+    close (srcFd);
+    return (status);
+}
+
+
+int
+setupResultForMove (mdasC_sql_result_struct *inresult, 
+mdasC_sql_result_struct *outresult, char *container)
+{
+    int i, fileCnt;
+
+    memset (outresult, 0, sizeof (mdasC_sql_result_struct));
+
+    if (inresult == NULL || inresult->row_count <= 0) 
+	return (0);
+
+    outresult->continuation_index = inresult->continuation_index;
+    fileCnt = inresult->row_count;
+
+    outresult->sqlresult[0].tab_name = strdup (dcs_tname[DATA_NAME]);
+    outresult->sqlresult[0].att_name = strdup (dcs_aname[DATA_NAME]);
+    outresult->sqlresult[1].tab_name = strdup (dcs_tname[DATA_GRP_NAME]);
+    outresult->sqlresult[1].att_name = strdup (dcs_aname[DATA_GRP_NAME]);
+    outresult->sqlresult[2].tab_name = strdup (dcs_tname[DATA_VER_NUM]);
+    outresult->sqlresult[2].att_name = strdup (dcs_aname[DATA_VER_NUM]);
+    outresult->sqlresult[3].tab_name = strdup (dcs_tname[DATA_REPL_ENUM]);
+    outresult->sqlresult[3].att_name = strdup (dcs_aname[DATA_REPL_ENUM]);
+
+    if (container == NULL) {
+        outresult->result_count = 5;
+        outresult->sqlresult[4].tab_name = strdup (dcs_tname[PATH_NAME]);
+        outresult->sqlresult[4].att_name = strdup (dcs_aname[PATH_NAME]);
+    } else {
+	outresult->result_count = 6;
+        outresult->sqlresult[4].tab_name = strdup (dcs_tname[SIZE]);
+        outresult->sqlresult[4].att_name = strdup (dcs_aname[SIZE]);
+        outresult->sqlresult[5].tab_name = strdup (dcs_tname[OFFSET]);
+        outresult->sqlresult[5].att_name = strdup (dcs_aname[OFFSET]);
+
+    }
+
+    for (i = 0; i < outresult->result_count; i++) {
+        outresult->sqlresult[i].values = malloc (fileCnt * MAX_DATA_SIZE);
+        if (outresult->sqlresult[i].values == NULL) {
+            elog(NOTICE,"setupResultForMove: malloc error");
+            return SYS_ERR_MALLOC;
+        }
+        memset (outresult->sqlresult[i].values, 0, fileCnt * MAX_DATA_SIZE);
+    }
+
+    return (0);
+}
+
+int
+localCreateForMove (char *inCollection, char *inObjID, char *inReplNum,
+char *inVerNum, struct mdasResInfo *destResInfo, int destTypeInx, 
+char *outCollection, char *outObjID, char *outReplNum, char *outVerNum, 
+char *outPath)
+{
+    int status;
+        
+    status = getFullPathName (destResInfo->logDirPathName,
+                          destResInfo->phyDirPathName,
+                          ClientUser->userName, ClientUser->domainName,
+                          "", inObjID, inCollection, outPath);
+
+
+    if (status < 0) {
+        elog(NOTICE,
+         "localCreateForMove: Unable get resolve pathName: %s/%s, status = %d",
+          inCollection, inObjID, status);
+        return status;
+    }
+
+    status = lowLevelCreate (destTypeInx,
+             destResInfo->phyResLoc, outPath,
+             StorVaultMode, NO_CHKDIR, -1);
+
+    if (status < 0) {
+	return (status);
+    }
+
+    strcpy (outCollection, inCollection);
+    strcpy (outObjID, inObjID);
+    strcpy (outReplNum, inReplNum);
+    strcpy (outVerNum, inVerNum);
+
+    return (status);
+}
+
+int
+cleanMovedData (struct mdasResInfo *destResInfo, 
+mdasC_sql_result_struct *outresult)
+{
+    int i, status;
+    int destTypeInx;
+    char *outPath;
+
+    if (outresult == NULL || outresult->row_count == 0) {
+	return 0;
+    }
+
+    outPath = (char *) getFromResultStruct(outresult,
+      dcs_tname[PATH_NAME], dcs_aname[PATH_NAME]);
+
+    destTypeInx = objTypeLookUp (destResInfo->phyResType);
+
+    for (i = 0; i < outresult->row_count; i++) {
+        status = _objUnlink (srbObjTypeEntry[destTypeInx].objType,
+        srbObjTypeEntry[destTypeInx].systemType, destResInfo->phyResLoc,
+         outPath, NO_CHKDIR);
+        if (status < 0) {
+            elog (NOTICE, "cleanMovedData:_objUnlink error for %s. status = %d",
+             outPath, status);
+        }
+	outPath += MAX_DATA_SIZE;
+    }
+    return (status);
+}
+
+int
+getFirstResc (char *srcResource, char *outResName)
+{
+    char *tmpPtr, *startPtr;
+    int c, cnt = 0;
+
+    if (srcResource == NULL || strlen (srcResource) == 0 ||
+      outResName == NULL) {
+	return -1;
+    }
+
+    if (strlen (srcResource) >= MAX_TOKEN) {
+        elog (NOTICE, "getFirstResc: Input srcResource %s too long",
+          srcResource);
+        return (INP_ERR_RES_FORMAT);
+    }
+
+    tmpPtr = startPtr = srcResource;
+    while ((c = *tmpPtr) != '\0') {
+        tmpPtr ++;
+        if (c == '|') {
+            if (cnt > 0) {
+                strncpy (outResName, startPtr, cnt);
+		outResName[cnt] = '\0';
+		return (0);
+	    }
+            startPtr = tmpPtr;
+	} else {
+	    cnt++;
+	}
+    }
+    if (cnt > 0) {
+        strncpy (outResName, startPtr, cnt);
+	outResName[cnt] = '\0';
+	return (0);
+    } else {
+	return (-1);
+    }
+}
+
+int
+sendDelToPortal (int destFd, mdasC_sql_result_struct *myresult)
+{
+    struct relayHeader myHeader;
+    char *size;
+    int status;
+
+    /* use the first file size for confirmation */
+   size = (char *) get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult,
+        dcs_tname[SIZE], dcs_aname[SIZE]);
+
+    myHeader.operation = htonl (DEL_FILES_IN_RES);
+    myHeader.offset =  strtoll (size, 0, 0);
+    srbHtonll (&myHeader.offset);
+    myHeader.length = htonl (myresult->row_count);
+
+    status = write (destFd, (void *) &myHeader, sizeof (myHeader));
+
+    return (status);
+}
+
+int printOrphan (mdasC_sql_result_struct *myresult)
+{
+    int i;
+    char *resourceLoc, *pathName;
+
+    if (myresult == NULL) {
+	return (0);
+    }
+    resourceLoc = (char *) get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult, dcs_tname[RSRC_ADDR_NETPREFIX],
+      dcs_aname[RSRC_ADDR_NETPREFIX]);
+
+    pathName = (char *) getFromResultStruct(
+     (mdasC_sql_result_struct *) myresult, dcs_tname[PATH_NAME], 
+     dcs_aname[PATH_NAME]);
+
+    fprintf (stderr, "possible orphan :\n");
+    for (i = 0; i < myresult->row_count; i++) {
+	fprintf (stderr, "%s    %s\n", resourceLoc, pathName);
+	resourceLoc += MAX_DATA_SIZE;
+	pathName += MAX_DATA_SIZE;
+    }
+
+    return (0);
+}
+
+int
+readDelHeader (int myFd, mdasC_sql_result_struct *savedResult)
+{
+    struct relayHeader myHeader;
+    int status;
+    char *size;
+    srb_long_t lsize;
+
+    status = readHeader (myFd, &myHeader);
+
+    if (status < 0) {
+	elog (NOTICE, "readDelHeader: readHeader error, errno = %d", errno);
+	return -1;
+    }
+
+    if (savedResult == NULL) {
+        elog (NOTICE, "readDelHeader: NULL savedResult");
+        return -1;
+    }
+
+    if (myHeader.operation != DEL_FILES_IN_RES) {
+	elog (NOTICE, 
+	 "readDelHeader: operation %d not equal to DEL_FILES_IN_RES", 
+	 myHeader.operation);
+	return -1;
+    }
+	
+    if (myHeader.length != savedResult->row_count) {
+        elog (NOTICE, 
+         "readDelHeader: header length %d not equal to %d",          
+	myHeader.length, savedResult->row_count);
+        return -1;
+    }
+    /* use the first file size for confirmation */
+   size = (char *) get_from_result_struct(
+    (mdasC_sql_result_struct *) savedResult,
+        dcs_tname[SIZE], dcs_aname[SIZE]);
+
+    lsize =  strtoll (size, 0, 0);
+
+    if (myHeader.offset != lsize) {
+        elog (NOTICE,
+         "readDelHeader: header offset %lld not equal to %lld",
+        myHeader.offset, lsize);
+        return -1;
+    }
+    return (0);
+}
+
+int
+delMovedSrcData (mdasC_sql_result_struct *myresult)
+{
+    int i, status;
+    char *resourceType, *dataPath, *resourceLoc;
+    int destTypeInx;
+
+    if (myresult == NULL || myresult->row_count == 0) {
+        return 0;
+    }
+
+    resourceType = (char *)get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult, dcs_tname[PHY_RSRC_TYP_NAME],
+        dcs_aname[PHY_RSRC_TYP_NAME]);
+    dataPath = (char *) get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult, dcs_tname[PATH_NAME],
+      dcs_aname[PATH_NAME]);
+    resourceLoc = (char *) get_from_result_struct(
+    (mdasC_sql_result_struct *) myresult, dcs_tname[RSRC_ADDR_NETPREFIX],
+      dcs_aname[RSRC_ADDR_NETPREFIX]);
+
+    for (i = 0; i < myresult->row_count; i++) {
+        destTypeInx = objTypeLookUp (resourceType);
+        status = _objUnlink (srbObjTypeEntry[destTypeInx].objType,
+        srbObjTypeEntry[destTypeInx].systemType, resourceLoc,
+         dataPath, NO_CHKDIR);
+        if (status < 0) {
+            elog (NOTICE, "delMovedSrcData:_objUnlink error for %s.status=%d",
+             dataPath, status);
+        }
+        dataPath += MAX_DATA_SIZE;
+        resourceLoc += MAX_DATA_SIZE;
+        resourceType += MAX_DATA_SIZE;
+    }
+    return (status);
+}
+
+int
+localBulkMoveData (int catType, char *collection, 
+struct mdasResInfo *destResInfo, mdasC_sql_result_struct *inresult)
+{
+    int continuation_index = 1;
+    srb_long_t size;
+    int status;
+    char *inCollection, *inObjID, *inSize, *inOffset, *inChksum, *inReplNum,
+      *inVerNum, *inResourceType, *inResourceLoc, *inPath;
+    char *outCollection, *outObjID, *outReplNum, *outVerNum, *outPath;
+    int destTypeInx, srcTypeInx;
+    mdasC_sql_result_struct outresult;
+    struct hostElement  *hostTabPtr;
+    int remoteFlag;
+
+    if (inresult == NULL) {
+	return (0);
+    }
+
+    if (continuation_index >= 0) {
+        remoteFlag = getMdasEnabledHost (collection, &hostTabPtr);
+
+        if (remoteFlag < 0) {
+            elog(NOTICE,
+             "localBulkMoveData:getMdasEnabledHost error for %s,status=%d",
+              collection, remoteFlag);
+            return (DONT_SEND_RETURN);
+        }
+    }
+
+    destTypeInx = objTypeLookUp (destResInfo->phyResType);
+
+    while (continuation_index >= 0) {
+        /* hand craft the outresult */
+        setupResultForMove (inresult, &outresult, NULL);
+
+        outCollection = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+        outObjID = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_NAME], dcs_aname[DATA_NAME]);
+        outVerNum = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_VER_NUM], dcs_aname[DATA_VER_NUM]);
+        outReplNum = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_REPL_ENUM], dcs_aname[DATA_REPL_ENUM]);
+        outPath = (char *) getFromResultStruct(&outresult,
+          dcs_tname[PATH_NAME], dcs_aname[PATH_NAME]);
+
+
+        inCollection = (char *) getFromResultStruct(
+         (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+
+        inObjID = (char *)getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[DATA_NAME],
+            dcs_aname[DATA_NAME]);
+        inSize = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[SIZE], dcs_aname[SIZE]);
+
+        inOffset = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[OFFSET], dcs_aname[OFFSET]);
+
+        inChksum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_CHECKSUM], dcs_aname[DATA_CHECKSUM]);
+
+        inReplNum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_REPL_ENUM], dcs_aname[DATA_REPL_ENUM]);
+
+        inVerNum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_VER_NUM], dcs_aname[DATA_VER_NUM]);
+
+        inResourceType = (char *)get_from_result_struct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[PHY_RSRC_TYP_NAME],
+            dcs_aname[PHY_RSRC_TYP_NAME]);
+        inPath = (char *) get_from_result_struct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[PATH_NAME],
+          dcs_aname[PATH_NAME]);
+        inResourceLoc = (char *) get_from_result_struct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[RSRC_ADDR_NETPREFIX],
+          dcs_aname[RSRC_ADDR_NETPREFIX]);
+
+	for (i = 0; i < inresult->row_count; i++) {
+	    srb_long_t bytesCopied;
+
+    	    status = getFullPathName (destResInfo->logDirPathName,
+                          destResInfo->phyDirPathName,
+                          ClientUser->userName, ClientUser->domainName,
+                          "", inObjID, inCollection, outPath);
+
+    	    if (status < 0) {
+                elog(NOTICE,
+                 "localBulkMoveData: getFullPathName error: %s/%s,status=%d",
+                  inCollection, inObjID, status);
+                return status;
+            }
+
+	    srcTypeInx = objTypeLookUp (inResourceType);
+	    size = strtoll (inSize, 0, 0);
+	    outresult.row_count++;
+
+            strcpy (outCollection, inCollection);
+            strcpy (outObjID, inObjID);
+            strcpy (outReplNum, inReplNum);
+            strcpy (outVerNum, inVerNum);
+
+	    bytesCopied = _svrDataCopyS (destTypeInx, outPath, 
+	      destResInfo->phyResLoc, srcTypeInx, inPath, inResourceLoc, size);
+	    if (bytesCopied != size) {
+		if (bytesCopied < 0) {
+		    status = bytesCopied;
+		} else {
+		    status = OBJ_ERR_COPY_LEN;
+	 	}
+		cleanMovedData (destResInfo, &outresult);
+                freeSqlResult (inresult);
+                clearSqlResult (&outresult);
+		return (status);
+	    }
+	    outCollection += MAX_DATA_SIZE;
+	    outObjID += MAX_DATA_SIZE;
+	    outVerNum += MAX_DATA_SIZE;
+	    outReplNum += MAX_DATA_SIZE;
+	    outPath += MAX_DATA_SIZE;
+	    inCollection += MAX_DATA_SIZE;
+	    inObjID += MAX_DATA_SIZE;
+	    inSize += MAX_DATA_SIZE;
+	    inOffset += MAX_DATA_SIZE;
+	    inChksum += MAX_DATA_SIZE;
+	    inReplNum += MAX_DATA_SIZE;
+	    inVerNum += MAX_DATA_SIZE;
+	    inResourceType += MAX_DATA_SIZE;
+	    inPath += MAX_DATA_SIZE;
+	    inResourceLoc += MAX_DATA_SIZE;
+	}
+        /* do the registration here */
+        status = _svrModifyForBulkMove (MDAS_CATALOG, BULK_PHY_MOVE,
+          destResInfo->phyResName, &outresult);
+
+        if (status < 0) {
+            elog (NOTICE,
+             "localBulkMoveData: getResultForBunload error. ststus = %d\n ",
+              status);
+            cleanMovedData (destResInfo, &outresult);
+            freeSqlResult (inresult);
+            clearSqlResult (&outresult);
+            return (status);
+        }
+        continuation_index = inresult->continuation_index;
+        clearSqlResult (&outresult);
+        status = delMovedSrcData (inresult);
+        if (status < 0) {
+            elog(NOTICE,
+             "localBulkMoveData:delMovedSrcData error ,status=%d",
+             status);
+	    printOrphan (inresult);
+            freeSqlResult (inresult);
+            return (status);
+        }
+        freeSqlResult (inresult);
+        outresult.row_count = 0;
+
+        if (continuation_index >= 0) {
+            if (remoteFlag == LOCAL_HOST) {      /* Can talk to mdas */
+#ifdef SRB_MDAS
+                status = get_more_rows (catType, continuation_index, 
+		  &inresult, BULK_MOVE_NUM_ROWS);
+#endif
+            } else {
+                status = remoteGetMoreRows (catType, continuation_index, 
+		  &inresult, BULK_MOVE_NUM_ROWS, hostTabPtr);
+            }
+
+            if (status < 0 || inresult == NULL || inresult->row_count <= 0) {
+                elog (NOTICE,
+                 "localBulkMoveData: get_more_rows error. ststus = %d\n ",
+                  status);
+                return (status);
+            }
+	    addZoneToResult (inresult, collection);
+	}
+    }
+    return (0);
+}
+
+int 
+_svrBulkMoveToCont (int catType, char *collectionName, int flag,
+char *srcResource, char *destResource, char *containerName)
+{
+    int remoteFlag;
+    char *portNum, tmpResLoc[MAX_TOKEN];
+    struct hostElement  *hostTabPtr, *tmpHostTabPtr;
+    mdasC_sql_result_struct *myresult = NULL;
+    int status = 0;
+
+    if (flag & BL_LOCAL_FLAG) {
+	/* do it locally */
+         remoteFlag = LOCAL_HOST;
+    } else {
+        remoteFlag = getBestSrcForBulkMove (catType, collectionName, flag,
+          srcResource, destResource, &myresult, &hostTabPtr);
+    }
+
+    if (remoteFlag < 0) {
+        return remoteFlag;               /* failure */
+    } else if (remoteFlag == REMOTE_HOST) {
+        if ((status = remoteConnect (hostTabPtr)) < 0) {
+            return status;
+        } else {
+            status = srbBulkMove (hostTabPtr->conn, catType, collectionName,
+              flag | BL_LOCAL_FLAG, srcResource, destResource,
+              containerName);
+            return (status);
+        }
+    }
+
+    /* do this here locally */
+
+    if (myresult == NULL) {
+        status = queryBulkUnloadForMove (catType, flag, collectionName,
+          srcResource, destResource, &myresult);
+        if (status < 0) {
+            return (status);
+        }
+        if (myresult == NULL || myresult->result_count <= 0) {
+            elog(NOTICE,
+             "_svrBulkMoveToCont: queryBulkUnloadForMove returns no result ");
+            return SYS_ERR_MDAS_CAT_RET;
+        }
+    }
+    status = localBulkMoveDataToCont (catType, collectionName, containerName,
+     myresult);
+
+
+    return (status);
+}
+
+int
+getBestSrcForBulkMove (int catType, char *collectionName, int flag, 
+char *srcResource, char *destResource, 
+mdasC_sql_result_struct **myresult, struct hostElement **tmpHostTabPtr)
+{
+    char phyResName[MAX_TOKEN];
+    int remoteFlag;
+    char *portNum, tmpResLoc[MAX_TOKEN];
+    int status;
+
+    status = getFirstResc (srcResource, phyResName);
+
+    *myresult = NULL;
+    *tmpHostTabPtr = NULL;
+    if (status < 0) {   /* no srcResource input */
+        status = queryBulkUnloadForMove (catType, flag, collectionName,
+          srcResource, destResource, myresult);
+        if (status < 0) {
+            return (status);
+        }
+        if (*myresult == NULL || (*myresult)->result_count <= 0) {
+            elog(NOTICE,
+             "getBestSrcForBulkMove:queryBulkUnloadForMove returns no result ");
+            return SYS_ERR_MDAS_CAT_RET;
+        }
+        getBulkUnloadHost(*myresult, tmpHostTabPtr, flag);
+        if (*tmpHostTabPtr == NULL) {
+            remoteFlag = LOCAL_HOST;
+            flag |= BL_QUERY_DONE;
+        } else {
+            remoteFlag = REMOTE_HOST;
+        }
+    } else {
+	struct resCache *myCacheRes = NULL;
+	struct mdasResInfo *srcResInfo = NULL;
+
+        if (getResInfo (collectionName, catType, phyResName,
+         ClientUser->domainName, &myCacheRes) < 0) {
+            elog (NOTICE,
+              "getBestSrcForBulkMove: Input resc %s is not a registered resc",
+              phyResName);
+            return (OBJ_ERR_RES_NOT_REG);
+        }
+
+        sortResForIngest (myCacheRes, -1);
+
+        srcResInfo = myCacheRes->resInfoHead;
+#ifdef FED_MCAT
+        remoteFlag = chkHostAndZone (srcResInfo->phyResLoc, tmpHostTabPtr);
+#else
+        /* Parse the hostAddr */
+        strcpy (tmpResLoc, srcResInfo->phyResLoc);
+        portNum = parseAddr (tmpResLoc);
+        remoteFlag = chkHost (tmpResLoc, portNum, tmpHostTabPtr);
+#endif
+    }
+
+    return (remoteFlag);
+}
+int 
+localBulkMoveDataToCont (int catType, char *collection, 
+char *container, mdasC_sql_result_struct *inresult)
+{
+    int continuation_index = 1;
+    srb_long_t size;
+    int status;
+    char *inCollection, *inObjID, *inSize, *inOffset, *inChksum, *inReplNum,
+      *inVerNum, *inResourceType, *inResourceLoc, *inPath;
+    char *outCollection, *outObjID, *outReplNum, *outVerNum, 
+     *outSize, *outOffset;
+    int srcTypeInx, contInx;
+    mdasC_sql_result_struct outresult;
+    struct hostElement  *hostTabPtr;
+    int remoteFlag;
+    char *buf;
+    int bufOffset;
+    srb_long_t contOffset;
+
+    if (inresult == NULL) {
+        return (0);
+    }
+
+    if (continuation_index >= 0) {
+        remoteFlag = getMdasEnabledHost (collection, &hostTabPtr);
+
+        if (remoteFlag < 0) {
+            elog(NOTICE,
+            "localBulkMoveDataToCont:getMdasEnabledHost error for %s,status=%d",
+              collection, remoteFlag);
+            return (DONT_SEND_RETURN);
+        }
+    }
+
+    contInx = _svrContainerOpen (catType, container, O_RDWR);
+    if (contInx < 0) {
+        elog(NOTICE,
+         "localBulkMoveDataToCont:_svrContainerOpen error for %s,status=%d",
+          container, contInx);
+	return (contInx);
+    }
+    /* seek to the end of cont */
+    if (srbObjDesc[contInx].objSize > 0) {
+        status = _svrObjSeek (contInx, srbObjDesc[contInx].objSize, SEEK_SET);
+    
+        if (status < 0) {
+            elog (NOTICE, 
+	      "localBulkMoveDataToCont: _svrObjSeek error, status = %d ",
+              status);
+            svrContainerClose (contInx);
+            return status;
+        }
+    }
+    contOffset = srbObjDesc[contInx].objSize;
+
+    buf = malloc (BL_BUFSIZE);
+    if (buf == NULL) {
+        fprintf (stderr, "localBulkMoveDataToCont: Unable to malloc buf\n");
+        return (CLI_ERR_MALLOC);
+    }
+
+    bufOffset = 0;
+
+    while (continuation_index >= 0) {
+        /* hand craft the outresult */
+        setupResultForMove (inresult, &outresult, container);
+
+        outCollection = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+        outObjID = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_NAME], dcs_aname[DATA_NAME]);
+        outVerNum = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_VER_NUM], dcs_aname[DATA_VER_NUM]);
+        outReplNum = (char *) getFromResultStruct(&outresult,
+          dcs_tname[DATA_REPL_ENUM], dcs_aname[DATA_REPL_ENUM]);
+        outSize = (char *) getFromResultStruct(&outresult,
+          dcs_tname[SIZE], dcs_aname[SIZE]);
+        outOffset = (char *) getFromResultStruct(&outresult,
+          dcs_tname[OFFSET], dcs_aname[OFFSET]);
+
+        inCollection = (char *) getFromResultStruct(
+         (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+
+        inObjID = (char *)getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[DATA_NAME],
+            dcs_aname[DATA_NAME]);
+        inSize = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[SIZE], dcs_aname[SIZE]);
+
+        inOffset = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[OFFSET], dcs_aname[OFFSET]);
+
+        inChksum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_CHECKSUM], dcs_aname[DATA_CHECKSUM]);
+
+        inReplNum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_REPL_ENUM], dcs_aname[DATA_REPL_ENUM]);
+
+        inVerNum = (char *) getFromResultStruct(
+        (mdasC_sql_result_struct *) inresult,
+            dcs_tname[DATA_VER_NUM], dcs_aname[DATA_VER_NUM]);
+
+        inResourceType = (char *)get_from_result_struct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[PHY_RSRC_TYP_NAME],
+            dcs_aname[PHY_RSRC_TYP_NAME]);
+        inPath = (char *) get_from_result_struct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[PATH_NAME],
+          dcs_aname[PATH_NAME]);
+        inResourceLoc = (char *) get_from_result_struct(
+        (mdasC_sql_result_struct *) inresult, dcs_tname[RSRC_ADDR_NETPREFIX],
+          dcs_aname[RSRC_ADDR_NETPREFIX]);
+
+        for (i = 0; i < inresult->row_count; i++) {
+            srb_long_t bytesCopied;
+
+            srcTypeInx = objTypeLookUp (inResourceType);
+            size = strtoll (inSize, 0, 0);
+
+	    bytesCopied = dataCopyToCont (catType, srcTypeInx, inPath, 
+	      inResourceLoc, size, contInx, contOffset, buf, &bufOffset);
+
+            if (bytesCopied != size) {
+                if (bytesCopied < 0) {
+                    status = bytesCopied;
+                } else {
+                    status = OBJ_ERR_COPY_LEN;
+                }
+                freeSqlResult (inresult);
+                clearSqlResult (&outresult);
+		free (buf);
+                return (status);
+            }
+
+            outresult.row_count++;
+	    sprintf (outOffset, "%lld", contOffset);
+            strcpy (outSize, inSize);
+            strcpy (outCollection, inCollection);
+            strcpy (outObjID, inObjID);
+            strcpy (outReplNum, inReplNum);
+            strcpy (outVerNum, inVerNum);
+
+	    contOffset += size;
+
+            outCollection += MAX_DATA_SIZE;
+            outObjID += MAX_DATA_SIZE;
+            outVerNum += MAX_DATA_SIZE;
+            outReplNum += MAX_DATA_SIZE;
+            outSize += MAX_DATA_SIZE;
+            outOffset += MAX_DATA_SIZE;
+            inCollection += MAX_DATA_SIZE;
+            inObjID += MAX_DATA_SIZE;
+            inSize += MAX_DATA_SIZE;
+            inOffset += MAX_DATA_SIZE;
+            inChksum += MAX_DATA_SIZE;
+            inReplNum += MAX_DATA_SIZE;
+            inVerNum += MAX_DATA_SIZE;
+            inResourceType += MAX_DATA_SIZE;
+            inPath += MAX_DATA_SIZE;
+            inResourceLoc += MAX_DATA_SIZE;
+	}
+	/* dump the rest of the buffer */
+        if (bufOffset > 0) {
+            status = _svrObjWrite (contInx, buf, bufOffset);
+            if (status != bufOffset) {
+                if (status < -1) {
+                    elog (NOTICE,
+                      "dataCopyToCont:problem writing to cont,stat=nbytes",
+                      status);
+                } else {
+                    elog (NOTICE,
+                    "dataCopyToCont:problem writing to cont,%d bytes left",
+                    bufOffset - status);
+                    status = OBJ_ERR_COPY_LEN;
+                }
+                return (status);
+            }
+            bufOffset = 0;
+        }
+
+	if (contOffset >= srbObjDesc[contInx].contInfo->containerMaxSize) {
+	    status = svrContainerClose (contInx);
+	    contInx = -1;
+	} else {
+            status = _svrRegNewObjSize (catType, srbObjDesc[contInx].objID,
+             srbObjDesc[contInx].collection, srbObjDesc[contInx].resourceName,
+             srbObjDesc[contInx].dataPath, 
+	     contOffset);
+            if (status < 0) {
+                elog (NOTICE,
+                 "localBulkMoveDataToCont:_svrRegNewObjSize error.stat=%d\n ",
+                  status);
+                freeSqlResult (inresult);
+                clearSqlResult (&outresult);
+                free (buf);
+                return (status);
+            }
+	    setWriteFlag (contInx, 0);
+	    status = procDescDirtyFlag (contInx);
+	}
+
+        if (status < 0) {
+            elog (NOTICE,
+             "localBulkMoveDataToCont:svrContainerClose error.stat=%d\n ",
+              status);
+            freeSqlResult (inresult);
+            clearSqlResult (&outresult);
+            free (buf);
+            return (status);
+        }
+
+        /* do the registration here */
+        status = _svrModifyForBulkMove (catType, BULK_PHY_MOVE_INTO_CONTAINER,
+          container, &outresult);
+        if (status < 0) {
+            elog (NOTICE,
+             "localBulkMoveDataToCont:_svrModifyForBulkMove error.stat=%d\n ",
+              status);
+            freeSqlResult (inresult);
+            clearSqlResult (&outresult);
+	    free (buf);
+            return (status);
+        }
+
+        if (contInx < 0) {
+	    /* get a new container */
+            contInx = _svrContainerOpen (catType, container, O_RDWR);
+            if (contInx < 0) {
+                elog(NOTICE,
+                 "localBulkMoveDataToCont:_svrContainerOpen error for %s,status=%d",
+                  container, contInx);
+                return (contInx);
+            }
+            /* seek to the end of cont */
+	    if (srbObjDesc[contInx].objSize > 0) {
+                status = _svrObjSeek (contInx, srbObjDesc[contInx].objSize, 
+		  SEEK_SET);
+                if (status < 0) {
+                    elog(NOTICE, 
+		      "localBulkMoveDataToCont:_svrObjSeek error,status = %d ",
+                      status);
+                    svrContainerClose (contInx);
+                    return status;
+                }
+	    }
+            contOffset = srbObjDesc[contInx].objSize;
+	}
+
+        continuation_index = inresult->continuation_index;
+        clearSqlResult (&outresult);
+        status = delMovedSrcData (inresult);
+        if (status < 0) {
+            elog(NOTICE,
+             "localBulkMoveDataToCont:delMovedSrcData error ,status=%d",
+             status);
+            freeSqlResult (inresult);
+	    free (buf);
+            return (status);
+        }
+        freeSqlResult (inresult);
+        outresult.row_count = 0;
+
+	/* XXXX need to take care of overflow cont here */
+
+        if (continuation_index >= 0) {
+            if (remoteFlag == LOCAL_HOST) {      /* Can talk to mdas */
+#ifdef SRB_MDAS
+                status = get_more_rows (catType, continuation_index,
+                  &inresult, BULK_MOVE_NUM_ROWS);
+#endif
+            } else {
+                status = remoteGetMoreRows (catType, continuation_index,
+                  &inresult, BULK_MOVE_NUM_ROWS, hostTabPtr);
+            }
+
+            if (status < 0 || inresult == NULL || inresult->row_count <= 0) {
+                elog (NOTICE,
+                 "localBulkMoveDataToCont: get_more_rows error. ststus = %d\n ",
+                  status);
+	        free (buf);
+                return (status);
+            }
+	    addZoneToResult (inresult, collection);
+        }
+    }
+    status = svrContainerClose (contInx);
+    free (buf);
+    return (0);
+}
+
+srb_long_t 
+dataCopyToCont (int catType, int srcTypeInx, char *inPath,
+char *inResourceLoc, srb_long_t size, int contInx, srb_long_t contOffset, 
+char *buf, int *bufOffset)
+{
+    srb_long_t retVal = 0;
+    int srcExfInx;
+    int toread, space;
+    srb_long_t bytesCopied;
+    char *bufptr;
+    int readLen, nbytes;
+    int status;
+
+    srcExfInx = lowLevelOpen (srcTypeInx, inPath, inResourceLoc, O_RDONLY);
+
+    if (srcExfInx < 0) {   /* error */
+        elog (NOTICE, "dataCopyToCont: Unable of open the source copy %s",
+	  inPath);
+        lowLevelClose (srcTypeInx, srcExfInx);
+        return srcExfInx;
+    }
+
+    toread = size;
+    bufptr = buf + *bufOffset;
+
+    while (toread > 0) {
+        int space;
+
+        space = BL_BUFSIZE - *bufOffset;
+
+        if (toread > space) {
+            if (*bufOffset > 0) {
+                status = _svrObjWrite (contInx, buf, *bufOffset);
+                if (status != *bufOffset) {
+        	    lowLevelClose (srcTypeInx, srcExfInx);
+		    if (status < -1) {
+                        elog (NOTICE,
+                          "dataCopyToCont:problem writing to cont,stat=nbytes",
+                          status);
+		        retVal = status;
+		    } else {
+                        elog (NOTICE,
+                        "dataCopyToCont:problem writing to cont,%d bytes left",
+              		*bufOffset - status);
+                        retVal = OBJ_ERR_COPY_LEN;
+		    }
+                    return (retVal);
+                }
+                bufptr = buf;
+		*bufOffset = 0;
+            }
+            readLen = BL_BUFSIZE;
+        } else {
+            readLen = toread;
+        }
+
+	 nbytes = _objRead (srcExfInx, srcTypeInx, bufptr, readLen);
+        if (nbytes <= 0) {
+            break;
+        }
+        toread -= nbytes;
+        *bufOffset += nbytes;
+	bufptr += nbytes;
+    }
+    lowLevelClose (srcTypeInx, srcExfInx);
+    if (toread > 0) {
+	if (nbytes < -1) {
+            elog (NOTICE,
+              "dataCopyToCont: problem reading file %s, status = nbytes",
+              inPath, nbytes);
+            retVal = nbytes;
+            return retVal;
+	} else {
+            elog (NOTICE,
+              "dataCopyToCont: problem reading file %s, %d bytes left\n",
+              inPath, toread);
+	    retVal = OBJ_ERR_COPY_LEN;
+	    return retVal;
+	}
+    }
+    return (size);
+}
+
+int
+_svrRegNewObjSize (int catType, char *objID, char *collection,
+char *resourceName, char *pathName, srb_long_t newSize)
+{
+    char strSize[MAX_TOKEN];
+    int status;
+
+#if defined(PORTNAME_osx)
+    sprintf (strSize, "%-qd", newSize);
+#else
+    sprintf (strSize, "%-lld", newSize);
+#endif
+
+    status = _svrModifyDataset (catType, objID, collection, resourceName,
+     pathName,
+     strSize, NULL, D_CHANGE_SIZE);
+
+    return (status);
+}
+
+int
+procDescDirtyFlag (int descInx)
+{
+    int status;
+    char *myPath;
+    struct mdasInfoOut *tmpInfoOut;
+    int tmpInx;
+
+    if (srbObjDesc[descInx].contInx >= 0) {  /* Container or inContainer Obj */
+        tmpInx = srbObjDesc[descInx].contInx;
+    } else {
+        tmpInx = descInx;
+    }
+
+    if (srbObjDesc[tmpInx].intReplNum >= 0) {
+        myPath = srbObjDesc[tmpInx].compDataPath;
+    } else {
+        myPath = srbObjDesc[tmpInx].dataPath;
+    }
+    /* Marking the container dirty. */
+    if (srbObjDesc[tmpInx].markedDirty == 0) {
+        status = _svrModifyDataset (MDAS_CATALOG,
+         srbObjDesc[tmpInx].objID,
+         srbObjDesc[tmpInx].collection,
+         srbObjDesc[tmpInx].resourceName,
+         myPath,
+         "1", NULL, D_CHANGE_DIRTY);
+        if (status < 0) {
+            elog (NOTICE,
+             "_svrObjClose: Unable to reg container to dirty, status = %d",
+             status);
+            return (status);
+        }
+        srbObjDesc[tmpInx].markedDirty = 1;
+    }
+
+    /* mark all other dirty copies not dirty */
+    tmpInfoOut = srbObjDesc[tmpInx].dirtyInfo;
+    while (tmpInfoOut != NULL) {
+        int myInx;
+        myInx = descInx;
+        while (myInx != -1) {
+            if (srbObjDesc[myInx].replNum < 0 ||
+             srbObjDesc[myInx].replNum == tmpInfoOut->replNum)
+                break;
+            myInx = srbObjDesc[myInx].nextDescInx;
+        }
+
+        if (myInx == -1) {      /* no match */
+            status = _svrModifyDataset (MDAS_CATALOG,
+             srbObjDesc[tmpInx].objID,
+             srbObjDesc[tmpInx].collection,
+             tmpInfoOut->resourceName,
+             tmpInfoOut->dataPath,
+             "0", NULL, D_CHANGE_DIRTY);
+        }
+
+        if (status < 0)
+            elog (NOTICE,
+             "_svrObjClose: Unable to reg container clean, status = %d",
+              status);
+
+        tmpInfoOut = tmpInfoOut->next;
+    }
+
+    /* free dirtyInfo so that we don't do it
+     * again next time.
+     */
+    if (srbObjDesc[tmpInx].dirtyInfo != NULL) {
+        freeAllInfoOut (srbObjDesc[tmpInx].dirtyInfo);
+        srbObjDesc[tmpInx].dirtyInfo = NULL;
+    }
+    srbObjDesc[tmpInx].dirtyInfo = NULL;
+
+    return (status);
+}
+
+int
+setWriteFlag (int descInx, int writeFlag)
+{
+    int objTypeInx, lowLevelDescInx;
+    int contInx;
+    int fileType;
+    srb_long_t incontSize = -1;
+    int status = 0;
+
+    fileType = parseObjDesc (descInx, &objTypeInx, &lowLevelDescInx, &contInx);
+
+    if (fileType < 0) {
+        return (fileType);
+    }
+
+    /* should,nt have to check if _getWriteSize () has _dbLobjWriteSize */
+    if (srbObjTypeEntry[objTypeInx].objType == FILE_TYPE) {
+	status = _setFileWriteFlag (lowLevelDescInx, writeFlag);
+    }
+    return (status);
+}
+ 
+int 
+svrRegPhyMove (int catType, struct varlena *vObjID, 
+struct varlena *vCollectionName,
+struct varlena *vCurResourceName, struct varlena *vCurDataPath, 
+struct varlena *vNewResourceName, struct varlena *vNewFullPathName)
+{
+    char *objID, *collectionName, *curResourceName, *curDataPath, 
+    *newResourceName, *newFullPathName;
+    int retVal;
+  
+    if (TicketUserFlag) {
+        elog (NOTICE, "Illegal operation for a ticket user");
+      return (ILLEGAL_OPR_TICKET_USER);
+    }
+  
+    objID = varToStr (vObjID);
+    collectionName = varToStr (vCollectionName);
+    curResourceName = varToStr (vCurResourceName);
+    curDataPath = varToStr (vCurDataPath);
+    newResourceName = varToStr (vNewResourceName);
+    newFullPathName = varToStr (vNewFullPathName);
+
+    retVal = _svrRegPhyMove (catType, objID, collectionName, curResourceName,
+     curDataPath, newResourceName, newFullPathName);
+
+    free (objID);
+    free (collectionName);
+    free (curResourceName);
+    free (curDataPath);
+    free (newResourceName);
+    free (newFullPathName);
+  
+    return retVal;
+}
+
+
+int
+_svrRegPhyMove (int catType, char *objID,  char *collectionName, 
+char *curResourceName, char *curDataPath, char *newResourceName, 
+char *newFullPathName)
+{
+    int retVal;
+    int remoteFlag;
+    struct hostElement  *hostTabPtr;
+  
+  
+    remoteFlag = getMdasEnabledHost (collectionName, &hostTabPtr);
+    if (remoteFlag < 0) {
+        retVal = remoteFlag;
+    } else if (remoteFlag == LOCAL_HOST) {      /* Can talk to mdas */
+#ifdef SRB_MDAS
+        retVal = move_dataset (catType, objID, collectionName,
+          curResourceName, curDataPath, newResourceName, newFullPathName,
+          ClientUser->userName, ClientUser->domainName);
+        if (retVal == 0) {
+          commit_db2_interaction (MDAS_CAT_COMMIT);
+        } else {
+            elog (NOTICE,
+	      "_svrRegPhyMove: move_dataset error for %s/%s, stat=%d",
+	      collectionName, objID, retVal);
+        }
+#endif
+    } else {
+        if ((retVal = remoteConnect (hostTabPtr)) < 0) {
+            return retVal;
+        }
+    
+        /* Do a client call to the remote host */
+    
+        retVal = srbRegPhyMove (hostTabPtr->conn, catType, objID, 
+	  collectionName, curResourceName, curDataPath, newResourceName, 
+	  newFullPathName);
+    }  
+    return retVal;
+}
+
+int
+_svrObjMoveToCont (struct mdasInfoOut *infoOut, char *objID, 
+char *collectionName, char *containerName)
+{
+    mdasC_sql_result_struct *myresult;
+    int status;
+
+    /* hand craft the input myresult */
+
+    myresult = malloc (sizeof (mdasC_sql_result_struct));
+    myresult->result_count = 12;
+    myresult->row_count = 1;
+
+    myresult->sqlresult[0].att_name = strdup (dcs_aname[DATA_NAME]);
+    myresult->sqlresult[0].tab_name = strdup (dcs_tname[DATA_NAME]);
+    myresult->sqlresult[0].values = strdup (objID);
+
+    myresult->sqlresult[1].att_name = strdup (dcs_aname[DATA_GRP_NAME]);
+    myresult->sqlresult[1].tab_name = strdup (dcs_tname[DATA_GRP_NAME]);
+    myresult->sqlresult[1].values = strdup (collectionName);
+
+    myresult->sqlresult[2].att_name = strdup (dcs_aname[PHY_RSRC_TYP_NAME]);
+    myresult->sqlresult[2].tab_name = strdup (dcs_tname[PHY_RSRC_TYP_NAME]);
+    myresult->sqlresult[2].values = 
+      strdup (srbObjTypeEntry[infoOut->objTypeInx].resourceType);
+
+    myresult->sqlresult[3].att_name = strdup (dcs_aname[DATA_VER_NUM]);
+    myresult->sqlresult[3].tab_name = strdup (dcs_tname[DATA_VER_NUM]);
+    myresult->sqlresult[3].values = malloc (MAX_DATA_SIZE);
+    memset (myresult->sqlresult[3].values, 0, 1);
+
+    myresult->sqlresult[4].att_name = strdup (dcs_aname[DATA_REPL_ENUM]);
+    myresult->sqlresult[4].tab_name = strdup (dcs_tname[DATA_REPL_ENUM]);
+    myresult->sqlresult[4].values = malloc (MAX_DATA_SIZE);
+    sprintf (myresult->sqlresult[4].values, "%d", infoOut->replNum);
+
+    myresult->sqlresult[5].att_name = strdup (dcs_aname[PATH_NAME]);
+    myresult->sqlresult[5].tab_name = strdup (dcs_tname[PATH_NAME]);
+    myresult->sqlresult[5].values = strdup (infoOut->dataPath);
+
+    myresult->sqlresult[6].att_name = strdup (dcs_aname[RSRC_ADDR_NETPREFIX]);
+    myresult->sqlresult[6].tab_name = strdup (dcs_tname[RSRC_ADDR_NETPREFIX]);
+    myresult->sqlresult[6].values = strdup (infoOut->resourceLoc);
+
+    myresult->sqlresult[7].att_name = strdup (dcs_aname[PHY_RSRC_NAME]);
+    myresult->sqlresult[7].tab_name = strdup (dcs_tname[PHY_RSRC_NAME]);
+    myresult->sqlresult[7].values = strdup (infoOut->resourceName);
+
+    myresult->sqlresult[8].att_name = strdup (dcs_aname[RSRC_CLASS]);
+    myresult->sqlresult[8].tab_name = strdup (dcs_tname[RSRC_CLASS]);
+    myresult->sqlresult[8].values = strdup (infoOut->phyResClass);
+
+    myresult->sqlresult[9].att_name = strdup (dcs_aname[SIZE]);
+    myresult->sqlresult[9].tab_name = strdup (dcs_tname[SIZE]);
+    myresult->sqlresult[9].values = malloc (MAX_DATA_SIZE);
+    sprintf (myresult->sqlresult[9].values, "%lld", infoOut->size);
+
+    myresult->sqlresult[10].att_name = strdup (dcs_aname[DATA_CHECKSUM]);
+    myresult->sqlresult[10].tab_name = strdup (dcs_tname[DATA_CHECKSUM]);
+    myresult->sqlresult[10].values = malloc (MAX_DATA_SIZE);
+    sprintf (myresult->sqlresult[10].values, "%d", infoOut->chksum);
+
+    myresult->sqlresult[11].att_name = strdup (dcs_aname[CONTAINER_NAME]);
+    myresult->sqlresult[11].tab_name = strdup (dcs_tname[CONTAINER_NAME]);
+    myresult->sqlresult[11].values = strdup (infoOut->containerName);
+
+    status = localBulkMoveDataToCont (MDAS_CATALOG, collectionName, 
+      containerName, myresult);
+
+    return (status);
+}

@@ -1,0 +1,83 @@
+
+The following is a description of how you could set up your own
+stand-alone Federation (set of Zones), for testing, evaluation, and
+learning about Zone SRB (SRB 3.0).
+
+Please see README.zones, MCAT/README.MCAT.INSTALL, and the beginning
+of install.pl and zonesync.pl for more information.
+
+
+1) install two zones
+
+Use the install.pl script to install two or more Zones on separate
+machines.  It is best to use an non-special user login for this (don't
+use srb, for example) and use a machine that is not already running
+postgres and not running other srb processes.  I typically use my
+desktop machine, or my laptop, from my own user login account.
+
+Define one Zone to be zone "A" and the other "B" (or whatever), and
+use one domain for one (e.g. "Adomain") and another for the other
+("Bdomain").  You should also define an A resource and a B resource.
+The install.pl script will make this resource a directory on the local
+machine.
+
+The 3.0 install.pl script also can define remote zones for you.  So in
+the A zone, define remote zone B.  And in B, define A.  You'll need to
+specify a few parameters for these including the host names.  (This is
+sort of a bootstrap process, as once you define these remote zones,
+you can connect to them (via zonesync.pl) and import information from
+them.)
+
+See the install.pl script for information on how to do all of this.
+
+This will be using Postgres on either Linux, Mac OS X, or Solaris.
+
+For SDSC SRB testers, it is easiest to get a current copy of the CVS
+repository, create a tar file, and then tell the install.pl script to
+use this and that it is not encrypted (via some of the adjustable
+defines in install.pl).  If you check out SRB2_0_0rel, include that
+directory level in the tar file and specify SRB2_0_0rel in install.pl
+as the directory that is created).  You can also copy install.pl from
+the MCAT subdirectory as you'll need one outside of the tar file to
+edit and then run.
+
+
+2) Once the install script has completed, add a non-privilaged user in
+one or the other zone, for example zone A (use either the Java admin
+tool or ingestUser).  And set things up so that you can use that SRB
+account when needed, perhaps from a different Unix login account.
+
+3) In the other zone, say B, run the zonesync.pl script (running as
+the B admin user, which is how install.pl sets things up).  This will
+contact zone A, get the user information, and insert it into zone A.
+(Passwords are not inserted, as that sort of information is only kept
+at the local zone.)
+
+4) Use the non-privilaged user account to store files into zone B (you
+can Sls and Scwd into /B/home/user.Adomain and then Sput).
+
+Note that if you just do an Sput, you'll get an error:
+  Unable to create object /D/home/waynes.Adomain/foo, status = -2400
+  OBJ_ERR_RES_NOT_REG: resource has not been registered
+This is because you'll still be attempting to use the A resource and
+zone B doen't know that resource.
+
+So specify the B resource and it should work:
+Sput -S Bresc foo
+
+Also note that "SgetR -z B" will list all resources in zone B.
+
+
+You can also sync resources from A into B via the zonesync.pl script.
+This will take the information about resources from A and insert it
+into B.  In that case, the user may be able to store data objects into
+zone B onto resource A, altho that might not be what you want them to
+do.
+
+5) Do lots more testing.
+
+You may want to create a third zone, and then add this in with the
+others manually.
+
+Try lots of different commands to transfer data to and from different
+zones.

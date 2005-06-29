@@ -1,0 +1,16 @@
+#! /bin/ksh
+#
+# srbBrowser    
+#
+
+ARCH="$(uname)"
+PROGNAME="$(whence $0)"
+
+export SRBHOME="$(dirname $PROGNAME)/.."
+
+export CLASSPATH="$SRBHOME/classes:$CLASSPATH"
+echo $CLASSPATH
+
+export LD_LIBRARY_PATH="$SRBHOME/lib:$LD_LIBRARY_PATH"
+
+(cd $SRBHOME; java edu/sdsc/SrbBrowser/srbBrowser)

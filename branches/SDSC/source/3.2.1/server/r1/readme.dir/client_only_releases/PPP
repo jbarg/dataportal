@@ -1,0 +1,86 @@
+GET_CHANGED_PHYSICAL_RESOURCE_CORE_INFO|1997
+11:RSRC_NAME|13:RSRC_TYP_NAME|27:RSRC_DEFAULT_PATH|29:PHY_RSRC_NAME|31:RSRC_REPL_ENUM|55:LOCATION_NAME|59:RSRC_CLASS|326:RSRC_COMMENTS|327:RSRC_CREATE_DATE|328:RSRC_MODIFY_DATE|331:RSRC_MAX_OBJ_SIZE|332:RSRC_OWNER_NAME|333:RSRC_OWNER_DOMAIN|344:RSRC_OWNER_ZONE
+sdsc-mda18-fs|file system|/scratch0/srb/SRBVault/?USER.?DOMAIN/TEST.?PATH?DATANAME.?RANDOM|sdsc-mda18-fs|0|unix file mda-18 sdsc|permanent||1997-08-15-00.00.00|1997-08-15-00.00.00|0|srb|sdsc|sdscdemo
+sdsc-fs|unix file system|/projects/mdas/srb/SRBVaultTest//?USER.?DOMAIN/TEST.?PATH?DATANAME.?RANDOM|sdsc-fs|0|unix file mda-18 sdsc|permanent||1997-08-15-00.00.00|1997-08-15-00.00.00|0|srb|sdsc|sdscdemo
+ora-sdsc|oracle dblobj database|/srbVault/OBJ_LOCATOR/OBJ_ID=%27TEST.?PATH/?DATANAME.?RANDOM%27|ora-sdsc|0|ghidorah oracle Vault|permanent||1997-08-15-00.00.00|1997-08-15-00.00.00|0|srb|sdsc|sdscdemo
+demo-ufs-sdsc|unix file system|/misc/srb/srb/demovault/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|demo-ufs-sdsc|0|srb sdsc|permanent||2000-10-18-16.20.55|2000-10-18-16.20.55|0|srb|sdsc|sdscdemo
+demo-hpss-sdsc|hpss file system|/users/sdsc/srb/demovault/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|demo-hpss-sdsc|0|hpss45g sdsc|archival||2000-10-18-16.20.59|2000-10-18-16.20.59|0|srb|sdsc|sdscdemo
+cont-demo-sdsc|unix file system|/misc/srb/srb/demovault/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|demo-ufscache-sdsc|0|srb sdsc|temporary||2000-12-15-17.59.08|2000-12-15-17.59.08|0|srb|sdsc|sdscdemo
+cont-demo-sdsc|hpss file system|/users/sdsc/srb/demovault/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|demo-hpss-sdsc|1|hpss45g sdsc|archival||2000-12-15-17.59.11|2000-12-15-17.59.11|0|srb|sdsc|sdscdemo
+demo-ufscache-sdsc|unix file system|/misc/srb/srb/demovault/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|demo-ufscache-sdsc|0|srb sdsc|temporary||2001-02-19-14.19.41|2001-02-19-14.19.41|0|srb|sdsc|sdscdemo
+brainmap-wustl-cache|unix file system|/export3/srbspace/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|brainmap-wustl-cache|0|brainmap-wustl|temporary||2001-06-07-10.30.58|2001-06-07-10.30.58|0|srb|sdsc|sdscdemo
+unix-ape-umd|unix file system|/fs/lpc/umsrb/srbVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-ape-umd|0|ape unix|permanent||2001-06-11-12.14.12|2001-06-11-12.14.12|0|srb|sdsc|sdscdemo
+sheauyen-unix|unix file system|/scratch/slocal/srbVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|sheauyen-unix|0|sheauyen unix|permanent||2001-06-27-08.44.18|2001-06-27-08.44.18|0|srb|sdsc|sdscdemo
+unix-tf005i-sdsc|unix file system|/gpfs/srb/SRB_HAYDEN_2GB_CACHE/SRBVault/?USER.?DOMAIN/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-tf005i-sdsc|0|tf005ig-sdsc|cache||2001-10-15-09.52.59|2001-10-15-09.52.59|0|srb|sdsc|sdscdemo
+unix-sc2001|unix file system|/sdsc-data/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/TEST.?PATH?DATANAME.?RANDOM.?TIMESEC|unix-sc2001|0|sc2001|permanent||2001-11-12-09.43.49|2001-11-12-09.43.49|0|srb|sdsc|sdscdemo
+unix-sc2001-1|unix file system|/home/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/TEST.?PATH?DATANAME.?RANDOM.?TIMESEC|unix-sc2001-1|0|sc2001-1|permanent||2001-11-12-13.54.52|2001-11-12-13.54.52|0|srb|sdsc|sdscdemo
+unix-sc2001-2|unix file system|/graphx/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/TEST.?PATH?DATANAME.?RANDOM.?TIMESEC|unix-sc2001-2|0|sc2001-2|permanent||2001-11-13-11.10.48|2001-11-13-11.10.48|0|srb|sdsc|sdscdemo
+hpss-caltech|hpss file system|/home/srb/SRBVault/SRBVault_1.1.8_Hayden_port.5650/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|hpss-caltech|0|hpss caltech|archival||2002-02-05-11.59.20|2002-02-05-11.59.20|0|srb|sdsc|sdscdemo
+du-unix|unix file system|/misc/srb/srb/du/SRBVault/?USER.?DOMAIN/?SPLITPATH/TEST.?PATH?DATANAME.?RANDOM.?TIMESEC|du-unix|0|du unix|cache||2002-02-26-09.40.51|2002-02-26-09.40.51|0|srb|sdsc|sdscdemo
+du-sdsc-hpss|hpss file system|/users/sdsc/srb/du/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|du-sdsc-hpss|0|du hpss17|archival||2002-02-26-09.41.57|2002-02-26-09.41.57|0|srb|sdsc|sdscdemo
+du-caltech-hpss|hpss file system|/home/srb/SRBVault/SRBVault_1.1.8_demo/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|du-caltech-hpss|0|du caltech|archival||2002-02-26-11.06.53|2002-02-26-11.06.53|0|srb|sdsc|sdscdemo
+du-cont2|logical|/users/sdsc/srb/du/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|du-sdsc-hpss|1|du hpss17|archival||2002-02-26-11.28.26|2002-02-26-11.28.26|0|srb|sdsc|sdscdemo
+du-cont3|logical|/misc/srb/srb/du/SRBVault/?USER.?DOMAIN/?SPLITPATH/TEST.?PATH?DATANAME.?RANDOM.?TIMESEC|du-unix|0|du unix|cache||2002-02-26-11.29.10|2002-02-26-11.29.10|0|srb|sdsc|sdscdemo
+du-cont3|logical|/users/sdsc/srb/du/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|du-sdsc-hpss|1|du hpss17|archival||2002-02-26-11.29.34|2002-02-26-11.29.34|0|srb|sdsc|sdscdemo
+du-cont3|logical|/home/srb/SRBVault/SRBVault_1.1.8_demo/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|du-caltech-hpss|2|du caltech|archival||2002-02-26-11.29.49|2002-02-26-11.29.49|0|srb|sdsc|sdscdemo
+ora-table|oracle table database|+|ora-table|0|ora table|permanent||2002-05-21-15.11.12|2002-05-21-15.11.12|0|srb|sdsc|sdscdemo
+ora-dev7-table|oracle table database|+|ora-dev7-table|0|ora dev7 table|permanent||2002-05-21-15.24.46|2002-05-21-15.24.46|0|srb|sdsc|sdscdemo
+tapeCache-sdsc|tapeCache|/misc/srb/srb/TapeCacheVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|tapeCache-sdsc|0|du unix|cache||2002-06-20-11.46.46|2002-06-20-11.46.46|0|srb|sdsc|sdscdemo
+tape-sdsc|tape|/tape/NULL|tape-sdsc|0|du unix|archival||2002-06-20-11.43.10|2002-06-20-11.43.10|0|srb|sdsc|sdscdemo
+cont-comp-sdsc|logical||compound-sdsc|0|srb sdsc|archival||2002-08-12-17.02.09|2002-08-12-17.02.09|0|srb|sdsc|sdscdemo
+GGF5-unix-uk|unix file system|/opt/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|GGF5-unix-uk|0|GGF5 unix uk|permanent||2002-07-12-15.34.15|2002-07-12-15.34.15|0|srb|sdsc|sdscdemo
+GGF5-unix2-uk|unix file system|/export/home0/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|GGF5-unix2-uk|0|GGF5 unix2 uk|permanent||2002-07-15-09.24.28|2002-07-15-09.24.28|0|srb|sdsc|sdscdemo
+GGF5-unix3-uk|unix file system|/export/home0/rsb/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|GGF5-unix3-uk|0|GGF5 unix3 uk|permanent||2002-07-15-09.25.05|2002-07-15-09.25.05|0|srb|sdsc|sdscdemo
+GGF5-unix4-uk|unix file system|/home/csf/acuksrb/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|GGF5-unix4-uk|0|GGF5 unix4 uk|permanent||2002-07-15-11.41.44|2002-07-15-11.41.44|0|srb|sdsc|sdscdemo
+null|generic||null|0|null|generic||1997-08-15-00.00.00|1997-08-15-00.00.00|0|srb|sdsc|sdscdemo
+compound-sdsc|compound||compound-sdsc|0|srb sdsc|archival||2002-08-07-16.02.09|2002-08-07-16.02.09|0|srb|sdsc|sdscdemo
+unix-nasa-langley|unix file system|/srb/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-nasa-langley|0|hpss nasa langley|permanent||2002-08-15-09.31.46|2002-08-15-09.31.46|0|srb|sdsc|sdscdemo
+logical-nasa-langley|logical|/srb/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-nasa-langley|0|hpss nasa langley|permanent||2002-08-15-09.32.09|2002-08-15-09.32.09|0|srb|sdsc|sdscdemo
+logical-nasa-langley|logical|/srbtest-vault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|hpss-nasa-langley|1|hpss nasa langley|archival||2002-08-15-09.32.28|2002-08-15-09.32.28|0|srb|sdsc|sdscdemo
+unix-test-testbrick|unix file system|/scratch/slocal/srb/srbVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-test-testbrick|0|unix testbrick|permanent||2002-08-23-09.45.32|2002-08-23-09.45.32|0|srb|sdsc|sdscdemo
+tapeCache-testbrick|tapeCache|/scratch/slocal/srb/TapeCacheVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|tapeCache-testbrick|0|unix testbrick|cache||2002-08-29-09.36.43|2002-08-29-09.36.43|0|srb|sdsc|sdscdemo
+unix-saic-langley|unix file system|/home/srb/asdcVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-saic-langley|0|nasa saic langley|permanent||2002-08-29-14.38.49|2002-08-29-14.38.49|0|srb|sdsc|sdscdemo
+unix-demo-loc|unix file system|/locsrb/server/SRBvault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-demo-loc|0|unix loc|permanent||2002-09-09-08.50.19|2002-09-09-08.50.19|0|srb|sdsc|sdscdemo
+unix-fhg1-demo|unix file system|/net/pfs1/srb/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-fhg1-demo|0|unix fhg|permanent||2002-09-17-08.40.58|2002-09-17-08.40.58|0|srb|sdsc|sdscdemo
+unix-fhg2-demo|unix file system|/net/pfs2/srb/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-fhg2-demo|0|unix fhg|permanent||2002-09-17-08.41.21|2002-09-17-08.41.21|0|srb|sdsc|sdscdemo
+unix-fhg3-demo|unix file system|/net/pfs3/srb/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-fhg3-demo|0|unix fhg|permanent||2002-09-17-08.41.40|2002-09-17-08.41.40|0|srb|sdsc|sdscdemo
+unix-fhg4-demo|unix file system|/net/pfs4/srb/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-fhg4-demo|0|unix fhg|permanent||2002-09-17-08.41.56|2002-09-17-08.41.56|0|srb|sdsc|sdscdemo
+comp1-sdsc|compound|/users/sdsc/srb/demovault/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|comp1-sdsc|0|db2 mda-18 sdsc|archival||2002-09-19-15.15.19|2002-09-19-15.15.19|0|srb|sdsc|sdscdemo
+hpss-sdsc|hpss file system|/users/sdsc/srb/demovault/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|hpss-sdsc|0|db2 mda-18 sdsc|archival||2002-09-19-15.17.03|2002-09-19-15.17.03|0|srb|sdsc|sdscdemo
+unix-saic2-langley|unix file system|/home/srb/asdcVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-saic2-langley|0|nasa saic2 langley|permanent||2002-09-27-13.24.26|2002-09-27-13.24.26|0|srb|sdsc|sdscdemo
+logical-saic-langley|logical|/home/srb/asdcVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-saic-langley|0|nasa saic langley|permanent||2002-09-27-13.28.46|2002-09-27-13.28.46|0|srb|sdsc|sdscdemo
+logical-saic-langley|logical|/home/srb/asdcVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-saic2-langley|1|nasa saic2 langley|permanent||2002-09-27-13.29.06|2002-09-27-13.29.06|0|srb|sdsc|sdscdemo
+grid-quasar2|gridFTP|/projects/diglib/srb/gridVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|grid-quasar2|0|quasar2|permanent||2002-10-14-16.02.01|2002-10-14-16.02.01|0|srb|sdsc|sdscdemo
+unix-sdsc|unix file system|/misc/srb/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/TEST.?PATH?DATANAME.?RANDOM.?TIMESEC|unix-sdsc|0|srb sdsc|permanent||2002-12-04-17.50.28|2002-12-04-17.50.28|-1|srb|sdsc|sdscdemo
+zhu-2k-pc|windows ntfs file system|/C:/SRBvault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|zhu-2k-pc|0|zhu2k pc|permanent||2003-01-06-17.16.30|2003-01-06-17.16.30|0|srb|sdsc|sdscdemo
+s2-netsvill-unix|unix file system|/home/leepro/GRID/SRB/data/Vault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|s2-netsvill-unix|0|s2 netsvill|permanent||2003-01-13-08.55.51|2003-01-13-08.55.51|0|srb|sdsc|sdscdemo
+giga1-kjist-unix|unix file system|/home/leepro/GRID/SRB/data/Vault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|giga1-kjist-unix|0|giga1 kjist|permanent||2003-01-13-08.57.31|2003-01-13-08.57.31|0|srb|sdsc|sdscdemo
+schen-unix|unix file system|/scratch/slocal/sheau200/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|schen-unix|0|schen|permanent||2003-02-03-21.47.32|2003-02-03-21.47.32|0|srb|sdsc|sdscdemo
+ntfs-demo-sdsc-1|windows ntfs file system|/e:/SRBVault/demo/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|ntfs-demo-sdsc-1|0|yenchenpc|permanent||2003-02-05-16.28.11|2003-02-05-16.28.11|0|srb|sdsc|sdscdemo
+ntfs-demo-sdsc-2|windows ntfs file system|/f:/SRBVault/demo/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|ntfs-demo-sdsc-2|0|yenchenpc|permanent||2003-02-05-16.28.26|2003-02-05-16.28.26|0|srb|sdsc|sdscdemo
+compound-test-sdsc|compound||compound-test-sdsc|0|srb sdsc|archival||2003-02-18-13.33.08|2003-02-18-13.33.08|0|srb|sdsc|sdscdemo
+compound-test-sdsc|logical||tapeCache-testbrick|1|unix testbrick|cache||2003-02-18-13.36.11|2003-02-18-13.36.11|0|srb|sdsc|sdscdemo
+compound-test-sdsc|logical||tape-sdsc|2|du unix|archival||2003-02-18-13.37.47|2003-02-18-13.37.47|0|srb|sdsc|sdscdemo
+compound-test-sdsc|logical||du-sdsc-hpss|3|du hpss17|archival||2003-02-18-13.48.46|2003-02-18-13.48.46|0|srb|sdsc|sdscdemo
+compound-test1-sdsc|compound||compound-test1-sdsc|0|srb sdsc|archival||2003-02-18-17.25.10|2003-02-18-17.25.10|0|srb|sdsc|sdscdemo
+grid-bzhu|gridFTP|/projects/diglib/bzhu/quasar2/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|grid-bzhu|0|quasar2|permanent||2003-04-18-10.02.16|2003-04-18-10.02.16|0|srb|sdsc|sdscdemo
+ads-sdsc|fake_ads|/misc/srb/srb/test/adsVault/?DATANAME.?RANDOM.?TIMESEC|ads-sdsc|0|srb sdsc|archival||2003-06-03-17.27.43|2003-06-03-17.27.43|0|srb|sdsc|sdscdemo
+ads-cache-sdsc|unix file system|/misc/srb/srb/test/adsCacheVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|ads-cache-sdsc|0|srb sdsc|cache||2003-06-03-17.35.06|2003-06-03-17.35.06|0|srb|sdsc|sdscdemo
+ads-compound-sdsc|compound||ads-compound-sdsc|0|srb sdsc|compound||2003-06-03-17.37.38|2003-06-03-17.37.38|0|srb|sdsc|sdscdemo
+ntfs-utexas|windows ntfs file system|/T:/SRBhome/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|ntfs-utexas|0|utexas-pc|permanent||2003-07-03-11.28.39|2003-07-03-11.28.39|0|srb|sdsc|sdscdemo
+hpss-brick1|hpss file system|/users/sdsc/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|hpss-brick1|0|srbbrick1|archival||2003-07-19-18.39.28|2003-07-19-18.39.28|-1|srb|sdsc|sdscdemo
+ntfs-C-utexas|windows ntfs file system|/C:/s1/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|ntfs-C-utexas|0|utexas-pc|permanent||2003-07-03-11.28.57|2003-07-03-11.28.57|0|srb|sdsc|sdscdemo
+ntfs-3-utexas|windows ntfs file system|//Ctserver3/Bemusers/SRBhome/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|ntfs-3-utexas|0|utexas-pc|permanent||2003-07-03-12.27.36|2003-07-03-12.27.36|0|srb|sdsc|sdscdemo
+ntfs-demo-sdsc-3|windows ntfs file system|/T://Samba3/scratch_s1/sheauc/SRBVault/?USER.?DOMAIN/?SPLITPATH\?PATH?DATANAME.?RANDOM.?TIMESEC|ntfs-demo-sdsc-3|0|yenchenpc|permanent||2003-07-07-11.23.35|2003-07-07-11.23.35|0|srb|sdsc|sdscdemo
+ntfs-sql-tacc|windows ntfs file system|/C:/SRB/SERVER/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|ntfs-sql-tacc|0|sql-tacc|permanent||2003-07-10-15.18.57|2003-07-10-15.18.57|0|srb|sdsc|sdscdemo
+unix-brick1|unix file system|/scratch/slocal/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-brick1|0|srbbrick1|cache||2003-07-22-16.55.51|2003-07-22-16.55.51|0|srb|sdsc|sdscdemo
+unix-test-wustl|unix file system|/home/arl/staff/wustlsrb/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|unix-test-wustl|0|brainmap-wustl|permanent||2001-06-07-10.30.54|2001-06-07-10.30.54|0|srb|sdsc|sdscdemo
+du-cont2|logical|/misc/srb/srb/du/SRBVault/?USER.?DOMAIN/?SPLITPATH/TEST.?PATH?DATANAME.?RANDOM.?TIMESEC|du-unix|0|du unix|cache||2002-02-26-11.26.57|2002-02-26-11.26.57|0|srb|sdsc|sdscdemo
+cont-comp-sdsc|logical||du-unix|1|du unix|cache||2002-08-12-17.03.29|2002-08-12-17.03.29|0|srb|sdsc|sdscdemo
+hpss-nasa-langley|hpss file system|/srbtest-vault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|hpss-nasa-langley|0|hpss nasa langley|archival||2002-08-02-14.22.13|2002-08-02-14.22.13|0|srb|sdsc|sdscdemo
+hpss-mda1|hpss file system|/users/sdsc/srb/SRBVault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|hpss-mda1|0|mda-1|archival||2002-09-09-08.28.58|2002-09-09-08.28.58|0|srb|sdsc|sdscdemo
+sheauyen-table|oracle table database|+|sheauyen-table|0|sheauyen table|permanent||2002-12-05-11.53.36|2002-12-05-11.53.36|0|srb|sdsc|sdscdemo
+http-server|http file system||http-server|0|srb sdsc|permanent||2003-02-14-11.26.02|2003-02-14-11.26.02|0|srb|sdsc|sdscdemo
+ux-gmu-test|unix file system|/export/home0/grid/resource/sdsc/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|ux-gmu-test|0|unix gmu|permanent||2003-05-30-12.03.33|2003-05-30-12.03.33|0|srb|sdsc|sdscdemo
+raja-2k-pc|windows ntfs file system|/C:/SRBvault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|raja-2k-pc|0|zhu2k pc|permanent|new one|2003-01-06-17.16.30|2003-09-04-16.25.45|0|srb|sdsc|sdscdemo
+raja-3k-pc|windows ntfs file system|/C:/SRBvault/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC|raja-3k-pc|0|zhu2k pc|permanent|new one|2003-01-06-17.16.30|2003-09-04-16.27.05|0|srb|sdsc|sdscdemo

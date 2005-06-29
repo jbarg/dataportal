@@ -1,0 +1,537 @@
+
+
+To add a new function to the SRB one needs to perform the following 
+ steps:
+
+1. src/include/clStubExtern.h
+        add   documentation for the client call 
+        add   interface definition for client call 
+
+
+2. src/include/srbObjFunctExtern.h
+        add   interface definition for server call
+        add   interface definition for _server call
+
+3. src/include/distribExtern.h
+        add   interface definition for remote call
+
+4. src/include/stubdef.h
+       add the FunctionId as a #define
+
+5. src/include/functionHandler.h
+        add  a row to functionTable
+
+6. src/client/clStub.c
+	code the client call
+
+7. src/back/srbObjFunct.c
+	code the server call 
+	code the _server call (and its attendant functions)
+
+8. back/distrib.c
+        code the remote function call
+              as per that added in src/include/distribExtern.h
+
+Two examples using this is given below.
+-------------------------------------------------------------------
+Example: modifyZoneInfo
+
+/***********************************************************************/
+/***********************************************************************/
+1. src/include/clStubExtern.h
+        add   documentation for the client call 
+        add   interface definition for client call 
+
+/*
+ * srbModifyZone - Modify and Insert SRB zone and zone information in the
+ *  Metadata Catalog. Information about the operation  performed is 
+ *  also logged in the audit  trail (if turned on). This is a
+ *  privileged function and should be called only by a 
+ *  srbAdmin user.
+ *
+ *
+ * Input - srbConn* conn    - From clConnect ().
+ *         int catType      - catalog type. e,g., MDAS_CATALOG.
+ *         char *zone_name  - name of the zone
+ *         char *dataValue1 - Input value 1.
+ *         char *dataValue2 - Input value 2.
+ *         char *dataValue3 - Input value 3.
+ *         char *dataValue4 - Input value 4.
+ *         char *dataValue5 - Input value 5.
+ *         int  actionType  - The type of action. performed
+ *                  values supported are:
+ *
+ *                 Z_INSERT_NEW_LOCAL_ZONE
+ *                     dv1 = locn_desc
+ *                     dv2 = port_number
+ *                     dv3 = username@domain   of remote MCAT admin
+ *                     dv4 = zone_contact
+ *                     dv5 = zone_comment
+ *                 Z_INSERT_NEW_ALIEN_ZONE
+ *                     dv1-5 = same as for INSERT_NEW_LOCAL_ZONE
+ *                 Z_MODIFY_ZONE_INFO
+ *                     dv1-5 = same as for INSERT_NEW_LOCAL_ZONE
+ *                           empty string implies no change.
+ *                 Z_MODIFY_ZONE_FOR_USER
+ *                     dv1 = user_name
+ *                     dv2 = domain_name
+ *                 Z_CHANGE_ZONE_NAME
+ *                     dv1 = new name
+ *                 Z_MODIFY_ZONE_LOCAL_FLAG
+ *                     dv1 = new value (integer)
+ *                 Z_MODIFY_ZONE_STATUS
+ *                     dv1 = new value (integer)
+ *
+ * Output - Returns 0 - success.
+ *          Returns negative - failure.
+ */
+
+extern int srbModifyZone (srbConn* conn, int catType,
+char *zoneName, char *dataValue1, char *dataValue2,
+char *dataValue3, char *dataValue4, char *dataValue5, int actionType);
+
+/***********************************************************************/
+/***********************************************************************/
+2. src/include/srbObjFunctExtern.h
+        add   interface definition for server call
+        add   interface definition for _server call
+
+
+extern int svrModifyZone (int catType, 
+			  struct varlena *vZoneName,
+			  struct varlena *vDataValue1, 
+			  struct varlena *vDataValue2,
+			  struct varlena *vDataValue3, 
+			  struct varlena *vDataValue4, 
+			  struct varlena *vDataValue5, 
+			  int actionType);
+extern int _svrModifyZone (int catType, 
+			   char *zoneName, 
+			   char *dataValue1, 
+			   char *dataValue2, 
+			   char *dataValue3, 
+			   char *dataValue4, 
+			   char *dataValue5, 
+			   int actionType);
+
+/***********************************************************************/
+/***********************************************************************/
+3. src/include/distribExtern.h
+        add   interface definition for remote call
+
+extern int remoteModifyZone (int catType, char *zoneName,
+       char *dataValue1, char *dataValue2, char *dataValue3, char *dataValue4,
+       char *dataValue5, int actionType, struct hostElement  *hostTabPtr);
+
+/***********************************************************************/
+/***********************************************************************/
+4. src/include/stubdef.h
+       add the FunctionId as a #define
+
+#define F_MODIFY_ZONE   	2152
+
+/***********************************************************************/
+/***********************************************************************/
+5. src/include/functionHandler.h
+        add  a row to functionTable
+
+#if defined(SRB_SERVER) && !defined(STK_SERVER)
+        {F_MODIFY_ZONE, (func_ptr)svrModifyZone, 
+#else
+        {F_MODIFY_ZONE, (func_ptr)NULL, 
+#endif
+	"svrModifyZone", SIZEOF32, 8, SIZEOF32, -1, -1, -1, -1,  -1, -1, 
+        SIZEOF32,  0, 0, 0, 0},
+
+/***********************************************************************/
+/***********************************************************************/
+6. src/client/clStub.c
+	code the client call
+
+int srbModifyZone (srbConn* conn, int catType,
+char *zoneName, char *dataValue1, char *dataValue2,
+char *dataValue3, char *dataValue4, char *dataValue5, int actionType)
+{
+    int retval;
+    srb_long_t argv[MAXFMGRARGS];
+    ClOut clOut;
+    int clOutVal;
+
+    clOut.retval = (char *) &clOutVal;
+
+    argv[0] = catType;
+    argv[1] = addrToSRBLong (zoneName);
+    argv[2] = addrToSRBLong (dataValue1);
+    argv[3] = addrToSRBLong (dataValue2);
+    argv[4] = addrToSRBLong (dataValue3);
+    argv[5] = addrToSRBLong (dataValue4);
+    argv[6] = addrToSRBLong (dataValue5);
+    argv[7] = actionType;
+
+    retval = clCall (conn, F_MODIFY_ZONE, argv, &clOut);
+    return retval;
+}
+
+/***********************************************************************/
+/***********************************************************************/
+
+7. src/back/srbObjFunct.c
+	code the server call 
+	code the _server call 
+
+
+int
+svrModifyZone (int catType, struct varlena *vZoneName,
+struct varlena *vDataValue1, struct varlena *vDataValue2,
+struct varlena *vDataValue3, struct varlena *vDataValue4, 
+struct varlena *vDataValue5, int actionType)
+{
+    char *zoneName;
+    char *dataValue1;
+    char *dataValue2;
+    char *dataValue3;
+    char *dataValue4;
+    char *dataValue5;
+    int retVal;
+
+    if (TicketUserFlag) {
+        elog (NOTICE, "Illegal operation for a ticket user");
+        return (ILLEGAL_OPR_TICKET_USER);
+    }
+
+    zoneName = varToStr (vZoneName);
+    dataValue1 = varToStr (vDataValue1);
+    dataValue2 = varToStr (vDataValue2);
+    dataValue3 = varToStr (vDataValue3);
+    dataValue4 = varToStr (vDataValue4);
+    dataValue5 = varToStr (vDataValue5);
+
+
+    retVal = _svrModifyZone (catType, zoneName, dataValue1, 
+    dataValue2, dataValue3, dataValue4, dataValue5, actionType);
+
+    free (zoneName);
+    free (dataValue1);
+    free (dataValue2);
+    free (dataValue3);
+    free (dataValue4);
+    free (dataValue5);
+
+    return retVal;
+}
+
+int
+_svrModifyZone (int catType, char *zoneName, char *dataValue1,
+char *dataValue2, char *dataValue3, char *dataValue4, char *dataValue5, 
+int actionType)
+{
+    int retVal;
+    char *userName;
+    int remoteFlag;
+    struct hostElement  *hostTabPtr;
+
+    /* Do a modify_zone_info */
+
+    remoteFlag = getMdasEnabledHost (NULL, &hostTabPtr);
+
+    if (remoteFlag < 0) {
+	retVal = remoteFlag;
+    } else if (remoteFlag == LOCAL_HOST) {      /* Can talk to mdas */
+#ifdef SRB_MDAS
+        userName = ClientUser->userName;
+        retVal = modify_zone_info (catType, userName, ClientUser->domainName,
+	  zoneName, dataValue1, dataValue2, dataValue3,
+	  dataValue4, dataValue5, actionType);
+	if (retVal == 0)
+            commit_db2_interaction (MDAS_CAT_COMMIT);
+#endif
+    } else {
+        retVal = remoteModifyZone (catType, zoneName,
+          dataValue1, dataValue2, dataValue3, dataValue4, dataValue5, 
+	  actionType, hostTabPtr);
+    }
+
+    return retVal;
+}
+/*** modify_zone_info   is done in the catalog ***/
+
+
+/***********************************************************************/
+/***********************************************************************/
+
+8. back/distrib.c
+        code the remote function call
+              as per that added in src/include/distribExtern.h
+
+
+
+int
+remoteModifyZone (int catType, char *zoneName,
+		  char *dataValue1, char *dataValue2, 
+		  char *dataValue3, char *dataValue4,
+		  char *dataValue5, int actionType,
+		  struct hostElement  *hostTabPtr)
+{
+    int status;
+
+    if (remoteConnect (hostTabPtr) < 0) {
+        return SYS_ERR_REMOTE_CONN;
+    }
+
+    /* Do a client call to the remote host */
+
+    status = srbModifyZone (hostTabPtr->conn, catType,
+      zoneName, dataValue1, dataValue2, dataValue3, dataValue5, 
+      dataValue5, actionType);
+
+    if (status < 0) {       /* Failure */
+        elog (NOTICE, "remoteModifyZone failed: %s",
+          clErrorMessage(hostTabPtr->conn));
+    }
+
+    return (status);
+}
+
+/***********************************************************************/
+/***********************************************************************/
+
+
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+Another Example: srbBulkQueryAnswer
+
+/***********************************************************************/
+/***********************************************************************/
+
+1. src/include/clStubExtern.h
+        add   documentation for the client call 
+        add   interface definition for client call 
+
+
+/*
+ * srbBulkQueryAnswer -  Get answers for canned queries from MCAT.
+ *
+ * Input - srbConn* conn - From srbConnect ().
+ *         int catType - catalog type - 0 - MCAT
+ *         char *queryInfo - query information all info needed to
+ *               perform the query is in this string. The semantics for
+ *               the string depends upon the operation.
+ *         int rowsWanted - number of rows of result wanted.
+ *
+ * Output:
+ *         A mdasC_sql_result_struct *myresult
+ *
+ * Return value :
+ *      0 - success; myresult->continuation_index >= 0, ==> more results from
+ *          the query. Use srbGetMoreRows() to retrieve more rows.
+ *      a negative value - failure
+ */
+extern int
+srbBulkQueryAnswer (srbConn *conn, int catType, char *queryInfo,
+mdasC_sql_result_struct *myresult, int rowsWanted);
+
+/***********************************************************************/
+/***********************************************************************/
+2. src/include/srbObjFunctExtern.h
+        add   interface definition for server call
+        add   interface definition for _server call
+
+extern struct varlena * svrBulkQueryAnswer (int catType, 
+					    struct varlena *vQueryInfo,
+					    int rowsWanted);
+
+extern int _svrBulkQueryAnswer (int catType, 
+			    char *queryInfo, 
+			    mdasC_sql_result_struct **myresult,
+			    int rowsWanted);
+
+/***********************************************************************/
+/***********************************************************************/
+3. src/include/distribExtern.h
+        add   interface definition for remote call
+
+extern int remoteBulkQueryAnswer (int catType, 
+				  char *queryInfo,
+				  mdasC_sql_result_struct **myresult, 
+				  int rowsWanted, 
+				  struct hostElement  *hostTabPtr);
+
+/***********************************************************************/
+/***********************************************************************/
+4. src/include/stubdef.h
+       add the FunctionId as a #define
+
+#define F_BULK_QUERY_ANSWER   	2153
+
+/***********************************************************************/
+/***********************************************************************/
+5. src/include/functionHandler.h
+        add  a row to functionTable
+
+#if defined(SRB_SERVER) && !defined(STK_SERVER)
+        {F_BULK_QUERY_ANSWER, (func_ptr)svrBulkQueryAnswer, 
+#else
+        {F_BULK_QUERY_ANSWER, (func_ptr)NULL, 
+#endif
+	"svrBulkQueryAnswer", -1, 3, SIZEOF32, -1,  SIZEOF32, 
+	0, 0, 0, 0, 0, 0, 0, 0, 0},
+
+/***********************************************************************/
+/***********************************************************************/
+6. src/client/clStub.c
+	code the client call
+
+extern int
+srbBulkQueryAnswer (srbConn *conn, int catType, char *queryInfo,
+mdasC_sql_result_struct *myresult, int rowsWanted)
+
+{
+    char *buf;
+    int buflen;
+    int retval;
+    srb_long_t argv[MAXFMGRARGS];
+    ClOut clOut;
+    int clOutVal;
+ 
+    argv[0] = catalog;
+    argv[1] = queryInfo;
+    argv[2] = rowsWanted;
+
+    if ((buflen = getSqlResultLen (MAX_DCS_NUM, rowsWanted)) <= 0)
+        return CLI_ERR_MALLOC;
+
+    buf = malloc (buflen);
+    if (buf == NULL)
+        return CLI_ERR_MALLOC;
+
+    clOut.retval = (char *) buf;
+
+    retval = clCall (conn, F_BULK_QUERY_ANSWER, argv, &clOut);
+
+    if (retval < 0 || rowsWanted == 0 ) {
+        free (buf);
+        return retval;
+    }
+
+    strToSqlResult (buf, myresult);
+
+    free (buf);
+
+    if (myresult->result_count > 0)
+        return 0;       /* success */
+    else
+        return CLI_ERR_RETURN_LEN;
+}
+
+/***********************************************************************/
+/***********************************************************************/
+7. src/back/srbObjFunct.c
+	code the server call 
+	code the _server call (and its attendant functions)
+
+
+struct varlena *
+svrBulkQueryAnswer (int catType, 
+		    struct varlena *vQueryInfo,
+		    int rowsWanted)
+{
+    struct varlena *retval;
+    int status;
+    char *queryInfo;
+    mdasC_sql_result_struct  *myresult = NULL;
+
+    queryInfo = varToStr (vQueryInfo);
+
+    status = _svrBulkQueryAnswer (catType, queryInfo, &myresult, rowsWanted);
+
+    if (status == 0) {
+        retval = sqlResultToVar (myresult, MULTI_ROW);
+        freeSqlResult (myresult);
+    } else {
+	elog (NOTICE, "svrBulkQueryAnswer:  failed. Status = %d",
+	  status);
+        retval = (struct varlena *)malloc(VAROUTHDRSZ);
+        VARSIZE(retval) = VAROUTHDRSZ;
+        VAROUTSTAT(retval) = htonl (status);
+        if (myresult != NULL)
+            free (myresult);
+    }
+
+    return retval;
+}
+
+
+
+int
+_svrBulkQueryAnswer (int catType, 
+		 int queryInfo, 
+		 mdasC_sql_result_struct **myresult,
+		 int rowsWanted)
+{
+    int status;
+    char *mcatHostHint;
+    int remoteFlag;
+    struct hostElement  *hostTabPtr;
+
+
+    remoteFlag = getMdasEnabledHost (NULL,  &hostTabPtr);
+
+    if (remoteFlag < 0) {
+        status = remoteFlag;
+    } else if (remoteFlag == LOCAL_HOST) {      /* Can talk to mdas */
+#ifdef SRB_MDAS
+        status = get_bulk_query_answers(catType, queryInfo,
+					myresult, rowsWanted);
+#endif
+    } else {
+        status = remoteBulkQueryAnswer (catType, queryInfo, myresult, 
+					rowsWanted, hostTabPtr);
+    }
+    return (status);
+
+}
+
+
+/***********************************************************************/
+/***********************************************************************/
+8. back/distrib.c
+        code the remote function call
+              as per that added in src/include/distribExtern.h
+
+
+int 
+remoteBulkQueryAnswer (int catType, 
+				  char *queryInfo,
+				  mdasC_sql_result_struct **myresult, 
+				  int rowsWanted, 
+				  struct hostElement  *hostTabPtr)
+{
+    int status;
+
+    if (remoteConnect (hostTabPtr) < 0) {
+        return SYS_ERR_REMOTE_CONN;
+    }
+ 
+    /* Do a client call to the remote host */
+ 
+    *myresult = (mdasC_sql_result_struct  *)
+      malloc (sizeof (mdasC_sql_result_struct));
+
+    memset (*myresult, 0, sizeof (mdasC_sql_result_struct));
+
+    status = srbBulkQueryAnswer (hostTabPtr->conn, catType, queryInfo, 
+      *myresult, rowsWanted);
+ 
+    if (status < 0) {       /* Failure */
+        elog (NOTICE, "Remote BulkQueryAnswer failed: %s",
+          clErrorMessage(hostTabPtr->conn));
+        free (*myresult);
+        *myresult = NULL;
+    }
+ 
+    return status;
+}
+
+
+/***********************************************************************/
+/***********************************************************************/

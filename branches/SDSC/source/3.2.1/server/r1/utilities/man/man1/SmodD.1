@@ -1,0 +1,93 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii SmodD.1
+.\"
+.TH SmodD 1 "Jan 2002 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+SmodD \- modifies metadata information about SRB data objects.
+.SH SYNOPSIS
+.BI SmodD
+.RB [ \-s|\-t|\-c|\-g|\-H|\-k|\-x|\-X|\-y|\-Y|\-z ]
+.I "newValue  dataName"
+.sp
+.BI SmodD
+.RB [ \-L|\-P ]
+.I "newValue additionalValue dataName"
+.sp
+.BI SmodD
+.RB -l
+.I "targetDataName targetCollectionName dataName"
+.SH DESCRIPTION
+.B "SmodD "
+modifies information about data objects
+.IR dataName .
+.sp
+Note that the command can change the information for more than
+one object if
+.I dataName
+can resolve to more than one object name.
+.sp
+The Stoken utility can be used to find the current data types
+supported.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-s "
+change size
+.TP 0.5i
+.B "\-t "
+change type
+.TP 0.5i
+.B "\-l "
+makes a soft link for this data in another collection
+.I "targetCollectionName"
+with a given 
+.I "targetDataName"
+.TP 0.5i
+.B "\-c "
+insert comments
+.TP 0.5i
+.B "\-g "
+insert GUID - global unique identifier
+.TP 0.5i
+.B "\-k "
+insert/change checksum
+.TP 0.5i
+.B "\-Y "
+insert/change encrypted field via SRB Secure Communication
+.TP 0.5i
+.B "\-z "
+insert/change compressed field
+.TP 0.5i
+.B "\-H "
+hide or unhide a srbObject  and disallows user from 
+reading/writing the srbObject Set newValue=1 for hiding 
+and newValue=0 for unhiding. When metadata access control is on, 
+the srbObject will not be seen by Sls.
+.TP 0.5i
+.B "\-P "
+pin or unpin a srbObject  and disallows removal of file by 
+a SRB daemon (current implementation does not use the pin
+from stopping one to remove/move a file)
+Set newValue=1 for pinning
+and newValue=0 for unpinning. 
+This operation needs additionalValue and 
+should be of the form YYYY-MM-DD-HH.MM.SS;
+.TP 0.5i
+.B "\-L "
+lock upto a timestamp; 
+newValue can be 'read', 'all' or 'null'.
+If all-locked no one can read or write.
+If read-locked no one can write but they can read.
+If null-locked all locks are removed.
+This operation needs additionalValue and 
+should be of the form YYYY-MM-DD-HH.MM.SS;
+
+.SH "SEE ALSO"
+.BR SgetD (1),
+.BR Sput (1),
+.BR Stoken (1),
+.BR Sattrs (1)
+
