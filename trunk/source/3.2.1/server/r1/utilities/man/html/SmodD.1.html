@@ -1,0 +1,158 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of SmodD</TITLE>
+</HEAD><BODY>
+<H1>SmodD</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+SmodD - modifies metadata information about SRB data objects.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>SmodD</B>
+
+[<B>-s|-t|-c|-g|-H|-k|-x|-X|-y|-Y|-z</B>]
+
+<I>newValue  dataName</I>
+
+<P>
+<B>SmodD</B>
+
+[<B>-L|-P</B>]
+
+<I>newValue additionalValue dataName</I>
+
+<P>
+<B>SmodD</B>
+
+-l
+
+<I>targetDataName targetCollectionName dataName</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>SmodD </B>
+
+modifies information about data objects
+<I>dataName</I>.
+
+<P>
+Note that the command can change the information for more than
+one object if
+<I>dataName</I>
+
+can resolve to more than one object name.
+<P>
+The Stoken utility can be used to find the current data types
+supported.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-s </B>
+
+<DD>
+change size
+<DT><B>-t </B>
+
+<DD>
+change type
+<DT><B>-l </B>
+
+<DD>
+makes a soft link for this data in another collection
+<I>targetCollectionName</I>
+
+with a given 
+<I>targetDataName</I>
+
+<DT><B>-c </B>
+
+<DD>
+insert comments
+<DT><B>-g </B>
+
+<DD>
+insert GUID - global unique identifier
+<DT><B>-k </B>
+
+<DD>
+insert/change checksum
+<DT><B>-Y </B>
+
+<DD>
+insert/change encrypted field via SRB Secure Communication
+<DT><B>-z </B>
+
+<DD>
+insert/change compressed field
+<DT><B>-H </B>
+
+<DD>
+hide or unhide a srbObject  and disallows user from 
+reading/writing the srbObject Set newValue=1 for hiding 
+and newValue=0 for unhiding. When metadata access control is on, 
+the srbObject will not be seen by Sls.
+<DT><B>-P </B>
+
+<DD>
+pin or unpin a srbObject  and disallows removal of file by 
+a SRB daemon (current implementation does not use the pin
+from stopping one to remove/move a file)
+Set newValue=1 for pinning
+and newValue=0 for unpinning. 
+This operation needs additionalValue and 
+should be of the form YYYY-MM-DD-HH.MM.SS;
+<DT><B>-L </B>
+
+<DD>
+lock upto a timestamp; 
+newValue can be 'read', 'all' or 'null'.
+If all-locked no one can read or write.
+If read-locked no one can write but they can read.
+If null-locked all locks are removed.
+This operation needs additionalValue and 
+should be of the form YYYY-MM-DD-HH.MM.SS;
+<P>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+SgetD">SgetD</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Sput">Sput</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Stoken">Stoken</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Sattrs">Sattrs</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 18:44:15 GMT, July 02, 2004
+</BODY>
+</HTML>

@@ -1,0 +1,81 @@
+--------
+Overview
+--------
+
+The SRB Python binding provides a layer on the top of the existing SRB C client APIs.
+The binding allows pyhton program(s) to navigate SRB storage system such as
+getting the content of a given collection and manipulating SRB file system.
+
+The output of the SRB Python binding after running 'gmake' is a shared library file, srb.so, 
+which contains the currently-implemented SRB client binding functions to be used by Python
+program(s).
+
+The Python binding functions were tested in Solaris and Linux (32-bit) machines.
+
+
+----------------------------
+Build the SRB Python library
+----------------------------
+
+Assume that either SRB C client or server has been configured and built successfully.
+In this case, the platform and other options/configurations have been set properly for a
+build machine.  Change directory to the 'python' directory under the SRB tree and run gmake.
+
+
+-------------------------------
+Currently-implemented Functions
+-------------------------------
+- connect and disconnect from a SRB server
+- file operations such as open, create, seek, write, read 
+- delete (unlink) a file.
+- collection operations such as create a sub-collection and delete an existing collection
+- virtual file system navigation functions for getting the content of a given collection such as 
+  its sub-collections and datasets(files)
+- metadata function: used to query the system metadata for a virtual file system.
+
+
+-------
+Example
+-------
+  The following example uses GSI login. The sytanx of APIs is documented in file 'api_reference.txt'.
+
+  $ python
+  Python 1.5.2 (#1, Jan 31 2003, 11:01:49)  [GCC 2.96 20000731 (Red Hat Linux 7.2 2 on linux-i386
+  Copyright 1991-1995 Stichting Mathematisch Centrum, Amsterdam
+  >>> import srb
+  >>> cid = srb.connect("srb.sdsc.edu","6617","sdsc","GSI_AUTH","bzhu","","/C=US/O=NPACI/OU=SDSC/USERID=srbdev/CN=SRB develop ment user/Email=srbdev@sdsc.edu")
+  >>> print cid
+  1
+  >>> srb.get_objs_in_coll(cid,0,0,"/home/bzhu.sdsc")
+  26
+  >>> srb.get_obj_metadata(cid,0,0)
+  '10.raw'
+  >>> srb.get_obj_metadata(cid,0,23)
+  'vdlexp.dat'
+  >>> srb.get_subcolls(cid,0,"/home/bzhu.sdsc")
+  12
+  >>> srb.get_subcoll_name(cid,0)
+  26
+  >>> srb.get_subcoll_name(cid,0)
+  '/home/bzhu.sdsc/TEMP'
+  >>> srb.get_subcoll_name(cid,4)
+  '/home/bzhu.sdsc/gridftp'
+  >>> srb.disconnect(cid)
+
+
+--------------
+Acknowledgment
+--------------
+
+My special thanks for Conrad Steenberg from California Institute of Technology for his contribution 
+in initiating this project and providing technical help in developing the SRB Python binding 
+functions. The Clarens team is also the first SRB PPDG partner to use SRB Python binding, 
+together with running a standalone SRB MCAT for Clarens.  Conrad Steenberg can be reached 
+at conrad@hep.caltech.edu.
+
+Bing Zhu
+Data and Knowledge Systems
+San Diego Supercomputer Center
+(858)534-8373
+bzhu@sdsc.edu
+May 19, 2003

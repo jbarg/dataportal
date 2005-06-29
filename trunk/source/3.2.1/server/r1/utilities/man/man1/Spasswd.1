@@ -1,0 +1,25 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Spasswd.1
+.\"
+.TH Spasswd 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Spasswd \- changes password of current user
+.SH SYNOPSIS
+.B Spasswd
+.SH DESCRIPTION
+.B "Spasswd"
+changes the current user's password both in the
+Meta Catalog as well as in the Client Authorization Environment
+file. The Client Authorization Environment file is normally
+located in  ~/.srb/.MdasAuth
+.sp
+The password change persists across sessions with SRB.
+.sp
+User should have write permissions in the path where the Client
+Authorization Environment file is located.
+.PP
+.SH "OPTIONS"
+none
+.SH "SEE ALSO"
+.BR Sinit (1)
+

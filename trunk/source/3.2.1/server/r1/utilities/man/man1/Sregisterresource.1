@@ -1,0 +1,60 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sregisterresource.1
+.\"
+.TH Sregisterresource 1 "April 2004 " "Storage Resource Broker" "Admin SRB Commands"
+.SH NAME
+Sregisterresource \- register a new physical resource
+.SH SYNOPSIS
+.B Sregisterresource 
+.RB [ \-h ]
+.IR NewResourceName 
+.IR ResourceType 
+.IR Location 
+.IR PhysicalPath 
+.IR Class
+.SH DESCRIPTION
+.B "Sregisterresource "
+is an SRB Administrator command to register a new physical resource
+into the MCAT.  
+It is similar to the MCAT command 
+.IR ingestResource 
+but
+can run on any supported host whereas 
+.IR ingestResource 
+needs to run on
+the MCAT host.  It uses SRB client/server calls to update the MCAT.
+You must have SRB administrative privileges for this command to succeed.
+ 
+.sp
+.I NewResourceName 
+is a name of your choosing for your new resource.
+.sp
+.I ResourceType
+needs to be one of the ResourceTypes defined in your SRB MCAT system, such
+as 'unix file system', 'hpss file system', etc.  Use Stoken to display
+your complete list.
+.sp
+.I Location
+needs to be a Location that is defined in your MCAT; again use Stoken to
+display a complete list.
+.sp
+.I PhysicalPath 
+is the path name under which this physical resource will be storing the files.
+.sp
+.I Class
+needs to be one of the ResourceClass items that is defined in your MCAT, such
+as 'archival', 'generic', etc; again use Stoken to
+display a complete list.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.SH "EXAMPLES"
+Sregisterresource  NewResource 'unix\ file\ system' sdsc '/scratch/slocal/?USER.?DOMAIN/?SPLITPATH/?PATH?DATANAME.?RANDOM.?TIMESEC' permanent
+.sp
+Sregisterresource  'ora-catharsis-sdsc' 'oracle\ dblobj\ database' 'catharsis\ oracle\ Vault'  "/srbVault/OBJ_LOCATOR/OBJ_ID='TEST.?PATH/?DATANAME.?RANDOM.?TIMESEC'" permanent
+.SH "SEE ALSO"
+.BR Stoken(1),
+.BR Sregisterlocation (1),
+and mcatAdmin the Java GUI admin tool.

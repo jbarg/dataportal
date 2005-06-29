@@ -1,0 +1,44 @@
+<!-- Ant makefile for JARGON -->
+
+<project name="Jargon" default="compile">
+
+  <target name="compile" description="Compile everything.">
+    <!-- First, ensure the build directory exists. -->
+    <mkdir dir="bin" />
+    <!-- Build everything -->
+    <javac srcdir="src/api" destdir="bin" target="1.2">
+      <exclude name="" />
+    </javac>
+    <javac srcdir="src/test" destdir="bin" target="1.2">
+      <exclude name="" />
+    </javac>
+  </target>
+
+
+  <target name="build" depends="compile" description="Build jargon.jar.">
+    <!-- Build jargon.jar. -->
+    <jar jarfile="lib/jargon.jar" basedir="bin" />
+  </target>
+
+
+  <target name="clean" description="Delete the build files.">
+    <delete dir="bin" />
+    <delete file="lib/jargon.jar" />
+  </target>
+
+
+  <target name="javadocs" description="Build the JavaDocs.">
+    <mkdir dir="lib" />
+    <javadoc
+           sourcepath="src/api"
+           packagenames="edu.*"
+           destdir="lib"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="Jargon API">
+    </javadoc>
+  </target>
+
+</project>
+
