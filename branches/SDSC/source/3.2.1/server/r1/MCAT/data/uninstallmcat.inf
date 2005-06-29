@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "CLEARING DATABASE  CLEARING DATABASE  CLEARING DATABASE  CLEARING DATABASE  "
+echo "Cleaning and UnInstal starts in 20 seconds"
+echo "Ctrl-C to abort"
+sleep 20
+echo "cleaning up mcat"
+dbaccess -e mcat  data/catalog.cleanup.inf

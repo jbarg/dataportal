@@ -1,0 +1,66 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sln.1
+.\"
+.TH Sln 1 "July 2004 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sln \- make links to
+.IR srbObjects " or to " srbCollections .
+.SH SYNOPSIS
+.B Sln
+.RB [ \-n
+.IR n ]
+.RB [ \-fp ]
+.I Target_srbObj Link_name
+.br
+.B Sln
+.RB [ \-n
+.IR n ]
+.BR \-r " [" \-fp ]
+.I Target_collection Link_name
+.br
+.SH DESCRIPTION
+In the first synopsis form,
+.B Sln
+makes a link
+.IR Link_name " to a " Target_srbObj .
+.sp
+The
+.I srbObj
+argument is a path name in the SRB collection hierarchy. The user
+should have at least 'read' access permission for the
+.IR Target_srbObj .
+.sp
+In the second synopsis form, 
+.B Sln
+makes recursive links, starting at link
+.IR Link_name " to " Target_collection .
+.sp
+The
+.I Target_collection
+argument is a path name in the SRB collection hierarchy. The user
+should have at least 'read' access permissions for all subcollections and srbObjs in
+.IR Target_collection .
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command line options.
+.TP 0.5i
+.B "\-p "
+prompts before linking each object.
+.TP 0.5i
+.B "\-f "
+force linking even if link already exists.
+.TP 0.5i
+.B "\-r "
+link collections recursively.
+.TP 0.5i
+.B "\-n "
+.I "n 
+is an integer denoting the replica number of the object to
+be linked.
+.SH "SEE ALSO"
+.BR Scp (1),
+.BR Smv (1).
+
+

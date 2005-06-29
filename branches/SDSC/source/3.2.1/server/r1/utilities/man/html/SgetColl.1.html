@@ -1,0 +1,161 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of SgetColl</TITLE>
+</HEAD><BODY>
+<H1>SgetColl</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2003 <BR><A HREF="#index">Index</A>
+<A HREF="http://localhost/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+SgetColl - display information about SRB data objects.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>SgetColl</B>
+
+[<B>-ahc</B>] [<B>-I</B>] [<B>-W</B>|<B>-U</B>
+
+<I>userName</I>]
+
+[<B>-Y</B>
+
+<I>number</I>]
+
+[<B>-L</B>
+
+<I>number</I>]
+
+[<B>-A</B>
+
+<I>condition</I>] [<I>collName</I>]
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>SgetColl </B>
+
+displays information about collections in
+<I>collName</I>.
+
+<P>
+If
+<I>collName</I>
+
+is not given,
+<B>SgetColl</B>
+
+displays information about all collections that can be associated
+with the user, unless -U or -W option is exercised.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-a </B>
+
+<DD>
+display access permissions
+<DT><B>-c </B>
+
+<DD>
+displays container information
+<DT><B>-H </B>
+
+<DD>
+display hidden files owned by you
+in the collection 
+<DT><B>-W </B>
+
+<DD>
+display information for all users
+<DT><B>-U </B>
+
+<DD>
+display information for user/group
+<I>userName</I>
+
+<DT><B>-Y </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls display format.
+<BR>
+
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+<BR>
+
+With -Y 0 will display in vertical, one attribute-per-line format.
+<BR>
+
+With Y n, n &gt; 0, information is displayed one item-per-line with each
+attribute spaced at
+<I>number</I>
+
+characters.
+<BR>
+
+With Y -1, information is displayed without headers, with each item
+quoted and separated by a blank and with no row control.
+<DT><B>-L </B>
+
+<DD>
+<B>[</B><I>number</I><B>] </B>
+
+controls number of items displayed at a time under user's
+control.
+<BR>
+
+Without  -L, DEFAULT_ROW_COUNT items of information is displayed
+at a time.
+<BR>
+
+With L n, n &gt; 0, n items are displayed at a time.
+<DT><B>-A    </B>
+
+<DD>
+<I>condition</I>
+
+option is an '&amp;' separated condition which will be applied
+in choosing the object to be listed. The separated condition
+is of the form &quot;&lt;Attr&gt; &lt;CompOp&gt; &lt;Value&gt;&quot;, where &lt;Attr&gt; is an
+MCAT attribute found by
+<B>Sattrs   </B>
+
+command, &lt;CompOp&gt; is a comparison operator and &lt;Value&gt; is a
+numeric or string value. The entire condition should be within
+a set of double quotes. Example: SgetColl -A &quot;COPY = 0&quot;
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+SgetD">SgetD</A></B>(1),
+
+<B><A HREF="http://localhost/cgi-bin/man/man2html?1+Sattrs">Sattrs</A></B>(1)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://localhost/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 18:44:15 GMT, July 02, 2004
+</BODY>
+</HTML>

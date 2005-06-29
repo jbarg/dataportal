@@ -1,0 +1,10 @@
+NOTICE:Feb 17 13:23:03: 
+NOTICE:Feb 17 13:23:03: ORACLE ERROR: RC= -1019, LDARC= 1019 Reported from src/catalog/mdas/mdasC_ora_internal.c, line 387 
+
+NOTICE:Feb 17 13:23:03: 
+-- ORACLE error
+
+NOTICE:Feb 17 13:23:03: Error while trying to retrieve text for error ORA-01019
+
+
+srbMasterMain: open_db2_interaction Error. Status = -3002

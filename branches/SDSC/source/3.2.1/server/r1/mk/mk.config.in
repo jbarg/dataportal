@@ -1,0 +1,849 @@
+#
+# mk.config.in - This is the configuration file for making the SRB software.
+#
+# mk.config, which is automatically generated from this file when the configure
+# script is run, is included by the main Makefile.in
+#
+#  UNCOMMENTING THE "old way" STUFF WILL OVERRIDE THE FLAGS 
+#                         PASSED TO THE CONFIGURE SCRIPT !!!
+#
+
+# PORTNAME defines the OS platform of this SRB port.
+# Valid PORTNAME are PORTNAME_solaris, PORTNAME_sunos, PORTNAME_aix
+# PORTNAME_alpha, PORTNAME_c90 (both c90 and t3e use this switch), PORTNAME_sgi
+# PORTNAME_osx - Apple OS X, PORTNAME_linux
+#
+# new way -> automatically detected by ./configure using config.guess script, e.g.
+#	./configure
+PORTNAME=@PORTNAME@
+#
+# old way -> Uncomment and modify to match your platform
+#	PORTNAME=PORTNAME_solaris
+#
+
+# installDir is the absolute path of the SRB install directory. After the
+# the build, type in "gmake install" to install the software into this
+# directory.
+#
+# new way -> send --enable-installdir=<your_install_path_here> flag to .configure, e.g.
+#	./configure --enable-installdir=<path>
+installDir=@INSTALL_DIR@
+#
+# old way -> Uncomment and modify to be desired install location
+#	installDir=/projects/diglib/srb/SRB2
+#
+
+# SRB_LARGEFILE64 defines whether the 64 bit file size is supported by the
+# underlining driver of this SRB server.
+# Current, 64 bit file size is supported by the PORTNAME_solaris, PORTNAME_aix, 
+# PORTNAME_linux and PORTNAME_c90 platforms.
+SRB_LARGEFILE64=1
+
+# ADDR_64BIT defines whether to compile for 64 bits address. This option
+# has only been tested for the the Solaris and Linux platforms.
+# new way -> automatically detected by configure
+# old way -> manually uncomment ADDR_64BIT=1 .
+# ADDR_64BIT=1
+ADDR_64BIT=@ADDR_64BIT@
+
+# ORACLE_VERSION defines the version of Oracle DBMS being used. 
+# Comment out this field if Oracle DBMS is not being used.
+# Valid ORACLE_VERSIONs are ORACLE_VERSION_733, ORACLE_VERSION_815, ORACLE_VERSION_920_32bit and ORACLE_VERSION_920_64bit
+#
+# new way -> send --enable-oraver=<733 | 815 | 920_32bit | 920_64bit> flag to .configure, e.g.
+#	./configure --enable-oraver=920_32bit
+ORACLE_VERSION=@ORAVER@
+#
+# old way -> Uncomment out the following field and set to be your version of Oracle, as listed above
+#	ORACLE_VERSION=ORACLE_VERSION_815
+#
+
+# ORACLE_CONNECT  defines the listener's connection type for Oracle DBMS. 
+# The listener may be using tns names service or the oracle name service.
+# Comment out this field if Oracle DBMS is not being used.
+# Valid ORACLE_CONNECTs are ORACLE_CONNECT_TNS and ORACLE_CONNECT_ONS.
+#
+# new way -> send --enable-oraconn=<TNS | ONS> flag to .configure, e.g.
+#	./configure --enable-oraconn=TNS
+ORACLE_CONNECT=@ORACONN@
+#
+# old way -> Uncomment out the following field and set to be your Oracle connection type
+#              ORACLE_CONNECT=ORACLE_CONNECT_TNS
+#
+
+# EX_CTLIB_VERSION defines the version of Sybase Client Library being used. 
+# Valid EX_CTLIB_VERSIONs are CS_VERSION_110
+#
+# new way -> send --enable-sybver=110 flag to .configure, e.g.
+#	./configure --enable-sybver=110
+EX_CTLIB_VERSION=@SYBVER@
+#
+# old way -> Comment out this field if Sybase DBMS is not being used.
+#	EX_CTLIB_VERSION=CS_VERSION_110
+
+# MCAT_VERSION defines the version of MCAT catalog being used.
+# Valid MCAT_VERSIONs are MCAT_VERSION_10, MCAT_VERSION_11 and MCAT_VERSION_20.
+# If installing a new MCAT at your site please use MCAT_VERSION_20. 
+#
+# new way -> send --enable-mcatver=<10 | 11 | 20> flag to .configure, e.g.
+#	./configure --enable-mcatver=20
+MCAT_VERSION=@MCAT_VERSION@
+#
+# old way -> Uncomment out the following field if the Server is to be MCAT enabled.
+#	MCAT_VERSION=MCAT_VERSION_20
+#
+
+# PSQMCAT defines that this SRB server being built is MDAS enabled and the  
+# MCAT is stored in Postgres DBMS. Normally, only one SRB server is MDAS enabled.
+#
+# new way -> send --enable-psgmcat flag to .configure, e.g.
+#	./configure --enable-psgmcat
+PSQMCAT = @MCAT_Postgres@
+#
+# old way -> Uncomment out the following field if the Server is to be MCAT enabled with an Postgres MCAT.
+# 	PSQMCAT = 1
+#
+ifdef PSQMCAT
+SRB_MDAS = 1
+PSQ_DBMS = 1
+DBMS_INCLUDE+= -DPSQMCAT
+endif
+
+# MYSMCAT defines that this SRB server being built is MDAS enabled and the  
+# MCAT is stored in MySQL DBMS. Normally, only one SRB server is MDAS enabled.
+#
+# new way -> send --enable-mysmcat flag to .configure, e.g.
+#	./configure --enable-mysmcat
+MYSMCAT = @MCAT_MySQL@
+#
+# old way -> Uncomment out the following field if the Server is to be MCAT enabled with an MySQL MCAT.
+# 	MYSMCAT = 1
+#
+ifdef MYSMCAT
+SRB_MDAS = 1
+MYS_DBMS = 1
+DBMS_INCLUDE+= -DMYSMCAT
+endif
+
+# ORAMCAT defines that this SRB server being built is MDAS enabled and the  
+# MCAT is stored in a Oracle DBMS. Normally, only one SRB server is MDAS enabled.
+#
+# new way -> send --enable-oramcat flag to .configure, e.g.
+#	./configure --enable-oramcat
+ORAMCAT=@MCAT_Oracle@
+#
+# old way -> Uncomment out the following field if the Server is to be MCAT enabled with an Oracle MCAT.
+# 	ORAMCAT = 1
+#
+ifdef ORAMCAT
+SRB_MDAS = 1
+ORA_DBMS = 1
+DBMS_INCLUDE+= -DORAMCAT
+endif
+
+# DB2MCAT defines that this SRB server being built is MDAS enabled and the 
+# MCAT is stored in a DB2 DBMS. Normally, only one SRB server is MDAS enabled.
+#
+# new way -> send --enable-db2mcat flag to .configure, e.g.
+#	./configure --enable-db2mcat
+DB2MCAT=@MCAT_DB2@
+#
+# old way -> Uncomment out the following field if the Server is to be MCAT enabled with a DB2 MCAT.
+# 	DB2MCAT = 1
+#
+ifdef DB2MCAT
+SRB_MDAS = 1
+DB2_DBMS = 1
+DBMS_INCLUDE+= -DDB2MCAT
+endif
+
+# makes client-server connections to be fast by switching off Nagle Algorithm in TCPIP
+# this flag will remove the Nagle algorithm optimization
+# comment this out if you want the Nagle algorithm optimization
+TCPNODELAYFLAG =  1
+
+# SYBMCAT defines that this SRB server being built is MDAS enabled and the 
+# MCAT is stored in Sybase DBMS. Normally, only one SRB server is MDAS enabled.
+#
+# new way -> send --enable-sybmcat flag to .configure, e.g.
+#	./configure --enable-sybmcat
+SYBMCAT=@MCAT_Sybase@
+#
+# old way -> Uncomment the following field if the Server is to be MCAT enabled with a Sybase MCAT.
+# 	SYBMCAT = 1
+#
+ifdef SYBMCAT
+SRB_MDAS = 1
+SYB_DBMS = 1
+DBMS_INCLUDE+= -DSYBMCAT
+endif
+
+# IFMXMCAT defines that this SRB server being built is MDAS enabled and the  
+# MCAT is stored in Informix DBMS. Normally, only one SRB server is MDAS enabled.
+#
+# new way -> send --enable-ifmxmcat flag to .configure, e.g.
+#     ./configure --enable-ifmxmcat
+IFMXMCAT = @MCAT_Informix@
+#
+# old way -> Uncomment out the following field if the Server is to be MCAT enabled with an Informix MCAT.
+#     IFMXMCAT = 1
+#
+ifdef IFMXMCAT
+SRB_MDAS = 1
+IFMX_DBMS = 1
+DBMS_INCLUDE+= -DIFMXMCAT
+endif
+
+# MDAS_DEBUG - If this flag is set, will write debug log.
+ifdef SRB_MDAS
+#MDAS_DEBUG = 1
+endif
+
+# UTREE defines whether this SRB server can access UniTree storage system. 
+# Comment it out if the SRB server does not support UniTree Access.
+# UTREE = 1
+
+# The following is needed only if UTREE is defined. UTREEDIR specifies
+# where the UniTree libraries are located and UTREE_HDR_DIR specifies where
+# the UniTree header directory is located.
+
+ifdef UTREE
+UTREEDIR=/scratch0/mwan/unitree
+UTREE_HDR_DIR=/scratch0/mwan/unitree/src/sdsc/lib/libnsltree/hdr
+endif
+ 
+# HPSS defines whether this SRB server can access HPSS storage system. 
+# Comment it out if the SRB server does not support HPSS Access.
+# HPSS=2
+ 
+# ADS defines whether this SRB server can access UK's Atlas Store mass
+# storage system.  Comment it out if the SRB server does not support ADS Access.
+# ADS=8
+
+# NO_DCE - non DCE hpss client. If this value is set, will use the DCEless
+# client library developed by Mike Gleicher for the solaris platform.
+# It should be noted this library is different from the one distributed
+# with the HPSS release. Please contact Mike at mkg@san.rr.com for 
+# informations regarding licensing this software.
+# NO_DCE=1
+
+# The following are needed only if HPSS is defined. HPSS_LIB_DIR specifies
+# the directory where the HPSS libraries are located. For NO_DCE
+# authentication, KRBLIB_PATH specifies where the Kerberos library
+# is located. For DCE authentication, ENCINA_LIB_DIR specifies where
+# encina libraries are located. HPSS_HDR_DIR, DCE_HDR_DIR and ENCINA_HDR_DIR
+# specifies where the header directories for HPSS, DCE and ENCINA,
+# respectively,are located.
+
+ifdef HPSS
+ifdef NO_DCE
+KRBLIB_PATH    = /usr/sdsc/lib
+HPSS_LIB_DIR=/projects/diglib/srb/no_dce_hpss/lib
+HPSS_HDR_DIR=/projects/diglib/srb/no_dce_hpss/include
+else
+# HPSS_LIB_DIR = /usr/lpp/hpss/lib
+HPSS_LIB_DIR = /opt/hpss/lib
+ENCINA_LIB_DIR=/usr/lpp/encina/lib
+HPSS_HDR_DIR = /usr/lpp/hpss/include
+# HPSS_HDR_DIR = /hpss_temp/build/aix4.1/include
+DCE_HDR_DIR = /usr/include/dce
+ENCINA_HDR_DIR = /usr/lpp/encina/include
+endif
+endif
+
+# PARA_OPR defines whether this SRB server supports parallel operation API.
+PARA_OPR = 1
+
+# FTP defines whether this SRB server support FTP access.
+# cOMment it out if the SRB server does not support FTP Access.
+# FTP = 3
+
+# HTTP defines whether this SRB server support HTTP access.
+# Comment it out if the SRB server does not support HTTP Access.
+HTTP = 4
+
+# DPSS defines whether this SRB server can access DPSS storage system. 
+# Comment it out if the SRB server does not support HPSS Access.
+#DPSS=5
+ 
+# The following is needed only if DPSS is defined. DPSS_LIB_DIR specifies
+# where the DPSS libraries are located. DPSS_HDR_DIR
+# specifies where the header directories for DPSS are located
+
+ifdef DPSS
+DPSS_HOME = /projects/diglib/srb/dpss/solaris
+DPSS_LIB_DIR = $(DPSS_HOME)/lib
+DPSS_HDR_DIR = $(DPSS_HOME)/include
+endif
+
+# DB_DB2 defines whether or not this SRB server supports DB2_LOBJ or TABLE access.
+# Comment it out if the SRB server does not support DB2_LOBJ or TABLE Access.
+#
+# new way -> send --enable-db2lobj flag to .configure, e.g.
+#	./configure --enable-db2lobj
+DB_DB2=
+#
+# old way -> Uncomment out the following field if the Server is to support DB2_LOBJ or TABLE access
+#              DB_DB2 = 0
+#
+ifdef DB_DB2
+DB2_DBMS = 1
+DBMS_INCLUDE+= -DDB_DB2=0
+endif
+
+# DB_Mysql defines whether or not this SRB server supports MYS_LOBJ or TABLE access.
+# Comment it out if the SRB server does not support MYS_LOBJ or TABLE Access.
+#
+# new way -> send --enable-myslobj flag to .configure, e.g.
+#	./configure --enable-myslobj
+DB_Mysql=@MYSLOBJ@
+#
+# old way -> Uncomment out the following field if the Server is to support MYS_LOBJ or TABLE access
+#              DB_Mysql = 1
+#
+ifdef DB_Mysql
+MYS_DBMS = 1
+DBMS_INCLUDE+= -DDB_Mysql=1
+endif
+
+# DB_Illustra defines whether this SRB server support ILLUSTRA_LOBJ or TABLE access.
+# Comment it out if the SRB server does not support ILLUSTRA_LOBJ or TABLE Access.
+#
+# new way -> send --enable-illuslobj flag to .configure, e.g.
+#       ./configure --enable-illuslobj
+DB_Illustra =@ILLUSLOBJ@
+#
+# old way -> Uncomment out the following field if the Server is to support ILLUSTRA_LOBJ or TABLE access
+#              DB_Illustra = 1
+#
+ifdef DB_Illustra
+ILLUS_DBMS = 1
+DBMS_INCLUDE+= -DDB_Illustra=1
+endif
+
+# DB_Postgres defines whether this SRB server support POSTGRES_LOBJ or TABLE access.
+# Comment it out if the SRB server does not support POSTGRES_LOBJ or TABLE Access.
+#
+# new way -> send --enable-psglobj flag to .configure, e.g.
+#	./configure --enable-psglobj
+DB_Postgres = @PSGLOBJ@
+#
+# old way -> Uncomment out the following field if the Server is to support POSTGRES_LOBJ or TABLE access
+#	DB_Postgres = 1
+#
+ifdef DB_Postgres
+PSQ_DBMS = 1
+DBMS_INCLUDE+= -DDB_Postgres=1
+endif
+
+# DB_Oracle defines whether this SRB server supports ORACLE_LOBJ or TABLE access.
+# Comment it out if the SRB server does not support ORACLE_LOBJ or TABLE Access.
+#
+# new way -> send --enable-oralobj flag to .configure, e.g.
+#	./configure --enable-oralobj
+DB_Oracle=@ORALOBJ@
+#
+# old way -> Uncomment out the following field if the Server is to support ORACLE_LOBJ or TABLE access
+# 	DB_Oracle = 1
+#
+ifdef DB_Oracle
+ORA_DBMS = 1
+DBMS_INCLUDE+= -DDB_Oracle=1
+endif
+
+# DB_Sybase defines whether this SRB server supports SYBASE_LOBJ or TABLE access.
+# Comment it out if the SRB server does not support SYBASE_LOBJ or TABLE Access.
+#
+# new way -> send --enable-syblobj flag to .configure, e.g.
+#	./configure --enable-syblobj
+DB_Sybase=@SYBLOBJ@
+#
+# old way -> Uncomment out the following field if the Server is to support SYBASE_LOBJ or TABLE access
+# 	DB_Sybase = 1
+#
+ifdef DB_Sybase
+SYB_DBMS = 1
+DBMS_INCLUDE+= -DDB_Sybase=1
+endif
+
+# DB_Informix defines whether this SRB server supports INFORMIX_LOBJ or TABLE access.
+# Comment it out if the SRB server does not support INFORMIX_LOBJ or TABLE Access.
+#
+# new way -> send --enable-ifmxlobj flag to .configure, e.g.
+#     ./configure --enable-ifmxlobj
+DB_Informix=@IFMXLOBJ@
+#
+# old way -> Uncomment out the following field if the Server is to support INFORMIX_LOBJ or TABLE access
+#     DB_Informix = 1
+#
+# currently the informix driver does NOT support this
+ifdef DB_Informix
+IFMX_DBMS = 1
+DBMS_INCLUDE+= -DDB_Informix=1
+endif
+
+# The following is needed only if DB_Illustra is defined. ILLUS_LIB_DIR
+# specifies where the Illustra libraries are located and ILLUS_HDR_DIR 
+# specifies where the Illustra header directory is located.
+
+ifdef ILLUS_DBMS
+ILLUS_LIB_DIR = /misc/illustra/lib
+ILLUS_HDR_DIR = /misc/illustra/h
+DBMS_LIB+= -L$(ILLUS_LIB_DIR) -lmi -L/usr/lib -ldl
+DBMS_INCLUDE+= -I$(ILLUS_HDR_DIR)
+endif
+
+# The following is needed only if MYS_DBMS is defined. MYS_LIB_DIR
+# specifies where the MYS libraries are located and MYS_HDR_DIR
+# specifies where the MYS header directory is located.
+
+ifdef MYS_DBMS
+MYS_HOME=@MYSHOME@
+MYS_LIB_DIR = $(MYS_HOME)/lib/mysql
+MYS_HDR_DIR = $(MYS_HOME)/include/mysql
+DBMS_LIB+= -L$(MYS_LIB_DIR) -lmysqlclient
+DBMS_INCLUDE+= -I$(MYS_HDR_DIR)
+endif
+
+# The following is needed only if DB2_DBMS is defined. DB2_LIB_DIR
+# specifies where the DB2 libraries are located and DB2_HDR_DIR
+# specifies where the DB2 header directory is located.
+
+ifdef DB2_DBMS
+DB2_HOME=@DB2HOME@
+DB2_LIB_DIR = $(DB2_HOME)/lib
+DB2_HDR_DIR = $(DB2_HOME)/include
+DBMS_LIB+= -L$(DB2_LIB_DIR) -ldb2
+DBMS_INCLUDE+= -I$(DB2_HDR_DIR)
+endif
+
+ifdef PSQ_DBMS
+POSTGRES_HOME=@POSTGRESHOME@
+ifeq ($(PORTNAME), PORTNAME_osx)
+NSL=
+else
+NSL=-lnsl
+endif
+PSQ_LIB_DIR = $(POSTGRES_HOME)/lib
+PSQ_HDR_DIR = $(POSTGRES_HOME)/include
+DBMS_LIB+= -L$(PSQ_LIB_DIR) -lpsqlodbc $(NSL) -lm
+DBMS_INCLUDE+= -I$(PSQ_HDR_DIR)
+endif
+
+# The following is needed only if SYB_DBMS is defined. SYB_LIB_DIR
+# specifies where the DB2 libraries are located and SYB_HDR_DIR
+# specifies where the DB2 header directory is located.
+
+ifdef SYB_DBMS
+ifeq ($(PORTNAME), PORTNAME_solaris)
+SYBPLATFORM=sun_svr4
+endif
+SYB_HOME=@SYBHOME@
+SYB_LIB_DIR = $(SYB_HOME)/lib
+SYB_HDR_DIR = $(SYB_HOME)/include
+export SYBPLATFORM
+CTLIBS=         `$(buildDir)/mk/sybopts.sh ct cs` `$(buildDir)/mk/sybopts.sh comlibs` 
+SYSLIBS=                `$(buildDir)/mk/sybopts.sh syslibs`
+DBMS_LIB+= -L$(SYB_LIB_DIR)  $(CTLIBS) $(SYSLIBS) 
+DBMS_INCLUDE+= -I$(SYB_HDR_DIR) -D$(SYBPLATFORM)=1
+endif
+
+
+# The following is needed only if IFMX_DBMS is defined. IFMX_LIB_DIR
+# specifies where the Informix libraries are located and IFMX_HDR_DIR
+# specifies where the Informix header directory is located.
+ifdef IFMX_DBMS
+IFMX_HOME=@IFMXHOME@
+IFMX_LIB_DIR = $(IFMX_HOME)/lib/cli
+IFMX_HDR_DIR = $(IFMX_HOME)/incl/cli
+ifeq ($(PORTNAME), PORTNAME_linux)
+DBMS_LIB+= -L$(IFMX_LIB_DIR) -lcli -ldl -lm -lodbc -lcrypt
+else
+DBMS_LIB+= -L$(IFMX_LIB_DIR) -R$(IFMX_LIB_DIR) -lcli -ldl -lm -lodbc -lnsl -ls
+endif
+DBMS_INCLUDE+= -I$(IFMX_HDR_DIR)
+endif
+
+
+ifdef ORA_DBMS
+ifeq ($(ORACLE_VERSION), ORACLE_VERSION_920_64bit)
+
+# ADDR_64BIT  defines whether the OS uses 64 bit for address
+ADDR_64BIT=1
+# ADDR_64BIT=1 Please switch on the 64 bit compliataion !
+
+SS_64BIT_SERVER=1
+# for the borrowed Oracle file ./src/catalog/include/ocidfn.h
+
+# 2003.01.03. compiles on 32 bit Oracle 9.2.0 at NASA (GJK)
+#
+# new way -> make sure ORACLE_HOME environment variable is set on your machine
+#
+ORACLE_HOME=@ORAHOME@
+#
+# old way -> Uncomment out the following field and set to the location of your Oracle installation
+#	ORACLE_HOME= /opt/oracle/app/product/9.2.0
+#
+ORA_LIB_DIR = $(ORACLE_HOME)/lib
+DBMS_INCLUDE+= $(ORA_INCLUDE)
+#DBMS_LIB+=  $(ORA_LDFLAGS) $(SSDBED) $(DEF_ON) $(OCISTATICLIBS)
+#DBMS_LIB+= $(ORA_LDFLAGS) $(OCISHAREDLIBS)
+DBMS_LIB+= -L$(ORA_LIB_DIR)/          \
+        -L$(ORACLE_HOME)/rdbms/lib          \
+        -lclntsh          \
+        $(ORA_LIB_DIR)/nautab.o          \
+        $(ORA_LIB_DIR)/naeet.o          \
+        $(ORA_LIB_DIR)/naect.o          \
+        $(ORA_LIB_DIR)/naedhs.o          \
+        `cat $(ORA_LIB_DIR)/ldflags`         \
+        -ln9 -lnl9 -lnro9          \
+        `cat $(ORA_LIB_DIR)/ldflags`           \
+#        -ln9 -lnl9 -lclient9 -lvsn9 -lcommon9 -lskgxp9          \
+        -ln9 -lnl9 -lclient9 -lvsn9 -lcommon9  \
+        -lgeneric9 -lmm -lnls9  -lcore9 -lnls9 -lcore9 -lnls9          \
+        `cat $(ORA_LIB_DIR)/ldflags`              \
+        -ln9 -lnl9 -lnro9          \
+        `cat $(ORA_LIB_DIR)/ldflags`              \
+        -ln9 -lnl9 -lclient9 -lvsn9 -lcommon9 -lskgxp9          \
+        -lgeneric9  -ltrace9 -lnls9  -lcore9 -lnls9 -lcore9          \
+        -lnls9  -lclient9 -lvsn9 -lcommon9 -lskgxp9 -lgeneric9         \
+        -lnls9  -lcore9 -lnls9 -lcore9 -lnls9             \
+        `cat $(ORA_LIB_DIR)/sysliblist`          \
+        `if [ -f /usr/lib/libsched.so ] ; then echo -lsched ; else true; fi`  \
+###        -R /opt/SUNWcluster/lib:$(ORA_LIB_DIR)          \
+###        -Y P,/usr/local/apps/X11R5/lib:/usr/lang/SC1.0:/usr/openwin/lib:/usr/local/apps/oracle/app/oracle/product/7.3.3/lib:/usr/lib:../lib:.:/opt/SUNWcluster/lib:/usr/ccs/lib:/usr/lib           \
+        -Qy -lc -laio -lposix4 -lkstat -lm  -lthread
+endif
+
+ifeq ($(ORACLE_VERSION), ORACLE_VERSION_920_32bit)
+# ADDR_64BIT  defines whether the OS uses 64 bit for address
+# ADDR_64BIT=1 Please switch off the 64 bit compliataion !
+
+# 2003.01.03. compiles on 32 bit Oracle 9.2.0 at NASA (GJK)
+#
+# new way -> make sure ORACLE_HOME environment variable is set on your machine
+#
+ORACLE_HOME=@ORAHOME@
+#
+# old way -> Uncomment out the following field and set to the location of your Oracle installation
+#	ORACLE_HOME= /opt/oracle/app/product/9.2.0
+#
+ORA_LIB_DIR = $(ORACLE_HOME)/lib
+DBMS_INCLUDE+= $(ORA_INCLUDE)
+#DBMS_LIB+=  $(ORA_LDFLAGS) $(SSDBED) $(DEF_ON) $(OCISTATICLIBS)
+#DBMS_LIB+= $(ORA_LDFLAGS) $(OCISHAREDLIBS)
+DBMS_LIB+= -L$(ORA_LIB_DIR)/          \
+        -L$(ORACLE_HOME)/rdbms/lib          \
+        -lclntsh          \
+        $(ORA_LIB_DIR)/nautab.o          \
+        $(ORA_LIB_DIR)/naeet.o          \
+        $(ORA_LIB_DIR)/naect.o          \
+        $(ORA_LIB_DIR)/naedhs.o          \
+        `cat $(ORA_LIB_DIR)/ldflags`         \
+        -ln9 -lnl9 -lnro9          \
+        `cat $(ORA_LIB_DIR)/ldflags`           \
+#        -ln9 -lnl9 -lclient9 -lvsn9 -lcommon9 -lskgxp9          \
+        -ln9 -lnl9 -lclient9 -lvsn9 -lcommon9  \
+        -lgeneric9 -lmm -lnls9  -lcore9 -lnls9 -lcore9 -lnls9          \
+        `cat $(ORA_LIB_DIR)/ldflags`              \
+        -ln9 -lnl9 -lnro9          \
+        `cat $(ORA_LIB_DIR)/ldflags`              \
+        -ln9 -lnl9 -lclient9 -lvsn9 -lcommon9 -lskgxp9          \
+        -lgeneric9  -ltrace9 -lnls9  -lcore9 -lnls9 -lcore9          \
+        -lnls9  -lclient9 -lvsn9 -lcommon9 -lskgxp9 -lgeneric9         \
+        -lnls9  -lcore9 -lnls9 -lcore9 -lnls9             \
+        `cat $(ORA_LIB_DIR)/sysliblist`          \
+        `if [ -f /usr/lib/libsched.so ] ; then echo -lsched ; else true; fi`  \
+###        -R /opt/SUNWcluster/lib:$(ORA_LIB_DIR)          \
+###        -Y P,/usr/local/apps/X11R5/lib:/usr/lang/SC1.0:/usr/openwin/lib:/usr/local/apps/oracle/app/oracle/product/7.3.3/lib:/usr/lib:../lib:.:/opt/SUNWcluster/lib:/usr/ccs/lib:/usr/lib           \
+        -Qy -lc -laio -lposix4 -lkstat -lm  -lthread
+endif
+
+ifeq ($(ORACLE_VERSION), ORACLE_VERSION_815)
+#
+# new way -> make sure ORACLE_HOME environment variable is set on your machine
+#
+ORACLE_HOME=@ORAHOME@
+#
+# old way -> Uncomment out the following field and set to the location of your Oracle installation
+#	ORACLE_HOME= /usr/local/apps/oracle/product/8.1.7
+#
+ORA_LIB_DIR = $(ORACLE_HOME)/lib
+DBMS_INCLUDE+= $(ORA_INCLUDE)
+#DBMS_LIB+=  $(ORA_LDFLAGS) $(SSDBED) $(DEF_ON) $(OCISTATICLIBS)
+#DBMS_LIB+= $(ORA_LDFLAGS) $(OCISHAREDLIBS) 
+ifeq ($(PORTNAME), PORTNAME_linux)
+ORA_DEP=
+else
+ORA_DEP=-R /opt/SUNWcluster/lib:$(ORA_LIB_DIR) -Qy -lc -laio -lposix4 -lkstat -lm  -lthread
+endif
+DBMS_LIB+= -L$(ORA_LIB_DIR)/          \
+        -L$(ORACLE_HOME)/rdbms/lib          \
+        -lclntsh          \
+        $(ORA_LIB_DIR)/nautab.o          \
+        $(ORA_LIB_DIR)/naeet.o          \
+        $(ORA_LIB_DIR)/naect.o          \
+        $(ORA_LIB_DIR)/naedhs.o          \
+        `cat $(ORA_LIB_DIR)/ldflags`         \
+        -ln8 -lnl8 -lnro8          \
+        `cat $(ORA_LIB_DIR)/ldflags`           \
+        -ln8 -lnl8 -lclient8 -lvsn8 -lcommon8 -lskgxp8          \
+        -lgeneric8 -lmm -lnls8  -lcore8 -lnls8 -lcore8 -lnls8          \
+        `cat $(ORA_LIB_DIR)/ldflags`              \
+        -ln8 -lnl8 -lnro8          \
+        `cat $(ORA_LIB_DIR)/ldflags`              \
+        -ln8 -lnl8 -lclient8 -lvsn8 -lcommon8 -lskgxp8          \
+        -lgeneric8  -ltrace8 -lnls8  -lcore8 -lnls8 -lcore8          \
+        -lnls8  -lclient8 -lvsn8 -lcommon8 -lskgxp8 -lgeneric8         \
+        -lnls8  -lcore8 -lnls8 -lcore8 -lnls8             \
+        `cat $(ORA_LIB_DIR)/sysliblist`          \
+        `if [ -f /usr/lib/libsched.so ] ; then echo -lsched ; else true; fi`  \
+	$(ORA_DEP)
+endif
+
+ifeq ($(ORACLE_VERSION), ORACLE_VERSION_733)
+#
+# new way -> make sure ORACLE_HOME environment variable is set on your machine
+#
+ORACLE_HOME=@ORAHOME@
+#
+# old way -> Uncomment out the following field and set to the location of your Oracle installation
+#	ORACLE_HOME=/usr/local/apps/oracle/app/oracle/product/7.3.3
+#
+ORA_LIB_DIR = $(ORACLE_HOME)/lib
+ifeq ($(PORTNAME), PORTNAME_linux)
+ORA_DEP=
+else
+ORA_DEP=-R /opt/SUNWcluster/lib:$(ORA_LIB_DIR)
+endif
+DBMS_LIB+= -L$(ORA_LIB_DIR)         \
+        -L$(ORA_HOME)/rdbms/lib      \
+        -lclient        \
+        -lsqlnet        \
+        -lncr          \
+        -lsqlnet        \
+        -lclient        \
+        -lcommon        \
+        -lcommon        \
+        -lgeneric       \
+        -lsqlnet        \
+        -lncr           \
+        -lsqlnet        \
+        -lclient        \
+        -lcommon        \
+        -lgeneric       \
+        -lepc           \
+        -lnlsrtl3       \
+        -lc3v6          \
+        -lcore3         \
+        -lnlsrtl3       \
+        -lcore3         \
+        -lnlsrtl3       \
+        -lsocket        \
+        -lnsl           \
+        -lm -ldl -lposix4 -lsunmath     \
+        -lm -lcore3 -lsocket -lnsl      \
+        -lm -ldl -lposix4 -lsunmath     \
+        -R /opt/SUNWcluster/lib:$(ORA_LIB_DIR)      \
+	$(ORA_DEP)	\
+        -Qy -lc 
+#instead of 
+# 	-Qy -lc $(ORA_LIB_DIR)/crtn.o
+#       -Y P,/usr/lib:/usr/openwin/lib:/usr/dt/lib:/usr/local/lib:/opt/SUNWclus
+endif
+endif
+
+# HOST_BASED_AUTH - defines whether the host based authorization should be 
+# used. Host based authorization uses the file data/hostAuthConfig to
+# configure which client and from which hosts is allowed to connect to
+# this SRB server. Comment it out if the SRB server does not support host 
+# based authorization.
+# HOST_BASED_AUTH = 1
+
+#
+# new way -> send --enable-gsi-auth to .configure, e.g.
+#	./configure --enable-gsi-auth
+GSI_AUTH=@GSI_AUTH@
+#
+# old way -> Uncomment out the following field if GSI Auth is to be used
+# GSI_AUTH = 1
+# GSI_AUTH - defines whether the GSI authentication scheme is supported.
+# Comment it out if the SRB server does not support GSI authentication.
+# NOTE : A server can be built to support MDAS_AUTH, SEA_AUTH and GSI_AUTH.
+
+ifdef GSI_AUTH
+# new way -> send --globus-location to .configure
+#old way -> define/edit LIB_GSI_AUTH
+# The following is needed only if GSI_AUTH is defined.
+# LIB_GSI_AUTH specifies where the GSI auth library is located.
+GLOBUS_LOCATION=@GSIHOME@
+GSI_INSTALL_TYPE=@GSI_INSTALL_TYPE@
+AUTH_INCLUDE += $(GLOBUS_LOCATION)/include/$(GSI_INSTALL_TYPE)
+LIB_GSI_AUTH = \
+        -L $(GLOBUS_LOCATION)/lib \
+        -lglobus_gss_assist_$(GSI_INSTALL_TYPE) \
+	-lglobus_gssapi_gsi_$(GSI_INSTALL_TYPE) \
+        -lglobus_gsi_credential_$(GSI_INSTALL_TYPE) \
+        -lglobus_gsi_proxy_core_$(GSI_INSTALL_TYPE) \
+	-lglobus_gsi_callback_$(GSI_INSTALL_TYPE) \
+	-lglobus_oldgaa_$(GSI_INSTALL_TYPE) \
+	-lglobus_gsi_sysconfig_$(GSI_INSTALL_TYPE) \
+	-lglobus_gsi_cert_utils_$(GSI_INSTALL_TYPE) \
+	-lglobus_openssl_error_$(GSI_INSTALL_TYPE) \
+	-lglobus_openssl_$(GSI_INSTALL_TYPE) \
+	-lglobus_proxy_ssl_$(GSI_INSTALL_TYPE) \
+	-lssl_$(GSI_INSTALL_TYPE) \
+	-lcrypto_$(GSI_INSTALL_TYPE) \
+	-lglobus_common_$(GSI_INSTALL_TYPE)
+endif
+# End GSI_AUTH config
+
+#
+# send --enable-secure-comm to .configure, e.g.
+#	./configure --enable-secure-comm
+SRB_SECURE_COMM=@SRB_SECURE_COMM@
+#
+ifdef SRB_SECURE_COMM
+OPENSSL_LOCATION=@OPENSSLHOME@
+ifdef OPENSSL_LOCATION
+AUTH_INCLUDE += $(OPENSSL_LOCATION)/include
+LIB_GSI_AUTH = \
+        -L $(OPENSSL_LOCATION)/lib \
+	-lssl \
+	-lcrypto
+else
+ifdef GSI_AUTH
+else
+GLOBUS_LOCATION=@GSIHOME@
+GSI_INSTALL_TYPE=@GSI_INSTALL_TYPE@
+AUTH_INCLUDE += $(GLOBUS_LOCATION)/include/$(GSI_INSTALL_TYPE)
+LIB_GSI_AUTH = \
+        -L $(GLOBUS_LOCATION)/lib \
+        -lglobus_gss_assist_$(GSI_INSTALL_TYPE) \
+	-lglobus_gssapi_gsi_$(GSI_INSTALL_TYPE) \
+        -lglobus_gsi_credential_$(GSI_INSTALL_TYPE) \
+        -lglobus_gsi_proxy_core_$(GSI_INSTALL_TYPE) \
+	-lglobus_gsi_callback_$(GSI_INSTALL_TYPE) \
+	-lglobus_oldgaa_$(GSI_INSTALL_TYPE) \
+	-lglobus_gsi_sysconfig_$(GSI_INSTALL_TYPE) \
+	-lglobus_gsi_cert_utils_$(GSI_INSTALL_TYPE) \
+	-lglobus_openssl_error_$(GSI_INSTALL_TYPE) \
+	-lglobus_openssl_$(GSI_INSTALL_TYPE) \
+	-lglobus_proxy_ssl_$(GSI_INSTALL_TYPE) \
+	-lssl_$(GSI_INSTALL_TYPE) \
+	-lcrypto_$(GSI_INSTALL_TYPE) \
+	-lglobus_common_$(GSI_INSTALL_TYPE)
+endif
+endif
+endif
+# End SRB_SECURE_COMM
+
+
+# LOCK_OBJ - defines whether the container should be locked when I/O
+# is performed on inContainer object.
+ifeq ($(PORTNAME), PORTNAME_osx)
+# LOCK_OBJ = 1
+else
+LOCK_OBJ = 1
+endif
+
+# DEMO - defines whether the distributed SRB demo should be output.
+# Comment it out if SRB demo is not needed.
+# DEMO = 1
+
+# Used for Timing Studies. Comment out 
+# LOGTIMINGSRB  = 1
+# LOGTIMINGMCAT = 1
+# LOGTIMINGCLIENT =  1
+
+# Used for Metadata Access Control. If you want to control access to 
+# metadata such as for las and for userdefined metadata define this.
+#
+# new way -> send --enable-accsctrl flag to .configure, e.g.
+#	./configure --enable-accsctrl
+MDATAACCS=@ACCSCTRL@
+#
+# old way -> Uncomment out the following field if you wish to enable
+# access control
+# 	MDATAACCS = 1
+#
+
+# ADR_PROXY - defines whether the ADR DataCutter proxy operation is
+# configured.
+# ADR_PROXY = 1
+
+# TEST_ADR_PROXY - compile the test module rather than the real thing.
+# This is for testing only and normally should be commented out.
+# If TEST_ADR_PROXY is defined, ADR_PROXY should also be defined.
+# TEST_ADR_PROXY = 1
+
+# AUTO_SYNC_FULL_CONTAINER - defines whether automatic synchronization
+# of containers whenever they are full will be carried out.
+AUTO_SYNC_FULL_CONTAINER = 1
+
+# WRITE_SYNC - defines whether fsync () call will be made when a file
+# is closed and the file has been written to. If WRITE_SYNC is not set,
+# size check of container should not be made since a recently updated
+# file on certain file system (NFS) may not give the right size with the
+# lstat() call.
+# WRITE_SYNC = 1
+
+# MYSRB - defines whether the MCAT is being used for mySRB activity
+# This will turn off some of the checks made when
+# registering files and shadow directories
+MYSRB = 1
+
+# JAVA_GUI - defines whether the the Java GUI should be built.
+# Comment it out if Java GUI is not needed.
+#
+# new way -> send --enable-javagui=no flag to .configure if you *DO NOT* want to build the java gui, e.g.
+#	./configure --enable-javagui=no
+JAVA_GUI = @JAVAGUI@
+#
+# old way -> Uncomment and modify to match your platform
+#	JAVA_GUI=1
+#
+
+ifdef JAVA_GUI
+#
+# new way -> send --enable-jdkhome=<path> flag to .configure, e.g.
+#	./configure --enable-jdkhome=<your_jdk_path_here>
+javaDir=@JDKHOME@
+#
+# old way -> Uncomment and modify to match your platform
+#	javaDir=/usr/local/apps/jdk1.4.1
+endif
+
+COMM_PORTS = @COMMPORTS@
+ifdef COMM_PORTS
+# COMM_PORT_NUM_START - defines the starting allowable port number that the
+# SRB server and client can have. This is done for firewall setup.
+#
+# new way -> send --enable-commstart=<#> flag to .configure, e.g.
+#	./configure --enable-commstart=<your_first_port_number_here>
+COMM_PORT_NUM_START = @COMMSTART@
+#
+# old way -> Uncomment and modify to match your requirement
+#	COMM_PORT_NUM_START = 20000
+
+# COMM_PORT_NUM_COUNT - defines the number of allowable port starting at
+# COMM_PORT_NUM_START. 
+#
+# new way -> send --enable-commnum=<#> flag to .configure, e.g.
+#	./configure --enable-commnum=<your_number_of_ports_here>
+COMM_PORT_NUM_COUNT = @COMMNUM@
+#
+# old way -> Uncomment and modify to match your requirement
+#	COMM_PORT_NUM_COUNT = 200
+endif
+# TAPE_DRIVE - defines whether the tape resource is supported on this server. 
+# TAPE_DRIVE should only be defined on the server where tape drives are
+# directly attached to the host.
+# TAPE_DRIVE = 1
+
+# FED_MCAT - defines whether the the federated MCAT is supported
+FED_MCAT = 1
+
+# NO_TRASH_SYSTEM - if defined, no trash system will be implemented. All files
+# and collections will be deleted immediately.
+# NO_TRASH_SYSTEM=1
