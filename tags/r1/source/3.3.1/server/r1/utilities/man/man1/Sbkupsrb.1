@@ -1,0 +1,46 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sbkupsrb.1
+.\"
+.TH Sbkupsrb 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sbkupsrb \- synchronizes copies of an SRB object
+.SH SYNOPSIS
+.B Sbkupsrb
+.RB [ \-aAr "] " \-S
+.IR backupResource " " srbObj | collection " ..."
+.SH DESCRIPTION
+.B "Sbkupsrb "
+backups the srb data/collection to the specified backupResource.
+It will first check whether a copy of the data to be backed up already exists in the backupResource. If it does and the copy is up to
+date, nothing will be done. If it exists but not up to date, the copy
+will be updated to the latest. If it does not exist, a replica to the
+backupResource will be made.
+.sp
+The
+.IR srbObj " or " collection
+arguments can be path names in the SRB collection hierarchy.
+.sp
+An admin user can use the -A option to backup other user's files.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-a "
+If the target resource is a logical resource consisting of more than
+one resource, then make a copy in each resource in the group.
+.TP 0.5i
+.B "\-A "
+Admin option. A user with admin privilege can use this option to backup other user's files. 
+.TP 0.5i
+.B "\-r "
+recursively backup the collection.
+.TP 0.5i
+.B "\-S "
+.I "backupResource "
+is the backup resource.
+.SH "SEE ALSO"
+.BR Sreplicate (1),
+.BR Ssyncd (1),
+.BR Sphymove (1),
+.BR Smv (1),
+.BR Scp (1)
+

@@ -1,0 +1,170 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Scat</TITLE>
+</HEAD><BODY>
+<H1>Scat</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Scat - concatenate and display files read from SRB space
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Scat</B>
+
+[<B>-C</B>
+
+<I>n</I>]
+
+[<B>-T</B>
+
+<I>ticket</I>]
+
+[<B>-V</B>
+
+<I>versionString</I>]
+
+[<B>-A</B>
+
+<I>condition</I>] <I>srbObj</I> ...
+
+<P>
+<B>Scat</B>
+
+[<B>-aChl</B>]
+
+[<B>-c</B>
+
+<I>condition</I>]
+
+<P>
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Scat </B>
+
+reads each
+<I>srbObj</I>
+
+from SRB space and writes it on the standard output. With -C
+option, one can read a particular copy of
+<I>srbObj</I>,
+
+if it exists. With -A option, only
+<I>srbObj</I>
+
+which conforms to the
+<I>condition</I>
+
+are chosen.
+<P>
+The second synopsis applies the 
+<I>condition</I>
+
+and writes the resulting objects to standard out.
+<P>
+If using a ticket, one need not give a
+<I>srbObj</I>
+
+name if the ticket is issued for a particular dataset.
+<P>
+If any
+<I>srbObj</I>
+
+is replicated then only one of the copies is displayed.
+<P>
+The user should have at least 'read' permission for each
+<I>SrbObj</I>
+
+or a ticket (for user or 'ticketuser' id) to access the
+<I>SrbObj</I>.
+
+<P>
+The
+<I>srbObj</I>
+
+argument can be a path name in the SRB collection hierarchy.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+displays command options
+<DT><B>-C </B>
+
+<DD>
+<I>n</I>
+
+is an integer denoting which COPY of the object to be accessed.
+<DT><B>-T </B>
+
+<DD>
+to give a filename containing a ticket
+<DT><B>-t </B>
+
+<DD>
+option for giving a ticket directly
+<DT><B>-V </B>
+
+<DD>
+is a string denoting the version of the object to be accessed
+<DT><B>-A </B>
+
+<DD>
+<I>condition</I>
+
+option is an '&amp;' separated condition which will be applied
+in choosing the object to be accessed. The separated condition
+is of the form &quot;&lt;Attr&gt; &lt;CompOp&gt; &lt;Value&gt;&quot;, where &lt;Attr&gt; is an
+MCAT attribute found by
+<B>Sattrs   </B>
+
+command, &lt;CompOp&gt; is a comparison operator and &lt;Value&gt; is a
+numeric or string value. The entire condition should be within
+a set of double quotes. Example: Scat -A &quot;COPY = 0&quot;
+<DT><B>-c </B>
+
+<DD>
+<I>condition</I>
+
+option applies to the whole SRB system instead of relative to the 
+current working collection.  Example: Scat -c &quot;GUID='123'&quot; will write the 
+objects  that haa their Guid set to 123. See 
+<I>Sattrs </I>
+
+for details of applicable conditions.
+<P>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sticket.1.html">Sticket</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sattrs.1.html">Sattrs</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

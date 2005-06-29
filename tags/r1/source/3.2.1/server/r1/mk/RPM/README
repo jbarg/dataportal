@@ -1,0 +1,41 @@
+
+In this directory, there is everything that is needed for building the SRB RPMS, and a script for "post"
+rpm install configuration, as well as a template for a Rocks "post" rpm install configuration
+(Rocks is the SDSC's Linux cluster setup and configuration software).
+
+To build the RPMS:
+##########################################################################################
+1) login as root on a linux red hat machine
+2) run ./configure in SRB-3.2.1 to generate SRB.spec
+3) edit the ./configure line in SRB.spec for any changes needed (--enable-something...)
+4) copy the file "SRB.spec" here: /usr/src/redhat/SPECS/
+5) tar the SRB tree: "tar -czvf SRB-3.2.1.tar.gz SRB-3.2.1"
+6) put the tarball here: /usr/src/redhat/SOURCES/
+7) cd to here: /usr/src/redhat/SPECS/
+8) do: "rpm -ba SRB.spec" or "rpmbuild -ba SRB.spec"(for Enterprise or 9)
+9) When complete, /usr/src/redhat/RPMS/i386/ will have:
+
+SRB-Client-3.2.1-1.i386.rpm
+SRB-MCAT_Server-3.2.1-1.i386.rpm
+SRB-Slave_Server-3.2.1-1.i386.rpm
+
+10) use "rpm -i <rpm-file>" to install one of the three rpms
+11) That SRB package is now installed on that machine
+
+
+To use the "srb-demo.sh" file for Configuration:
+##########################################################################################
+1) Edit and configure the srb settings for your data grid (SRB)
+2) run the script "sh srb-demo.sh"
+
+
+(ignore if don't have Rocks (Rocks is the SDSC's Linux cluster software))
+http://www.rocksclusters.org/Rocks/
+To use the Rocks Configuration file
+##########################################################################################
+1) You must do a Rocks installation on the machine for this to work
+2) copy the file "srb-demo.xml" here: <rocks_path>/profiles/nodes
+3) edit the file <rocks_path>/profiles/graphs/default.xml
+4) add an entry to the file: "<edge from="frontend-node" to="srb-demo" />"
+5) do a rocks install
+

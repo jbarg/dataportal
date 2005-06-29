@@ -1,0 +1,15 @@
+#!/bin/sh
+cp mk/mk.config.rescue mk/mk.config
+cp java/src/Makefile.in java/src/Makefile
+cp Makefile.in Makefile
+cp java/src/glue/Makefile.in java/src/glue/Makefile
+cp MCAT/Makefile.in MCAT/Makefile
+cp MCAT/java/src/Makefile.in MCAT/java/src/Makefile
+cp MCAT/java/Makefile.in MCAT/java/Makefile
+cp admin/Makefile.in admin/Makefile
+cp preload/Makefile.in preload/Makefile
+cp tape/Makefile.in tape/Makefile
+cp test/APItest/Makefile.in test/APItest/Makefile
+cp test/examples/Makefile.in test/examples/Makefile
+cp test/testsuite/Makefile.in test/testsuite/Makefile
+cp utilities/Makefile.in utilities/Makefile

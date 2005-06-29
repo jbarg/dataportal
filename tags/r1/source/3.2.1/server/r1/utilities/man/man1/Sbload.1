@@ -1,0 +1,76 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sbload.1
+.\"
+.TH Sbload 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sbload \- imports in bulk one or more local files and/or directories into
+SRB space.
+.SH SYNOPSIS
+.B Sbload  [-k] [\-c
+.I container]
+.RB [ \-S
+.IR resourceName ]
+.RB [ \-s
+.IR maxContSzInMbytes "] " localFile | localDirectory " ... " targetCollection
+.br
+.SH DESCRIPTION
+.B "Sbload "
+is similar to Sput, which reads one or more local files and|or directories and
+writes them as object(s) in SRB space. It is designed to greatly improve the
+efficiency of ingesting a large number of small files by 
+.br
+1) registering up to several hundreds files with MCAT with a single call instead
+of the normal mode of registering one file at a time.
+.br
+2) use of separate threads for registration and data transfer.
+.sp
+If the -c option is specified, the Sbload command will put
+all data into the specified container 
+which must be created beforehand. 
+If the -c option is not used, all data will be ingested as normal files. 
+.sp
+When the container is full, Sbload automatically renames the full container "myContainer"
+to "myContainer.NNNN" where NNNN is a random integer number. It then creates an empty
+container with the original container name "myContainer" to receive more data. The
+optional -S option is used to specify the resource for the new container. If this option
+is not used, the resource associated with the original container will be used. Similarly,
+the optional -s option is used to specify the container size limit in MBytes. If this
+option is not used, the limit associated with the original container will be used.
+.sp
+The
+.I localFile
+and|or
+.I localDirectory
+can be a path name in the local file hierarchy. The user should
+have at least 'read' access permission for them. These inputs
+can have wildcards.
+.sp
+The
+.I targetCollection
+is the target collection path under which the new objects will be created.
+The path can be relative or absolute. Also, special path name such as "."
+and ".." are valid. 
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-c "
+.I "container "
+is the container where the target object will be stored.
+.TP 0.5i
+.B "\-S "
+.I "resourceName "
+is the resource for the new container.
+.TP 0.5i
+.B "\-s "
+.I "maxContSzInMbytes "
+is the container size limit in MBytes.
+.TP 0.5i
+.B "\-k "
+Client computes simple checksum (sum -s, --sysv) of the local file and registers with MCAT.
+No verification is done on the server side.
+.SH "SEE ALSO"
+.BR Sbunload (1),
+.BR Sput (1),
+.BR Sget (1),
+.BR Smkdir (1)
+

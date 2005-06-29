@@ -1,0 +1,56 @@
+There are several patches in  .../MCAT/data :
+
+212to300patch.xxx, 300to301patch.xxx, 301to310patch.xxx and 310to320patch.xxx
+where xxx is either 'ora', 'psg', 'db2', 'syb', 'mys' or 'inf' for the
+different DBMSes.
+
+The patch 310to320patch.xxx can be applied without shutting down the SRB system.
+A general plan to apply the patch is given below.
+
+This example is for PostgreSQL MCAT:
+
+First shutdown your current MCAT-enabled SRB V3.0.1.
+
+Do a good backup of postgreSQL MCAT backup.
+
+After the backup is completed, you can start the following steps:
+
+If your current SRB version is V3.0.1
+you just need to run  301to310patch.psg
+
+1. use postgreSQL client psql :
+$postgresInstallDir/bin/psql your-MCAT < 301to310patch.psg > 301to310patch.psg.log
+
+check the 301to310patch.psg.log, make sure there are no errors.
+
+2. with the newly released SRB V3.1, build SRB3_1_0
+   cd SRB3_1_0
+   configure --enable-psgmcat --enable-psghome=$postgresInstallDir  ....
+( if you have other parameters enabled, also add here )
+
+3. gmake clean; gmake
+
+4. change the current srbMaster, srbServer to the newly built SRB
+   V3.1.0 code.
+
+   cd SRBInstall/bin
+
+you can either copy the newly built srbMaster-3.1.0  &  srbServer to here
+or make a softlink to the newly built srbMaster-3.1.0 & srbServer.
+
+5.  cp SRB3_1_0/data/metadata.fkrel.psg  SRBInstall/data/metadata.fkrel.psg
+
+6. If you are still using the same srbPort, do nothing.
+
+To use a different srbPort, you need to modify your 'runsrb' file in
+SRBInstall/bin directory.
+
+# srbPort defines the port number the SRB frontend server is listening on.
+# The default port number, if srbPort is not defined here, is set in
+# src/include/srb.h  (configure replaces there too)
+#
+srbPort=6644  (choose your port )
+
+6. You are now ready to do 'runsrb'
+
+

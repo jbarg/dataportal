@@ -1,0 +1,44 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Smkdir.1
+.\"
+.TH Smkdir 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Smkdir \- creates a new SRB collection
+.SH SYNOPSIS
+.B Smkdir
+.RB [ \-N ]
+.RB [ \-c
+.IR container "] " collection
+.SH DESCRIPTION
+.B "Smkdir "
+creates a new SRB collection.
+.sp
+.I collection
+is of the format [path_name/]new_collection_name, where an absolute
+path can be given, or a relative path name with respect to the
+current working directory, or just the new_collection_name in
+which case the current working directory will be used.
+.sp
+When creating the collection, the call also associates the new
+collection with a parent collection's container (if one exists).
+Using the -N option overrides this default.
+
+The -c option can be used to associate a container with the collection being made. The specified container must already exist. If the command is executed successfully, all subsequent files put underneath this collection will be automatically put in the container.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-N "
+overrides automatic inheritance of container from parent
+collection.
+.TP 0.5i
+.B "\-c "container
+associate a container with the collection being made. 
+.SH "SEE ALSO"
+.BR Spwd (1),
+.BR Scd (1),
+.BR Sls (1),
+.BR Srmdir (1)
+

@@ -1,0 +1,41 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sstage.1
+.\"
+.TH Sstage 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sstage \- Stage an SRB object stored in Sun's SamFs type resources 
+(not applicable to other resource types) from offline to online.
+.SH SYNOPSIS
+.B Sstage
+.RB [ \-r "] " \-S
+.IR stageResource " " srbObj | collection " ..."
+.SH DESCRIPTION
+.B "Sstage "
+stages the srb data/collection stored in SamFs type resources from offline 
+to online. This will be helpful to someone who wants to download or copy
+(Sget,Scp, etc) a large number of files that have been migrated to tapes
+(offline). The Sstage command does not block waiting for the completion of
+the actual staging. It issues all the staging commands to the SamFs at once
+so that the SamFs can optimize a staging strategy. 
+The Sstage command should be run before Sget or Scp is run.
+If an SRB data object contains multiple copies, the -S option can be used to specify
+the resource of the copy to be staged. 
+.sp
+The
+.IR srbObj " or " collection
+arguments can be path names in the SRB collection hierarchy.
+.sp
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-r "
+recursively stage the collection.
+.TP 0.5i
+.B "\-S "
+.I "stageResource "
+is the resource of the copy to be staged.
+.SH "SEE ALSO"
+.BR Sget (1),
+.BR Sreplicate (1),
+.BR Scp (1)
+

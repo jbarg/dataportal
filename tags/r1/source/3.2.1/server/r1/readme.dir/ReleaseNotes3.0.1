@@ -1,0 +1,144 @@
+<HTML>
+<HEAD>
+<TITLE>SRB</TITLE>
+<BODY bgcolor=#BBFF00FA>
+<IMG SRC="http://www.npaci.edu/images/DI.gif" WIDTH="555" HEIGHT="90"></P>
+
+<h3>
+SRB 3.0.1
+</h3>
+
+This document describes changes for SRB 3.0.1, released on December 19,
+2003.  
+<p>
+
+This is the follow-on release of our latest major new version, SRB
+3, the Federated MCAT, also known as the zoneSRB and Peer-to-Peer
+Federation.  Our previous release, SRB 3.0, October 1, 2003, was Beta.
+<p>
+
+The new features include improved interoperability between SRB 
+version 2 and SRB version 3, new features needed to improve 
+performance, improve zone management, organize collections, and fix 
+some bugs.
+<p>
+
+1) Interoperability<p>
+
+SRB 3 servers can now be built compliant to SRB 2 MCAT and SRB 2
+clients.  Run configure and then comment out the FED_MCAT = 1 in
+mk.config, and the SRB will have none of the Zone features but all of
+the other SRB 3 features and bug fixes.  In this mode, you can run
+with an SRB 2 MCAT without upgrading it.  The SRB 3.0.1 Server code
+will recognize SRB 2.x clients and use the old protocol, so you can
+update some or all of the clients later.  All servers must be upgraded
+to SRB 3.0.1.  In this mode, 2.x inQ will also work.
+<p>
+
+MySRB now operates with SRB 3.x and can display Zone information.
+<p>
+
+The SRB Java API, Jargon, has been updated to operate with SRB 3 
+(i.e. the new protocol).
+<p>
+
+UNIX_NOCHK and HPSS_NOCHK resource types were added which can be used
+when one wants the driver to not check for the existence of
+?USER.?RESOURCE in the path.  To activate this feature, use the "Add
+New Token" menu of the Java Admin GUI to add two ResourceTypes -
+"UNIX_NOCHK file system" and "HPSS_NOCHK file system".
+<p>
+
+The install script, install3.pl, has been updated to support the 
+latest Postgres (7.4) and Postgres-odbc (07.03.0200), and to increase 
+the stack size on Mac OS X (needed for this release).  Some bugs, 
+when run under Solaris, have been fixed.
+<p>
+
+There is a new Unix I/O library, unixIO, which that emulates Unix I/O 
+calls, converting them to SRB calls.  This is similar to srbio, but 
+the application directly calls either SRB or Unix functions.  unixIO 
+has some different emulations for SRB features.
+<p>
+
+2) Improve performance<p>
+
+Sput/Sget can now do bulk upload/download (previously bulk data
+transfer was only available via Sbload and Sbunload).  Also, bulk
+operations can be done on regular files (non-Containers).  Use -b to
+request bulk operations.  Sget -b will get from non-Containers,
+Containers, either, or both.  Currently Sput -b will put to
+non-Containers (use Sbload to put to Containers).  Compared to 
+regular files, bulk transfers of large sets of files are often 5 to 10
+times faster.  Bulk transfers to/from Containers are often 20 to 50
+times faster.
+<p>
+
+The general query protocol has been modified to greatly reduce the 
+size of messages sent across the network.  Users should see some 
+improvement in latency in queries such as Sls, especially if the 
+distance between the client and the MCAT server is large.
+<p>
+
+Changes have been made to reuse sockets quickly when linking with 
+Oracle library (add SO_REUSEADDR option in srbSetsockopt()).  This is 
+normally default, but needs to be reset when linking with Oracle.
+<p>
+
+3) Improve zone management<p>
+
+The Java admin tool has improved Zone management functions.  When 
+creating a Zone, it now lists various options to choose from as is 
+done in other panels.  Also, new panels have been added to display 
+resources information, in both summary and detail form.
+<p>
+The zonesync.pl script has been enhanced.  Run 'zonesync.pl -h' for
+additional information.
+<p>
+
+
+4) Improve collection organization and management<p>
+
+Links are now supported.  These are like Unix softlinks, where one 
+can create another logical name to point to an existing data object. 
+The new command is Sln (like Unix ln), and Sls will list these links.
+<p>
+
+The limit to the number of characters allowed in a SRB path name has 
+been increased from 200 characters to 500 characters.
+<p>
+
+GUID (Global Unique IDentifier) support has been added.  A GUID will 
+be generated for each data object stored (if so configured by the 
+administrator).  GUIDs can be modified via a SputD command and viewed 
+via SgetD.  GUIDs will be useful when interfacing to other Grid 
+software systems.
+<p>
+
+A parameter, STOR_VAULT_MODE, was added in runsrb which allows the 
+access mode of files created in the vault to be changed to values 
+different than the default value of 0600.
+<p>
+
+Srm has been modified so that it can successfully remove collections
+even if the container and in-container files are in the same
+directory.  (By default, containers are created in /container but if
+users create containers in a collection, Srm will now handle it.)
+<p>
+
+The Sbunload interface was significantly changed as per user request. 
+See the Sman page for a description.  Also note that Sput -b can be 
+now be used for Sbunload operations.
+<p>
+
+5) Bug fixes and documentation improvements<p>
+
+A number of smaller bug fixes and enhancements have also been made.
+<p>
+
+Updated documentation includes changes and additions to faq.html, 
+README.MCAT.INSTALL, and install3.pl.
+<p>
+
+</BODY>
+</HTML>

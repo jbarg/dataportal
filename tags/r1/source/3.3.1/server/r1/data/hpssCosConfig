@@ -1,0 +1,19 @@
+# This is the HPSS COS (class of service) configuration file. This file
+# is needed only if this SRB server is HPSS enabled (i.e., HPSS defined)
+# in the mk.config file. The COS definition should be entered one COS
+# per line. Each line should have two or three entries. The first entry
+# is the Class of Service ID followed by the Maximum file size in 
+# KBytes of this COS. The optional third entry may contain the keyword 
+# "default_cos" which indicates that this COS is the default COS. i.e., the 
+# "size" input of the srbObjCreate call is unknown (-1), this class will be 
+# chosen.
+#
+# SDSC HPSS COS config afetr 2003.01.10.
+#
+# use only new tapes !
+#
+2        2098			# small 2 copies. Size is in KBytes.
+311      209716	    default_cos	# medium 2 copies - the default cos, 
+321      6442451       		# large 2 copies
+201      10737419		# 1_way_3590_tape
+202      107374183		# 2_way 3590 tape

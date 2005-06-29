@@ -1,0 +1,30 @@
+This is a client-only release of the SRB code.
+
+Although SRB is freely available to gov and edu sites, there are some
+restrictions to commercial sites and so our full release requires a
+decryption key (see our web site).  For this client-only release,
+however, we are able to make available without encryption.
+
+The purpose of this is to make it easier for people to build SRB
+client programs and API libraries.  But to use these, you will need to
+to set up the SRB environment files to connect to an SRB server system
+of your choice.
+
+For more information, see the readme.dir documents and/or the SRB
+web site at http://www.npaci.edu/dice/srb/
+
+To build:
+
+1) Edit mk/mk.config changing the 
+PORTNAME=PORTNAME_[something]      to 
+PORTNAME=PORTNAME_[your OS]        (e.g. PORTNAME_linux for linux
+or one of the other supported OS types).  See the comments in mk.config.
+(Unlike our full release, this client-only release does not use configure.)
+
+2) gmake
+
+You should then have the Scommands under utilities/bin.
+
+3) copy the utilities/bin to your install directory (or use them in
+the current location).  'gmake install' is not supported in this
+client-only release.

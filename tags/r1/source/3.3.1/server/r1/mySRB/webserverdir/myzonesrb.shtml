@@ -1,0 +1,102 @@
+ <html><head>
+<title>MySRB v7.0 for SRB 2.0</title>
+<body background="srb2.jpg">
+<table>
+<tr valign=top><td>
+<html><head>
+<title>MySRB v7.0 for SRB 2.0</title>
+<body bgcolor=#FFFFFF><center><b><font color=#0000FF>MySRB</font></b>
+<table>
+<tr><td nowrap>
+<a href="mySRB-SCEC.shtml" target="_top"><b>MySRB Login Page</b></a></td></tr>
+<tr><td nowrap>
+<a href="mysrbticket.shtml" target="_top"><b>Use Ticket-based Access</b></a></td></tr>
+<tr><td nowrap>
+<a href="mysrbpasschange.shtml" target="_top"><b>Change MySRB Password</b></a></td></tr>
+<tr><td nowrap>
+<a href="mysrbforgotpass.shtml" target="_top"><b>Forgot MySRB Password</b></a></td></tr>
+<tr><td nowrap>
+<a href="mysrbregister.shtml" target="_top"><b>Register As New User</b></a></td></tr>
+<tr><td nowrap>
+<a href="mySrbHelp.shtml" target="_top"><b>MySRB Online Help</b></a></td></tr>
+</table>
+</body>
+</html>
+ 
+</td><td><center> <b><font color=#0000FF>MySRB Login</font></b>
+<table>
+<form method="POST" action="https://srb.npaci.edu/cgi-bin/mysrb3.cgi">
+<input type=hidden name="function" value="sentry">
+
+<tr>
+<td align=RIGHT>
+<strong><font color=#FF0000>SRB User Name:</font></strong>
+</td>
+<td>
+<input type="TEXT" name="username", value= "testuser" , size=24,12>
+</td>
+</tr>
+
+<tr>
+<td align=RIGHT><strong><font color=#FF0000>SRB User Domain Name:</font></strong></td>
+<td><input type="TEXT" name="domainname", value= "sdsc" , size=24,12></td>
+</tr>
+
+<tr>
+<td align=RIGHT><strong><font color=#FF0000>SRB User Password:</font></strong></td>
+<td><input type="PASSWORD" name="password", value= "" , size=24,12></td>
+</tr>
+
+<tr>
+<td align=RIGHT><strong><font color=#FF0000>SRB Port Number:</font></strong></td>
+<td><input type="TEXT" name="portnum", value= "DEFAULT" , size=24,12></td>
+</tr>
+<tr>
+<td align=RIGHT><strong><font color=#FF0000>SRB Host:</font></strong></td>
+<td><select size=1 name=srbHost>
+<option selected> andal.sdsc.edu</option>
+<option>srb.sdsc.edu</option>
+</select>
+</td>
+</tr>
+
+<input type="hidden" name="mode" value="advanced">
+
+<input type="hidden" name="lang" value="English">
+
+<tr>
+<td align=center colspan=2><b><font color=#0000FF>Please exit SRB once you have finished</font>
+	</b><br><input type="submit" value="LogIn"></td>
+</tr>
+<tr>
+
+<td align=RIGHT><strong><font color=#FF0000>Session will timeout in:</font></strong></td>
+<td><input type="TEXT" name="timeoutval", value= "120" , size=4,12><strong><font color=#FF0000> &nbsp; minutes</font></strong></td>
+</tr>
+
+<input type="hidden" name="startcol" value="/home/testuser.sdsc">
+
+</table>
+</form>
+<p>
+<hr size=3 noshade>
+<font color=#0000FF>MySRB - A Quick Introduction</font><br>
+<table>
+<tr><td>
+<ul>
+<li><font color=#0000FF>What is MySRB?</font> MySRB is a web-based <font color=#FF5500>browse and search</font> interface to the <a href="http://www.npaci.edu/dice/srb">Storage Resource Broker</a> (SRB) developed at the San Diego Supercomputer Center (<a href="http://www.sdsc.edu">SDSC</a>). The SRB facilitates information sharing by  allowing users (1) to access files stored on heterogeneoues resources including disks, tapes and databases on different  machines through logically organized catalogs; and (2) to manage and share 
+data collections in a secure manner.
+<li><font color=#0000FF>What about security?</font>  MySRB uses secure-http 
+(https) protocol using 128-bit RSA authentication. As an extra degree of 
+protection, your browser receives a unique session key when you login; 
+once its time limit (default 60 minutes) expires, you must login again 
+in order to continue.
+</td>
+</tr>
+</table>
+<hr size=3 noshade>
+</td></tr>
+</table>
+</center>
+</body>
+</html>

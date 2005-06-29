@@ -1,0 +1,331 @@
+<HTML>
+<HEAD>
+<TITLE>SRB</TITLE>
+<BODY bgcolor=#99EEFF>
+<IMG SRC="http://www.npaci.edu/images/DI.gif" WIDTH="555" HEIGHT="90"></P>
+
+<h4>
+SRB 3.3
+</h4>
+
+This document describes changes for SRB 3.3, released February 18,
+2005.
+<p>
+
+If you are upgrading from a 3.2 release, you must first run
+.../MCAT/data/321to330patch.xyz, where xyz matches your DBMS system
+(syb, ora, psg, inf, mys, or db2).
+If you are upgrading from a previous release, see the instructions in
+MCAT/README.MCAT.PATCH.  
+<p>
+
+
+<h4>
+User Features</h4>
+<dl>
+<dt>Sticky Bit for Access Control Inheritance
+
+<dd>Users can set/reset a sticky bit for a collection (using Schmod -i
+option) to control how access is inherited.  When set, any new
+srbObject or srbCollection created, copied, or moved into such a
+"sticky" collection will inherit all the access control permissions
+from that parent collection.  Previously created children/descendants
+of the collection do not inherit any permission when the sticky bit is
+set.  Also when the sticky bit is reset, no permissions are retracted.
+
+</dl>
+
+
+<h4>
+Performance</h4>
+<dl>
+<dt>Sphymove
+<dd>The Server/MCAT code supporting Sphymove (to move an object or
+collection to another physical resource) has been completed revised to
+be more efficient.  It now does bulk-mode operations directly from
+a resource to a target resource or container to move a large number of
+small files efficiently. In addition, it can now use parallel I/O to move 
+large files efficiently. This was a critical request by some sites in the 
+UK for their particular data system architecture.
+
+<dt>Scp
+<dd>The Scp command has been upgraded to support bulk-mode operations
+to improve the performance of copying a large number small files.  
+</dl>
+
+
+<h4>
+Administration</h4>
+<dl>
+<dt>New domainadmin user type.
+<dd>In addition to the old sysadmin user type (the 'srb' user), there is now
+a new one called 'domainadmin' who can create (non-privileged) users within
+their domain and create new datatypes.  See the Java Admin Tool for more.
+<dt>New group ownership privilege.
+<dd>Users who have been given 'ownership' privilege over a group (by sysadmin)
+are able to add or remove other users to/from the group.
+See the Java Admin Tool for more.
+</dl>
+
+<h4>
+Security</h4>
+<dl>
+<dt> Optional alternative to plain-text passwords in .MdasAuth files.
+<dd> For Scommands, users can save their passwords in an alternative
+file in a scrambled form to improve the security some.  See the Sauth
+man page for more.
+<dt> Support for GT3 GSI.
+<dd> The Grid Toolkit version 3 of Grid Security Infrastructure is now
+supported in addition to the older versions of GSI and other
+authentication methods.  See README.gsi.htm for more.
+<dt> Non-plain-text passwords in MCAT.
+<dd> Passwords stored in the MCAT are now automatically scrambled
+before storage in the DBMS and descrambled for use (in a different
+manner than Sauth), improving security some.  As users change their
+passwords, the scrambled form will be stored.
+<dt>Sput.pl and Sget.pl available later.
+<dd>The two perl scripts that are the interface to the SRB Encryption
+and/or Compression system should be available shortly in a separate
+distribution.  We are in the process of acquiring an export license
+for them.
+
+</dl>
+
+<h4>
+Server Performance and configurations </h4>
+<dl>
+<dt> Runtime communication port range configuration
+<dd> In versions 3.2 and earlier, the communication port range is configured
+at compile time by setting the --enable-commstart and --enable-commnum
+options of "configure". In 3.3, the compile time configuration is
+still supported. But these parameters can be overridden at runtime by setting
+the commPortNumStart and commPortNumCount parameters in the runsrb script. 
+In addtion, the communication port values are now output to the log file
+for verification.
+<dt> Configuring SRB servers to use a single port for firewall consideration
+<dd> An option is provided to configure SRB servers to use a single port 
+for firewall consideration. In this mode, no prespawning of srbServer will 
+be done. In addition, bulk load/unload and parallel put/get and copy will
+use only one port for the operations. It should be noted that this is a 
+preliminary implementation and not all SRB operations have been tested
+with this configuration. This option is turned on by setting the
+SingleSvrPort parameter in the runsrb script.  
+<dt> Server Connection Timeout
+<dd>The MCAT enabled server will now be disconnected
+to the database server if it does not receive any new requests in 2 hours.
+The connection will be re-established once a new request arrives.
+In addition, an optional parameter - ServerTimeOut in the runsrb script
+can be set to enable srbServer timeout which causes a srbServer
+process to exit if no new request is received within the timeout limit.
+<dt> Zone Configuration Info
+<dd> The Zone Configuration Info which includes info on local and remote
+zones will now be output to the log file for verification.
+<dt> Handle network load balancer
+<dd> Added code to operate with with network load balancers.  These are
+hardware devices which select between addresses from a pool (in
+a round robin manner) for improved performance.  
+<dt> Added UNIX_SYNC_ON_CLOSE option to sync data to disk when a file is 
+closed  
+<dd> Added a configurable option - UNIX_SYNC_ON_CLOSE to automatically 
+sync data from system cache to disk when a UNIX file is closed. This is 
+needed to prevent data corruption of newly ingested files followed by a 
+system crash. The drawback is the overall ingestion rate could be reduced 
+by half when this option is turned on. Therefore, UNIX_SYNC_ON_CLOSE is not
+turned on by default. It can be turned on by uncommenting the line
+"# UNIX_SYNC_ON_CLOSE = 1" in the mk/mk.config file. 
+<dt> Added AUTO_SYNC_FULL_CONTAINER
+<dd> This option enables the automatic synchronization of a full container 
+to an archival physical resource by the srbServer. 
+<dt> More robust handling of connection from non-SRB client
+<dd> More robust handling of connection from non-SRB client such as port
+scan from network security group or hackers.
+<dt> Added ADS (Atlas Data Store from RAL) driver
+<dd> Added ADS driver from Bonny Strong of RAL.
+</dl>
+
+<h4>
+GridFTP
+</h4>
+<dl>
+<dt> SRB on top of GridFTP.
+<dd> GridFTP can now be configured and defined as an SRB resource.  Like
+with other resources, data objects can be stored in a GridFTP resource
+under the control of the srb user.
+<dt> GridFTP on top of SRB.
+<dd> The GridFTP Server can be configured to make use of SRB space in
+place of local disk space.  This is done via an SRB-specific gridFTP
+DSI (Data Storage Interface) which links with the SRB Client library.
+</dl>
+In both cases, data will transfer through
+a host acting as a gateway, so performance will be limited.  The integration
+of two network data transfer systems like this, necessarily, reduces the
+functionality of the combined system.
+Please contact us if you wish to make use of either of these and we'll
+provide additional information.  
+<p>
+We'd like to acknowledge and thank John Bresnahan of the GridFTP team
+at ANL for working with us on these; in particular in developing
+the SRB on GridFTP DSI.
+
+<h4>
+Zone Management
+</h4>
+<dl>
+
+<dt>Improvements to zonesync.pl (now Szonesync.pl)
+<dd>This includes a bug fix, ignoring inactive zones, and
+automatically creating and cd'ing to a subdirectory for the working
+files.  zonesync.pl has been renamed Szonesync.pl and is now in the
+utilities/admin-bin subdirectory.
+
+<dt>New zoneingest.pl script to more easily create remote zones.  
+<dd>zoneingest.pl takes as input the output of the 'Stoken Zone'
+command run at remote site.  See the beginning of the script for more
+information.  
+</dl>
+
+<p>
+
+<h4>Updates to the Scommand Utilities</h4>
+<dl>
+<dt>Scat
+<dd>added 'Version' as an option
+
+<dt>Schmod
+<dd> added -i option to to set/unset the "ACL inheritance bit" of a collection. 
+<dd>added an option -b for bulk changes of permissions (similar to -D -r
+of earlier versions) note that Schmod also has option to change
+ownership of a dataset/collection. There is
+no separate Schown command.
+<dt>Sget
+<dd>added option [-W] to use version string in finding source object
+  See new notes  added about options -m, -M and -b.
+
+<dt>SgetColl
+<dd>added three new options
+<dd>-e  displays count and total size of files in the collection grouped by users
+<dd>-f  displays count and total size of files in the collection grouped by resources
+<dd>-g  displays count and total size of files in the collection
+
+<dt>SgetR
+<dd>   this command has been extended  to go across (possibly all known) zones. 
+
+<dt>SgetU
+<dd>   added an option (-G) to display group(s) for which the user is a groupowner.
+<dd>   added a new synopsis to display members and owners of user groups.
+<dd>   this command has been extended  to go across (possibly all known) zones. 
+
+<dt>Singestuser
+<dd>  added zoneName as an option hence allowing registration of users not in loal zone.
+
+<dt>Sls
+<dd>  added an option [-v] to show version
+<dd>  the condition-based listing has been extended  to go across (possible all known) zones.
+<dd> The -C option will now display an "I" if the  "ACL inheritance bit" 
+of a collection is set.
+
+<dt>Slscont
+
+<dd> added option [-A] to display containers accessible by the user,
+when this option is not used
+<dd>  added option [-F] to display all inContainer objects.
+<dd>  this command has been extended  to go across  zones.
+
+<dt>Smkdir
+
+<dd>added the much requested option [-p] to create a chain of
+collections if any intermediate collections do not exist.
+
+<dd>  added option [-T] to move data to trash.
+<dd>  added option [-V] to change the version string
+
+<dt>SmodifyUser
+
+<dd>added option to addUserGroupOwner, delUserGroupOwner, changeZone,
+changeUserAddress, changeUserEmail, and changeUserPhone.
+
+<dt>Spasswd
+<dd>  modified to conform to new option provided by the new command called Sauth (ref. Sauth) 
+
+<dt>Sput
+<dd> The -P option has been extended  to deal with collections also.
+   See new notes  added about options -m, -M and -b.
+
+<dt>Sreplicate
+<dd>added option [-V] to use version string in finding source object
+<dd>added a new synopsis to ingest a local file as a replica of an existing SRB object.
+
+<dt>Stoken
+<dd>this command has been extended  to go across  (possible all known) zones.
+
+<dt>Sufmeta
+<dd>this command has been extended  to go across  (possible all known) zones.
+
+<dt>NEW SCOMMANDS:
+<dd>Sauth - Create an SRB password file with scrambled contents
+<dd>Sconvert - convert an image or sequence of images
+<dd>SmodE -  modifies extensible table metadata
+<dd>Sstage - stages files from SAM-QFS from off-line to on-line
+<dd>Squery -  pure query command for MCAT
+<dd>Singestgroup - adds a  group user  account
+<dd>Singesttoken -  ingests SRB native metadata types (reserved keywords)
+
+<dt>Depreciated:
+<dd>Sbload (not completely)
+<dd>Sbunload 
+</dl>
+<p>
+<h4>srbBrowser - JAVA JNI GUI </h4>
+<dl>
+<dt> The srbBrowser has been fixed to work with the 3.3 release. The following
+improvements have been made:
+<dd> Add the capability to select multiple files and directories for import,
+    export, replicate and copy.
+<dd> Add the ability to select the default transfer mode - serial,
+    parallel/clientInitiated, parallel/serverInitiated and bulk.
+<dd> Always display the default settings (Resource, Transfer mode, Container
+    and Comment) on the metadata panel. Previously, the user have to
+    use the menu to display these items.
+<dd> Add a text message panel at the bottom of the frame to display the status
+    of operations. Previously, a popup window was used to display these status.
+<dd> For the "Select Resource" operation, the list of resources available
+    for selection now reflects the zone of the highlighted file/collecion.
+    the resource.
+</dl>
+
+<h4>Misc bug fixes</h4>
+<dl>
+<dt> The bulk put/get operations have been made more robust. 
+<dt> Allow normal user to unregister or delete SRB files if the in-vault files 
+do not exist. 
+<dt> Allow parallel I/O when Sput -P is used.
+<dt>Fix a problem with "Sget -m" failure or Scp failure when multiple large 
+files are transfered. This error seems to affect only the Linux platform 
+and not the Solaris platform. Error msg returned include ""UNIX error. 
+Broken pipe", "UNIX error. Bad file number" and "Unknown UNIX error".
+This is the same fix as the one given in the 3.2.1+ patch.
+
+<h4>Bugzilla</h4>
+The (recently introduced) SRB Bugzilla home is at
+<a href=http://srb.npaci.edu/bugzilla>http://srb.npaci.edu/bugzilla</a>
+and can be used to query and view open or closed bugs and/or enhancement
+requests, and/or to submit new ones.
+The following link lists items resolved
+for this release:
+<a href=
+http://srb.npaci.edu/bugzilla/buglist.cgi?&chfieldfrom=2004-07-02&chfieldto=2005-02-18&bug_status=RESOLVED>
+http://srb.npaci.edu/bugzilla/buglist.cgi?&chfieldfrom=2004-07-02&chfieldto=2005-02-18&bug_status=RESOLVED</a>
+As always, many smaller bug fixes and enhancements have also been
+made and various documentation files updated.
+
+<h4>More extensive testing</h4>
+<dl>
+<dt>Although we have always done quite a bit of testing before each
+release, we have now developed additional automatic test scripts to
+help with us stress-test and verify the operation of various
+functions.  This has been quite useful and we plan to extend the
+scripts in the near future.  These are designed for internal SDSC
+ use only.
+
+</BODY>
+</HTML>

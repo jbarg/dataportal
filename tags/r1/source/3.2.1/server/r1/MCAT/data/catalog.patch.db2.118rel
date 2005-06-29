@@ -1,0 +1,93 @@
+WHENEVER SQLERROR EXIT -99  ROLLBACK
+alter table MDAS_AD_REPL add last_accs_time varchar(32);
+create table MDAS_AD_COLLMDATA
+        (data_grp_id  varchar(250)  not null,
+	 metadatanum integer not null,
+	 userdef_metastr0   varchar(350),
+	 userdef_metastr1   varchar(350),
+	 userdef_metastr2   varchar(350),
+	 userdef_metastr3   varchar(350),
+	 userdef_metastr4   varchar(350),
+	 userdef_metastr5   varchar(350),
+	 userdef_metastr6   varchar(350),
+	 userdef_metastr7   varchar(350),
+	 userdef_metastr8   varchar(350),
+	 userdef_metastr9   varchar(350),
+	 userdef_metaint0   integer,
+	 userdef_metaint1   integer
+	);
+
+create table MDAS_AD_COLLCONT
+	(data_grp_id  varchar(250)  not null,
+	 container_id             integer  not null,
+         data_typ_id    varchar(250)   not null
+        );
+
+create synonym MDAS_TD_COLLCONT    for MDAS_TD_CONTAINER;
+alter table mdas_ad_repl add unique (data_id,rsrc_id);
+alter table mdas_ad_collcont add unique (data_grp_id,data_typ_id );
+alter table mdas_ad_collmdata add unique (data_grp_id, metadatanum);
+create sequence DataId increment by 1 start with 4000000;
+commit;
+WHENEVER SQLERROR EXIT -99  ROLLBACK
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000d','compressed file');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000d.0001','compressed mmCIF file');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000d.0002','compressed PDB file');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000e','binary file');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000f','Document');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000f.0001','MSWord Document');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000f.0002','PDF Document');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000g','Executable');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000g.0001','NT Executable');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000g.0002','Solaris Executable');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000g.0003','AIX Executable');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000g.0004','Mac Executable');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000g.0004.0001','Mac OSX Executable');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000g.0005','Cray Executable');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000g.0006','SGI Executable');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000h','DLL');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000h.0001','NT DLL');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000h.0002','Solaris DLL');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000h.0003','AIX  DLL');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000h.0004','Mac DLL');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000h.0005','Cray DLL');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000h.0006','SGI DLL');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000i','Movie');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000i.0001','MPEG Movie');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000i.0001.0001','MPEG 3 Movie');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000i.0002','Quicktime Movie');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000j','Slide');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000j.0001','Power Point Slide');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000k','Spread Sheet');
+insert into MDAS_TD_DATA_TYP values ('0001.0001.0001.0001.000k.0001','Excel Spread Sheet');
+insert into MDAS_TD_RSRC_TYP values ('0001.0001.0001.0001.0003.0009','windows ntfs file system');
+insert into  mdas_td_actn values (117,'insert container for collection');
+insert into  mdas_td_actn values (118,'delete container for collection');
+insert into  mdas_td_actn values (119,'change user defined integer meta data for collection');
+insert into  mdas_td_actn values (120,'insert user defined string meta data for collection');
+insert into  mdas_td_actn values (121,'insert user defined integer meta data for collection');
+insert into  mdas_td_actn values (122,'delete user defined string meta data for collection');
+insert into  mdas_td_actn values (123,'delete user defined integer meta data for collection');
+insert into  mdas_td_actn values (124,'change user defined string meta data for collection');
+insert into  mdas_td_actn values (1117,'insert container for collection failure');
+insert into  mdas_td_actn values (1118,'delete container for collection failure');
+insert into  mdas_td_actn values (1119,'change user defined integer meta data for collection failure');
+insert into  mdas_td_actn values (1120,'insert user defined string meta data for collection failure');
+insert into  mdas_td_actn values (1121,'insert user defined integer meta data for collection failure');
+insert into  mdas_td_actn values (1122,'delete user defined string meta data for collection failure');
+insert into  mdas_td_actn values (1123,'delete user defined integer meta data for collection failure');
+insert into  mdas_td_actn values (1124,'change user defined string meta data for collection failure');
+insert into MDAS_CD_DATA values (0,'null','0000');
+insert into MDAS_AD_REPL (data_id,repl_enum,data_name,data_typ_id,path_name,rsrc_id,repl_timestamp,data_grp_id,data_size,is_deleted,data_owner,is_dirty,offset,container_id,modify_timestamp,last_accs_time) values (0,0,'null','0000','/tmp/null',1,'1997-08-15-00.00.00','0001.0001.0001.0001',100,0,2,0,0,1,'1997-08-15-00.00.00','1997-08-15-00.00.00');
+insert into MDAS_TD_CONTAINER (container_id,container_name,container_max_size,rsrc_id) values    (0,'',1000000000000000000000000000,1);
+insert into MDAS_AD_ACCS values (1,0,6,50);
+insert into MDAS_AD_ACCS values (1,0,7,50);
+update  MDAS_AD_REPL set last_accs_time = modify_timestamp;
+insert into mdas_ar_accs 
+ select A.phy_rsrc_id, 0, 1, 50 
+ from mdas_ar_physical A where not exists 
+  (select B.rsrc_id, 0, 1, 50 from mdas_ar_accs B 
+   where A.phy_rsrc_id = B.rsrc_id);
+commit;
+exit;
+

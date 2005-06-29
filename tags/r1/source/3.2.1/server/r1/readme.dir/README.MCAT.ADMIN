@@ -1,0 +1,145 @@
+If you are building an MCAT-enabled SRB, see the
+MCAT/README.MCAT.INSTALL for the installation procedure.  After the
+SRB server is installed and running, follow the procedures outlined
+below.
+
+----------------------------------
+ SRB Administration Tool
+----------------------------------
+
+The new Srb Admin Tool (SAT) is used for most of the SRB/MCAT
+administration operations once you have an SRB system initialized
+(either hosted by SDSC or your own MCAT-enabled SRB).
+
+The SAT provide a GUI to assist in the process.  In most cases, where
+you need to select from currently defined values, the SAT will query
+your MCAT database and present you with the options to pick from.
+
+All SAT operations go thru the normal SRB client/server interface, so
+you can run it on various Unix SRB client hosts (you do not need to
+run the SAT on a host with access to the MCAT database itself).
+
+The SAT is written in Java.  Cut&Paste can come in handy for many
+operations and is available as long as you are using a recent Java JDK
+(1.4.1).  The JDK is specified as part of the general build, via
+configure, and is defined in the mk/mk.config file.
+
+Each function (except exit) in the main window brings up another
+window to perform that operation.  Being an free-standing window, you
+can move and resize the window to anywhere on the screen.  You can
+close the window, and bring it back, and it will retain the settings
+and results from previous operations during the current SAT session
+(the object remains when closed).  The Clear/Refresh button can be
+used to again query the MCAT for current values (if you've changed
+something).
+
+To run SAT: 
+
+1) Set up user authentication like is done for any other SRB client
+   program (~/.srb/.MdasEnv and ~/.srb/.MdasAuth).  This will need to
+   be an sysadmin user to be allowed to perform any significant
+   functions.
+
+2) cd to the ../MCAT/java directory.  Run 'gmake run' to run (and build 
+   if necessary) the SAT program.
+
+3) It will bring up a window displaying menu items.  There is a Help
+   function that will bring up various descriptions.  SAT is a little
+   slower than many programs, but is reasonably responsive on most
+   systems.
+
+Look thru the various options, windows, and help pages to get familiar
+with its features.
+
+If you just installed your own MCAT-enabled SRB, you should change the
+password for the pre-defined admin userid used to boot-strap your
+system.  Use the pull-down menu for Users, select Modify User Info,
+and it bring up another window to do so.  Click on the 'sdsc' domain,
+and it will show you the existing users under that domain, click on
+the 'srb' user, click the change user password button, enter a new
+password, and then Execute.  A message indicating success should
+appear in the text window at the bottom.
+
+If you didn't create your own domain while installing an MCAT-enabled
+SRB, you can do so via the SAT.  It is under Tokens, Add New Domain.
+
+----------------------------------
+ Scommands
+----------------------------------
+
+The Scommands are both user and adminitrator commands (built in
+utilities/bin).  As an example of administrator operations, you can
+list complete information about the currently defined resources, by
+running 'Sinit' followed by 'SgetR'.
+
+The Scommands are:
+ Sannotate  - Annotate SRB Objects and display annotations
+ Sappend    - Appends a local file, standard in, or a SRB object to a target SRB object
+ Sattrs     - Display meta attributes used in conditions
+ Sbload     - imports in bulk one or more local files and/or directories into SRB space.
+ Scat       - Streams SRB Objects to standard output
+ Scd        - Changes working SRB collection
+ Schmod     - Modify access permissions for SRB objects and collections
+ Scp        - Copies an object to a new collection in SRB space
+ Senv       - Displays environmental file content
+ Serror     - Display Error Information from Error Number
+ Sexit      - Clears environmental files created during SRB operation
+ Sget       - Exports SRB objects into local file system
+ SgetColl   - Displays information about SRB collections
+ SgetD      - Displays information about SRB files (objects)
+ SgetR      - Displays information about SRB resources
+ SgetT      - Displays information about SRB tickets
+ SgetU      - Displays information about SRB users
+ Shelp      - Displays one-line help messages for all Scommands
+ Sinit      - Initializes environmental files for SRB operation
+ Sls        - Lists SRB objects and collections
+ Slscont    - Lists SRB containers
+ Smeta      - Displays and ingests meta data values
+ Smkcont    - Creates a new SRB container
+ Smkdir     - Creates a new SRB collection
+ SmodColl   - Modifies some system metadata information on SRB collections
+ SmodD      - Modifies some system metadata information on SRB objects
+ Smv        - Changes the collection for objects in SRB space
+ Spasswd    - Change SRB (Text) Password
+ Spcommand  - Execute proxy command in SRB
+ Sphymove   - Moves a SRB object to a new SRB resource
+ Sput       - Imports local files into SRB space
+ Spwd       - Displays current working SRB collection
+ srbpget    - Exports SRB objects into local file system with client driven threads
+ srbpput    - Imports local files into SRB space with client driven threads
+ Sregister  - Registers an object as a SRB object in MCAT
+ Sreplcont  - Replicates an existing SRB Container
+ Sreplicate - Replicates an existing SRB object in a (possibly) new resource
+ Srm        - Removes SRB objects
+ Srmcont    - Removes SRB container
+ Srmdir     - Removes an existing SRB collection
+ Srmticket  - Remove a ticket
+ Ssyncd     - Synchronizes copies of an SRB object
+ Ssyncont   - Synchronize SRB containers
+ Stcat      - Streams ticketed SRB Objects to standard output
+ Sticket    - Issue tickets for SRB objects and collections
+ Stls       - Lists ticketed SRB objects and collections
+ Stoken     - Displays information about SRB-aware types.
+
+
+----------------------------------
+SYSTEM MANAGER'S OPERATIONS
+----------------------------------
+
+Common Admin functions include creating resources, adding new users,
+and creating tokens (descriptive items).  See the SAT for additional
+information.
+
+A simple SRB system can be created as follows (via the SAT):
+  Create a new domain, if you haven't already.
+  Create a new location (a name for your system).
+  Create a new physical resource, associated with your location; the 
+    simplist being a Unix file system on the SRB server host.
+  Add a new user in your domain, non-privileged.
+  The user should now be able to Sinit (after setting their
+     ~/.srb/.MdasEnv and ~/.srb/.MdasAuth), and Sput, and Sget files.
+  
+SAT can also be used to create more sophistocated resource systems,
+including Compound and Logical Resources.  The Compound Resources are
+part of a Mass Storage System (MSS) implementation within SRB.  See
+the release notes and other documents for more information.

@@ -1,0 +1,2 @@
+configure --enable-oramcat --enable-oraver=920_32bit --enable-oraconn=mcatisis.esc.rl.ac.uk --enable-oralobj --enable-orahome=$ORACLE_HOME --enable-commports --enable-commstart=64000 --enable-commnum=1255 --enable-srbport=5600 --enable-javagui=yes --enable-jdkhome=$JAVA_HOME --enable-installdir=/opt/srb/isis
+

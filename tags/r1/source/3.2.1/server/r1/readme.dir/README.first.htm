@@ -1,0 +1,99 @@
+<HTML>
+<HEAD>
+<TITLE>SRB</TITLE>
+<BODY bgcolor=#BBFF00FA>
+<IMG SRC="http://www.npaci.edu/images/DI.gif" WIDTH="555" HEIGHT="90"></P>
+<FONT FACE="Courier New" SIZE=4>
+<PRE>
+
+IMPORTANT NOTES: 
+
+i) Starting with SRB 2.0.0, installation procedures have been changed
+to use the "configure" script. Please read README.build for details.
+Starting with 2.1.1, there is now an install.pl script to handle certain 
+types of installations.
+ii) The Sput and Sget commands support parallel I/O. But the DEFAULT I/O
+mode is SERIAL. Please use the -m option or set the env variable "srbParallel"
+to any value to switch the I/O mode to parallel.   With 2.1, the server
+can be configured with the number of parallel threads to use.
+iii) The previous versions (1.1.8) of MCAT are not compatible with the
+2.0 and 2.1 releases.  At SDSC, we are starting to upgrade the MCATs
+of various projects to 2.x.  If you are using one of the MCATs at
+SDSC, please email srb@sdsc.edu for the status of the MCAT upgrade.
+ 
+See the ReleaseNotesX.Y[.Z] files (for example, ReleaseNotes2.1.1) for
+features of the releases.
+
+Contents of this release
+-----------------------
+
+Directory                              Comments
+---------           ---------------------------------------------------------
+./src			The source for the SRB code.
+./obj                   The SRB object files, the SRB client library. 
+./bin			The SRB server binary and startup script.
+./data			The SRB server configuration files.
+./mk			The SRB server make configuration.
+./readme.dir		The README directory.
+./MCAT			MCAT installation, configuration and management.
+./MCAT/java             The SRB/MCAT Admin Tool.
+./utilities		The SRB client utilities.
+./test                  Client programs, test suites.
+./java			The java srbBrowser.
+./admin			The SRB server monitoring program.
+./jargon                A pure Java API
+./matrix                WSDL Services interface for SRB
+./python                Python binding
+
+
+Other README files
+------------------
+
+SRB_Install_Notes.doc - This is an excellent SRB installation note written 
+by Dr. Michael Doherty of the e-Science Group at the Rutherford Appleton 
+Laboratory of UK. It describes from start to finish the installation of MCAT, 
+MES (MCAT enable server), other SRB resource servers and client softwares.
+The install note is based on a Linux system with Oracle 9i as the database
+for MCAT. However, most of the note is applicable to other OS and
+DMBS.
+
+faq.html - Frequently Asked Questions.
+
+README.build - Notes on how to build the SRB server and client library.
+
+README.dataEncryptionCompression - Notes on optional data 
+        encryption/compression capabilities.
+
+README.serverconfig - Notes on how to configure and run the SRB server.
+
+README.client - Notes on how to configure a SRB client environment and use
+the SRB client API.
+
+README.clientAPI - Gives a summary of the SRB client API.
+
+README.utilities - Notes on Installation and Use of Client Utilities.
+
+README.MCAT.INSTALL - Notes on Installation and Management of the MCAT
+catalog.
+
+README.python - Notes on python binding.
+
+README.srbBrowser - Notes on Installation and Use of the java srbBrowser.
+
+README.srbMon - Notes on Installation and Use of the SRB server monitoring
+daemon.
+
+README.tapeMassStor - Notes on Installation of the SRB's own Tape
+Mass Storage system.
+
+README.DAI - Notes on usage of the database access interface (DAI).
+
+TLANG.PRIMER - A small primer for the Template Language (T Language).
+
+
+web/SRB.htm - SRB Version 2.0.0 Manual in HTML format.
+
+</PRE>
+</BODY>
+</HTML>
+
