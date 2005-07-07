@@ -2,10 +2,11 @@
 #
 # Script to shutdown SRB master and server
 #
+# Work out which project this is
+SRB_PROJECT=`echo $PWD | rev | cut -d/ -f2 | rev`
+
 # Set this to the srbMaster you wish to shutdown
-MASTER_STR=srbMaster-@SRB_VERSION@@SRB_PROJECT@
-
-
+MASTER_STR=srbMaster-3.3.1-$SRB_PROJECT
 
 # Display all srbMasters and srbServers that are running
 ps -elf | egrep "srb[S|M]"

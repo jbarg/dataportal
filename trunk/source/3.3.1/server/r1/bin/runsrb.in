@@ -8,6 +8,10 @@ else
 	cd $1
 fi
 
+# Define the SRB project and root
+SRB_PROJECT=`echo $PWD | rev | cut -d/ -f2 | rev`
+SRB_ROOT=/opt/srb/$SRB_PROJECT
+
 # This is the umask for the server operation.
 umask 077
 
@@ -171,8 +175,8 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:@GSIHOME@/lib
 # replace '/local/tmp/.srb/.MdasEnv' with your own name
 # replace '/local/tmp/.srb/.MdasAuth' with your own name
 #
-# mdasAuthFile=/local/tmp/.srb/.MdasAuth
-# mdasEnvFile=/lacal/tmp/.srb/.MdasEnv
+mdasAuthFile=$SRB_ROOT/.srb/.MdasAuth
+mdasEnvFile=$SRB_ROOT/.srb/.MdasEnv
 
 # STOR_VAULT_MODE - This allows the mode of files created in the vault to
 # be changed to values different than the default value of 0600.
@@ -194,6 +198,7 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:@GSIHOME@/lib
 # The connection to the MCAT database is re-established when a new request
 # is received.
 # ServerTimeOut=432000
+ServerTimeOut=14400
 
 # commPortNumStart - Specifies the first allowable port number for SRB 
 # client/server. This overides the value specified with the --enable-commstart
@@ -210,9 +215,11 @@ export NSL_UNITREE_DIR srbData srbKeytabName srbPrincipalName METADATA_FKREL hps
 
 export commPortNumStart commPortNumCount SingleSvrPort
 
-mv $CURDIR/../data/srbLog $CURDIR/../data/srbLog.sav 
+mv $CURDIR/../data/srbLog $CURDIR/../data/log-archive/srbLog.`date +%Y%m%d-%H%M%S`
+gzip $CURDIR/../data/log-archive/srbLog.`date +%Y%m%d-%H%M%S`
 rm $CURDIR/../data/lockDir/.[a-z]* $CURDIR/../data/lockDir/*
-$CURDIR/srbMaster-@SRB_VERSION@@SRB_PROJECT@ -d 1 -S
+$CURDIR/srbMaster-3.3.1-$SRB_PROJECT -d 1 -S
+
 sleep 2
 tail $CURDIR/../data/srbLog
 # Need to use different ps options on Mac
@@ -221,5 +228,5 @@ if [ "$hostOS" = "Darwin" ]
 then
     ps -ax | grep srbMaster
 else
-    ps -ef | grep srbMaster
+    ps -ef | grep srbMaster-3.3.1-$SRB_PROJECT
 fi
