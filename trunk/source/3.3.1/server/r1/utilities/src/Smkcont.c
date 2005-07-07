@@ -38,7 +38,7 @@ main(int argc, char **argv)
     char *mcatName;
     char *userName, *domainName;
     srbPathName nameArray[MAX_TOKEN];
-    srb_long_t contSize;
+    srb_long_t contSize, maxContSize;;
     int i;
     int status;
     int sFlag = 0;
@@ -55,11 +55,13 @@ main(int argc, char **argv)
 		SFlag = 1;
 		break;
 	    case 's':
+		maxContSize = MAX_CONTAINER_SIZE; /* in Mb */
+		maxContSize = maxContSize * 1024*1024;
 		contSize = strtoll (optarg, 0, 0);
-		if (contSize > MAX_CONTAINER_SIZE) {
+		if (contSize > maxContSize) {
 	            fprintf (stderr, 
-		     "The input container size exceed max value of %d. Set to max value.\n", MAX_CONTAINER_SIZE);
-		contSize = MAX_CONTAINER_SIZE;
+		     "The input container size exceed max value of %d Mb. Set to max value.\n", MAX_CONTAINER_SIZE);
+		contSize = maxContSize;
 		}
 		sFlag = 1;
 		break;
