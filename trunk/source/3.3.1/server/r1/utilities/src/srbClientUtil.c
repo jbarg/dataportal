@@ -3487,19 +3487,22 @@ filterDuplicateShort (mdasC_sql_result_struct *myresult)
 {
     int i, inInx, outInx;
     char *dataName, *dirty, *inStr, *outStr;
+    char *collName;
     char *dirtySz, *myDirtySz;
     int real_row_count;
 
     if (myresult->result_count == 0)
         return;
-
     dataName = (char *) getFromResultStruct (myresult,
       dcs_tname[DATA_NAME], dcs_aname[DATA_NAME]);
 
     dirty = (char *) getFromResultStruct (myresult,
       dcs_tname[IS_DIRTY], dcs_aname[IS_DIRTY]);
 
-    if (dataName == NULL || dirty == NULL)
+    collName = (char *) getFromResultStruct (myresult,
+      dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+
+    if (dataName == NULL || dirty == NULL || collName == NULL)
 	return;
 
     outInx = 1;
@@ -3511,7 +3514,9 @@ filterDuplicateShort (mdasC_sql_result_struct *myresult)
 
     for (inInx = 1; inInx < myresult->row_count; inInx ++) { 
 	if (strcmp (&dataName[inInx*MAX_DATA_SIZE], 
-	 &dataName[(inInx-1) * MAX_DATA_SIZE]) == 0) {
+	 &dataName[(inInx-1) * MAX_DATA_SIZE]) == 0 && 
+	   strcmp (&collName[inInx*MAX_DATA_SIZE],
+	 &collName[(inInx-1) * MAX_DATA_SIZE]) == 0	) {
 	    if (myDirtySz != NULL && atoi (&dirty[inInx]) > 0) 
 		myDirtySz = &dirtySz[inInx];
 	    real_row_count--;
@@ -3872,10 +3877,13 @@ int copyNum)
         return (0);
     } else {
 	status = lstatus;
-        fprintf (stderr, "localToSrbFileCopy error for %s/%s\n",
-         targColl, targObj);
-        srb_perror (2, (int) status, "", SRB_RCMD_ACTION|SRB_LONG_MSG);
-
+        if (status != COLLECTION_NOT_IN_CAT && 
+	  status != DATA_NOT_IN_COLLECTION) {    /* rsync depends on this
+						  * error to make new coll */
+            fprintf (stderr, "localToSrbFileCopy error for %s/%s\n",
+              targColl, targObj);
+            srb_perror (2, (int) status, "", SRB_RCMD_ACTION|SRB_LONG_MSG);
+	}
         return ((int) status);
     }
 }
@@ -5417,8 +5425,15 @@ char *srbCollection, srb_long_t size, int flagval)
         return(in_fd);
     }
 
-    /* Check whether the target file exists */
 
+    /***  RAJA Apr 6th 2005 - added a check to remove any conditions that are there ***/
+    if (strlen(inCondition) > 0) {
+      if ((buf = strstr(localPath,inCondition)) != NULL)
+	*buf = '\0';
+    } 
+    /***  RAJA Apr 6th 2005 - added a check to remove any conditions that are there for target name ***/
+    /* Check whether the target file exists */
+    
 #ifdef _WIN32
     status = stat_file (localPath, &statbuf);
 #else

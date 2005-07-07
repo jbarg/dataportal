@@ -9799,7 +9799,7 @@ int check_permit_in_dataid_by_access_id(int data_id, int user_id, int access_id)
   int i;
 
   sprintf(sqlq, "select distinct t1.data_id from %sMDAS_AD_REPL t4, %sMDAS_AD_ACCS t1, %sMDAS_AU_GROUP t3 where  t4.data_id = %i  AND t4.container_id = t1.data_id  AND t3.user_id = %i AND t3.group_user_id = t1.user_id AND t1.access_id >= %i",
-             MDASSCHEMENAME, MDASSCHEMENAME,  data_id, user_id, access_id);
+             MDASSCHEMENAME, MDASSCHEMENAME,  MDASSCHEMENAME,  data_id, user_id, access_id);
   if (check_exists(sqlq) != 0)  {
 #ifdef DEBUGON
     elog(NOTICE, "Failurein check_permit_in_dataid : %s\n",sqlq);

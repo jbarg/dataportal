@@ -17,11 +17,14 @@ Please read these files before using,modifying or distributing SRB software.
 #ifdef PSQMCAT
 #define nextDataId "nextval('DataId')"
 #define currDataId "currval('DataId')"
-#endif /* PSQMCAT */
-#ifdef ORAMCAT
+#elif defined ORAMCAT
 #define nextDataId "DataId.NextVal"
 #define currDataId "DataId.CurrVal"
-#endif /* ORAMCAT */
+#else
+#define nextDataId ""
+#define currDataId ""
+#endif
+
 
 
 int getDataId(char *collName, char *dataName)
@@ -499,7 +502,7 @@ registerIncontainerDatasetInBulk (int catType,
     }
     ******/
     idataSize = strtoll (dataSize, 0, 0);
-    ioffSet = atol(offSet);
+    ioffSet = strtoll(offSet, 0, 0);
     if (createTimeStamp == NULL)
       strcpy(cTS,cval[5]);
     else
@@ -1363,7 +1366,7 @@ movePhysicalIntoContainerInBulk(int catType,
   for (ii = 0; ii < inDataInfo->row_count ; ii++) { /*** begin the loop ***/
     rnum = atoi(replNum);
     idataSize = strtoll (dataSize, 0, 0);
-    ioffSet = atol(offSet);
+    ioffSet = strtoll(offSet, 0, 0);
     make_quote_to_two_quote(dataName,newDataName);
     make_quote_to_two_quote(collName,newCollName);
     data_id = getDataId(newCollName,newDataName);

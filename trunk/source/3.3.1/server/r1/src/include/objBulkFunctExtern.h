@@ -15,7 +15,7 @@ Please read these files before using,modifying or distributing SRB software.
 #ifndef OBJ_BULK_FUNCT_EXTERN_H
 #define OBJ_BULK_FUNCT_EXTERN_H
 
-#define BUNLOAD_NUM_ROWS 4000
+#define BUNLOAD_NUM_ROWS 5000	/* for BBSRC */
 
 #define BULK_MOVE_NUM_ROWS      200
 

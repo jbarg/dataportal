@@ -301,8 +301,8 @@ typedef struct {
 
 #define DEF_NUM_ROWS	100	/* The default number of rows to be returned */
 
-#define DEF_CONTAINER_SIZE 200*1024*1024 /* default container size */
-#define MAX_CONTAINER_SIZE 150000*1024*1024 /* max container size */
+#define DEF_CONTAINER_SIZE (200*1024*1024) /* default container size */
+#define MAX_CONTAINER_SIZE (200*1024) /* max container size in MB */
 #define SOCK_WIN_SIZE 800*1024 /* default socket window size */
 
 typedef enum {
