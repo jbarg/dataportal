@@ -142,7 +142,7 @@ execCommand (char *command, char *commandArgv, int lsock, int portalFlag)
     int len = 0;
     int openQuote = 0;
 
-    sprintf (commandBuf, "%s/../%s/%s", 
+    sprintf (commandBuf, "%s/../%s/%s",
      (char *) getSrbDataDir(), (char *) COMMAND_DIR, command);
 
     /* parse the commandArgv */
@@ -150,6 +150,9 @@ execCommand (char *command, char *commandArgv, int lsock, int portalFlag)
     av[0] = commandBuf;
 
     if (commandArgv != NULL) {
+      inpPtr = strdup (commandArgv);
+      outPtr = inpPtr;
+      while ((c = *inpPtr) != '\0') {
         if ((c == ' ' && openQuote == 0) || openQuote == 2) {
             openQuote = 0;
             if (len > 0) {      /* end of a argv */
@@ -171,53 +174,51 @@ execCommand (char *command, char *commandArgv, int lsock, int portalFlag)
                 inpPtr++;
                 outPtr = inpPtr;
             }
-        } else if (c == '\'' || c == '\"') {
-            openQuote ++;
-            if (openQuote == 1) {
-                /* skip the quote */
-                inpPtr++;
-                outPtr = inpPtr;
-            }
         } else {
             len ++;
             inpPtr++;
         }
+      }
+      if (len > 0) {      /* handle the last argv */
+        av[inx] = outPtr;
+        inx++;
+      }
     }
 
-    av[inx] = NULL;	/* terminate with a NULL */ 
+    av[inx] = NULL;     /* terminate with a NULL */
 
     /* close opened file desc opened by the srbServer */
 
     closeAllDesc ();            /* Close all opened obj descriptor */
 
     if (portalFlag & PORTAL_STD_IN_OUT) {
-	int outFd;
+        int outFd;
 
         if (lsock != 0)
-	    close (0);		/* close stdin */
+            close (0);          /* close stdin */
 
         if (lsock != 1)
-	    close (1);		/* close stdout */
+            close (1);          /* close stdout */
 
         if (lsock != 2)
-	    close (2);		/* close stderr */
+            close (2);          /* close stderr */
 
         /* Setup portal as stdin, stdout and stderr ? */
 
-	    dup (lsock);	/* inFd */
-	    outFd = dup (lsock);
-	    dup (lsock);	/* errFd */
-	    close (lsock);
-	    lsock = outFd;
+            dup (lsock);        /* inFd */
+            outFd = dup (lsock);
+            dup (lsock);        /* errFd */
+            close (lsock);
+            lsock = outFd;
     }
-	
+
     /* setup the portal env */
 
     sprintf (envBuf, "%s=%-d", PORTAL_ENV, lsock);
     putenv (envBuf);
     return(execv(av[0], av));
 }
-    
+
 func_ptr 
 getFunctionCall(char *myFunc)
 {
