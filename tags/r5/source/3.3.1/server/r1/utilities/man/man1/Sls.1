@@ -1,0 +1,127 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Sls.1
+.\"
+.TH Sls 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Sls \- display objects and sub-collections in a SRB collection
+.SH SYNOPSIS
+.B Sls
+.RB [ \-aChlVpv ]
+.RB [ \-r | \-f ]
+.RB [ \-A
+.IR condition "] [" collection | srbObj " ...]"
+.sp
+.B Sls -c
+.RB [ \-aChlv ]
+.RB [ \-z
+.IR zone "]
+.I condition 
+.SH DESCRIPTION
+.B "Sls "
+utility displays objects that match the input
+.IR srbObj ,
+or objects and sub-collections in 
+.IR collection .
+When invoked with no
+.IR collection | srbObj
+operand, the current working SRB collection value is displayed.
+.sp
+The second synopsis applies the 
+.IR condition
+and displays the resultant list of objects. It applies across all collections.
+.sp
+When the operand
+.I collection
+does not begin with '/', '../' or '^/' the collection name used
+is with respect to the current working collection.
+.sp
+When the operand
+.I collection
+begins with '^/' the collection name used is with respect to
+the mdasCollectionHome value in the ~/.srb/.MdasEnv file.
+.sp
+When the operand
+.I collection
+begins with '../' the collection name used is with respect to
+the parent of current working collection.
+.sp
+When the operand
+.I collection
+begins with '/' the collection name used is that of the
+operand value.
+.sp
+When the operand
+.I collection
+contains wildcard characters
+.BR * | ?
+then
+.I collection
+must be surrounded by double quotes.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-a "
+list metaData associated with each file and collection.
+.TP 0.5i
+.B "\-C "
+list the access control list of each file and collection. 
+A character "I" following the collection means the "ACL inherit bit" is set 
+for the collection.
+.TP 0.5i
+.B "\-r "
+display recursively for sub-collections of
+.I collection
+.TP 0.5i
+.B "\-f "
+Force each argument to be interpreted as a collection.
+.TP 0.5i
+.B "\-h "
+displays command options
+.TP 0.5i
+.B "\-l "
+List in long format, giving owner, replica number,
+physical resource, size in bytes, time of creation and
+object name.
+.TP 0.5i
+.B "\-v "
+Lists in long format as -l but also includes the version numbers of all the copies.
+.TP 0.5i
+.B "\-p "
+List the resource and physical path of the data file. 
+.TP 0.5i
+.B "\-V "
+Verify the physical path assoicated with the data by doing a file stat on the 
+physical path. Only works for UNIX type resource currently. 
+.TP 0.5i
+.B "\-A "
+.I condition
+option is an '&' separated condition which will be applied
+in choosing the object to be listed. The separated condition
+is of the form "<Attr> <CompOp> <Value>", where <Attr> is an
+MCAT attribute found by
+.I Sattrs
+command, <CompOp> is a comparison operator and <Value> is a
+numeric or string value. The entire condition should be within
+a set of double quotes. Example: Sls -A "COPY = 0"
+.TP 0.5i
+.B "\-c "
+.I condition
+option applies to the whole SRB system instead of relative to the 
+current working collection.  Example: Sls -c "GUID='123'" will find all 
+objects  that have their Guid set to 123. See 
+.I Sattrs 
+for details of applicable conditions.
+.TP 0.5i
+.B "\-z "
+.I zone
+option applies to the second synopsis and is used to perform the Sls operation on a particular zone.
+If ALL is used for 
+.I zone 
+then every zone known to the current zone will be queried. 
+.I zone
+can have wild cards.
+.SH "SEE ALSO"
+.BR Spwd (1),
+.BR Scd (1),
+.BR SgetD (1),
+.BR Sattrs (1)

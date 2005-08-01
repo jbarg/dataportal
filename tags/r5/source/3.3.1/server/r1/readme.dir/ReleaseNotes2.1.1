@@ -1,0 +1,99 @@
+SRB 2.1.1
+---------
+
+This document describes the new features of SRB 2.1.1, released on July
+11, 2003.  This is an intermediate release containing mostly bug fixes and
+minor new features.  For additional information, see the SRB home page at 
+http://www.npaci.edu/DICE/SRB.  Also see ReleaseNotes2.1 for more
+information on the SRB 2.1.0 (released 6/5/2003).
+
+The other planned features listed on our future plans page at
+http://www.npaci.edu/dice/srb/srbFuture.html.
+
+A few bugs have been fixed, the more significant of which are
+described on our bugs page at:
+http://www.npaci.edu/dice/srb/bugs.html
+
+
+SRB New features:
+
+1) A new install script, install.pl, for doing full MCAT installations
+on Linux or Mac OS X.  It performs all the steps required to do a full
+(but basic) Postgres MCAT-enabled SRB installation, starting with the
+distribution files (for example, postgresql-7.3.3.tar,
+psqlodbc-07.03.0100.tar, and SRB2.1.0rel_pgp.tar) and ending with the
+user ready to set the path and Sinit and Sput.  It configures and
+builds Postgres, Postgres-ODBC, and SRB, initializes the database,
+ingests the MCAT tables, tests the database, updates configuration
+files, starts the Postgres and SRB servers, creates an SRB resource
+(to provide access to local disk space), and configures access for the
+current user; the manual steps described in README.MCAT.INSTALL.  See
+MCAT/install.pl for more information.
+
+2) Support for the latest version of Postgres (7.3.3) and it's
+separate ODBC distribution.  README.MCAT.INSTALL has been updated and
+install.pl includes the needed steps.
+
+3) Support for Mac OS X builds.  README.MCAT.INSTALL has been updated
+and install.pl includes the needed steps.
+
+4) True64 Alpha port of SRB client.
+
+5) Mod from Jason Holland of UH to stop echoing when the passwd is typed in.
+
+6) Add env variable mdasAuthFile to the readMdasAuth file so that the runsrb
+script can point the .MdasAuth file to somewhere besides ~/.srb/.MdasEnv.
+
+7) New Scommand srbparget to get partial file from a named remote resource.
+Useful for scatter in cluster system
+
+8) New Scommand Sufmeta - user-friendly meta access command. lets users to
+ingest and query attribute-value type of metadata easily.
+
+9) -v option for Sbregister to output what has been registered.
+
+10) Add ADS (Atlas Store) mass storage system as one of the file system type
+supported by the SRB.
+
+
+Jargon new features:
+
+1) Alpha version of the metadata querying.
+
+
+SRB Bug fixes:
+
+1) A bug submitted by Jason Holland of UH that Sbload exited with error -3220
+(NO_ACCS_TO_USER_IN_COLLECTION) when uploading certain set of data. 
+
+2) Sbload occasionally failed with a INP_ERR_FILENAME error.
+
+3) A memory leak problem when doing a Sbload without using a contaier. 
+Showed up as a -1314, UNIX_EFAULT: UNIX error. Bad address. 
+
+4) SRB server cannot handle GSI authentication for a user with multiple 
+Distinguished Names. 
+
+5) Fixed Scd to accept directory path ended with '/'. e.g., /a/b/c/
+
+6) Fix a parsing error when the -f option is used and the code exit without 
+error although the registration failed.
+
+7) More efficient way to do _svrDataCopy with the PARA_OPR switch off. 
+
+8) The srbMaster occasionally hangs when doing a pipe read. Set a 5 second
+timeout for the read.
+
+9) Fixed a heap overflow problem under Mac OS X.
+
+
+Jargon bug fixes:
+
+1) copyFromLocal(...), runs out of memory for very large files when files are 
+copied in serial.
+
+2) Parallel copies would sometimes hang when using method 
+copyFromLocal( LocalFile, boolean )
+
+3) Fixed the listFiles method which was not listing the first two files of 
+a collection.

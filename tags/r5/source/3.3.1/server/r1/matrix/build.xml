@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<!--   ANT BUILD FILE FOR SDSC MATRIX PROJECT    Last updated: 01/30/04 by Allen Ding alding@sdsc.edu   Modified by: Arun Jagatheesan arun@sdsc.edu   Created by Erik Vandekieft evk@ucsd.edu -->
+<project default="war">
+	<!-- Basic properties -->
+	<property file="build.properties"/>
+	<property name="build.dir" value="./"/>
+	<property name="bin.dir" value="${build.dir}/bin"/>
+	<property name="examples.dir" value="${build.dir}/examples"/>
+	<property name="src.dir" value="${build.dir}/src"/>
+	<property name="schema.dir" value="${build.dir}/schema"/>
+	<property name="docs.dir" value="${build.dir}/docs"/>
+	<property name="libs.dir" value="${build.dir}/lib"/>
+	<property name="appname" value="matrix"/>
+	<property name="webapps.dir" value="${build.dir}/webapps"/>
+	<property name="webinf.dir" value="${webapps.dir}/${appname}/WEB-INF"/>
+	<property name="clientjar" value="${bin.dir}/${appname}client.jar"/>
+	<property name="serverwar" value="${bin.dir}/${appname}.war"/>
+	<!--
+	<property name="deploymentDir" value="C:\Applications\Tomcat\Tomcat4.1\webapps"/>
+	-->
+	<!-- set up the classpath -->
+	<path id="main.classpath">
+		<pathelement location="${bin.dir}"/>
+		<fileset dir="${libs.dir}" includes="**.jar"/>
+	</path>
+	<!-- set up the jaxb tool -->
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath refid="main.classpath"/>
+	</taskdef>
+	<!-- Removing/creating class directories -->
+	<target name="clean">
+		<delete dir="${webapps.dir}"/>
+		<delete dir="${docs.dir}/client"/>
+		<delete dir="${docs.dir}/server"/>
+		<delete dir="${bin.dir}/edu"/>
+		<delete dir="${src.dir}/edu/sdsc/matrix/srb/parser"/>
+		<delete dir="${bin.dir}/examples"/>
+		<delete file="${clientjar}"/>
+		<delete file="${serverwar}"/>
+		<delete file="${bin.dir}/classpath"/>
+		<delete file="${bin.dir}/setMatrixClasspath.bat"/>
+	</target>
+	<!-- JAXB class generation and compilation -->
+	<target name="jaxbprepare">
+		<xjc schema="${schema.dir}/DGL.xsd" target="${build.dir}/src" package="edu.sdsc.matrix.srb.parser"/>
+	</target>
+	<target name="jaxb" depends="jaxbprepare">
+		<mkdir dir="${build.dir}/bin"/>
+		<javac srcdir="${src.dir}/edu/sdsc/matrix/srb/parser" destdir="${bin.dir}" debug="on">
+			<classpath refid="main.classpath"/>
+		</javac>
+		<copy todir="${bin.dir}/edu/sdsc/matrix/srb/parser" file="${src.dir}/edu/sdsc/matrix/srb/parser/jaxb.properties"/>
+		<copy todir="${bin.dir}/edu/sdsc/matrix/srb/parser" file="${src.dir}/edu/sdsc/matrix/srb/parser/bgm.ser"/>
+	</target>
+	<!-- Server package compilation -->
+	<target name="server" depends="jaxb">
+		<javac srcdir="${build.dir}/src" destdir="${bin.dir}" debug="on">
+			<classpath refid="main.classpath"/>
+			<exclude name="edu/sdsc/matrix/srb/client/**"/>
+		</javac>
+	</target>
+	<!-- Client package compilation -->
+	<target name="client" depends="jaxb">
+		<javac srcdir="${build.dir}/src" destdir="${bin.dir}" debug="on">
+			<classpath refid="main.classpath"/>
+			<include name="edu/sdsc/matrix/srb/client/*.java"/>
+		</javac>
+		<echo message="Building matrixclient.jar..."/>
+		<jar destfile="${clientjar}" basedir="${bin.dir}">
+			<exclude name="*"/>
+		</jar>
+		<delete dir="${bin.dir}/edu"/>
+	</target>
+	<!-- Examples package compilation -->
+	<target name="examples" depends="client">
+		<javac srcdir="${examples.dir}" destdir="${bin.dir}" debug="on">
+			<classpath refid="main.classpath"/>
+		</javac>
+		<copy todir="${bin.dir}" file="${build.dir}/examples/classpath"/>
+		<copy todir="${bin.dir}" file="${build.dir}/examples/setMatrixClasspath.bat"/>
+		<echo message="Building examples..."/>
+	</target>
+	<!-- Create server war file -->
+	<target name="warprepare">
+		<mkdir dir="${webinf.dir}"/>
+		<mkdir dir="${webinf.dir}/META-INF"/>
+		<mkdir dir="${webinf.dir}/classes"/>
+		<mkdir dir="${webinf.dir}/lib"/>
+	</target>
+	<target name="warcopy" depends="warprepare,server">
+		<copy todir="${webinf.dir}" file="${schema.dir}/web.xml"/>
+		<copy todir="${webinf.dir}/classes">
+			<fileset dir="${bin.dir}"/>
+		</copy>
+		<copy todir="${webinf.dir}/lib">
+			<fileset dir="${libs.dir}" includes="*.jar"/>
+		</copy>
+		<delete file="${webinf.dir}/lib/servlet.jar"/>
+		<delete file="${webinf.dir}/lib/commons-logging.jar"/>
+	</target>
+	<target name="war" depends="warcopy">
+		<jar destfile="${serverwar}" basedir="${webapps.dir}/${appname}">
+			<include name="**"/>
+			<exclude name="WEB-INF/classes/edu/sdsc/matrix/srb/client/**"/>
+		</jar>
+		<!-- <copy todir="${deploymentDir}" file="${serverwar}"/> -->
+		<echo message="Removing temporary webapps directory"/>
+		<delete dir="${webapps.dir}"/>
+		<delete dir="${bin.dir}/edu"/>
+		<delete dir="${bin.dir}/org"/>
+	</target>
+	<!-- Server documentation generation -->
+	<target name="server-docs">
+		<mkdir dir="${docs.dir}/server/api"/>
+		<javadoc packagenames="edu.sdsc.matrix.srb.*" destdir="${docs.dir}/server/api" windowtitle="Matrix server API" use="true" private="true" author="true" version="true">
+			<packageset dir="src" defaultexcludes="yes">
+				<include name="**"/>
+				<exclude name="edu/sdsc/matrix/srb/wrappers/**"/>
+			</packageset>
+			<classpath refid="main.classpath"/>
+		</javadoc>
+	</target>
+	<!-- Client documentation generation -->
+	<target name="client-docs" depends="jaxb">
+		<mkdir dir="${docs.dir}/client/api"/>
+		<javadoc packagenames="edu.sdsc.matrix.srb.client.*" destdir="${docs.dir}/client/api" windowtitle="SDSC Matrix Java Client API v3.3" use="true">
+			<packageset dir="src" defaultexcludes="yes">
+				<include name="edu/sdsc/matrix/srb/client"/>
+				<include name="edu/sdsc/matrix/srb/parser/**"/>
+			</packageset>
+			<classpath refid="main.classpath"/>
+		</javadoc>
+	</target>
+	<!-- JAVACC Processor   <target name="queryschema">   <jjtree      target="${build.dir}/src/edu/sdsc/matrix/srb/query/MatrixQueryParser.jjt"      outputdirectory="${build.dir}/classes"     javacchome="c:/Applications/Java/javaCC/javacc-3.1"      nodeusesparser="true" 	/>   <javacc      target="${build.dir}/src/edu/sdsc/matrix/srb/query/MatrixQueryParser.jj"      outputdirectory="${build.dir}/classes"     javacchome="c:/Applications/Java/javaCC/javacc-3.1"      static="true" 	/>   </target> -->
+</project>

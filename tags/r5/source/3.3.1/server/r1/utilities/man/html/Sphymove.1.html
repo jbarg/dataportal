@@ -1,0 +1,199 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sphymove</TITLE>
+</HEAD><BODY>
+<H1>Sphymove</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2005 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sphymove - moves an SRB files/collections to a new resource
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Sphymove</B>
+
+[<B>-n</B>
+
+<I>replNum</I>]
+
+[<B>-c</B>
+
+<I>container</I>]
+
+[<B>-S</B>
+
+<I>targetResource</I>]
+
+[<B>-P</B>
+
+<I>newpathName</I>] <I>srbFile</I> ... 
+
+<P>
+<B>Sphymove -b|r</B>
+
+[<B>-c</B>
+
+<I>container</I>]
+
+[<B>-S</B>
+
+<I>targetResource</I>]
+
+[<B>-s</B>
+
+<I>sourceResource</I>] <I>srbCollection</I> ... 
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Sphymove </B>
+
+moves one or more SRB objects to the
+<I>targetResource</I>
+
+(if given). The old copy is deleted and the MCAT catalog is
+also updated.
+<P>
+It is implemented in 2 modes - the &quot;file&quot; mode or &quot;collection&quot; mode. 
+The &quot;file&quot; mode which is the default mode, moves
+one or more individual files. The &quot;bulk&quot; mode, which is triggered
+with the -b or -r flags, is designed to move a large number of files
+(recursively) in one or more SRB collections efficiently.
+<P>
+In the &quot;file&quot; mode, if the -P option is used, the object will be stored in
+<I>newpathName</I>.
+
+Otherwise the object is stored in the default path for the
+<I>targetResource.</I>
+
+<P>
+The user should have at least 'write' access permission for
+<I>srbFile.</I>
+
+If the -n option is specified, the
+<I>replNum</I>
+
+copy will be moved.
+If the -c option is specified, the files will be moved into the specified
+<I>container.</I>
+
+The -c option overrides the -S option. 
+<P>
+The recursive move of a collection can be done either in bulk (-b) or 
+or non-bulk mode (-r). 
+<P>
+In bulk mode, up to 200 files can be moved in a single 
+(of many if necessary) move operation to improve efficient. 
+It is designed to move a large number of small files.
+<P>
+But if the collection to be moved contains some large files (50 Mb and
+up), the non-bulk mode may be better because the move will be done
+using third party parallel I/O. If both the -b and -r options are
+specified, the -b option will take precedent. 
+<P>
+It also accepts an optional -s 
+option which specifies the Source Resource of the copy to be moved. If 
+this option is specified, only SRB files stored in the given 
+<I>sourceResource</I>
+
+will be moved. If the -s option is not used, all files that are not stored
+in the
+<I>targetResource</I>
+
+will be moved. 
+<P>
+It is important to note that the -s option
+should be used whenever possible to eliminate unintended moves. Multiple
+<I>sourceResources</I>
+
+can be specified using the &quot;|&quot; character as seperator. 
+e.g., &quot;resource1|resource2|resource3&quot;.
+<P>
+It should be noted that if multiple sourceResources are specified, the 
+move operation will use the host of the first resource on the list to
+launch the operation. Therefore, it is important to use the resource with
+the most files to be moved as the first sourceResource.
+<BR>&nbsp;&nbsp;
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+- Display command options
+<DT><B>-b </B>
+
+<DD>
+- Specifies bulk move for moving large number of small files.
+<DT><B>-r </B>
+
+<DD>
+- recurive non-bulk move for moving large files.
+<DT><B>-n </B>
+
+<DD>
+<I>replNum</I>
+
+- An integer denoting the replica number of the object to be moved.
+<DT><B>-P </B>
+
+<DD>
+<I>newpathName</I>
+
+- The physical path name of the new copy.
+<DT><B>-S </B>
+
+<DD>
+<I>targetResource</I>
+
+- The target resource of the move. If not specified, the default resource 
+will be used as the target resource.
+<DT><B>-c </B>
+
+<DD>
+<I>container</I>
+
+- The target container of the move. The container must already exist 
+before the move. The option overrides the -S option.
+<DT><B>-S </B>
+
+<DD>
+<I>sourceResource</I>
+
+- If specified, only files stored in this resource will be moved.
+<P>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Smv.1.html">Smv</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sreplicate.1.html">Sreplicate</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Scp.1.html">Scp</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

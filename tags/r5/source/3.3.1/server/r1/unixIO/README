@@ -1,0 +1,14 @@
+
+This is a simple interface library for applications (such as MDSPlus)
+to access SRB functionality at the object (file) level via calls
+similar to unix IO calls(open, read, write, close, etc).  For more
+information, see the top of the srbUio.h file and the srbUio.c file.
+
+Currently this is known to work fine in Linux, but has not been tested
+on others.  Some small changes will be needed to work on some OSes.
+
+To build, first build the rest of the SRB tree, then cd to this
+directory and run gmake.  See the Makefile for more information.
+
+Initial version, October, 2003.
+Wayne Schroeder

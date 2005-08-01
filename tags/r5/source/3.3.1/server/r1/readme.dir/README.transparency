@@ -1,0 +1,73 @@
+The SRB preload-transparency option was designed to allow the use of
+UNIX commands to access data stored in SRB without code modification
+nor recompiling. Currently, this feature works on the Solaris platform
+and Redhat 7.3 of the Linux. Future support of this feature
+for the Linux platform is in doubt because of the recent changes in glibc in
+Redhat 8.0.  
+
+To use the the SRB preload option:
+
+1) cd preload;gmake clean;gmake; - This will make the lib/srbPreload.so
+   library.
+
+2) Copy the files script/srbalias and script/cdalias to the ~/.srb directory.
+
+3) Edit the srbalias file as follows:
+
+	. Change the env variable "SrbDir" (first line) to the directory path 
+	  where the SRB software is installed. 
+
+	. If the utilities (S commands) and the preload library (srbPreload.so)
+	  are build in the SrbDir tree, your are done. Otherwise, change
+	  the env variable "SrbUtilDir" (second line) to the directory path 
+	  where the utility binaries are installed and the env variable 
+	  "SrbPrelLibDir" to the directory path where the preload library
+	  (srbPreload.so) is installed.   
+
+4) type in "source ~/.srb/srbalias" or place this line in the ~/.cshrc file.
+
+5) type in "setprel"  - this will set the preload env. i.e., most I/O calls
+   will be trapped by the preload library" but you are still in the "LOCAL"
+   mode. i.e., "ls" will show you local FS.
+
+6) To access SRB files when you are in LOCAL mode, prepend the SRB path with
+   "s%", e.g.,
+
+    "ls s%." or "ls s%fooColl"    will list the current collection and the 
+    SRB path fooColl.
+
+   or prepending the string "/srb" to the absolute SRB path, e.g.,
+
+   "ls /srb/home/mwan.sdsc" will list mwan's SRB home collection 
+   "/home/mwan.sdsc".
+
+7) To store a file in SRB using a particular resource, append "%ResourceName"
+   to the SRB path. e.g.,
+
+   "tar -chlf s%foo.tar%hpss-sdsc myLocalDir"     
+    
+   will tar your local directory "myLocalDir" to a SRB file foo.tar and 
+   store it in resource "hpss-sdsc".
+
+8) You can change between LOCAL mode and SRB mode using:
+
+   "ss"	 - set SRB mode
+   "sl"  - set local mode
+
+9) When you are in SRB mode, you can reference local file by prepending
+   "l%" to the local path name. e.g.,
+
+   "ls l%fooDir"   will list the path fooDir in my current local directory.
+
+   or you can just specify the absolute path. e.g.,
+
+   "ls /users/sy/mwan" will list mwan's home directory.
+ 
+10)When you are in LOCAL mode, "pwd" will show your LOCAL cwd, To list the 
+   cwd of your SRB env, type in "spwd".
+
+11)When you are in SRB mode, "pwd" will show your SRB cwd, To list the 
+   cwd of your LOCAL env, type in "lpwd".
+
+12)To unset the preload env, type in "unsetprel"
+

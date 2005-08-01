@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Set Oracle Home
+#. /home/srb/.my-ora
+
+cd ~/WebReports/for-MCAT/bin; sh srb-stats
+cd ~/WebReports/for-WEB/bin; sh srb-stats
+
+exit 0

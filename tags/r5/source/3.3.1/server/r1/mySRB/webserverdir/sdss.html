@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0033)http://nvo.sdsc.edu/NVO/sdss.html -->
+<html><head><title>NVO SDSS SRB Data Set Handling Page</title>
+<meta http-equiv=content-type content="text/html; charset=iso-8859-1">
+<meta content="MSHTML 6.00.2800.1170" name=GENERATOR>
+<meta content=FrontPage.Editor.Document name=ProgId></head>
+<body bgcolor=#ffffff>&nbsp; <br>&nbsp;<b><font color=#008000><font 
+size=+4></font></font></b> 
+<center>
+<p><b><font color=#008000><font size=+4>NVO SDSS SRB Data Sets 
+Access</font></font></b></center>
+<p><br><br><font size=+4></font><br><br>
+<p><b><font color=#800000>MySRB</font></b> interface to SRB-based NVO 
+collections :<font color=#ff6600></font> 
+<center>
+ 
+<p><b><font color=#0000ff>MySRB Login filled allready for Interface to SRB-based 
+NVO SDSS collection</font></b> <br><b>( just click on "LogIn" )</b></center>
+<center>
+<table>
+  <caption>
+  <center>
+  <form action="https://srb.npaci.edu/cgi-bin/mysrb2_nvo.cgi" 
+  method=post><input type=hidden value=sentry name=function></center></caption>
+  <tbody>
+  <tr>
+    <td align=right><b><font color=#ff0000>SRB User Name:</font></b></td>
+    <td><input size=24 value=public name=username ,></td></tr>
+  <tr>
+    <td align=right><b><font color=#ff0000>SRB User Domain Name:</font></b></td>
+    <td><input size=24 value=npaci name=domainname ,></td></tr>
+  <tr>
+    <td align=right><b><font color=#ff0000>SRB User Password:</font></b></td>
+    <td><input type=password size=24 value=public name=password ,></td></tr>
+  <tr>
+    <td align=right><b><font color=#ff0000>SRB Port Number:</font></b></td>
+    <td><input size=24 value=5832 name=portnum ,></td></tr>
+    <input type=hidden value=srb.sdsc.edu name=srbHost>
+  <tr>
+    <td align=middle colspan=2><b><font color=#0000ff>Please exit SRB once you 
+      have finished</font></b> <br><input type=submit value=LogIn></td></tr>
+  <tr>
+    <td align=right><b><font color=#ff0000>Session will timeout 
+    in:</font></b></td>
+    <td><input size=4 value=180 name=timeoutval ,><b><font 
+      color=#ff0000>&nbsp; minutes</font></b></td></tr>
+      <input type=hidden name="startcol" value="/home/sdss.nvo/SDSSfromWEB/DR1/imaging" >
+      </tbody></table></center>
+<center></form></center>
+<hr>
+<b><font color=#800000>SRB-based NVO SDSS DR1 collection</font></b> is in 
+"/home/sdss.nvo/SDSSfromWEB/DR1/imaging". <br>To use the mySRB interface 
+effectively, once you click on "Login" and get the next screen, make sure the Home 
+Collection Name is set to: /home/sdss.nvo/SDSSfromWEB/DR1/imaging BEFORE clicking "Take 
+Me To My Collection" 
+<hr>
+<b><font color=#800000>MySRB</font></b> interface to NVO SRB 2MASS, SDSS and 
+SDSS calibration collection : <a 
+href="https://srb.npaci.edu/mySRB118.shtml?function=sentry&amp;username=public&amp;domainname=npaci&amp;password=public&amp;portnum=5680" 
+target=_new>MySRB</a> 
+<p>SRB User Name : "public" <br>SRB User Domain Name : "npaci" <br>SRB User 
+Password : "public" <br>SRB Port Number : "5830" <br># for SRB 1.1.8 <br>SRB 
+Port Number : "5832" <br># for SRB 2.0 
+<hr>
+You can find out more about <a href="http://www.npaci.edu/dice/srb/">Storage 
+Request Broker (SRB)</a> here. 
+<hr>
+You can download free SRB Windows browser <a 
+href="http://www.npaci.edu/dice/srb/inQ/inQ.html">inQ v1.1</a> here and use inQ 
+to connect to SRB from any Windows based platform with values : 
+<p>SRB User Name : "public" <br>SRB User Domain Name : "npaci" <br>SRB Host Name 
+: "srb.sdsc.edu" <br>SRB User Password : "public" <br>SRB Port Number : "5830" 
+<br># for SRB 1.1.8 <br>SRB Port Number : "5832" <br># for SRB 2.0 
+<p>PS. 
+<p>The SRB is based on network based client/server architecture and as such 
+doesn't work through firewalls. <br>
+<hr>
+<font color=#006600><font size=+1>Please start your testing with the following 
+hard coded, single click test links :</font></font> 
+<p>Download SDSS DR1 FITS file <a 
+href="http://nvo.sdsc.edu/NVO/fitscopy2.cgi?F=/home/sdss.nvo/SDSSfromWEB/DR1/imaging/1033/1/corr/2/fpC-001033-g2-0069.fit.gz&amp;M=image/fits">srb://home/sdss.nvo/SDSSfromWEB/DR1/imaging/1033/1/corr/2/fpC-001033-g2-0069.fit.gz</a> 
+using 'fitscopy' and using MIME type 'image/fits'. <br>You can dislplay only the 
+<a 
+href="http://nvo.sdsc.edu/NVO/listhead.cgi?F=srb://home/sdss.nvo/SDSSfromWEB/DR1/imaging/1033/1/objcs/1/psField-001033-1-0131.fit">FITS 
+headers</a> of the SDSS SRB FITS 
+srb:///home/sdss.nvo/SDSSfromWEB/DR1/imaging/1033/1/objcs/1/psField-001033-1-0131.fit 
+file using SRB server proxy cut operation. <br>You can display <a 
+href="http://nvo.sdsc.edu/NVO/get_SRB_mime_file2.cgi?F=/home/sdss.nvo/SDSSfromWEB/DR1/imaging/1033/1/Zoom/1/fpC-001033-1-1-0065-z00.jpeg&amp;M=image/jpeg">JPEG</a> 
+(srb://home/sdss.nvo/SDSSfromWEB/DR1/imaging/1033/1/Zoom/1/fpC-001033-1-1-0065-z00.jpeg) 
+image directly from SDSS SRB collection. </p></body></html>
