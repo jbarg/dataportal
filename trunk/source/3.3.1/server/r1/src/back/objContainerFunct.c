@@ -6,6 +6,7 @@ for copyright, usage, liability and license information.
 Please read these files before using,modifying or distributing SRB software.
 **************************************************************************/
 
+#define SYNC_CONT_DEBUG
 
 /* objContainerFunct.c - Routines to handle Container Object type SID.
  */
@@ -1757,6 +1758,7 @@ _svrSyncContainer (int catType, char *containerName, int syncFlag)
         return (retVal);
     }
 
+#ifdef foo      /* why are we going to MCAT ?. commented out mw 7/28/05 */
     remoteFlag = getMdasEnabledHost (contCollection, &hostTabPtr);
 
     if (remoteFlag < 0) {
@@ -1770,6 +1772,7 @@ _svrSyncContainer (int catType, char *containerName, int syncFlag)
         }
 	return (retVal);
     }
+#endif
 
     infoInp.domainName = ClientUser->domainName;
     infoInp.accessMode = "all";
@@ -1912,7 +1915,7 @@ _svrSyncContainer (int catType, char *containerName, int syncFlag)
         tmpInfoOut = cacheInfoOut;
         while (tmpInfoOut != NULL) {
             nextInfoOut = tmpInfoOut->next;
-            _rmContainerCopy (catType, containerName, contCollection,
+            _rmContainerCopy (catType, outContName, contCollection,
              tmpInfoOut);
             tmpInfoOut = nextInfoOut;
         }
@@ -1921,6 +1924,10 @@ _svrSyncContainer (int catType, char *containerName, int syncFlag)
 
     	/* File copy - use the dirtyCacheInfoOut as source first */
 
+#ifdef SYNC_CONT_DEBUG
+        elog (NOTICE, 
+	  "Container copy used for sync = %s", dirtyCacheInfoOut->resourceName);
+#endif
 	status = syncInfoToInfo (dirtyCacheInfoOut, contCollection,
 	  archInfoOut, contCollection, 0);
 
@@ -1954,7 +1961,10 @@ _svrSyncContainer (int catType, char *containerName, int syncFlag)
         permInfoOut = empArchInfoOut;
         while (permInfoOut != NULL) {
 	    struct mdasInfoOut *newInfoOut;
-
+#ifdef SYNC_CONT_DEBUG
+        elog (NOTICE, 
+          "Container copy used for sync = %s", srcInfoOut->resourceName);
+#endif
 	    retVal = _objReplicate (catType, outContName, contCollection,
              permInfoOut->resourceName, "", srcInfoOut, &newInfoOut, NULL);
 

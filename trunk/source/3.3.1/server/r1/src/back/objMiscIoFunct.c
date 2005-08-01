@@ -322,7 +322,7 @@ struct mdasInfoOut **oDirtyArchInfoOut)
          resClassEntries[resClassInx].primary == 1) {
             queInfoOut (&priArchInfoOut, tmpInfoOut, 1, topFlag);
         } else if (resClassEntries[resClassInx].permanent == 0 &&
-         resClassEntries[resClassInx].primary == 1) {
+         (resClassEntries[resClassInx].primary == 1 || topFlag == 1)) {
             queInfoOut (&priCacheInfoOut, tmpInfoOut, 1, topFlag);
         } else if (resClassEntries[resClassInx].permanent == 1 &&
          resClassEntries[resClassInx].primary == 0) {
