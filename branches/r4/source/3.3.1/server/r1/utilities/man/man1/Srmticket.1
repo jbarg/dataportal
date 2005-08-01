@@ -1,0 +1,28 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Srmticket.1
+.\"
+.TH Srmticket 1 "Jan 2002 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Srmticket \- remove a ticket
+.SH SYNOPSIS
+.B Srmticket
+.RB [ \-F
+.IR fileName "] | " ticket
+.SH DESCRIPTION
+.B "Srmticket "
+removes a previously issued ticket. One has to own the ticket
+to remove it.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-F "
+.I fileName
+specifies the file in which the ticket is stored.
+.SH "SEE ALSO"
+.BR Sticket (1),
+.BR Stls (1),
+.BR Stcat (1)
+

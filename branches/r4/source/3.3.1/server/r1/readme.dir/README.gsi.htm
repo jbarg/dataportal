@@ -1,0 +1,275 @@
+<HTML>
+<HEAD>
+<TITLE>SRB Grid Security Infrastructure (GSI)</TITLE>
+<FONT FACE="Courier New" SIZE=4>
+
+This document was last updated September, 2004.
+<p>
+
+GSI uses X.509 certificates to securely authenticate users across the
+network.  This same GSI authentication system that is used for Globus
+commands can also be used for SRB commands.  For additional
+information on the Grid Security Infrastructure see the <a
+href=http://www.npaci.edu/Globus>NPACI Globus Guide</a> and the <a
+href=http://www.npaci.edu/Globus/guide/certs-dns.html> Globus
+Certificates and Distinguished Names</a> pages.
+<p>
+
+As of September, 2004, SRB now also supports the Grid Toolkit 3
+version of GSI in addition to previous versions we've supported for
+many years.  See the GT 3 section below for more information on
+differences and changes.
+
+
+<H4>* To Build *</H4>
+
+To build the SRB with GSI, you'll first need the Globus system,
+including the GSI libraries, installed.  You'll need to know the
+GLOBUS_LOCATION (this is a Globus environment variable) under which
+the SRB can find the GSI include files, static libraries, and dynamic
+link libraries.
+<p>
+
+The rest of the needed software is now part of the SRB release and
+build procedure.  To enable it, include --enable-gsi-auth on the
+configure line.  The SRB build system has predefined locations for the
+globus system (GLOBUS_LOCATION) based on the architecture type; if you
+need to override this, include --enable-globus-location=path on the
+configure line.
+<p>
+
+<h4>* Users running the GSI-enabled SRB Client *</h4>
+
+Users will need to get certificates to use GSI authentication.  At
+NPACI sites this would normally be from the NPACI/SDSC Certificate
+Authority (CA) system.  The Globus GSI system is set up to accept
+certificates issued from sites with trusted Certificate Authorities
+(CAs), and at NPACI sites this includes the NPACI CA.  Other sites may
+accept certificates from different sites. <p>
+
+As described on the NPACI <a
+href=http://www.npaci.edu/Globus/guide/certs-dns.html> Globus
+Certificates and Distinguished Names</a> page, users now get GSI
+certificates via the hotpage or by logging in and running 'cacl'.  The
+'cacl' system will automatically issue the user an NPACI certificate
+(after verifying their password), and setting it up properly for use
+(putting the certificate and password-protected key in their ~/.globus
+directory).
+<p>
+
+The certificate will contain a Distinguished Name (DN) that is unique,
+via a set of attributes including items such as Country, Organization,
+Organizational Unit, Common Name, and User id, for example
+/C=US/O=NPACI/OU=SDSC/CN=Wayne Schroeder/UID=schroede.  These DNs need
+to be entered into the MCAT to map an individual DN to a particular
+SRB user (this is comparable to the Globus grid-mapfile which maps DNs
+to local logins).  This can be done via the new SRB Admin Tool
+(GUI-mode), or via the MCAT utility commands.<p>
+
+After getting established (receiving a certificate and having their DN
+registered into the SRB), users then run 'grid-proxy-init' and enter
+their certificate-key password.  This generates a proxy certificate
+(kind of a "sub-certificate") that is good for a few hours (like a
+kerberos 'kinit').  This will let them run the SRB Sinit to establish
+an SRB session (as well as other GSI-enabled applications) during the
+period that the proxy certificate is valid.
+<p>
+
+Users also need to set an environment variable, SERVER_DN, to tell the
+GSI system the DN of the SRB server (as defined in the SRB server's
+certificate).  At SDSC this is
+'/C=US/O=NPACI/OU=SDSC/UID=srb/CN=Storage Resource Broker/Email=srb@sdsc.edu'.
+Typically, users would add this to their ~/.srb/.MdasEnv file, for example:<br>
+SERVER_DN /C=US/O=NPACI/OU=SDSC/UID=srb/CN=Storage Resource Broker/Email=srb@sdsc.edu
+<p>
+
+To run GSI-enabled 'C' programs (Sinit and the other Scommands, for
+example), users need to set the environment variable LD_LIBRARY_PATH
+so that the GSI libraries can find the GSI dynamic link libraries.  If
+this is not set, users will see an error something like this: "error
+while loading shared libraries:libglobus_gss_assist_gcc32dbg.so.0:
+can't open shared object, no such file or directory".  The preferred
+way to do this would be with:
+<pre>
+  setenv GLOBUS_LOCATION /usr/local/apps/nmi-2.1    
+  source $GLOBUS_LOCATION/etc/globus-user-env.csh
+</pre>
+as this globus script will set up various things, including the
+LD_LIBRARY_PATH.  Of course, your installation of Globus may be
+at some other location, different than /user/local/apps/nmi-2.1, and
+so users would enter that.  Instead of sourcing globus-user-env.csh,
+one could also just set LD_LIBRARY_PATH via something like:
+'setenv LD_LIBRARY_PATH $GLOBUS_LOCATION/lib'.
+
+
+<h4>* Running the GSI-enabled SRB Server *</h4>
+
+Like for client 'C' programs, the GSI-enabled SRB Server needs to be
+able to find the Globus dynamic libraries.  So before running 'runsrb'
+you need to set LD_LIBRARY_PATH as described in the paragraph above
+for clients.
+<p>
+
+The SRB Server also needs a certificate, so that client programs can
+confirm the identity of the server they are connecting to.  For server
+to server connections we generally use ENCRYPT1 authentication to
+avoid certificate compatibility problems.
+<p>
+
+Getting a server certificate is not as automated as getting user
+certificates.  At SDSC, one would contact Bill Link, our CA
+administrator, and he can manually create one and provide it to you.
+The server DNs may have a somewhat different form, usually with a
+hostname.  For testing, for example, I used a certificate with a DN of
+/C=US/O=NPACI/OU=SDSC/CN=zuri.sdsc.edu.  By setting SERVER_DN on the
+client-side to this value, my test SRB client/server code worked fine.
+<p>
+
+You need to set it up so that the SRB server software can securely
+access a certificate/key for authentication without requiring a
+password or other manual intervention.  One could 'grid-proxy-init'
+command periodically, but that would put the password in a file so
+wouldn't be secure and wouldn't be very convenient either.  Instead,
+you can create an unencrypted key file.
+<p>
+
+A certificate consists of two text files, a certificate file and a
+corresponding key file.  The key file contains the private key needed
+to confirm the identity in the certificate, and it is normally
+encrypted via a pass-phrase.  The command 'openssl rsa -in userkey.pem
+-out userkey2.pem' prompts for the userkey pass phrase and writes the
+userkey2.pem file without encryption.  Or if your cert/key files are
+zuri.sdsc.edu.cert.pem and zuri.sdsc.edu.privkey, you would run
+something like 'openssl rsa -in zuri.sdsc.edu.privkey -out zuri.privkey2'.
+Openssl is now released with Globus and can be found in
+GLOBUS_LOCATION/bin.
+<p>
+
+You then need to set two GSI environment variables, X509_USER_CERT and
+X509_USER_KEY, to point to your cert and key files, before starting
+the SRB server.  The 'runsrb' script sets these variables, so modify
+the script for your file names.  Then, if the key is unencrypted, the
+library will authenticate without asking for a passphrase.
+<p>
+
+setenv X509_USER_CERT /scratch/slocal/zuri.sdsc.edu.cert.pem
+<br>
+setenv X509_USER_KEY  /scratch/slocal/zuri.privkey2 
+<p>
+
+It would be better to keep the key file on local disk (not NFS) to
+avoid sending the unencrypted key across the network. It is like a
+plain-text password.
+
+
+<h4>* Grid Toolkit 3 GSI support*</h4>
+
+Starting in September 2004, we now also support the Grid Toolkit 3
+version of GSI.  The current SRB can be linked with either the GT 3
+libraries or the previous GT 2 ones.
+
+<p>
+The GT3 GSI has a number of new features, and capabilities built upon
+it; but the fundamental API that the SRB utilizes (the GSSAPI) is
+largely unchanged from GT2.  See the Globus GSI documentation at
+http://www-unix.globus.org/toolkit/docs/3.2/gsi/index.html 
+and, in particular, the GT3 Grid Security Overview under
+http://www-unix.globus.org/toolkit/docs/3.2/gsi/developer/relateddocs.html
+
+<p>
+
+There are two changes you need to be aware of:
+<p>
+
+1) USERID and UID, and a simple workaround
+
+<p>
+
+As Keith Thompson of SDSC described a while ago in
+<a href=http://bugzilla.globus.org/bugzilla/show_bug.cgi?id=575>
+http://bugzilla.globus.org/bugzilla/show_bug.cgi?id=575>
+</a>, there's a problem with certain Distinguished Name (DN) objects
+(fields) which are called either USERID or UID.  These objects are
+used by the NPACI/SDSC Certificate Authority, and some of the other
+CAs.
+<p>
+
+The more recent OpenSSL being used by GT3 GSI now defines this object,
+"0.9.2342.19200300.100.1.1", as "UID".  Years ago, some of the SDSC
+software (in SRB), and some of the Globus software (I believe), would
+create this object itself.  If I recall correctly, this was needed
+because our CA needed it but the OpenSSL at that time had no
+definition for it.  So the code in SRB creates the object as the
+string "USERID".
+
+<p>
+But in GT3, with the newer OpenSSL, that object is now converted to
+the string "UID=".  For example, GT3 grid-proxy-info shows my DN as: 
+   /C=US/O=NPACI/OU=SDSC/CN=Wayne Schroeder/UID=schroede 
+whereas that same certificate, viewed via GT2 grid-proxy-info is:
+   /C=US/O=NPACI/OU=SDSC/CN=Wayne Schroeder/USERID=schroede
+
+<p>
+
+When SRB authenticates users via GSI, it compares the elements of the
+DN individually, so that the order of the fields will not be critical.
+
+<p>
+So a simple solution was for us to add code to compare "/UID=" as
+equivalent to "/USERID=".  This seems to work fine, and appears to be
+a good solution, allowing SRB to be compatible with either GT2 and
+GT3, and various versions of OpenSSL; admins don't need to change the
+SRB MCAT entries for user DNs (the equivalent of the gridmap file) for
+existing GSI users, and it doesn't matter which form users use or
+specify.
+<p>
+
+It appears that GT3 GSI does something similar too, since one can
+specify the server DN to which one is connecting to as either
+USERID=name or UID=name.  Maybe it's converting it to and from an
+object representation and so normalizing the field name.
+
+<p>
+
+2) Pre-knowledge of server DN now required
+<p>
+
+For now, basic GSI_DELEGATE authentication mode will function, but
+operation in a multi-Zone Federation will not be available until a
+future release.
+<p>
+
+Ananta Manandhar of the Data Management Group of the CCLRC e-Science
+Centre, recently developed software for using GSI delegated
+certificates in the SRB system.  In this mode (user authentication of
+type GSI_DELEGATE) the SRB server uses the user's delegated certificate
+to authenticate to another SRB server, that is to another Zone in the
+SRB Federation, or (soon) to connect to a GridFTP server.
+<p>
+
+In GSI_DELEGATE mode, we were using a GSI option to connect to a
+server without knowing ahead of time the DN for that server (via using
+GSS_C_NO_NAME as the ServerDN argument to gss_init_sec_context) but
+this is no longer allowed.  (It returns the error "globus_gsi_gssapi:
+Bad argument: Need a target name for authorization prior to doing
+delegation".)
+<p>
+
+We have implemented some changes so that simple GSI_DELEGATE GT3 GSI
+authentication will work OK, using the user's DN_SERVER environment
+variable like regular GSI_AUTH mode does.  But in multi-zone SRB
+federations where users make use of GSI_DELEGATE authentication, we
+will need to further extend SRB Server logic so that each will know
+the DN of other servers in the federation, and utilize those values
+while connecting.  This will make it more secure, closing a potential
+hole allowing a man-in-the-middle attack.
+
+<p>
+We'd like to acknowledge and thank John Bresnahan of the GridFTP team
+at ANL for help in resolving some of these problems.  These were some
+side-issues as we were developing some SRB-GridFTP interoperation
+capabilities a few weeks ago.
+
+
+</BODY>
+</HTML>

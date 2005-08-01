@@ -1,0 +1,25 @@
+We no longer recommend the use of these scripts (but are leaving them
+here as examples).  Instead, we recommend you do this in two separate
+steps and run the sqlplus commands by hand.  See README.MCAT.INSTALL.
+
+#!/bin/csh
+#source $HOME/.cshrc
+#setenv ORACLE_HOME /dbms/oracle/v01/app/oracle/product/8.1.5
+#setenv ORACLE_SID MCAT 
+#rm data/myinstall.results.ora data/mytest.results.ora
+#echo "RUN  UnInstall or Clean if required. No clean up is automatically done."
+#echo "installation started"
+#sqlplus USERID/PASSWD@MCAT  @data/catalog.install.ora >& data/myinstall.results.ora
+#diff data/myinstall.results.ora data/install.results.ora
+#wc data/*install.results.ora
+#echo "installation completed. Successful if diff and wc results above are identical (modulo date/time)."
+#echo "testing started - this may take a few minutes"
+#cd bin
+#test.catalog >& ../data/mytest.results.ora
+#cd ..
+#diff data/mytest.results.ora data/test.results.ora
+#wc data/*test.results.ora
+#echo "testing completed. Successful if diff and wc results above are identical."
+#echo "installation and testing completed."
+
+

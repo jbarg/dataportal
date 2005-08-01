@@ -1,0 +1,144 @@
+
+This document describes changes for SRB 3.3.1, released April 6, 2005.
+
+New features:
+
+1) Extensible Schema.  Supplimenting core-metadata (pre-defined
+schema) and user defined metadata, the new extensible schema system
+allows users to add tables to an MCAT instance and access them through
+the native SRB/MCAT interfaces.  See the new document
+readme.dir/README.extensibleschema.
+
+2) Real-Time Access Through SRB. SRB has been augmented with new
+drivers and server-side support for accessing data from real-time data
+streams.  As part of this new extension, two real-time resources
+developed and sold by Boulder Real Time Technologies (BRTT -
+www.brtt.com) has been made accessible through two new drivers in
+SRB. The first resource is an Object Ring Buffer called the Antelope
+Real Time System (ARTS).  The second resource is a relational database
+called Antelope Seismic Information System (ASIS) (also known as
+Datascope).  Antelope provides a set of software modules that
+implement acquisition, transport, buffering, processing, archiving and
+distribution of environmental monitoring information.  When
+integrating with SRB, we laid over the stream-flow paradigm of the
+real-time system with the file system paradigm of SRB.  Because of
+this, a user can register a data stream as an SRB object, open it and
+read packets of data and close the stream.  because of the way ARTS is
+implemented more than one user can open a stream and read the
+packets. SRB takes full advantage of this facility.  Moreover, one can
+define user-defined metadata and extensible metadata for these streams
+in the MCAT catalog (as well as system metadata in Datascope database)
+and discover the streams that are available through the SRB.
+
+3) MDSPlus interface to SRB.  MDSPlus (www.mdsplus.org) is a data
+handling system used in the Fusion community.  MDSPlus clients can
+link with an interface library (in the unixIO subdirectory) and the
+SRB client-only libraries, and then access (open, read, write, close,
+etc) data on an SRB Server.  As of SRB 3.3, all functions needed by
+MDSPlus are implemented, including a partial file lock.
+
+
+Bug fixes and enhancements:
+
+1) A critical bug was fixed that caused Sput of a file larger than 2
+GB to fail.  This is the same bug fix given in the 3.3 patch.
+
+2) A new readme file was added - advancedScommand.primer to explain
+some of the more advanced Scommands.
+
+3) HPSS v 5.1 support was added.
+
+4) The way the server configures the MCAT host was changed so that it
+will use the host configured in the data/mcatHost file instead of the
+one in MCAT zone table.  This will make it easier to move the
+MCAT-enabled server to another host.  (The previous method was to use
+the mcatHost information and then override it with the Zone
+information from the MCAT, which is fine when they match.)
+
+5) A -s option was added to Schksum to provide a quick check of data
+integrity based on file size. For each file being checked, the server
+will compare the actual physical file size with the size registered in
+MCAT.
+
+6) Fixes were made to get phyMove, bulk phyMove and bulk get of
+compound objects (objects on compound resources) to work properly.
+Previously, it would return an error message.
+
+7) Bulk Sput into container was added. "Sput -bc cont" now works.
+Sbload can now be deprecated.
+
+8) The ADS (UK eScience's archival system) driver was modified so that
+it will do only sequential I/O.  Previously, the server supporting an
+ADS resource had to be built for sequential I/O, which is error prone
+and limiting.
+
+9) Several compile errors under various conditions were fixed: 
+        . AIX platform 
+        . Older versions of Linux compiler   
+        . running "configure --enable-secure-comm"
+        . a few // comments were removed as needed for some compilers
+        . some changes were made to avoid some needless errors from gmake
+
+10) Misc bug fixes - Segmentation fault in SgetR; parallel "Sput -a"
+
+11) A bug in the ticket-based access for accesing files using a
+collection ticket with recursion has been removed. The bug caused an
+error when accessing files in lower levels of the collections. One can
+now access files at any level using such a ticket using MySRB or
+Scommands.
+
+12) Some bugs in Squery and SmodE have been removed which were causing
+some of the options to fail.
+
+13) Extensible Metadata  Ingestion, Deletion, Modify and Query
+Functionalities have been added to MySRB.
+
+14) A problem when linking with GSI 3.2.1 has been fixed; it now
+properly locates the callout library to avoid some missing externals
+(bug 84).
+
+15) A workaround has been developed for a intermittent bulk load
+problem for the MAC OSX OS.  We were seeing an occasional buffer
+corruption problem when running bulk upload using multiple
+threads. This problem is only seen using the MAC OSX OS when multiple
+threads were used. The multi-threads mode has now been switched off
+for the MAC OS as a workaround which would result in a somewhat slower
+but not significantly slower bulk load operation.  (bug 72)
+
+16) Java Admin Tool (mcatAdmin.jar): 
+   a) deleteUser has been fixed; it now removes various user
+      directories (if empty) before attempting to remove user.
+   b) the connect host is now displayed in the title bar and the
+      program exits when the X box is clicked (these provided by Nigel
+      Sim; thanks!)
+
+17) Many extensions were made to the autotest.sh script: more tests,
+more configurations, and more platforms.  This is used internally, in
+various tests, during development and before each release and has
+helped us find and correct a number of bugs.
+
+18) install.pl has been updated with many additional checks and
+features to eliminate problems in various platform environments.
+
+
+The following Bugzilla bugs/features have been resolved since the
+previous release.  Some of these are described above.  See bugzilla
+for more information:
+ID State Result Summary 
+58  RESO INVA   a problem with the function srbFile.copyTo 
+64  RESO FIXE   Sput -b stops after 1001 file transfer 
+71  RESO WONT   --enable-openssl-location configure option doesn't work 
+74  RESO FIXE   html man pages have bad html links to other Sman pages 
+82  RESO FIXE   SRB_SECURE_COMM fails to build in 3.3 release 
+84  RESO FIXE   Missing library references when using GT 3.2.1 GSI 
+87  RESO FIXE   autotest.sh test failure on login-linux (malloc/free) 
+90  RESO FIXE   Sput of File larger than 2 gb gets bogus error return 
+92  RESO FIXE   Broken link in web documentation 
+93  RESO FIXE   Broken links to installation scripts 
+94  RESO FIXE   The deleteValue and changeValue utilities require the
+                string "Yes" for confirmation
+97  RESO FIXE   Java Admin cannot delete users 
+100 RESO FIXE   isUserSysAdmin call returns wrong answer in some cases 
+104 RESO FIXE   Sphymove -bc fails on AIX 
+107 RESO FIXE   Sufmeta -R -c option returns COLECTION_NOT_IN_CAT 
+111 RESO FIXE   After a while, SRBServers fail trying to open mcatHost 

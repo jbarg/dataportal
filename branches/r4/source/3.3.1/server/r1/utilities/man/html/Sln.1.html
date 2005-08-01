@@ -1,0 +1,130 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sln</TITLE>
+</HEAD><BODY>
+<H1>Sln</H1>
+Section: User SRB Commands (1)<BR>Updated: July 2004 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sln - make links to
+<I>srbObjects</I> or to <I>srbCollections</I>.
+
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Sln</B>
+
+[<B>-n</B>
+
+<I>n</I>]
+
+[<B>-fp</B>]
+
+<I>Target_srbObj Link_name</I>
+
+<BR>
+
+<B>Sln</B>
+
+[<B>-n</B>
+
+<I>n</I>]
+
+<B>-r</B> [<B>-fp</B>]
+
+<I>Target_collection Link_name</I>
+
+<BR>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+In the first synopsis form,
+<B>Sln</B>
+
+makes a link
+<I>Link_name</I> to a <I>Target_srbObj</I>.
+
+<P>
+The
+<I>srbObj</I>
+
+argument is a path name in the SRB collection hierarchy. The user
+should have at least 'read' access permission for the
+<I>Target_srbObj</I>.
+
+<P>
+In the second synopsis form, 
+<B>Sln</B>
+
+makes recursive links, starting at link
+<I>Link_name</I> to <I>Target_collection</I>.
+
+<P>
+The
+<I>Target_collection</I>
+
+argument is a path name in the SRB collection hierarchy. The user
+should have at least 'read' access permissions for all subcollections and srbObjs in
+<I>Target_collection</I>.
+
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command line options.
+<DT><B>-p </B>
+
+<DD>
+prompts before linking each object.
+<DT><B>-f </B>
+
+<DD>
+force linking even if link already exists.
+<DT><B>-r </B>
+
+<DD>
+link collections recursively.
+<DT><B>-n </B>
+
+<DD>
+<I>n </I>
+
+is an integer denoting the replica number of the object to
+be linked.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Scp.1.html">Scp</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Smv.1.html">Smv</A></B>(1).
+
+<P>
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

@@ -1,0 +1,129 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Squery</TITLE>
+</HEAD><BODY>
+<H1>Squery</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Squery - is a pure metadata query command 
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<DL COMPACT>
+<DT><B>Squery [-z</B><I> zone </I><B> ] [-N </B><I>NameSpace ... </I><B> ]  </B>
+
+<DD>
+<B>-S</B><I> SelectedMcatAttrName  </I>
+
+<B> [-S </B><I> SelectedMcatAttrName </I>
+
+<B> ] ...</B><I> QueryMcatAttrName Op QueryMcatAttrValue</I><B> [ </B><I>QueryMcatAttrName Op QueryMcatAttrValue</I><B> ] ...</B>
+
+<BR>
+
+<DT><B>Squery [-z</B><I> zone </I><B>] H|-E|-U [-L]  [-N </B><I> NameSpace ... </I><B>]</B>
+
+<DD>
+<B> [-B </B><I>AttrBeginsWithString</I><B>] [-C </B><I>AttrContainsString </I><B>]</B>
+
+<BR>
+
+</DL>
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Squery </B>
+
+provides the facility for querying all queriable metadata in SRB including core metadata,
+extensible metadata and user-defined attribute-value type metadata.
+<P>
+The first synopsis is used to query using the metadata attribute names.
+<P>
+The second synopsis is used to find the metadata attribute names that can be used in the first synopsis.
+<P>
+The first synopsis takes a set of 
+<I>Namespace</I>s
+
+(or schema names such as DC for dublin core ) that are stored 
+in the extensible-schema table   (MDAS_TD_EXTAB_INFO in the SRB core schema).  The query is based on these 
+schemas as well as  the SRB core schema. (See README.extensibleschema for details). The  query is based on the condition given by
+<I> QueryMcatAttrName Op QueryMcatAttrValue </I>
+
+triplets and the values for the 
+<I> SelectedMcatAttrName  </I>
+
+are returned. The 
+<I> QueryMcatAttrName</I>and<I> SelectedMcatAttrName  </I>
+
+should be in the chosen
+<I>Namespace</I>s.
+
+<P>
+The  second synopsis  takes a set of
+<I>Namespace</I>s
+
+and reyrns the Attrbute Names in those schemas with the conditions satisfying
+<I>  AttrBeginsWithString  </I>and
+
+<I> AttrContainsString</I>
+
+if given. The other options are used to restrict the schema spaces still further.
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-z </B>
+
+<DD>
+<I>zone</I>
+
+option applies to the second synopsis and is used to perform the Sls operation on a particular zone.
+If ALL is used for 
+<I>zone </I>
+
+then every zone known to the current zone will be queried. 
+<I>zone</I>
+
+<DT><B>-H</B>
+
+<DD>
+option  displays both core attributes as well as extensible schema attributes.
+<DT><B>-E</B>
+
+<DD>
+option displays only those attributes in the extensible schema.
+<DT><B>-U</B>
+
+<DD>
+option displays only those attributes that are registered in the extensible schema but are in the 
+user-defined attribute-value metadata.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sufmeta.1.html">Sufmeta</A></B>(1)
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/SmodE.1.html">SmodE</A></B>(1)
+
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>
