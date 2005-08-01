@@ -233,15 +233,22 @@ int zoneFlag)
             elog (NOTICE,
              "_svrDataCopy: target size %lld does not match input size %lld",
             verifySize, size);
-            _objUnlink (srbObjTypeEntry[destTypeInx].objType,
-             srbObjTypeEntry[destTypeInx].systemType,
-             destResLoc, destPath, NO_CHKDIR);
-            retVal = OBJ_ERR_COPY_LEN;
+            if (srbObjTypeEntry[destTypeInx].systemType != ADS_FT) {
+                _objUnlink (srbObjTypeEntry[destTypeInx].objType,
+                 srbObjTypeEntry[destTypeInx].systemType,
+                 destResLoc, destPath, NO_CHKDIR);
+                retVal = OBJ_ERR_COPY_LEN;
+            }
+            else {
+                elog (NOTICE, "_svrDataCopy: ignore size mismatch for ADS");
+            }
         }
     }
 
     return retVal;
 }
+
+
 
 #ifdef PARA_OPR
 srb_long_t
