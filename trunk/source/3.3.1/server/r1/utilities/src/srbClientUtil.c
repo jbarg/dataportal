@@ -6891,7 +6891,10 @@ mdasC_sql_result_struct *myresult, char *inpMcatName)
       /* RAJA Feb 10 2005 changed to includ empty names and null names  for container 0 *
         sprintf(qval[CONTAINER_NAME], " is not null");
       */
-      sprintf(qval[CONTAINER_NAME], "is not null && <> ''");
+      /* PETER July 15 2005 amended as per RAJA instructions to fix Slscont *
+        sprintf(qval[CONTAINER_NAME], "is not null && <> ''");
+      */
+        sprintf(qval[CONTAINER_NAME], "is not null");
     }
     selval[CONTAINER_NAME] = 1;
 
