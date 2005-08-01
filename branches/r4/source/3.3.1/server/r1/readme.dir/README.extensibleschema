@@ -1,0 +1,502 @@
+This document provides information about how to use the extended
+schema capabilities of SRB.
+
+SRB uses the MCAT metadatalog to store metadata about various entities
+in SRB. This includes metadata about users, resources, data,
+collections, containers and zones. Apart from the core-metadata
+(pre-defined schema) maintained for these entities, the MCAT also has
+multiple ways of storing additional metadata in an extensible fashion.
+
+There are two ways to provides this extensibility for an SRB system.
+
+    1. The first one, familiarly, is through the user-defined metadata
+       table which allows a user to add attribute-value-unit type
+       metadata to data, collections, resources as wellas users.
+
+    2. The second way provides an easy way to extend the core by
+       allowing users to add tables to MCAT instance and access them
+       through the native SRB/MCAT interfaces.
+
+In this document we discuss the second method. The first method is
+discussed in the man page for Sufmeta.
+
+
+In this case we provide a means for a user/SRB admin to expose new
+tables that are not in the core MCAT but are located in the same
+schema/instance as the MCAT or accessible from the schema.  Currently
+we do not provide creation of these tables through the SRB (for
+security purposes) but this restriction will probably be relaxed in a
+later release.
+
+There are two sets of information that is needed to be exposed to the
+MCAT to provide the access.
+
+     1. The attribute/table information. This information is provided
+        by populating the table MDAS_TD_EXTAB_INFO in the core schema.
+
+     2. The metadata.fkrel.ext file in the data directory which gives
+        the referential relationship among the tables given in the
+        MDAS_TD_EXTAB_INFO.
+
+
+The table MDAS_TD_EXTAB_INFO is in the core schema and has the
+following attributes:
+
+            Name                                    Type
+ -----------------------------------------  ----------------------------
+          EXT_SCHEMA_NAME                           VARCHAR2(250)
+          EXT_TABLE_NAME                            VARCHAR2(250)
+          EXT_ATTR_NAME                             VARCHAR2(250)
+          EXT_ATTR_OUT_NAME                         VARCHAR2(250)
+          EXT_ATTR_COMMENTS                         VARCHAR2(250)
+  
+The EXT_SCHEMA_NAME and the EXT_ATTR_OUT_NAME name are the information
+that is exposed to the user.
+
+For example there might be the following rows in the schema table:
+    EXT_SCHEMA_NAME  EXT_TABLE_NAME  EXT_ATTR_NAME  EXT_ATTR_OUT_NAME  EXT_ATTR_COMMENTS
+    ---------------  --------------  -------------  -----------------  -----------------
+    roadnet          srb.sensor      sensor_name    sensor_name        sensor name of data stream
+    roadnet          srb.sensor      sensor_type    sensor_type        sensor type of data stream
+    roadnet          srb.sensor      location_lat   latitude           sensor latitude
+    roadnet          srb.sensor      location_lon   longitude          sensor longitude
+    roadnet          srb.sensor      data_id                           FK to SRB data_id
+    roadnet          srb.validity    start_date     start_date         start of a valid period
+    roadnet          srb.validity    end_date       end_date           end of valid period
+    roadnet          srb.validity    comments       v_comments         validity comments
+    roadnet          srb.validity    sensor_name                       FK to srb.sensor.sensor_name
+    mets             sekar.m_core    data_name      object_name        name of object in METS
+    mets             sekar.m_core    author         creator            name of creator of METS objects  
+    mets             sekar.m_core    data_id                           FK to SRB data_id
+
+insert into MDAS_TD_EXTAB_INFO values ('roadnet','srb.sensor','data_id','','FK to SRB data_id');
+insert into MDAS_TD_EXTAB_INFO values ('roadnet','srb.validity','sensor_name','','FK to srb.sensor.sensor_name');
+insert into MDAS_TD_EXTAB_INFO values ('mets','sekar.m_core','data_id','','FK to SRB data_id');
+   
+
+
+The metadata.fkrel.ext file should have the following to show the
+relationships for the above rows:
+
+srb.MDAS_ADC_REPL data_id  srb.sensor data_id A
+srb.MDAS_ADC_REPL data_id  sekar.m_core  data_id A
+srb.sensor  sensor_name srb.validity  sensor_name A
+
+
+The first two lines shows the relationship to the MCAT core schema and
+the last line between the two tables in the sensor schema.sensor_name
+ 
+One can then query across mets, roadnet and core schema using the
+Squery (see man pages).  The schema attributes can be listed using H,E
+or U options of the Squery command.
+
+
+Sample Session:
+orion-131% Squery -H -L |head
+0:DATA_ID -> MDAS_AD_REPL.data_id
+1:DATA_REPL_ENUM -> MDAS_ADC_REPL.repl_enum
+2:DATA_NAME -> MDAS_AD_REPL.data_name
+ :
+ :
+397:EXTENSIBLE_ATTR_NAME -> MDAS_TD_EXTAB_INFO.ext_attr_name
+398:EXTENSIBLE_ATTR_OUTSIDE_NAME -> MDAS_TD_EXTAB_INFO.ext_attr_out_name
+399:EXTENSIBLE_ATTR_COMMENTS -> MDAS_TD_EXTAB_INFO.ext_attr_comments
+
+orion-134% Squery -E -L
+420:mets.creator -> sekar.m_core.author
+421:mets.data_id -> sekar.m_core.data_id
+422:mets.object_name -> sekar.m_core.data_name
+423:roadnet.data_id -> srb.sensor.data_id
+424:roadnet.location_lat -> srb.sensor.location_lat
+425:roadnet.location_lon -> srb.sensor.location_lon
+426:roadnet.sensor_name -> srb.sensor.sensor_name
+427:roadnet.sensor_type -> srb.sensor.sensor_type
+428:roadnet.v_comments -> srb.validity.comments
+429:roadnet.end_date -> srb.validity.end_date
+430:roadnet.sensor_name -> srb.validity.sensor_name
+431:roadnet.start_date -> srb.validity.start_date
+
+
+ Querying Examples:
+
+1.  Find all values of latitues in the sensor schema
+
+orion-139%  Squery -S roadnet.location_lat
+--------------------------- RESULTS ------------------------------
+location_lat: 10N
+-----------------------------------------------------------------
+location_lat: 20.3N
+-----------------------------------------------------------------
+
+2. Find  all rows in sensor table 
+orion-140%  Squery -S roadnet.location_lat -S roadnet.location_lon -S roadnet.sensor_name -S roadnet.sensor_type
+--------------------------- RESULTS ------------------------------
+location_lat: 10N
+location_lon: 50W
+sensor_name: SCA
+sensor_type: wind North in meters per second
+-----------------------------------------------------------------
+location_lat: 10N
+location_lon: 50W
+sensor_name: SCB
+sensor_type: wind East  in meters per second
+-----------------------------------------------------------------
+location_lat: 20.3N
+location_lon: 40W
+sensor_name: AFS
+sensor_type: temp in deg c
+-----------------------------------------------------------------
+location_lat: 20.3N
+location_lon: 40W
+sensor_name: AFU
+sensor_type: time in GMT
+-----------------------------------------------------------------
+
+3. Find all rows in sensor table for wind related sensor_types
+
+orion-145% Squery -S roadnet.location_lat -S roadnet.location_lon -S roadnet.sensor_name -S roadnet.sensor_type  roadnet.sensor_type like '*wind*'
+j=427:srb.sensor:sensor_type:roadnet.sensor_type
+--------------------------- RESULTS ------------------------------
+location_lat: 10N
+location_lon: 50W
+sensor_name: SCA
+sensor_type: wind North in meters per second
+-----------------------------------------------------------------
+location_lat: 10N
+location_lon: 50W
+sensor_name: SCB
+sensor_type: wind East  in meters per second
+
+4. Find all rows in sensor table and the related data in SRB for wind related sensor_types
+orion-155% Squery -S DATA_NAME -S roadnet.location_lat -S roadnet.location_lon -S roadnet.sensor_name -S roadnet.sensor_type roadnet.sensor_type like '*wind*'
+--------------------------- RESULTS ------------------------------
+data_name: Spwd2.c
+location_lat: 10N
+location_lon: 50W
+sensor_name: SCA
+sensor_type: wind North in meters per second
+-----------------------------------------------------------------
+data_name: Spwd2.c
+location_lat: 10N
+location_lon: 50W
+sensor_name: SCB
+sensor_type: wind East  in meters per second
+-----------------------------------------------------------------
+
+5. Do the above for non-wind related data
+orion-156% Squery -S DATA_NAME -S roadnet.location_lat -S roadnet.location_lon -S roadnet.sensor_name -S roadnet.sensor_type roadnet.sensor_type 'not like' '*wind*'
+--------------------------- RESULTS ------------------------------
+data_name: Spwd.c
+location_lat: 20.3N
+location_lon: 40W
+sensor_name: AFS
+sensor_type: temp in deg c
+-----------------------------------------------------------------
+data_name: Spwd.c
+location_lat: 20.3N
+location_lon: 40W
+sensor_name: AFU
+sensor_type: time in GMT
+-----------------------------------------------------------------
+
+6. For non-wind-related sensors find their validity periods
+orion-167% Squery  -S roadnet.sensor_name -S roadnet.start_date -S roadnet.end_date  roadnet.sensor_type  'not like' '*wind*'
+--------------------------- RESULTS ------------------------------
+sensor_name: AFS
+end_date: 2004-08-18-04.40
+start_date: 2004-02-10-10.30
+-----------------------------------------------------------------
+sensor_name: AFS
+end_date: 2005-01-10-02.20
+start_date: 2004-08-20-11:12
+-----------------------------------------------------------------
+sensor_name: AFS
+end_date: 2999-12-31-12.00
+start_date: 2005-01-11-01.43
+-----------------------------------------------------------------
+sensor_name: AFU
+end_date: 2004-08-15-2.22
+start_date: 2004-02-10-10.30
+-----------------------------------------------------------------
+sensor_name: AFU
+end_date: 2005-01-10-02.20
+start_date: 2004-08-20-11:12
+-----------------------------------------------------------------
+sensor_name: AFU
+end_date: 2999-12-31-12.00
+start_date: 2005-01-11-01.43
+-----------------------------------------------------------------
+
+7. Repeat the same with data_name
+orion-168% Squery -S DATA_NAME  -S roadnet.sensor_name -S roadnet.start_date -S roadnet.end_date  roadnet.sensor_type  'not like' '*wind*'
+--------------------------- RESULTS ------------------------------
+data_name: Spwd.c
+sensor_name: AFS
+end_date: 2004-08-18-04.40
+start_date: 2004-02-10-10.30
+-----------------------------------------------------------------
+data_name: Spwd.c
+sensor_name: AFS
+end_date: 2005-01-10-02.20
+start_date: 2004-08-20-11:12
+-----------------------------------------------------------------
+data_name: Spwd.c
+sensor_name: AFS
+end_date: 2999-12-31-12.00
+start_date: 2005-01-11-01.43
+-----------------------------------------------------------------
+data_name: Spwd.c
+sensor_name: AFU
+end_date: 2004-08-15-2.22
+start_date: 2004-02-10-10.30
+-----------------------------------------------------------------
+data_name: Spwd.c
+sensor_name: AFU
+end_date: 2005-01-10-02.20
+start_date: 2004-08-20-11:12
+-----------------------------------------------------------------
+data_name: Spwd.c
+sensor_name: AFU
+end_date: 2999-12-31-12.00
+start_date: 2005-01-11-01.43
+-----------------------------------------------------------------
+
+8. Find all sensors s that are running
+orion-169%  Squery  -S roadnet.sensor_name -S roadnet.start_date roadnet.v_comments '=' running  
+--------------------------- RESULTS ------------------------------
+sensor_name: AFS
+start_date: 2005-01-11-01.43
+-----------------------------------------------------------------
+sensor_name: AFU
+start_date: 2005-01-11-01.43
+-----------------------------------------------------------------
+sensor_name: SCA
+start_date: 2004-10-21-10:20
+-----------------------------------------------------------------
+sensor_name: SCB
+start_date: 2004-10-21-10:20
+-----------------------------------------------------------------
+
+9. Repeat the above query but restricting to wind-related sensors
+orion-170%  Squery  -S roadnet.sensor_name -S roadnet.start_date roadnet.v_comments '=' running  roadnet.sensor_type  like  '*wind*'
+--------------------------- RESULTS ------------------------------
+sensor_name: SCA
+start_date: 2004-10-21-10:20
+-----------------------------------------------------------------
+sensor_name: SCB
+start_date: 2004-10-21-10:20
+-----------------------------------------------------------------
+
+10. Find all authors associated with a SRB file
+orion-172% Squery -S DATA_NAME  -S roadnet.sensor_name 
+--------------------------- RESULTS ------------------------------
+data_name: Spwd.c
+sensor_name: AFS
+-----------------------------------------------------------------
+data_name: Spwd.c
+sensor_name: AFU
+-----------------------------------------------------------------
+data_name: Spwd2.c
+sensor_name: SCA
+-----------------------------------------------------------------
+data_name: Spwd2.c
+sensor_name: SCB
+-----------------------------------------------------------------
+
+11. Dind the same with sensor name information
+orion-173% Squery -S DATA_NAME  -S roadnet.sensor_name -S mets.creator
+--------------------------- RESULTS ------------------------------
+data_name: Spwd.c
+author: Frank Vernon
+sensor_name: AFS
+-----------------------------------------------------------------
+data_name: Spwd.c
+author: Frank Vernon
+sensor_name: AFU
+-----------------------------------------------------------------
+data_name: Spwd.c
+author: Kent Linquist
+sensor_name: AFS
+-----------------------------------------------------------------
+data_name: Spwd.c
+author: Kent Linquist
+sensor_name: AFU
+-----------------------------------------------------------------
+data_name: Spwd2.c
+author: Frank Vernon
+sensor_name: SCA
+-----------------------------------------------------------------
+data_name: Spwd2.c
+author: Frank Vernon
+sensor_name: SCB
+-----------------------------------------------------------------
+data_name: Spwd2.c
+author: Kent Linquist
+sensor_name: SCA
+-----------------------------------------------------------------
+data_name: Spwd2.c
+author: Kent Linquist
+sensor_name: SCB
+-----------------------------------------------------------------
+
+12. Rerun above query with validity information also
+orion-174% Squery -S DATA_NAME  -S roadnet.sensor_name -S mets.creator -S roadnet.start_date -S roadnet.end_date  -S  roadnet.v_comments 
+--------------------------- RESULTS ------------------------------
+data_name: Spwd.c
+author: Frank Vernon
+sensor_name: AFS
+comments: power shut down
+end_date: 2004-08-18-04.40
+start_date: 2004-02-10-10.30
+-----------------------------------------------------------------
+data_name: Spwd.c
+author: Frank Vernon
+sensor_name: AFS
+comments: running
+end_date: 2999-12-31-12.00
+start_date: 2005-01-11-01.43
+-----------------------------------------------------------------
+data_name: Spwd.c
+author: Frank Vernon
+sensor_name: AFS
+comments: sensor calibration
+end_date: 2005-01-10-02.20
+start_date: 2004-08-20-11:12
+-----------------------------------------------------------------
+:
+:
+-----------------------------------------------------------------
+data_name: Spwd.c
+author: Frank Vernon
+sensor_name: AFS
+comments: sensor calibration
+end_date: 2005-01-10-02.20
+start_date: 2004-08-20-11:12
+-----------------------------------------------------------------
+
+===========================================================================================
+
+1. Inserting New Data into a Table (need to know table name use Squery with -L to find this)
+
+orion-230% SmodE -i Spwd.c /home/sekar.sdsc/mytest srb.sensor 'DATA_ID|SENSOR_NAME|SENSOR_TYPE|LOCATION_LAT|LOCATION_LON'  "0|'LAB'|'Seismic sensor with Z value'|'20N'|'38W'"
+
+Attribute names DATA_ID, USER_ID, TIME_VAL and COLLECTION_ID are
+keywords and will be substituted if 0 is used as the default value.
+
+orion-233% Squery -S roadnet.location_lat -S roadnet.location_lon -S roadnet.sensor_name -S roadnet.sensor_type roadnet.sensor_type like '*Seismic*'
+--------------------------- RESULTS ------------------------------
+location_lat: 20N
+location_lon: 38W
+sensor_name: LAB
+sensor_type: Seismic sensor with Z value
+-----------------------------------------------------------------
+
+orion-249% SmodE -i Spwd.c /home/sekar.sdsc/mytest srb.validity 'sensor_name|start_date|end_date|comments' "'SCA'|'2004-02-10-10.30'|'2004-02-22-10.20'|'internal software error'"
+
+orion-253% Squery -S roadnet.sensor_name -S roadnet.start_date -S roadnet.end_date  -S roadnet.v_comments   roadnet.sensor_name = 'SCA'
+--------------------------- RESULTS ------------------------------
+sensor_name: SCA
+comments: internal software error
+end_date: 2004-02-22-10.20
+start_date: 2004-02-10-10.30
+-----------------------------------------------------------------
+sensor_name: SCA
+comments: running
+end_date: 2999-12-31-12.00
+start_date: 2004-10-21-10:20
+-----------------------------------------------------------------
+
+
+2. Updating the Values in a Row 
+orion-235% SmodE -u Spwd.c /home/sekar.sdsc/mytest srb.sensor  SENSOR_TYPE "'seismic sensor with Z value'" SENSOR_NAME "= 'LAB'"
+
+orion-236% Squery -S roadnet.location_lat -S roadnet.location_lon -S roadnet.sensor_name -S roadnet.sensor_type roadnet.sensor_name =  'LAB'
+--------------------------- RESULTS ------------------------------
+location_lat: 20N
+location_lon: 38W
+sensor_name: LAB
+sensor_type: seismic sensor with Z value
+-----------------------------------------------------------------
+
+3. Deleting a Row in a Table
+
+orion-239% SmodE -d Spwd.c /home/sekar.sdsc/mytest srb.sensor SENSOR_NAME "= 'LAB'"
+orion-240% Squery -S roadnet.location_lat -S roadnet.location_lon -S roadnet.sensor_name -S roadnet.sensor_type roadnet.sensor_name =  'LAB'
+No Answer found for the Query
+Squery Error: -3005
+orion-241% Squery -S roadnet.location_lat -S roadnet.location_lon -S roadnet.sensor_name -S roadnet.sensor_type
+--------------------------- RESULTS ------------------------------
+location_lat: 10N
+location_lon: 50W
+sensor_name: SCA
+sensor_type: wind North in meters per second
+-----------------------------------------------------------------
+location_lat: 10N
+location_lon: 50W
+sensor_name: SCB
+sensor_type: wind East  in meters per second
+-----------------------------------------------------------------
+location_lat: 20.3N
+location_lon: 40W
+sensor_name: AFS
+sensor_type: temp in deg c
+-----------------------------------------------------------------
+location_lat: 20.3N
+location_lon: 40W
+sensor_name: AFU
+sensor_type: time in GMT
+-----------------------------------------------------------------
+
+
+
+---------------------  DETAILS OF SCHEMA AND TABLE VALUES USED IN EXAMPLE  -----------
+create table sensor 
+ (
+  data_id  number(38),
+  sensor_name   varchar(250),
+  sensor_type   varchar(250),
+  location_lat  varchar(250),
+  location_lon   varchar(250)
+ );
+create table validity
+ (
+  sensor_name   varchar(250),
+  start_date    varchar(32),
+  end_date      varchar(32)
+ );
+create table m_core
+ (
+  data_id  number(38),
+  author   varchar(250),
+  data_name varchar(250)
+ );
+
+
+srb.sensor
+ DATA_ID   SENSOR_NAME SENSOR_TYPE                        LOCN_LAT    LOCN_LON
+--------------------------------------------------------------------------------------
+ 35332292  AFS         temp in deg c                      20.3N       40W
+ 35332292  AFU         time in GMT                        20.3N       40W
+ 35332293  SCB         wind East  in meters per second    10N         50W
+ 35332293  SCA         wind North in meters per second    10N         50W
+
+
+srb.validity
+ SENSOR_NAME   START_DATE            END_DATE            COMMENTS
+-----------------------------------------------------------------------------
+ AFS           2004-02-10-10.30      2004-08-18-04.40    power shut down
+ AFS           2004-08-20-11:12      2005-01-10-02.20    sensor calibration
+ AFS           2005-01-11-01.43      2999-12-31-12.00    running
+ AFU           2004-02-10-10.30      2004-08-15-02.22    power shut down
+ AFU           2004-08-20-11:12      2005-01-10-02.20    sensor calibration
+ AFU           2005-01-11-01.43      2999-12-31-12.00    running
+ SCA           2004-10-21-10:20      2999-12-31-12.00    running
+ SCB           2004-10-21-10:20      2999-12-31-12.00    running
+
+
+sekar.m_core
+ DATA_ID     AUTHOR             DATA_NAME
+--------------------------------------------------------
+ 35332292    Frank Vernon       Anza  Sensor Data
+ 35332293    Kent Linquist      South Cal  Sensor Data
+

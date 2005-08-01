@@ -1,0 +1,7 @@
+# This file is combined with autotest.conf to set up an optional
+# configuration via autotest.sh.
+#
+# $SRB_CONFIGURE_OPTIONS_JAVA can be used for some additional options
+# to the configure script when building SRB.  The following enables
+# GSI.
+$SRB_CONFIGURE_OPTIONS_JAVA="--enable-gsi-auth --enable-globus-location=/usr/local/apps/nmi-2.1";

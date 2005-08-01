@@ -1,0 +1,135 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Stcat</TITLE>
+</HEAD><BODY>
+<H1>Stcat</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Stcat - display files read from SRB space for a ticketuser
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Stcat</B>
+
+[<B>-T</B>
+
+<I>ticketFile</I>
+
+|<B> -t</B>
+
+<I>ticket</I>]
+
+[<B>-H</B>
+
+<I>hostName</I>]
+
+[<B>-A</B>
+
+<I>condition</I>]<I> srbObj </I>...
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Stcat </B>
+
+reads each
+<I>srbObj</I>
+
+from SRB space and writes it on the standard output. Stcat is
+used by users who do not have accounts on SRB. Only
+<I>ticket</I>
+
+issued for 'ticketuser' name is usable through Stcat.
+<P>
+One need not give a
+<I>srbObj</I>
+
+name if the ticket is issued for a particular dataset.
+<P>
+With -A option, only
+<I>srbObj which conforms to the</I>
+
+<I>condition are chosen.</I>
+
+<P>
+If any
+<I>srbObj</I>
+
+is replicated then only one of the copies is displayed.
+<P>
+The
+<I>srbObj</I>
+
+argument can be a path name in the SRB collection hierarchy.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-T </B>
+
+<DD>
+option to give a filename containing a ticket
+<DT><B>-t </B>
+
+<DD>
+option for giving a ticket directly
+<DT><B>-H </B>
+
+<DD>
+<I>hostName</I>
+
+is the host name where a server SRB is running. If not given
+it exopects the environment files or variables to provide the information.
+<DT><B>-A </B>
+
+<DD>
+<I>condition </I>
+
+option is an '&amp;' separated condition which will be applied
+in choosing the object to be accessed. The separated condition
+is of the form &quot;&lt;Attr&gt; &lt;CompOp&gt; &lt;Value&gt;&quot;, where &lt;Attr&gt; is an
+MCAT attribute found by
+<B>Sattrs</B>
+
+command, &lt;CompOp&gt; is a comparison operator and &lt;Value&gt; is a
+numeric or string value. The entire condition should be within
+a set of double quotes.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sticket.1.html">Sticket</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Scat.1.html">Scat</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sattrs.1.html">Sattrs</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

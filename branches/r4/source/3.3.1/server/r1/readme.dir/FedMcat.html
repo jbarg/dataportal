@@ -1,0 +1,492 @@
+<center>
+<h2>
+An Overview of the SRB 3.0: the Federated MCAT.
+</h2>
+
+By Michael Wan, Arcot Rajasekar, Wayne Schroeder
+<p>
+<a href=http://www.npaci.edu/DICE/SRB>http://www.npaci.edu/DICE/SRB</a>
+<p>
+This document available at 
+<a href=http://www.npaci.edu/DICE/SRB/FedMcat.html>http://www.npaci.edu/DICE/SRB/FedMcat.html</a>
+
+<p>
+September, 2003
+
+</center>
+
+<h2>
+Introduction
+</h2>
+This paper provides a brief introduction to the Federated MCAT SRB system,
+also known as SRB zones, which is being released as version 3.0.
+
+In this, we assume the reader is very familiar with the
+previous SRB architecture and terminology.  For reference, you may wish
+to check with the SRB documentation, the 
+<a href=http://www.npaci.edu/DICE/SRB/faq.html>FAQ</a>, in particular.
+
+
+<h2>Motivation for a Federated (multiple) MCAT system
+</h2>
+The following are the primary motivations for the Federated MCAT system.
+<ol>
+<li>
+Improve MCAT WAN performance.  In world-wide networks, the network
+latency would cause significant SRB performance degradation.  For
+example, U.S. the East/West coast latency for a simple query is often
+1-2 seconds.  Many SRB operations require multiple MCAT
+interactions, compounding the delays.
+<li>
+
+Local control.  Some SRB sites want to share resources and
+collections, yet maintain more local control over those resources,
+data objects, and collections.  Rather than one SRB system managed by
+one administrator, they needed two (or more) cooperating SRB system
+managed locally, as primarily a security and authorization
+issue.  
+<li>
+Scalability of the MCAT.  For heavily loaded MCAT, distributing the load
+to multiple servers, MCATs, and DBMS es will avoid bottlenecks and improved
+overall performance, particularly as the systems are scaled up.
+<li>
+No single point of failure.  If site A and site B have a single MCAT
+at site B, then B's MCAT and server must be up and accessible for site
+A users to access data objects, even if those data objects are on a
+resource at site A.  With a Zone a A and B, operations are more
+independent and locally controlled.
+</ol>
+
+<h2>
+SRB Zone Usage Scenarios
+</h2>
+
+One can use the Zone SRB in multiple ways.  The following examples
+illustrate some of the possibilities, although one can also use the Zone SRB
+in other creative ways to achieve your goals of collaboration without
+losing autonomy.
+<p>
+First Model:  <b> Occasional Interchange</b><br>
+This is the simplest model in which two or more zones operate autonomously
+with very little exchange of data or metadata. The two zones exchange
+only user-ids for those users who may go across from one zone to another.
+Most of the users stay in their own zone accessing resources and data that
+managed by their zone MCAT. Inter-zone users will occasionally cross zones,
+browsing collections, querying metadata and accessing files that they
+have permission to read. These users can store data in remote zones
+if needed but these objects are not accessible to users in their local zone
+unless they cross into other zones.  This model provides the
+greatest of autonomy and control. The cross-zone user registration is
+done not for every user from a zone but for selected users only.
+The local SRB admins control who is given access to their system and can
+restrict these users from creating files in their resources. (NPACI Zones)
+<p>
+Second Model: <b> Replicated Catalog</b><br>
+In this model, even though there are multiple MCATs operating distinct
+zones, the overall system behaves as though it is a single zone
+with replicated MCATs. The MCATs synchronize metadata between them,
+so that each contains the same information as any of its sister MCATs.
+Metadata about the tokens being used, users, resources, collections,
+containers and data objects are all synchronized between all MCATs such that
+any file or resource is accessible from any Zone as though it is
+locally available without going across to another zone. An object created in
+a zone is registered as an object in all other sister zones and any
+associated metadata is also replicated. Hence, the view from every zone is
+the same. This model provides a completely replicated system which has
+a high degree of fault-tolerance for MCAT failures.  The user will not
+miss any access to data even if their local MCAT becomes
+non-functional. The degree of synchronization though very high
+in principle, in practice, the MCATs might be out of sync on newly
+created data and metadata and will be constantly catching up with her sisters.
+The periodicity of synchronization is decided by the cooperating
+administrators and can be as long as days if the systems can tolerate them.
+An important point to note is that because of these delayed synchronizations,
+one might have occasional clashes. For example, a data object with
+the same name and in the same collection might be created in two zones
+almost at the same time. Because of delayed synchronization both will be
+allowed in their respective Zones. But when the synchronization is attempted,
+the system will see a clash when registering across zones. The resolution
+of this has to be done by mutual policies set by the cooperating
+administrators. In order to avoid such clashes, policies can be
+instituted with clear lines of partitioning about where one can
+create a new file in a collection. (NARA)
+
+<p>
+Third Model: <b>Resource Interaction</b><br>
+In this model resources are shared by more than one zone and hence
+they can be used for replicating data. This model is useful if
+the zones are electronically distant, but want to make it easier
+for users in the sister zone to access data that might be of mutual
+interest. In this model, a user in a zone creates a data replicated in
+these multi-zonal resources (either using synchronous replication or
+asynchronous replication as done in a single zone), then the metadata
+of these replicated objects get synchronized across the zones.
+The user list of the zones need not be  completely synchronized. (BIRN)
+<p>
+Fourth Model: <b>Replicated Data Zones</b><br>
+In this model two or more zones work independently but maintain
+the same `data across zones, i.e., they replicate data and
+related metadata across zones. In this case, the zones are truly
+autonomous and do not allow users to cross zones.In fact,
+ user lists and resources are not shared  across zones. But data
+stored in one zone is copied into another zone along with related
+metadata, by  a user who has accounts in the sister zones.
+This method is very useful when two zones are operating at
+considerable (electronic) distance, but want to share`data across zones.
+(BaBar Model)
+<p>
+
+Fifth Model: <b>Master-Slave Zones</b><br>
+This is a variation of the 'Replicated Data Zones' model in which
+new data is created at a Master site and the slave sites synchronize
+with the master site. The user list and resource list are distinct
+across zones. The data created at the master are copied over to
+the slave zone. The slave zone can create additional derived objects
+and metadata but this may not be shared back to the Master Zone. (PDB)
+<p>
+Sixth Mode: <b>Snow-Flake Zones</b><br>
+This is a variation of the 'Master-Slave Zones' model, In this case,
+one can see this as a ripple- model, where  a Master Zone creates
+the data and which is copied to the slave zones, whose data
+in turn gets copied into other slave zones in the next hierarchy.
+Each level of the hierarchy can create new derived products of data
+and metadata and have their own client base and propagate only a subset
+of their holdings to their slave zones. (CMS)
+<p>
+Seventh Model: <b>User and Data Replica Zones</b><br>
+This is another variation of the 'Replicated Data Zones' where
+not just the data get replicated but also user lists are exchanged.
+This model allows user to go across zones and use data when they
+operate in that zone. This model can be used for wide-area
+enterprises where users travel across zones and would like to
+access data from their current locations. (Roving Enterprise User)
+<p>
+
+Eighth Model: <b>Nomadic Zones - SRB in a Box</b><br>
+In this model, a user might have a small zone on a laptop
+or other desktop systems that are not always connected
+to other zones. The user during his times of non-connectedness
+can create new data and metadata. The user on connecting to
+the parent Zone, will then synchronize and exchange new data
+and metadata across the user-zone and the parent zone. This model
+is useful for users who can have their own zones on laptops
+but also for zones that are created for ships and nomadic
+scientists in the field who might go on scientific forays and
+come back and synchronize with a parent zone. (SIOExplorer)
+<p>
+Ninth Model: <b>Free-floating Zones - myZone</b><br>
+This is a variation of the 'Nomadic Zone' model having multiple
+stand-alone zones but no parent zone. These zones can be considered
+peers and possibly having very few users and resources. These zones
+can be seen as isolated systems running by themselves (like a PC)
+without any interaction with other zones, but with a slight difference.
+These zones occasionally "talk" to each other and exchange data and
+collections. This is similar to what happens when we exchange files
+using zip drives or CDs or being occasional network neighbors.
+This system has good level of autonomy and isolation with controlled
+data sharing. ( peer-to-peer, Napster)
+<p>
+Tenth Model: <b>Archival Zone, BackUp Zone</b><br>
+In this model, there can be multiple zone with an additional zone
+called the archive. The main purpose of this is to be an archive of the
+holdings of the other zones which can designate which collections
+need to be archived. This provides for having a backup copy
+for a set of zones which by themselves might be fully running on
+spinning disks. (backup)
+<p>
+
+
+
+<h2>
+Design Goals of 3.0
+</h2>
+<ul>
+<li>Very Basic features - incremental changes
+<li>Multiple MCATs.
+<ul>
+<li>MCAT ZONE - a new term 
+defines a federation of SRB resources controlled by a single MCAT.
+Each Zone has its own sys admin - local control of users and resources
+<li>Peer to peer zone architecture
+<li>
+Each Zone can operate entirely independently from other zone.
+</ul>
+<li>
+Data and Resource sharing across ZONES
+<ul>
+<li>
+Use storage resources in foreign zones
+<li>
+Access data stored in foreign zones
+<li>
+Copy data across zones
+</ul>
+</ul>
+
+<img src="Slide0009.gif">
+
+<h3>The above diagram illustrates the interactions between the
+MCAT-enabled servers and non-MCAT-enabled servers within and between
+zones. </h3> The Zone architecture builds on the previous non-Zone
+architecture for added functionality.
+
+<h2>Single MCAT (pre-3.0) Architecture, Concepts and Features
+</h2>
+
+The SRB (v1, 2 and 3) is a Federated middleware system.  In the
+pre-3.0 versions there is a single MCAT for each SRB system (set of servers).
+Other servers within that SRB system, contact
+the MCAT-enabled server to read and update metadata information.  The
+MCAT uses traditional DBMS systems.  The SRB servers are federated
+resource servers, providing access to resources local to the host they
+run on.  There is a single client signOn on any one of the servers,
+which then provides access to all resources in the federation.  There
+is robust server-server operation.
+<p>
+
+Features include:
+<ul>
+
+<li>A single global User Space 
+<li>Single sign-on, access all resources
+<li>Single class of Administrative Users
+<li>Multiple authentication schemes:<br>
+  GSI, secure passwords, tickets
+<li>Robust access control and audit trail
+<li>Data and Collections (Logical Name Space) Management
+<li>High-performance Transfers, bulk and parallel, 
+<li>Extensible metadata scheme, serving system-metadata, user-defined metadata and annotations,
+<li>Multiple user interfaces: APIs, Scommands, inQ, GridPortals, MySRB, Jargon and Matrix.
+</ul>
+
+The SRB provides a logical name space that is layered on top of the
+physical name space.  The SRB collections are Unix-like directories
+and data objects (files).  Unlike Unix directories, each individual
+data object within a collection can reside on any physical resource.
+The SRB/MCAT handles the mapping of logical name to physical
+attributes - host address, physical path, access and authentication protocols.
+<p>
+
+The SRB also provides a Unix-like API and utilities for making
+collections (mkdir) and data creation (creat).
+<p>
+
+The SRB also virtualizes resources, via its mapping of a logical
+resource name to physical attributes: Resource Location and Type.
+Clients use a single logical name to specify a resource.
+
+<p>
+SRB 2 includes a number of performance enhancements.  A major one is
+client and server-driven parallel I/O strategies, often resulting in a
+3-4 times speedup in transfer speeds.  There is also an interface with
+HPSS's mover protocol for parallel I/O and parallel third party
+transfer for copy and replicate.  The SRB protocol also provides 
+one hop data transfer between client and data resource, as clients are
+re-connected directly to resource-servers.  The system also
+includes container operations: physical grouping of small files for
+tape I/O.  The SRB 2 also includes bulk load and unload
+capabilities which speed up uploading and downloading of small files
+10-50+ times.
+<p>
+
+<img src="Slide0003.gif">
+
+<h2>
+Peer to peer Federated MCAT implementation
+</h2>
+
+Development tasks completed:
+<ol>
+<li>New metadata for Zones:<br>
+     New Zone table<br>
+     Add zone to user metadata
+
+<li>Authentication across zones
+
+<li>Resource and data access across zones
+</ol>
+
+<p>
+For version 3.0.0, our Zone development includes
+the Unix server and Scommands clients only.  Later
+versions will include extending Zone capability to other user interfaces.
+<p>
+
+<h2>Zone metadata implementation
+</h2>
+A system of MCAT zones or Federation has been implemented.
+Each MCAT manages  metadata independently of other zones.
+There was no change for most metadata and metadata operations.
+New metadata includes: 
+Zone Info - new table defines all zones in the federation, 
+ZoneName - logical name, 
+Network address,
+Local/Foreign flag,
+and 
+Authentication information.
+Each MCAT maintains a complete zone table.
+<p>
+
+The MCAT includes user information which 
+defines all users in the federation.  There is a 
+single global user name space, so each username@domain name must
+be unique in a Zone federation.
+Each MCAT maintains a table of all users, with a flag to indicate
+if the user is local or foreign.
+A user is local to only one zone.
+Sensitive info (the user's password) is only stored in user's local zone.
+<p>
+
+There are some changes and additions to the administration software
+for handling new metadata.
+There is a new Zone Authority system, a web page and cgi script to obtain
+as reserve unique zone names that administrators need to use when setting up
+zones.
+The Zone Authority web page maintained by NPACI is at:
+<a href=http://www.npaci.edu/dice/srb/ZoneAuthority.html>http://www.npaci.edu/dice/srb/ZoneAuthority.html</a>
+
+
+To create and modify Zone metadata, the Java admin GUI has been
+extended, as have the command line tools.  The GUI contains a few new 
+classes/windows for displaying and modifying zone information and a new
+option in modify user to change a user's zone.
+There is a new option in
+Stoken, 'Stoken Zone' to list zone information, and a new command-line utility,
+Szone, to modify zone information. The SgetU has been modified to show zones for users.
+Many Scommands have been augmented with -z option to allow for "across zone" accessibility.
+<p>
+The Zonesync perl script, via the new
+Spullmeta and SpushMeta commands,
+is used to poll foreign MCATs for new users and other metadata
+and add it to local MCAT.  This is highly-configurable to serve the needs
+of Federations operating in the various Zone models.  See the zonesync.pl script
+for more information.
+<p>
+There are two authentication schemes supported for cross zone
+authentication: the "Encrypted Password (ENCRYPT1)" method (actually a
+challenge-response scheme, so there is no password sent on the
+network) and Grid Security Infrastructure (GSI, public key
+certificates (X.509)).  The plain text password system and SDSC
+Encryption/Authentication (SEA) are being phased out.
+<p>
+We support a robust set of server-server operations.  Servers running
+as privileged SRB users perform operations on behalf of client users.
+Since we wanted to limit the privileges of administration
+user from a foreign zone, the admin user can only request
+a foreign zone to perform operations behalf of client users from the 
+SAME zone.  Sensitive information, the password of local user, is
+stored only in local MCAT.  So a security compromise in one zone cannot 
+spread to other zone.
+<p>
+Because of this security measure, a little transparency has been lost.
+Users must first connect to a server in their own zone for cross-zone
+operation.  This is because the server, on the user's behalf, will go
+across zone for them, authenticating as the local admin user.  This
+slight additional overhead has a very minor effect on data operations.
+
+
+<h2>
+Resource and data access across zones
+</h2>
+Resource and data access across zones was made
+easy by the existing robust server-server support.
+Most existing operations are supported across zones
+put, get, copy, bload, bunload, register, container operations, etc.
+Currently, 
+replication across zones is not supported, but one can use Scp for now.
+<p>
+
+For example, a typical operation: open a collectionName /x/y/z for read.
+Data server queries MCAT for location, file type, etc.
+But which MCAT to query?
+The first value in the pathname of the collectionName specifies the zoneName where the
+metadata is stored.
+For /z1/x/y/z, z1 is the zoneName.  This is
+similar to mount point in Unix File System.
+Most data handling code was unchanged. 
+New code was added to determine which MCAT to go to.
+<p>
+
+So most of this involved adding logic to determine which MCAT to go
+to.  For example, Sput -S s1 foo /z1/x/y/z (Scd /z1/x/y/z; Sput -S s1
+foo .) is to upload the local file foo to SRB and create foo in mcat
+Zone 'z1', in resource 's1' of 'z1'.  The SRB server queries mcat 'z1'
+for metadata for resource 's1' (network address, file type).  It then
+uploads foo and puts it in resource 's1' and registers the file
+/z1/x/y/z/foo with mcat 'z1'.
+<p>
+
+As another example, Sget /z1/x/y/z/foo, to download the SRB file foo to 
+the local file system.  The SRB server queries mcat 'z1' for metadata for 
+file /z1/x/y/z/foo and discovers the file is in resource 's1'. It then 
+requests resource 's1' server to download the file.
+
+<p>
+
+The command Scp -S s2 /z1/x/y/z/foo /z2/a/b/c is to
+copy the SRB file foo managed by mcat 'z1' to the resource 's2' of mcat 'z2'.
+The server queries'z1' for file foo, found file in resource 's1', queries
+'z2' for resource 's2'.  It then copies the file foo stored in resource 's1' to source's2' and registers the file /z2/a/b/c with mcat 'z2'.
+<p>
+
+Some Scommand do not involve a collectionName [???], so one needs to use a
+new -z option.  The -z zoneName option explicitly specifies a
+zoneName.  Users can also use the cwd command if the -z option is not used.
+For example:<br>
+SgetR -z z1<br>
+Smkcont -z z1 -S s1 cont1<br>
+Of if the current working directory is /z2/x/y/z, then Slscont will
+list all containers belonging to the user in zone 'z2'.
+<p>
+
+Registration of data files in more than one Zone is handled as follows.
+
+For example, a file created/registered  in zone z1
+/z1/u.d/x/y   in resource s1 in zone z1.  It is also
+registered also in zone z2: 
+/z2/u.d/x/y   in resource s1  in zone z2
+s1 should be 'known' to z2 
+Note that collectionName changes.
+Some system-metadata is carried over when doing inter-zone registration.
+The system will copy user-defined metadata across the zones (if needed).
+For 3.0, we're implemented a lazy synchronization scheme that is 
+user-controlled, the zonesync perl script.
+<p>
+
+In 3.0:
+Zone z1 and z2 are unaware of each other's copies 
+In later versions, awareness will be improved.  We plan to include
+metadata  synchronization, deletion notification, and a 
+user-controllable
+delay in synchronization.
+<p>
+
+<h2>3.0 Status
+</h2>
+The release has been slightly delayed, from our original target of the
+end of August, to late September.  All core development was completed
+by late August including Zone metadata, cross zone authentication, and
+cross zone resource and data access.  The items completed in September
+include the user management tools, synchronization tools,
+documentation, and integrated testing.  Also, the install.pl script
+has been extended to optionally set up local and remote Zones.
+<p>
+
+<h2>
+Future plans
+</h2>
+For 3.1, we plan to include zone capabilities in the rest of SRB software:
+Windows, inQ, mySRB, Jargon and Matrix.  In 3.2, we plan to use
+proxy certificates for cross zone authentication as implemented by the
+Kerstin Kleese group at DL.  We plan for later releases to also include
+cross zone replication, synchronization of copies, versioning, and
+possibly locking across zones and cross zone soft links.
+
+<h2>
+Additional Information
+</h2>
+In the SRB release readme.dir directory, see the README.zones document.
+</p>
+Also see the zonesync.pl script, in the MCAT directory.
+</html>
+

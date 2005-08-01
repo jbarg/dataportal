@@ -1,0 +1,63 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Schksum.1
+.\"
+.TH Schksum 1 "April 2004 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Schksum \- Checksum SRB data files and/or collections.
+.SH SYNOPSIS
+.B Schksum
+.RB [ \-f | l | c | s ] 
+.RB [ \-n
+.IR replNum ]
+.RB [ \-rv ]
+.IR srbFile | collection " ... " 
+.sp
+.I TargetName
+.SH DESCRIPTION
+.B "Schksum "
+performs checksum operation on one or more existing files stored in the SRB space. 
+If the input is a collection and the -r option is specified, a recursive checksum will be carried out for all files in the collection and subcollections.
+.sp
+If no  f|l|c option is specified, by default, it checks whether a checksum for this file already exists in MCAT. 
+If it does, nothing will be done. If the checksum does not exist in MCAT, the server computes the checksum and registers it with MCAT.
+.sp
+The -c option puts the operation in verification mode. The server computes a checksum value based on the data stored in the SRB storage vault and compares it with the value registered with MCAT if a registered value exists.
+An error will be returned if they don't match. 
+.sp
+The -f option forces the computation and registration of checksum regardless of the existence of the value in MCAT. The existing checksum is overwritten and no comparison is done between the newly computed and existing values.
+.sp
+The -l option lists the checkum values stored in MCAT. No computation of checksum is done.
+The -s option does not use the checksum value at all. Instead it compares
+the file size registered in the MCAT with the size stored in the SRB vault
+(e.g., for UNIX, the stat() call was made to get the the physical file size).
+It provides a quick check on the data integrity.
+
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-f "
+force mode. Forces the computation and registration of checksum.
+.TP 0.5i
+.B "\-c "
+verification mode. Computes checksum without registering. Verifies newly computed values with the MCAT values.
+.TP 0.5i
+.B "\-l "
+list mode. Lists the checkum values stored in MCAT.
+.TP 0.5i
+.B "\-s "
+A quick check on data integrity using file size. The checksum value is not used
+at all.
+.TP 0.5i
+.B "\-r "
+recursively checksum files in the collection and subcollections.
+.TP 0.5i
+.B "\-v "
+verbose mode. Not relevant with the -l option. 
+.TP 0.5i
+.B "\-n "
+.I "replNum"
+checksum only the replica with replica number replNum.
+.SH "SEE ALSO"
+.BR Sget (1),
+.BR Sput (1),
+

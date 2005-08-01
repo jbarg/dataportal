@@ -1,0 +1,83 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Srm.1
+.\"
+.TH Srm 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Srm \- Remove files from SRB space
+.SH SYNOPSIS
+.B Srm
+.RB [ \-n
+.IR replicaNum ]
+.RB [ \-puf "] [" \-A
+.IR condition "] " srbObj " ..."
+.br
+.B Srm
+.RB [ \-n
+.IR replicaNum ]
+.RB [ \-puf "] [" \-A
+.IR condition "] " srbObj | collection " ..."
+.SH DESCRIPTION
+In the first synopsis form, Srm erases each
+.I srbObj
+from SRB space.
+.sp
+In the second synopsis form, Srm erases recursively each
+.IR srbObj " and/or " collection
+from SRB space.
+.sp
+This new Srm command by default, will move the files and collections designated for removal into the /trash or /myZone/trash collections.
+For immediate removal at the time of execution, the 
+.I -f 
+option should be used. The 
+.I Srmtrash 
+command can be used to purge the trash directories.
+.sp
+If any
+.I srbObj
+is replicated, then all copies are erased.
+.sp
+The user should have at least 'all' access permission for each
+.I SrbObj
+erased.
+.sp
+The
+.I srbObj
+argument can be a path name in the SRB collection hierarchy.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-p "
+Prompts before removing each object from SRB space.
+.TP 0.5i
+.B "\-f "
+Force the immediate removal at the time of execution..
+.TP 0.5i
+.B "\-r "
+Recursively remove collections and subcollections in the argument
+list. The collection will be emptied of datasets and removed.
+.TP 0.5i
+.B "\-n "
+the replicaNum of the copy to be removed.
+.TP 0.5i
+.B "\-u "
+Unregister the data from MCAT. The physical data file is not removed.
+.TP 0.5i
+.B "\-A "
+.I condition 
+option is an '&' separated condition which will be applied
+in choosing the object to be removed. The separated condition
+is of the form "<Attr> <CompOp> <Value>", where <Attr> is an
+MCAT attribute found by
+.B Sattrs
+command, <CompOp> is a comparison operator and <Value> is a
+numeric or string value. The entire condition should be within
+a set of double quotes. Example: Srm -A "COPY = 0" foo.txt
+.SH "SEE ALSO"
+.BR Sput (1),
+.BR Srmtrash (1),
+.BR Srmdir (1),
+.BR Sattrs (1)
+

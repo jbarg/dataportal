@@ -1,0 +1,26 @@
+#
+# hostAuthConfig - The host based access configuration file.
+#
+# The first column specifies a user that is allowed to connection to
+# this SRB. An entry of "all" means all users are allowed.
+# The second and third columns specify the address and the address mask.
+# Together, they define the client IP addresses/domains that are permitted
+# to connect to the SRB server. The address column specifies the IP
+# address and the Mask column specifies which bits that will be ignored. 
+# i.e., after those bits are taken out, the connection address 
+# must match the address in the address column.
+#
+# <name>	<address>	<mask>
+#
+#
+all		  127.0.0.1	  0.0.255.255
+all             132.249.0.0     0.0.255.255
+all             198.202.0.0     0.0.255.255
+# berkeley
+jonah             128.32.131.0    0.0.0.255
+# roofpig.hpc.org demo
+all            192.187.0.0      0.0.255.255
+# caltech
+all            131.215.0.0      0.0.255.255
+# NCSA
+all            141.142.0.0      0.0.255.255

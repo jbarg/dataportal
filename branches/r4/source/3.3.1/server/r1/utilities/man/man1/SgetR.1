@@ -1,0 +1,104 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii SgetR.1
+.\"
+.TH SgetR 1 "Jan 2002 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+SgetR \- display information about SRB resource(s).
+.SH SYNOPSIS
+.B SgetR
+.RB [ \-alchdDpP "] [" \-L 
+.IR number ]
+.RB [ \-Y
+.IR number ]
+.RB [ \-H
+.IR hostname ]
+.RB [ \-z
+.IR zone ]
+.RB [ \-T
+.IR resourceType "] [" resourceName ]
+.SH DESCRIPTION
+.B "SgetR "
+displays information about resource
+.IR resourceName .
+.sp
+If
+.I resourceName
+is not given, SgetR displays information about all
+resources.
+.I resourceName
+can have wildcards * and ?.
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-l "
+display comprehensive list of resource parameters
+.TP 0.5i
+.B "\-d "
+list objects stored in resource
+.TP 0.5i
+.B "\-D "
+list objects stored in resource with details
+.TP 0.5i
+.B "\-c "
+list all physical resources in a compound resource
+.TP 0.5i
+.B "\-a "
+list usergroups who have access to the resource along with permissions.
+.TP 0.5i
+.B "\-P "
+list a subset of parameters listed with no options
+.TP 0.5i
+.B "\-p "
+list resource parameters for physical resources only
+.TP 0.5i
+.B "\-H "
+.BI [ hostname "] "
+List all resources located on the given hostname.
+.br
+.B "\-T "
+.I resourceType
+list for the given type.
+.TP 0.5i
+.B "\-z "
+.I zone
+option applies to the second synopsis and is used to perform the Sls operation on a particular zone.
+If ALL is used for
+.I zone
+then every zone known to the current zone will be queried.
+.I zone
+can have wild cards.
+.TP 0.5i
+.B "\-Y "
+.BI [ number "] "
+controls display format.
+.br
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+.br
+With -Y 0 will display in vertical, one attribute-per-line format.
+.br
+With Y n, n > 0, information is displayed one item-per-line with each
+attribute spaced at
+.I number
+characters.
+.br
+With Y -1, information is displayed without headers, with each item
+quoted and separated by a blank and with no row control.
+.TP 0.5i
+.B "\-L "
+.BI [ number "] "
+controls number of items displayed at a time under user's
+control.
+.br
+Without  -L, DEFAULT_ROW_COUNT items of information is displayed
+at a time.
+.br
+With L n, n > 0, n items are displayed at a time.
+.SH "SEE ALSO"
+.BR SgetU (1),
+.BR SgetD (1),
+.BR SmodR (1)
+
