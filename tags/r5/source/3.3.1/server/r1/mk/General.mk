@@ -1,0 +1,250 @@
+# General Section
+
+COPY=cp
+MOVE=mv
+REMOVE=rm -f 
+SHELL=/bin/sh
+TOUCH=touch
+CD = cd
+LN = ln
+CAT = cat
+ECHO = echo
+CHMOD = chmod
+RM = rm
+CP = cp
+MV = mv
+
+PLATFORM = mipsabi
+I_SYM=-I
+SILENT=@
+
+CC=gcc
+CPP=gcc
+CXX=g++
+
+AR=ar
+ARCREATE=$(AR) cr$(ARLOCAL)
+ARDELETE= $(AR) d$(ARLOCAL)
+AREXTRACT = $(AR) x 
+ARREPLACE = $(AR) r 
+
+LD=ld
+LINK=gcc
+
+LIBHOME=$(ORACLE_HOME)/lib
+BINHOME=$(ORACLE_HOME)/bin
+
+CCFLAGS=-KPIC
+
+OPT=$(OPTIMIZE)
+
+CFLAGS= $(GFLAG) $(OPTIMIZE) $(CDEBUG) $(CCFLAGS) $(QACCFLAGS) $(PFLAGS) $(SHARED_CFLAG) $(ENV_FLAGS)
+PFLAGS= $(INCLUDE) $(SPFLAGS) $(LPFLAGS)
+
+SPFLAGS=
+COMPNO=$(CC) -c $(PFLAGS) $(CCFLAGS)
+ASPFLAGS = -P $(PFLAGS)
+
+COMPRO= $(CC) $(ROFLAGS) $(CFLAGS) $(MAKERO)
+COMPRONO= $(CC) $(ROFLAGS) $(CDEBUG) $(CCFLAGS) $(PFLAGS) $(MAKERONO)
+
+LDCCOM= $(CC) $(GFLAG) $(CCFLAGS) $(LDFLAGS)
+TTLIBS=$(NETLIBS) $(LLIBORA) $(NETLIBS) $(LLIBORA) $(LIBPLSHACK) \
+	$(LLIBEPC) $(CORELIBS) $(LDLIBS)
+DEVTTLIBS=$(TTLIBS)
+TTLIBD=$(NETLIBD) $(LIBORA) $(LIBSQLNET) $(LIBORA) \
+	$(CORELIBD) $(LIBEPC)
+CLIBS=$(LOCALLIBS) $(EXOSLIBS) $(LIBBSD) $(OTHERLIBS) $(SECLIBS) $(M6LIBS)
+LDLIBS=$(SPLIBS) $(CLIBS) $(MATHLIB)
+SPLIBS=
+
+MATHLIB=-lm
+MOTIFLIBS=-lXm -lXt -lX11 -lgen -lm
+XLIBS=-lXaw -lXmu -lXext -lXt -lX11 -lm
+LOCALLIBS=
+SYSTEMLIBS = -lsocket -lnsl -lm -ldl -lmutex
+
+LDFLAGS= `if [ -x /usr/lib/ld32 ] ; then echo "-Wl,-woff,84" ; fi` -o $@ $(PRODUCT_LIBHOME) -L$(LIBHOME)
+
+LCOMPO= $(CC) -c $(CFLAGS) $? ; mv `basename $@` $@
+LCOMPD= $(CC) -c $(CFLAGS) -DDEBUG $? ; mv `basename $@` $@
+LCOMPS= $(CC) -S $(CFLAGS) $? ; mv `basename $@` $@
+LCOMPNO= $(CC) -c $(PFLAGS) $(CCFLAGS) $? ; mv `basename $@` $@
+
+SO=a
+
+MKCUST_TARGET=mkcustnoinclude
+SETUP_X_FLAG= -x
+SETUP_L_FLAG= -l
+BUGDB_PORT= 168
+
+# Oracle Specific section
+
+COREHOME= $(ORACLE_HOME)/oracore3
+LIBCORE= $(LIBHOME)/libcore3.$(SO)
+LIBCV6= $(LIBHOME)/libc3v6.$(SO)
+LLIBCORE= -lcore3
+LLIBCV6= -lc3v6
+
+COREPUBLIC=$(I_SYM)$(COREHOME)/public $(I_SYM)$(COREHOME)/public/unix \
+		$(I_SYM)$(COREHOME)/public/$(PLATFORM)
+COREINCLUDE=$(I_SYM)$(COREHOME)/include $(COREPUBLIC)
+CORELIBD=$(LIBNLSRTL) $(LIBCV6) $(LIBCORE) $(LIBNLSRTL) $(LIBCORE) $(LIBNLSRTL)
+CORELIBS=$(LLIBNLSRTL) $(LLIBCV6) $(LLIBCORE) $(LLIBNLSRTL) $(LLIBCORE) $(LLIBNLSRTL)
+
+NLSRTLHOME= $(ORACLE_HOME)/nlsrtl3
+ORA_NLS = $(ORACLE_HOME)/ocommon/nls/admin/data
+NLSRTLLIB= -lnlsrtl3
+LIBNLSRTL= $(LIBHOME)/libnlsrtl3.$(SO)
+SHAREDLIBNLSRTL = $(LIBHOME)/libnlsrtl3.so.3.2
+ARCSHAREDLIBNLSRTL = $(LIBHOME)/libnlsrtl3.sa.3.2
+LLIBNLSRTL=-lnlsrtl3
+NLSRTLPUBLIC = $(I_SYM)$(NLSRTLHOME)/public
+NLSRTLINCLUDE = $(I_SYM)$(NLSRTLHOME)/include $(NLSRTLPUBLIC)
+
+RDBMSHOME=$(ORACLE_HOME)/rdbms
+RDBMS_ROOT=$(RDBMSHOME)
+RDBMSPUBLIC=$(I_SYM)$(RDBMSHOME)/public $(I_SYM)$(RDBMSHOME)/include
+
+SYSLIBLIST = $(RDBMS_ROOT)/lib/sysliblist
+
+LIBCLIENT=$(ORACLE_HOME)/lib/libclient.a
+LLIBCLIENT=-lclient
+
+LIBSERVER=$(ORACLE_HOME)/lib/libserver.a
+LLIBSERVER=-lserver
+
+LIBGENERIC=$(ORACLE_HOME)/lib/libgeneric.a
+LLIBGENERIC=-lgeneric
+
+LIBCOMMON=$(ORACLE_HOME)/lib/libcommon.a
+LLIBCOMMON=-lcommon
+
+LIBXA=$(ORACLE_HOME)/lib/libxa.a
+LLIBXA=-lxa
+
+LIBIMP=$(RDBMSHOME)/lib/libimp.a
+LLIBIMP=-limp
+
+LIBEXP=$(RDBMSHOME)/lib/libexp.a
+LLIBEXP=-lexp
+
+LIBORA=$(LIBCLIENT) $(LIBCOMMON) $(LIBGENERIC)
+LLIBORA=$(LLIBCLIENT) $(LLIBCOMMON) $(LLIBGENERIC)
+
+PLSHOME=$(ORACLE_HOME)/plsql
+PLSQL_ROOT=$(PLSHOME)
+
+LLIBAPPS = -lapps
+LLIBCOG = -lcog
+LLIBCOX = -lcox
+LLIBIDL = -lidl
+LLIBKNLDE = -lknlde
+LLIBPKG = -lpkg
+LLIBPLS = -lpls
+LLIBSEM = -lsem
+LLIBSYN = -lsyn
+
+LIBAPPS = $(LIBHOME)/libapps.a
+LIBCOG = $(LIBHOME)/libcog.a
+LIBCOX = $(LIBHOME)/libcox.a
+LIBIDL = $(LIBHOME)/libidl.a
+LIBKNLDE = $(LIBHOME)/libknlde.a
+LIBPKG = $(LIBHOME)/libpkg.a
+LIBPLS = $(LIBHOME)/libpls.a
+LIBSEM = $(LIBHOME)/libsem.a
+LIBSYN = $(LIBHOME)/libsyn.a
+
+PLSQLLIBS=$(LIBAPPS) $(LIBCOG) $(LIBCOX) $(LIBIDL) $(LIBKNLDE) \
+	$(LIBPKG) $(LIBPLS) $(LIBSEM) $(LIBSYN)
+
+LLIBPLSQL=$(LLIBAPPS) $(LLIBCOG) $(LLIBCOX) $(LLIBIDL) $(LLIBKNLDE) \
+	$(LLIBPKG) $(LLIBPLS) $(LLIBSEM) $(LLIBSYN)
+
+NETLIBHOME=$(NETHOME)/lib
+
+OSN_USE_FTT=-DOSN_USE_FTT
+
+GENNT=compile
+NTCONTAB=ntcontab.c
+CFLAGS_SHIP=-KPIC
+
+TNCR_SRC=tncr.c
+TNCR_OUT=tncr.i
+TNCR_TEST=tncr.tsc
+TNCRFLT_SRC=tncrflt.c
+TNCRFLT_OUT=tncrflt.i
+TNCRFLT_TEST=tncrflt.tsc
+
+LIBNTTCP= $(NETLIBHOME)/libnttcp.a
+TCP=ntt
+TCPINS=tcppa
+NTTCPFLAG=-DNTUSETCP
+
+SNMP_NONE=yes
+SNMPAUX=nmd
+SNMPFLAG=-DORACLE_SNMP_NONE
+
+LIBTCL=$(ORACLE_HOME)/network/lib/libtcl.a -lm
+DBSNMP= dbsnmp
+TCLSHDEBUG= oratclsh
+OEMEVENT=oemevent
+AGENTTESTEXECS= nmitest nmitestd nmiqtest nmitclsh nmieutest
+AGENT=nmi
+AGENTINS=snmp
+TCLFLAGS= -DVERSION7 -DHAVE_UNISTD_H=1 -DNO_FLOAT_H=1 -DNO_STDLIB_H=1 \
+	-DNO_STRING_H=1 -DNEED_MATHERR=1
+
+NAMESRC=nnfo.c
+NAMES=names
+NAMESCTL=namesctl
+TNNFGNAMES=tnnfgn
+NAMESRV=nno
+NCTL=nncc
+NAMESINS=names
+NAMESFLAG=-DNNFG_USEONAMES
+
+INTCHG=nr
+
+NETHOME=$(ORACLE_HOME)/network
+NETINCLUDE= $(I_SYM)$(NETHOME)/public $(I_SYM)$(NETHOME)/include
+
+OSNTAB = $(ORACLE_HOME)/lib/osntab.o
+OSNTABST = $(ORACLE_HOME)/lib/osntabst.o
+NTCONTAB= $(LIBHOME)/ntcontab.o
+
+LIBSQLNET=$(LIBHOME)/libsqlnet.a
+LIBRPC=$(LIBHOME)/libncr.a
+LIBTNSAPI=$(LIBHOME)/libtnsapi.a
+LLIBSQLNET=-lsqlnet
+LLIBRPC=-lncr
+LLIBTNSAPI=-ltnsapi
+LIBMIGV1=$(ORACLE_HOME)/network/lib/libmigv1.a
+NETLIBD= $(LIBSQLNET) $(LIBRPC)
+NETLIBS= $(LLIBSQLNET) $(LLIBRPC) $(LLIBSQLNET)
+
+TRACEHOME= $(ORACLE_HOME)/otrace
+
+LIBEPC= $(LIBHOME)/libepc.$(SO)
+LLIBEPC= -lepc
+LIBEPCFE= $(LIBHOME)/libepcfe.$(SO)
+LLIBEPCFE= -lepcfe
+LIBEPCPT=$(LIBHOME)libepcpt.$(SO)
+LLIBEPCPT= -lepcpt
+
+TRACEPUBLIC=$(I_SYM)$(TRACEHOME)/public
+TRACEINCLUDE=$(I_SYM)$(TRACEHOME)/include $(TRACEPUBLIC)
+
+SLAXHOME=$(ORACLE_HOME)/slax
+SLAXINCLUDE=$(I_SYM)$(SLAXHOME)/include
+
+LLIBSLAX=-lslax
+
+LIBSLAXD=$(LIBHOME)/libslax.a
+
+PRECOMPHOME=$(ORACLE_HOME)/precomp
+PRECOMPPUBLIC=$(I_SYM)$(PRECOMPHOME)/public
+
+LLIBSQL=-lsql
+
+LIBSQLD=$(LIBHOME)/libsql.a

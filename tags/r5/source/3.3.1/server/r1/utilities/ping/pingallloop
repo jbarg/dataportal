@@ -1,0 +1,15 @@
+#!/bin/csh -ex
+set webPagePath = /misc/www/projects/srb/pingsrb4.html
+echo "Ping Start"
+date
+unalias rm
+
+rm -f pingsrb.html
+while ( 1 == 1)
+../admin-bin/pingall > pingsrb.html
+mv pingsrb.html $webPagePath
+rm -f pingsrb.html
+chmod gou+r $webPagePath
+date
+sleep 3600
+end

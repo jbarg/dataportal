@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Set Oracle Home
+#. /home/srb/.my-ora
+
+../src/srb-web-insert.php
+../src/collabor-web-insert.php
+
+exit 0

@@ -1,0 +1,58 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Smv.1
+.\"
+.TH Smv 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Smv \- changes the collection for objects in SRB space
+.SH SYNOPSIS
+.BI "Smv " "srbObj targetObj"
+.br
+.BI "Smv " "collection newcollection"
+.br
+.B Smv
+.RB [ \-p ]
+.IR "srbObj " ... " collection"
+.SH DESCRIPTION
+In  the first synopsis,
+.B Smv
+moves the SRB object named
+.I srbObj
+into the destination specified by
+.IR targetObj .
+The
+.I targetObj
+should not exist; otherwise, the operation is not performed. 
+.sp
+In the second synopsis,
+.B Smv
+moves a SRB collection named
+.I collection
+to a new destination collection called
+.IR newcollection .
+.sp
+In the third synopsis,
+.B Smv
+moves each
+.I srbObj
+to a new
+.IR collection .
+.sp
+Smv does not move the SRB objects physically. If any
+.I srbObj
+is replicated then every copy is moved to the new location. The
+user should have 'all' access permission for each
+.IR SrbObj .
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-h "
+display command options
+.TP 0.5i
+.B "\-p "
+prompt for input srbObj
+.SH "SEE ALSO"
+.BR Scp (1),
+.BR Sphymove (1),
+.BR Sreplicate (1),
+.BR Srename (1)
+

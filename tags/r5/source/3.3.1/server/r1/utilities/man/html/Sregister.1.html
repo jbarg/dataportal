@@ -1,0 +1,185 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sregister</TITLE>
+</HEAD><BODY>
+<H1>Sregister</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sregister - registers one or more files into SRB space.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Sregister</B>
+
+[<B>-p</B>] [<B>-D</B>
+
+<I>dataType</I>]
+
+[<B>-S</B>
+
+<I>size</I>]
+
+[<B>-R</B>
+
+<I>resourceName</I>] <I>RegisteringObjectPath</I> ... <I>TargetName</I>
+
+<BR>
+
+<B>Sregister -c</B>
+
+[<B>-p</B>] [<B>-D</B>
+
+<I>dataType</I>]
+
+[<B>-S</B>
+
+<I>size</I>]
+
+[<B>-R</B>
+
+<I>resourceName</I>] <I>RegisteringObjectPath srbObjectName</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Sregister </B>
+
+registers files that are created outside SRB but are accesible
+by SRB and are as yet unregistered). The files are not modified.
+The options are similar to that of Sput.
+<P>
+The
+<I>RegisteringObjectPath</I>
+
+can be a path name in the local file hierarchy. SRB should have at
+least 'read/write' access permission for
+<I>RegisteringObjectPath</I>.
+
+This is required as a security measure that objects are registered
+only by owners who are able to grant SRB write priveleges. One can
+always remove the 'write' permission once the object has been
+registered. Note that without write permission, SRB cannot write,
+append or remove the object.
+<P>
+<I>RegisteringObjectPath</I>
+
+can be a pattern in the case of Unix.
+<P>
+The second synopsis allows one to register another copy of an
+already existing (or registered)
+<I>srbObjectName</I>
+
+at the new location
+<I>RegisteringObjectPath</I>.
+
+<P>
+The
+<I>TargetName</I>
+
+can be a path name in the collection hierarchy. The object
+creation is done in the current collection, if
+<I>TargetName</I>
+
+is just an object-name. If a relative or absolute collection is
+given in
+<I>TargetName</I>,
+
+then the object is stored in that collection. The user should
+have 'write' access permission for the collection. '.' can be
+used as
+<I>TargetName</I>
+
+to denote the current collection.
+<P>
+If
+<I>TargetName</I>
+
+is a collection, then Sregister uses the names of the local files
+as SRB object names. The directory path of
+<I>RegisteringObjectPath</I>
+
+is not used in making the SRB object name.
+<P>
+If
+<I>TargetName</I>
+
+is an object-name (possibly with a collection path) and there are
+more than one local file to be copied then the
+<I>TargetName</I>
+
+is appended to the front of the local file names to make SRB
+object names.
+<P>
+If given, the data type of the object is set to
+<I>dataType</I>.
+
+Otherwise, Sregister uses the file extender (i.e. string after
+the last '.') to figure out the type. If it is unable to figure
+out the data type, the 'generic' data type is used. Most popular
+extenders in Unix and DOS will be supported. The data type 
+discovery is done in the MCAT and hence future extenders can be
+supported without any change in or compilation of the client code.
+<P>
+If given, the object is stored in
+<I>resourceName</I>.
+
+Otherwise the object is stored in the default resource given by
+DEFRESOURCE in the user environment file, located in
+~/.srb/.MdasEnv
+<P>
+The 
+<I>size</I>
+
+parameter is needed for correct operations of many other Scommands. 
+Hence we suggest that you give the correct size of the file using 
+this option. If the 
+<I>size </I>
+
+is not given,  it will try to get it through a stat() call assuming the file is local. If this stat() failed, a value of 0 is chosen.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<DT><B>-p </B>
+
+<DD>
+prompts before writing each object to SRB space.
+<DT><B>-c </B>
+
+<DD>
+registers another copy of an existing SRB object.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Sput.1.html">Sput</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>
