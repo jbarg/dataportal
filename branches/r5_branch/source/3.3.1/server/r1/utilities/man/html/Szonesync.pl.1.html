@@ -1,0 +1,121 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Szonesync.pl</TITLE>
+</HEAD><BODY>
+<H1>Szonesync.pl</H1>
+Section: Admin SRB Commands (1)<BR>Updated: Jan 2005 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Szonesync.pl - Synchronize information from another zone.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Szonesync.pl -[u|r|d] [-z zone] [-h]</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<P>
+This perl script synchronizes information between SRB zones, helping
+to create an SRB federation of zones so that users can access data (if
+access controls allow) across multiple zones.  It should be
+periodically run by the SRB administrator to keep the local zone
+up-to-date with other zones in the Federation.  It pulls information
+from the other zone(s) and inserts it into the local zone MCAT via the
+Spullmeta and Spushmeta commands.
+<P>
+In the Federated MCAT system, the local MCAT needs to have certain
+information from the other zones.  For example, a list of users
+(username and domain) for the remote zone is needed in the local MCAT,
+although the password is kept only at the zone that is home for that
+user.
+<P>
+Before sync'ing with another zone, you should make sure you do
+not have name conflicts with any of the following:
+<BR>&nbsp;&nbsp;1)&nbsp;Domain&nbsp;names.&nbsp;&nbsp;
+<BR>&nbsp;&nbsp;2)&nbsp;Resource&nbsp;names.
+<BR>&nbsp;&nbsp;3)&nbsp;Location&nbsp;names&nbsp;(locations&nbsp;with&nbsp;the&nbsp;same&nbsp;name&nbsp;are&nbsp;OK&nbsp;if&nbsp;they
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;actually&nbsp;refer&nbsp;to&nbsp;the&nbsp;same&nbsp;location).
+<P>
+This script queries the local MCAT to find which zones exist (and are
+active; zones marked as inactive are ignored) and where they are (host
+ids) and then connects to each, retrieving the information, and
+inserting it locally.  The Spullmeta and Spushmeta commands perform
+the get and put of the information. 
+<P>
+It is assumed that the user has set the path to include the location
+of the SRB S commands and has a valid .MdasEnv and .MdasAuth
+for connecting to the local server.
+<P>
+It is also necessary that this local user id is registered as an
+admin for this zone at the remote zone(s).  For example, the local
+zone is &quot;A&quot;, the remote is &quot;B&quot;, and you are <A HREF="mailto:srbAdmin@Adomain">srbAdmin@Adomain</A>
+locally.  At B, there must be a user defined as being in Zone A,
+with name <A HREF="mailto:srbAdmin@Adomain">srbAdmin@Adomain</A>, with admin privileges (for zone A).
+When this script, via Stoken, connects to the server at B, server B
+will check with server A to verify <A HREF="mailto:srbAdmin@Adomain">srbAdmin@Adomain</A> has the correct
+password.
+<P>
+Szonesync.pl creates and cd's to a subdirectory (&quot;SzonesyncTmpDir&quot;)
+into which it creates a set of small text files which are used
+with the Spullmeta/Spushmeta commands.
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-u </B>
+
+<DD>
+do a user information (basic) syncronization
+<DT><B>-r </B>
+
+<DD>
+do user information plus resource information syncronization
+<DT><B>-d </B>
+
+<DD>
+do data information syncronization
+<DT><B>-z zone </B>
+
+<DD>
+syncronize with the specified zone only
+<P>
+<DT><B>-h </B>
+
+<DD>
+display command options
+<P>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B>the zoneingest.pl script,</B>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Szone.1.html">Szone</A>(1),</B>
+
+<B>Java Admin Tool,</B>
+
+<B>and see the top of the Szonesync.pl script</B>
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

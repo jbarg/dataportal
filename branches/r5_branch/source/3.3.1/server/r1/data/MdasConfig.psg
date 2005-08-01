@@ -1,0 +1,8 @@
+MDASDBTYPE       postgres 
+MDASDBNAME       PostgreSQL 
+MDASINSERTSFILE  /scratch/s1/sekar/SRB2_0_0rel/data/mdas_inserts
+METADATA_FKREL_FILE metadata.fkrel
+DB2USER           sheauc 
+DB2LOGFILE       /scratch/s1/sekar/SRB2_0_0rel/data/db2logfile
+DBHOME        /scratch/slocal/pgsql/data
+

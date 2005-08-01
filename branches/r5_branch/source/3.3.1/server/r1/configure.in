@@ -1,0 +1,754 @@
+dnl--  Process this file with autoconf to produce a configure script.
+#
+#
+# TO ADD A NEW FLAG to the configure script, follow these steps:
+#
+#     1) Add a user friendly comment below about what the flag is and what it does
+#
+#     2) Search for "Begin configure online help section" and add appropriate lines
+#          to get your flag added into the output of './configure --help'
+#
+#          NOTE:  default values are set here in the last argument to AC_ARG_ENABLE
+#
+#     3) Search for "Begin handling of configure flags" and add appropriate code
+#          to handle the new flag
+#
+#     4) Run "autoconf" to generate a new configure file
+#
+# For help on ./configure options:
+#                  ./configure --help
+#
+# To build vanilla SRB server, use:
+#                   ./configure
+#
+# To change the directory where the software will be installed (copied) to, use:
+#                   --enable-installdir=<path>
+#
+# To specify Oracle version to be used for MCAT enabled SRB server, use:
+#                   --enable-oraver=<733 | 815 | 920_32bit | 920_64bit | 10g_32bit>
+#
+# To specify the SYBASE version, use:
+#                   --enable-sybver=<110>
+#
+# To specify the listener connection type for Oracle DBMS
+#                   --enable-oraconn=<TNS | ONS>
+#
+# To specify the MCAT version, use:
+#                   --enable-mcatver=<10 | 11 | 20>
+#
+# To build Postgres MCAT enabled SRB server, use:
+#                   --enable-psgmcat                           
+#
+# To build Oracle MCAT enabled SRB server, use:
+#                   --enable-oramcat
+#
+# To build DB2 MCAT enabled SRB server, use:
+#                   --enable-db2mcat
+#
+# To build Sybase MCAT enabled SRB server, use:
+#                   --enable-sybmcat
+#
+# To build MySQL MCAT enabled SRB server, use:
+#                   --enable-mysmcat
+#
+# To build Informix MCAT enabled SRB server, use:
+#                   --enable-ifmxmcat
+#
+# To support DB2_LOBJ access, use:
+#                   --enable-db2lobj
+#
+# To support POSTGRES_LOBJ access, use:
+#                   --enable-psglobj
+#
+# To support ORACLE_LOBJ access, use:
+#                   --enable-oralobj
+#
+# To support SYBASE_LOBJ access, use:
+#                   --enable-syblobj
+#
+# To support ILLUSTRA_LOBJ access, use:
+#                   --enable-illuslobj
+#
+# To support MySQL_LOBJ access, use:
+#                   --enable-myslobj
+#
+# To support IFMXLOBJ access, use:
+#                   --enable-ifmxlobj
+#
+# To specify path to DB2 (DB2_HOME), use:
+#                   --enable-db2home=<path>
+#
+# To specify path to Postgres (POSTGRES_HOME), use:
+#                   --enable-psghome=<path>
+#
+# To specify path to Sybase (SYB_HOME), use:
+#                   --enable-sybhome=<path>
+#
+# To specify path to Oracle (ORACLE_HOME), use:
+#                   --enable-orahome=<path>
+#
+# To specify path to MySQL (MYSQL_HOME), use:
+#                   --enable-myshome=<path>
+#
+# To specify path to Informix (IFMXHOME), use:
+#                   --enable-ifmxhome=<path>
+#
+# To specify whether or not to build Java GUI, use:
+#                   --enable-javagui
+#
+# To specify path to Java JDK (javaDir), use:
+#                   --enable-jdkhome=<path>
+#
+# To enable the use of communications ports, use:
+#                   --enable-commports=<#>
+#	 
+# To specify a first allowable port number for SRB client/server other than the default of 20000, use:
+#                   --enable-commstart=<#>
+#
+# To specify a number of allowable ports for SRB client/server other than the default of 200, use:
+#                   --enable-commnum=<#>
+#
+# To enable access control (MDATAACCS), use:
+#                   --enable-accsctrl
+#
+# To include GSI Authentication (Grid Security Infrastructure), use:
+#                   --enable-gsi-auth
+#
+# To specify the path to GSI (GLOBUS_LOCATION), use:
+#                   --enable-globus-location=<path>
+#
+# To specify a project, this is most useful when running multiple SRB Servers on one machine, use:
+#                   --enable-project=<name>
+#
+# To specify the srbPort, this is most useful to differentiate between Data Grids, default 5544, use:
+#                   --enable-srbport=<#>
+#
+# To include SRB secure communication, use:
+#                   --enable-secure-comm
+#
+# SRB secure communication will use GLOBUS_LOCATION to find the needed
+# OpenSSL libraries.  If instead you want to use just an OpenSSL
+# installation (which is easier to install), you can specify it's
+# location with:
+#                   --enable-openssl-location=<path>
+#
+
+AC_INIT(proxy/test/src/adrTestProxyOpr.c)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_LEX
+AC_PROG_YACC
+
+dnl ----------------------------------------------------------------------
+#
+# Begin configure online help section
+#
+AC_ARG_ENABLE(installdir,  [  --enable-installdir=<path>  Specify where SRB currently is, or to be copied to (default is /usr/local/srb)], , enable_installdir="/usr/local/srb")
+
+AC_ARG_ENABLE(oraver,      [  --enable-oraver=<num>       Specify version of Oracle to be used (valid values are <733, 815, 920_32bit, 920_64bit and 10g_32bit - default is 920_32bit)], , enable_oraver="ORACLE_VERSION_920_32bit")
+
+AC_ARG_ENABLE(sybver,      [  --enable-sybver=<num>       Specify Sybase version to be used. (valid value is 110 - default is 110)], , enable_sybver="1100")
+
+AC_ARG_ENABLE(oraconn,     [  --enable-oraconn=<num>      Specify listener connection type for Oracle (valid values are <TNS, and ONS - default is TNS)], , enable_oraconn="TNS")
+
+AC_ARG_ENABLE(mcatver,     [  --enable-mcatver=<num>      Specify MCAT version to be used. (valid values are 10, 11, or 20 - default is 20)], , enable_mcatver="20")
+
+AC_ARG_ENABLE(psgmcat,     [  --enable-psgmcat            Compile Postgres MCAT enabled server (default is disabled)], , enable_psgmcat="no")
+
+AC_ARG_ENABLE(oramcat,     [  --enable-oramcat            Compile Oracle MCAT enabled server (default is disabled)], , enable_oramcat="no")
+
+AC_ARG_ENABLE(mysmcat,     [  --enable-mysmcat            Compile MySQL MCAT enabled server (default is disabled)], , enable_mysmcat="no")
+
+AC_ARG_ENABLE(db2mcat,     [  --enable-db2mcat            Compile DB2 MCAT enabled server (default is disabled)], , enable_db2mcat="no")
+
+AC_ARG_ENABLE(sybmcat,     [  --enable-sybmcat            Compile Sybase MCAT enabled server (default is disabled)], , enable_sybmcat="no")
+
+AC_ARG_ENABLE(ifmxmcat,    [  --enable-ifmxmcat           Compile Informix MCAT enabled server (default is disabled)], , enable_ifmxmcat="no")
+
+AC_ARG_ENABLE(db2lobj,     [  --enable-db2lobj            Compile MCAT enabled server to support DB2_LOBJ access (default is disabled)], , enable_db2lobj="no")
+
+AC_ARG_ENABLE(psglobj,     [  --enable-psglobj            Compile MCAT enabled server to support POSTGRES_LOBJ access (default is disabled)], , enable_psglobj="no")
+
+AC_ARG_ENABLE(myslobj,     [  --enable-myslobj            Compile MCAT enabled server to support MySQL_LOBJ access (default is disabled)], , enable_myslobj="no")
+
+AC_ARG_ENABLE(oralobj,     [  --enable-oralobj            Compile MCAT enabled server to support ORACLE_LOBJ access (default is disabled)], , enable_oralobj="no")
+
+AC_ARG_ENABLE(syblobj,     [  --enable-syblobj            Compile MCAT enabled server to support SYBASE_LOBJ access (default is disabled)], , enable_syblobj="no")
+
+AC_ARG_ENABLE(illuslobj,     [  --enable-illuslobj        Compile MCAT enabled server to support ILLUSTRA_LOBJ access (default is disabled)], , enable_illuslobj="no")
+
+AC_ARG_ENABLE(ifmxlobj,     [  --enable-ifmxlobj          Compile MCAT enabled server to support IFMX_LOBJ access (default is disabled)], , enable_ifmxlobj="no")
+
+AC_ARG_ENABLE(db2home,     [  --enable-db2home=<path>     Specify path to DB2 (DB2_HOME) (default is /projects/doct/db2/v5/home/sqllib)], , enable_db2home="/projects/doct/db2/v5/home/sqllib")
+
+AC_ARG_ENABLE(psghome,     [  --enable-psghome=<path>     Specify path to Postgres (POSTGRES_HOME) (default is /scratch/slocal/pgsql)], , enable_psghome="/scratch/slocal/pgsql")
+
+AC_ARG_ENABLE(myshome,     [  --enable-myshome=<path>     Specify path to MySQL (MySQL_HOME) (default is /scratch/slocal/mysql)], , enable_myshome="/scratch/slocal/mysql")
+
+AC_ARG_ENABLE(sybhome,     [  --enable-sybhome=<path>     Specify path to Sybase (SYB_HOME) (default is /sybase)], , enable_sybhome="/sybase")
+
+AC_ARG_ENABLE(orahome,     [  --enable-orahome=<path>     Specify path to Oracle (ORACLE_HOME) (default is /dbms/oracle/v01/app/oracle/product/9.2.0)], , enable_orahome="/dbms/oracle/v01/app/oracle/product/9.2.0")
+
+AC_ARG_ENABLE(ifmxhome,     [  --enable-ifmxhome=<path>   Specify path to Informix (IFMX_HOME) (default is /informix)], , enable_ifmxhome="/informix")
+
+AC_ARG_ENABLE(javagui,     [  --enable-javagui            Build Java GUI (default is disabled)], , enable_javagui="no")
+
+AC_ARG_ENABLE(jdkhome,     [  --enable-jdkhome=<path>     Specify path to JDK (javaDir) (default is /usr/local/apps/jdk1.4.1)], , enable_jdkhome="/usr/local/apps/jdk1.4.1")
+
+AC_ARG_ENABLE(commports,   [  --enable-commports          Enable use of a specific number of ports, beginning with a particular port number. (default is 200 ports starting at 20000)], , enable_commports="no")
+
+AC_ARG_ENABLE(commstart,   [  --enable-commstart=<num>    Specify the first allowable port number for SRB client/server. (default is 20000)], , enable_commstart="20000")
+
+AC_ARG_ENABLE(commnum,     [  --enable-commnum=<num>      Specify the number of allowable ports for SRB client/server. (default is 200)], , enable_commnum="200")
+
+AC_ARG_ENABLE(accsctrl,    [  --enable-accsctrl           Enable access control on metadata (default is disabled)], , enable_accsctrl="no")
+
+AC_ARG_ENABLE(gsi-auth,    [  --enable-gsi-auth           Enable GSI (Grid Security Infrastructure) authentication (default is disabled)], , enable_gsi_auth="no")
+
+AC_ARG_ENABLE(globus-location,[  --enable-globus-location=<path> Specify path to Globus/GSI (GLOBUS_LOCATION) (default is /usr/local/apps/nmi-2.1)], , enable_globus_location="/usr/local/apps/nmi-2.1")
+
+AC_ARG_ENABLE(project,     [  --enable-project=<name>     Specify a project name for this Server, mostly used for running multiple Servers on one machine. (default is "")], , enable_project="")
+
+AC_ARG_ENABLE(srbport,     [  --enable-srbport=<num>      Specify a port number for this Server, mostly used to differentiate between Data Grids. (default is "5544")], , enable_srbport="5544")
+
+AC_ARG_ENABLE(secure-comm, [  --enable-secure-comm        Enable SRB Secure Communication (default is disabled) (uses GLOBUS_LOCATION libraries by default)], , enable_secure_comm="no")
+
+AC_ARG_ENABLE(openssl-location, [  --enable-openssl-location=<path> For SRB Secure Communication, use this openssl location instead of under GLOBUS_LOCATION], , enable_openssl_location="no")
+
+#
+# End configure online help section
+#
+dnl ----------------------------------------------------------------------
+
+dnl Checks for libraries.
+dnl Replace `main' with a function in -lDataCutter:
+AC_CHECK_LIB(DataCutter, main)
+dnl Replace `main' with a function in -lEncClient:
+AC_CHECK_LIB(EncClient, main)
+dnl Replace `main' with a function in -lEncSfs:
+AC_CHECK_LIB(EncSfs, main)
+dnl Replace `main' with a function in -lEncina:
+AC_CHECK_LIB(Encina, main)
+dnl Replace `main' with a function in -lSrbClient:
+AC_CHECK_LIB(SrbClient, main)
+dnl Replace `main' with a function in -lSrbJavaGlue:
+AC_CHECK_LIB(SrbJavaGlue, main)
+dnl Replace `main' with a function in -lc:
+AC_CHECK_LIB(c, main)
+dnl Replace `main' with a function in -lc_r:
+AC_CHECK_LIB(c_r, main)
+dnl Replace `main' with a function in -lcom_err:
+AC_CHECK_LIB(com_err, main)
+dnl Replace `main' with a function in -ldb:
+AC_CHECK_LIB(db, main)
+dnl Replace `main' with a function in -ldce:
+AC_CHECK_LIB(dce, main)
+dnl Replace `main' with a function in -ldcepthreads:
+AC_CHECK_LIB(dcepthreads, main)
+dnl Replace `main' with a function in -ldpss:
+AC_CHECK_LIB(dpss, main)
+dnl Replace `main' with a function in -ldpssfs:
+AC_CHECK_LIB(dpssfs, main)
+dnl Replace `main' with a function in -ldpssutils:
+AC_CHECK_LIB(dpssutils, main)
+dnl Replace `main' with a function in -lelf:
+AC_CHECK_LIB(elf, main)
+dnl Replace `main' with a function in -lgen:
+AC_CHECK_LIB(gen, main)
+dnl Replace `main' with a function in -lhpss:
+AC_CHECK_LIB(hpss, main)
+dnl Replace `main' with a function in -lhpss_extensions:
+AC_CHECK_LIB(hpss_extensions, main)
+dnl Replace `main' with a function in -lhpssapi:
+AC_CHECK_LIB(hpssapi, main)
+dnl Replace `main' with a function in -ljnetutils:
+AC_CHECK_LIB(jnetutils, main)
+dnl Replace `main' with a function in -lkrb5:
+AC_CHECK_LIB(krb5, main)
+dnl Replace `main' with a function in -lkrb5crypto:
+AC_CHECK_LIB(krb5crypto, main)
+dnl Replace `main' with a function in -ll:
+AC_CHECK_LIB(l, main)
+dnl Replace `main' with a function in -lm:
+AC_CHECK_LIB(m, main)
+dnl Replace `main' with a function in -lnetlogger:
+AC_CHECK_LIB(netlogger, main)
+dnl Replace `main' with a function in -lnsl:
+AC_CHECK_LIB(nsl, main)
+dnl Replace `main' with a function in -lposix4:
+AC_CHECK_LIB(posix4, main)
+dnl Replace `main' with a function in -lpthread:
+AC_CHECK_LIB(pthread, main)
+dnl Replace `main' with a function in -lpthreads:
+AC_CHECK_LIB(pthreads, main)
+dnl Replace `main' with a function in -lresolv:
+AC_CHECK_LIB(resolv, main)
+dnl Replace `main' with a function in -lsocket:
+AC_CHECK_LIB(socket, main)
+dnl Replace `main' with a function in -lthread:
+AC_CHECK_LIB(thread, main)
+dnl Replace `main' with a function in -lwrtree:
+AC_CHECK_LIB(wrtree, main)
+dnl Replace `main' with a function in -ly:
+AC_CHECK_LIB(y, main)
+
+dnl Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS(fcntl.h limits.h malloc.h strings.h sys/file.h sys/ioctl.h sys/time.h syslog.h unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_UID_T
+AC_TYPE_MODE_T
+AC_TYPE_OFF_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_STRUCT_ST_BLKSIZE
+AC_STRUCT_ST_BLOCKS
+AC_STRUCT_ST_RDEV
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+dnl Checks for library functions.
+AC_FUNC_ALLOCA
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MEMCMP
+AC_FUNC_MMAP
+AC_TYPE_SIGNAL
+AC_FUNC_UTIME_NULL
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(ftime getcwd gethostname gettimeofday mkdir mktime putenv re_comp regcomp rmdir select socket strdup strerror strstr)
+
+dnl ----------------------------------------------------------------------
+# check for 64 bit addressing.
+# run a build and run a simple program who's exit value indicates if
+# and address variable is 8 bytes.
+#
+# first, temporarily change ac_link (the command executed to link) 
+# so that it does not include libraries.  This is to avoid an error, 
+# on linux at least, where it would try to link with -lelf
+# but then would get a fatal error.
+#
+ac_link_save=$ac_link
+ac_link='$CC -o  conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext >&5'
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
+main() {
+char *foo;
+if (sizeof(foo)==8) exit(0);
+exit(1);
+} 
+]])],
+[ADDR_64BIT="1";], [:])
+
+AC_SUBST(ADDR_64BIT)
+ac_link=$ac_link_save
+
+if test "$ADDR_64BIT" = "1"; then
+  echo "checking for 64 bit addressing .... yes"
+else
+  echo "checking for 64 bit addressing .... no"
+fi
+
+dnl ----------------------------------------------------------------------
+#
+# Begin handling of SRB configure variables
+#
+
+SRB_VERSION=3.3.1
+AC_SUBST(SRB_VERSION)
+
+AC_CANONICAL_HOST
+
+#    *-solaris*)
+case "$host" in
+    *-linux*) 
+	PORTNAME=PORTNAME_linux
+	AC_SUBST(PORTNAME)
+	echo "Host system is Linux.";;
+    *-solaris*) 
+	PORTNAME=PORTNAME_solaris
+	AC_SUBST(PORTNAME)
+	echo "Host system is Solaris.";;
+    *-sunos*) 
+	PORTNAME=PORTNAME_sunos
+	AC_SUBST(PORTNAME)
+	echo "Host system is SunOS.";;
+    *-aix*) 
+	PORTNAME=PORTNAME_aix
+	AC_SUBST(PORTNAME)
+	echo "Host system is AIX.";;
+    *alpha*) 
+	PORTNAME=PORTNAME_alpha
+	AC_SUBST(PORTNAME)
+	echo "Host system is Alpha.";;
+    *-c90*) 
+	PORTNAME=PORTNAME_c90
+	AC_SUBST(PORTNAME)
+	echo "Host system is C90.";;
+    *-t3e*) 
+	PORTNAME=PORTNAME_t3e
+	AC_SUBST(PORTNAME)
+	echo "Host system is T3e.";;
+    *-sgi*) 
+	PORTNAME=PORTNAME_sgi
+	AC_SUBST(PORTNAME)
+	echo "Host system is SGI.";;
+    *-darwin*) 
+	PORTNAME=PORTNAME_osx
+	AC_SUBST(PORTNAME)
+	echo "Host system is OSX.";;
+    *)
+	echo "Unknown system type.";;
+esac
+echo "Portname was set to:  $PORTNAME"
+
+dnl ----------------------------------------------------------------------
+#
+# Begin handling of configure flags
+#
+INSTALL_DIR=$enable_installdir
+AC_SUBST(INSTALL_DIR)
+
+SRB_PROJECT=$enable_project
+AC_SUBST(SRB_PROJECT)
+
+case "$enable_oraver" in
+    *733) 
+	ORAVER=ORACLE_VERSION_733
+	echo "Using Oracle version 733";;
+    *815) 
+	ORAVER=ORACLE_VERSION_815
+	echo "Using Oracle version 815";;
+    *920_32bit) 
+	ORAVER=ORACLE_VERSION_920_32bit
+	echo "Using Oracle version 920_32bit";;
+    *920_64bit) 
+	ORAVER=ORACLE_VERSION_920_64bit
+	echo "Using Oracle version 920_64bit";;
+    *10g_32bit) 
+	ORAVER=ORACLE_VERSION_10g_32bit
+	echo "Using Oracle version 10g_32bit";;
+esac
+AC_SUBST(ORAVER)
+
+if test "$enable_sybver" = "110"
+then
+     echo "Configuring for Sybase version 110 . . . "
+     SYB_VER=CS_VERSION_110
+fi
+AC_SUBST(SYBVER)
+
+case "$enable_oraconn" in
+    ONS) 
+	ORACONN=ORACLE_CONNECT_ONS
+	echo "Using Oracle listener connect type ONS";;
+    TNS) 
+	ORACONN=ORACLE_CONNECT_TNS
+	echo "Using Oracle listener connect type TNS";;
+esac
+AC_SUBST(ORACONN)
+
+if test "$enable_mcatver" = "10"
+then
+     echo "Configuring for MCAT version 10 . . . "
+     MCAT_VERSION=MCAT_VERSION_10
+fi
+if test "$enable_mcatver" = "11"
+then
+     echo "Configuring for MCAT version 11 . . . "
+     MCAT_VERSION=MCAT_VERSION_11
+fi
+if test "$enable_mcatver" = "20"
+then
+     echo "Configuring for MCAT version 20 . . . "
+     MCAT_VERSION=MCAT_VERSION_20
+fi
+     AC_SUBST(MCAT_VERSION)
+
+if test "$enable_psgmcat" != "no"
+then
+     echo "Configuring to build Postgres MCAT enabled SRB server . . . "
+     MCAT_Postgres=1
+     rm -f data/metadata.fkrel
+     ln -s metadata.fkrel.psg data/metadata.fkrel
+     AC_SUBST(MCAT_Postgres)
+fi
+
+if test "$enable_mysmcat" != "no"
+then
+     echo "Configuring to build MySQL MCAT enabled SRB server . . . "
+     MCAT_MySQL=1
+     rm -f data/metadata.fkrel
+     ln -s metadata.fkrel.psg data/metadata.fkrel
+     AC_SUBST(MCAT_MySQL)
+fi
+
+if test "$enable_oramcat" != "no"
+then
+     echo "Configuring to build Oracle MCAT enabled SRB server . . . "
+     MCAT_Oracle=1
+     rm -f data/metadata.fkrel
+     ln -s metadata.fkrel.ora data/metadata.fkrel
+     AC_SUBST(MCAT_Oracle)
+fi
+
+if test "$enable_db2mcat" != "no"
+then
+     echo "Configuring to build DB2 MCAT enabled SRB server . . . "
+     MCAT_DB2=1
+     rm -f data/metadata.fkrel
+     ln -s metadata.fkrel.db2 data/metadata.fkrel
+     AC_SUBST(MCAT_DB2)
+fi
+
+if test "$enable_sybmcat" != "no"
+then
+     echo "Configuring to build Sybase MCAT enabled SRB server . . . "
+     MCAT_Sybase=1
+     rm -f data/metadata.fkrel
+     ln -s metadata.fkrel.syb data/metadata.fkrel
+     AC_SUBST(MCAT_Sybase)
+fi
+
+if test "$enable_ifmxmcat" != "no"
+then
+     echo "Configuring to build Informix MCAT enabled SRB server . . . "
+     MCAT_Informix=1
+     rm -f data/metadata.fkrel
+     ln -s metadata.fkrel.ifmx data/metadata.fkrel
+     AC_SUBST(MCAT_Informix)
+fi
+
+if test "$enable_db2lobj" != "no"
+then
+     echo "Configuring SRB server that supports DB2_LOBJ access. . . "
+     DB2LOBJ=1
+     AC_SUBST(DB2LOBJ)
+fi
+
+if test "$enable_myslobj" != "no"
+then
+     echo "Configuring SRB server that supports MySQL_LOBJ access. . . "
+     MYSLOBJ=1
+     AC_SUBST(MYSLOBJ)
+fi
+
+if test "$enable_psglobj" != "no"
+then
+     echo "Configuring SRB server that supports POSTGRES_LOBJ access. . . "
+     PSGLOBJ=1
+     AC_SUBST(PSGLOBJ)
+fi
+
+if test "$enable_oralobj" != "no"
+then
+     echo "Configuring SRB server that supports ORACLE_LOBJ access. . . "
+     ORALOBJ=1
+     AC_SUBST(ORALOBJ)
+fi
+
+if test "$enable_syblobj" != "no"
+then
+     echo "Configuring SRB server that supports SYBASE_LOBJ access. . . "
+     SYBLOBJ=1
+     AC_SUBST(SYBLOBJ)
+fi
+
+if test "$enable_illuslobj" != "no"
+then
+     echo "Configuring SRB server that supports ILLUSTRA_LOBJ access. . . "
+     ILLUSLOBJ=1
+     AC_SUBST(ILLUSLOBJ)
+fi
+
+if test "$enable_ifmxlobj" != "no"
+then
+     echo "Configuring SRB server that supports IFMX_LOBJ access. . . "
+     IFMXLOBJ=1
+     AC_SUBST(IFMXLOBJ)
+fi
+
+DB2HOME=$enable_db2home
+AC_SUBST(DB2HOME)
+
+MYSHOME=$enable_myshome
+AC_SUBST(MYSHOME)
+
+POSTGRESHOME=$enable_psghome
+AC_SUBST(POSTGRESHOME)
+
+SYBHOME=$enable_sybhome
+AC_SUBST(SYBHOME)
+
+ORAHOME=$enable_orahome
+AC_SUBST(ORAHOME)
+
+IFMXHOME=$enable_ifmxhome
+AC_SUBST(IFMXHOME)
+
+if test "$enable_javagui" != "no"
+then
+     echo "Configuring to build Java GUI . . . "
+     JAVAGUI=1
+     AC_SUBST(JAVAGUI)
+fi
+
+JDKHOME=$enable_jdkhome
+AC_SUBST(JDKHOME)
+
+if test "$enable_commports" != "no"
+then
+     echo "Configuring with specific comm ports . . . "
+     COMMPORTS=1
+     AC_SUBST(COMMPORTS)
+fi
+
+COMMSTART=$enable_commstart
+AC_SUBST(COMMSTART)
+
+COMMNUM=$enable_commnum
+AC_SUBST(COMMNUM)
+
+SRB_PORT=$enable_srbport
+AC_SUBST(SRB_PORT)
+
+if test "$enable_accsctrl" != "no"
+then
+     echo "Configuring for access control to metadata . . . "
+     ACCSCTRL=1
+     AC_SUBST(ACCSCTRL)
+fi
+
+if test "$enable_gsi_auth" != "no"
+then
+     echo "Configuring for GSI Authentication . . . "
+     GSI_AUTH=1
+     AC_SUBST(GSI_AUTH)
+     GSIHOME=$enable_globus_location
+     AC_SUBST(GSIHOME)
+
+#    And now try to figure out the GSI type of installation
+     if test -d $enable_globus_location/include/gcc32 
+     then 
+         GSI_INSTALL_TYPE=gcc32
+     fi
+     if test -d $enable_globus_location/include/gcc64 
+     then
+         GSI_INSTALL_TYPE=gcc64
+     fi
+     if test -d $enable_globus_location/include/vendorcc32dbg
+     then
+         GSI_INSTALL_TYPE=vendorcc32dbg
+     fi
+     if test -d $enable_globus_location/include/vendorcc32
+     then
+         GSI_INSTALL_TYPE=vendorcc32
+     fi
+     if test -d $enable_globus_location/include/gcc32dbg
+     then
+        GSI_INSTALL_TYPE=gcc32dbg
+     fi
+     AC_SUBST(GSI_INSTALL_TYPE)
+
+# and determine if extra libaries are needed
+     if test -f "$enable_globus_location/lib/libglobus_callout_$GSI_INSTALL_TYPE"
+     then
+         GSI_CALLOUT=1
+     fi
+     AC_SUBST(GSI_CALLOUT)
+
+fi
+
+if test "$enable_secure_comm" != "no"
+then
+     echo "Configuring for SRB Secure Communication . . . "
+     SRB_SECURE_COMM=1
+     AC_SUBST(SRB_SECURE_COMM)
+     if test "$enable_openssl_location" = no; then
+        if test "$enable_gsi_auth" = no; then
+	   echo "Configuring for GSI/OpenSSL Libraries . . . "
+           GSIHOME=$enable_globus_location
+           AC_SUBST(GSIHOME)
+
+#          And now try to figure out the GSI type of installation
+           if test -d $enable_globus_location/include/gcc32 
+           then 
+              GSI_INSTALL_TYPE=gcc32
+           fi
+           if test -d $enable_globus_location/include/gcc64 
+           then
+              GSI_INSTALL_TYPE=gcc64
+           fi
+           if test -d $enable_globus_location/include/vendorcc32dbg
+           then
+              GSI_INSTALL_TYPE=vendorcc32dbg
+           fi
+           if test -d $enable_globus_location/include/vendorcc32
+           then
+              GSI_INSTALL_TYPE=vendorcc32
+           fi
+           if test -d $enable_globus_location/include/gcc32dbg
+           then
+              GSI_INSTALL_TYPE=gcc32dbg
+           fi
+           AC_SUBST(GSI_INSTALL_TYPE)
+
+# and determine if extra libaries are needed
+           if test -f "$enable_globus_location/lib/libglobus_callout_$GSI_INSTALL_TYPE"
+           then
+              GSI_CALLOUT=1
+           fi
+           AC_SUBST(GSI_CALLOUT)
+
+        fi
+     else
+	echo "Configuring for OpenSSL libraries"
+        OPENSSLHOME=$enable_openssl_location
+        AC_SUBST(OPENSSLHOME)
+     fi
+fi
+
+#
+# End handling of configure flags
+#
+dnl ----------------------------------------------------------------------
+#
+# Create symbolic links in places where you need duplicates of a given file
+#
+    rm -f MCAT/data/MdasConfig
+    rm -f MCAT/data/metadata.fkrel
+    rm -f readme.dir/web/README.first.htm
+    ln -s ../../data/MdasConfig MCAT/data/MdasConfig
+    ln -s ../../data/metadata.fkrel MCAT/data/metadata.fkrel
+    ln -s ../README.first.htm readme.dir/web/README.first.htm
+
+dnl ----------------------------------------------------------------------
+
+targetroot=`pwd`
+AC_SUBST(targetroot)
+
+AC_OUTPUT(
+Makefile
+bin/killsrb
+bin/runsrb
+java/src/Makefile
+java/src/glue/Makefile
+mk/mk.config
+mk/RPM/README
+mk/RPM/SRB.spec
+MCAT/Makefile
+MCAT/java/src/Makefile
+MCAT/java/Makefile
+preload/Makefile
+src/include/srb.h
+tape/Makefile
+test/APItest/Makefile
+test/examples/Makefile
+test/testsuite/Makefile
+utilities/Makefile,
+chmod 755 bin/killsrb bin/runsrb
+)

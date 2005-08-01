@@ -1,0 +1,327 @@
+
+A Primer to the T-Language:
+--------------------------
+
+	The Template language (T-language for short) was developed
+to aid as a tool for facilitating ingestion and presentation of
+data in and out of database systems. The language (as the name suggest) 
+provides statements that can be used for creating templates, which are
+in turn filled with data from a database; conversely, the T-language also
+provides rule templates  for identifying data values from a document for
+ingestion into a database. 
+
+The grammar for the T-language is given in Appendix A.
+Each T program consists of two parts. The first part is the presentation 
+template used for transforming the results of a database query into a 
+presentation format and the second part is the ingestion template for taking
+a document and extracting values from it for ingestion into a database.
+A T program can have either or both of these parts. 
+
+The execution of a T program is different from a normal procedural
+language. One can call the execution paradigm of a T program as 
+'template building'. 
+
+In a procedural language, the action proceeds by 
+executing statements one after the other and the value of variables 
+change as a side effect to this execution. Moreover, when a variable is
+changed by a statement, the new value is used by subsequent statement
+execution. When a database answer  is being processed by a procedural 
+language, one can see some sort of a loop inside which a new row of 
+values are read and used in the execution of the loop. The access of 
+the data is controlled by the flow of the program. Also, procedural 
+statements have a concept  of a 'begin' and a  'end' and execution of 
+the program (with possible internal looping) is done once per invocation. 
+
+In the 'template building' paradigm, the data controls the execution of
+the program. The program gets executed with the arrival of a new row
+of values.  Hence there are as many invocation of the program as there
+are rows of data. With each invocation, the program emits an output which
+corresponds to the filling of a template using the input row data values.
+Hence, a T program can be viewed as a template (form) that needs to be
+outputted. If the template is just a non-T sequence (i.e., cannot be 
+interpreted as a T language statement), then the template is emitted.
+If there are variables in that  template, they are replaced with actual
+values and if there are some T language statements (such as if or for),
+they are executed to emit parts of the template.
+
+An important point to note in this execution is that the statements should
+be viewed as being executed in parallel with a template being output as a 
+result of the application. One can view each statement in the program
+as being responsible for filling  a part of the template and each such
+statement can be executed in parallel. When the statements are nested
+as in (for or if) the same paradigm is applied at each nesting level. 
+If a value of a variable is changed in this 'instantaneous' execution, 
+these do not affect the current program execution.
+These changed values become visible when the program gets executed again and 
+affects the output based on the next row of data values (the exceptions
+are loop variable used in for-loops). Since there
+are no side effects that link portions of a program, one can
+view a T program as a truly parallel program. 
+
+In another view, the invocation of a T program can be viewed as a 
+program rewriting task. Where the T program template is rewritten
+(replaced) by another template based on the rules for evaluating
+the various statements in the program.
+
+
+Presentation Program: 
+--------------------
+The presentation program has three templates associated  with it: Header,
+Body and Tail templates. The Header and Tail templates are each  applied
+once, respectively before the beginning and after the end  of 
+processing of results from the database. The body of a T program is 
+invoked for each row of data accessed from the database. 
+
+
+There are two types of variable names allowed in  T programs: system-defined 
+variable names and user-defined variable names. The system-defined
+variable names can be used for their values but the T program cannot
+change their values. The user-defined variables can have their values
+changed using assignment statements.
+
+
+Functions are also allowed in a T program but a function is
+applied by replacing the function call in the program by the 
+body of the function (like macros substitution in C).
+
+For loops are applied by replacing with multiple copies of the
+body as dictated by the for-loop. The loop variables are allowed to change
+for each copy of the for-loop body replacement. 
+If-then-else  statements are applied by checking the conditions and 
+by replacing the if-statement  with the body of the then or else clause
+depending upon the truth of the if condition. As one can see, the execution
+of a for-statement is just a replacement by a (finite) number of its body
+and the execution of an if-statement is just a replacement by the appropriate
+portion of its body. 
+
+Assignment statements are executed by evaluating the right hand side and
+replacing the value of the left-hand-side variable's value with this
+new value. 
+
+In the template, if a variable occurs in any place, it is
+replaced in the template (for that invocation) by its value. Similarly,
+if  an evaluable expression occurs   in the template, the expression
+is evaluated and its value is placed instead of the expression.
+
+
+Ingestion Program:
+-----------------
+
+The ingestion program is a set of rules. It works as follows: the input to
+the program is a document (string of ASCII characters). Each rule has 
+a Head-RegularExpression (HRE) and a Tail-RegularExpression (TRE). 
+The document is scanned from top to bottom and a rule becomes 
+applicable if its  HRE and TRE evaluate to true. In such a case, the
+value between these two strings (that matched HRE and TRE) are assigned to
+the rule-variable. The rule may also have a condition that need to be evaluate
+to true to allow the rule to fire. 
+
+The set of rules may have a set of flag variable  that may be 
+be assigned values  (eg. rule application criteria). These values are
+used when applying the rules. For example, one may have an 
+application-criteria, "match=FIRSTRULE", hence the first rule that fires 
+is used. If "match=NEAREST", then the rule that applies nearer to the
+top of the document is use and if "match=ROUNDROBIN", the search for
+applicable rule is begun after the last rule that was used by the program. 
+
+When a rule  becomes applicable, the answer is returned by the program
+(like Prolog's answer to a query). The user then can re-invoke the
+ingestion program using the same document after truncating it appropriately.
+
+Grammar in Appendix A  gives the rules for forming the sentences in
+T language. The following example shows a T language program.
+
+Example 1:
+=========
+
+<TLHEAD>
+  <html>
+   <head>
+       <title> Welcome to SRB</title>
+   </head>
+   <body  bgcolor=#FFFFFF>
+        <TABLE>
+           <TR BGCOLOR="#BEBEBE">
+                <TH>ROW</TH><TH>@@@0:</TH><TH>@@@1:</TH><TH>@@@2:</TH>
+           </TR>
+</TLHEAD>
+<TLBODY>
+   <TLASSIGN>
+   alpha = $convtoint( (***alpha: + $pow( 5 , 3) ) )
+   </TLASSIGN>
+   <TLIF> (%%%RN: % 10) == 0 
+      <TLTHEN><TR BGCOLOR="#BEBEBE">
+                <TH>ROW</TH><TH>@@@0:</TH><TH>@@@1:</TH><TH>@@@2:</TH></TR>
+   </TLIF>
+   <TLIF> ('$$$2:' ? 'file system') == 1 
+      <TLTHEN>
+          <TLIF> ('$$$2:' ? 'hpss.*system') == 1 
+             <TLTHEN> <TR BGCOLOR="#AAFFFF">
+             <TLELSE><TR BGCOLOR="#FFAAFF">
+          </TLIF>
+      <TLELSE><TR BGCOLOR="#FFFFAA">
+   </TLIF>
+   <TLIF> ('$$$1:' ? 'sdsc') == 1
+      <TLTHEN><TD BGCOLOR="#DDDDDD"><B><FONT COLOR=#0000FF>%%%RN:</FONT></B></TD>
+      <TLELSE><TD><FONT COLOR=#0000FF>%%%RN:</FONT></TD>
+   </TLIF>
+   <TD><FONT COLOR=#0000FF META=RSRC_ID> $$$0:</FONT></TD>
+   <TD><FONT COLOR=#0000FF META=RSRC_NAME> $$$1:</FONT></TD>
+   <TD><FONT COLOR=#0000FF META=RSRC_TYP_NAME>$$$2:</FONT></TD>
+   </TR>
+</TLBODY>
+<TLTAIL>
+   </TABLE></body></html>
+</TLTAIL>
+<TLRULES>
+   <TLRULECOND>
+match=NEAREST
+   </TLRULECOND>
+   <TLRULEHEAD>META=RSRC_ID></TLRULEHEAD>
+RSRC_ID
+   <TLRULETAIL></FONT></TD></TLRULETAIL>
+   <TLRULEHEAD>META=RSRC_NAME></TLRULEHEAD>
+RSRC_NAME
+   <TLRULETAIL></FONT></TD></TLRULETAIL>
+   <TLRULEHEAD>META=RSRC_TYP_NAME></TLRULEHEAD>
+RSRC_TYP_NAME
+   <TLRULETAIL></FONT></TD></TLRULETAIL>
+</TLRULES>
+
+
+
+
+A. Grammar for Template Language (T-Language)
+==========================================
+
+<tlTemplate>		 := [<tlPresentationTemplate>][<tlIngestionTemplate>]
+<tlPresentationTemplate> := [<tlTemplateHeader>][<tlTemplateBody>][<tlTemplateFooter>][<tlTemplateRules>]
+<tlTemplateHeader>       := '<TLHEAD>'<tlString>'</TLHEAD>'
+<tlTemplateBody>         := '<TLBODY>'<tlString>'</TLBODY>'
+<tlTemplateFooter>       := '<TLTAIL>'<tlString>'</TLTAIL>'
+<tlTemplateRules>	 := '<TLRULES>'<tlApplyRules><tlRuleSet>'</TLRULES>'
+
+<tlIngestionTemplate>    := <empty-string> |
+			    '<TLFUNCLIST>'<tlFuncTemplateList>'</TLFUNCLIST>'
+<tlFuncTemplateList>	 := <empty-string> |
+			    <tlFuncTemplate><tlFuncTemplateList>
+<tlFuncTemplate>	 := '<TLFUNC>'<tlFuncName>'('<tlFuncArgList>')<TLFUNCBODY>'<tlString>'</TLFUNC>'
+
+<tlString>		 := <tlPrintString> |
+			    <tlString><tlValueHolder><tlString> |
+			    <tlString><tlEvalTemplate><tlString> |
+			    <tlString><tlifTemplate><tlString> |
+			    <tlString><tlforTemplate><tlString> |
+			    <tlString><tlincludeObject><tlString> |
+			    <tlString><tlfunctionCall><tlString> |
+			    <tlString><tlAssignmentBlock><tlString>
+<tlincludeObject>	 := '<TLINCLUDEOBJ>'<srbObjPropertiesString>'</TLINCLUDEOBJ>'
+<tlAssignmentBlock>	 := '<TLASSIGN>'<tlAssignmentList>'</TLASSIGN>'
+<tlfunctionCall>	 := '<TLFUNCCALL>'<tlFuncName>'('<tlFuncParamList>')</TLFUNCCALL>'
+<tlifTemplate>		 := '<TLIF>'<tlLogicalExpr>'<TLTHEN>'<tlString>'<TLELSE>'<tlString>'</TLIF>' |
+			    '<TLIF>'<tlLogicalExpr>'<TLTHEN>'<tlString>'</TLIF>' 
+<tlforTemplate>		 := '<TLFOR>'<tlforControl>'<TLFORBODY>'<tlString>'</TLFOR>'
+<tlforControl>		 := <tlAssignmentList>';'<tlLogicalExpr>';'<tlAssignmentList>
+<tlAssignmentList>	 := <empty-string> |
+			     <tlAssignment> |
+			     <tlAssignment> ',' <tlAssignment>
+<tlEvalTemplate>	 := '<TLEVAL>'<tlEvaluation>'</TLEVAL>'
+<tlAssignment>		 := <tlUserDefinedNameStr> '=' <tlEvaluation>
+
+<tlApplyRules>		 := [<tlApplyQuery>][<tlApplyCond>]
+<tlApplyQuery>		 := '<TLQUERY>'<tlPrintString>'</TLQUERY>'
+<tlApplyCond>		 := '<TLRULECOND>'<tlAssignmentList>'</TLRULECOND>'
+<tlRuleSet>		 := <empty-string> |
+			    <tlRule><tlRuleSet> 
+<tlRule>		 := '<TLRULEHEAD>'<tlRegExp>'</TLRULEHEAD>'<tlValueHolder>'<TLRULETAIL>'<tlRegExp>'</TLRULETAIL>'
+<tlRule>		 := '<TLRULEHEAD>'<tlRegExp>'<TLRULEPRESTRINGCOND>'<tlRegExp>'</TLRULEHEAD>'<tlValueHolder>'<TLRULETAIL>'<tlRegExp>'</TLRULETAIL>'
+
+
+<srbObjPropertiesString> := <srbObjName> |
+			    <srbObjConjunctString> 
+<srbObjConjunctString>   := '&'<metaCatEqEqExpression> |
+			    '&'<metaCatEqExpression> <srbObjConjunctString>
+<metaCatEqExpression>	 := <metaCatDefineConstant>'='<metaDataValue>
+<metaDataValue>		 := <number> | <quoted-String>
+
+<tlFuncArgList>		 := <tlFuncArg> |
+			    <tlFuncArg> , <tlFuncArgList>
+<tlFuncParamList>	 := <tlFuncParam> |
+			    <tlFuncParam> , <tlFuncParamList>
+<tlFuncName>		 := <tlUserDefinedValueHolder>
+<tlFuncArg>		 := <tlUserDefinedValueHolder>
+<tlFuncParam>		 := <tlString>
+
+<tlEvaluation>		 := <tlArithStringExpr>
+
+<tlLogicalExpr>		 := <tlLogterm> |
+			    <tlArithStringExpr>   --- result is coerced to 0 or 1
+<tlArithStringExpr>	 := <tlASExp>  |
+			    '(' <tlASExp> ')' |
+			    '[' <tlASExp> ']' |
+			    '{' <tlASExp> '}' 
+			    
+<tlRedExpr>		 := Regular Expression defined for regexp
+<tlASExp>		 := <tlASterm> | 
+			    <tlLogicalExpr> <LogicalOpr> <tlLogicalExpr>
+			    <tlArithStringExpr> <ComparisonOpr> <tlArithStringExpr> |
+			    <tlArithStringExpr> <RegExpOpr> <tlArithStringExpr> |
+			    <tlArithStringExpr> <ArithmeticOpr> <tlArithStringExpr> |
+			    <tlArithStringExpr> <StringOpr> <tlArithStringExpr> 
+			    
+<LogicalOpr>		 := '&&' | '||'
+<ComparisonOpr>		 := '>' | '<' | '==' | '>=' | '<=' | '!=' 
+<ArithmeticOpr>		 := '+' | '-' | '*' | '/'
+<RegExpOpr>		 := '?'
+<StringOpr>		 := '.' |     --- concatenation
+			    '|h' |    --- (s |h n)   head of  's' upto size 'n'
+			    '|t' |    --- (s |t n)   tail of  's' upto size 'n'
+
+<tlLogterm>		 := '0' |
+			    '1' | 
+			    <tlValueHolder>     ---  coerced into 1 or 0
+
+<tlASterm>		 := <tlValueHolder> | 
+			    <number> |
+			    <quoted-string-with-\-escape> |
+			    <double-quoted-string-with-\-escape>
+
+<tlValueHolder>          := <tlColumnNameHolder> |
+			    <tldataHolder> |
+			    <tlescapedataHolder> |
+			    <tlolddataHolder> |
+			    <tlrownumberHolder> |
+			    <tlnumofColumnHolder> |
+			    <tlUserDefValueHolder> |
+			    <tlnumofTablesHolder> |
+			    <tlnumofUsrDfValHolder> |
+			    <tlQueryHolder> |
+			    <tlTableNameListHolder> 
+
+<tlColumnNameHolder>     := '@@@'<tlinteger>
+<tldataHolder>		 := '$$$'<tlinteger> |
+			    '$$$'<tlColumnNameValue>
+<tlescapedataHolder>	 := '+++'<tlinteger> |
+			    '+++'<tlColumnNameValue>
+<tlolddataHolder>	 := '!!!'<tlinteger>	 |
+			    '!!!'<tlColumnNameValue>		
+<tlUserDefValueHolder>	 := '***'<tlUserDefinedNameStr>	
+<tlrownumberHolder>	 := '%%%RN'
+<tlnumofColumnHolder>	 := '%%%NC'
+<tlnumofTablesHolder>	 := '%%%NT'
+<tlnumofUsrDfValHolder>  := '%%%ND'
+<tlQueryHolder>          := '%%%QQ'
+<tlTableNameListHolder>	 := '%%%TL'
+
+<tlColumnNameValue>      := <tlPrintString>           ; stands for output columnname
+<tlUserDefinedNameStr>	 := <tlPrintString>           ;   user-defined variable name
+
+<tlPrintString>          := <empty-string> |
+			    <string-without-tlReservedString>
+
+<tlReservedString>       := '<TL' |'</TL' | '!!!' | '@@@' | '###' | '$$$' | '%%%' | '^^^' | 
+			    '&&&'  | '***' | '???' | '///' | '\\\' | '+++' | '---' | 
+			    '~~~'  | '|||'
+<metaCatDefineConstant>	 :=  --- terms defined by Sattrs command
+
+

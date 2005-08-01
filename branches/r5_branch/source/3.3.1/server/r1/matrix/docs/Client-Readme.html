@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+  <HEAD>
+    <TITLE>Matrix Client API Readme</TITLE>
+  </HEAD>
+  <BODY>
+  <H2>What is the Matrix Client API</H2>
+  Some classes that are used to take away most tedium from using auto generated
+  JAXB classes, and remove the details of needing to handle marshalling and
+  unmarshalling and SOAP requests. Using the API, developers should be able to
+  focus on their application logic, instead of the details of correctly talking
+  to a Matrix server.
+  <BR/><BR/>
+  <H2>How to Use it</H2>
+  First, take a look at the schema srb.xsd, and understand what it is.Look at the example code for using the Client API in
+examples/ClientXXXTest.sh.
+  <H2>Some Interesting Stuff you may want/have to know<br/>
+      More *'s means more important</H2>
+  1. * Although most of the classes allow setXXX methods, you should only use them for
+  non-required parameters, and useXXX methods for required parameters, since the
+  useXXX parameters guarantee that the resulting object will be a valid
+  content tree.<br/><br/>
+  2. ** When creating a UserInfo object, the setXXX methods should probably be used
+  to set the HomeDirectory, ChallengeResponse (password), and
+  DefaultStorageResouce fields. Although these are optional fields for a valid
+  request, they are probably needed.<br/><br/>
+  3. ** Right now, when creating a Step, the optional field StepName must be set
+  for an operation to be performed by the server. (e.g.
+  step.setStepName("createOp") ). The list of valid StepNames follow:
+  <ul>
+		<li>copyOp</li>
+		<li>createOp</li>
+		<li>deleteOp</li>
+		<li>downloadDataSetOp</li>
+		<li>ingestOp</li>
+		<li>listOp</li>
+		<li>prepareTicketOp</li>
+		<li>renameOp</li>
+		<li>replicateOp</li>
+		<li>seekNReadOp</li>
+		<li>seekNWriteOp</li>
+  </UL>
+
+  4. * You need to have a matrix server running somewhere.
+  <p>&nbsp;5. ** Communication to the server can be done by first setting up a DataGridRequest.
+  A DataGridRequest looks like this:</p>
+  <pre>
+  DataGridRequest
+    |_DocMeta (type DocMeta)
+    |_GridUser (type UserInfo)
+    |_VOInfo (type VirtualOrganizationInfo)
+    |_Transaction/TransactionStatusQuery (Transaction when making requests)
+    |_FaultHandler (type FaultHandlers - not used for now)
+
+  </pre>
+  An example operation might be one for creating a new Collection. So first the
+  user has to set up a DocMeta, GridUser, VOInfo, and FaultHandler, all of which
+  should be straightforward by looking at the API and the provided examples.
+
+  Then the actual operation object needs to be created which is a little harder.
+  The user will create an Op from the bottom up, starting from smaller objects
+  like StdDatagridObject and building some form of Params and then the final
+  Operation.
+
+  Required parameters for any object are passed to the constructor and the user
+  can set any optional parameters (which might actually be <i>required</I> for
+  that particular purpose through the set methods).
+
+  After a DataGridRequest object has been created, a MatrixConnection object can
+  be created and the request sent through it.<br/><br/>
+  <H2>More information</H2>
+
+<p>IF you need any help in developing your programs using the Matrix client-API e-mail <a
+href="mailto:srb-chat@sdsc.edu">srb-chat@sdsc.edu</a> or refer our <a
+href="https://lists.sdsc.edu/mailman/listinfo.cgi/srb-chat">SRB-Chat archives</a>.
+</p>
+
+  </BODY>
+</HTML>

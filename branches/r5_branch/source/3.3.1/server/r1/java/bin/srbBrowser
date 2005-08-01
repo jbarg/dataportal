@@ -1,0 +1,20 @@
+#! /bin/sh
+#
+# srbBrowser    
+#
+
+# export SRB_JAVA_HOME="/data/mwan/test/SRB3_3plus/java"
+
+if [ "$SRB_JAVA_HOME" = "" ]
+then
+ echo "Please set the env variable SRB_JAVA_HOME. " 
+ echo "e.g. setenv SRB_JAVA_HOME /data/mwan/test/SRB3_3/java" 
+ exit 1
+fi
+
+export CLASSPATH="$SRB_JAVA_HOME/classes"
+echo $CLASSPATH
+
+export LD_LIBRARY_PATH="$SRB_JAVA_HOME/lib:$LD_LIBRARY_PATH"
+
+(cd $SRB_JAVA_HOME; java -Djava.util.prefs.syncInterval=2000000 edu/sdsc/SrbBrowser/srbBrowser)
