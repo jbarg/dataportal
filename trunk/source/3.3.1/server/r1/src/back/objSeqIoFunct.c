@@ -4347,7 +4347,8 @@ int *newObjInx, int flag, int numThreads, svrComm_t *myComm)
              srbObjTypeEntry[tinx].systemType,
              newResInfo->phyResLoc, newFullPathName, NO_CHKDIR);
             totalWritten = OBJ_ERR_COPY_LEN;
-        } else if (size > 0 && srbObjTypeEntry[tinx].objType == FILE_TYPE) {
+        } else if (size > 0 && srbObjTypeEntry[tinx].objType == FILE_TYPE &&
+	  srbObjTypeEntry[tinx].systemType != ADS_FT) {
             struct srbStat retStat;
             char *portNum, tmpResLoc[MAX_TOKEN];
 
