@@ -1,0 +1,40 @@
+#!/bin/sh
+TIMEOUT=2
+
+# Get list of network attached storage trays
+list=`cat /etc/fstab | grep nas | grep -v grep | grep -v ^# | awk '{ print $2 }'`
+
+# First true represents remote SRB server up and responding (expect on calling side will provide false)
+echo "true"
+echo $list
+
+# To remove nas-there script in case of modifications
+if [ "$1" = "reset" ]; then
+rm nas-there
+fi
+
+# To make script if not present (to be called from expect, needed for nfs issues)
+if [ ! -e nas-there ]; then
+  cat > nas-there << 'EOF'
+#!/bin/sh
+
+if [ -e $1/srb/SRBVault ]; then
+  echo -n "true "
+  df -P $1 | tail -1 | awk '{ print $5 }'
+else
+  echo "false"
+fi
+EOF
+fi
+
+# Actual testing of SRB Vault existence
+for nas in $list ;
+do
+/usr/bin/expect << EOT
+set timeout $TIMEOUT
+spawn -noecho sh nas-there $nas
+expect {
+  timeout { puts "timeout" }
+}
+EOT
+done

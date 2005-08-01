@@ -1,0 +1,729 @@
+SRB 2.0.2
+---------
+Released on  May 1, 2003
+
+The link  http://www.npaci.edu/dice/srb/bugs.html
+gives a list of bugs fixed and features added in 2.0.2. They are:
+
+1) In case the connection to a SQL database fails, the srbMaster may not 
+   log any message and then segfault.
+2) Sls -C core dump.
+3) Importing large file ( > 2 Gig Bytes) with Postgres MCAT fails.
+4) Sbload failure to open SRB container in some cases. 
+5) Sbload cause the server with Postgres MCAT to core dump.
+6) "Srmcont -a" does not work for postgres MCAT.
+7) Srm of a filenames with underscores '_' does not work. 
+8) A problem with container associated with collection when it is full. 
+   When the container got full, a new container with the same name was 
+   created, but the collection is still associated with the old container. 
+9) Sls -r" does not work with Postgres MCAT. 
+10)Some additional checks for NULL when dealing with $HOME variable for the 
+   Solaris platform. 
+11)When the path is too long and overflow the qval length of MAX_TOKEN (200).
+12)Problem with using the Java Admin tool connecting to a non-mcat-enabled srb 
+   server to create a physical resource causing the resource path to be
+   regisatered incorrectly.
+13)Fatal SRB compilation errors under recently patched versions of Redhat 
+   Linux 8.0 or 9.0.
+14)Improvement in mcatAdmin (Java Admin tool) to clarify what one should type 
+   in certain windows.
+15)Building SRB with GSI support no longer requires a separate 
+   installation of the AID library and manual SRB GSI configuration. 
+16)Fatal SRB compilation errors when building on AIX with MCAT.
+
+------------------------------------------------------------------------------
+SRB 2.0.1
+---------
+Released on  March 14, 2003
+
+The link  http://www.npaci.edu/dice/srb/bugs.html
+gives a list of bugs fixed and features added in 2.0.1. They are:
+
+1) Problem building with Postgres or Sybase 
+2) New utility Sbunload to match Sbload
+3) New utility Sbregister.
+4) On Linux systems, Sbload and Sbunload will hang or segfault after an error 
+   condition. 
+5) he GridPort interface to the SRB would fail because the SRB Scommands 
+   programs would die (either gracefully or segmentation fault) when faced
+   with the situation of no $HOME variable (while looking for 
+   $HOME/.srb/.MdasEnv and Auth files). 
+6) Data transfers would fail on server systems with two sets of IP addresses 
+   (i.e. an internal and an external IP address). 
+7) When a file is replicated and the first copy is deleted, the remaining 
+   copies become inaccessible
+
+------------------------------------------------------------------------------
+    
+SRB 2.0
+-------
+
+    Released on February 18 2003
+
+Subject:  [Announce] SRB version 2.0 is available
+
+  (brief blurb here about what SRB is/does, pointers to websites,
+  features, supported platforms, licensing, etc.  Don't forget to warn
+  everyone that if they update their servers, they must update their
+  clients and their MCAT database!)
+
+  SYSTEM REQUIREMENTS
+
+    Unix Platforms
+
+  The following Unix variants are supported:
+    * Linux Redhat 7.3, 32 and 64 bits
+    * Solaris, 32 and 64 bits 
+    * AIX
+    * SGI
+    * MAC - OSX
+
+    Windows Platforms
+
+  The following Microsoft Windows versions are supported:
+    * Windows 2000
+
+   The following databases are support for MCAT:
+     DB2 Version 5,7
+     Oracle 8i and 9i
+     Sybase
+     Postgres 7.3.2
+
+  GETTING THE SRB SOFTWARE
+
+    SRB source code is available to academic and government
+    organizations in the United States.  Limited availability exists
+    for other countries.  Contact srb@sdsc.edu or see
+    http://www.npaci.edu/DICE/SRB for additional information.
+
+
+This document provides additional details on the new enhancements
+made to SRB in release 2.0.0. An overview of these can be found in
+README.first.htm.
+
+Additional Notes
+-------------------
+
+1) "Server driven" parallel I/O - The "Server driven" parallel I/O
+scheme has been implemented throughout the SRB infrastructure. It uses
+the more efficient "mover" APIs and protocol to access HPSS
+resources. It is the preferred data transfer mechanism for data
+import, export, copy and replication.
+
+The more efficient "server driven" parallel I/O scheme is replacing
+the "client driven" scheme used in the "srbpput" and "srbpget"
+utilities.  "srbpput" and "srbpget" will be phased out eventually if
+"Sput" and "Sget" meet user's expectation.
+
+With the "client driven" scheme, the client is the active partner
+which subdivides the file to be imported/exported into segments and
+spawns threads to handle the import/export of each segment in
+parallel. Each thread independently connects to the server through the
+normal client/server connection mechanism. So, in effect, the client
+is multi-threaded but the server involves multi processes.
+
+With the "server driven" scheme, the server is the active partner. The
+client listens on a control socket for instructions from the servers.
+Upon receiving the client request, the server with the help of
+information from the MCAT, plans the execution of the import/export.
+Typically it sends data transfer instruction to the server where the
+import/export resource is located. The resource server then
+sub-divides the file to be imported into segments and spawns threads
+to handle the import of each segment in parallel. Each server thread
+independently connects to the client's control socket for data
+transfer. Both client and server are are multi-threaded with this
+scheme.
+
+Advantages of the "server driven" scheme are:
+
+a) The server has better access to MCAT information to plan optimum
+transfer strategy.
+
+b) Data transfer is always directly between the resource server and
+client with no intermediate server in between.
+
+c) It uses the more efficient "mover" APIs and protocol to access HPSS
+resources.
+
+d) Both client and server are are multi-threaded which involves less
+overhead and consumes less resources than multi processes.
+
+One possible problem with the "server driven" scheme is that the
+client machine may sit behind a security firewall that limits the
+ports that can be connected to the client. In this case, the firewall
+must allow at least a few ports to get through and the
+COMM_PORT_NUM_START and COMM_PORT_NUM_COUNT parameters in the
+mk/mk.config file can be configured to limit the range of ports used
+by the client. If this is not possible, the -s option should be used
+with Sput and Sget to force the I/O mode to serial.
+
+The PARA_OPR flag in the mk/mk.config file can be used to switch
+on/off the "server driven" scheme. By default, this switch is on. For
+platforms such as Windows, OSX and BSD which do not support pthread,
+this parameter should be turned off.
+
+By default, Sput and Sget use serial I/O while Sreplicate and Scp use
+the parallel I/O API for data operations.  The -m option can be used
+with Sput and Sget to force the I/O mode to parallel.
+
+Two new APIs - srbObjGet() and srbObjPut() have been created to
+support the "server driven" parallel I/O.
+
+2) A Mass Storage System (MSS) implementation within SRB
+
+The motivations for implementing a MSS in SRB are:
+
+a) Cost of licensing commercial MSS such as HPSS
+
+b) Efficiency and performance - A MSS system that is tightly
+integrated with the infrastructure of the SRB can take full advantage
+of SRB features such as the cache system, file replication and server
+directed parallel I/O.
+
+c) Elimination of duplication of features - SRB and MSS such as HPSS
+provide some duplication of features such as disk cache,
+authentication system, etc.
+
+Components of the MSS:
+
+a) A new type of resource "compound resource" - A compound resource
+may be configured to contain a pool of cache resources and a tape
+resource. When a user creates a file using a compound resource, the
+object created becomes a "compound object". The actual data of a
+"compound object" may reside on cache or tape or both. Unlike the SRB
+replica, a "compound object" always appears as a single object even
+though there may be multiple copies of the data. It is a simple
+hierarchical system where data migrate automatically between cache and
+tape. Data is always staged on cache automatically whenever it is
+accessed and migrates to tape by the system admin when more cache
+space is needed.
+
+b) A set of driver functions for basic tape I/O operations - a set of
+driver functions for basic tape I/O operations has been incorporated
+into the SRB server. These functions include mount, dismount, open,
+close, read, write, seek, etc. Currently, the driver has only been
+tested for 3590 tape drives. The TAPE_DRIVE flag in the mk/mk.config
+file can be used to switch on/off the tape drivers. By default, this
+switch is off.
+
+c) A tape library server - A tape library server for the STK silo
+running ACSLS software has been incorporated into the SRB system. Its
+primary function is to schedule and perform the mounting and
+dismounting of tapes.  It uses the same authentication system and
+server framework as other SRB servers. The tape library server will be
+a binary release only since it uses StorageTek's CSC Developer's
+Toolkit which requires software licensing for any source access to
+software written with the Toolkit.
+
+d) A set of tape and cache management utilities.
+
+inittape - Label a tape and register the tape with the MCAT.
+lstape - List the tapes and their associated meta data in MCAT.
+tapemeta - Modify the metadata of a tape that has been registered with MCAT.
+dumptape - Dump and purge files in the cache system to tape.
+
+e) A set of tape and cache management APIs. These are all privileged calls.
+
+srbTapelibMntCart() - Request the Tape Library server to mount a tape.
+srbTapelibDismntCart() Request the Tape Library server to dismount a tape.
+srbGetTapeCartPri() - Get the priorities for each tape type depending on the 
+availability of tape drives.
+srbDumpFileList() - Dump a list of files to tape.
+srbStageCompObj() - Stage a compound Object from tape to cache.
+
+f) A set of APIs that deal with compound object metadata. These are
+all privileged calls. Raja did the internal MCAT calls.
+
+srbRegInternalCompObj() -  register an internal compound object.
+srbRmIntCompObj() - unregister an internal compound objects.
+srbModInternalCompObj - Modify the metadata of an internal comp object.
+srbRmCompObj() - unregister a compound object.
+
+
+3) A new command "Sbload" to imports in bulk one or more local files
+and/or directories into SRB space. It is similar in functionality to
+"Sput" but designed to greatly improve the efficiency of ingesting a
+large number of small files by a) registering up to several hundreds
+files with MCAT with a single call instead of the normal mode of
+registering one file at a time and b) use of separate threads for
+registration and data transfer.
+
+A new API - srbBulkRegister() was created to enable the registration
+of several hundred files with one call.
+
+A "Sbunload" which is the counterpart of "Sbload" will be implemented
+if time permits.
+
+4) Replica synchronization - Copies of replica can modified
+individually and the replica of an object can be out of sync. Now, the
+most recently modified copy will be marked as "dirty".
+
+A new command - "Ssyncd" and API - srbSyncData() has been created to
+synchronize all copies (replica) of an SRB object with the dirty copy.
+A "%" character to the left of the file name of a "Sls -l" output
+indicates the given copy is "dirty".
+
+5) The handling of storing data objects in a logical resource consisting of
+multiple physical resources has been slightly modified. Previously
+(version 1.1.8), when a data object is created in a logical resource
+consisting of multiple physical resources, the data object is automatically
+replicated to all the physical resources in the group by default. In order
+to support the idea of using multiple SRB bricks (Linux PC with 1 TBytes
+of disk space) to create logically a single very large disk cache, only a
+single copy will be created in one of the resource in the group chosen
+randomly. If a copy is required for each physical resources, the -a option
+of Sput, Scp and Ssyncd should be used.
+
+6) 64 bits addressing platform - The SRB software has been ported to the
+64 bits address platform of Linux and Solaris. The software has been tested
+for the client and non-MCAT-enabled server configurations. Currently, since
+we have no license for any 64-bits DBMS, the MCAT-enabled server configuration
+cannot be tested.
+
+The ADDR_64BIT flag in the mk/mk.config file can be used to switch on/off
+the 64 bits addressing. By default, this switch is off.
+
+7) Enhancement to handle family of containers - When a container is full,
+the SRB server automatically renames the full container "myContainer" to
+"myContainer.NNNN"  where  NNNN is a random integer number.  The server
+then creates an empty container with the original container name
+"myContainer" so that the client can continue to put data into the same
+container without worrying about it getting full. In effect, this scheme 
+creates a family of containers without the explicit knowledge of the
+owner.
+
+The -a option has been added to the "Ssyncont" and "Srmcont" commands
+to synchronize and remove, respectively, all containers in the family.
+
+8) Miscellaneous Scommand enhencements :
+  Scp
+    New options:
+	-v - Verbose mode to print out file size and transfer rate.
+    Enhanced options:
+	-a - If  the  target  object does not exist and the target resource
+	is a logical resource consisting of more than one resources, then
+	make a copy in each resources. If the target object exists, force
+	copying all replica of the target object.
+
+  Sget
+    New options:
+        -m - multi-threaded parallel I/O mode.
+        -s - serial I/O mode.
+        -v - Verbose mode to print out file size and transfer rate.
+
+  Sls
+    New options:
+	-a - list metaData  associated with each file and collection.
+	-C - list the access control list (ACL) of each file and collection.
+
+  Sput
+    New options:
+        -m - multi-threaded parallel I/O mode.
+        -s - serial I/O mode.
+        -v - Verbose mode to print out file size and transfer rate.
+    Enhenced options:
+        -a - If  the  target  object does not exist and the target resource
+        is a logical resource consisting of more than one resources, then
+        make a copy in each resources. If the target object exists, force
+        copying all replica of the target object.
+
+  Sreplicate
+    New options:
+        -v - Verbose mode to print out file size and transfer rate.
+
+  Srmcont
+    New options:
+	-a - Delete all containers in a container family.
+
+  Ssycont
+    New options:
+	-a - Synchronize all containers in a container family.
+  Smeta
+    works as advertised :-)
+New Scommands:
+    Sbload and Ssyncd
+
+9. Miscellaneous inQ Enhancements:
+
+   context (right-click) menues have been enabled for right-hand windows
+   when you double click on an icon in the lower-right hand window it opens
+      the file as expectced.  Known Bug: long pause after double-clicking 
+      icons in lower-right hand window to open the file.
+   metadata window streamlined to be more user-friendly.
+
+10. Miscellaneous MySRB  Enhancements:
+     more features have been added. These include metadata copy, extraction
+     of metadata function, different types of object support, etc.
+
+
+11. MCAT Enhancements 
+  There are several new features addaed to the MCAT module in the SRB.
+  These include new databases which can be used to run the MCAT as well as
+  changes that provide new capabilities for the MCAT.These new capabilities 
+  can be categorized as follows:
+  
+ A. Porting of MCAT to new database systems:
+      1. Porting of the MCAT to Sybase  database. This will also 
+          enable use with SQLServer since they share API.
+      2. Porting of the MCAT to Postgres database. A porting to Informix 
+          will be released in the next few patches.
+ B. Improvements to System-level Metadata Functionality
+    1. Access Control for metadata.
+    2. Softlinking of srbObjects to another collection  
+    3. Streamlined Auditing Functionality
+    4. Locking and Hiding of  srbObjects
+    5. Compound Resource and Compound Object Support
+    6. Bulk Ingestion of Files Support
+    7. Bulk Access Control Function over all Objects in Collecions
+    8. Delete All from Container
+    9. New Miscellaneaous Metadata attributes
+         Collection Ownership and creation-time metadata.
+         srbObject checksum, encryption-type, compression-type.
+         srbObject Pinning, Expiration
+         srbObject Version Number, Segment Number    
+
+ C. Improvements to User-defined Metadat Functionality
+    1. Metadata Extraction Functionality 
+    2. Copy Functionality for Metadata and Annotations
+    3. Additional Query Capability for user-defined metadata
+    4. Annotations for Collections
+    5. User-defined Metadata for Resources and Users
+ D. Administrative Support
+    1. Client-side Java GUI for MCAT Administration
+    2. Client exposure to Administrative APIs for Admin GUI
+    3. New Admin Functionality for remove: users, resources, locations,domains.
+
+We explain each of these in some detail below:
+ A. MCAT Ports
+ A.1  Porting of MCAT to Sybase:
+   The MCAT software has been ported to run its database on Sybase. The 
+   functionality is the same as that of Oracle and DB2 based MCAT systems.
+   There were certain features which were not natively supported by
+   Sybase such as synonyms and aliases. These were done by defining views.
+   Because of this there might be some slowing down of the MCAT when
+   using the Sybase MCAT. In our normal testing, we haven't found any
+   performance degradation, but we suspect that with larger tables there
+   might be some slowing down which is not noticed in Oracle or DB2. We
+   haven't done much tunability experiments with Sybase MCAT. We plan to
+   do that in the near future when required by our user base. The Sybase
+   port was done in such a way that one can use the same port for use with
+   SQLServer. Even though we haven't tested this feature, we believe that
+   it should be straightforward to use the MCAT with SQLserver using the
+   Sybase port. More details on Sybase can be found in 
+   http://www.sybase.com/home
+ A.2  Porting of MCAT to Postgres:
+   Due to popular demand for MCAT on a free database, we have ported the
+   MCAT to run on Postgres. Postges is a freeware available from
+   http://www.postgresql.com/ and runs on multiple platforms including
+   Linux, Solaris, Win32 and xBSD. Postgres is a full-fledged SQL
+   providing transaction-level support and is fully ACID compliance and 
+   ANSI SQL compliance. The porting was done by Matt Clark of Aerospace Corp.
+   and was tested by the SRB group. The Postgres port is based on ODBC 
+   API and hence talks through ODBC with the Postgres database. Hence, this
+   port can be used for other ODBC-enabled databases also. (Note: we haven't
+   tested the port with other ODB-enabled databases). The Postgres port
+   provides full MCAT functionality. More information about Postgres and 
+   how to download and install the database can be found at 
+   http://www.postgresql.com/.
+
+ B. Improvements to System-level Metadata Functionality
+   Several additions and improvements have been made in the way MCAT handles
+   core system-level metadata. Some of the functionalities have been 
+   stream-lined or improved to proved bulk operations. Bugs uncovered
+   over the past year or so in the version 1.1.8 have been corrected. 
+ B.1. Access Control for metadata.
+   This functionality allows owners and co-owners of srbObjects and SRB
+   collections to control access to associated system-level and user-defined 
+   metadata that are stored in the MCAT.  In pervious versions of the SRB, the
+   user was able to access control only the collections and the srbObjects
+   but not the associated metadata. because of this every user was able to
+   see the collection listing (say through Sls) as well as view and
+   query user-defined metadata. This was unacceptable to many user communities
+   and a requirement to show metadata based on access permission was 
+   delivered to the SRB developers. This functionality is due to that
+   requirement. 
+   The access permissions for the metadata is inherited from the access 
+   permissions of the accosiated srbObject or collection. A user will 
+   be able to see the metadata only if he/she has 'read' permission. 
+   As in earlier versions, a user can write/modify system-level metadata 
+   only if they have ownership and a user can write/modify user-defined 
+   metadata only if they have 'write' permission. 
+   The access control for metadata is made into an option which can be
+   turned on or of at compile time. This is because, this level of control
+   has some impact on the MCAT operation when user is accessing metadata.
+   Many communities may not want this additional impact when they have
+   no objection for everyone to see metadata.  The option that turns this
+   on and off is  called the MDATAACCS. By default this option is turned OFF.
+
+ B.2. Softlinking of srbObjects to another collection  
+   This feature allows users to link their srbObject into a new Collection.
+   In this mannat, a srbObject which is located in a Collection can be
+   linked to one or more other collections. When this linking is done, no new
+   physical copy of the srbObject is made (as done by the Scp copy operation).
+   The new linked object can have its own user-defined metadata and 
+   annotations. But it shares the system-level metadata from the original copy.
+   Hence access-control for this linked object is still with that of the
+   original srbObject. None of the user-defined metadata  are copied from 
+   the original to the linking copy. A user can copy the metadata if they wish
+   using the copy-metadata functionality discussed below. To link an srbObject
+   the user should have atleast a 'read' permission for the original object 
+   and at leasta 'write' permission in the collection they are placing the 
+   the link. The linked object will be visible through an Sls call in the new
+   collection. Linking of a collection will be done in the next few patches.
+   Linking of containers  will not link the underlying files. One needs to
+   link individual files in order to achieve this effect.
+
+ B.3. Streamlined Auditing Functionality
+   The auditing functionality that is present in the Versions 1.1.8 and older
+   are being phased out and a new type of auditing functionality is being
+   introduced. This is to make the auditing to be of minimal overhead for
+   many of the operations. The auditing level is controlled using
+   environmental variable (AUDIT_LEVEL). By default AUDIT_LEVEL is 0
+   and no auditing is performed. When the AUDIT_LEVEL is set to 1 then
+   operations on all datasets by any user gets audited and is written to
+   special audit tables in the MCAT. Users can use SgetD to view audit
+   information for datasets that they own. Auditing is done not only
+   on operations of datasets but also for operations on collections, 
+   containers,  resources and users. In later releases, we plan to introduce 
+   additional levels of auditing that may perform finer levels of auditing.
+   Auditing is controlled using the runsrb script. So, a srbAdmin can
+   turn on or off the auditing capability by stopping and restarting SRB after
+   modifying the runsrb script. There is no necessity for recompiling
+   the SRB for enabling/disabling auditing.
+
+ B.4. Locking and Hiding of  srbObjects
+   These two functionalities provide controlling of access to srbObjects
+   on top of the access control lists and tickets. A owner can lock a 
+   srbObject using the SmodD command and following that user (including
+   owners) access is disabled srbObject depending upon the types of
+   lock that is applied. There are two types of lock that are provided.
+   'read' lock will read operations and 'all' lock will allow no
+   operations (note that this is different in semantics from database-type
+   locks). When locking a user has to associate a time-stamp with the lock.
+   This timestamp provides the expiry date/time for the lock after
+   which the lock is invalid. When a lock is expired any one with a write
+   permission can release the lock. But when the lock is still alive only the
+   lock owner (not the dataset owner) can release the lock. The lock
+   only controls access to the srbObject and has no affect on the metadata 
+   for the srbObject.  Hence reads, writes and modifies to the srbObject 
+   is still allowed. There are no collection-level lock in the current version.
+   Lock is useful when one has created and modified a srbObject and is
+   reasonably sure that the object will not be modified. Then locking will
+   ensure that the file is not modified inadvertantly. 
+   
+   Hiding a srbObject will make the object and its metadata 'disappear'
+   from a users view. A hidden object seems as though it is deleted but
+   it is still in the SRB and all its metadata are still stored. A hidden 
+   object can be unhidden and then it will become visible to users who
+   are allowed to view it or its metadata. The hide and unhide operations 
+   can be performed using SmodD. Since a hidden object is 'invisible' to
+   everyone, it is not seen by anyone including its owner when using Sls. 
+   A new option in  SgetD allows owners to list all hidden objects in a
+   collection. Another important point to remembr is that though the object
+   is hidden it is still in the SRB and MCAT. Hence any attempt to create
+   another object with the same name in the same collection will be 
+   disallowed. Hiding objects will be very useful when you want to take 
+   an object out of circulation but do not want to delete it from the 
+   collection. Hiding a container will not hide its objects. One need to
+   hide individual object to achieve this effect.  
+
+   SgetD with various options can be used to check various system metadata
+   about data files  and  SmodD is useful for checking them.
+   The following shows a few of the options and how they can be viewed.
+   SgetD -f:
+     parameter shown with SgetD    how to set
+     - dpin                          SmodD -P
+     - dexpire_date_1                SmodD -x
+     - dexpire_date_2                SmodD -X
+     - dccompressed                  SmodD -z
+     - dencrypted                    SmodD -y
+   SgetD -e:
+     - access_constraint             SmodD -L
+     - dchekcsum                     SmodD -k
+     - dhide                         SmodD -H
+
+  B.5. Compound Resource and Compound Object Support
+   MCAT has been augmented to deal with compund resources and compound 
+   objects. New APIs as well as data structures and tables have been
+   included in this version for supporting the compound resource 
+   aspects of SRB. 
+
+ B.6. Bulk Ingestion of Files Support
+   This feature allows for bulk ingestion of files (directories of files)
+   into a container. When this container is created, the directory structure
+   gets translated into collections and sub-collections with files
+   associated as srbObjects in these collection hierarchy. The building
+   of this collection hierarchy is done using a bulk-load operation in the 
+   MCAT. For more information on the bulk load capability of SRB, please refer
+   to the man pages for Sbload command.
+	
+ B.7. Bulk Access Control API Function over all Objects in Collecions
+   This functionality provides a means to provide permission to a user or a 
+   user group for all srbObjects in a collection using a single API. In 
+   previous versions of the SRB, this operation was done at per srbObject
+   basis. Bulk access control will also work on collections in a recursive
+   manner by performing the acces permission delegation to all 
+   sub-collections as well as to their descendents. Hence this is not a new
+   functionality but an enhancement (speeding up) of existing function call.
+
+ B.8. Delete All from Container API
+   This is another functionality that helps in speeding up already existing
+   operation. In previous versions, deletion of srbObjects in a ccontainer
+   was done at a per object basis which was very slow. With the current
+   enhancement, one can delete all objects froma  container using a single API
+   call. 
+
+ B.9. New Miscellaneaous Metadata attributes
+   In order to increase the utility of the SRB system new attributes 
+   have been added to those already in the core schema. A new set of
+   attributes holding the owner of a collection as well as its creation 
+   timestamps have been included. This allows not only for providing this
+   information, but also helps in access control functions. 
+   At the srbObject level several new attributes have been added. The checksum
+   is probably the most important one and allows the user to store and 
+   retrieve checksums of srbObjects. Hence, the integrity of any srbObject
+   can be checked using the checksum. 
+   Two other new attributes store information about the 
+   encryption and compression (if any) of a srbObject. These attributes
+   are basically character strings and can store any information 
+   regarding these operations. A suggestion is to store the methods of
+   encryption (eg. RSA64bit) or comression (eg. Lempel-Ziv) that are performed
+   on the object and this will provide a hint to the client application
+   that it needs to post process the data after it has retrieved from the SRB
+   or enable the SRB to apply appropriate proxy operations before sending 
+   the data to the client. 
+   Another new feature added is a set of attributes that enable pinning of 
+   replicas of a srbObject to their current physical location. Pinning of a
+   copy of a srbObject to a particular place might be needed when one
+   needs a file in a place for some operation in the near future (so that
+   its access can be fast) and wants to prevent it from being purgd by some
+   administrative daemon which does cache management using LRU type schemes.
+   Pinning is not enforced by SRB by itself but can be used by such daemon 
+   which are doing cache management on a local file system. Obviously
+   there is some chnace that this can be abused by the users who might
+   pin every one of their files; but in such a case, one can view these as
+   non-mandatory pinning and a higher logic will be applied to remove
+   even pined files. Hopefully, in a cooperative situation, pinning can
+   ideally be used for improving data access performance by using
+   judicious data placements. Pinning has an expiry timestamp associated
+   with it, after which the pin becomes invalid. The owner of the pin
+   can at an time unpin the srbObject.
+   Two other attributes that are useful for storage recalamation are also
+   added in the new version: expiration_date, expiration_date_2. The
+   second attribute can be viewed as providing a timestamp after which the 
+   srbObject can be put into archival storage and all its cache copies can 
+   be removed. The first expiration timestamp can be used as a time when the
+   srbObject can be removed completely from the SRB system. These are very
+   useful when one has intermediate results that one would like to have for
+   some time but want it to be automatically purged after some time. These
+   are also useful for digital library management where one would like to
+   purge from active disks collections of files after some time period.
+   Two other atributes that are added are useful for SRB itself. One is the
+   Segment number which store the segment number of a srbObject that
+   is split into more than one piece and stored as individual files. The
+   SRB can chain these segments and provide a contiguous piece back to the
+   users. This is helpful when the file size is too large to be held in a 
+   particular file system. Refer to the section on MSS for additional details
+   how the segmentation is used. The other attribute is called the version
+   number and can store the version number of a srbObject. AT the current time
+   this is not utilized by any of the API or Scommands. In the near future
+   we plan to provide a simple versioning capability in the SRB and will
+   utilize this attribute.
+
+ C. Improvements to User-defined Metadata Functionality
+   SRB Version 2.0.0 has a few extensions to the user-definable
+   metadata capability of the SRB. These range from entirely new set
+   of user-defined attrbute sets to additional querying functionality to
+   metadata ingestion assistance.
+ C.1. Metadata Extraction Functionality 
+   This facility allows a user to define a method for extracting metadata
+   from a srbObject and assobciating them to a (possibly different) srbObject
+   at the SRB server level. For example, if one has stored a DICOM image
+   in SRB, then one can extract the metadata from this image file and
+   associate the elements as user-defined metadata for the DICOM image.
+   This will allow susers to query on the fields of the DICOM  attribute
+   schema and discover images of their interest. In order to do this,
+   a user associates a style-sheet type program written in the T-language
+   and registers this as a srbObject with user-defined metadata for this
+   T-language template stating that it is a metadata extraction method
+   for DICOM image data type. One can associate more than one method to
+   a data type as well as associate the same template for more than one
+   data type. Once this is done, for any DICOM image file, the one can 
+   invoke the metadata extraction function and then the metadata will
+   be extracted from a source file and associated with the target
+   DICOM  file. Note that the metadata extraction can be done on one srbObject
+   and the resulting metadata assciated with another file. This is 
+   needed because in many cases, one may store metadata in an XML file.
+
+ C.2. Copy Functionality for Metadata and Annotations
+   This feature allows a user to copy metadata from one srbObject
+   or collection and associate them with another srbObject or collection.
+   Any old metadata that is associated with the target srbObject or
+   collection is not deleted. The user prforming the copy should have 
+   at least 'read' permission for the source  and should have
+   at least 'write' permission for the target. Note that copying from
+   a srbObject to a collection and vice versa is allowed. 
+   This functionality is also provided for annotations where one
+   can copy annotation from a srbObject to another srbObject.
+   Copying of annotations to and from collections will be provided in later
+   patches.
+
+ C.3. Additional Query Capability for user-defined metadata
+   In version 1.1.8, one can query user-defined metadata only using
+   a single attribute at a time. This, though useful, was extremely
+   time consuming and can lead to lot of post processing. In order to
+   alleviate this difficulty, this version has been enhanced to
+   query upto five metadata attributes at a ime. Our user requirements 
+   seem that five is enough for the present. If there is a necessity for
+   any project to query more than five attributes, the SRB developers will
+   accomodate that request. The five attributes are queried conjunctively 
+   (i.e., using the AND operation). In the near future, we plan to release
+   where one can have a choice of conjunction or inclusive disjunction
+   in their queries. 
+
+ C.4. Annotations for Collections
+   As per user request, we have added functionality where one can annotate
+   collections also. The operation is similar to that provided in 
+   version 1.1.8 for srbObjects.
+
+ C.5. User-defined Metadata for Resources and Users
+   A new set of attributes have been defined for storing user-defined
+   metadata for resources and users. This will allow one to store
+   arbitarary metadata for resources and users. These will be very useful 
+   for administrative purposes as well as for SRB data access purposes.
+   For a resource, one can store information about its current load, 
+   delay, down time, preventive maintenance schedules, and other
+   operational characteristics. For users, one can store their profile
+   information and information regarding their usage model and such.
+   At the current time, these metadata attributes are not used by the SRB 
+   system. In the near future, we plan to use them to provide additional
+   functionalities.
+ D. Administrative Support
+   Improvements have been made in MCAT adminsitration. One of the main
+   change is that the administartion of MCAT can be done from the client
+   side (as opposed to server-side admin tools available with version 1.1.8).
+   
+ D.1. Client-side Java GUI for MCAT Administration
+   The Java tool for MCAT/SRB administration has been enhanced and 
+   has been made to operate from the client-side. This will allow
+   one to administer SRB for registering users, resources, etc from
+   any Java-capable system. In version 1.1.8, administration was tied
+   to the system that ran the MCAT.  More information about the new
+   administration Java GUI can be found in README.MCAT.ADMIN.
+
+ D.2. Client exposure to Administrative APIs for Admin GUI
+   The development of the client-side GUI for SRB/MCAT administration
+   required that these APIs, which were previously available only on
+   MCAT-enabled servers, be available at the client-side. In version
+   2.0.0, all adminsitration APIs are available at the client-side.   
+   See web/SRB.htm for more information.
+ D.3. New Admin Functionality for remove: users, resources, locations,domains.
+   SRB version 1.1.8 had capabilities for registering entities such as users 
+   and resources but lacked any means for deleting them. In version 2.0.0, we
+   have alleviated this difficulty. The new Java Admin GUI  can be used 
+   to delete users and resources. The deletion will go through only if
+   no associated references are there for the entity being deleted. For
+   example, if one is deleting a user, then no srbObjects or collections
+   should be associated with that user. Such checks are automatically 
+   performed and a deletion is allowed only if all conditions are
+   satisfactory.

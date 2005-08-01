@@ -1,0 +1,100 @@
+.\" For ascii version, process this file with
+.\" groff -man -Tascii Schmod.1
+.\"
+.TH Schmod 1 "Jan 2003 " "Storage Resource Broker" "User SRB Commands"
+.SH NAME
+Schmod \- changes permission modes and ownership for objects and collections
+in SRB space
+.SH SYNOPSIS
+.B Schmod
+.RB [ \-h ]
+.RB [ \-a ]
+.RB [ \-b ]
+.RB [ \-p ]
+.RB [ \-r ]
+.RB [ \-d | c | D]
+.RB [ \-C]
+.IR "w|a|r|n|t|o|c "
+.I newUserName domainName
+.IR collection | srbObj " ..."
+.sp
+.B Schmod -i
+.RB [ \-r ]
+.IR "s|u "
+.IR collection  " ..."
+.SH DESCRIPTION
+.B "Schmod "
+grants/changes access permissions or changes owners for the operand
+.IR collection " or " srbObj " ... for " newUserName " in " domainName .
+.sp
+If the operand is a dataset (srbObj), the permission is granted
+for all copies (replica) of the dataset.
+.sp
+Access permissions allowed are write (w), read (r), all (a),
+annotate (t),  none (n), give curator (c) permission or  change owner (o).
+.sp
+The user changing permissions should have 'all' access
+permission for each SrbObj.
+
+The second synopsis sets or unsets the "ACL inherit bit" of the specified collection.
+If the "ACL inherit bit" of a collection is set, all new data and collections
+created under this collection will inherit the access permission of
+this collection. 
+The inheritance is set using 's' and unset using 'u' for the first argument. 
+Note that the inherited permissions apply only to new data and collections, 
+Any later change to the access control of the
+.I collection
+is not transferred to existing children. The "ACL inherit bit" of a collection
+can be listed using the "Sls -C" or "SgetColl -i" commands. 
+.sp
+If the -r option is used in conjunction with the -i option, 
+the "ACL inherit bit" of all sub-collections will be recurively set or unset. 
+.PP
+.SH "OPTIONS"
+.TP 0.5i
+.B "\-i "
+Set the execution to "ACL inheritance bit" setting mode.
+.TP 0.5i
+.B "\-b "
+grants/changes access permissions or ownership in bulk for all data and sub-collections recursively in
+.I collection.
+This option is same as options  -D -r  given together.
+.TP 0.5i
+.B "\-r "
+grants/changes access permissions or ownership or ACL inheritance recursively for data and sub-collections in 
+.I collection
+and in all sub-collections under it.
+.TP 0.5i
+.B "\-d "
+grants/changes access permissions for datasets only.
+.TP 0.5i
+.B "\-D "
+grants/changes access permissions or ownership for all datasets and sub-collections under 
+.I collection
+but does not change any permission for datasets or collections under its sub-collections. With the -r option will do it recursively for sub-collections also.
+.TP 0.5i
+.B "\-C "
+grants/changes access permissions or ownership for all datasets and sub-collections under 
+.I collection
+if the user is a curator for at least one of the ancestor collections. With the -r option will do it recursively for sub-collections also.
+.TP 0.5i
+
+.B "\-c "
+grants/changes access permissions or ownership for collections only.
+.TP 0.5i
+.B "\-a "
+adds auditing feature for the access permission granted
+for datasets. Auditing works only if the audit_flag is
+turned on when compiling the MCAT Server.
+.TP 0.5i
+.B "\-p "
+prompt user for confirmation before changing.
+.TP 0.5i
+.B "\-h "
+help
+.SH "SEE ALSO"
+.BR SgetD (1),
+.BR SgetU (1)
+.BR Sls (1)
+.BR SgetColl (1)
+

@@ -1,0 +1,216 @@
+Content-type: text/html
+
+<HTML><HEAD><TITLE>Manpage of Sannotate</TITLE>
+</HEAD><BODY>
+<H1>Sannotate</H1>
+Section: User SRB Commands (1)<BR>Updated: Jan 2002 <BR><A HREF="#index">Index</A>
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+Sannotate - modifies annotation information about SRB data objects.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>Sannotate [-c] -w</B>
+
+<I>position annotation dataName | collectionName</I>
+
+<BR>
+
+<B>Sannotate [-c] -u</B>
+
+<I>timestamp newAnnotation dataName | collectionName</I>
+
+<BR>
+
+<B>Sannotate [-c] -d</B>
+
+<I>timestamp dataName | collectionName</I>
+
+<BR>
+
+<B>Sannotate</B>
+
+[-c]<B>[</B>-R<B>]</B>
+
+[<B>-t</B>
+
+<I>timestamp</I>]
+
+[<B>-p</B>
+
+<I>position</I>]
+
+[<B>-U</B>
+
+<I><A HREF="mailto:userName@domainName">userName@domainName</A></I>]
+
+[<B>-Y</B>
+
+<I>n</I>]
+
+[<B>-L</B>
+
+<I>n</I>]
+
+[<B>-T</B>
+
+<I>dataType</I>] <I>dataName</I>|<I>collectionName</I>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>Sannotate </B>
+
+provides a facility for inserting, deleting, updating, and
+accessing annotations on data objects
+<I>dataName</I>.
+
+<P>
+The annotations can be made for a data object by noting a
+particluar position at which this annotation holds (eg. Page 3,
+para 5). The user who has 'annotate' or better permission can
+only insert annotations. Annotations can be deleted and updated
+only by the person who inserted the annotation. Anyone who
+has 'read' or better permission can view annotations on a data
+object.
+<P>
+The
+<B>Stoken</B>
+
+utility can be used to find the current data types
+supported.
+<P>
+
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-c </B>
+
+<DD>
+action performed on collection
+<DT><B>-w </B>
+
+<DD>
+insert annotation
+<DT><B>-u </B>
+
+<DD>
+update annotation
+<DT><B>-d </B>
+
+<DD>
+delete annotation
+<DT><B>-h </B>
+
+<DD>
+displays command options
+<DT><B>-R </B>
+
+<DD>
+recursively view annotation under
+<I>collectionName</I>.
+
+If this option is not used then the annotations are given for
+<I>dataName</I>
+
+(the value can have wild cards).
+<DT><B>-T </B>
+
+<DD>
+<I>dataType</I>
+
+gets annotations of a particular data type (the value can have
+wild cards)
+<DT><B>-p </B>
+
+<DD>
+<I>position</I>
+
+gets annotations at a particular position (the value can
+have wild cards)
+<DT><B>-U </B>
+
+<DD>
+<I><A HREF="mailto:userName@domainName">userName@domainName</A></I>
+
+gets annotations inserted by a particular user
+(the value can have wild cards)
+<DT><B>-t </B>
+
+<DD>
+<I>timestamp</I>
+
+gets annotations inserted at a particular time stamp (with
+or without wildcards) as well as with SQL conditions.
+<BR>
+
+Ex. &quot;&gt; '2000-01-20'&quot;
+<BR>
+
+Ex. &quot; between '2000-01-19' and '2000-01-20-17'&quot;
+<DT><B>-Y </B>
+
+<DD>
+<I>number</I>
+
+controls display format.
+<BR>
+
+Without -Y, information is displayed one item-per-line with each
+attribute spaced at DEFAULT_FIELD_WIDTH characters.
+<BR>
+
+With -Y 0 will display in vertical, one attribute-per-line format.
+<BR>
+
+With Y n, n &gt; 0, information is displayed one item-per-line with
+each attribute spaced at
+<I>number</I>
+
+characters.
+<BR>
+
+With Y -1, information is displayed without headers, with each
+item quoted and separated by a blank and with no row control.
+<DT><B>-L </B>
+
+<DD>
+<I>number</I>
+
+controls the number of items displayed at a time under user's
+control. Without -L, DEFAULT_ROW_COUNT items of information is
+displayed at a time.
+<BR>
+
+With L n, n &gt; 0, n items are displayed at a time.
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/SgetD.1.html">SgetD</A></B>(1),
+
+<B><A HREF="http://www.sdsc.edu/srb/srbcommands/Schmod.1.html">Schmod</A></B>(1)
+
+<P>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="http://www.sdsc.edu/srb/srbcommands.html">man2html</A>,
+using the manual pages.<BR>
+Time: 16:22:19 GMT, February 23, 2005
+</BODY>
+</HTML>

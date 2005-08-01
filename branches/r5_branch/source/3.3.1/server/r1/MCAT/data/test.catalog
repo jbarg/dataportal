@@ -1,0 +1,436 @@
+echo "test_srb_mdas_create_user testuser1 CACA npaci project '1 Main Street' '619-534 5000' 'testuser1@npaci.edu' srb CANDO sdsc"
+test_srb_mdas_create_user testuser1 CACA npaci project '1 Main Street' '619-534 5000' 'testuser1@npaci.edu' srb CANDO sdsc
+echo "test_srb_mdas_create_user testuser1 CACA npaci project '1 Main Street' '619-534 5000' 'testuser1@npaci.edu' srb CANDO sdsc"
+test_srb_mdas_create_user testuser1 CACA npaci project '1 Main Street' '619-534 5000' 'testuser1@npaci.edu' srb CANDO sdsc
+echo "test_srb_mdas_create_user testuser2 CACA npaci project '1 Main Street' '619-534 5000' 'testuser2@npaci.edu' srb CANDO sdsc"
+test_srb_mdas_create_user testuser2 CACA npaci project '1 Main Street' '619-534 5000' 'testuser2@npaci.edu' srb CANDO sdsc
+
+echo "test_srb_mdas_modr 75 sdsc-mda18-fs srb CANDO sdsc testuser1@npaci write"
+test_srb_mdas_modr 75 sdsc-mda18-fs srb CANDO sdsc testuser1@npaci write
+echo "test_srb_mdas_modr 75 sdsc-mda18-fs srb CANDO sdsc testuser2@npaci write"
+test_srb_mdas_modr 75 sdsc-mda18-fs srb CANDO sdsc testuser2@npaci write
+
+echo "test_srb_mdas_modu 22 srb CANDO sdsc testuser1@npaci sysadmin"
+test_srb_mdas_modu 22 srb CANDO sdsc testuser1@npaci sysadmin
+echo "test_srb_mdas_modu 22 srb CANDO sdsc testuser1@npaci aaaa"
+test_srb_mdas_modu 22 srb CANDO sdsc testuser1@npaci aaaa
+echo "test_srb_mdas_modu 22 srb CANDO sdsc testuser1@npaci project"
+test_srb_mdas_modu 22 srb CANDO sdsc testuser1@npaci project
+
+echo "test_srb_mdas_auth testuser1 CACA npaci"
+test_srb_mdas_auth testuser1 CACA npaci
+echo "test_srb_mdas_auth testuser1 CARA npaci"
+test_srb_mdas_auth testuser1 CARA npaci
+echo "test_srb_mdas_auth tuser1 CACA npaci"
+test_srb_mdas_auth tuser1 CACA npaci
+echo "test_srb_mdas_auth testuser1 CACA ssss"
+test_srb_mdas_auth testuser1 CACA ssss
+echo "test_srb_mdas_auth testuser1 CACA sdsc"
+test_srb_mdas_auth testuser1 CACA sdsc
+
+echo "test_srb_mdas_modu 16 testuser1 CACA npaci BABA"
+test_srb_mdas_modu 16 testuser1 CACA npaci BABA
+echo "test_srb_mdas_auth testuser1 CACA npaci"
+test_srb_mdas_auth testuser1 CACA npaci
+echo "test_srb_mdas_auth testuser1 BABA npaci"
+test_srb_mdas_auth testuser1 BABA npaci
+echo "test_srb_mdas_modu 16  testu1 BABA npaci CACA"
+test_srb_mdas_modu 16  testu1 BABA npaci CACA
+echo "test_srb_mdas_modu 16 testuser1 BAB npaci CACA"
+test_srb_mdas_modu 16 testuser1 BAB npaci CACA
+echo "test_srb_mdas_modu 16 testuser1 BABA sdsc CACA"
+test_srb_mdas_modu 16 testuser1 BABA sdsc CACA
+echo "test_srb_mdas_modu 16 testuser1 BABA dddd CACA"
+test_srb_mdas_modu 16 testuser1 BABA dddd CACA
+echo "test_srb_mdas_modu 16 testuser1 BABA npaci CACA"
+test_srb_mdas_modu 16 testuser1 BABA npaci CACA
+echo "test_srb_mdas_auth testuser1 CACA npaci"
+test_srb_mdas_auth testuser1 CACA npaci
+
+echo "test_srb_mdas_modu 19 srb CANDO sdsc testuser1@npaci sdsc"
+test_srb_mdas_modu 19 srb CANDO sdsc testuser1@npaci sdsc
+echo "test_srb_mdas_modu 19 srb CANDO sdsc testuser1@npaci sdsc"
+test_srb_mdas_modu 19 srb CANDO sdsc testuser1@npaci sdsc
+echo "test_srb_mdas_modu 19 testuser1 CACA npaci testuser1 sdsc"
+test_srb_mdas_modu 19 testuser1 CACA npaci testuser1@npaci sdsc
+echo "test_srb_mdas_modu 19 testuser1 CACA npaci testuser1 ucb"
+test_srb_mdas_modu 19 testuser1 CACA npaci testuser1 ucb
+echo "test_srb_mdas_modu 19 srb CANDO sdsc testu1@npaci ucb"
+test_srb_mdas_modu 19 srb CANDO sdsc testu1@npaci ucb
+echo "test_srb_mdas_modu 19 srb CANDO sdsc  testuser1@npaci dddd"
+test_srb_mdas_modu 19 srb CANDO sdsc  testuser1@npaci dddd
+echo "test_srb_mdas_modu 19 srb CANDO sdsc testuser1@npaci ucb"
+test_srb_mdas_modu 19 srb CANDO sdsc testuser1@npaci ucb
+echo "test_srb_mdas_modu 18 srb CANDO sdsc testuser1@npaci sdsc"
+test_srb_mdas_modu 18 srb CANDO sdsc testuser1@npaci sdsc
+echo "test_srb_mdas_modu 18 srb CANDO sdsc testuser1 sdsc"
+test_srb_mdas_modu 18 srb CANDO sdsc testuser1@npaci sdsc
+echo "test_srb_mdas_modu 18 testuser1 CACA npaci testuser1 sdsc"
+test_srb_mdas_modu 18 testuser1 CACA npaci testuser1 sdsc
+echo "test_srb_mdas_modu 18 srb CANDO sdsc testu1@npaci sdsc"
+test_srb_mdas_modu 18 srb CANDO sdsc testu1@npaci sdsc
+echo "test_srb_mdas_modu 18 srb CANDO sdsc testuser1@npaci dddd"
+test_srb_mdas_modu 18 srb CANDO sdsc testuser1@npaci dddd
+echo "test_srb_mdas_modu 18 srb CANDO sdsc testuser1@npaci ucb"
+test_srb_mdas_modu 18 srb CANDO sdsc testuser1@npaci ucb
+
+echo "test point 1"
+
+echo "test_srb_mdas_create_ugroup ngroup1 CACA project '2 Main Street' '619-534 5000' 'ngroup1@sdsc.edu' srb CANDO sdsc"
+test_srb_mdas_create_ugroup ngroup1 CACA project '2 Main Street' '619-534 5000' 'ngroup1@sdsc.edu' srb CANDO sdsc
+echo "test_srb_mdas_create_ugroup ngroup1 CACA project  '2 Main Street' '619-534 5000' 'ngroup1@sdsc.edu' srb CANDO sdsc"
+test_srb_mdas_create_ugroup ngroup1 CACA project  '2 Main Street' '619-534 5000' 'ngroup1@sdsc.edu' srb CANDO sdsc
+
+
+echo "test_srb_mdas_modu 21 srb CANDO sdsc testuser1@npaci ngroup1"
+test_srb_mdas_modu 21 srb CANDO sdsc testuser1@npaci ngroup1
+echo "test_srb_mdas_modu 21 srb CANDO sdsc testuser1@npaci ngroup1"
+test_srb_mdas_modu 21 srb CANDO sdsc testuser1@npaci ngroup1
+echo "test_srb_mdas_modu 21 srb CANDO sdsc testuser1@npaci ngroup2"
+test_srb_mdas_modu 21 srb CANDO sdsc testuser1@npaci ngroup2
+echo "test_srb_mdas_modu 21 srb CANDO sdsc tuser1@npaci ngroup1"
+test_srb_mdas_modu 21 srb CANDO sdsc tuser1@npaci ngroup1
+echo "test_srb_mdas_modu 21 srb CANDO sdsc srb@sdsc ngroup1"
+test_srb_mdas_modu 21 srb CANDO sdsc srb@sdsc ngroup1
+echo "test_srb_mdas_modu 21 srb CANDO sdsc srb@sdsc ngroup1"
+test_srb_mdas_modu 21 srb CANDO sdsc srb@sdsc ngroup1
+echo "test_srb_mdas_modu 21 srb CANDO sdsc srb@sdsc ngroup2"
+test_srb_mdas_modu 21 srb CANDO sdsc srb@sdsc ngroup2
+
+
+echo "test_srb_mdas_create_ugroup ngroup2 CACA project '2 Main Street' '619-534 5000' 'ngroup2@sdsc.edu' srb CANDO sdsc"
+test_srb_mdas_create_ugroup ngroup2 CACA project '2 Main Street' '619-534 5000' 'ngroup2@sdsc.edu' srb CANDO sdsc
+
+
+echo "test_srb_mdas_modu 20 srb CANDO sdsc srb@sdsc ngroup1"
+test_srb_mdas_modu 20 srb CANDO sdsc srb@sdsc ngroup1
+
+echo "test_srb_mdas_create_collections '/g1/g1/g1/srbtest' 'dir1' srb CANDO sdsc"
+test_srb_mdas_create_collections '/g1/g1/g1/srbtest' 'dir1' srb CANDO sdsc
+echo "test_srb_mdas_create_collections '/g1/g1/g1/srbtest' 'dir2' srb CANDO sdsc"
+test_srb_mdas_create_collections '/g1/g1/g1/srbtest' 'dir2' srb CANDO sdsc
+echo "test_srb_mdas_create_collections '/g1/g1/g1/srbtest' 'dir2' srb CANDO sdsc"
+test_srb_mdas_create_collections '/g1/g1/g1/srbtest' 'dir2' srb CANDO sdsc
+echo "test_srb_mdas_create_collections '/srbtest' 'dir3' srb CANDO sdsc"
+test_srb_mdas_create_collections '/srbtest' 'dir3' srb CANDO sdsc
+
+
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci all "
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci all 
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci all "
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci all 
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci read"
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci read
+echo "test_srb_mdas_modc 27 '/srbtest/dir2' srb CANDO sdsc  testuser1 npaci read"
+test_srb_mdas_modc 27 '/srbtest/dir2' srb CANDO sdsc  testuser1 npaci read
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc tuser1 npaci read"
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc tuser1 npaci read
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 ddd all"
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 ddd all
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 sdsc all"
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 sdsc all
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci rd"
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci rd
+
+
+echo "test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci all "
+test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci all 
+echo "test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci read"
+test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci read
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci read"
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci read
+echo "test_srb_mdas_modc 28 '/srbtest/dir2' srb CANDO sdsc testuser1 npaci read "
+test_srb_mdas_modc 28 '/srbtest/dir2' srb CANDO sdsc testuser1 npaci read 
+echo "test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc tuser1 npaci read"
+test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc tuser1 npaci read
+echo "test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 ddd read"
+test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 ddd read
+echo "test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 sdsc read"
+test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 sdsc read
+echo "test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci rd"
+test_srb_mdas_modc 28 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci rd
+echo "test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci write"
+test_srb_mdas_modc 27 '/g1/g1/g1/srbtest/dir2' srb CANDO sdsc testuser1 npaci write
+
+
+echo "test_srb_mdas_get_collections R '/g1/g1/g1/srbtest'  testuser1 CACA npaci 200"
+test_srb_mdas_get_collections R '/g1/g1/g1/srbtest'  testuser1 CACA npaci 200
+echo "test_srb_mdas_get_collections C '/g1/g1/g1/srbtest'  testuser1 CACA npaci 200"
+test_srb_mdas_get_collections C '/g1/g1/g1/srbtest'  testuser1 CACA npaci 200
+echo "test_srb_mdas_get_collections C '/g1'  testuser1 CACA npaci 200"
+test_srb_mdas_get_collections C '/g1'  testuser1 CACA npaci 200
+echo "test_srb_mdas_get_collections R '/g1'  testuser1 CACA npaci 200"
+test_srb_mdas_get_collections R '/g1'  testuser1 CACA npaci 200
+
+echo "test_srb_mdas_get_rsrc sdsc-mda18-fs  testuser1 CACA npaci dn cn pn"
+test_srb_mdas_get_rsrc sdsc-mda18-fs  testuser1 CACA npaci dn cn pn
+echo "test_srb_mdas_get_rsrc ssc-mda18-fs   testuser1 CACA npaci dn cn pn"
+test_srb_mdas_get_rsrc ssc-mda18-fs   testuser1 CACA npaci dn cn pn
+echo "test_srb_mdas_get_rsrc sdsc-mda18-fs  tuser1    CACA npaci dn cn pn"
+test_srb_mdas_get_rsrc sdsc-mda18-fs  tuser1    CACA npaci dn cn pn
+echo "test_srb_mdas_get_rsrc sdsc-mda18-fs  testuser1 CACA lgn dn cn pn"
+test_srb_mdas_get_rsrc sdsc-mda18-fs  testuser1 CACA lgn dn cn pn
+echo "test_srb_mdas_get_rsrc sdsc-mda18-fs  testuser1 CACA sdsc dn cn pn"
+test_srb_mdas_get_rsrc sdsc-mda18-fs  testuser1 CACA sdsc dn cn pn
+echo "test_srb_mdas_get_rsrc sdsc-mda18-fs  testuser1 CACA npaci dn cn pn"
+test_srb_mdas_get_rsrc sdsc-mda18-fs  testuser1 CACA npaci dn cn pn
+
+echo "test_srb_mdas_create ntest1  testuser1 all npaci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest1  testuser1 all npaci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+echo "test_srb_mdas_create ntest1  testuser1 all npaci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest1  testuser1 all npaci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+echo "test_srb_mdas_create ntest10  testuser1 all npaci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest10  testuser1 all npaci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+echo "test_srb_mdas_create ntest1  testuser1 al npaci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest1  testuser1 al npaci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+echo "test_srb_mdas_create ntest1  testuser1 all npci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest1  testuser1 all npci 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+echo "test_srb_mdas_create ntest1  testuser1 all sdsc 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest1  testuser1 all sdsc 'C code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+echo "test_srb_mdas_create ntest1  testuser1 all npaci 'L code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest1  testuser1 all npaci 'L code' '/tmp/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+echo "test_srb_mdas_create ntest1  testuser1 all npaci 'C code' '/tmp/ntest1' 'sdsc-mda19-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest1  testuser1 all npaci 'C code' '/tmp/ntest1' 'sdsc-mda19-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+echo "test_srb_mdas_create ntest2  testuser1 all npaci 'C code' '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir1' 100 CACA"
+test_srb_mdas_create ntest2  testuser1 all npaci 'C code' '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir1' 100 CACA
+echo "test_srb_mdas_create ntest2  testuser1 all npaci 'C code' '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir10' 100 CACA"
+test_srb_mdas_create ntest2  testuser1 all npaci 'C code' '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir10' 100 CACA
+echo "test_srb_mdas_create ntest2  testuser1 all npaci 'C code' '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CAC"
+test_srb_mdas_create ntest2  testuser1 all npaci 'C code' '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CAC
+echo "test_srb_mdas_create ntest2  testuser1 all npaci 'C code' '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA"
+test_srb_mdas_create ntest2  testuser1 all npaci 'C code' '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' 100 CACA
+
+echo "test_srb_mdas_get ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest/dir2' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest/dir2' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA all npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA all npaci '%srbtest' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all npaci '%srbtest' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA 'read audit' npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA 'read audit' npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA read npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA read npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA 'write audit' npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA 'write audit' npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA write npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA write npaci '' 200
+
+echo "test_srb_mdas_get ntest1 testuser1 CARA all npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CARA all npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA www npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA www npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA all naci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all naci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA all sdsc '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all sdsc '' 200
+echo "test_srb_mdas_get ntest2 testuser1 CACA all npaci '' 200"
+test_srb_mdas_get ntest2 testuser1 CACA all npaci '' 200
+echo "test_srb_mdas_get ntest3 testuser1 CACA all npaci '' 200"
+test_srb_mdas_get ntest3 testuser1 CACA all npaci '' 200
+echo "test_srb_mdas_get ntest1 srb CANDO all sdsc '' 200"
+test_srb_mdas_get ntest1 srb CANDO all sdsc '' 200
+echo "test_srb_mdas_get ntest1 srb CANDO read sdsc '' 200"
+test_srb_mdas_get ntest1 srb CANDO read sdsc '' 200
+
+
+echo "test point 3"
+
+echo "test_srb_mdas_move ntest1 '' 'sdsc-mda18-fs' '/tmp/ntest1'  'sdsc-mda18-fs' '/tmp/new/ntest1'  testuser1 CACA npaci"
+test_srb_mdas_move ntest1 '' 'sdsc-mda18-fs' '/tmp/ntest1'  'sdsc-mda18-fs' '/tmp/new/ntest1'  testuser1 CACA npaci
+echo "test_srb_mdas_move ntest1 '' 'sdsc-mda18-fs' '/tmp/ntest1'  'sdsc-mda18-fs' '/tmp/new/ntest1'  testuser1 CACA npaci"
+test_srb_mdas_move ntest1 '' 'sdsc-mda18-fs' '/tmp/ntest1'  'sdsc-mda18-fs' '/tmp/new/ntest1'  testuser1 CACA npaci
+echo "test_srb_mdas_move ntest2 '' 'sdsc-mda18-fs' '/tmp/ntest2'  'sdsc-mda18-fs' '/tmp/new/ntest1'  testuser1 CACA npaci"
+test_srb_mdas_move ntest2 '' 'sdsc-mda18-fs' '/tmp/ntest2'  'sdsc-mda18-fs' '/tmp/new/ntest1'  testuser1 CACA npaci
+
+
+echo "test_srb_mdas_copy  ntest1 ''  'sdsc-mda18-fs' '/tmp/new/ntest1'  'sdsc-fs' '/tmp/ntest1' testuser1 CACA npaci"
+test_srb_mdas_copy  ntest1 ''  'sdsc-mda18-fs' '/tmp/new/ntest1'  'sdsc-fs' '/tmp/ntest1' testuser1 CACA npaci
+echo "test_srb_mdas_copy  ntest1 ''  'sdsc-mda18-fs' '/tmp/new/ntest1'  'sdsc-fs' '/tmp/ntest1' testuser1 CACA npaci"
+test_srb_mdas_copy  ntest1 ''  'sdsc-mda18-fs' '/tmp/new/ntest1'  'sdsc-fs' '/tmp/ntest1' testuser1 CACA npaci
+
+
+
+echo "test_srb_mdas_get ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest/dir2' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest/dir2' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA all npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest' 200
+
+
+echo "test_srb_mdas_all  ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest/dir2' 'sdsc-mda18-fs'"
+test_srb_mdas_all  ntest1 testuser1 CACA all npaci '/g1/g1/g1/srbtest/dir2' 'sdsc-mda18-fs'
+echo "test_srb_mdas_all  ntest2 testuser1 CACA all npaci '/g1/g1/g1/srbtest/dir2' 'sdsc-mda18-fs'"
+test_srb_mdas_all  ntest2 testuser1 CACA all npaci '/g1/g1/g1/srbtest/dir2' 'sdsc-mda18-fs'
+
+echo "test_srb_mdas_mod 4 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs'  '' testuser1 CACA npaci 400"
+test_srb_mdas_mod 4 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs'  '' testuser1 CACA npaci 400
+echo "test_srb_mdas_mod 4 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs'  '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci 500"
+test_srb_mdas_mod 4 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs'  '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci 500
+echo "test_srb_mdas_mod 4 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs'  '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci 600"
+test_srb_mdas_mod 4 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs'  '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci 600
+echo "test_srb_mdas_mod 4 ntest1 '' '' ''  testuser1 CACA npaci 600"
+test_srb_mdas_mod 4 ntest1 '' '' ''  testuser1 CACA npaci 600
+
+
+echo "test_srb_mdas_mod 5 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'gif image'"
+test_srb_mdas_mod 5 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'gif image'
+echo "test_srb_mdas_mod 5 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci alpha"
+test_srb_mdas_mod 5 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci alpha
+echo "test_srb_mdas_mod 5 ntest1 '' '' '' testuser1 CACA npaci 'jpeg image'"
+test_srb_mdas_mod 5 ntest1 '' '' '' testuser1 CACA npaci 'jpeg image'
+echo "test_srb_mdas_mod 5 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'C code'"
+test_srb_mdas_mod 5 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'C code'
+echo "test_srb_mdas_mod 5 ntest1 '' '' '' testuser1 CACA npaci 'C code'"
+test_srb_mdas_mod 5 ntest1 '' '' '' testuser1 CACA npaci 'C code'
+
+
+
+echo "test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir1'"
+test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir1'
+echo "test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir1' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir2'"
+test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir1' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir2'
+echo "test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir1' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir2'"
+test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir1' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir2'
+echo "test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci '/g1/g1/g1/srbte'"
+test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci '/g1/g1/g1/srbte'
+echo "test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir1'"
+test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir1'
+echo "test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir2'"
+test_srb_mdas_mod 6 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir2'
+echo "test_srb_mdas_mod 6 ntest1 '' '' ''  testuser1 CACA npaci '/g1/g1/g1/srbtest/dir1'"
+test_srb_mdas_mod 6 ntest1 '' '' ''  testuser1 CACA npaci '/g1/g1/g1/srbtest/dir1'
+echo "test_srb_mdas_mod 6 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir2'"
+test_srb_mdas_mod 6 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci '/g1/g1/g1/srbtest/dir2'
+
+
+echo "test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci sekar@sdsc all"
+test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci sekar@sdsc all
+echo "test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci sekar@sdsc all"
+test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci sekar@sdsc all
+echo "test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci sekar@sdsc read"
+test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci sekar@sdsc read
+echo "test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc  'read audit'"
+test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc  'read audit'
+echo "test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc  'read noaudit'"
+test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc  'read noaudit'
+echo "test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci@npaci alpha read"
+test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci alpha@npaci read
+echo "test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci public@npaci read"
+test_srb_mdas_mod 8 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci public@npaci read
+echo "test_srb_mdas_mod 8 ntest1 '' '' '' testuser1 CACA npaci public read"
+test_srb_mdas_mod 8 ntest1 '' '' '' testuser1 CACA npaci public@npaci read
+
+echo "test_srb_mdas_get ntest1 public CANDO all npaci '' 200"
+test_srb_mdas_get ntest1 public CANDO all npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser1 CACA all npaci '' 200"
+test_srb_mdas_get ntest1 testuser1 CACA all npaci '' 200
+echo "test_srb_mdas_get ntest1 testuser2 CACA all npaci '' 200"
+test_srb_mdas_get ntest1 testuser2 CACA all npaci '' 200
+echo "test_srb_mdas_get ntest1 srb  CANDO read sdsc '' 200"
+test_srb_mdas_get ntest1 srb  CANDO read sdsc '' 200
+echo "test_srb_mdas_get ntest1 srb  CANDO all sdsc '' 200"
+test_srb_mdas_get ntest1 srb  CANDO all sdsc '' 200
+echo "test_srb_mdas_get ntest1 srb  CANDO write sdsc '' 200"
+test_srb_mdas_get ntest1 srb  CANDO write sdsc '' 200
+echo "test_srb_mdas_get ntest1 srb  CANDO 'write audit' sdsc '' 200"
+test_srb_mdas_get ntest1 srb  CANDO 'write audit' sdsc '' 200
+echo "test_srb_mdas_get ntest1 srb  CANDO 'read audit' sdsc '' 200"
+test_srb_mdas_get ntest1 srb  CANDO 'read audit' sdsc '' 200
+echo "test_srb_mdas_get ntest1 public CANDO  read npaci '' 200"
+test_srb_mdas_get ntest1 public CANDO  read npaci '' 200
+echo "test_srb_mdas_get ntest1 public CANDO  write npaci '' 200"
+test_srb_mdas_get ntest1 public CANDO  write npaci '' 200
+
+echo "test point 4"
+
+echo "test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc read"
+test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc read
+echo "test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc 'read audit'"
+test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc 'read audit'
+echo "test_srb_mdas_mod 9 ntest1 '' '' '' testuser1 CACA npaci public@npaci read"
+test_srb_mdas_mod 9 ntest1 '' '' '' testuser1 CACA npaci public@npaci read
+echo "test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci testuser2@npaci write"
+test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci testuser2@npaci write
+echo "test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc 'rad'"
+test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci srb@sdsc 'rad'
+echo "test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci aaa@npaci read"
+test_srb_mdas_mod 9 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci aaa@npaci read
+
+echo "test_srb_mdas_mod 13 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'this is a test dataset'"
+test_srb_mdas_mod 13 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'this is a test dataset'
+echo "test_srb_mdas_mod 13 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'this is a test dataset'"
+test_srb_mdas_mod 13 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'this is a test dataset'
+echo "test_srb_mdas_mod 13 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'this is a test dataset'"
+test_srb_mdas_mod 13 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'this is a test dataset'
+
+echo "test_srb_mdas_mod 13 ntest1 '/tmp/ntest1' 'sdsc-fs' '' testuser1 CACA npaci 'this is a test dataset'"
+test_srb_mdas_mod 13 ntest1 '/tmp/ntest1' 'sdsc-fs' '' testuser1 CACA npaci 'this is a test dataset'
+echo "test_srb_mdas_mod 13 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'this is a test dataset2'"
+test_srb_mdas_mod 13 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'this is a test dataset2'
+
+
+echo "test_srb_mdas_mod 12 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci ''"
+test_srb_mdas_mod 12 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci ''
+echo "test_srb_mdas_mod 12 ntest1 '' '' '' testuser1 CACA npaci ''"
+test_srb_mdas_mod 12 ntest1 '' '' '' testuser1 CACA npaci ''
+echo "test_srb_mdas_mod 12 ntest2 '' '' '' testuser1 CACA npaci ''"
+test_srb_mdas_mod 12 ntest2 '' '' '' testuser1 CACA npaci ''
+
+
+echo "test_srb_mdas_mod 14 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'execute failure' 'installation test'"
+test_srb_mdas_mod 14 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'execute failure' 'installation test'
+echo "test_srb_mdas_mod 14 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'execute fialure' 'installation test'"
+test_srb_mdas_mod 14 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '' testuser1 CACA npaci 'execute fialure' 'installation test'
+
+
+echo "test_srb_mdas_mod 15 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci sekar sdsc"
+test_srb_mdas_mod 15 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci sekar sdsc
+echo "test_srb_mdas_mod 15 ntest1 '' '' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci srb sdsc"
+test_srb_mdas_mod 15 ntest1 '' '' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci srb sdsc
+echo "test_srb_mdas_mod 15 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci sekar sdsc"
+test_srb_mdas_mod 15 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci sekar sdsc
+echo "test_srb_mdas_mod 15 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci testuser1 sdsc"
+test_srb_mdas_mod 15 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci testuser1 sdsc
+echo "test_srb_mdas_mod 15 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci testuser1 npaci"
+test_srb_mdas_mod 15 ntest1 '/tmp/new/ntest1' 'sdsc-mda18-fs' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci testuser1 npaci
+echo "test_srb_mdas_mod 15 ntest1 '' '' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci  testuser1 npaci"
+test_srb_mdas_mod 15 ntest1 '' '' '/g1/g1/g1/srbtest/dir2' testuser1 CACA npaci  testuser1 npaci
+
+
+echo "test_srb_mdas_mod 1 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci 0"
+test_srb_mdas_mod 1 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci 0
+echo "test_srb_mdas_mod 1 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci 0"
+test_srb_mdas_mod 1 ntest2 '/tmp/ntest2' 'sdsc-mda18-fs' '' testuser1 CACA npaci 0
+echo "test_srb_mdas_mod 1 ntest1 '' '' '' testuser1 CACA npaci 0"
+test_srb_mdas_mod 1 ntest1 '' '' '' testuser1 CACA npaci 0
+
+
+echo "test_srb_mdas_modu 17 srb CANDO sdsc testuser1@npaci"
+test_srb_mdas_modu 17 srb CANDO sdsc testuser1@npaci
+echo "test_srb_mdas_modu 17 srb CANDO sdsc testuser2@npaci"
+test_srb_mdas_modu 17 srb CANDO sdsc testuser2@npaci
+echo "test_srb_mdas_modu 17 srb CANDO sdsc ngroup1@groups"
+test_srb_mdas_modu 17 srb CANDO sdsc ngroup1@groups
+echo "test_srb_mdas_modu 17 srb CANDO sdsc ngroup2@groups"
+test_srb_mdas_modu 17 srb CANDO sdsc ngroup2@groups
+
+
+echo "test_srb_mdas_mod 8 srbdatatest1 '' '' '' srb CANDO sdsc public@npaci 'read audit'"
+test_srb_mdas_mod 8 srbdatatest1 '' '' '' srb CANDO sdsc public@npaci 'read audit'
+
+
+echo "test_srb_mdas_audit public  srbdatatest1 '/tmp/srbdatatest1' 'sdsc-mda18-fs' '' 'read audit' 'testing cat 1' 1  CANDO npaci"
+test_srb_mdas_audit public  srbdatatest1 '/tmp/srbdatatest1' 'sdsc-mda18-fs' '' 'read audit' 'testing cat 1' 1  CANDO npaci
+echo "test_srb_mdas_audit public  srbdatatest1 '/tmp/srbdatatest1' 'sdsc-mda18-fs' '' 'read audit' 'testing cat 1' 0  CANDO npaci"
+test_srb_mdas_audit public  srbdatatest1 '/tmp/srbdatatest1' 'sdsc-mda18-fs' '' 'read audit' 'testing cat 1' 0  CANDO npaci
+echo "test_srb_mdas_audit public  srbdatatest1 '/tmp/srbdatatest1' 'sdsc-mda18-fs' '' 'raudit' 'testing cat 1' 1  CANDO npaci"
+test_srb_mdas_audit public  srbdatatest1 '/tmp/srbdatatest1' 'sdsc-mda18-fs' '' 'raudit' 'testing cat 1' 1  CANDO npaci
+echo "test_srb_mdas_audit public  srbdata1 '/tmp/srbdatatest1' 'sdsc-mda18-fs' '' 'read audit' 'testing cat 1' 1  CANDO npaci"
+test_srb_mdas_audit public  srbdata1 '/tmp/srbdatatest1' 'sdsc-mda18-fs' '' 'read audit' 'testing cat 1' 1  CANDO npaci
+echo "test_srb_mdas_audit public  srbdatatest1 '/tmp/srbdata1' 'sdsc-mda18-fs' '' 'read audit' 'testing cat 1' 1  CANDO npaci"
+test_srb_mdas_audit public  srbdatatest1 '/tmp/srbdata1' 'sdsc-mda18-fs' '' 'read audit' 'testing cat 1' 1  CANDO npaci
+
+

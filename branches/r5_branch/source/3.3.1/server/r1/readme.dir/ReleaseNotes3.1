@@ -1,0 +1,376 @@
+<HTML>
+<HEAD>
+<TITLE>SRB</TITLE>
+<BODY bgcolor=#BBFF00FA>
+<IMG SRC="http://www.npaci.edu/images/DI.gif" WIDTH="555" HEIGHT="90"></P>
+
+<h3>
+SRB 3.1
+</h3>
+
+This document describes changes for SRB 3.1, released April 19,
+2004.
+<p>
+
+In conjunction with this, although released independently, inQ and
+Jargon are now compatiable with the SRB 3.x protocol and so can now
+function with current SRB releases.  
+<p>
+
+If you are upgrading from a previous release, see the instructions in
+MCAT/README.MCAT.PATCH.  
+<p>
+
+<h4>
+New features that deal with data integrity and data backup
+</h4>
+
+<ol>
+<li>
+The checksumming capability of SRB has been greatly expanded. </li>
+
+    a) The -M option of Sget and Sput has been replaced by the -k option.
+    The -k option essentially has the same functionality as the old -M
+    option. i.e., for Sput, the locally computed checksum value by the
+    client is registered with MCAT after the file has been uploaded.
+    For Sget, the downloaded file is checksummed and the value is compared
+    with the valued registered with MCAT.
+<p>
+    b) Added a new Sput option -K which puts the command in the checksum 
+    verification mode. In this mode, after a file has been uploaded,
+    the server  computes a checksum by reading back the file
+    that was just stored. This value is then compared with the  source  
+    checksum  value provided by the client for verification. This verified  
+    checksum value is then registered with MCAT.
+<p>   
+    c) Added a new command Schksum to compute and register checksum values
+    for data that have already been ingested into SRB. The operation can be 
+    in one of several modes. By default, the server computes and registers 
+    checksum value for the data if the value does not already exist in MCAT. 
+    The -c option puts the operation in the verification mode. The server 
+    computes a checksum value based on the data stored in SRB and compares 
+    it with the value registered with MCAT if a registered value exists.  
+    An error will be returned if they don't match. 
+    New API: srbObjChksum()
+
+<li>Synchronization of data between a local copy (local file system) and the 
+copy stored in SRB (UNIX rsync like functionality)</li>
+
+    Added a new command Srsync to perform the synchronization. The command 
+    can be in one of the two modes : synchronization of data from the client's
+    local file system to SRB or from SRB to the local file system. 
+    The command compares the checksum values and file sizes of the source 
+    and target files to determine whether synchronization is needed. 
+    Therefore, the command will run faster if the checksum value for the  
+    specific SRB file already  exists and is registered  with  MCAT. This 
+    can be achieved by using the -k|K option of Sput or the Schksum command.
+
+<li>Backing up SRB data</li>
+
+   A new command Sbkupsrb has been added to simplify the task of backing up 
+   srb data and collections to a specific resource. The existing Sreplicate
+   command can be used to replicate srb data to another resource. But the
+   problem is a new replica will be produced each time Sreplicate is run
+   and too many replicas may result after a few Sreplicate runs.
+   Sbkupsrb will first check whether a copy of the data to be backed up 
+   already exists in  the  backupResource.  If it does and the copy is up to 
+   date, nothing will be done. If it exists but not up to date, the copy will 
+   be updated to the  latest.  If it does not exist, a replica to the
+   backupResource will be made.
+ <p>
+   New API: srbBackupData()
+
+</ol>
+
+<h4>
+New features in Authentication
+</h4>
+
+In order to address the issue of cross zone authentication, we have made a 
+couple of improvements. Previously, for cross zone operations, users were
+required to connect and login through their own home zone and even with that,
+some cross zone operations such as replication may fail. We made the 
+following improvements:
+<ol>
+<li>GSI Delegation certificate</li>
+We are very grateful that Ananta Manandhar 
+of the Data Management Group of the CCLRC e-Science Centre has 
+designed and implemented a new authentication scheme - 'GSI_DELEGATE' which 
+uses the client's GSI Delegation certificate for authentication. The 
+advantage is that this certificate can be passed from server to server
+whereby the users identity is continued to be maintained across servers
+and across zones. This scheme basically solves the cross zone authentication
+issues. A slight drawback is that the overhead is somewhat higher than the
+normal 'GSI_AUTH' scheme which will continue to be supported.
+
+<li>Cross zone authentication improvement for the 'ENCRYPT1' scheme</li>
+The SRB federated system depends heavily on server making requests to 
+another server on behalf on the client. For across zone requests, the 
+receiving server may decide that the requesting server does not have enough 
+authorization to make such request. Previously, a AUTH_ERR_CLIENT_SVR_DIFF_ZONE 
+error would be returned. With this improvement, the receiving server
+will request a direct 'ENCRYPT1' authentication session with the client.
+This scheme requires one additional authentication session in certain
+situations, but the client will no longer get the AUTH_ERR_CLIENT_SVR_DIFF_ZONE
+error.
+</ol>
+
+Java GSI authentication is now supported:
+<ol>
+<li>The SRB client/server 'aid' library has been enhanced to
+interoperate with the Java GSI code, which Jargon now supports.</li>  GSI
+authentication with C clients is still supported but it now also will
+work the Java clients.  Also, a buffer size has been increased to avoid 
+occasional failures that occured when tokens get larger, e.g. with more
+proxy indirection.
+</ol>
+
+
+
+<h4>
+New features associated with installation and administration
+</h4>
+<ol>
+
+<li> Admin Tool is now pure Java, runs on Mac OS X, Windows</li>
+The Java Admin Tool (aka mcatAdmin or SRB Admin Tool) now uses pure
+Java (Jargon) instead of the JNI interface to the C libraries.
+Because of this, it can now run on Mac OS X and Windows in addition to
+our previously supported Unix systems.  There is now no need to
+recompile it, as the jar file is part of the release.  The Makefiles
+and install scripts have been updated to handle this.
+
+<li>The Java Admin Tool also has many new panels/functions.</li>
+This includes
+a new panel to delete a logical resource, to remove a physical
+resource from a logical resource, a new panel to display tokens
+(Location, ResourceType, ResourceClass, DataType, UserType, Domain,
+Action, AccessConstraint, and Zone), a new panel to display user
+information, and a panel to display locations (via display tokens).
+
+<li>install.pl script now supports non-full installations</li>
+The install script, now called install.pl again (and displaying a version
+id), includes options to perform subsets of a full installation: 1 Use
+an existing Postgres installation, 2 like 1 but also skip the
+initialization of the MCAT database, 3 like 2 but also skip ingesting
+new domains, users, etc.  The script contains documentation for these
+modes.  There are also some improvements to handle different versions
+of perl, changes for 3.1, etc.
+
+<li>There is a new installServer.pl script that installs a non-MCAT
+server.</li> 
+This was done as a separate script (distinct from the
+install.pl script) since it is a small subset and can best be
+completed with some manual steps done by administrators.  See
+installServer.pl for documentation.
+
+<li>The SRB 'configure' script now will automatically detect if a host is
+using 64-bit addressing and set the configuration accordingly.</li>  Also,
+some irrelevant configure warning messages have been removed.
+
+<li>SRB GUID/UUID generation code is a separate download</li>
+If you want to use the SRB GUID/UUID (Global or Universal, Unique
+IDentifiers) features, you should download and replace
+src/lib/gen_uuid.c with the real one at
+http://www.npaci.edu/DICE/SRB/tarfiles/gen_uuid.c.  We need to
+distribute this separately because it is based on code with a GNU
+license.  The SRB release includes a place-holder version of
+gen_uuid.c that builds OK and can adequately generate a few GUIDs but
+should not be used for production GUIDs.
+
+</ol>
+
+<h4>
+New Trash Can System 
+</h4>
+
+<ul>
+<li>
+A trash can system has been implemented to process deleted SRB files and 
+collections. </li>
+The advantages of the system are: 
+<ol>
+<li>Greatly improves the file removal speed perceived by users</li>
+
+<li>Files and collections in the trash can be restored if users change
+their minds after the deletion.</li>
+</ol>
+
+By default, Srm will now move the files and collections being deleted into
+the user's trash can collections given as follows:
+<pre>
+    /trash/home/userName.domainName    
+</pre>
+for files with a path of the form: /home/userName.domainName/..... and,
+<pre>
+    /myZone/trash/home/userName.domainName
+</pre>
+for files with a path of the form: /myZone/home/userName.domainName/..... 
+<p>
+
+The -f option of Srm forces the absolute removal without moving to the
+trash can first.
+<p>
+Also, building the SRB software with the following line:
+<br>
+# NO_TRASH_SYSTEM=1
+<br>
+uncommented out will disable the Trash Can System.  As released, the
+default is for the Trash Can System to be enabled.
+<p>
+
+A new command Srmtrash has been added to allow normal users to purge their 
+own trash or by admin users to purge system wide trash managed by the local
+MCAT. The -t expiration_time_in_hours option can be used to set the minimum 
+age criteria of the trash in hours for purging.
+<p>
+
+For the Trash Can System to work, the following trash collections must
+exist:
+<pre>
+/trash/home
+/trash/container
+/your_local_zone/trash/home
+/your_local_zone/trash/container
+</pre>
+These collections must be owned by the admin user and writable by the
+public (public@npaci). These collections will be made automatically by
+the install script when a brand new MCAT installation is made. For
+existing MCATs, these collections must be made by the admin user.  For
+example, the following commands make the /trash/home collection:
+<pre>
+    Smkdir /trash
+    Smkdir /trash/home
+    Schmod w public npaci /trash/home
+</pre>
+</li>
+</ul>
+
+<h4>
+Other new features 
+</h4>
+
+<ol>
+<li>Different Port number for each zone</li>
+Previously, every server in
+a multi-zone federation was required to use the same TCP/IP port number 
+for incoming connections. The new scheme still requires each server
+within a zone to use the same port number, but each zone in the federation
+now can use different port numbers. 
+<br>
+Rules for specifying port number in server configuration:
+<ul>
+   <li>Local zone's port number -
+Because each server must know the port number
+of its own local zone before it can communicate with its local MCAT enabled 
+server, it is not practical to determine the local zone's port number by
+querying the MCAT. Therefore, the local zone's port number is determined
+based on the following order:
+
+    i) The value defined by the environment variable "srbPort". This value 
+    can be set in the "runsrb" script.
+
+    ii) The Built in default port number of 5544.
+</li>
+<li>Foreign zone's port numbers
+The foreign zone's port numbers are determined
+based on the following order:
+
+    i) The port number associated with the foreign zone registered in MCAT.
+
+    ii) If the port number is undefined or set to 0 in MCAT, it will use
+    the value defined by the environment variable "srbPort". This value 
+    can be set in the "runsrb" script.
+
+    iii) The Built in default port number of 5544.
+</li>
+</ul>
+  
+<li>Server timeout
+</li>
+It has been observed at a site that inactive srbServer
+processes can build up, especially the MCAT enabled SRB servers. There
+are mechanism in the srbServer to detect disconnection which allow
+the srbServer process to exit properly. Either these mechanism are not 
+functioning fast enough or malfunctioning, they were seeing accumulation 
+of inactive srbServer processes. To counter this problem in the short
+term, we made the following changes:
+
+<ul>
+    <li>Before a srbServer process exits, it now sends a disconnect message
+    to all other srbServers that have a connection to it.
+
+    <li>Server process timeout -
+     Added a new configurable environment variable 
+    "ServerTimeOut" in the "runsrb" script. This allows the srbServer process 
+    to timeout and exit if it has not received new commands from the 
+    connecting client/server for the number of seconds specified by 
+    ServerTimeOut. The ServerTimeOut value must not be too small especially 
+    on a MCAT enabled server because the connecting server may be busy 
+    transferring a very large file. Internally ServerTimeOut defaults to 
+    1800 sec if it is set to less than this value.
+    </li>
+</ul>
+
+<li>Replace gethostbyname with gethostbyname_r (reentrant version). </li>
+Fix
+submitted by David McNab of NASA to prevent occasional core dump on
+the solaris platform.
+
+<li>Add a [-n replNum] option to Sput to specify which replica number to 
+overwrite.</li>
+
+<li>Get around a problem on the solaris platform where the first random number
+from random() is always a odd number. Random number are used in many places
+in SRB such as selecting which resource in a logical resource to use when
+ingesting data.</li>
+
+<li>A few fixes for bulk load and unload.</li>
+</ol>
+
+
+This release contains the following new utlities:
+<ul>
+ <li>Srsync     - Synchronize files in the local file system and the copy stored in SRB</li>
+ <li>Srmtrash   - Purge SRB objects and sub-collections in the "trash" collection</li>
+ <li>Schksum    - Performs checksum on existing SRB objects and stores them in the MCAT</li>
+ <li> Sbkupsrb   - Backup/synchronize srb data/collection to a target resource</li>
+ <li> SmodR      - Modifies some system metadata information on SRB resorces</li>
+ <li> Sregisterlocation - Register a Resource location in MCAT</li>
+ <li> Sregisterresource - Register a Physical Resource in MCAT</li>
+ <li> SmodifyUser- Modifies some system metadata information on SRB users</li>
+ <li> Singestuser- Register a new user into SRB space</li>
+ <li> Schhost    - Changes connection host for the current session</li>
+ <li>Schdefres  - Changes default resource for the current session.</li>
+</ul>
+The following utilities have been updated:
+ Sufmeta,
+ SgetD,
+ SgetU,
+ Stoken,
+ Sattrs,
+ Shelp,
+ Sls,
+ Sput,
+ Sget, and
+ Schmod (owner and bulk).
+<p>
+
+Updated documentation includes changes and additions to
+readme.dir/faq.html (the FAQ), README.gsi.htm, MCAT/install.pl,
+MCAT/README.MCAT.PATCH and new/updated man pages for Scommands.
+<p>
+
+There is a new paper describing SRB security features and how to
+run more securely: readme.dir/srb-security.html.  
+<p>
+
+A document describing the GSI Delegation is available as
+readme.dir/GSIDelegation.doc.  
+<p>
+
+As always, many smaller bug fixes and enhancements have also been
+made.
+
+</BODY>
+</HTML>

@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# Script to shutdown SRB master and server
+#
+# Set this to the srbMaster you wish to shutdown
+MASTER_STR=srbMaster-@SRB_VERSION@@SRB_PROJECT@
+
+
+
+# Display all srbMasters and srbServers that are running
+ps -elf | egrep "srb[S|M]"
+
+# Find all srbServers that are part of THIS srbMaster
+masterPid=`ps -elf | egrep "$MASTER_STR" | egrep -v grep | awk '{ print $4 }'`
+
+
+# If $masterPid is "", then it causes everything owned by srb to be killed
+# This is NOT what we want
+if [ "$masterPid" = "" ]
+then
+       listServers=""
+else
+       listServers=`ps -elf | egrep " $masterPid " | egrep srbS | egrep -v "$MASTER_STR" | egrep -v grep | awk '{ print $4 }'`
+fi
+
+listMaster=`ps -elf | egrep "$MASTER_STR" | egrep -v grep | awk '{ print $4 }'`
+
+if [ "$1" != "now" ]
+then
+    echo "Will kill srbServers with pid = $listServers" 
+    echo "Will kill srbMaster with pid = $listMaster"
+    echo "Enter y to do so:"
+    read ttyinput
+    if [ "$ttyinput" != "y" ]
+    then
+        exit
+    fi
+fi
+
+# Kill all srbServers that are part of THIS srbMaster
+if [ -n "$listServers" ]
+then
+       echo "kill 1: $listServers"
+       /bin/kill $listServers
+       echo "kill 2: $listServers"
+       /bin/kill $listServers
+fi
+
+# Kill THIS srbMaster
+if [ -n "$listMaster" ]
+then
+        echo "kill 1: $listMaster"
+        /bin/kill $listMaster
+        echo "kill 2: $listMaster"
+        /bin/kill $listMaster
+fi
+
+exit 0;

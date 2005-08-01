@@ -1,0 +1,605 @@
+
+SQL*Plus: Release 8.1.7.0.0 - Production on Fri Feb 14 15:25:57 2003
+
+(c) Copyright 2000 Oracle Corporation.  All rights reserved.
+
+
+Connected to:
+Oracle8i Enterprise Edition Release 8.1.5.0.0, 64-bit - Production
+With the Partitioning and Java options
+PL/SQL Release 8.1.5.0.0 - Production
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+drop table MDAS_AU_AUDIT_DESC
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Table dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Synonym dropped.
+
+
+Sequence dropped.
+
+Disconnected from Oracle8i Enterprise Edition Release 8.1.5.0.0, 64-bit - Production
+With the Partitioning and Java options
+PL/SQL Release 8.1.5.0.0 - Production
