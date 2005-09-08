@@ -1,0 +1,155 @@
+Only in SRB-3.3.1-SDSC: admin
+Only in SRB-3.3.1-SDSC: bin
+Only in SRB-3.3.1-SDSC: config.guess
+Only in SRB-3.3.1-SDSC: config.rescue
+Only in SRB-3.3.1-SDSC: config.sub
+Only in SRB-3.3.1-SDSC: configure
+Only in SRB-3.3.1-SDSC: configure.in
+Only in SRB-3.3.1-SDSC: configure.readme.srbteam
+Only in SRB-3.3.1-SDSC: COPYRIGHT
+Only in SRB-3.3.1-SDSC: CVS
+Only in SRB-3.3.1-SDSC: data
+Only in SRB-3.3.1-SDSC: errMsg
+Only in SRB-3.3.1-SDSC: installServer.pl
+Only in SRB-3.3.1-SDSC: install.sh
+Only in SRB-3.3.1-SDSC: jargon
+Only in SRB-3.3.1-SDSC: java
+Only in SRB-3.3.1-SDSC: Makefile.in
+Only in SRB-3.3.1-SDSC: matrix
+Only in SRB-3.3.1-SDSC: MCAT
+Only in SRB-3.3.1-SDSC: mk
+Only in SRB-3.3.1-SDSC: mySRB
+Only in SRB-3.3.1-SDSC: NT
+Only in SRB-3.3.1-SDSC: preload
+Only in SRB-3.3.1-SDSC: .project
+Only in SRB-3.3.1-SDSC: proxy
+Only in SRB-3.3.1-SDSC: python
+Only in SRB-3.3.1-SDSC: readme.dir
+Only in SRB-3.3.1-SDSC/src: auth.txt
+Only in SRB-3.3.1-SDSC/src/back: adsFileDvr.c
+Only in SRB-3.3.1-SDSC/src/back: antelopeOrbDvr.c
+Only in SRB-3.3.1-SDSC/src/back: compoundObj.c
+Only in SRB-3.3.1-SDSC/src/back: CVS
+Only in SRB-3.3.1-SDSC/src/back: datascopeDvr.c
+Only in SRB-3.3.1-SDSC/src/back: db2DvrLib.c
+Only in SRB-3.3.1-SDSC/src/back: db2TableDvr.c
+Only in SRB-3.3.1-SDSC/src/back: dbLobj.c
+Only in SRB-3.3.1-SDSC/src/back: dbTable.c
+Only in SRB-3.3.1-SDSC/src/back: distrib.c
+Only in SRB-3.3.1-SDSC/src/back: dpssFileDvr.c
+Only in SRB-3.3.1-SDSC/src/back: exfFunct.c
+Only in SRB-3.3.1-SDSC/src/back: exfSw.c
+Only in SRB-3.3.1-SDSC/src/back: ftpFileDvr.c
+Only in SRB-3.3.1-SDSC/src/back: functionHandler.c
+Only in SRB-3.3.1-SDSC/src/back: gridftpDvr.c
+Only in SRB-3.3.1-SDSC/src/back: hpssFileDvr.c
+Only in SRB-3.3.1-SDSC/src/back: hpssParaOpr.c
+Only in SRB-3.3.1-SDSC/src/back: ifmxDvrLib.c
+Only in SRB-3.3.1-SDSC/src/back: ifmxTableDvr.c
+Only in SRB-3.3.1-SDSC/src/back: illusTableDvr.c
+Only in SRB-3.3.1-SDSC/src/back: illustraDB.c
+Only in SRB-3.3.1-SDSC/src/back: MDriver.c
+Only in SRB-3.3.1-SDSC/src/back: mysDvrLib.c
+Only in SRB-3.3.1-SDSC/src/back: mysTableDvr.c
+Only in SRB-3.3.1-SDSC/src/back: ntFileDvr.c
+Only in SRB-3.3.1-SDSC/src/back: objBulkFunct.c
+Only in SRB-3.3.1-SDSC/src/back: objContainerFunct.c
+Only in SRB-3.3.1-SDSC/src/back: objMcatAdminFunct.c
+Only in SRB-3.3.1-SDSC/src/back: objMcatOprFunct.c
+Only in SRB-3.3.1-SDSC/src/back: objMiscIoFunct.c
+diff -ru SRB-3.3.1-SDSC/src/back/objParaIoFunct.c srb-patches/ADS driver update/src/back/objParaIoFunct.c
+--- SRB-3.3.1-SDSC/src/back/objParaIoFunct.c	2005-06-29 13:31:28.000000000 +0100
++++ srb-patches/ADS driver update/src/back/objParaIoFunct.c	2005-08-01 09:48:39.000000000 +0100
+@@ -233,16 +233,23 @@
+             elog (NOTICE,
+              "_svrDataCopy: target size %lld does not match input size %lld",
+             verifySize, size);
+-            _objUnlink (srbObjTypeEntry[destTypeInx].objType,
+-             srbObjTypeEntry[destTypeInx].systemType,
+-             destResLoc, destPath, NO_CHKDIR);
+-            retVal = OBJ_ERR_COPY_LEN;
++            if (srbObjTypeEntry[destTypeInx].systemType != ADS_FT) {
++                _objUnlink (srbObjTypeEntry[destTypeInx].objType,
++                 srbObjTypeEntry[destTypeInx].systemType,
++                 destResLoc, destPath, NO_CHKDIR);
++                retVal = OBJ_ERR_COPY_LEN;
++            }
++            else {
++                elog (NOTICE, "_svrDataCopy: ignore size mismatch for ADS");
++            }
+         }
+     }
+ 
+     return retVal;
+ }
+ 
++
++
+ #ifdef PARA_OPR
+ srb_long_t
+ _svrDataCopySrbToLocalP (int destTypeInx, char *destPath, char *destResLoc,
+diff -ru SRB-3.3.1-SDSC/src/back/objSeqIoFunct.c srb-patches/ADS driver update/src/back/objSeqIoFunct.c
+--- SRB-3.3.1-SDSC/src/back/objSeqIoFunct.c	2005-06-29 13:31:28.000000000 +0100
++++ srb-patches/ADS driver update/src/back/objSeqIoFunct.c	2005-08-01 09:48:47.000000000 +0100
+@@ -1865,6 +1865,7 @@
+     int tinx;
+     int status;
+     int contInx = -1;
++    srb_long_t lstatus;
+ 
+     if (descInx < 0 || descInx >= MAX_SRBO_DESC ||
+     srbObjDesc[descInx].lowLevelDescInx < 0) {
+@@ -1889,12 +1890,12 @@
+ 			srbObjDesc[descInx].baseOffset = 
+ 			 srbObjDesc[contInx].contInfo->curContainerSize;
+ 			/* Seek to the baseOffset */
+-    			status = _svrObjSeek (descInx, 0, SEEK_SET);
++    			lstatus = _svrObjSeek (descInx, 0, SEEK_SET);
+ 
+-    			if (status < 0) {
++    			if (lstatus < 0) {
+         		    elog(NOTICE, 
+-			     "svrObjWrite: _svrObjSeek error, status = %d ", 
+-			      status);
++			     "svrObjWrite: _svrObjSeek error, status = %lld ", 
++			      lstatus);
+         		    return status;
+     			}
+ 			chgBaseOffset = 1;
+@@ -4346,7 +4347,8 @@
+              srbObjTypeEntry[tinx].systemType,
+              newResInfo->phyResLoc, newFullPathName, NO_CHKDIR);
+             totalWritten = OBJ_ERR_COPY_LEN;
+-        } else if (size > 0 && srbObjTypeEntry[tinx].objType == FILE_TYPE) {
++        } else if (size > 0 && srbObjTypeEntry[tinx].objType == FILE_TYPE &&
++	  srbObjTypeEntry[tinx].systemType != ADS_FT) {
+             struct srbStat retStat;
+             char *portNum, tmpResLoc[MAX_TOKEN];
+ 
+Only in SRB-3.3.1-SDSC/src/back: oraDvrLib.c
+Only in SRB-3.3.1-SDSC/src/back: oraTableDvr.c
+Only in SRB-3.3.1-SDSC/src/back: orbUtil.c
+Only in SRB-3.3.1-SDSC/src/back: psgDvrLib.c
+Only in SRB-3.3.1-SDSC/src/back: psgTableDvr.c
+Only in SRB-3.3.1-SDSC/src/back: srbC_db2_library.c
+Only in SRB-3.3.1-SDSC/src/back: srbC_httpc_library.c
+Only in SRB-3.3.1-SDSC/src/back: srbC_ora_library.c
+Only in SRB-3.3.1-SDSC/src/back: srbProxyFunct.c
+Only in SRB-3.3.1-SDSC/src/back: srbServer.c
+Only in SRB-3.3.1-SDSC/src/back: srbServerMisc.c
+Only in SRB-3.3.1-SDSC/src/back: srbServerSfo.c
+Only in SRB-3.3.1-SDSC/src/back: sybDvrLib.c
+Only in SRB-3.3.1-SDSC/src/back: sybTableDvr.c
+Only in SRB-3.3.1-SDSC/src/back: unixFileDvr.c
+Only in SRB-3.3.1-SDSC/src/back: utFileDvr.c
+Only in SRB-3.3.1-SDSC/src: catalog
+Only in SRB-3.3.1-SDSC/src: client
+Only in SRB-3.3.1-SDSC/src: CVS
+Only in SRB-3.3.1-SDSC/src: front
+Only in SRB-3.3.1-SDSC/src: include
+Only in SRB-3.3.1-SDSC/src: lib
+Only in SRB-3.3.1-SDSC/src: nt_util
+Only in SRB-3.3.1-SDSC: tape
+Only in SRB-3.3.1-SDSC: test
+Only in SRB-3.3.1-SDSC: unixIO
+Only in SRB-3.3.1-SDSC: utilities
