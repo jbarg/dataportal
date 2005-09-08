@@ -1,0 +1,132 @@
+Only in SRB-3.3.1-r4/: admin
+Only in SRB-3.3.1-r4/: bin
+Only in SRB-3.3.1-r4/: config.guess
+Only in SRB-3.3.1-r4/: config.rescue
+Only in SRB-3.3.1-r4/: config.sub
+Only in SRB-3.3.1-r4/: configure
+Only in SRB-3.3.1-r4/: configure.in
+Only in SRB-3.3.1-r4/: configure.readme.srbteam
+Only in SRB-3.3.1-r4/: COPYRIGHT
+Only in SRB-3.3.1-r4/: data
+Only in SRB-3.3.1-r4/: errMsg
+Only in SRB-3.3.1-r4/: installServer.pl
+Only in SRB-3.3.1-r4/: install.sh
+Only in SRB-3.3.1-r4/: jargon
+Only in SRB-3.3.1-r4/: java
+Only in SRB-3.3.1-r4/: Makefile.in
+Only in SRB-3.3.1-r4/: matrix
+Only in SRB-3.3.1-r4/: MCAT
+Only in SRB-3.3.1-r4/: mk
+Only in SRB-3.3.1-r4/: mySRB
+Only in SRB-3.3.1-r4/: NT
+Only in SRB-3.3.1-r4/: preload
+Only in SRB-3.3.1-r4/: .project
+Only in SRB-3.3.1-r4/: proxy
+Only in SRB-3.3.1-r4/: python
+Only in SRB-3.3.1-r4/: readme.dir
+Only in SRB-3.3.1-r4/src: auth.txt
+Only in SRB-3.3.1-r4/src/back: adsFileDvr.c
+Only in SRB-3.3.1-r4/src/back: antelopeOrbDvr.c
+Only in SRB-3.3.1-r4/src/back: compoundObj.c
+Only in SRB-3.3.1-r4/src/back: datascopeDvr.c
+Only in SRB-3.3.1-r4/src/back: db2DvrLib.c
+Only in SRB-3.3.1-r4/src/back: db2TableDvr.c
+Only in SRB-3.3.1-r4/src/back: dbLobj.c
+Only in SRB-3.3.1-r4/src/back: dbTable.c
+Only in SRB-3.3.1-r4/src/back: distrib.c
+Only in SRB-3.3.1-r4/src/back: dpssFileDvr.c
+Only in SRB-3.3.1-r4/src/back: exfFunct.c
+Only in SRB-3.3.1-r4/src/back: exfSw.c
+Only in SRB-3.3.1-r4/src/back: ftpFileDvr.c
+Only in SRB-3.3.1-r4/src/back: functionHandler.c
+Only in SRB-3.3.1-r4/src/back: gridftpDvr.c
+Only in SRB-3.3.1-r4/src/back: hpssFileDvr.c
+Only in SRB-3.3.1-r4/src/back: hpssParaOpr.c
+Only in SRB-3.3.1-r4/src/back: ifmxDvrLib.c
+Only in SRB-3.3.1-r4/src/back: ifmxTableDvr.c
+Only in SRB-3.3.1-r4/src/back: illusTableDvr.c
+Only in SRB-3.3.1-r4/src/back: illustraDB.c
+Only in SRB-3.3.1-r4/src/back: MDriver.c
+Only in SRB-3.3.1-r4/src/back: mysDvrLib.c
+Only in SRB-3.3.1-r4/src/back: mysTableDvr.c
+Only in SRB-3.3.1-r4/src/back: ntFileDvr.c
+diff -ru SRB-3.3.1-r4/src/back/objBulkFunct.c srb-patches/Bulk registration debug patch/src/back/objBulkFunct.c
+--- SRB-3.3.1-r4/src/back/objBulkFunct.c	2005-06-29 13:44:16.000000000 +0100
++++ srb-patches/Bulk registration debug patch/src/back/objBulkFunct.c	2005-09-01 15:44:31.217392944 +0100
+@@ -6,6 +6,7 @@
+ Please read these files before using,modifying or distributing SRB software.
+ **************************************************************************/
+ 
++#define BL_TIMING
+ 
+ /* objBulkFunct.c - Routines to handle Bulk operation type SID.
+  */
+@@ -136,7 +137,10 @@
+     struct resCache *myResCache;
+     
+     int numFilesDone = 0;
+-
++#ifdef BL_TIMING
++    time_t blStartTm = time (0);
++    time_t regStartTm;
++#endif
+ 
+     /* do it locally */
+ 
+@@ -343,6 +347,12 @@
+ 	if (retVal < 0)
+ 	    break;
+     }
++#ifdef BL_TIMING
++    regStartTm = time (0);
++    elog (NOTICE, "BL_TIMING: %d sec to unfold %d files in %s",
++      regStartTm - blStartTm, numFilesDone, infoOutHead->objID);
++#endif
++
+ #ifdef DEBUG_BLOAD
+     printf (" pid = %d, %s\n", getpid (), infoOutHead->dataPath);
+     fflush (stdout);
+@@ -429,6 +439,11 @@
+     if (compPath != NULL)
+         free (compPath);
+ 	
++#ifdef BL_TIMING
++    elog (NOTICE, "BL_TIMING: %d sec to Register %d files in %s",
++      time (0) - regStartTm, numFilesDone, infoOutHead->objID);
++#endif
++
+     return retVal;
+ }
+ 
+Only in SRB-3.3.1-r4/src/back: objContainerFunct.c
+Only in SRB-3.3.1-r4/src/back: objMcatAdminFunct.c
+Only in SRB-3.3.1-r4/src/back: objMcatOprFunct.c
+Only in SRB-3.3.1-r4/src/back: objMiscIoFunct.c
+Only in SRB-3.3.1-r4/src/back: objParaIoFunct.c
+Only in SRB-3.3.1-r4/src/back: objSeqIoFunct.c
+Only in SRB-3.3.1-r4/src/back: oraDvrLib.c
+Only in SRB-3.3.1-r4/src/back: oraTableDvr.c
+Only in SRB-3.3.1-r4/src/back: orbUtil.c
+Only in SRB-3.3.1-r4/src/back: psgDvrLib.c
+Only in SRB-3.3.1-r4/src/back: psgTableDvr.c
+Only in SRB-3.3.1-r4/src/back: srbC_db2_library.c
+Only in SRB-3.3.1-r4/src/back: srbC_httpc_library.c
+Only in SRB-3.3.1-r4/src/back: srbC_ora_library.c
+Only in SRB-3.3.1-r4/src/back: srbProxyFunct.c
+Only in SRB-3.3.1-r4/src/back: srbServer.c
+Only in SRB-3.3.1-r4/src/back: srbServerMisc.c
+Only in SRB-3.3.1-r4/src/back: srbServerSfo.c
+Only in SRB-3.3.1-r4/src/back: sybDvrLib.c
+Only in SRB-3.3.1-r4/src/back: sybTableDvr.c
+Only in SRB-3.3.1-r4/src/back: unixFileDvr.c
+Only in SRB-3.3.1-r4/src/back: utFileDvr.c
+Only in SRB-3.3.1-r4/src: catalog
+Only in SRB-3.3.1-r4/src: client
+Only in SRB-3.3.1-r4/src: front
+Only in SRB-3.3.1-r4/src: include
+Only in SRB-3.3.1-r4/src: lib
+Only in SRB-3.3.1-r4/src: nt_util
+Only in SRB-3.3.1-r4/: tape
+Only in SRB-3.3.1-r4/: test
+Only in SRB-3.3.1-r4/: unixIO
+Only in SRB-3.3.1-r4/: utilities

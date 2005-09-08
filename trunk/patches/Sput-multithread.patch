@@ -1,0 +1,151 @@
+Only in SRB-3.3.1-SDSC/: admin
+Only in SRB-3.3.1-SDSC/: bin
+Only in SRB-3.3.1-SDSC/: config.guess
+Only in SRB-3.3.1-SDSC/: config.rescue
+Only in SRB-3.3.1-SDSC/: config.sub
+Only in SRB-3.3.1-SDSC/: configure
+Only in SRB-3.3.1-SDSC/: configure.in
+Only in SRB-3.3.1-SDSC/: configure.readme.srbteam
+Only in SRB-3.3.1-SDSC/: COPYRIGHT
+Only in SRB-3.3.1-SDSC/: CVS
+Only in SRB-3.3.1-SDSC/: data
+Only in SRB-3.3.1-SDSC/: errMsg
+Only in SRB-3.3.1-SDSC/: installServer.pl
+Only in SRB-3.3.1-SDSC/: install.sh
+Only in SRB-3.3.1-SDSC/: jargon
+Only in SRB-3.3.1-SDSC/: java
+Only in SRB-3.3.1-SDSC/: Makefile.in
+Only in SRB-3.3.1-SDSC/: matrix
+Only in SRB-3.3.1-SDSC/: MCAT
+Only in SRB-3.3.1-SDSC/: mk
+Only in SRB-3.3.1-SDSC/: mySRB
+Only in SRB-3.3.1-SDSC/: NT
+Only in SRB-3.3.1-SDSC/: preload
+Only in SRB-3.3.1-SDSC/: .project
+Only in SRB-3.3.1-SDSC/: proxy
+Only in SRB-3.3.1-SDSC/: python
+Only in SRB-3.3.1-SDSC/: readme.dir
+Only in SRB-3.3.1-SDSC/: src
+Only in SRB-3.3.1-SDSC/: tape
+Only in SRB-3.3.1-SDSC/: test
+Only in SRB-3.3.1-SDSC/: unixIO
+Only in SRB-3.3.1-SDSC/utilities: admin-bin
+Only in SRB-3.3.1-SDSC/utilities: bin
+Only in SRB-3.3.1-SDSC/utilities: CVS
+Only in SRB-3.3.1-SDSC/utilities: envFiles
+Only in SRB-3.3.1-SDSC/utilities: include
+Only in SRB-3.3.1-SDSC/utilities: Makefile.in
+Only in SRB-3.3.1-SDSC/utilities: man
+Only in SRB-3.3.1-SDSC/utilities: obj
+Only in SRB-3.3.1-SDSC/utilities: ping
+Only in SRB-3.3.1-SDSC/utilities: README.utilities
+diff -ru SRB-3.3.1-SDSC/utilities/src/bloadLib.c srb-patches/Sput multithreading patch/utilities/src/bloadLib.c
+--- SRB-3.3.1-SDSC/utilities/src/bloadLib.c	2005-06-29 13:31:28.000000000 +0100
++++ srb-patches/Sput multithreading patch/utilities/src/bloadLib.c	2005-08-22 11:38:00.803352592 +0100
+@@ -675,7 +675,7 @@
+ 
+ void genBloadFileName ()
+ {
+-    sprintf (TmpBloadFile, "%s.%-d", TMP_BLOAD_FILE, random());
++    sprintf (TmpBloadFile, "%s.%-d", TMP_BLOAD_FILE, random() + getpid ());
+ }
+ 
+ #ifdef PARA_OPR
+diff -ru SRB-3.3.1-SDSC/utilities/src/bunloadLib.c srb-patches/Sput multithreading patch/utilities/src/bunloadLib.c
+--- SRB-3.3.1-SDSC/utilities/src/bunloadLib.c	2005-06-29 13:31:28.000000000 +0100
++++ srb-patches/Sput multithreading patch/utilities/src/bunloadLib.c	2005-08-22 11:38:11.878668888 +0100
+@@ -1135,6 +1135,9 @@
+     }
+ 
+     while (continuation_index >= 0) {
++        if (myresult == NULL || myresult->row_count <= 0) { 
++            break;  
++        }
+         collection = (char *) getFromResultStruct(
+          (mdasC_sql_result_struct *) myresult,
+             dcs_tname[DATA_GRP_NAME], dcs_aname[DATA_GRP_NAME]);
+Only in SRB-3.3.1-SDSC/utilities/src: CVS
+Only in SRB-3.3.1-SDSC/utilities/src: getsrbobj.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sannotate.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sappend.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sattrs.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sauth.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sbkupsrb.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sbload.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sbregister.c
+Only in SRB-3.3.1-SDSC/utilities/src: SbregisterInfoFile.sample
+Only in SRB-3.3.1-SDSC/utilities/src: Sbunload.c
+Only in SRB-3.3.1-SDSC/utilities/src: Scat.c
+Only in SRB-3.3.1-SDSC/utilities/src: Scd.c
+Only in SRB-3.3.1-SDSC/utilities/src: Schdefres.c
+Only in SRB-3.3.1-SDSC/utilities/src: Schhost.c
+Only in SRB-3.3.1-SDSC/utilities/src: Schksum.c
+Only in SRB-3.3.1-SDSC/utilities/src: Schmod.c
+Only in SRB-3.3.1-SDSC/utilities/src: Scp.c
+Only in SRB-3.3.1-SDSC/utilities/src: SdelValue.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sdir.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sds2db.c
+Only in SRB-3.3.1-SDSC/utilities/src: Senv.c
+Only in SRB-3.3.1-SDSC/utilities/src: Serror.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sexit.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sgetappend.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sget.c
+Only in SRB-3.3.1-SDSC/utilities/src: SgetColl.c
+Only in SRB-3.3.1-SDSC/utilities/src: SgetD.c
+Only in SRB-3.3.1-SDSC/utilities/src: SgetR.c
+Only in SRB-3.3.1-SDSC/utilities/src: SgetT.c
+Only in SRB-3.3.1-SDSC/utilities/src: SgetU.c
+Only in SRB-3.3.1-SDSC/utilities/src: sgetw.c
+Only in SRB-3.3.1-SDSC/utilities/src: Shelp.c
+Only in SRB-3.3.1-SDSC/utilities/src: Singestgroup.c
+Only in SRB-3.3.1-SDSC/utilities/src: Singesttoken.c
+Only in SRB-3.3.1-SDSC/utilities/src: Singestuser.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sinit.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sln.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sls.c
+Only in SRB-3.3.1-SDSC/utilities/src: Slscont.c
+Only in SRB-3.3.1-SDSC/utilities/src: Smeta.c
+Only in SRB-3.3.1-SDSC/utilities/src: Smkcont.c
+Only in SRB-3.3.1-SDSC/utilities/src: Smkdir.c
+Only in SRB-3.3.1-SDSC/utilities/src: SmodColl.c
+Only in SRB-3.3.1-SDSC/utilities/src: SmodD.c
+Only in SRB-3.3.1-SDSC/utilities/src: SmodE.c
+Only in SRB-3.3.1-SDSC/utilities/src: SmodifyUser.c
+Only in SRB-3.3.1-SDSC/utilities/src: SmodR.c
+Only in SRB-3.3.1-SDSC/utilities/src: Smv.c
+Only in SRB-3.3.1-SDSC/utilities/src: Spasswd.c
+Only in SRB-3.3.1-SDSC/utilities/src: Spcommand.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sphymove.c
+Only in SRB-3.3.1-SDSC/utilities/src: Spullmeta.c
+Only in SRB-3.3.1-SDSC/utilities/src: Spushmeta.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sput.c
+Only in SRB-3.3.1-SDSC/utilities/src: sputw.c
+Only in SRB-3.3.1-SDSC/utilities/src: Spwd.c
+Only in SRB-3.3.1-SDSC/utilities/src: Squery.c
+Only in SRB-3.3.1-SDSC/utilities/src: srbClientUtil.c
+Only in SRB-3.3.1-SDSC/utilities/src: srbparget.c
+Only in SRB-3.3.1-SDSC/utilities/src: srbpget.c
+Only in SRB-3.3.1-SDSC/utilities/src: srbpput.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sregister.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sregisterlocation.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sregisterresource.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sreplcont.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sreplicate.c
+Only in SRB-3.3.1-SDSC/utilities/src: Srm.c
+Only in SRB-3.3.1-SDSC/utilities/src: Srmcont.c
+Only in SRB-3.3.1-SDSC/utilities/src: Srmdir.c
+Only in SRB-3.3.1-SDSC/utilities/src: Srmticket.c
+Only in SRB-3.3.1-SDSC/utilities/src: Srmtrash.c
+Only in SRB-3.3.1-SDSC/utilities/src: Srsync.c
+Only in SRB-3.3.1-SDSC/utilities/src: Ssfstage.c
+Only in SRB-3.3.1-SDSC/utilities/src: Ssh.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sstage.c
+Only in SRB-3.3.1-SDSC/utilities/src: Ssyncd.c
+Only in SRB-3.3.1-SDSC/utilities/src: Ssyncont.c
+Only in SRB-3.3.1-SDSC/utilities/src: Stcat.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sticket.c
+Only in SRB-3.3.1-SDSC/utilities/src: Stls.c
+Only in SRB-3.3.1-SDSC/utilities/src: Stoken.c
+Only in SRB-3.3.1-SDSC/utilities/src: Sufmeta.c
+Only in SRB-3.3.1-SDSC/utilities/src: Szone.c
+Only in SRB-3.3.1-SDSC/utilities: test
