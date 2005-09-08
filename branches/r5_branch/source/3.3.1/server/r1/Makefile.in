@@ -608,14 +608,14 @@ ifdef JAVA_GUI
 endif
 
 install:: $(TARGETS)
-	-mkdir $(installDir);	\
+	-mkdir $(installDir); -mkdir $(installDir)/data/log-archive; -mkdir $(installDir)/bin/utilities	\
 	$(INSTALL) bin $(installDir);	\
 	$(INSTALL) data $(installDir);	\
 	chmod 755 $(installDir) $(installDir)/data $(installDir)/bin	\
 	$(installDir)/bin/*; 	\
 	chmod 644 $(installDir)/data/*; 	\
 	chmod 600 $(installDir)/data/MdasConfig
-	chmod 755 $(installDir)/data/lockDir $(installDir)/data/CVS
+	chmod 755 $(installDir)/data/lockDir $(installDir)/data/log-archive $(installDir)/bin/utilities $(installDir)/data/CVS
 
 clean:
 	rm -f $(TARGETS) $(SOBJS) $(MDAS_OBJ)	\
@@ -682,3 +682,7 @@ ifeq ($(PORTNAME), PORTNAME_solaris)
 $(objDir)/libSRBClient.so: $(COBJS) $(objDir)/clGlobal.o
 	$(LDR) -G -o $(objDir)/$(@F) $^
 endif
+installbin:: $(TARGETS)
+  -mkdir $(installDir);   \
+  $(INSTALL) bin $(installDir);   \
+  chmod 755 $(installDir) $(installDir)/bin $(installDir)/bin/*;
