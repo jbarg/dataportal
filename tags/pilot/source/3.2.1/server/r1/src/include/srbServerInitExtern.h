@@ -1,6 +1,0 @@
-
-#ifndef SRB_SERVER_INIT_EXTERN_H
-#define SRB_SERVER_INIT_EXTERN_H
-
-#endif	/* SRB_SERVER_INIT_EXTERN_H */
-

@@ -1,5 +1,0 @@
-GET_LOCATION_INFO
-7:USER_NAME|9:DOMAIN_DESC|69:SERVER_LOCATION|70:SERVER_NETPREFIX|300:ZONE_NAME|357:PARENT_SERVER_LOCATION
-srb|sdsc|GGF5 unix4 uk|csf.rl.ac.uk:NULL:NULL|sdscdemo|sdsc
-srb|sdsc|GGF5 unix3 uk|strule.cs.qub.ac.uk:NULL:NULL|sdscdemo|sdsc
-srb|sdsc|sc2001-4|140.221.210.242:NULL:NULL|sdscdemo|sdsc
