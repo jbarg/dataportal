@@ -1,6 +1,0 @@
-#!/bin/sh
-echo "Hello $1 from SRB world"
-echo "$2"
-echo "$3"
-echo "$4"
-echo "$5"

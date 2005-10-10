@@ -1,2 +1,0 @@
-timex bin/test_srb_mdas_bload test/bload.filelarge1 bloadtest sekar sdsc CANDO &
-timex bin/test_srb_mdas_bload test/bload.filelarge2 bloadtest sekar sdsc CANDO 

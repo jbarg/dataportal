@@ -1,6 +1,0 @@
-#!/bin/sh
-echo "hello     - Hello World with argument passing testing."
-echo "help      - Prints Spcommand usage and list of operations available."
-echo "penv      - Prints environment variables available to you."
-echo "srbps     - Prints srbMaster and srbServer process info."
-echo "ufsdf     - Prints disk free info for unix path given as 1st arg."
