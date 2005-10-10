@@ -1,4 +1,0 @@
-# This is the auth file for hpss nodce login. This first line sould be
-# the HPSS user ID and the next line should be the passwd in HPSS env
-srb
-passwd
