@@ -1,0 +1,3 @@
+1.open schema_create_script_oracle.sql
+2.remove the word: 	enable
+2.replace integer with numeric
