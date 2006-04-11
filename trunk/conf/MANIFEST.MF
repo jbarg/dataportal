@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: cog-jglobus-signed.jar browser.jar log4j-1.2.8-signed.jar jgss-signed.jar jce-jkd13.120-signed.jar puretls-signed.jar cryptix-asn1-signed.jar cryptix32-signed.jar liquidlnf-signed.jar
+Main-Class: uk.ac.dl.myproxy.MyProxyMain
