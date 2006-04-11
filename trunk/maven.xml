@@ -1,6 +1,0 @@
-<project xmlns:ant="jelly:ant">
-  <goal name="do">
-   <echo>Executing JUnit tests</echo>
-
-  </goal>
-</project>
