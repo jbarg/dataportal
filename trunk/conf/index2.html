@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+
+    <head>
+
+        <title>CCLRC MyProxy Upload Tool</title>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <meta http-equiv="Pragma" content="no-cache" />
+
+        <meta http-equiv="cache-control" content="no-store" />
+
+        <meta name="robots" content="index, follow" />
+
+        <meta name="description" content="Dataportal, metadata, clrc,  Glen Drinkwater, globus, myproxy, credentials" />
+
+        <meta name="keywords" content="Dataportal, metadata, clrc,  Glen Drinkwater, globus, myproxy, credentials" />
+
+
+
+
+
+        <SCRIPT LANGUAGE="JavaScript">
+            var javawsInstalled = 0;
+            var javaws142Installed=0;
+            var javaws150Installed=0;
+            isIE = "false";
+            if (navigator.mimeTypes && navigator.mimeTypes.length) {
+            x = navigator.mimeTypes['application/x-java-jnlp-file'];
+            if (x) {
+            javawsInstalled = 1;
+            javaws142Installed=1;
+            javaws150Installed=1;
+            }
+            } else {    isIE = "true";
+            }
+        </SCRIPT>
+
+
+        <SCRIPT LANGUAGE="VBScript">
+            on error resume next
+            If isIE = "true" Then
+            If Not(IsObject(CreateObject("JavaWebStart.isInstalled"))) Then
+            javawsInstalled = 0
+            Else
+            javawsInstalled = 1
+            End If
+            If Not(IsObject(CreateObject("JavaWebStart.isInstalled.1.4.2.0"))) Then
+            javaws142Installed = 0
+            Else
+            javaws142Installed = 1
+            End If
+            If Not(IsObject(CreateObject("JavaWebStart.isInstalled.1.5.0.0"))) Then
+            javaws150Installed = 0
+            Else
+            javaws150Installed = 1
+            End If
+            End If
+        </SCRIPT>
+
+
+
+        <script language="JavaScript">
+
+
+           function insertLink(url15,url14, name)
+    {
+
+
+    /* Note that the logic below always launches the JNLP application *if the browser is Gecko based. This is because it is not possible *to detect MIME type application/x-java-jnlp-file on Gecko-based browsers.  */
+   if(navigator.userAgent.indexOf("Gecko") !=-1){
+      document.write("Version of Web Start installed unknown");
+        document.write("<br />Launch <a href=" + url15 + ">" + name + "</a> via Java Web Start if you have Java 1.5 installed.");
+	               document.write("<a href='#' onclick='help();return false;' ><font size='2'>Help</font></a>&nbsp;&nbsp;");
+              document.write("<a href='WebStart.htm'><font size='2'>Installation</font></a>");
+                document.write("<br />Launch <a href=" + url14 + ">" + name + "</a> via Java Web Start if you have Java 1.4 installed.");
+			  		                document.write("<a href='#' onclick='help();return false;' ><font size='2'>Help</font></a>&nbsp;&nbsp;");
+			  		                 document.write("<a href='#' onclick='Security();return false;' ><font size='2'>Security</font></a>&nbsp;&nbsp;");
+			   document.write("<a href='Upgrade.htm' ><font size='2'>Why upgrade to Java 1.5?</font></a>");
+			   document.write("<br />Click ");
+			  			    document.write("<a href=http://java.sun.com/PluginBrowserCheck?pass=http://www.MySite.com/download.html&fail=http://java.sun.com/j2se/1.5.0/download.html>here</a> ");
+			    document.write("to download and install JRE 5.0 and the application.");
+   }
+
+           else if (javaws150Installed ) {
+            //
+
+            document.write("<br />Launch <a href=" + url15 + ">" + name + "</a> via Java Web Start.");
+             document.write("<a href='#' onclick='help();return false;' ><font size='2'>Help</font></a>&nbsp;&nbsp;");
+              document.write("<a href='WebStart.htm'><font size='2'>Installation</font></a>");
+
+            }
+            else if(javaws142Installed){
+           document.write("<br />Launch <a href=" + url14 + ">" + name + "</a> via Java Web Start.");
+		                document.write("<a href='#' onclick='help();return false;' ><font size='2'>Help</font></a>&nbsp;&nbsp;");
+		                 document.write("<a href='#' onclick='Security();return false;' ><font size='2'>Security</font></a>&nbsp;&nbsp;");
+ document.write("<a href='Upgrade.htm' ><font size='2'>Why upgrade to Java 1.5?</font></a>");
+ document.write("<br />Click ");
+			    document.write("<a href=http://java.sun.com/PluginBrowserCheck?pass=http://www.MySite.com/download.html&fail=http://java.sun.com/j2se/1.5.0/download.html>here</a> ");
+			    document.write("to download and install JRE 5.0 and the application.");
+
+            }
+
+            else {
+             document.write("Click ");
+			    document.write("<a href=http://java.sun.com/PluginBrowserCheck?pass=http://www.MySite.com/download.html&fail=http://java.sun.com/j2se/1.5.0/download.html>here</a> ");
+			    document.write("to download and install JRE 5.0 and the application.");
+
+            }
+}
+
+            function help(){
+            window.open("Help_tiber.html","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=530,left=0,top=0");
+
+
+            }
+            function Security(){
+            window.open("Help_tiber.html#jwssecurity","Help","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,width=900,height=530,left=0,top=0");
+
+
+            }
+
+        </script>
+
+        <style type="text/css">
+
+            @import url(mainmenu.css); /*IE and NN6x styles*/
+
+        </style>
+
+    </head>
+
+    <body background="img/bluebg.gif">
+
+
+
+        <table id="top_table"  width="100%" cellspacing="3" ><tr>
+
+            <td id="td_top1" valign="top" width="20%">
+
+
+
+            </td>
+            <td id="td_top2" valign="top">
+
+                <h1>MyProxy Upload Tool</h1>
+                <br />
+                <br />
+                <hr />
+
+                <br />
+
+                <br />
+                This is the home page for the MyProxy Upload tool.  This application was
+                developed and written for the <a href="http://www.e-science.clrc.ac.uk/web/projects/dataportal">Data Portal</a>. The Data Portal used
+                globus proxy credentials for authentication to the portal.
+
+                <br />
+                <br />
+
+                Before using the Data Portal or other tools you need to load
+                your personal credential into a MyProxy Server. There are a range of proxy
+                servers around the world that will hold your credential accessible from
+                anywhere in the world. The benefit is not just availability (you do not need to
+                take your certificate with you when you travel a lot) and therefore you can log
+                on to the Data Portal from any browser connected to the internet, but more importantly
+                security as the proxy server will only pass on a subset of your credentials
+                (proxy certificate) to the requesting services, therefore your credentials are
+                safe.
+                <br />
+                <br />
+                This product includes material developed by the <a href="http://www.globus.org/" >Globus
+                Project</a>.  It allows a platform dependant application to be used to upload
+                and download credentials to and from a MyProxy server without downloading or
+                installing any software with a click of a button.
+                <br />
+                <br />
+
+
+                <script  language="Javascript">
+
+                    insertLink("myproxy.jnlp","../myproxy_test/myrpoxy_test.jnlp", "MyProxy Upload Tool");
+                </script>
+
+                <br />
+                <br />
+
+                <br />
+                <hr />
+
+                <div id="footer" align="right"> <a href="#"><img
+                src="img/vxhtml.gif"
+                alt="Valid XHTML 1.0!" border="0" height="31" width="88" /></a>
+                <br />
+                <br />
+                <a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top">&copy;
+                2004 CCLRC</a></div>
+
+            </td>
+
+        </tr>
+
+        </table>
+
+    </body>
+
+</html>

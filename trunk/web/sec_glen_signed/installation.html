@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+
+    <head>
+
+        <title>CCLRC MyProxy Upload Tool</title>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <meta http-equiv="Pragma" content="no-cache" />
+
+        <meta http-equiv="cache-control" content="no-store" />
+
+        <meta name="robots" content="index, follow" />
+
+        <meta name="description" content="Dataportal, metadata, clrc,  Glen Drinkwater, globus, myproxy, credentials" />
+
+        <meta name="keywords" content="Dataportal, metadata, clrc,  Glen Drinkwater, globus, myproxy, credentials" />
+
+
+
+ <script language="JavaScript">
+
+            function year(){
+            var d = new Date();
+
+            var curr_year = d.getFullYear();
+
+            document.write(curr_year);
+            }
+        </script>
+
+
+        <style type="text/css">
+
+            @import url(../mainmenu.css); /*IE and NN6x styles*/
+
+        </style>
+
+    </head>
+
+    <body background="../img/bluebg.gif">
+
+
+
+        <table id="top_table"  width="100%" cellspacing="3" ><tr>
+
+            <td id="td_top1" valign="top" width="20%">
+
+
+
+            </td>
+            <td id="td_top2" valign="top">
+
+                <h1>MyProxy Upload Tool</h1>
+                <br />
+                <br />
+                <hr />
+
+                <br />
+
+
+                <p class=MsoNormal><b>Installation of MyProxy Upload Tool<o:p></o:p></b></p>
+
+
+                <p class=MsoNormal>In order for the Java WebStart client to verify the
+                signature of the jars it needs to know the CA that issued the signing
+                certificate to the entity that signed the jars. That means that before using any
+                of the applications a user needs to import the <st1:country-region><st1:place>UK</st1:place></st1:country-region>
+                e-Science and Sun's &quot;JCE Code Signing CA&quot; certificate authorities
+                into their Java WebStart client.<br>
+                <br>
+                Download the CA certificates:<br>
+                <a href="certs/uk-escience.cert">UK e-Science CA</a><br />
+
+                <a href="certs/JCE%20Code%20Signing%20CA.pem">JCE Code
+                Signing CA</a><span class=MsoHyperlink><o:p></o:p></span>
+
+
+
+                <p class=MsoNormal>You will also have to import my certificate as a trusted
+                certificate into WebStart</p>
+
+
+
+                Download my certificate:<br />
+
+                <a href="certs/glen_drinkwater.cert">Glen Drinkwater</a>
+                <br>
+                <br />
+                Here are the steps to install the CA certificates into Java WebStart:<br>
+                <br>
+                Start Java WebStart console<br>
+                Go to Edit-&gt;Perferences<br>
+                Go to Security -&gt; Certificates<br>
+                Click on Signer CA<br>
+                Click import and then select the two files containing the CA Certificates<br
+                style='mso-special-character:line-break'>
+                <![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+                <![endif]></p>
+
+                <p class=MsoNormal>Here are the steps to install the my certificate into Java
+                WebStart:<br>
+                <br>
+                Start Java WebStart console<br>
+                Go to Edit-&gt;Perferences<br>
+                Go to Security -&gt; Certificates<br>
+                Click on Trusted Cerificates<br>
+                Click import and select the file containing my certificate<br>
+                <br />
+                Only then will Java WebStart be able to validate the signature of the
+                jars.<span style='mso-spacerun:yes'> </span>Since the '<b>Legion of the </b><st1:place><st1:PlaceName><b>Bouncy</b></st1:PlaceName><b>
+                </b><st1:PlaceType><b>Castle</b></st1:PlaceType></st1:place><b>' </b><span
+                style='mso-bidi-font-weight:bold'>is signed by Sun's JCE Code Signing CA you
+                can trust this by pressing 'Always' once you have launched the tool.<o:p></o:p></span></p>
+
+
+
+                <p class=MsoNormal><span style='mso-bidi-font-weight:bold'>Launch <a
+                href="myproxy.jnlp">MyProxy Upload Tool.</a> </span></p>
+                <br />
+                <br />
+
+
+
+                <br />
+                <br />
+
+                <br />
+                <hr />
+
+                <div id="footer" align="right"> <a href="#"><img
+                src="../img/vxhtml.gif"
+                alt="Valid XHTML 1.0!" border="0" height="31" width="88" /></a>
+                <br />
+                <br />
+                <a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top">&copy;
+                <script  language="Javascript">year(); </script> CCLRC</a></div>
+
+
+            </td>
+
+        </tr>
+
+        </table>
+
+    </body>
+
+</html>

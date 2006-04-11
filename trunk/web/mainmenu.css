@@ -1,0 +1,165 @@
+/* Glen's CSS style sheet for DataPortal -- 18th Jan 2002	*/
+
+
+
+body 		{ margin: 10px; font-family: Trebuchet, Arial, sans-serif; )
+
+}
+
+
+
+th              {font-size: 16px;}
+
+h1		{ text-align: right; color: white; }
+
+
+
+#footer	{ text-align: right; font-size: 8pt; }
+
+span.navtext	{ color: #ffffff; text-align: left; }
+
+span.navbar	{ color: #ffffff; text-align: left; }
+
+
+
+hr		{ color: #ADD8E6; height: 3px; }
+
+
+
+#button		{height:40px; width:100px; }
+
+
+
+.button {height:40px; width:100px; }
+.button70 {height:21px;  }
+
+
+span.NavBar1 {color: white; font-size:16px; }
+
+.menuhr { color: grey ; height: 2px; }
+
+
+.menu:link, .menu:visited {
+  color: white;
+  text-decoration: none;
+  font-family: tahoma, verdana, sans-serif;
+  font-size: 14px;
+}
+.menu:hover {
+  color: white;
+text-decoration: none;
+  font-family: tahoma, verdana, sans-serif;
+  font-size: 15px;
+}
+
+#headmenu {
+font-family: times,tahoma, verdana, sans-serif;
+  font-size: 18px;
+color: white;
+
+}
+
+
+a:link 		{ color: BLUE; text-decoration: none; }
+
+
+
+a:visited 	{ color: #0000FF; text-decoration: none;  }
+
+
+
+a:hover		{ color: #999999; text-decoration: underline;  }
+
+
+
+a:active 	{ color: #9999CC; text-decoration: underline;  }
+
+
+
+#b               {text-align: center; font-weight: bold}
+
+ 
+
+#top_table      {border-style: solid; border-width: 0px ; width:100%}
+
+
+
+#td_top1         {text-align: left; vertical-align:text-top; width:180px}
+
+
+
+
+
+#td_top2        {text-align: left; vertical-align:text-top}
+
+
+
+img             {border-style: solid; border-width: 0px; border:0px }
+
+
+
+#xhtml          { width:88; height:31; border-style: solid; border-width: 0px}
+
+#tablerow  {font-size:14px; text-align:center}
+#tablehead  {text-align:center; font-family:courier,fantasy; font-weight:bold}
+p#topheader   {text-align: right; color:white; font-size:19px; font-style:italic}
+p.footer       	{ text-align: right; font-size: 8pt; }
+
+
+
+FORM.mess1 {font-family: Verdana, Arial, Helvetica, sans-serif;
+
+font-size: 13px;
+
+color: #000080;
+
+background: #DFEFF7;
+
+border: 2px solid #3499CC;
+
+
+
+
+
+
+
+}
+
+
+
+INPUT.mess1, TEXTAREA.mess1 {
+
+	font-family: Georgia, "MS Serif", "New York", serif;	
+
+	padding: 2px;
+
+	font-size: 13px;
+
+	color: #FFFFFF;
+
+	background-color: #3499CC;
+
+	border: inset 1px #C71585;
+
+}
+
+
+
+SELECT.mess1, OPTION.mess1 {
+
+	font-family: "MS Serif", Georgia, "New York", serif;
+
+	padding: 2px;
+
+	font-size: 13px;
+
+	color: #FFFFFF;
+
+	background-color: #008080;
+
+	border: outset 1px #adff2f;/*for demonstration only*/
+
+}
+
+
+
