@@ -10,7 +10,7 @@ import javax.faces.event.ActionEvent;
 //normal j2se stuff
 import java.util.List;
 
-public class HelloBean {
+public class Login {
     private int numControls;
     private HtmlPanelGrid controlPanel;
     public int getNumControls() {
