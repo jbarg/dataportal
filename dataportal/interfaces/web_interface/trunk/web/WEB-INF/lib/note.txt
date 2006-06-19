@@ -1,0 +1,7 @@
+jars added:
+-----------
+
+1. all jar files from myfaces-core-1.1.3/lib
+
+
+2. tomahawk-1.1.3/lib/tomahawk-1.1.3.jar
