@@ -2,12 +2,12 @@ package uk.ac.cclrc.webinterface.bean;
 
 public class SearchBean {
 
-    private keyword = null ;
+    private String keyword = null ;
     
     public SearchBean() {
     }
 
-    public setKeyword(String keyword){
+    public void setKeyword(String keyword){
        this.keyword=keyword ;
     }
 
