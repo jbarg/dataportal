@@ -12,6 +12,13 @@
       <managed-bean-scope>session</managed-bean-scope>
    </managed-bean>
 
+   <managed-bean>
+      <description>Bean Supporting Search</description>
+      <managed-bean-name>searchController</managed-bean-name>
+      <managed-bean-class>uk.ac.cclrc.webinterface.bean.SearchController</managed-bean-class>
+      <managed-bean-scope>session</managed-bean-scope>
+   </managed-bean>
+
    <navigation-rule>
       <description>Navigation from the Login page.</description>
       <from-view-id>/login.jsp</from-view-id>
@@ -24,9 +31,13 @@
    <navigation-rule>
         <from-view-id>/search.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>searched</from-outcome>
-            <to-view-id>/WEB-INF/jsp/search_result.jsp</to-view-id>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/WEB-INF/jsp/search_result.jsp</to-view-id> 
         </navigation-case>
+        <navigation-case>
+            <from-outcome>bad</from-outcome>
+            <to-view-id>/WEB-INF/jsp/search_error.jsp</to-view-id>
+       </navigation-case>
     </navigation-rule>
 
 </faces-config>
