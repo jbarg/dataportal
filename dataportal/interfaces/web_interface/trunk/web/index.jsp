@@ -15,24 +15,18 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>JSP Front Page</title>
     </head>
     <body>
 
-    <h1>JSP Page</h1>
+    <h1>JSP Front Page</h1>
+
     <br/>
     <a href="./faces/login.jsp">JSF Login Page</a>
+
+    <br/>
+    <a href="./faces/search.jsp">JSF Search Page</a>
     
-    <%--
-    This example uses JSTL, uncomment the taglib directive above.
-    To test, display the page like this: index.jsp?sayHello=true&name=Murphy
-    --%>
-    <%--
-    <c:if test="${param.sayHello}">
-        <!-- Let's welcome the user ${param.name} -->
-        Hello ${param.name}!
-    </c:if>
-    --%>
     
     </body>
 </html>

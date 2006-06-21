@@ -21,4 +21,12 @@
       </navigation-case>
    </navigation-rule>
 
+   <navigation-rule>
+        <from-view-id>/search.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>searched</from-outcome>
+            <to-view-id>/WEB-INF/jsp/search_result.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>
