@@ -10,9 +10,10 @@
             <tr><th CLASS="TITLE">DataPortal Search Page</th></tr>
         </table>
         <p>
-        <h:form>
-            Keyword Search <h:inputText/><br/>
-            <h:commandButton value="Search" action="search_icat"/>
+        <h:form id="form1">
+            <!-- Keyword Search <h:inputText id="keyword"/><br/> -->
+            Keyword Search <h:inputText value="#{searchBean.keyword}"/><br/> 
+            <h:commandButton value="Search" action="#{searchController.studySearch}"/>
         </h:form>
     </center></body></html>
 </f:view>

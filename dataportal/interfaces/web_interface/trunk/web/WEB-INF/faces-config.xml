@@ -13,11 +13,19 @@
    </managed-bean>
 
    <managed-bean>
-      <description>Bean Supporting Search</description>
+      <description>Search Controller</description>
       <managed-bean-name>searchController</managed-bean-name>
       <managed-bean-class>uk.ac.cclrc.webinterface.bean.SearchController</managed-bean-class>
       <managed-bean-scope>session</managed-bean-scope>
    </managed-bean>
+
+    <managed-bean>
+      <description>Bean Supporting Search</description>
+      <managed-bean-name>searchBean</managed-bean-name>
+      <managed-bean-class>uk.ac.cclrc.webinterface.bean.SearchBean</managed-bean-class>
+      <managed-bean-scope>session</managed-bean-scope>
+   </managed-bean>
+
 
    <navigation-rule>
       <description>Navigation from the Login page.</description>
