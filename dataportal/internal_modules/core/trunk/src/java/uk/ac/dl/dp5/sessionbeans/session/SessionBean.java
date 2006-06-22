@@ -131,6 +131,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
                 
                 // need to set the default prefs for the user.
                 user = UserUtil.createUser(DN);
+                userutil = new UserUtil(user,em);
                 
                 //add to DB
                 em.persist(user);
@@ -148,14 +149,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.info("New session created for user: "+DN+" sid: "+sid);
             
             //add login event
-            if(userutil == null){
-                try {
-                    new UserUtil(user.getId().intValue(),em).sendEventLog(Event.LOG_ON,"Logged on at "+new Date());
-                } catch (UserNotFoundException ex) {
-                    
-                }
-            }
-            else userutil.sendEventLog(Event.LOG_ON,"Logged on at "+new Date());
+            userutil.sendEventLog(Event.LOG_ON,"Logged on at "+new Date());
             
             return sid;
             
@@ -184,12 +178,11 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         log.debug("logout()");
         Session session = new SessionUtil(sid,em).getSession();
         em.remove(session);
-        try {        
-            UserUtil  userutil = new UserUtil(session.getUserId(),em);
-            userutil.sendEventLog(Event.LOG_OPF,"Logged off at "+new Date());
-        } catch (UserNotFoundException ex) {
-            
-        }
+        
+        //send logout event
+        UserUtil  userutil = new UserUtil(session.getUserId(),em);
+        userutil.sendEventLog(Event.LOG_OPF,"Logged off at "+new Date());
+        
         
         log.info("Ended session: "+sid);
         return true;

@@ -88,7 +88,7 @@ public class UserUtil {
     }
     
     /** Creates a new instance of SessionUtil */
-    public UserUtil(User user, EntityManager em) throws UserNotFoundException {
+    public UserUtil(User user, EntityManager em) {
         this.em = em;
         
         if(user == null) throw new IllegalArgumentException("User cannot be null.");
