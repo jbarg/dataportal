@@ -15,8 +15,11 @@ package uk.ac.dl.dp5.util;
  */
 public enum Event {
     
-    LOG_ON("LOG_ON"),
-    LOG_OPF("LOG_OFF");
+     LOG_ON("LOG_ON"),
+    LOG_OPF("LOG_OFF"),
+    TRANSFTER("TRANSFTER"),
+    ADVANCED_SEARCH("ADVANCED_SEARCH"),
+    BASIC_SEARCH("BASIC_SEARCH");
     
     Event(String value) {
         this.value = value;
