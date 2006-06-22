@@ -12,7 +12,7 @@
         <p>
         <h:form id="form1">
             <!-- Keyword Search <h:inputText id="keyword"/><br/> -->
-            Keyword Search <h:inputText value="#{searchBean.keyword}"/><br/> 
+            Keyword Search <h:inputText value="#{searchController.keyword}"/><br/> 
             <h:commandButton value="Search" action="#{searchController.studySearch}"/>
         </h:form>
     </center></body></html>
