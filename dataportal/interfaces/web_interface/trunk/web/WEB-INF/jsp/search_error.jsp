@@ -23,7 +23,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             <tr><th CLASS="TITLE">Error</th></tr>
         </table>
         <h2>
-        That was a lowercase bad search !!!: you looked for <h:outputText value="#{searchBean.keyword}"/><br/>
+        That was a lowercase bad search !!!: you looked for <h:outputText value="#{searchController.keyword}"/><br/>
         </h2>
     </center>
 </body></html>
