@@ -41,7 +41,7 @@ public class EndSessionClient {
             
             SessionRemote sless = (SessionRemote) ic.lookup("SessionEJB");
             
-            boolean session =  sless.logout("66a23b8d-1eea-4ee0-86d6-db8f97753b8c");
+            boolean session =  sless.logout("4ba83fdd-4081-48b9-888b-910462f34bf5");
             System.out.println("Got session : "+session);
             //
         }catch(Exception e){

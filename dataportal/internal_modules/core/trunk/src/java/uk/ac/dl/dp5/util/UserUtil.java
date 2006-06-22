@@ -12,6 +12,15 @@ package uk.ac.dl.dp5.util;
 import java.math.BigDecimal;
 import java.security.cert.CertificateException;
 import java.util.Date;
+import javax.annotation.Resource;
+import javax.jms.JMSException;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSender;
+import javax.jms.QueueSession;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
@@ -30,6 +39,10 @@ public class UserUtil {
     
     private User user;
     static Logger log = Logger.getLogger(UserUtil.class);
+    
+    private  QueueConnectionFactory queueCF;
+    private  Queue mdbQueue;
+    
     
     @PersistenceContext(unitName="dataportal")
     protected EntityManager em;
@@ -66,6 +79,23 @@ public class UserUtil {
         }
     }
     
+    /** Creates a new instance of SessionUtil */
+    public UserUtil(int userId, EntityManager em) throws UserNotFoundException {
+        this.em = em;
+        if(userId == 0) throw new IllegalArgumentException("User ID cannot be 0.");
+        user = (User)em.createNamedQuery("User.findById").setParameter("id",new BigDecimal(userId)).getSingleResult();
+        
+    }
+    
+    /** Creates a new instance of SessionUtil */
+    public UserUtil(User user, EntityManager em) throws UserNotFoundException {
+        this.em = em;
+        
+        if(user == null) throw new IllegalArgumentException("User cannot be null.");
+        this.user = user;
+    }
+    
+    
     private void loadUser(String DN){
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         user = (User)em.createNamedQuery("User.findByDn").setParameter("dn",DN).getSingleResult();
@@ -83,19 +113,18 @@ public class UserUtil {
     
     public DpUserPreference getUserPrefs(){
         DpUserPreference dpup = user.getDpUserPreference();
-        if(dpup == null){           
+        if(dpup == null){
             try {
                 return  (DpUserPreference) em.createNamedQuery("DpUserPreference.findByUserId").setParameter("userId", user).getSingleResult();
             } catch(Exception e){
                 log.warn("Unable to get user prefs",e);
                 return null;
             }
-        }
-        else return dpup;
+        } else return dpup;
     }
     
     public static User createUser(String DN){
-        User user = new User();        
+        User user = new User();
         
         user.setDn(DN);
         user.setModTime(new Date());
@@ -105,6 +134,49 @@ public class UserUtil {
         return user;
     }
     
+    
+    public void sendEventLog(Event event, String description){
+        
+        QueueConnection queueCon = null;
+        QueueSender queueSender = null;
+        QueueSession queueSession = null;
+        
+        
+        try {
+            CachingServiceLocator csl =  CachingServiceLocator.getInstance();
+            mdbQueue  = csl.lookupQueue("MDBQueue");
+            QueueConnectionFactory queueCF =
+                    (QueueConnectionFactory) csl.lookup("MDBQueueConnectionFactory");
+            
+            queueCon = queueCF.createQueueConnection();
+            queueSession = queueCon.createQueueSession
+                    (false, Session.AUTO_ACKNOWLEDGE);
+            queueSender = queueSession.createSender(null);
+            
+        } catch (Exception e) {
+            log.error("Unable to locate EventBean",e);
+        }
+        try {
+            
+            TextMessage msg = queueSession.createTextMessage(
+                    this.user.getId().toString() + "," +
+                    event.toString()+","+description );
+            
+            // The sent timestamp acts as the message's ID
+            long sent = System.currentTimeMillis();
+            msg.setLongProperty("sent", sent);
+            
+            queueSender = queueSession.createSender(mdbQueue);
+            queueSender.send(msg);
+            // sess.commit ();
+            queueSession.close();
+            
+        } catch (JMSException ex) {
+            log.error("Unable send event: "+event+" by userId: "+this.user.getId(),ex);
+        }
+        
+        
+    }
     
     
 }

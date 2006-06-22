@@ -25,6 +25,7 @@ import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.util.CredentialType;
 import uk.ac.dl.dp5.entity.Session;
 import uk.ac.dl.dp5.util.Certificate;
+import uk.ac.dl.dp5.util.Event;
 import uk.ac.dl.dp5.util.LoginMyProxyException;
 import uk.ac.dl.dp5.util.MyProxyCredentialExpiredException;
 import uk.ac.dl.dp5.util.PortalCredential;
@@ -86,6 +87,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         log.info("Starting insertSessionImpl");
         Certificate certificate =  null;
         String DN = null;
+        UserUtil userutil = null;
+        User user = null;
+        
         try {
             certificate = new Certificate(credential);
             DN  = certificate.getDName();
@@ -105,7 +109,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             String sid = UUID.randomUUID().toString();
             
             //create a session to put in DB
-            Session session = new Session();          
+            Session session = new Session();
             
             session.setCredential(certificate.getStringRepresentation());
             session.setCredentialType(CredentialType.PROXY.toString());
@@ -116,14 +120,17 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             try {
                 log.debug("Getting user.");
                 //need to get user corresponding to DN
-                User user = new UserUtil(certificate,em).getUser();
+                
+                userutil = new UserUtil(certificate,em);
+                user = userutil.getUser();
+                
                 session.setUserId(user);
             } catch(UserNotFoundException enfe){
                 //no entity found, so create one
                 log.debug("No user found, creating one.");
                 
-                //TODO, need to set the default prefs for the user.
-                User user = UserUtil.createUser(DN);
+                // need to set the default prefs for the user.
+                user = UserUtil.createUser(DN);
                 
                 //add to DB
                 em.persist(user);
@@ -139,6 +146,17 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.debug("Persiting session.");
             em.persist(session);
             log.info("New session created for user: "+DN+" sid: "+sid);
+            
+            //add login event
+            if(userutil == null){
+                try {
+                    new UserUtil(user.getId().intValue(),em).sendEventLog(Event.LOG_ON,"Logged on at "+new Date());
+                } catch (UserNotFoundException ex) {
+                    
+                }
+            }
+            else userutil.sendEventLog(Event.LOG_ON,"Logged on at "+new Date());
+            
             return sid;
             
         } else {
@@ -163,9 +181,16 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
       * - deletes session and user authorisation details from datbase
       */
     public boolean logout(String sid)  throws  SessionNotFoundException {
-         log.debug("logout()");
+        log.debug("logout()");
         Session session = new SessionUtil(sid,em).getSession();
         em.remove(session);
+        try {        
+            UserUtil  userutil = new UserUtil(session.getUserId(),em);
+            userutil.sendEventLog(Event.LOG_OPF,"Logged off at "+new Date());
+        } catch (UserNotFoundException ex) {
+            
+        }
+        
         log.info("Ended session: "+sid);
         return true;
     }
@@ -174,7 +199,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         log.debug("setUserPrefs()");
         UserUtil userutil = new UserUtil(sid,em);
         User user = userutil.getUser();
-       
+        
         DpUserPreference prefs = userutil.getUserPrefs();
         if(prefs == null){
             log.warn("User has no prefs");
@@ -194,16 +219,16 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         UserUtil userutil = new UserUtil(sid,em);
         User user = userutil.getUser();
         DpUserPreference dto = userutil.getUserPrefs();
-       
+        
         if(dto == null){
-             log.debug("Unable to get user prefs");
+            log.debug("Unable to get user prefs");
             return new UserPreferencesDTO();
         } else return new UserPreferencesDTO(dto);
         
     }
     
     private DpUserPreference getDefaultUserPreferences() {
-        DpUserPreference prefs = new DpUserPreference();       
+        DpUserPreference prefs = new DpUserPreference();
         
         Collection<Facility> facilities =  (Collection<Facility>)  em.createQuery("select f from Facility f").getResultList();
         prefs.setDefaultFacility(facilities.iterator().next().getShortName());

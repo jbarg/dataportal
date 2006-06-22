@@ -21,6 +21,7 @@ import uk.ac.dl.dp5.sessionbeans.lookup.*;
 import javax.naming.*;
 import java.util.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
+import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.FacilityType;
 import uk.ac.dl.dp5.util.Resolution;
