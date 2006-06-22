@@ -14,6 +14,7 @@ import javax.ejb.EJBHome;
 import javax.ejb.EJBLocalHome;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
+import javax.jms.Queue;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
@@ -57,7 +58,7 @@ public class CachingServiceLocator {
         log.debug("Looking up: "+jndiName);
         Object cachedObj = cache.get(jndiName);
         if (cachedObj == null) {
-            log.debug("Not in cache, jndi lookup.");
+            log.debug("Not in cache, doing a jndi lookup.");
             cachedObj = ic.lookup(jndiName);
             cache.put(jndiName, cachedObj);
         }
@@ -67,6 +68,11 @@ public class CachingServiceLocator {
     public <T> Object lookup(String jndiHomeName) throws NamingException {
         if(remote) jndiHomeName += "Remote";
         return (Object) lookupImpl(jndiHomeName);
+    }
+    
+     public <T> Queue lookupQueue(String jndiHomeName) throws NamingException {
+        if(remote) jndiHomeName += "Remote";
+        return (Queue) lookupImpl(jndiHomeName);
     }
     
     /**
