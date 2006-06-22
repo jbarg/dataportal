@@ -8,6 +8,7 @@ import java.security.cert.CertificateExpiredException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 
 import javax.ejb.*;
 import org.apache.log4j.Logger;
@@ -67,7 +68,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     }
     
     public String login(String username,String password, int lifetime) throws MyProxyCredentialExpiredException, IOException, Exception{
-        log.debug("login()");
+        log.debug("login()");      
         GSSCredential myproxy_proxy;
         try {
             myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy());
@@ -240,5 +241,6 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
         return prefs;
     }
+       
     
 }
