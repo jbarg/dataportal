@@ -16,6 +16,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,7 +35,8 @@ import uk.ac.dl.dp5.util.DPEvent;
 @NamedQueries( {@NamedQuery(name = "Event.findById", query = "SELECT e FROM Event e WHERE e.id = :id"), @NamedQuery(name = "Event.findByEventName", query = "SELECT e FROM Event e WHERE e.eventName = :eventName"), @NamedQuery(name = "Event.findByEventDetails", query = "SELECT e FROM Event e WHERE e.eventDetails = :eventDetails"), @NamedQuery(name = "Event.findByModTime", query = "SELECT e FROM Event e WHERE e.modTime = :modTime")})
 public class Event implements Serializable {
 
-    @Id
+    @Id    
+     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private BigDecimal id;
 
