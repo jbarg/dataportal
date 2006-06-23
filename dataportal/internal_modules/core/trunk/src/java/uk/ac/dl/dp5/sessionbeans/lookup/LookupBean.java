@@ -27,7 +27,7 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         //change this to a DTO??  maybe later
         log.info("Looking for facilities type: "+type);
         Collection<ModuleLookup> facilities;     
-        facilities = (Collection<ModuleLookup>) em.createNamedQuery("ModuleLookup.findByModuleType").setParameter("moduleType", type.toString()).getResultList();
+        facilities = (Collection<ModuleLookup>) em.createNamedQuery("ModuleLookup.findByModuleType").setParameter("moduleType", type).getResultList();
         
         ArrayList list = new ArrayList<FacilityDTO>();
         for(ModuleLookup fac : facilities){
