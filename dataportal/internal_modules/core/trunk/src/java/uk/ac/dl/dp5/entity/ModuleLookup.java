@@ -36,7 +36,7 @@ import uk.ac.dl.dp5.util.DPFacilityType;
 public class ModuleLookup implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private BigDecimal id;
 
