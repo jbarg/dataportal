@@ -19,7 +19,7 @@ import javax.naming.*;
 import java.util.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.Certificate;
-import uk.ac.dl.dp5.util.FacilityType;
+import uk.ac.dl.dp5.util.DPFacilityType;
 /**
  *
  * @author gjd37
@@ -34,8 +34,9 @@ public class EndSessionClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        try{
+      //  System.out.println(new java.sql.Date());
+                
+        /*try{
             
             InitialContext ic = new InitialContext();
             
@@ -48,7 +49,7 @@ public class EndSessionClient {
             
             e.printStackTrace();
             
-        }
+        }*/
     }
     
     public static Context getContext() throws Exception{

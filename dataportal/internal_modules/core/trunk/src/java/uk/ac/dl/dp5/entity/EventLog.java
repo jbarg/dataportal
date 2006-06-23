@@ -46,7 +46,7 @@ public class EventLog implements Serializable {
     private String details;
 
     @Column(name = "MOD_TIME")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @JoinColumn(name = "USER_ID")

@@ -42,7 +42,7 @@ public class ProxyServers implements Serializable {
     private String caRootCertificate;
 
     @Column(name = "MOD_TIME")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @OneToMany(mappedBy = "proxyServerId")

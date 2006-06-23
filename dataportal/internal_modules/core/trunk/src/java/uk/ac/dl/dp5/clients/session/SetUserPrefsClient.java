@@ -13,7 +13,7 @@ import javax.naming.*;
 import java.util.*;
 import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
-import uk.ac.dl.dp5.util.Resolution;
+import uk.ac.dl.dp5.util.DPResolution;
 
 /**
  *
@@ -38,10 +38,10 @@ public class SetUserPrefsClient {
             
             UserPreferencesDTO dtp  =new UserPreferencesDTO();
             dtp.setDefaultFacility("ISIS");
-            dtp.setResolution(Resolution.res_1600x1200);
+            dtp.setResolution(DPResolution.res_1024x768);
             dtp.setResultsPerPage(20);
                     
-             sless.setUserPrefs("da746c2a-ab16-4ec2-9743-1b129ff08c98",dtp);
+             sless.setUserPrefs("565a63dd-5715-4ef2-aac3-c69213082d36",dtp);
             //System.out.println("Got session : "+session);
             //
         }catch(Exception e){

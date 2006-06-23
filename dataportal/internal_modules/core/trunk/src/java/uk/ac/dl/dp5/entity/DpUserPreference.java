@@ -15,6 +15,8 @@ import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +28,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import uk.ac.dl.dp5.util.Resolution;
+import uk.ac.dl.dp5.util.DPResolution;
 
 /**
  *
@@ -38,7 +40,7 @@ import uk.ac.dl.dp5.util.Resolution;
 public class DpUserPreference implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private BigDecimal id;
 
@@ -49,10 +51,11 @@ public class DpUserPreference implements Serializable {
     private String defaultFacility;
 
     @Column(name = "RESOLUTION")
+    //@Enumerated(EnumType.STRING)
     private String resolution;
 
     @Column(name = "MOD_TIME")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @JoinColumn(name = "PROXY_SERVER_ID")

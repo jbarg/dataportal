@@ -20,7 +20,8 @@ import javax.naming.*;
 import java.util.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.Certificate;
-import uk.ac.dl.dp5.util.FacilityType;
+import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.entity.Role;
 /**
  *
  * @author gjd37
@@ -35,15 +36,23 @@ public class GetSessionIDClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        String sid = "565a63dd-5715-4ef2-aac3-c69213082d36";
         try{
-            
             InitialContext ic = new InitialContext();
             
             SessionRemote sless = (SessionRemote) ic.lookup("SessionEJB");
+            //sless.isValid("ed046b97-3fac-49d9-9b70-8df0031e7d05");
             
-            SessionDTO session =  sless.getSession("66a23b8d-1eea-4ee0-86d6-db8f97753b8c");
-            System.out.println("Got session : "+session.getCredential());
+            SessionDTO session =  sless.getSession(sid);
+            System.out.println("Got session : "+session.getCredentialType());
+            
+            /*Role role =  (Role)sless.getSessionI(sid);
+            System.out.println("Got session : "+role.getModTime() );
+            
+           role.setModTime(new Date());
+            sless.addSessionI(role);*/
+            
+            
             //
         }catch(Exception e){
             

@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import uk.ac.dl.dp5.clients.dto.FacilityDTO;
 import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
-import uk.ac.dl.dp5.util.FacilityType;
+import uk.ac.dl.dp5.util.DPFacilityType;
 //import org.jboss.annotation.ejb.RemoteBinding;
 
 /**
@@ -23,7 +23,7 @@ import uk.ac.dl.dp5.util.FacilityType;
 public class LookupBean extends SessionEJBObject implements LookupRemote, LookupLocal {
     static Logger log = Logger.getLogger(LookupBean.class);
            
-    public Collection<FacilityDTO> getFacilities(FacilityType type){
+    public Collection<FacilityDTO> getFacilities(DPFacilityType type){
         //change this to a DTO??  maybe later
         log.info("Looking for facilities type: "+type);
         Collection<ModuleLookup> facilities;     

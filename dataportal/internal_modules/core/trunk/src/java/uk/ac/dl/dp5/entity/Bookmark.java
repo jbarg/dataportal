@@ -49,7 +49,7 @@ public class Bookmark implements Serializable {
     private String note;
 
     @Column(name = "MOD_TIME")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @JoinColumn(name = "USER_ID")

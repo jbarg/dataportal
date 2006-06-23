@@ -12,12 +12,17 @@ package uk.ac.dl.dp5.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -44,23 +49,37 @@ public class User implements Serializable {
     private String dn;
 
     @Column(name = "MOD_TIME", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @OneToMany(mappedBy = "userId")
     private java.util.Collection <uk.ac.dl.dp5.entity.EventLog> eventLog;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @Basic(fetch=FetchType.LAZY)
     private java.util.Collection <uk.ac.dl.dp5.entity.Bookmark> bookmark;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @Basic(fetch=FetchType.LAZY)
     private java.util.Collection <uk.ac.dl.dp5.entity.Session> session;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @Basic(fetch=FetchType.LAZY)
     private java.util.Collection <uk.ac.dl.dp5.entity.DataReference> dataReference;
 
     @OneToOne(mappedBy = "userId")
+    @Basic(fetch=FetchType.LAZY)
     private uk.ac.dl.dp5.entity.DpUserPreference dpUserPreference;
+    
+    @ManyToMany
+    @JoinTable(name="DP_USER_ROLE",
+        joinColumns=
+            @JoinColumn(name="USER_ID", referencedColumnName="ID"),
+        inverseJoinColumns=
+            @JoinColumn(name="ROLE_ID", referencedColumnName="ID")
+        )
+    private java.util.Collection <uk.ac.dl.dp5.entity.Role> roles;
+  
     
     /** Creates a new instance of User */
     public User() {
@@ -158,6 +177,14 @@ public class User implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
+    }
+
+    public java.util.Collection<uk.ac.dl.dp5.entity.Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(java.util.Collection<uk.ac.dl.dp5.entity.Role> roles) {
+        this.roles = roles;
     }
     
 }

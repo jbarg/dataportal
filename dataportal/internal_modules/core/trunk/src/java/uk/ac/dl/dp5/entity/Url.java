@@ -38,7 +38,7 @@ public class Url implements Serializable {
     private String url;
 
     @Column(name = "MOD_TIME", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
     
     /** Creates a new instance of Url */

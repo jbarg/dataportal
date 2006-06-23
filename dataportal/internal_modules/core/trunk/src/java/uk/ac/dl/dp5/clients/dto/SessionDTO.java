@@ -11,6 +11,7 @@ package uk.ac.dl.dp5.clients.dto;
 
 import java.io.Serializable;
 import uk.ac.dl.dp5.entity.Session;
+import uk.ac.dl.dp5.util.DPCredentialType;
 
 /**
  *
@@ -22,7 +23,7 @@ public class SessionDTO implements Serializable{
   
     private String credential;
    
-    private String credentialType;
+    private DPCredentialType credentialType;
    
    // private User userId;
     
@@ -49,11 +50,11 @@ public class SessionDTO implements Serializable{
         this.credential = credential;
     }
 
-    public String getCredentialType() {
+    public DPCredentialType getCredentialType() {
         return credentialType;
     }
 
-    public void setCredentialType(String credentialType) {
+    public void setCredentialType(DPCredentialType credentialType) {
         this.credentialType = credentialType;
     }
     

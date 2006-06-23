@@ -12,9 +12,13 @@ package uk.ac.dl.dp5.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +30,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import uk.ac.dl.dp5.util.DPCredentialType;
 
 /**
  *
@@ -37,7 +42,7 @@ import javax.persistence.TemporalType;
 public class Session implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private BigDecimal id;
 
@@ -48,10 +53,11 @@ public class Session implements Serializable {
     private String credential;
 
     @Column(name = "CREDENTIAL_TYPE")
-    private String credentialType;
+    @Enumerated(EnumType.STRING)
+    private DPCredentialType credentialType;
 
     @Column(name = "MOD_TIME", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sessionId")
@@ -59,6 +65,7 @@ public class Session implements Serializable {
 
     @JoinColumn(name = "USER_ID")
     @ManyToOne
+    @Basic(fetch=FetchType.LAZY)
     private User userId;
     
     /** Creates a new instance of Session */
@@ -100,11 +107,11 @@ public class Session implements Serializable {
         this.credential = credential;
     }
 
-    public String getCredentialType() {
+    public DPCredentialType getCredentialType() {
         return this.credentialType;
     }
 
-    public void setCredentialType(String credentialType) {
+    public void setCredentialType(DPCredentialType credentialType) {
         this.credentialType = credentialType;
     }
 

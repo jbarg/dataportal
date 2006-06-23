@@ -10,9 +10,10 @@
 package uk.ac.dl.dp5.util;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.security.cert.CertificateException;
+import java.util.Collection;
 import java.util.Date;
-import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
@@ -23,13 +24,17 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
-import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp5.entity.DpUserPreference;
+import uk.ac.dl.dp5.entity.Facility;
 import uk.ac.dl.dp5.entity.ProxyServers;
+import uk.ac.dl.dp5.entity.Role;
 import uk.ac.dl.dp5.entity.User;
+import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
+
+import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp5.exceptions.UserNotFoundException;
 
 /**
  *
@@ -118,24 +123,67 @@ public class UserUtil {
                 return  (DpUserPreference) em.createNamedQuery("DpUserPreference.findByUserId").setParameter("userId", user).getSingleResult();
             } catch(Exception e){
                 log.warn("Unable to get user prefs",e);
-                return null;
+                throw new EntityNotFoundException("Entity Not Found: "+e.getMessage());       
             }
         } else return dpup;
     }
+         
     
-    public static User createUser(String DN){
-        User user = new User();
+    public static User createDefaultUser(String DN,EntityManager em) throws CannotCreateNewUserException {
+        User user;
+        try {
+            user = new User();
+            
+            user.setDn(DN);
+            user.setModTime(new Date());       
+            
+            //set up default role
+            Collection<Role> roles = (Collection<Role>) em.createNamedQuery("Role.findByName").setParameter("name",DPRole.USER).getResultList();
+            log.debug("Default roles found for user are  "+roles.iterator().next().getName());
+            log.debug("Role is  "+roles.iterator().next().getName().getClass());
+            user.setRoles(roles);
+            
+            //add to DB
+            em.persist(user);
+            
+            //save prefs
+            DpUserPreference dpup = getDefaultUserPreferences(em);
+            dpup.setUserId(user);
+            em.persist(dpup);
+            
+        } catch(Exception e) {
+            log.error("Unable to create new user for DN: "+DN,e);
+            throw new CannotCreateNewUserException("Unable to create new user for DN: "+DN,e);
+        }
         
-        user.setDn(DN);
-        user.setModTime(new Date());
         
         //TODO get default prefs
         //user.setDpUserPreference();
         return user;
     }
     
+     private static DpUserPreference getDefaultUserPreferences(EntityManager em) {
+        DpUserPreference prefs = new DpUserPreference();
+        
+        Collection<Facility> facilities =  (Collection<Facility>)  em.createQuery("select f from Facility f").getResultList();
+        prefs.setDefaultFacility(facilities.iterator().next().getShortName());
+        
+        
+        prefs.setResultsPerPage(new BigInteger(""+20));
+        prefs.setResolution(DPResolution.res_1024x768.toString());
+        
+        prefs.setModTime(new Date());
+        //get the myproxy
+        Collection<ProxyServers> proxyservers =  (Collection<ProxyServers>)  em.createQuery("select p from ProxyServers p").getResultList();
+        prefs.setProxyServerId(proxyservers.iterator().next());
+        
+        log.debug("User proxyserver is "+proxyservers.iterator().next().getId()+" with address: "+proxyservers.iterator().next().getProxyServerAddress());
+                
+        return prefs;
+    }
     
-    public void sendEventLog(Event event, String description){
+    
+    public void sendEventLog(DPEvent event, String description){
         
         QueueConnection queueCon = null;
         QueueSender queueSender = null;

@@ -41,7 +41,7 @@ public class CredentialType implements Serializable {
     private String infoUrl;
 
     @Column(name = "MOD_TIME", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
     
     /** Creates a new instance of CredentialType */

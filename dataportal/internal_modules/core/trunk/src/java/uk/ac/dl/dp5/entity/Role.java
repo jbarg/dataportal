@@ -14,12 +14,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import uk.ac.dl.dp5.util.DPRole;
 
 /**
  *
@@ -34,11 +37,15 @@ public class Role implements Serializable {
     @Column(name = "ID", nullable = false)
     private BigDecimal id;
 
+    //@Column(name = "NAME", nullable = false)
+    //private String name;
+    
     @Column(name = "NAME", nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private DPRole name;
 
     @Column(name = "MOD_TIME", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
     
     /** Creates a new instance of Role */
@@ -49,7 +56,7 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public Role(BigDecimal id, String name, Date modTime) {
+    public Role(BigDecimal id, DPRole name, Date modTime) {
         this.id = id;
         this.name = name;
         this.modTime = modTime;
@@ -63,11 +70,19 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
+    /*public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
+        this.name = name;
+    }*/
+    
+    public DPRole getName() {
+        return this.name;
+    }
+
+    public void setName(DPRole name) {
         this.name = name;
     }
 

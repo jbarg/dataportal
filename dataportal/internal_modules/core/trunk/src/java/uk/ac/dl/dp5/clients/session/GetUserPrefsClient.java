@@ -13,7 +13,7 @@ import javax.naming.*;
 import java.util.*;
 import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
-import uk.ac.dl.dp5.util.Resolution;
+import uk.ac.dl.dp5.util.DPResolution;
 
 /**
  *
@@ -38,7 +38,7 @@ public class GetUserPrefsClient {
             
             
                     
-           UserPreferencesDTO dto =  sless.getUserPrefs("da746c2a-ab16-4ec2-9743-1b129ff08c98");
+           UserPreferencesDTO dto =  sless.getUserPrefs("565a63dd-5715-4ef2-aac3-c69213082d36");
            
             System.out.println("Got session : "+dto.getResolution());
             //
