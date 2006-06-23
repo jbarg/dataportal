@@ -7,18 +7,18 @@
  * and open the template in the editor.
  */
 
-package uk.ac.dl.dp5.util;
+package uk.ac.dl.dp5.exceptions;
 
 /**
  *
  * @author gjd37
  */
-public class SessionNotFoundException extends java.lang.Exception {
+public class UserNotFoundException extends java.lang.Exception {
     
     /**
      * Creates a new instance of <code>UserNotFoundException</code> without detail message.
      */
-    public SessionNotFoundException() {
+    public UserNotFoundException() {
     }
     
     
@@ -26,7 +26,7 @@ public class SessionNotFoundException extends java.lang.Exception {
      * Constructs an instance of <code>UserNotFoundException</code> with the specified detail message.
      * @param msg the detail message.
      */
-    public SessionNotFoundException(String msg) {
+    public UserNotFoundException(String msg) {
         super(msg);
     }
 }
