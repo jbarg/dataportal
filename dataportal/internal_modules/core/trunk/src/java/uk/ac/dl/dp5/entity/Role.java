@@ -16,6 +16,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,6 +36,7 @@ import uk.ac.dl.dp5.util.DPRole;
 public class Role implements Serializable {
 
     @Id
+     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private BigDecimal id;
 
