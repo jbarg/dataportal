@@ -26,9 +26,7 @@ public abstract class SessionEJBObject {
     
     static Logger log = Logger.getLogger(SessionEJBObject.class);
     
-    @Resource
-    private  SessionContext ctx;
-            
+                
     @PersistenceContext(unitName="dataportal")
     protected EntityManager em;
     

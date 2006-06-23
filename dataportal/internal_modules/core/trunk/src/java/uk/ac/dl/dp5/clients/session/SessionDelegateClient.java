@@ -23,8 +23,8 @@ import java.util.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.Certificate;
-import uk.ac.dl.dp5.util.FacilityType;
-import uk.ac.dl.dp5.util.Resolution;
+import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.util.DPResolution;
 /**
  *
  * @author gjd37
@@ -63,7 +63,7 @@ public class SessionDelegateClient {
             //setting user prefs
             UserPreferencesDTO dto = new UserPreferencesDTO();
             dto.setDefaultFacility("ISIS");
-            dto.setResolution(Resolution.res_1280x768);
+            dto.setResolution(DPResolution.res_1024x768);
             dto.setResultsPerPage(50);
             sd.setUserPrefs(sid, dto);
             printTime("setUserPrefs");

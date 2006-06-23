@@ -55,7 +55,7 @@ public class DataReference implements Serializable {
     private String typeOfObject;
 
     @Column(name = "MOD_TIME")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @JoinColumn(name = "USER_ID")

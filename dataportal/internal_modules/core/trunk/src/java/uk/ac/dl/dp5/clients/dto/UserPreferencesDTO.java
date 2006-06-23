@@ -11,7 +11,7 @@ package uk.ac.dl.dp5.clients.dto;
 
 import java.io.Serializable;
 import uk.ac.dl.dp5.entity.DpUserPreference;
-import uk.ac.dl.dp5.util.Resolution;
+import uk.ac.dl.dp5.util.DPResolution;
 
 /**
  *
@@ -24,11 +24,11 @@ public class UserPreferencesDTO implements Serializable {
     
     private String defaultFacility;    
     
-    private Resolution resolution;
+    private DPResolution resolution;
     
      public UserPreferencesDTO(){    
          //set defaults
-          this.setResolution(Resolution.res_1024x768);
+          this.setResolution(DPResolution.res_1024x768);
           this.setResultsPerPage(20);
      }
      
@@ -36,14 +36,15 @@ public class UserPreferencesDTO implements Serializable {
     /** Creates a new instance of UserPreferencesSDTO */
     public UserPreferencesDTO(DpUserPreference prefs) {
         this.setDefaultFacility(prefs.getDefaultFacility());
-        String res = prefs.getResolution();
-        if(res.equals(Resolution.res_1024x768.toString())) resolution = Resolution.res_1024x768;
-        else  if(res.equals(Resolution.res_1280x1024.toString())) resolution = Resolution.res_1280x1024;
-        else  if(res.equals(Resolution.res_1280x768.toString())) resolution = Resolution.res_1280x768;
-        else  if(res.equals(Resolution.res_1600x1200.toString())) resolution = Resolution.res_1600x1200;
-        else resolution = Resolution.res_1024x768;
+       /* String res = prefs.getResolution();
+        if(res.equals(DPResolution.res_1024x768.toString())) resolution = DPResolution.res_1024x768;
+        else  if(res.equals(DPResolution.res_1280x1024.toString())) resolution = DPResolution.res_1280x1024;
+        else  if(res.equals(DPResolution.res_1280x768.toString())) resolution = DPResolution.res_1280x768;
+        else  if(res.equals(DPResolution.res_1600x1200.toString())) resolution = DPResolution.res_1600x1200;
+        else resolution = DPResolution.res_1024x768;        
+        this.setResolution(resolution);*/
         
-        this.setResolution(resolution);
+        this.setResolution(DPResolution.valueOf(prefs.getResolution()));
         this.setResultsPerPage(prefs.getResultsPerPage().intValue());
     }
     
@@ -63,11 +64,11 @@ public class UserPreferencesDTO implements Serializable {
         this.defaultFacility = defaultFacility;
     }
     
-    public Resolution getResolution() {
+    public DPResolution getResolution() {
         return resolution;
     }
     
-    public void setResolution(Resolution resolution) {
+    public void setResolution(DPResolution resolution) {
         this.resolution = resolution;
     }
     

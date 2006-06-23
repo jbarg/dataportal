@@ -11,6 +11,7 @@ package uk.ac.dl.dp5.clients.dto;
 
 import java.io.Serializable;
 import uk.ac.dl.dp5.entity.ModuleLookup;
+import uk.ac.dl.dp5.util.DPFacilityType;
 
 /**
  *
@@ -23,7 +24,7 @@ public class FacilityDTO implements Serializable {
     
     private String platform;
     
-    private String moduleType;
+    private DPFacilityType moduleType;
     
     private String facility;
     
@@ -56,11 +57,11 @@ public class FacilityDTO implements Serializable {
         this.platform = platform;
     }
 
-    public String getModuleType() {
+    public DPFacilityType getModuleType() {
         return moduleType;
     }
 
-    public void setModuleType(String moduleType) {
+    public void setModuleType(DPFacilityType moduleType) {
         this.moduleType = moduleType;
     }
 

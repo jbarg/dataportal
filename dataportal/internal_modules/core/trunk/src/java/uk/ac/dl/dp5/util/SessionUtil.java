@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp5.clients.dto.SessionDTO;
 import uk.ac.dl.dp5.entity.Session;
+import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 
 /**
  *

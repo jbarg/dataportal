@@ -17,7 +17,7 @@ import uk.ac.dl.dp5.sessionbeans.lookup.*;
 
 import javax.naming.*;
 import java.util.*;
-import uk.ac.dl.dp5.util.FacilityType;
+import uk.ac.dl.dp5.util.DPFacilityType;
 /**
  *
  * @author gjd37
@@ -49,8 +49,8 @@ public class LookupClient {
             //   LookupRemote sless = (LookupRemote) ic.lookup("uk.ac.dl.dp5.sessionbeans.lookup.LookupRemote");
             
             LookupRemote sless = (LookupRemote) ic.lookup("LookupEJB");
-            System.out.println("Looking for facilities type: "+FacilityType.ACM);
-            Collection<FacilityDTO> facs = (Collection<FacilityDTO>)sless.getFacilities(FacilityType.XMLWRAPPER);
+            System.out.println("Looking for facilities type: "+DPFacilityType.ACM);
+            Collection<FacilityDTO> facs = (Collection<FacilityDTO>)sless.getFacilities(DPFacilityType.XMLWRAPPER);
             
             for(FacilityDTO f : facs){
                 System.out.println(f.getFacility()+" has connection "+f.getModuleType());

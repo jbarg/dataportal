@@ -4,7 +4,7 @@ import java.util.Collection;
 import javax.ejb.Local;
 import uk.ac.dl.dp5.clients.dto.FacilityDTO;
 import uk.ac.dl.dp5.entity.ModuleLookup;
-import uk.ac.dl.dp5.util.FacilityType;
+import uk.ac.dl.dp5.util.DPFacilityType;
 
 /**
  * This is the business interface for Lookup enterprise bean.
@@ -19,5 +19,5 @@ public interface LookupLocal {
 
     void removeEntity(Object entity);
     
-     public Collection<FacilityDTO> getFacilities(FacilityType type);
+     public Collection<FacilityDTO> getFacilities(DPFacilityType type);
 }

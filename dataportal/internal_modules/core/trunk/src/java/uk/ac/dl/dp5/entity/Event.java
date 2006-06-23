@@ -14,12 +14,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import uk.ac.dl.dp5.util.DPEvent;
 
 /**
  *
@@ -35,13 +38,14 @@ public class Event implements Serializable {
     private BigDecimal id;
 
     @Column(name = "EVENT_NAME")
-    private String eventName;
+    @Enumerated(EnumType.STRING)
+    private DPEvent eventName;
 
     @Column(name = "EVENT_DETAILS")
     private String eventDetails;
 
     @Column(name = "MOD_TIME", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
     
     /** Creates a new instance of Event */
@@ -65,11 +69,11 @@ public class Event implements Serializable {
         this.id = id;
     }
 
-    public String getEventName() {
+    public DPEvent getEventName() {
         return this.eventName;
     }
 
-    public void setEventName(String eventName) {
+    public void setEventName(DPEvent eventName) {
         this.eventName = eventName;
     }
 

@@ -43,7 +43,7 @@ public class Tokens implements Serializable {
     private String facilityCert;
 
     @Column(name = "MOD_TIME", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @JoinColumn(name = "SESSION_ID")

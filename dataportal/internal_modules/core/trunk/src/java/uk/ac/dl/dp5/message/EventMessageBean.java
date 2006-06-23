@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 import uk.ac.dl.dp5.entity.EventLog;
 import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
-import uk.ac.dl.dp5.util.UserNotFoundException;
+import uk.ac.dl.dp5.exceptions.UserNotFoundException;
 import uk.ac.dl.dp5.util.UserUtil;
 
 /**
