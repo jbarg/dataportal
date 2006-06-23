@@ -53,8 +53,8 @@ public class ModuleLookup implements Serializable {
     private String platform;
 
     @Column(name = "MODULE_TYPE", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private DPFacilityType moduleType;
+    //@Enumerated(EnumType.STRING)
+    private String moduleType;
 
     @Column(name = "FACILITY", nullable = false)   
     private String facility;
@@ -74,7 +74,7 @@ public class ModuleLookup implements Serializable {
         this.id = id;
     }
 
-    public ModuleLookup(BigDecimal id, String connection, DPFacilityType moduleType, String facility, Date modTime) {
+    public ModuleLookup(BigDecimal id, String connection, String moduleType, String facility, Date modTime) {
         this.id = id;
         this.connection = connection;
         this.moduleType = moduleType;
@@ -122,11 +122,11 @@ public class ModuleLookup implements Serializable {
         this.platform = platform;
     }
 
-    public DPFacilityType getModuleType() {
+    public String getModuleType() {
         return this.moduleType;
     }
 
-    public void setModuleType(DPFacilityType moduleType) {
+    public void setModuleType(String moduleType) {
         this.moduleType = moduleType;
     }
 
