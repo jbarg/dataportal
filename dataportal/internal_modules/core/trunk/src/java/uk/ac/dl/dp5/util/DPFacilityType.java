@@ -16,8 +16,8 @@ package uk.ac.dl.dp5.util;
 public enum DPFacilityType {
     
     ACM("ACM"),
-    XMLWRAPPER("WRAPPER"),
-     ERROR("ERROR");
+    WRAPPER("WRAPPER");
+    
      
     DPFacilityType(String value) {
         this.value = value;

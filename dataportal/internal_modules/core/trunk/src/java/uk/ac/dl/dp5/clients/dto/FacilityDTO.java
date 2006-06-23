@@ -24,7 +24,7 @@ public class FacilityDTO implements Serializable {
     
     private String platform;
     
-    private DPFacilityType moduleType;
+    private String moduleType;
     
     private String facility;
     
@@ -57,11 +57,11 @@ public class FacilityDTO implements Serializable {
         this.platform = platform;
     }
 
-    public DPFacilityType getModuleType() {
+    public String getModuleType() {
         return moduleType;
     }
 
-    public void setModuleType(DPFacilityType moduleType) {
+    public void setModuleType(String moduleType) {
         this.moduleType = moduleType;
     }
 

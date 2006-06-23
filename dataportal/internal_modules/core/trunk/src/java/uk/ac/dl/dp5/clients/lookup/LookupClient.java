@@ -50,7 +50,7 @@ public class LookupClient {
             
             LookupRemote sless = (LookupRemote) ic.lookup("LookupEJB");
             System.out.println("Looking for facilities type: "+DPFacilityType.ACM);
-            Collection<FacilityDTO> facs = (Collection<FacilityDTO>)sless.getFacilities(DPFacilityType.XMLWRAPPER);
+            Collection<FacilityDTO> facs = (Collection<FacilityDTO>)sless.getFacilities(DPFacilityType.WRAPPER);
             
             for(FacilityDTO f : facs){
                 System.out.println(f.getFacility()+" has connection "+f.getModuleType());
