@@ -13,11 +13,12 @@ package uk.ac.dl.dp5.sessionbeans.session;
  *
  * @author gjd37
  */
+import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Timer;
 
 
-@Remote
+@Local
 public interface TimerSession {
     public void createTimer(long starttime,long intervalDuration);
 

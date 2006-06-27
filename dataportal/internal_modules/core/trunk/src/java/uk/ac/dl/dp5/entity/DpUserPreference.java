@@ -13,10 +13,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -64,6 +66,7 @@ public class DpUserPreference implements Serializable {
 
     @JoinColumn(name = "USER_ID")
     @OneToOne
+    @Basic(fetch=FetchType.LAZY)
     private User userId;
     
     /** Creates a new instance of DpUserPreference */

@@ -55,20 +55,16 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "userId")
     private java.util.Collection <uk.ac.dl.dp5.entity.EventLog> eventLog;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    @Basic(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")   
     private java.util.Collection <uk.ac.dl.dp5.entity.Bookmark> bookmark;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    @Basic(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")   
     private java.util.Collection <uk.ac.dl.dp5.entity.Session> session;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    @Basic(fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")   
     private java.util.Collection <uk.ac.dl.dp5.entity.DataReference> dataReference;
 
-    @OneToOne(mappedBy = "userId")
-    @Basic(fetch=FetchType.LAZY)
+    @OneToOne(mappedBy = "userId")    
     private uk.ac.dl.dp5.entity.DpUserPreference dpUserPreference;
     
     @ManyToMany
@@ -80,7 +76,7 @@ public class User implements Serializable {
         )
     private java.util.Collection <uk.ac.dl.dp5.entity.Role> roles;
   
-    
+        
     /** Creates a new instance of User */
     public User() {
     }

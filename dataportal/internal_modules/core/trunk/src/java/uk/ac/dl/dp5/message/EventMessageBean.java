@@ -79,7 +79,7 @@ public class EventMessageBean extends SessionEJBObject implements MessageListene
         
         em.persist(eventlog);
         
-       System.out.println("Mesasge receieved");
+       System.out.println("Message receieved");
     }
     
 }

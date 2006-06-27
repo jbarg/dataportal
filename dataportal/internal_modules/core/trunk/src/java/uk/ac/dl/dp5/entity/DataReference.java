@@ -14,16 +14,21 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import uk.ac.dl.dp5.util.DPUrlRefType;
 
 /**
  *
@@ -52,6 +57,7 @@ public class DataReference implements Serializable {
     private String query;
 
     @Column(name = "TYPE_OF_REFERENCE")
+   //  @Enumerated(EnumType.STRING)
     private String typeOfReference;
 
     @Column(name = "TYPE_OF_OBJECT")
@@ -64,6 +70,15 @@ public class DataReference implements Serializable {
     @JoinColumn(name = "USER_ID")
     @ManyToOne
     private User userId;
+    
+    @ManyToMany
+    @JoinTable(name="DP_DATA_REF_URL",
+        joinColumns=
+            @JoinColumn(name="DATA_REF_ID", referencedColumnName="ID"),
+        inverseJoinColumns=
+            @JoinColumn(name="URL_ID", referencedColumnName="ID")
+        )
+    private java.util.Collection <uk.ac.dl.dp5.entity.Url> urls;
     
     /** Creates a new instance of DataReference */
     public DataReference() {
@@ -168,6 +183,14 @@ public class DataReference implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
+    }
+
+    public java.util.Collection<uk.ac.dl.dp5.entity.Url> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(java.util.Collection<uk.ac.dl.dp5.entity.Url> urls) {
+        this.urls = urls;
     }
     
 }

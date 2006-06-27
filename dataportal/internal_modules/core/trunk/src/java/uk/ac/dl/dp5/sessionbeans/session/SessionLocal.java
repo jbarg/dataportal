@@ -26,17 +26,17 @@ public interface SessionLocal {
     
     void removeEntity(Object entity);
     
-    public SessionDTO getSession(String sid) throws SessionNotFoundException;    
+    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException;    
     
     public String login(String username,String password, int lifetime) throws CannotCreateNewUserException, LoginMyProxyException ;
             
-    public Boolean isValid(String sid) throws CertificateException, SessionNotFoundException  ;
+    public Boolean isValid(String sid) throws SessionNotFoundException,SessionTimedOutException  ;
     
-    public boolean logout(String sid) throws SessionNotFoundException;
+    public boolean logout(String sid) throws SessionNotFoundException,SessionTimedOutException;
     
-    public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws  SessionNotFoundException, UserNotFoundException;
+    public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException;
     
-    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException;
+    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException;
     
     
 }
