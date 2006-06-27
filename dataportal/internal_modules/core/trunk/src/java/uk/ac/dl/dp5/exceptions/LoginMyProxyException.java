@@ -19,10 +19,10 @@ import org.globus.myproxy.MyProxyException;
  */
 public class LoginMyProxyException extends java.lang.Exception {
     
-     static Logger log = Logger.getLogger(LoginMyProxyException.class);
-     
-     private LoginError exceptionType = LoginError.UNKNOWN;
-     
+    static Logger log = Logger.getLogger(LoginMyProxyException.class);
+    
+    private LoginError exceptionType = LoginError.UNKNOWN;
+    
     /**
      * Creates a new instance of <code>LoginMyProxyException</code> without detail message.
      */
@@ -44,8 +44,14 @@ public class LoginMyProxyException extends java.lang.Exception {
      */
     public LoginMyProxyException(String msg, MyProxyException e ) {
         super(msg);
-        super.initCause(e);
-        handleMyProxyException(e);      
+        if(e.getCause() == null) super.initCause(e);
+        handleMyProxyException(e);
+    }
+    
+    public LoginMyProxyException(MyProxyException e ) {
+        super(e.getMessage());
+        if(e.getCause() == null) super.initCause(e);
+        handleMyProxyException(e);
     }
     
     /**
@@ -53,22 +59,30 @@ public class LoginMyProxyException extends java.lang.Exception {
      * @param msg the detail message.
      */
     public LoginMyProxyException(Throwable e ) {
-        super(e);
+        super(e.getLocalizedMessage());
+         if(e.getCause() == null) super.initCause(e);
+       
     }
     
     public LoginMyProxyException(String msg, LoginError error ) {
         super(msg);
         exceptionType = error;
     }
-    
-     public LoginMyProxyException(String msg, LoginError error , Throwable e) {
+
+     public LoginMyProxyException(String msg, Throwable e ) {
         super(msg);
-         super.initCause(e);
+        if(e.getCause() == null) super.initCause(e);
+       
+    }
+     
+    public LoginMyProxyException(String msg, LoginError error , Throwable e) {
+        super(msg);
+        if(e.getCause() == null) super.initCause(e);
         exceptionType = error;
         
     }
     
-     public LoginMyProxyException( LoginError error ) {
+    public LoginMyProxyException( LoginError error ) {
         super(error.toString());
         exceptionType = error;
     }
@@ -78,7 +92,7 @@ public class LoginMyProxyException extends java.lang.Exception {
         String trace = e.getLocalizedMessage().trim();
         
         String errMsg = null;
-        //log.debug("MyProxy Trace is : '"+trace+"'");
+        log.debug("MyProxy Trace is : '"+trace+"'");
         if( trace.compareToIgnoreCase( "MyProxy get failed. [Root error message: invalid pass phrase]") == 0) {
             errMsg = "Invalid Passphrase Please Try Again";
             exceptionType = LoginError.INVALID_PASSPHASE;
@@ -102,7 +116,7 @@ public class LoginMyProxyException extends java.lang.Exception {
         return errMsg;
     }
     
-        /**
+    /**
      * @return the SRB server error type.
      */
     public LoginError getType( ) {
@@ -123,7 +137,7 @@ public class LoginMyProxyException extends java.lang.Exception {
     }
     
     public static void main(String[] ed){
-       
+        
        /* LoginMyProxyException s1 = new LoginMyProxyException("Error",LoginError.CREDENTIALS_EXPIRED);
         System.out.println(s1);
         LoginMyProxyException s2 = new LoginMyProxyException(LoginError.CREDENTIALS_EXPIRED);
@@ -133,7 +147,7 @@ public class LoginMyProxyException extends java.lang.Exception {
         //s3.printStackTrace();
         //if(s3.getType() == LoginError.NO_MYPROXY_CREDENTIAL) System.out.println("true");
         
-          LoginMyProxyException s4 = new LoginMyProxyException("exceptio here",LoginError.MYPROXY_LOGIN_EXCEPTION,new Exception("fd"));
+        LoginMyProxyException s4 = new LoginMyProxyException("exceptio here",LoginError.MYPROXY_LOGIN_EXCEPTION,new Exception("fd"));
         //System.out.println(s4);
         s4.printStackTrace();
         // log.warn("d",s);

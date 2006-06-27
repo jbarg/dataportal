@@ -1,7 +1,7 @@
 /*
  * Session.java
  *
- * Created on 19 June 2006, 15:50
+ * Created on 27 June 2006, 10:03
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,7 +25,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,7 +36,7 @@ import uk.ac.dl.dp5.util.DPCredentialType;
  */
 @Entity
 @Table(name = "DP_SESSION")
-@NamedQueries( {@NamedQuery(name = "Session.findById", query = "SELECT s FROM Session s WHERE s.id = :id"), @NamedQuery(name = "Session.findByUserSessionId", query = "SELECT s FROM Session s WHERE s.userSessionId = :userSessionId"), @NamedQuery(name = "Session.findByCredential", query = "SELECT s FROM Session s WHERE s.credential = :credential"), @NamedQuery(name = "Session.findByCredentialType", query = "SELECT s FROM Session s WHERE s.credentialType = :credentialType"), @NamedQuery(name = "Session.findByModTime", query = "SELECT s FROM Session s WHERE s.modTime = :modTime")})
+@NamedQueries( {@NamedQuery(name = "Session.findById", query = "SELECT s FROM Session s WHERE s.id = :id"), @NamedQuery(name = "Session.findByUserSessionId", query = "SELECT s FROM Session s WHERE s.userSessionId = :userSessionId"), @NamedQuery(name = "Session.findByCredential", query = "SELECT s FROM Session s WHERE s.credential = :credential"), @NamedQuery(name = "Session.findByCredentialType", query = "SELECT s FROM Session s WHERE s.credentialType = :credentialType"), @NamedQuery(name = "Session.findByExpireDateTime", query = "SELECT s FROM Session s WHERE s.expireDateTime = :expireDateTime"), @NamedQuery(name = "Session.findByModTime", query = "SELECT s FROM Session s WHERE s.modTime = :modTime")})
 public class Session implements Serializable {
 
     @Id
@@ -55,17 +53,18 @@ public class Session implements Serializable {
     @Column(name = "CREDENTIAL_TYPE")
     @Enumerated(EnumType.STRING)
     private DPCredentialType credentialType;
+    
+    @Column(name = "EXPIRE_DATE_TIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expireDateTime;
 
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sessionId")
-    private java.util.Collection <uk.ac.dl.dp5.entity.Tokens> tokens;
-
     @JoinColumn(name = "USER_ID")
     @ManyToOne
-    @Basic(fetch=FetchType.LAZY)
+    @Basic(fetch=FetchType.LAZY)    
     private User userId;
     
     /** Creates a new instance of Session */
@@ -105,14 +104,22 @@ public class Session implements Serializable {
 
     public void setCredential(String credential) {
         this.credential = credential;
-    }
+    }   
 
     public DPCredentialType getCredentialType() {
         return this.credentialType;
     }
-
+    
     public void setCredentialType(DPCredentialType credentialType) {
         this.credentialType = credentialType;
+    }
+
+    public Date getExpireDateTime() {
+        return this.expireDateTime;
+    }
+
+    public void setExpireDateTime(Date expireDateTime) {
+        this.expireDateTime = expireDateTime;
     }
 
     public Date getModTime() {
@@ -121,14 +128,6 @@ public class Session implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
-
-    public java.util.Collection <uk.ac.dl.dp5.entity.Tokens> getTokens() {
-        return this.tokens;
-    }
-
-    public void setTokens(java.util.Collection <uk.ac.dl.dp5.entity.Tokens> tokens) {
-        this.tokens = tokens;
     }
 
     public User getUserId() {
@@ -156,7 +155,7 @@ public class Session implements Serializable {
 
     public String toString() {
         //TODO change toString() implementation to return a better display name
-        return "" + this.id+" "+this.userSessionId+" "+this.credentialType+" "+this.modTime;
+        return "" + this.id;
     }
     
 }

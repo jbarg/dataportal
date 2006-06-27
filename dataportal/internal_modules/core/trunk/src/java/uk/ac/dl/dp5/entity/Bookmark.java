@@ -1,7 +1,7 @@
 /*
  * Bookmark.java
  *
- * Created on 19 June 2006, 15:50
+ * Created on 27 June 2006, 10:03
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -31,14 +31,17 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_BOOKMARK")
-@NamedQueries( {@NamedQuery(name = "Bookmark.findById", query = "SELECT b FROM Bookmark b WHERE b.id = :id"), @NamedQuery(name = "Bookmark.findByName", query = "SELECT b FROM Bookmark b WHERE b.name = :name"), @NamedQuery(name = "Bookmark.findByQuery", query = "SELECT b FROM Bookmark b WHERE b.query = :query"), @NamedQuery(name = "Bookmark.findByFacility", query = "SELECT b FROM Bookmark b WHERE b.facility = :facility"), @NamedQuery(name = "Bookmark.findByNote", query = "SELECT b FROM Bookmark b WHERE b.note = :note"), @NamedQuery(name = "Bookmark.findByModTime", query = "SELECT b FROM Bookmark b WHERE b.modTime = :modTime")})
+@NamedQueries( {@NamedQuery(name = "Bookmark.findByStudyIdFacility", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId AND b.facility = :facility"),@NamedQuery(name = "Bookmark.findById", query = "SELECT b FROM Bookmark b WHERE b.id = :id"), @NamedQuery(name = "Bookmark.findByStudyId", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId"), @NamedQuery(name = "Bookmark.findByName", query = "SELECT b FROM Bookmark b WHERE b.name = :name"), @NamedQuery(name = "Bookmark.findByQuery", query = "SELECT b FROM Bookmark b WHERE b.query = :query"), @NamedQuery(name = "Bookmark.findByFacility", query = "SELECT b FROM Bookmark b WHERE b.facility = :facility"), @NamedQuery(name = "Bookmark.findByNote", query = "SELECT b FROM Bookmark b WHERE b.note = :note"), @NamedQuery(name = "Bookmark.findByModTime", query = "SELECT b FROM Bookmark b WHERE b.modTime = :modTime")})
 public class Bookmark implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
+     @GeneratedValue(strategy=GenerationType.AUTO)    
     @Column(name = "ID", nullable = false)
     private BigDecimal id;
 
+    @Column(name = "STUDY_ID", nullable = false)
+    private BigDecimal studyId;
+    
     @Column(name = "NAME", nullable = false)
     private String name;
 
@@ -51,13 +54,13 @@ public class Bookmark implements Serializable {
     @Column(name = "NOTE")
     private String note;
 
-    @Column(name = "MOD_TIME")
+    @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
     @JoinColumn(name = "USER_ID")
     @ManyToOne
-    private uk.ac.dl.dp5.entity.User userId;
+    private User userId;
     
     /** Creates a new instance of Bookmark */
     public Bookmark() {
@@ -67,10 +70,13 @@ public class Bookmark implements Serializable {
         this.id = id;
     }
 
-    public Bookmark(BigDecimal id, String name, String query) {
+     public Bookmark(BigDecimal id, BigDecimal studyId, String name, String query, String facility, Date modTime) {
         this.id = id;
+        this.studyId = studyId;
         this.name = name;
         this.query = query;
+        this.facility = facility;
+        this.modTime = modTime;
     }
 
     public BigDecimal getId() {
@@ -79,6 +85,14 @@ public class Bookmark implements Serializable {
 
     public void setId(BigDecimal id) {
         this.id = id;
+    }
+    
+     public BigDecimal getStudyId() {
+        return this.studyId;
+    }
+
+    public void setStudyId(BigDecimal studyId) {
+        this.studyId = studyId;
     }
 
     public String getName() {
@@ -121,11 +135,11 @@ public class Bookmark implements Serializable {
         this.modTime = modTime;
     }
 
-    public uk.ac.dl.dp5.entity.User getUserId() {
+    public User getUserId() {
         return this.userId;
     }
 
-    public void setUserId(uk.ac.dl.dp5.entity.User userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 

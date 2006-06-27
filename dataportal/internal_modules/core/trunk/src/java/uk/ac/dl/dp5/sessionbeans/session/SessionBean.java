@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 
 import javax.ejb.*;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp5.clients.dto.SessionDTO;
@@ -20,6 +24,7 @@ import uk.ac.dl.dp5.entity.Role;
 import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
 import uk.ac.dl.dp5.exceptions.LoginError;
+import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 
 import uk.ac.dl.dp5.util.DPCredentialType;
 import uk.ac.dl.dp5.entity.Session;
@@ -46,8 +51,9 @@ import uk.ac.dl.dp5.util.cog.DelegateCredential;
 public class SessionBean extends SessionEJBObject  implements SessionRemote, SessionLocal {
     
     static Logger log = Logger.getLogger(SessionBean.class);
+  
     
-    public SessionDTO getSession(String sid) throws SessionNotFoundException{
+    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException{
         log.debug("getSession()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         return new SessionUtil(sid,em).getSessionDTO();
@@ -66,7 +72,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         try {
             myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy());
         } catch (MyProxyException mex) {
-            log.warn("Error from myproxy: "+mex.getMessage(),mex);
+            log.warn("Error from myproxy server: "+mex.getMessage(),mex);
             throw new LoginMyProxyException(mex);
         } catch (Exception e) {
             log.warn("Unexpected error from myproxy: "+e.getMessage(),e);
@@ -111,6 +117,17 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             session.setCredential(certificate.getStringRepresentation());
             session.setCredentialType(DPCredentialType.PROXY);
             session.setModTime(new Date());
+            Calendar cal =  GregorianCalendar.getInstance();
+            try {
+                cal.add(GregorianCalendar.SECOND,(int)certificate.getLifetime()-60*5); //minus 5 mins
+                log.debug("Lifetime left is: "+certificate.getLifetime()+" secs and "+certificate.getLifetime()/3600);
+                log.debug("Setting expire time as: "+ cal.getTime());
+            } catch (CertificateException ex) {
+                log.warn("Unable to load certificate",ex);
+                throw new LoginMyProxyException("Unable to load certificate",LoginError.UNKNOWN,ex);
+                
+            }
+            session.setExpireDateTime(cal.getTime());
             session.setUserSessionId(sid);
             
             //get user
@@ -156,16 +173,20 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
      * - proxy lifetime still remaining
      * otherwise returns false
      */
-    public Boolean isValid(String sid) throws CertificateException, SessionNotFoundException  {
+    public Boolean isValid(String sid) throws SessionNotFoundException  {
         log.debug("isValid()");
-        return  new SessionUtil(sid,em).isValid();
+        try {
+            return  new SessionUtil(sid,em).isValid();
+        }  catch (SessionTimedOutException ex) {
+            return false;
+        }
     }
     
      /*
       * Ends a session
       * - deletes session and user authorisation details from datbase
       */
-    public boolean logout(String sid)  throws  SessionNotFoundException {
+    public boolean logout(String sid) throws SessionNotFoundException ,SessionTimedOutException{
         log.debug("logout()");
         Session session = new SessionUtil(sid,em).getSession();
         em.remove(session);
@@ -178,7 +199,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return true;
     }
     
-    public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws SessionNotFoundException, UserNotFoundException{
+    public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("setUserPrefs()");
         UserUtil userutil = new UserUtil(sid,em);
         User user = userutil.getUser();
@@ -196,12 +217,23 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         }
     }
     
-    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException {
+    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException ,SessionTimedOutException{
         log.debug("getUserPrefs()");
         UserUtil userutil = new UserUtil(sid,em);
         User user = userutil.getUser();
         DpUserPreference dto = userutil.getUserPrefs();
         return new UserPreferencesDTO(dto);
+    }
+    
+    @EJB
+    private TimerSession ts;
+    
+    @PostConstruct
+    public void postConstruct(){        
+        PropertyConfigurator.configure("c:/log4j.properties");
+        log.debug("Loaded log4j properties");        
+        log.debug("Starting timer service");
+        ts.createTimer(1000*10,1000*60*30);
     }
     
     

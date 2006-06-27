@@ -41,7 +41,7 @@ public abstract class DelegateCredential
         
         org.globus.myproxy.MyProxy proxy = new org.globus.myproxy.MyProxy( DataPortalConstants.MYPROXY_HOST, DataPortalConstants.MYPROXY_PORT );
         log.info("Connecting to "+DataPortalConstants.MYPROXY_HOST+":"+DataPortalConstants.MYPROXY_PORT); 
-        GSSCredential delegateUserProxy = proxy.get( DataPortalConstants.MYPROXY_HOST, DataPortalConstants.MYPROXY_PORT, portalProxy, username, userPassphrase, lifetime, DataPortalConstants.MYPROXY_DN );
+        GSSCredential delegateUserProxy = proxy.get( DataPortalConstants.MYPROXY_HOST, DataPortalConstants.MYPROXY_PORT, portalProxy, username, userPassphrase, lifetime *3600 /*turn into seconds*/, DataPortalConstants.MYPROXY_DN );
         log.info("Retrieved user proxy.");
         return delegateUserProxy;
     }

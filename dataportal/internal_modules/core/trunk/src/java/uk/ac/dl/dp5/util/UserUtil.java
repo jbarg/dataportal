@@ -34,6 +34,7 @@ import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
 
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
 
 /**
@@ -53,7 +54,7 @@ public class UserUtil {
     protected EntityManager em;
     
     /** Creates a new instance of SessionUtil */
-    public UserUtil(String sid, EntityManager em) throws SessionNotFoundException ,UserNotFoundException {
+    public UserUtil(String sid, EntityManager em) throws SessionNotFoundException ,UserNotFoundException,SessionTimedOutException {
         this.em = em;
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         user =  new SessionUtil(sid,em).getSession().getUserId();

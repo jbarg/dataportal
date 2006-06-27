@@ -17,6 +17,7 @@ import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
 
 import uk.ac.dl.dp5.exceptions.LoginMyProxyException;
+import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.sessionbeans.session.SessionBean;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -58,23 +59,23 @@ public class SessionDelegate {
         return  sb.login(username, password,lifetime);
     }
     
-    public boolean logout(String sid) throws SessionNotFoundException{
+    public boolean logout(String sid) throws SessionNotFoundException, SessionTimedOutException{
         return  sb.logout(sid);
     }
     
-    public boolean isValid(String sid) throws CertificateException, SessionNotFoundException{
+    public boolean isValid(String sid) throws  SessionNotFoundException,SessionTimedOutException{
         return  sb.isValid(sid);
     }
     
-    public SessionDTO getSession(String sid) throws SessionNotFoundException{
+    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException{
         return sb.getSession(sid);
     }
     
-    public void setUserPrefs(String sid, UserPreferencesDTO dto) throws  SessionNotFoundException, UserNotFoundException{
+    public void setUserPrefs(String sid, UserPreferencesDTO dto) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException{
         sb.setUserPrefs(sid, dto);
     }
     
-    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException{
+    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException{
         return sb.getUserPrefs(sid);
     }
     

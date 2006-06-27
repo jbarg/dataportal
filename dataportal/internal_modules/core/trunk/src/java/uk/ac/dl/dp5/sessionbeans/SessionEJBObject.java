@@ -25,8 +25,10 @@ import org.apache.log4j.PropertyConfigurator;
 public abstract class SessionEJBObject {
     
     static Logger log = Logger.getLogger(SessionEJBObject.class);
+         
+      
     
-                
+    
     @PersistenceContext(unitName="dataportal")
     protected EntityManager em;
     
@@ -51,8 +53,7 @@ public abstract class SessionEJBObject {
     @PostConstruct
     public void init(){        
         PropertyConfigurator.configure("c:/log4j.properties");
-        log.debug("Loaded log4j properties");        
-        
+        log.debug("Loaded log4j properties");               
     }
     
    
