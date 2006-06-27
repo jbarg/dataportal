@@ -665,6 +665,8 @@ CREATE TABLE  "SEQUENCE"
 	"SEQ_COUNT" NUMBER(15,0)
    );
 
+INSERT INTO SEQUENCE(SEQ_NAME, SEQ_COUNT) values ('SEQ_GEN', 0) ;
+
 insert into DP_ROLE values (1, 'USER',systimestamp);
 insert into DP_ROLE values (2, 'ADMIN',systimestamp);
 
