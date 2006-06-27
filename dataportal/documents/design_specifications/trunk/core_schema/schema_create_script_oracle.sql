@@ -683,6 +683,6 @@ insert into DP_EVENT values (5,'TRANSFER','User transfering event',systimestamp)
 insert into DP_CREDENTIAL_TYPE values (1,'PROXY','Normal proxy',systimestamp);
 insert into DP_CREDENTIAL_TYPE values (2,'CERTIFICATE','Certificate only, no private key',systimestamp);
 
-
+commit;
 
 
