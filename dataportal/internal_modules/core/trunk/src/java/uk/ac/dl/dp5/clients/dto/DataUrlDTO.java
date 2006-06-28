@@ -43,6 +43,7 @@ public class DataUrlDTO implements Serializable{
     }
     
     public DataUrlDTO(DataReference dref){
+        this.id = dref.getId().intValue();
         this.facility = dref.getFacility();
         this.query = dref.getQuery();
         this.note = dref.getNote();

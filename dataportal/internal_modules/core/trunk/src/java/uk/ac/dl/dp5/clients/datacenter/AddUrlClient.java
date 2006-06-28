@@ -1,6 +1,10 @@
 package uk.ac.dl.dp5.clients.datacenter;
+import java.util.ArrayList;
+import java.util.Collection;
 import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
 import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
+import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -20,6 +24,8 @@ import uk.ac.dl.dp5.util.DPUrlRefType;
  */
 public class AddUrlClient {
     String sid = "";
+    boolean loggingin = false;
+    SessionRemote sless1;
     /** Creates a new instance of BookmarkClient */
     public AddUrlClient() {
         try{
@@ -28,7 +34,8 @@ public class AddUrlClient {
             
             
             if(sid == null || sid.equals("")){
-                SessionRemote sless1 = (SessionRemote) csl.lookup("SessionEJB");
+                loggingin = true;
+                sless1 = (SessionRemote) csl.lookup("SessionEJB");
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);
@@ -36,22 +43,36 @@ public class AddUrlClient {
             
             DataCenterRemote sless = (DataCenterRemote) csl.lookup("DataCenterEJB");
             DataUrlDTO dto = new DataUrlDTO();
-            //dto.setId(759);
+             dto.setId(1757);
             
             dto.setTypeOfReference(DPUrlRefType.DATA_SET);
             dto.setTypeOfObject("txt");
             dto.setFacility("ISIS");
-            dto.setName("bookmark 3f");
-            dto.setNote("Silly note 3 ");
-            dto.setQuery("query 3f");
+            dto.setName("New Bookmark 4");
+            dto.setNote("note");
+            dto.setQuery("sql select");
+            Collection<String> cs = new ArrayList<String>();
+            cs.add("srb://www.test.com/moredata"+(int)(Math.random()*10000L));
+            dto.setUrl(cs);
             
             sless.addDataUrl(sid,dto);
+            
+            
             //
         }catch(Exception e){
             System.out.println(e.getMessage());
             if(e.getCause() instanceof java.sql.SQLException){
                 System.out.println("sql");
-            } else e.printStackTrace();            
+            } else e.printStackTrace();
+            
+            if(loggingin)
+                try {
+                    if(sless1 != null) sless1.logout(sid);
+                } catch (SessionTimedOutException ex) {
+                    ex.printStackTrace();
+                } catch (SessionNotFoundException ex) {
+                    ex.printStackTrace();
+                }
         }
     }
     

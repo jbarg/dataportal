@@ -3,7 +3,6 @@ package uk.ac.dl.dp5.sessionbeans.lookup;
 import java.util.Collection;
 import javax.ejb.Remote;
 import uk.ac.dl.dp5.clients.dto.FacilityDTO;
-import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.util.DPFacilityType;
 
 

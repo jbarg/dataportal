@@ -94,14 +94,26 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
     public void addDataUrl(String sid, DataUrlDTO dto) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addDataUrl()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(dto.getUrl() == null ) throw new IllegalArgumentException("Urls to add cannot be null.");
         
         User user = new UserUtil(sid,em).getUser();
         
         //TODO check the unique constraint
         
         DataReference dr = new DataReference();
+        
+        //if got id, then its an update, adding urls not allowed
         if(dto.getId() != 0){
             dr.setId(new BigDecimal(dto.getId()));
+        } else{
+            Collection<Url> dataUrls = new ArrayList<Url>();
+            for(String surl : dto.getUrl()){
+                Url url = new Url();
+                url.setModTime(new Date());
+                url.setUrl(surl);
+                dataUrls.add(url);
+            }
+            dr.setUrls(dataUrls);
         }
         dr.setFacility(dto.getFacility());
         dr.setName(dto.getName());
@@ -109,16 +121,8 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         dr.setQuery(dto.getQuery());
         dr.setTypeOfReference(dto.getTypeOfReference().toString());
         dr.setTypeOfObject(dto.getTypeOfObject());
-        dr.setModTime(new Date());
+        dr.setModTime(new Date());        
         
-        Collection<Url> dataUrls = new ArrayList<Url>();
-        for(String surl : dto.getUrl()){
-            Url url = new Url();
-            url.setModTime(new Date());
-            url.setUrl(surl);
-            dataUrls.add(url);
-        }
-        dr.setUrls(dataUrls);
         dr.setUserId(user);
         
         em.merge(dr);

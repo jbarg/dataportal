@@ -1,6 +1,5 @@
 package uk.ac.dl.dp5.sessionbeans.session;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
@@ -192,9 +191,8 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         em.remove(session);
         
         //send logout event
-        UserUtil  userutil = new UserUtil(session.getUserId(),em);
-        userutil.sendEventLog(DPEvent.LOG_OPF,"Logged off at "+new Date());
-        
+        new UserUtil(session.getUserId(),em).sendEventLog(DPEvent.LOG_OPF,"Logged off at "+new Date());
+                
         log.info("Ended session: "+sid);
         return true;
     }
