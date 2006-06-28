@@ -11,13 +11,13 @@ import uk.ac.dl.dp5.util.DPFacilityType;
  */
 @Local
 public interface LookupLocal {
-     Object mergeEntity(Object entity);
-
+    Object mergeEntity(Object entity);
+    
     Object persistEntity(Object entity);
-
+    
     Object refreshEntity(Object entity);
-
+    
     void removeEntity(Object entity);
     
-     public Collection<FacilityDTO> getFacilities(DPFacilityType type);
+    public Collection<FacilityDTO> getFacilities(DPFacilityType type);
 }
