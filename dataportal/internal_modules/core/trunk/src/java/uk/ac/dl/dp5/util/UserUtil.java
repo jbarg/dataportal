@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.util.Collection;
-import java.util.Date;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
@@ -180,7 +179,7 @@ public class UserUtil {
      private static DpUserPreference getDefaultUserPreferences(EntityManager em) {
         DpUserPreference prefs = new DpUserPreference();
         
-        Collection<Facility> facilities =  (Collection<Facility>)  em.createQuery("select f from Facility f").getResultList();
+        Collection<Facility> facilities =  (Collection<Facility>)  em.createNamedQuery("Facility.findAll").getResultList();
         prefs.setDefaultFacility(facilities.iterator().next().getShortName());
         
         
@@ -188,7 +187,7 @@ public class UserUtil {
         prefs.setResolution(DPResolution.res_1024x768.toString());
         
         //get the myproxy
-        Collection<ProxyServers> proxyservers =  (Collection<ProxyServers>)  em.createQuery("select p from ProxyServers p").getResultList();
+        Collection<ProxyServers> proxyservers =  (Collection<ProxyServers>)  em.createNamedQuery("ProxyServers.findAll").getResultList();
         prefs.setProxyServerId(proxyservers.iterator().next());
         
         log.debug("User proxyserver is "+proxyservers.iterator().next().getId()+" with address: "+proxyservers.iterator().next().getProxyServerAddress());
@@ -206,7 +205,7 @@ public class UserUtil {
         
         try {
             CachingServiceLocator csl =  CachingServiceLocator.getInstance();
-            mdbQueue  = csl.lookupQueue("MDBQueue");
+            mdbQueue  = csl.lookupQueue("jms/MDBQueue");
             QueueConnectionFactory queueCF =
                     (QueueConnectionFactory) csl.lookup("MDBQueueConnectionFactory");
             

@@ -37,7 +37,16 @@ import uk.ac.dl.dp5.util.DPUrlRefType;
  */
 @Entity
 @Table(name = "DP_DATA_REFERENCE")
-@NamedQueries( {@NamedQuery(name = "DataReference.findById", query = "SELECT d FROM DataReference d WHERE d.id = :id"), @NamedQuery(name = "DataReference.findByName", query = "SELECT d FROM DataReference d WHERE d.name = :name"), @NamedQuery(name = "DataReference.findByNote", query = "SELECT d FROM DataReference d WHERE d.note = :note"), @NamedQuery(name = "DataReference.findByFacility", query = "SELECT d FROM DataReference d WHERE d.facility = :facility"), @NamedQuery(name = "DataReference.findByQuery", query = "SELECT d FROM DataReference d WHERE d.query = :query"), @NamedQuery(name = "DataReference.findByTypeOfReference", query = "SELECT d FROM DataReference d WHERE d.typeOfReference = :typeOfReference"), @NamedQuery(name = "DataReference.findByTypeOfObject", query = "SELECT d FROM DataReference d WHERE d.typeOfObject = :typeOfObject"), @NamedQuery(name = "DataReference.findByModTime", query = "SELECT d FROM DataReference d WHERE d.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "DataReference.findById", query = "SELECT d FROM DataReference d WHERE d.id = :id"), 
+    @NamedQuery(name = "DataReference.findByName", query = "SELECT d FROM DataReference d WHERE d.name = :name"), 
+    @NamedQuery(name = "DataReference.findByNote", query = "SELECT d FROM DataReference d WHERE d.note = :note"), 
+    @NamedQuery(name = "DataReference.findByFacility", query = "SELECT d FROM DataReference d WHERE d.facility = :facility"), 
+    @NamedQuery(name = "DataReference.findByQuery", query = "SELECT d FROM DataReference d WHERE d.query = :query"), 
+    @NamedQuery(name = "DataReference.findByTypeOfReference", query = "SELECT d FROM DataReference d WHERE d.typeOfReference = :typeOfReference"), 
+    @NamedQuery(name = "DataReference.findByTypeOfObject", query = "SELECT d FROM DataReference d WHERE d.typeOfObject = :typeOfObject"), 
+    @NamedQuery(name = "DataReference.findByModTime", query = "SELECT d FROM DataReference d WHERE d.modTime = :modTime")}
+)
 public class DataReference implements Serializable {
 
     @Id

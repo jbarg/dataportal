@@ -32,7 +32,11 @@ import uk.ac.dl.dp5.util.DPRole;
  */
 @Entity
 @Table(name = "DP_ROLE")
-@NamedQueries( {@NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"), @NamedQuery(name = "Role.findByName", query = "SELECT r FROM Role r WHERE r.name = :name"), @NamedQuery(name = "Role.findByModTime", query = "SELECT r FROM Role r WHERE r.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"), 
+    @NamedQuery(name = "Role.findByName", query = "SELECT r FROM Role r WHERE r.name = :name"), 
+    @NamedQuery(name = "Role.findByModTime", query = "SELECT r FROM Role r WHERE r.modTime = :modTime")}
+)
 public class Role implements Serializable {
 
     @Id

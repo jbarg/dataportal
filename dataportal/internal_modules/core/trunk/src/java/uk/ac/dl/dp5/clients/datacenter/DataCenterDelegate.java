@@ -18,7 +18,6 @@ import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
 
 import uk.ac.dl.dp5.exceptions.LoginMyProxyException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp5.exceptions.UniqueConstraintException;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -58,11 +57,11 @@ public class DataCenterDelegate {
     /*All DataCenterBean methods here*/
     
     
-    public Collection<BookmarkDTO> addBookmark(String sid, BookmarkDTO dto) throws UniqueConstraintException, UserNotFoundException,SessionTimedOutException, SessionNotFoundException{
+    public Collection<BookmarkDTO> addBookmark(String sid, BookmarkDTO dto) throws  UserNotFoundException,SessionTimedOutException, SessionNotFoundException{
         return dcr.addBookmark(sid,dto);
     }
     
-     public Collection<BookmarkDTO> addBookmark(String sid, Collection<BookmarkDTO> dto) throws UniqueConstraintException, UserNotFoundException,SessionTimedOutException, SessionNotFoundException{
+     public Collection<BookmarkDTO> addBookmark(String sid, Collection<BookmarkDTO> dto) throws  UserNotFoundException,SessionTimedOutException, SessionNotFoundException{
         return dcr.addBookmark(sid,dto);
     }
     

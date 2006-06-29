@@ -27,7 +27,7 @@ import uk.ac.dl.dp5.util.UserUtil;
  *
  * @author gjd37
  */
-@MessageDriven(mappedName="MDBQueue")
+@MessageDriven(mappedName="jms/MDBQueue")
 public class EventMessageBean extends SessionEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(EventMessageBean.class);

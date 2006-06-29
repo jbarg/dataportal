@@ -24,11 +24,8 @@ import org.apache.log4j.PropertyConfigurator;
  */
 public abstract class SessionEJBObject {
     
-    static Logger log = Logger.getLogger(SessionEJBObject.class);
-         
-      
-    
-    
+    static Logger log = Logger.getLogger(SessionEJBObject.class);         
+              
     @PersistenceContext(unitName="dataportal")
     protected EntityManager em;
     

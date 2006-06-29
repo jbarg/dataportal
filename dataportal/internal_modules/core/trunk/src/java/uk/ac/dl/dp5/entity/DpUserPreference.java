@@ -34,7 +34,14 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_USER_PREFERENCE")
-@NamedQueries( {@NamedQuery(name = "DpUserPreference.findById", query = "SELECT d FROM DpUserPreference d WHERE d.id = :id"), @NamedQuery(name = "DpUserPreference.findByResultsPerPage", query = "SELECT d FROM DpUserPreference d WHERE d.resultsPerPage = :resultsPerPage"), @NamedQuery(name = "DpUserPreference.findByDefaultFacility", query = "SELECT d FROM DpUserPreference d WHERE d.defaultFacility = :defaultFacility"), @NamedQuery(name = "DpUserPreference.findByResolution", query = "SELECT d FROM DpUserPreference d WHERE d.resolution = :resolution"), @NamedQuery(name = "DpUserPreference.findByModTime", query = "SELECT d FROM DpUserPreference d WHERE d.modTime = :modTime"),@NamedQuery(name = "DpUserPreference.findByUserId", query = "SELECT d FROM DpUserPreference d WHERE d.userId = :userId")})
+@NamedQueries( {
+    @NamedQuery(name = "DpUserPreference.findById", query = "SELECT d FROM DpUserPreference d WHERE d.id = :id"), 
+    @NamedQuery(name = "DpUserPreference.findByResultsPerPage", query = "SELECT d FROM DpUserPreference d WHERE d.resultsPerPage = :resultsPerPage"), 
+    @NamedQuery(name = "DpUserPreference.findByDefaultFacility", query = "SELECT d FROM DpUserPreference d WHERE d.defaultFacility = :defaultFacility"), 
+    @NamedQuery(name = "DpUserPreference.findByResolution", query = "SELECT d FROM DpUserPreference d WHERE d.resolution = :resolution"),
+    @NamedQuery(name = "DpUserPreference.findByModTime", query = "SELECT d FROM DpUserPreference d WHERE d.modTime = :modTime"),
+    @NamedQuery(name = "DpUserPreference.findByUserId", query = "SELECT d FROM DpUserPreference d WHERE d.userId = :userId")}
+)
 public class DpUserPreference implements Serializable {
 
     @Id

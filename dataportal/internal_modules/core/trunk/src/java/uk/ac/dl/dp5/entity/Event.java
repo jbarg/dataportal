@@ -32,7 +32,12 @@ import uk.ac.dl.dp5.util.DPEvent;
  */
 @Entity
 @Table(name = "DP_EVENT")
-@NamedQueries( {@NamedQuery(name = "Event.findById", query = "SELECT e FROM Event e WHERE e.id = :id"), @NamedQuery(name = "Event.findByEventName", query = "SELECT e FROM Event e WHERE e.eventName = :eventName"), @NamedQuery(name = "Event.findByEventDetails", query = "SELECT e FROM Event e WHERE e.eventDetails = :eventDetails"), @NamedQuery(name = "Event.findByModTime", query = "SELECT e FROM Event e WHERE e.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "Event.findById", query = "SELECT e FROM Event e WHERE e.id = :id"), 
+    @NamedQuery(name = "Event.findByEventName", query = "SELECT e FROM Event e WHERE e.eventName = :eventName"), 
+    @NamedQuery(name = "Event.findByEventDetails", query = "SELECT e FROM Event e WHERE e.eventDetails = :eventDetails"), 
+    @NamedQuery(name = "Event.findByModTime", query = "SELECT e FROM Event e WHERE e.modTime = :modTime")}
+)
 public class Event implements Serializable {
 
     @Id    

@@ -13,7 +13,7 @@ package uk.ac.dl.dp5.exceptions;
  *
  * @author gjd37
  */
-public class CannotCreateNewUserException extends java.lang.Exception {
+public class CannotCreateNewUserException extends DataPortalException {
     
     /**
      * Creates a new instance of <code>CannotCreateNewUserException</code> without detail message.

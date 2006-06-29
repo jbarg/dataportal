@@ -33,7 +33,17 @@ import uk.ac.dl.dp5.util.DPFacilityType;
  */
 @Entity
 @Table(name = "DP_MODULE_LOOKUP")
-@NamedQueries( {@NamedQuery(name = "ModuleLookup.findById", query = "SELECT m FROM ModuleLookup m WHERE m.id = :id"), @NamedQuery(name = "ModuleLookup.findByConnection", query = "SELECT m FROM ModuleLookup m WHERE m.connection = :connection"), @NamedQuery(name = "ModuleLookup.findByUsername", query = "SELECT m FROM ModuleLookup m WHERE m.username = :username"), @NamedQuery(name = "ModuleLookup.findByPassword", query = "SELECT m FROM ModuleLookup m WHERE m.password = :password"), @NamedQuery(name = "ModuleLookup.findByPlatform", query = "SELECT m FROM ModuleLookup m WHERE m.platform = :platform"), @NamedQuery(name = "ModuleLookup.findByModuleType", query = "SELECT m FROM ModuleLookup m WHERE m.moduleType = :moduleType"), @NamedQuery(name = "ModuleLookup.findByFacility", query = "SELECT m FROM ModuleLookup m WHERE m.facility = :facility"), @NamedQuery(name = "ModuleLookup.findByActive", query = "SELECT m FROM ModuleLookup m WHERE m.active = :active"), @NamedQuery(name = "ModuleLookup.findByModTime", query = "SELECT m FROM ModuleLookup m WHERE m.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "ModuleLookup.findById", query = "SELECT m FROM ModuleLookup m WHERE m.id = :id"), 
+    @NamedQuery(name = "ModuleLookup.findByConnection", query = "SELECT m FROM ModuleLookup m WHERE m.connection = :connection"), 
+    @NamedQuery(name = "ModuleLookup.findByUsername", query = "SELECT m FROM ModuleLookup m WHERE m.username = :username"), 
+    @NamedQuery(name = "ModuleLookup.findByPassword", query = "SELECT m FROM ModuleLookup m WHERE m.password = :password"), 
+    @NamedQuery(name = "ModuleLookup.findByPlatform", query = "SELECT m FROM ModuleLookup m WHERE m.platform = :platform"), 
+    @NamedQuery(name = "ModuleLookup.findByModuleType", query = "SELECT m FROM ModuleLookup m WHERE m.moduleType = :moduleType"), 
+    @NamedQuery(name = "ModuleLookup.findByFacility", query = "SELECT m FROM ModuleLookup m WHERE m.facility = :facility"), 
+    @NamedQuery(name = "ModuleLookup.findByActive", query = "SELECT m FROM ModuleLookup m WHERE m.active = :active"), 
+    @NamedQuery(name = "ModuleLookup.findByModTime", query = "SELECT m FROM ModuleLookup m WHERE m.modTime = :modTime")}
+)
 public class ModuleLookup implements Serializable {
 
     @Id

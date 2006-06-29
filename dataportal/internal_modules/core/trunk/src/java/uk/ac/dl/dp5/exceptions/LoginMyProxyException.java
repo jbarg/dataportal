@@ -17,7 +17,7 @@ import org.globus.myproxy.MyProxyException;
  *
  * @author gjd37
  */
-public class LoginMyProxyException extends java.lang.Exception {
+public class LoginMyProxyException extends DataPortalException {
     
     static Logger log = Logger.getLogger(LoginMyProxyException.class);
     

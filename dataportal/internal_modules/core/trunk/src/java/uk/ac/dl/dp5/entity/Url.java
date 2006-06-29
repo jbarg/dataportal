@@ -30,7 +30,11 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_URL")
-@NamedQueries( {@NamedQuery(name = "Url.findById", query = "SELECT u FROM Url u WHERE u.id = :id"), @NamedQuery(name = "Url.findByUrl", query = "SELECT u FROM Url u WHERE u.url = :url"), @NamedQuery(name = "Url.findByModTime", query = "SELECT u FROM Url u WHERE u.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "Url.findById", query = "SELECT u FROM Url u WHERE u.id = :id"), 
+    @NamedQuery(name = "Url.findByUrl", query = "SELECT u FROM Url u WHERE u.url = :url"), 
+    @NamedQuery(name = "Url.findByModTime", query = "SELECT u FROM Url u WHERE u.modTime = :modTime")}
+)
 public class Url implements Serializable {
 
     @Id
