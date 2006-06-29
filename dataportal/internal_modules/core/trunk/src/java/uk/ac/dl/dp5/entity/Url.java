@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,6 +44,11 @@ public class Url implements Serializable {
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
+    
+    @PrePersist
+    public void prePersist(){
+        modTime = new Date();
+    }
     
     /** Creates a new instance of Url */
     public Url() {
@@ -78,9 +84,9 @@ public class Url implements Serializable {
         return this.modTime;
     }
 
-    public void setModTime(Date modTime) {
+   /* public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
+    }*/
 
     public int hashCode() {
         int hash = 0;

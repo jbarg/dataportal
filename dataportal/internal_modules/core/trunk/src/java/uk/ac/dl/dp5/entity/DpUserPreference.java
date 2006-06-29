@@ -27,6 +27,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -68,6 +69,11 @@ public class DpUserPreference implements Serializable {
     @OneToOne
     @Basic(fetch=FetchType.LAZY)
     private User userId;
+    
+    @PrePersist
+    public void prePersist(){
+        modTime = new Date();
+    }
     
     /** Creates a new instance of DpUserPreference */
     public DpUserPreference() {

@@ -21,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,6 +53,11 @@ public class EventLog implements Serializable {
     @JoinColumn(name = "USER_ID")
     @ManyToOne
     private uk.ac.dl.dp5.entity.User userId;
+    
+    @PrePersist
+    public void prePersist(){
+        modTime = new Date();
+    }
     
     /** Creates a new instance of EventLog */
     public EventLog() {
@@ -94,9 +100,9 @@ public class EventLog implements Serializable {
         return this.modTime;
     }
 
-    public void setModTime(Date modTime) {
+    /*public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
+    }*/
 
     public uk.ac.dl.dp5.entity.User getUserId() {
         return this.userId;

@@ -1,6 +1,8 @@
 package uk.ac.dl.dp5.clients.datacenter;
 import java.util.Collection;
 import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
+import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -19,6 +21,7 @@ import uk.ac.dl.dp5.util.CachingServiceLocator;
  */
 public class GetBookmarksClient {
     String sid = "";
+    SessionRemote sless1 = null;
     /** Creates a new instance of BookmarkClient */
     public GetBookmarksClient() {
         try{
@@ -26,7 +29,7 @@ public class GetBookmarksClient {
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
             
             if(sid == null || sid.equals("")){
-                SessionRemote sless1 = (SessionRemote) csl.lookup("SessionEJB");
+                 sless1 = (SessionRemote) csl.lookup("SessionEJB");
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);
@@ -35,16 +38,21 @@ public class GetBookmarksClient {
             
             
             Collection<BookmarkDTO> dto =  sless.getBookmarks(sid);
-            
+            int idremove = 0;
             for(BookmarkDTO dtos : dto){
                 System.out.println("-----------------");
+                System.out.println(dtos.getId());
                 System.out.println(dtos.getFacility());
                 System.out.println(dtos.getName());
                 System.out.println(dtos.getNote());
                 System.out.println(dtos.getQuery());
                 System.out.println(dtos.getQuery());
                 System.out.println("-----------------\n");
+                idremove = dtos.getId();
             }
+            dto.remove(dto.iterator().next());
+            dto.remove(dto.iterator().next());
+            sless.removeBookmark(sid,dto);
             //
         }catch(Exception e){
             
@@ -52,6 +60,16 @@ public class GetBookmarksClient {
                 System.out.println("sql");
             }   
             else e.printStackTrace();
+        } finally {
+            System.out.println("Logging out");
+            try {
+                sless1.logout(sid);
+            } catch (SessionNotFoundException ex) {
+                ex.printStackTrace();
+            } catch (SessionTimedOutException ex) {
+                ex.printStackTrace();
+            }
+            
         }
     }
     

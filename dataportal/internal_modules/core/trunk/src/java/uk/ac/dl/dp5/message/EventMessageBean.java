@@ -72,7 +72,6 @@ public class EventMessageBean extends SessionEJBObject implements MessageListene
         //Event event = (Event) em.createNamedQuery("Event.findByEventName").setParameter(":eventName",eventType).getSingleResult();
         
         EventLog eventlog = new EventLog();
-        eventlog.setModTime(sent);
         eventlog.setUserId(user);
         eventlog.setEvent(eventType);
         eventlog.setDetails(description);

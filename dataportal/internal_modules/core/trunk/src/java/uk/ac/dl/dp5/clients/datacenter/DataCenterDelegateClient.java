@@ -62,7 +62,10 @@ public class DataCenterDelegateClient {
             dto.setNote("Silly ");
             dto.setQuery("Query ");
             
-            dd.addBookmark(sid,dto);
+            Collection<BookmarkDTO> notadded =   dd.addBookmark(sid,dto);
+            for(BookmarkDTO dto1 : notadded){
+                System.out.println("Not added: "+dto1.getStudyid());
+            }
             printTime("Adding bookmark");
             
             //addUrl

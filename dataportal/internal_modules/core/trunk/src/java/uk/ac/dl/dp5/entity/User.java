@@ -27,6 +27,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,22 +53,22 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "userId",fetch=FetchType.LAZY)
     private java.util.Collection <uk.ac.dl.dp5.entity.EventLog> eventLog;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")   
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId",fetch=FetchType.LAZY)   
     private java.util.Collection <uk.ac.dl.dp5.entity.Bookmark> bookmark;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")   
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId",fetch=FetchType.LAZY)   
     private java.util.Collection <uk.ac.dl.dp5.entity.Session> session;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")   
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId",fetch=FetchType.LAZY)   
     private java.util.Collection <uk.ac.dl.dp5.entity.DataReference> dataReference;
 
     @OneToOne(mappedBy = "userId")    
     private uk.ac.dl.dp5.entity.DpUserPreference dpUserPreference;
     
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="DP_USER_ROLE",
         joinColumns=
             @JoinColumn(name="USER_ID", referencedColumnName="ID"),
@@ -76,20 +77,29 @@ public class User implements Serializable {
         )
     private java.util.Collection <uk.ac.dl.dp5.entity.Role> roles;
   
-        
+     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",fetch=FetchType.LAZY)
+    private java.util.Collection <DataRefAuthorisation> DataRefAuthorisation;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "source_user",fetch=FetchType.LAZY)
+    private java.util.Collection <DataRefAuthorisation> DataRefAuthorisationSource;
+       
+    @PrePersist
+    public void prePersist(){
+        modTime = new Date();
+    }
+    
     /** Creates a new instance of User */
     public User() {
     }
 
     public User(BigDecimal id) {
-        this.id = id;
+        this.setId(id);
     }
 
-    public User(BigDecimal id, String dn, Date modTime) {
-        this.id = id;
-        this.dn = dn;
-        this.modTime = modTime;
-    }
+    public User(BigDecimal id, String dn) {
+        this.setId(id);
+        this.setDn(dn);
+         }
 
     public BigDecimal getId() {
         return this.id;
@@ -111,9 +121,9 @@ public class User implements Serializable {
         return this.modTime;
     }
 
-    public void setModTime(Date modTime) {
+   /* public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
+    }*/
 
     public java.util.Collection <uk.ac.dl.dp5.entity.EventLog> getEventLog() {
         return this.eventLog;
@@ -157,7 +167,7 @@ public class User implements Serializable {
 
     public int hashCode() {
         int hash = 0;
-        hash += (this.id != null ? this.id.hashCode() : 0);
+        hash += (this.getId() != null ? this.getId().hashCode() : 0);
         return hash;
     }
 
@@ -166,13 +176,13 @@ public class User implements Serializable {
             return false;
         }
         User other = (User)object;
-        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) return false;
+        if (this.getId() != other.getId() && (this.getId() == null || !this.getId().equals(other.getId()))) return false;
         return true;
     }
 
     public String toString() {
         //TODO change toString() implementation to return a better display name
-        return "" + this.id;
+        return "" + this.getId();
     }
 
     public java.util.Collection<uk.ac.dl.dp5.entity.Role> getRoles() {
@@ -182,5 +192,21 @@ public class User implements Serializable {
     public void setRoles(java.util.Collection<uk.ac.dl.dp5.entity.Role> roles) {
         this.roles = roles;
     }
+    
+     public java.util.Collection <DataRefAuthorisation> getDataRefAuthorisation() {
+        return this.DataRefAuthorisation;
+    }
+
+    public void setDataRefAuthorisation(java.util.Collection <DataRefAuthorisation> DataRefAuthorisation) {
+        this.DataRefAuthorisation = DataRefAuthorisation;
+    }
+
+    public java.util.Collection<DataRefAuthorisation> getDataRefAuthorisationSource() {
+        return DataRefAuthorisationSource;
+    }
+
+    public void setDataRefAuthorisationSource(java.util.Collection<DataRefAuthorisation> DataRefAuthorisationSource) {
+        this.DataRefAuthorisationSource = DataRefAuthorisationSource;
+    }    
     
 }

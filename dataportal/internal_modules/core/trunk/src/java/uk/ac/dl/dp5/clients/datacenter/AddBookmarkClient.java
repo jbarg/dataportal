@@ -1,4 +1,5 @@
 package uk.ac.dl.dp5.clients.datacenter;
+import java.util.Collection;
 import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
@@ -35,13 +36,16 @@ public class AddBookmarkClient {
             DataCenterRemote sless = (DataCenterRemote) csl.lookup("DataCenterEJB");
             BookmarkDTO dto = new BookmarkDTO();
             //dto.setId(759);
-            dto.setStudyid(421);
+            dto.setStudyid(454545654);
             dto.setFacility("ISIS");
-            dto.setName("bookmark 3f");
-            dto.setNote("Silly note 3 ");
-            dto.setQuery("query 3f");
+            dto.setName("BB");
+            dto.setNote("SS");
+            dto.setQuery("QQ");
             
-            sless.addBookmark(sid,dto);
+           Collection<BookmarkDTO> notadded =   sless.addBookmark(sid,dto);
+           for(BookmarkDTO dto1 : notadded){
+               System.out.println("Not added: "+dto1.getStudyid());
+           }
             //
         }catch(Exception e){
             System.out.println(e.getMessage());

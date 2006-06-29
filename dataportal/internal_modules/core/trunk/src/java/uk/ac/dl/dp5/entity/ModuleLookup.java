@@ -21,6 +21,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -65,6 +66,11 @@ public class ModuleLookup implements Serializable {
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
+    
+    @PrePersist
+    public void prePersist(){
+        modTime = new Date();
+    }
     
     /** Creates a new instance of ModuleLookup */
     public ModuleLookup() {
