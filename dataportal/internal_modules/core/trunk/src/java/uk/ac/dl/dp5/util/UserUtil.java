@@ -187,7 +187,6 @@ public class UserUtil {
         prefs.setResultsPerPage(new BigInteger(""+20));
         prefs.setResolution(DPResolution.res_1024x768.toString());
         
-        prefs.setModTime(new Date());
         //get the myproxy
         Collection<ProxyServers> proxyservers =  (Collection<ProxyServers>)  em.createQuery("select p from ProxyServers p").getResultList();
         prefs.setProxyServerId(proxyservers.iterator().next());

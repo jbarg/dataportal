@@ -143,8 +143,7 @@ public class DataUrlDTO implements Serializable{
         dr.setQuery(getQuery());
         dr.setTypeOfReference(getTypeOfReference().toString());
         dr.setTypeOfObject(getTypeOfObject());
-        dr.setModTime(new Date());
-        return dr;
+         return dr;
     }
     
 }
