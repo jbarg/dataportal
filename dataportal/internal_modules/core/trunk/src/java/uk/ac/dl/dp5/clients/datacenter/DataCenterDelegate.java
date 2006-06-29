@@ -58,8 +58,12 @@ public class DataCenterDelegate {
     /*All DataCenterBean methods here*/
     
     
-    public void addBookmark(String sid, BookmarkDTO dto) throws UniqueConstraintException, UserNotFoundException,SessionTimedOutException, SessionNotFoundException{
-        dcr.addBookmark(sid,dto);
+    public Collection<BookmarkDTO> addBookmark(String sid, BookmarkDTO dto) throws UniqueConstraintException, UserNotFoundException,SessionTimedOutException, SessionNotFoundException{
+        return dcr.addBookmark(sid,dto);
+    }
+    
+     public Collection<BookmarkDTO> addBookmark(String sid, Collection<BookmarkDTO> dto) throws UniqueConstraintException, UserNotFoundException,SessionTimedOutException, SessionNotFoundException{
+        return dcr.addBookmark(sid,dto);
     }
     
     public Collection<BookmarkDTO> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{

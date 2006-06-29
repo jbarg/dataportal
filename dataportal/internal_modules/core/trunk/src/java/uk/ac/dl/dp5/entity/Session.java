@@ -25,6 +25,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -64,8 +65,12 @@ public class Session implements Serializable {
 
     @JoinColumn(name = "USER_ID")
     @ManyToOne
-    @Basic(fetch=FetchType.LAZY)    
     private User userId;
+     
+    @PrePersist
+    public void prePersist(){
+        modTime = new Date();
+    }
     
     /** Creates a new instance of Session */
     public Session() {
@@ -126,9 +131,9 @@ public class Session implements Serializable {
         return this.modTime;
     }
 
-    public void setModTime(Date modTime) {
+   /* public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
+    }*/
 
     public User getUserId() {
         return this.userId;

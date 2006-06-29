@@ -25,6 +25,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -79,6 +80,11 @@ public class DataReference implements Serializable {
             @JoinColumn(name="URL_ID", referencedColumnName="ID")
         )
     private java.util.Collection <uk.ac.dl.dp5.entity.Url> urls;
+    
+    @PrePersist
+    public void prePersist(){
+        modTime = new Date();
+    }
     
     /** Creates a new instance of DataReference */
     public DataReference() {

@@ -70,8 +70,8 @@ public class UserUtil {
         }*/
     }
     
-    /** Creates a new instance of SessionUtil */
-    public UserUtil(Certificate certificate, EntityManager em) throws CertificateException, UserNotFoundException {
+    /** Creates a new instance of UserUtil */
+    public UserUtil(Certificate certificate, EntityManager em) throws UserNotFoundException, CertificateException {
         this.em = em;
         if(certificate == null) throw new IllegalArgumentException("Certificate cannot be null.");
         String DN = certificate.getDName();
@@ -85,7 +85,22 @@ public class UserUtil {
         }
     }
     
-    /** Creates a new instance of SessionUtil */
+    /** Creates a new instance of UserUtil */
+    public UserUtil(EntityManager em, String DN) throws UserNotFoundException {
+        this.em = em;
+        if(DN == null) throw new IllegalArgumentException("DN cannot be null.");        
+        log.debug("Loading user with DN "+DN);
+        try {
+            loadUser(DN);
+        } catch(javax.persistence.NoResultException nre){
+            throw new UserNotFoundException("No user associated with DN: "+DN);
+        } catch(EntityNotFoundException enfe){
+            throw new UserNotFoundException("No user associated with DN: "+DN);
+        }
+    }
+    
+    
+    /** Creates a new instance of UserUtil */
     public UserUtil(int userId, EntityManager em) throws UserNotFoundException {
         this.em = em;
         if(userId == 0) throw new IllegalArgumentException("User ID cannot be 0.");
@@ -136,8 +151,7 @@ public class UserUtil {
             user = new User();
             
             user.setDn(DN);
-            user.setModTime(new Date());       
-            
+             
             //set up default role
             Collection<Role> roles = (Collection<Role>) em.createNamedQuery("Role.findByName").setParameter("name",DPRole.USER).getResultList();
             log.debug("Default roles found for user are  "+roles.iterator().next().getName());

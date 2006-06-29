@@ -10,22 +10,24 @@
 package uk.ac.dl.dp5.sessionbeans.datacenter;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
 import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
 import uk.ac.dl.dp5.entity.Bookmark;
 import uk.ac.dl.dp5.entity.DataReference;
-import uk.ac.dl.dp5.entity.Url;
 import uk.ac.dl.dp5.entity.User;
+import uk.ac.dl.dp5.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.UserUtil;
+
 /**
  *
  * @author gjd37
@@ -35,41 +37,40 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
     
     static Logger log = Logger.getLogger(DataCenterBean.class);
     
-    public void addBookmark(String sid, BookmarkDTO dto) throws UniqueConstraintException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<BookmarkDTO> addBookmark(String sid, BookmarkDTO dto) throws  SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        Collection<BookmarkDTO> dtos = new ArrayList<BookmarkDTO>();
+        dtos.add(dto);
+        return addBookmark(sid, dtos );
+    }
+    
+    
+    public Collection<BookmarkDTO> addBookmark(String sid, Collection<BookmarkDTO> dtos) throws  SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addBookmark()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        
         User user = new UserUtil(sid,em).getUser();
-        try {
-            
-            //has user got this in table
-            em.createNamedQuery("Bookmark.findByStudyIdFacility").setParameter("studyId",dto.getStudyid()).setParameter("facility",dto.getFacility()).getSingleResult();
-        } catch(NoResultException nre){
-            
-            //user no0t go it in, so put it in
-            Bookmark bookmark = new Bookmark();
-            
-            if(dto.getId() != 0){
-                bookmark.setId(new BigDecimal(dto.getId()));
-            }
-            
-            bookmark.setStudyId(new BigDecimal(dto.getStudyid()));
-            bookmark.setFacility(dto.getFacility());
-            bookmark.setName(dto.getName());
-            bookmark.setNote(dto.getNote());
-            bookmark.setUserId(user);
-            bookmark.setModTime(new Date());
-            bookmark.setQuery(dto.getQuery());
-            
-            try {
+        
+        Collection<BookmarkDTO> uce = new ArrayList<BookmarkDTO>();
+        for(BookmarkDTO dto : dtos){
+            try{
+                Bookmark  bookmark = dto.toBookmark();
+                bookmark.setUserId(user);
                 em.merge(bookmark);
-            } catch(Throwable e){
-                log.debug("Error: "+e.getMessage(),e);
+                em.flush();
+            } catch(PersistenceException e){
+                log.debug("eerorr "+e.getCause().getClass(),e);
+                if(e.getCause().getCause() instanceof SQLException){
+                    //unique constraint error //Oracel Only??
+                    SQLException sql = (SQLException)e.getCause().getCause();
+                    log.error("Unable to add bookmark to db.  Error code: "+sql.getErrorCode(),e);
+                    if(sql.getErrorCode() == 1 ){
+                        uce.add(dto);
+                    }
+                } else throw e;
             }
-            return ;
         }
         
-        throw new UniqueConstraintException("User already has studyId: "+dto.getStudyid());
-        
+        return uce;
         
     }
     
@@ -78,9 +79,10 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         User user = new UserUtil(sid,em).getUser();
-        
         Collection<Bookmark> bookmarks  = user.getBookmark();
+        
         log.debug("User had "+bookmarks.size()+" number of bookmarks");
+        
         Collection<BookmarkDTO> dto = new  ArrayList<BookmarkDTO>();
         
         for(Bookmark bm : bookmarks){
@@ -90,42 +92,71 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         return dto;
     }
     
+    public void removeBookmark(String sid, Collection<BookmarkDTO> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        log.debug("removeBookmark()");
+        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        
+        User user = new UserUtil(sid,em).getUser();        
+         
+        for(BookmarkDTO bm : dtos){
+            //security, check if users bookmark
+            Bookmark foundBookmark = em.find(Bookmark.class,new BigDecimal(bm.getId()));
+            if(foundBookmark.getUserId().getId().intValue() == user.getId().intValue()) em.remove(foundBookmark);
+            else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+bm.getId()+" denied for user "+user.getDn());
+        }
+    }
     
-    public void addDataUrl(String sid, DataUrlDTO dto) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<DataUrlDTO> addDataUrl(String sid, DataUrlDTO dto) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        Collection<DataUrlDTO> dtos = new ArrayList<DataUrlDTO>();
+        dtos.add(dto);
+        return addDataUrl(sid, dtos );
+    }
+    
+    public Collection<DataUrlDTO> addDataUrl(String sid, Collection<DataUrlDTO> dtos) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addDataUrl()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        if(dto.getUrl() == null ) throw new IllegalArgumentException("Urls to add cannot be null.");
+        for(DataUrlDTO dto: dtos){
+            if(dto.getUrl() == null ) throw new IllegalArgumentException("Urls to add cannot be null");
+        }
         
         User user = new UserUtil(sid,em).getUser();
         
-        //TODO check the unique constraint
+        Collection<DataUrlDTO> uce = new ArrayList<DataUrlDTO>();
         
-        DataReference dr = new DataReference();
-        
-        //if got id, then its an update, adding urls not allowed
-        if(dto.getId() != 0){
-            dr.setId(new BigDecimal(dto.getId()));
-        } else{
-            Collection<Url> dataUrls = new ArrayList<Url>();
-            for(String surl : dto.getUrl()){
-                Url url = new Url();
-                url.setModTime(new Date());
-                url.setUrl(surl);
-                dataUrls.add(url);
+        for(DataUrlDTO dto: dtos){
+            try{
+                DataReference dr = dto.toDataReference();
+                dr.setUserId(user);
+                em.merge(dr);
+                em.flush();
+            } catch(PersistenceException e){
+                log.debug("eerorr "+e.getCause().getClass(),e);
+                if(e.getCause().getCause() instanceof SQLException){
+                    //unique constraint error //Oracle Only??
+                    SQLException sql = (SQLException)e.getCause().getCause();
+                    log.error("Unable to add bookmark to db.  Error code: "+sql.getErrorCode(),e);
+                    if(sql.getErrorCode() == 1 ){
+                        uce.add(dto);
+                    }
+                } else throw e;
             }
-            dr.setUrls(dataUrls);
         }
-        dr.setFacility(dto.getFacility());
-        dr.setName(dto.getName());
-        dr.setNote(dto.getNote());
-        dr.setQuery(dto.getQuery());
-        dr.setTypeOfReference(dto.getTypeOfReference().toString());
-        dr.setTypeOfObject(dto.getTypeOfObject());
-        dr.setModTime(new Date());        
+        return uce;
         
-        dr.setUserId(user);
+    }
+    
+      public void removeUrl(String sid, Collection<DataUrlDTO> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        log.debug("removeUrl()");
+        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
-        em.merge(dr);
+        User user = new UserUtil(sid,em).getUser();
+        
+        for(DataUrlDTO url : dtos){
+            //security, check if users bookmark
+            DataReference foundDataReference = em.find(DataReference.class,new BigDecimal(url.getId()));
+            if(foundDataReference.getUserId().getId().intValue() == user.getId().intValue()) em.remove(foundDataReference);
+            else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+url.getId()+" denied for user "+user.getDn());
+        }
     }
     
     public Collection<DataUrlDTO> getUrls(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{

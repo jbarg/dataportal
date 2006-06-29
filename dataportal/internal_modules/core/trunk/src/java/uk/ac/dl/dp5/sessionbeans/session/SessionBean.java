@@ -50,7 +50,7 @@ import uk.ac.dl.dp5.util.cog.DelegateCredential;
 public class SessionBean extends SessionEJBObject  implements SessionRemote, SessionLocal {
     
     static Logger log = Logger.getLogger(SessionBean.class);
-  
+    
     
     public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException{
         log.debug("getSession()");
@@ -67,6 +67,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     public String login(String username,String password, int lifetime) throws LoginMyProxyException, CannotCreateNewUserException{
         log.debug("login()");
+        if(username == null || username.equals("")) throw new IllegalArgumentException("Usrname cannot be null or empty.");
+        if(password == null || password.equals("")) throw new IllegalArgumentException("Password cannot be null or empty.");
+        
         GSSCredential myproxy_proxy;
         try {
             myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy());
@@ -115,7 +118,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             
             session.setCredential(certificate.getStringRepresentation());
             session.setCredentialType(DPCredentialType.PROXY);
-            session.setModTime(new Date());
+           
             Calendar cal =  GregorianCalendar.getInstance();
             try {
                 cal.add(GregorianCalendar.SECOND,(int)certificate.getLifetime()-60*5); //minus 5 mins
@@ -192,7 +195,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
         //send logout event
         new UserUtil(session.getUserId(),em).sendEventLog(DPEvent.LOG_OPF,"Logged off at "+new Date());
-                
+        
         log.info("Ended session: "+sid);
         return true;
     }
@@ -227,11 +230,11 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     private TimerSession ts;
     
     @PostConstruct
-    public void postConstruct(){        
+    public void postConstruct(){
         PropertyConfigurator.configure("c:/log4j.properties");
-        log.debug("Loaded log4j properties");        
+        log.debug("Loaded log4j properties");
         log.debug("Starting timer service");
-        ts.createTimer(1000*10,1000*60*30);
+        ts.createTimer(1000*60*30,1000*60*30);
     }
     
     

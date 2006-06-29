@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import uk.ac.dl.dp5.entity.DataReference;
 import uk.ac.dl.dp5.entity.Url;
 import uk.ac.dl.dp5.util.DPUrlRefType;
@@ -37,7 +38,7 @@ public class DataUrlDTO implements Serializable{
     private int id;
     
     private Collection<String> urls;
-            
+    
     /** Creates a new instance of DataURLDTO */
     public DataUrlDTO() {
     }
@@ -112,13 +113,38 @@ public class DataUrlDTO implements Serializable{
     public void setId(int id) {
         this.id = id;
     }
-
+    
     public Collection<String> getUrl() {
         return urls;
     }
-
+    
     public void setUrl(Collection<String> urls) {
         this.urls = urls;
+    }
+    
+    public DataReference toDataReference(){
+        DataReference dr = new DataReference();
+        
+        //if got id, then its an update, adding urls not allowed
+        if(getId() != 0){
+            dr.setId(new BigDecimal(getId()));
+        } else{
+            Collection<Url> dataUrls = new ArrayList<Url>();
+            for(String surl : getUrl()){
+                Url url = new Url();
+                  url.setUrl(surl);
+                dataUrls.add(url);
+            }
+            dr.setUrls(dataUrls);
+        }
+        dr.setFacility(getFacility());
+        dr.setName(getName());
+        dr.setNote(getNote());
+        dr.setQuery(getQuery());
+        dr.setTypeOfReference(getTypeOfReference().toString());
+        dr.setTypeOfObject(getTypeOfObject());
+        dr.setModTime(new Date());
+        return dr;
     }
     
 }
