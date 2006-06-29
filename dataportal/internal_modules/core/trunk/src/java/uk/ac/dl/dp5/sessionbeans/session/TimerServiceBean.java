@@ -63,7 +63,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerSession  
         log.info("Timeout occurred");
         Collection<Session> sessions =  null;
         try {
-            sessions = (Collection<Session>) em.createQuery("select f from Session f").getResultList();
+            sessions = (Collection<Session>) em.createQuery("Session.findAll").getResultList();
         } catch(Exception e){
             log.warn("Error with query in Timer",e);
         }

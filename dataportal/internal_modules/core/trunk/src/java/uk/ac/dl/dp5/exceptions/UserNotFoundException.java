@@ -13,7 +13,7 @@ package uk.ac.dl.dp5.exceptions;
  *
  * @author gjd37
  */
-public class UserNotFoundException extends java.lang.Exception {
+public class UserNotFoundException extends DataPortalException {
     
     /**
      * Creates a new instance of <code>UserNotFoundException</code> without detail message.

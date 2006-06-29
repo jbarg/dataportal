@@ -36,7 +36,15 @@ import uk.ac.dl.dp5.util.DPCredentialType;
  */
 @Entity
 @Table(name = "DP_SESSION")
-@NamedQueries( {@NamedQuery(name = "Session.findById", query = "SELECT s FROM Session s WHERE s.id = :id"), @NamedQuery(name = "Session.findByUserSessionId", query = "SELECT s FROM Session s WHERE s.userSessionId = :userSessionId"), @NamedQuery(name = "Session.findByCredential", query = "SELECT s FROM Session s WHERE s.credential = :credential"), @NamedQuery(name = "Session.findByCredentialType", query = "SELECT s FROM Session s WHERE s.credentialType = :credentialType"), @NamedQuery(name = "Session.findByExpireDateTime", query = "SELECT s FROM Session s WHERE s.expireDateTime = :expireDateTime"), @NamedQuery(name = "Session.findByModTime", query = "SELECT s FROM Session s WHERE s.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "Session.findById", query = "SELECT s FROM Session s WHERE s.id = :id"), 
+    @NamedQuery(name = "Session.findByUserSessionId", query = "SELECT s FROM Session s WHERE s.userSessionId = :userSessionId"),
+    @NamedQuery(name = "Session.findByCredential", query = "SELECT s FROM Session s WHERE s.credential = :credential"), 
+    @NamedQuery(name = "Session.findByCredentialType", query = "SELECT s FROM Session s WHERE s.credentialType = :credentialType"), 
+    @NamedQuery(name = "Session.findByExpireDateTime", query = "SELECT s FROM Session s WHERE s.expireDateTime = :expireDateTime"), 
+    @NamedQuery(name = "Session.findByModTime", query = "SELECT s FROM Session s WHERE s.modTime = :modTime"),
+    @NamedQuery(name = "Session.findAll", query = "SELECT s FROM Session s")}
+)
 public class Session implements Serializable {
 
     @Id

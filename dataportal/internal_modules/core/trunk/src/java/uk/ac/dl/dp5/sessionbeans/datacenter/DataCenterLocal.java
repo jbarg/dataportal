@@ -8,7 +8,7 @@ import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
 import uk.ac.dl.dp5.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp5.exceptions.UniqueConstraintException;
+
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
 
 

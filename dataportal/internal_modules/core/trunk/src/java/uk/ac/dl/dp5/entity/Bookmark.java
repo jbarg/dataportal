@@ -32,7 +32,16 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_BOOKMARK")
-@NamedQueries( {@NamedQuery(name = "Bookmark.findByStudyIdFacility", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId AND b.facility = :facility"),@NamedQuery(name = "Bookmark.findById", query = "SELECT b FROM Bookmark b WHERE b.id = :id"), @NamedQuery(name = "Bookmark.findByStudyId", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId"), @NamedQuery(name = "Bookmark.findByName", query = "SELECT b FROM Bookmark b WHERE b.name = :name"), @NamedQuery(name = "Bookmark.findByQuery", query = "SELECT b FROM Bookmark b WHERE b.query = :query"), @NamedQuery(name = "Bookmark.findByFacility", query = "SELECT b FROM Bookmark b WHERE b.facility = :facility"), @NamedQuery(name = "Bookmark.findByNote", query = "SELECT b FROM Bookmark b WHERE b.note = :note"), @NamedQuery(name = "Bookmark.findByModTime", query = "SELECT b FROM Bookmark b WHERE b.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "Bookmark.findByStudyIdFacility", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId AND b.facility = :facility"),
+    @NamedQuery(name = "Bookmark.findById", query = "SELECT b FROM Bookmark b WHERE b.id = :id"), 
+    @NamedQuery(name = "Bookmark.findByStudyId", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId"), 
+    @NamedQuery(name = "Bookmark.findByName", query = "SELECT b FROM Bookmark b WHERE b.name = :name"), 
+    @NamedQuery(name = "Bookmark.findByQuery", query = "SELECT b FROM Bookmark b WHERE b.query = :query"),
+    @NamedQuery(name = "Bookmark.findByFacility", query = "SELECT b FROM Bookmark b WHERE b.facility = :facility"), 
+    @NamedQuery(name = "Bookmark.findByNote", query = "SELECT b FROM Bookmark b WHERE b.note = :note"), 
+    @NamedQuery(name = "Bookmark.findByModTime", query = "SELECT b FROM Bookmark b WHERE b.modTime = :modTime")}
+)
 public class Bookmark implements Serializable {
 
     @Id

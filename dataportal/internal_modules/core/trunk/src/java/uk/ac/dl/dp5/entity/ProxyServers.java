@@ -30,7 +30,13 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_PROXY_SERVERS")
-@NamedQueries( {@NamedQuery(name = "ProxyServers.findById", query = "SELECT p FROM ProxyServers p WHERE p.id = :id"), @NamedQuery(name = "ProxyServers.findByProxyServerAddress", query = "SELECT p FROM ProxyServers p WHERE p.proxyServerAddress = :proxyServerAddress"), @NamedQuery(name = "ProxyServers.findByCaRootCertificate", query = "SELECT p FROM ProxyServers p WHERE p.caRootCertificate = :caRootCertificate"), @NamedQuery(name = "ProxyServers.findByModTime", query = "SELECT p FROM ProxyServers p WHERE p.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "ProxyServers.findById", query = "SELECT p FROM ProxyServers p WHERE p.id = :id"), 
+    @NamedQuery(name = "ProxyServers.findByProxyServerAddress", query = "SELECT p FROM ProxyServers p WHERE p.proxyServerAddress = :proxyServerAddress"),
+    @NamedQuery(name = "ProxyServers.findByCaRootCertificate", query = "SELECT p FROM ProxyServers p WHERE p.caRootCertificate = :caRootCertificate"), 
+    @NamedQuery(name = "ProxyServers.findByModTime", query = "SELECT p FROM ProxyServers p WHERE p.modTime = :modTime"),
+    @NamedQuery(name = "ProxyServers.findAll", query = "SELECT p FROM ProxyServers p")}
+)
 public class ProxyServers implements Serializable {
 
     @Id

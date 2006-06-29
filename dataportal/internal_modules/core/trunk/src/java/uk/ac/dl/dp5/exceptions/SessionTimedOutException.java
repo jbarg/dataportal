@@ -13,7 +13,7 @@ package uk.ac.dl.dp5.exceptions;
  *
  * @author gjd37
  */
-public class SessionTimedOutException extends java.lang.Exception {
+public class SessionTimedOutException extends DataPortalException {
     
     /**
      * Creates a new instance of <code>SessionTimedOutException</code> without detail message.

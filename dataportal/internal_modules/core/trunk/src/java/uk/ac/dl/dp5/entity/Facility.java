@@ -29,7 +29,14 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_FACILITY")
-@NamedQueries( {@NamedQuery(name = "Facility.findById", query = "SELECT f FROM Facility f WHERE f.id = :id"), @NamedQuery(name = "Facility.findByShortName", query = "SELECT f FROM Facility f WHERE f.shortName = :shortName"), @NamedQuery(name = "Facility.findByLongName", query = "SELECT f FROM Facility f WHERE f.longName = :longName"), @NamedQuery(name = "Facility.findByInfoUrl", query = "SELECT f FROM Facility f WHERE f.infoUrl = :infoUrl"), @NamedQuery(name = "Facility.findByModTime", query = "SELECT f FROM Facility f WHERE f.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "Facility.findById", query = "SELECT f FROM Facility f WHERE f.id = :id"), 
+    @NamedQuery(name = "Facility.findByShortName", query = "SELECT f FROM Facility f WHERE f.shortName = :shortName"), 
+    @NamedQuery(name = "Facility.findByLongName", query = "SELECT f FROM Facility f WHERE f.longName = :longName"), 
+    @NamedQuery(name = "Facility.findByInfoUrl", query = "SELECT f FROM Facility f WHERE f.infoUrl = :infoUrl"), 
+    @NamedQuery(name = "Facility.findByModTime", query = "SELECT f FROM Facility f WHERE f.modTime = :modTime"),
+    @NamedQuery(name = "Facility.findAll", query = "SELECT f FROM Facility f")}
+)
 public class Facility implements Serializable {
 
     @Id
