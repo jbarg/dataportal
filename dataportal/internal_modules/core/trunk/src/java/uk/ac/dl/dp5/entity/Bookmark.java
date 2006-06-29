@@ -76,13 +76,12 @@ public class Bookmark implements Serializable {
         this.id = id;
     }
 
-     public Bookmark(BigDecimal id, BigDecimal studyId, String name, String query, String facility, Date modTime) {
+     public Bookmark(BigDecimal id, BigDecimal studyId, String name, String query, String facility) {
         this.id = id;
         this.studyId = studyId;
         this.name = name;
         this.query = query;
-        this.facility = facility;
-        this.modTime = modTime;
+        this.facility = facility;     
     }
 
     public BigDecimal getId() {
@@ -137,9 +136,9 @@ public class Bookmark implements Serializable {
         return this.modTime;
     }
 
-    public void setModTime(Date modTime) {
+   /* public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
+    }*/
 
     public User getUserId() {
         return this.userId;

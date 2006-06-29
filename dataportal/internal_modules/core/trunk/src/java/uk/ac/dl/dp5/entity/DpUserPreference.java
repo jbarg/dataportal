@@ -13,12 +13,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +27,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import uk.ac.dl.dp5.util.DPResolution;
 
 /**
  *
@@ -66,8 +61,7 @@ public class DpUserPreference implements Serializable {
     private ProxyServers proxyServerId;
 
     @JoinColumn(name = "USER_ID")
-    @OneToOne
-    @Basic(fetch=FetchType.LAZY)
+    @OneToOne   
     private User userId;
     
     @PrePersist
@@ -119,9 +113,9 @@ public class DpUserPreference implements Serializable {
         return this.modTime;
     }
 
-    public void setModTime(Date modTime) {
+   /* public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
+    }*/
 
     public ProxyServers getProxyServerId() {
         return this.proxyServerId;

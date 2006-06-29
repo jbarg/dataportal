@@ -104,7 +104,6 @@ public class BookmarkDTO implements Serializable{
         bookmark.setFacility(getFacility());
         bookmark.setName(getName());
         bookmark.setNote(getNote());
-         bookmark.setModTime(new Date());
         bookmark.setQuery(getQuery());
         
         return bookmark;

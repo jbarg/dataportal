@@ -159,9 +159,9 @@ public class DataReference implements Serializable {
         return this.modTime;
     }
 
-    public void setModTime(Date modTime) {
+   /* public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
+    }*/
 
     public User getUserId() {
         return this.userId;
