@@ -12,7 +12,6 @@ package uk.ac.dl.dp5.sessionbeans.query;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Remove;
@@ -24,9 +23,6 @@ import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
 import javax.jms.Session;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp5.clients.dto.QueryRequest;
@@ -61,8 +57,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     private Collection<String> facilities;
     
     //stateful info
-    boolean isFinished = false;
-    Collection<String> completedQueries  = new ArrayList<String>();
+    
     
     public void queryByKeyword(String sid, Collection<String> facilities, String keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
@@ -74,8 +69,6 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         this.sid = sid;
         this.facilities = facilities;
         
-        Collection<QuerySlaveLocal> qslCollection = new ArrayList<QuerySlaveLocal>();
-        
         Connection connection = null;
         Session session = null;
         MessageProducer messageProducer = null;
@@ -86,7 +79,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             messageProducer = session.createProducer(queue);
         } catch (JMSException ex) {
             ex.printStackTrace();
-        }
+        }           
         
         //TODO real query
         for(String fac : facilities){
@@ -102,6 +95,10 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
                 e.setSent(new Timestamp(System.currentTimeMillis()));
                 
                 message.setObject(e);
+                
+                 //clear out old messages
+                 QueryManager.removeRecord(sid+fac);
+                 
                 messageProducer.send(message);
                 
                 
@@ -121,22 +118,21 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             QueryRecord qr = QueryManager.getRecord(sid+fac);
             if(qr == null){
                 log.debug("No results from: "+fac);
-                isFinished = false;
             } else completed.add(fac);
         }
         return completed;
     }
     
     public boolean isFinished(){
-        isFinished = true;
+        
         for(String fac : facilities){
             QueryRecord qr = QueryManager.getRecord(sid+fac);
             if(qr == null){
                 log.debug("No results from: "+fac);
-                isFinished = false;
+                return false;
             }
         }
-        return isFinished;
+        return true;
     }
     
     @Remove
@@ -144,12 +140,15 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         //TODO remove objects
     }
     
+    //TODO put together a single method to recurse over QueryManager
     public Collection<QueryRecord> getQueryResults(){
-        
+        log.debug("getQueryResults()");
         Collection<QueryRecord> qra = new ArrayList<QueryRecord>();
-        for(String fac : completedQueries){
+        for(String fac : getCompleted()){
+            log.debug("Compeleted query for: "+fac);
             QueryRecord qr = QueryManager.getRecord(sid+fac);
             if(qr != null){
+                log.debug("Added result from "+fac);
                 qra.add(qr);
             }
         }

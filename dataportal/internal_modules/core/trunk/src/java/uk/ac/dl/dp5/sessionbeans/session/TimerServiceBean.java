@@ -9,16 +9,10 @@
 
 package uk.ac.dl.dp5.sessionbeans.session;
 
-/**
- *
- * @author gjd37
- */
-import java.security.cert.CertificateException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import javax.annotation.PostConstruct;
 import javax.ejb.TimerService;
 import org.apache.log4j.*;
 import javax.annotation.Resource;
@@ -26,7 +20,12 @@ import javax.ejb.Stateless;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import uk.ac.dl.dp5.entity.Session;
-import uk.ac.dl.dp5.util.Certificate;
+import uk.ac.dl.dp5.exceptions.DataPortalException;
+import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp5.message.QueryManager;
+import uk.ac.dl.dp5.message.QueryRecord;
+import uk.ac.dl.dp5.util.SessionUtil;
 
 
 @Stateless(mappedName="TimerServiceEJB")
@@ -81,6 +80,32 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
                 log.info("Remove old session: "+ses.getUserSessionId()+" for user "+ses.getUserId().getDn());
             }
         }
+    }
+    
+    @Timeout
+    public void timeoutQueryManager(Timer timer) {
+        QueryRecord[] qr = QueryManager.getAll();
+        
+        for(QueryRecord rec : qr){
+            try {
+                new SessionUtil(rec.getSid(), em);
+            } catch (DataPortalException ex) {
+                log.info("Remove old query from cache: "+rec.getSid());
+                QueryManager.removeRecord(rec.getSid());
+            }
+            
+        }
+    }
+    
+    public void removeSessionFromQueryCache(String sid){
+        QueryRecord[] qr = QueryManager.getAll();
+        
+        for(QueryRecord rec : qr){
+            if(rec.getSid().equals(sid)){
+                log.info("Remove old query from cache: "+rec.getSid());
+                QueryManager.removeRecord(rec.getSid());                
+            }
+        }        
     }
     
 }
