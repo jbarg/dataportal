@@ -90,10 +90,9 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
             try {
                 new SessionUtil(rec.getSid(), em);
             } catch (DataPortalException ex) {
-                log.info("Remove old query from cache: "+rec.getSid());
-                QueryManager.removeRecord(rec.getSid());
-            }
-            
+                log.info("Remove old query from cache: "+rec.getId());
+                QueryManager.removeRecord(rec.getId());
+            }            
         }
     }
     
@@ -102,11 +101,10 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
         
         for(QueryRecord rec : qr){
             if(rec.getSid().equals(sid)){
-                log.info("Remove old query from cache: "+rec.getSid());
-                QueryManager.removeRecord(rec.getSid());                
+                log.info("Remove old query from cache: "+rec.getId());
+                QueryManager.removeRecord(rec.getId());                
             }
         }        
-    }
-    
+    }    
 }
 

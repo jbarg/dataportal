@@ -12,8 +12,10 @@ package uk.ac.dl.dp5.sessionbeans.query;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.PrePassivate;
 import javax.ejb.Remove;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
@@ -58,6 +60,19 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     
     //stateful info
     
+    @PrePassivate
+    public void prePassivate(){
+        this.sid = null;
+        this.facilities = null;
+        log.info("Unloading..");
+    }
+    
+    @PreDestroy
+    public void preDestory(){
+        this.sid = null;
+        this.facilities = null;
+        log.info("Destroying..");
+    }
     
     public void queryByKeyword(String sid, Collection<String> facilities, String keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
@@ -79,7 +94,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             messageProducer = session.createProducer(queue);
         } catch (JMSException ex) {
             ex.printStackTrace();
-        }           
+        }
         
         //TODO real query
         for(String fac : facilities){
@@ -95,10 +110,13 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
                 e.setSent(new Timestamp(System.currentTimeMillis()));
                 
                 message.setObject(e);
+                //TODO  should we do first in first out on QueryManager so can have more than one per session
+                //250 is not going to be full
+                //TODO tuen QueryManager into Session Bean so can search for own data and remove when needed
+                ///and get old results.
+                //clear out old messages
+                QueryManager.removeRecord(sid+fac);
                 
-                 //clear out old messages
-                 QueryManager.removeRecord(sid+fac);
-                 
                 messageProducer.send(message);
                 
                 
