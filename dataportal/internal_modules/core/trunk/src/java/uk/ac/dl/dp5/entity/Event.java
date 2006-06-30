@@ -10,7 +10,7 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,7 +43,7 @@ public class Event implements Serializable {
     @Id    
      @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "EVENT_NAME")
     @Enumerated(EnumType.STRING)
@@ -60,20 +60,20 @@ public class Event implements Serializable {
     public Event() {
     }
 
-    public Event(BigDecimal id) {
+    public Event(Integer id) {
         this.id = id;
     }
 
-    public Event(BigDecimal id, Date modTime) {
+    public Event(Integer id, Date modTime) {
         this.id = id;
         this.modTime = modTime;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

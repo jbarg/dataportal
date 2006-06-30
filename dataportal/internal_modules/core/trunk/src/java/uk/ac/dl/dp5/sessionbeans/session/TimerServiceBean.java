@@ -30,7 +30,7 @@ import uk.ac.dl.dp5.util.Certificate;
 
 
 @Stateless(mappedName="TimerServiceEJB")
-public class TimerServiceBean extends SessionEJBObject implements TimerSession  {
+public class TimerServiceBean extends SessionEJBObject implements TimerServiceLocal  {
     
     @Resource
     TimerService timerService;

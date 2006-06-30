@@ -18,7 +18,7 @@ import uk.ac.dl.dp5.sessionbeans.lookup.*;
 import javax.naming.*;
 import java.util.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
-import uk.ac.dl.dp5.sessionbeans.session.TimerSession;
+import uk.ac.dl.dp5.sessionbeans.session.TimerServiceLocal;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.DPFacilityType;
 /**
@@ -40,7 +40,7 @@ public class TimerServiceClient {
             
             InitialContext ic = new InitialContext();
             
-            TimerSession sless = (TimerSession) ic.lookup("TimerServiceEJB");
+            TimerServiceLocal sless = (TimerServiceLocal) ic.lookup("TimerServiceEJB");
             
            sless.createTimer(1000*10,1000*60*30);
             //

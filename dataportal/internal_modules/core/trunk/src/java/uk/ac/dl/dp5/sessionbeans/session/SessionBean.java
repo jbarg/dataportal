@@ -1,6 +1,5 @@
 package uk.ac.dl.dp5.sessionbeans.session;
 
-import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.util.Calendar;
@@ -18,7 +17,6 @@ import uk.ac.dl.dp5.clients.dto.SessionDTO;
 import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp5.entity.DpUserPreference;
 import uk.ac.dl.dp5.entity.Role;
-//import org.jboss.annotation.ejb.RemoteBinding;
 
 import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
@@ -118,7 +116,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             
             session.setCredential(certificate.getStringRepresentation());
             session.setCredentialType(DPCredentialType.PROXY);
-           
+            
             Calendar cal =  GregorianCalendar.getInstance();
             try {
                 cal.add(GregorianCalendar.SECOND,(int)certificate.getLifetime()-60*5); //minus 5 mins
@@ -212,7 +210,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         } else {
             log.debug("Refreshing prefs: "+userprefs.getResolution());
             prefs.setResolution(userprefs.getResolution().toString());
-            prefs.setResultsPerPage(new BigInteger(""+userprefs.getResultsPerPage()));
+            prefs.setResultsPerPage(userprefs.getResultsPerPage());
             prefs.setDefaultFacility(userprefs.getDefaultFacility());
             em.merge(prefs);
         }
@@ -227,7 +225,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     }
     
     @EJB
-    private TimerSession ts;
+    private TimerServiceLocal ts;
     
     @PostConstruct
     public void postConstruct(){

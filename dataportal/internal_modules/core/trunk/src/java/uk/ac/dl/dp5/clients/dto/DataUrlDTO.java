@@ -10,10 +10,8 @@
 package uk.ac.dl.dp5.clients.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import uk.ac.dl.dp5.entity.DataReference;
 import uk.ac.dl.dp5.entity.Url;
 import uk.ac.dl.dp5.util.DPUrlRefType;
@@ -127,7 +125,7 @@ public class DataUrlDTO implements Serializable{
         
         //if got id, then its an update, adding urls not allowed
         if(getId() != 0){
-            dr.setId(new BigDecimal(getId()));
+            dr.setId(getId());
         } else{
             Collection<Url> dataUrls = new ArrayList<Url>();
             for(String surl : getUrl()){

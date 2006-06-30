@@ -10,7 +10,6 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,10 +46,10 @@ public class Bookmark implements Serializable {
     @Id
      @GeneratedValue(strategy=GenerationType.AUTO)    
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "STUDY_ID", nullable = false)
-    private BigDecimal studyId;
+    private Integer studyId;
     
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -81,11 +80,11 @@ public class Bookmark implements Serializable {
     public Bookmark() {
     }
 
-    public Bookmark(BigDecimal id) {
+    public Bookmark(Integer id) {
         this.id = id;
     }
 
-     public Bookmark(BigDecimal id, BigDecimal studyId, String name, String query, String facility) {
+     public Bookmark(Integer id, Integer studyId, String name, String query, String facility) {
         this.id = id;
         this.studyId = studyId;
         this.name = name;
@@ -93,19 +92,19 @@ public class Bookmark implements Serializable {
         this.facility = facility;     
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     
-     public BigDecimal getStudyId() {
+     public Integer getStudyId() {
         return this.studyId;
     }
 
-    public void setStudyId(BigDecimal studyId) {
+    public void setStudyId(Integer studyId) {
         this.studyId = studyId;
     }
 

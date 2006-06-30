@@ -42,7 +42,7 @@ public class Facility implements Serializable {
     @Id
      @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "SHORT_NAME", nullable = false)
     private String shortName;
@@ -61,22 +61,22 @@ public class Facility implements Serializable {
     public Facility() {
     }
 
-    public Facility(BigDecimal id) {
+    public Facility(Integer id) {
         this.id = id;
     }
 
-    public Facility(BigDecimal id, String shortName, String infoUrl, Date modTime) {
+    public Facility(Integer id, String shortName, String infoUrl, Date modTime) {
         this.id = id;
         this.shortName = shortName;
         this.infoUrl = infoUrl;
         this.modTime = modTime;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

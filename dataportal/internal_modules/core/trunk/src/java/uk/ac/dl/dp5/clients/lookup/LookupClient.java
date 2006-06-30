@@ -55,7 +55,7 @@ public class LookupClient {
             for(FacilityDTO f : facs){
                 System.out.println(f.getFacility()+" has connection "+f.getModuleType());
             }
-            
+           
             
             
         }catch(Exception e){

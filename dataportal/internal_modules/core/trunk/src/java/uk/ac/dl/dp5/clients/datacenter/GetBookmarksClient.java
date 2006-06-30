@@ -50,9 +50,9 @@ public class GetBookmarksClient {
                 System.out.println("-----------------\n");
                 idremove = dtos.getId();
             }
-            dto.remove(dto.iterator().next());
-            dto.remove(dto.iterator().next());
-            sless.removeBookmark(sid,dto);
+           // dto.remove(dto.iterator().next());
+           // dto.remove(dto.iterator().next());
+           // sless.removeBookmark(sid,dto);
             //
         }catch(Exception e){
             

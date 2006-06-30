@@ -10,7 +10,6 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,7 +48,7 @@ public class ModuleLookup implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "CONNECTION", nullable = false)
     private String connection;
@@ -86,11 +85,11 @@ public class ModuleLookup implements Serializable {
     public ModuleLookup() {
     }
 
-    public ModuleLookup(BigDecimal id) {
+    public ModuleLookup(Integer id) {
         this.id = id;
     }
 
-    public ModuleLookup(BigDecimal id, String connection, String moduleType, String facility, Date modTime) {
+    public ModuleLookup(Integer id, String connection, String moduleType, String facility, Date modTime) {
         this.id = id;
         this.connection = connection;
         this.moduleType = moduleType;
@@ -98,11 +97,11 @@ public class ModuleLookup implements Serializable {
         this.modTime = modTime;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

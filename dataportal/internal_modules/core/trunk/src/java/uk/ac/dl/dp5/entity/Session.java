@@ -10,7 +10,6 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,7 +49,7 @@ public class Session implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "USER_SESSION_ID", nullable = false)
     private String userSessionId;
@@ -83,22 +82,22 @@ public class Session implements Serializable {
     public Session() {
     }
 
-    public Session(BigDecimal id) {
+    public Session(Integer id) {
         this.id = id;
     }
 
-    public Session(BigDecimal id, String userSessionId, String credential, Date modTime) {
+    public Session(Integer id, String userSessionId, String credential, Date modTime) {
         this.id = id;
         this.userSessionId = userSessionId;
         this.credential = credential;
         this.modTime = modTime;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
