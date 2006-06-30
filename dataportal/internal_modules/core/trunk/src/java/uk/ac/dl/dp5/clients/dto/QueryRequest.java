@@ -23,6 +23,7 @@ public class QueryRequest implements Serializable{
     private String faciltity;
     private String keyword;
     private Timestamp sent;
+    private String sid ;
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
@@ -58,6 +59,14 @@ public class QueryRequest implements Serializable{
 
     public void setSent(Timestamp sent) {
         this.sent = sent;
+    }
+
+    public String getSid() {
+        return sid;
+    }
+
+    public void setSid(String sid) {
+        this.sid = sid;
     }
     
 }

@@ -49,6 +49,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     static Logger log = Logger.getLogger(SessionBean.class);
     
+     @EJB
+    private TimerServiceLocal ts;
+    
     
     public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException{
         log.debug("getSession()");
@@ -184,12 +187,15 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
      /*
       * Ends a session
-      * - deletes session and user authorisation details from datbase
+      * - deletes session and user authorisation details from database
       */
     public boolean logout(String sid) throws SessionNotFoundException ,SessionTimedOutException{
         log.debug("logout()");
         Session session = new SessionUtil(sid,em).getSession();
         em.remove(session);
+        
+        //clear query cache
+        ts.removeSessionFromQueryCache(sid);
         
         //send logout event
         new UserUtil(session.getUserId(),em).sendEventLog(DPEvent.LOG_OPF,"Logged off at "+new Date());
@@ -224,9 +230,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return new UserPreferencesDTO(dto);
     }
     
-    @EJB
-    private TimerServiceLocal ts;
-    
+   
     @PostConstruct
     public void postConstruct(){
         PropertyConfigurator.configure("c:/log4j.properties");

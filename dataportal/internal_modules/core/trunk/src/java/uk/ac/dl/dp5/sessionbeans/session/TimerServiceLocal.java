@@ -23,5 +23,7 @@ public interface TimerServiceLocal {
     public void createTimer(long starttime,long intervalDuration);
 
     public void timeout(Timer timer);
+    
+    public void removeSessionFromQueryCache(String sid);
 }
 

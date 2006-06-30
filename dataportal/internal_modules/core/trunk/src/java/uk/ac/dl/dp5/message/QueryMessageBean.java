@@ -49,23 +49,22 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
             try {
                 e = (QueryRequest) msg.getObject();
             } catch (JMSException ex) {
-               log.debug("Object not correct",ex);
+                log.debug("Object not correct",ex);
             }
             
-            //do search here
+            //TODO do search here
             log.debug("Query : Keyword "+e.getKeyword()+" on fac: "+e.getFaciltity()+" sent at "+e.getSent());
             try {
                 if(e.getFaciltity().equals("ISIS")){
-                Thread.sleep(10000);
-                }
-                else Thread.sleep(5000);
+                    Thread.sleep(10000);
+                } else Thread.sleep(5000);
                 results[0] = "glen";
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                log.debug("Imterrupted", ex);
             }
-            
+             results[0] = "glen";
             log.debug("Query finished..");
-            QueryManager.addRecord(e.getId(),e.getSent(), results);
+            QueryManager.addRecord(e.getId(),e.getSid(),e.getSent(), results);
             
         }
         

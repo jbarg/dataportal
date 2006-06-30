@@ -81,7 +81,7 @@ public class QueryClient {
             printTime("finished");
             Collection<QueryRecord> qr = (Collection) qsmr.getQueryResults();
             for(QueryRecord rec : qr){
-                System.out.println("Finished with results: "+rec.result[0]);
+                System.out.println("Finished with results: "+rec.getResult()[0]);
             }
             printTime("got results");
             
