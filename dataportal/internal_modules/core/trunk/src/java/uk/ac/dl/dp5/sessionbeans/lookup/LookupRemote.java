@@ -19,5 +19,6 @@ public interface LookupRemote {
     
     void removeEntity(Object entity);
     
-    public Collection<FacilityDTO> getFacilities(DPFacilityType type);
+    public Collection<FacilityDTO> getFacilities(DPFacilityType type);    
+   
 }

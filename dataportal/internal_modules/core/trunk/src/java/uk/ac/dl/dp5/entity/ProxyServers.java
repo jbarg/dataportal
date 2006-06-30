@@ -10,7 +10,6 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,7 +41,7 @@ public class ProxyServers implements Serializable {
     @Id
      @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "PROXY_SERVER_ADDRESS", nullable = false)
     private String proxyServerAddress;
@@ -61,21 +60,21 @@ public class ProxyServers implements Serializable {
     public ProxyServers() {
     }
 
-    public ProxyServers(BigDecimal id) {
+    public ProxyServers(Integer id) {
         this.id = id;
     }
 
-    public ProxyServers(BigDecimal id, String proxyServerAddress, String caRootCertificate) {
+    public ProxyServers(Integer id, String proxyServerAddress, String caRootCertificate) {
         this.id = id;
         this.proxyServerAddress = proxyServerAddress;
         this.caRootCertificate = caRootCertificate;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

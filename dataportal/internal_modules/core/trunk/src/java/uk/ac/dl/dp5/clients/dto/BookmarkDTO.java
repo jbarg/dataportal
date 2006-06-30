@@ -10,8 +10,6 @@
 package uk.ac.dl.dp5.clients.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 import uk.ac.dl.dp5.entity.Bookmark;
 
 /**
@@ -32,7 +30,7 @@ public class BookmarkDTO implements Serializable{
     private int studyid;
     
     public BookmarkDTO(Bookmark bookmark){
-        this.id = bookmark.getId().intValue();
+        this.id = bookmark.getId();
         this.facility = bookmark.getFacility();
         this.query = bookmark.getQuery();
         this.note = bookmark.getNote();
@@ -97,10 +95,10 @@ public class BookmarkDTO implements Serializable{
         Bookmark bookmark = new Bookmark();
         
         if(getId() != 0){
-            bookmark.setId(new BigDecimal(getId()));
+            bookmark.setId(getId());
         }
         
-        bookmark.setStudyId(new BigDecimal(getStudyid()));
+        bookmark.setStudyId(getStudyid());
         bookmark.setFacility(getFacility());
         bookmark.setName(getName());
         bookmark.setNote(getNote());

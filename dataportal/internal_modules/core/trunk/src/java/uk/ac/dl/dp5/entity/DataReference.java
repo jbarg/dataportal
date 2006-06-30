@@ -10,7 +10,7 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,7 +52,7 @@ public class DataReference implements Serializable {
     @Id
      @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -99,20 +99,20 @@ public class DataReference implements Serializable {
     public DataReference() {
     }
 
-    public DataReference(BigDecimal id) {
+    public DataReference(Integer id) {
         this.id = id;
     }
 
-    public DataReference(BigDecimal id, String name) {
+    public DataReference(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

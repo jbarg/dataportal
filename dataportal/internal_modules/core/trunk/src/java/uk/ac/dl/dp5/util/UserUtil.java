@@ -9,8 +9,6 @@
 
 package uk.ac.dl.dp5.util;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.util.Collection;
 import javax.jms.JMSException;
@@ -103,7 +101,7 @@ public class UserUtil {
     public UserUtil(int userId, EntityManager em) throws UserNotFoundException {
         this.em = em;
         if(userId == 0) throw new IllegalArgumentException("User ID cannot be 0.");
-        user = (User)em.createNamedQuery("User.findById").setParameter("id",new BigDecimal(userId)).getSingleResult();
+        user = (User)em.createNamedQuery("User.findById").setParameter("id",userId).getSingleResult();
         
     }
     
@@ -183,7 +181,7 @@ public class UserUtil {
         prefs.setDefaultFacility(facilities.iterator().next().getShortName());
         
         
-        prefs.setResultsPerPage(new BigInteger(""+20));
+        prefs.setResultsPerPage(20);
         prefs.setResolution(DPResolution.res_1024x768.toString());
         
         //get the myproxy

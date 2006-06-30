@@ -10,7 +10,6 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +39,7 @@ public class Url implements Serializable {
     @Id
      @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "URL", nullable = false)
     private String url;
@@ -58,21 +57,21 @@ public class Url implements Serializable {
     public Url() {
     }
 
-    public Url(BigDecimal id) {
+    public Url(Integer id) {
         this.id = id;
     }
 
-    public Url(BigDecimal id, String url, Date modTime) {
+    public Url(Integer id, String url, Date modTime) {
         this.id = id;
         this.url = url;
         this.modTime = modTime;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

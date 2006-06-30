@@ -10,7 +10,6 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +34,7 @@ public class CredentialType implements Serializable {
     @Id
      @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -51,21 +50,21 @@ public class CredentialType implements Serializable {
     public CredentialType() {
     }
 
-    public CredentialType(BigDecimal id) {
+    public CredentialType(Integer id) {
         this.id = id;
     }
 
-    public CredentialType(BigDecimal id, String name, Date modTime) {
+    public CredentialType(Integer id, String name, Date modTime) {
         this.id = id;
         this.name = name;
         this.modTime = modTime;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

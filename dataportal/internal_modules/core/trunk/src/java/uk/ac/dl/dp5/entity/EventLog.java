@@ -38,7 +38,7 @@ public class EventLog implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)  
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "EVENT", nullable = false)
     private String event;
@@ -63,20 +63,20 @@ public class EventLog implements Serializable {
     public EventLog() {
     }
 
-    public EventLog(BigDecimal id) {
+    public EventLog(Integer id) {
         this.id = id;
     }
 
-    public EventLog(BigDecimal id, String event) {
+    public EventLog(Integer id, String event) {
         this.id = id;
         this.event = event;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

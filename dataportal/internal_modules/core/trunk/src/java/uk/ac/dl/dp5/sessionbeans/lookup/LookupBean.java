@@ -2,11 +2,17 @@ package uk.ac.dl.dp5.sessionbeans.lookup;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import javax.ejb.*;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp5.clients.dto.FacilityDTO;
 import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
+import uk.ac.dl.dp5.sessionbeans.transfer.TransferLocal;
+import uk.ac.dl.dp5.sessionbeans.transfer.TransferRemote;
+import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.DPFacilityType;
 
 
@@ -17,8 +23,9 @@ import uk.ac.dl.dp5.util.DPFacilityType;
  */
 @Stateless(mappedName="LookupEJB")
 public class LookupBean extends SessionEJBObject implements LookupRemote, LookupLocal {
-    static Logger log = Logger.getLogger(LookupBean.class);
     
+    static Logger log = Logger.getLogger(LookupBean.class);    
+      
     public Collection<FacilityDTO> getFacilities(DPFacilityType type){
         //change this to a DTO??  maybe later
         log.info("Looking for facilities type: "+type);
@@ -33,5 +40,7 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
             
         }
         return list;
-    }
+    } 
+    
+    
 }

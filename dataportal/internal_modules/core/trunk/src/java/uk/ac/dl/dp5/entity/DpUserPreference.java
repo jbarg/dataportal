@@ -10,8 +10,7 @@
 package uk.ac.dl.dp5.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
+
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,10 +46,10 @@ public class DpUserPreference implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private BigDecimal id;
+    private Integer id;
 
     @Column(name = "RESULTS_PER_PAGE")
-    private BigInteger resultsPerPage;
+    private Integer resultsPerPage;
 
     @Column(name = "DEFAULT_FACILITY")
     private String defaultFacility;
@@ -80,23 +79,23 @@ public class DpUserPreference implements Serializable {
     public DpUserPreference() {
     }
 
-    public DpUserPreference(BigDecimal id) {
+    public DpUserPreference(Integer id) {
         this.id = id;
     }
 
-    public BigDecimal getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public BigInteger getResultsPerPage() {
+    public Integer getResultsPerPage() {
         return this.resultsPerPage;
     }
 
-    public void setResultsPerPage(BigInteger resultsPerPage) {
+    public void setResultsPerPage(Integer resultsPerPage) {
         this.resultsPerPage = resultsPerPage;
     }
 

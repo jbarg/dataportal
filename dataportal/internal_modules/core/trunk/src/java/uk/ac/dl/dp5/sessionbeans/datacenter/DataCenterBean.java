@@ -9,7 +9,6 @@
 
 package uk.ac.dl.dp5.sessionbeans.datacenter;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -100,7 +99,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
          
         for(BookmarkDTO bm : dtos){
             //security, check if users bookmark
-            Bookmark foundBookmark = em.find(Bookmark.class,new BigDecimal(bm.getId()));
+            Bookmark foundBookmark = em.find(Bookmark.class,bm.getId());
             if(foundBookmark.getUserId().getId().intValue() == user.getId().intValue()) em.remove(foundBookmark);
             else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+bm.getId()+" denied for user "+user.getDn());
         }
@@ -153,7 +152,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         
         for(DataUrlDTO url : dtos){
             //security, check if users bookmark
-            DataReference foundDataReference = em.find(DataReference.class,new BigDecimal(url.getId()));
+            DataReference foundDataReference = em.find(DataReference.class,url.getId());
             if(foundDataReference.getUserId().getId().intValue() == user.getId().intValue()) em.remove(foundDataReference);
             else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+url.getId()+" denied for user "+user.getDn());
         }
