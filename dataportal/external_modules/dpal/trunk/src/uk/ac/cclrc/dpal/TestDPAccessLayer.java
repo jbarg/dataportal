@@ -58,7 +58,7 @@ public class TestDPAccessLayer
          System.out.println("---") ;
          System.out.println("The list of STUDIES for the keywords"+keyword_list.toString()+":") ;
          //////
-         r_s_l = dpal.GetStudies(keyword_list, "DN") ;
+         r_s_l = dpal.getStudies(keyword_list, "DN") ;
          for(Study s : r_s_l) {
             System.out.println("\t"+s.toString()) ; //note need to write beans.toString methods
             study_id_list.add(s.getId()) ;
@@ -66,7 +66,7 @@ public class TestDPAccessLayer
          System.out.println("-") ;
          //////
          System.out.println("The list of INVESTIGATIONS for these study_ids"+study_id_list.toString()+":") ;
-         r_i_l = dpal.GetInvestigations(study_id_list, "DN") ;
+         r_i_l = dpal.getInvestigations(study_id_list, "DN") ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;
             inv_id_list.add(i.getId()) ;
@@ -74,7 +74,7 @@ public class TestDPAccessLayer
          System.out.println("-") ;
          //////
          System.out.println("The list of DATASETS for the investigation_ids"+inv_id_list.toString()+":") ;
-         r_d_l = dpal.GetDataSets(inv_id_list, "DN") ;
+         r_d_l = dpal.getDataSets(inv_id_list, "DN") ;
          for(DataSet ds : r_d_l) {
             System.out.println("\t"+ds.toString()) ;
             ds_id_list.add(ds.getId()) ;
@@ -82,7 +82,7 @@ public class TestDPAccessLayer
          System.out.println("-") ;
          //////
          System.out.println("The list of DATAFILES for the dataset_ids"+ds_id_list.toString()+":") ;
-         r_f_l = dpal.GetDataFiles(ds_id_list, "DN") ;
+         r_f_l = dpal.getDataFiles(ds_id_list, "DN") ;
          for(DataFile df : r_f_l) {
             System.out.println("\t"+df.toString()) ;
          }
