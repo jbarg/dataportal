@@ -74,7 +74,7 @@ public class DPAccessLayer
    }
 
     /////////////////////////////////////////////////////////////
-    public ArrayList<Study> GetStudies(String[] keyword_array, String DN) throws SQLException
+    public ArrayList<Study> getStudies(String[] keyword_array, String DN) throws SQLException
     {
        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
        ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
@@ -100,7 +100,7 @@ public class DPAccessLayer
        return study_array ;
     }
 
-    public ArrayList<Study> GetStudies(ArrayList<String> keyword_list, String DN) throws SQLException
+    public ArrayList<Study> getStudies(ArrayList<String> keyword_list, String DN) throws SQLException
     {
        String[] ka = new String[keyword_list.size()] ;
        ListIterator li = keyword_list.listIterator() ;
@@ -109,11 +109,11 @@ public class DPAccessLayer
        {
           ka[i++] = (String)li.next() ;
        }
-       return GetStudies(ka,DN);
+       return getStudies(ka,DN);
     }
        
    //////////////////////////////////////////////////////////////
-   public ArrayList<Investigation> GetInvestigations(String[] study_id_array, String DN) throws SQLException {
+   public ArrayList<Investigation> getInvestigations(String[] study_id_array, String DN) throws SQLException {
        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
        //convert string array to integer array
        int[] intArray = new int [study_id_array.length] ;
@@ -144,7 +144,7 @@ public class DPAccessLayer
        return inv_array ; 
     }
 
-    public ArrayList<Investigation> GetInvestigations(ArrayList<String> study_id_list, String DN) throws SQLException
+    public ArrayList<Investigation> getInvestigations(ArrayList<String> study_id_list, String DN) throws SQLException
     {
        String[] sa = new String[study_id_list.size()] ;
        ListIterator li = study_id_list.listIterator() ;
@@ -153,12 +153,12 @@ public class DPAccessLayer
        {
           sa[i++] = (String)li.next() ;
        }
-       return GetInvestigations(sa,DN);
+       return getInvestigations(sa,DN);
     }
 
 
    //////////////////////////////////////////////////////////////
-   public ArrayList<DataSet> GetDataSets(String[] inv_id_array, String DN) throws SQLException {
+   public ArrayList<DataSet> getDataSets(String[] inv_id_array, String DN) throws SQLException {
        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
        //convert string array to integer array
        int[] intArray = new int [inv_id_array.length] ;
@@ -190,7 +190,7 @@ public class DPAccessLayer
        return ds_array ;
     }
 
-    public ArrayList<DataSet> GetDataSets(ArrayList<String> inv_list, String DN) throws SQLException
+    public ArrayList<DataSet> getDataSets(ArrayList<String> inv_list, String DN) throws SQLException
     {
        String[] ia = new String[inv_list.size()] ;
        ListIterator li = inv_list.listIterator() ;
@@ -199,12 +199,12 @@ public class DPAccessLayer
        {
           ia[i++] = (String)li.next() ;
        }
-       return GetDataSets(ia,DN);
+       return getDataSets(ia,DN);
     }
 
    
    //////////////////////////////////////////////////////////////
-   public ArrayList<DataFile> GetDataFiles(String[] ds_id_array, String DN) throws SQLException {
+   public ArrayList<DataFile> getDataFiles(String[] ds_id_array, String DN) throws SQLException {
        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
        //convert string array to integer array
        int[] intArray = new int [ds_id_array.length] ;
@@ -234,7 +234,7 @@ public class DPAccessLayer
        return df_array ;
    }
 
-    public ArrayList<DataFile> GetDataFiles(ArrayList<String> ds_list, String DN) throws SQLException
+    public ArrayList<DataFile> getDataFiles(ArrayList<String> ds_list, String DN) throws SQLException
     {
        String[] dsa = new String[ds_list.size()] ;
        ListIterator li = ds_list.listIterator() ;
@@ -243,7 +243,7 @@ public class DPAccessLayer
        {
           dsa[i++] = (String)li.next() ;
        }
-       return GetDataFiles(dsa,DN);
+       return getDataFiles(dsa,DN);
     }
 
 
