@@ -20,10 +20,12 @@ public class QueryRequest implements Serializable{
     
     
     private String id;
-    private String faciltity;
-    private String keyword;
+    private String facility;
+    private String[] keyword;
     private Timestamp sent;
     private String sid ;
+    private String DN;
+    
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
@@ -37,19 +39,19 @@ public class QueryRequest implements Serializable{
         this.id = id;
     }
 
-    public String getFaciltity() {
-        return faciltity;
+    public String getFacility() {
+        return facility;
     }
 
-    public void setFaciltity(String faciltity) {
-        this.faciltity = faciltity;
+    public void setFacility(String facility) {
+        this.facility = facility;
     }
 
-    public String getKeyword() {
+    public String[] getKeyword() {
         return keyword;
     }
 
-    public void setKeyword(String keyword) {
+    public void setKeyword(String[] keyword) {
         this.keyword = keyword;
     }
 
@@ -67,6 +69,14 @@ public class QueryRequest implements Serializable{
 
     public void setSid(String sid) {
         this.sid = sid;
+    }
+
+    public String getDN() {
+        return DN;
+    }
+
+    public void setDN(String DN) {
+        this.DN = DN;
     }
     
 }

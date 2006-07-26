@@ -2,17 +2,12 @@ package uk.ac.dl.dp5.sessionbeans.lookup;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import javax.ejb.*;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import org.apache.log4j.Logger;
+import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.dl.dp5.clients.dto.FacilityDTO;
 import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
-import uk.ac.dl.dp5.sessionbeans.transfer.TransferLocal;
-import uk.ac.dl.dp5.sessionbeans.transfer.TransferRemote;
-import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.DPFacilityType;
 
 
@@ -24,8 +19,8 @@ import uk.ac.dl.dp5.util.DPFacilityType;
 @Stateless(mappedName="LookupEJB")
 public class LookupBean extends SessionEJBObject implements LookupRemote, LookupLocal {
     
-    static Logger log = Logger.getLogger(LookupBean.class);    
-      
+    static Logger log = Logger.getLogger(LookupBean.class);
+    
     public Collection<FacilityDTO> getFacilities(DPFacilityType type){
         //change this to a DTO??  maybe later
         log.info("Looking for facilities type: "+type);
@@ -40,7 +35,35 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
             
         }
         return list;
-    } 
+    }
+    
+    public void query(){
+        try {
+               /* if(e.getFacility().equalsIgnoreCase("ISIS")){
+                    Thread.sleep(10000);
+                } else Thread.sleep(5000);
+                results[0] = "glen";*/
+            
+            //init the dp access layer
+            String db_host = "elektra.dl.ac.uk";
+            String db_port = "1521";
+            String db_sid = "minerva2" ;
+            String db_user = "icat_v2copy2" ;
+            String db_pass = "l1verp00lfc" ;
+            String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
+                    "(PROTOCOL=tcp)(PORT="+db_port+"))"+
+                    "(CONNECT_DATA=(SID="+db_sid+")))";
+            
+            DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
+            ArrayList<String> keyword_list = new ArrayList<String>() ;
+            keyword_list.add("hrpd");
+            String[] a = {"hrpd"};
+            dpal.getStudies( a,"F");
+            
+        } catch (Exception ex) {
+            log.debug("Interrupted", ex);
+        }
+    }
     
     
 }

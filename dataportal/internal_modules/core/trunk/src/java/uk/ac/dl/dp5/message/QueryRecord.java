@@ -12,6 +12,8 @@ package uk.ac.dl.dp5.message;
 
 import java.io.*;
 import java.sql.Timestamp;
+import java.util.Collection;
+import uk.ac.cclrc.dpal.beans.Study;
 
 /**
  *
@@ -20,11 +22,11 @@ import java.sql.Timestamp;
 public class QueryRecord implements Serializable {
   private Timestamp sent;
   private Timestamp processed;
-  private Object[] result;
+  private Collection<Study> result;
   private String id;
   private String sid;
 
-  public QueryRecord (String id, String sid, Timestamp sent, Timestamp processed, Object[] result) {
+  public QueryRecord (String id, String sid, Timestamp sent, Timestamp processed, Collection<Study> result) {
     this.setSent(sent);
     this.setProcessed(processed);
     this.setResult(result);
@@ -48,11 +50,11 @@ public class QueryRecord implements Serializable {
         this.processed = processed;
     }
 
-    public Object[] getResult() {
+    public Collection<Study> getResult() {
         return result;
     }
 
-    public void setResult(Object[] result) {
+    public void setResult(Collection<Study> result) {
         this.result = result;
     }
 
@@ -70,5 +72,14 @@ public class QueryRecord implements Serializable {
 
     public void setSid(String sid) {
         this.sid = sid;
+    }
+    
+    public String toString(){
+        StringBuilder b = new StringBuilder();
+        for(Study study : result){
+            b.append(study.getName()+", ");
+        }
+        
+        return "QueryRecord[id: "+id+"] [sid: "+sid+"] [result: "+result.size()+"] [Studies: "+b+"]";
     }
 }
