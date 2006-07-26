@@ -21,4 +21,5 @@ public interface LookupRemote {
     
     public Collection<FacilityDTO> getFacilities(DPFacilityType type);    
    
+    public void query();
 }

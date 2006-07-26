@@ -12,10 +12,10 @@ import uk.ac.dl.dp5.exceptions.UserNotFoundException;
  */
 @Local
 public interface QuerySlaveLocal {
-     public void queryByKeyword(String DN, String facility, String keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-      
-    public boolean isFinished();     
-   
+    public void queryByKeyword(String DN, String facility, String keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public boolean isFinished();
+    
     public void remove();
     
     public Object getQueryResults();

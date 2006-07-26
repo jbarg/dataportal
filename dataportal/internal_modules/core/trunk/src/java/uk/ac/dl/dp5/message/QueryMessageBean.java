@@ -9,22 +9,18 @@
 
 package uk.ac.dl.dp5.message;
 
-import java.sql.Timestamp;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.jms.TextMessage;
 import org.apache.log4j.Logger;
+import uk.ac.cclrc.dpal.DPAccessLayer;
+import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp5.clients.dto.QueryRequest;
-import uk.ac.dl.dp5.entity.EventLog;
-import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
-import uk.ac.dl.dp5.exceptions.UserNotFoundException;
-import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
-import uk.ac.dl.dp5.util.UserUtil;
 
 /**
  *
@@ -41,7 +37,8 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
         
         log.debug("onMessage();  Event message received");
         ObjectMessage msg = null;
-        String[] results = new String[1];
+       
+        Collection<Study> r_s_l = new ArrayList<Study>() ;
         
         if (message instanceof ObjectMessage) {
             msg = (ObjectMessage) message;
@@ -53,18 +50,37 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
             }
             
             //TODO do search here
-            log.debug("Query : Keyword "+e.getKeyword()+" on fac: "+e.getFaciltity()+" sent at "+e.getSent());
+            log.debug("Query : Keyword "+e.getKeyword()+" on fac: "+e.getFacility()+" sent at "+e.getSent());
             try {
-                if(e.getFaciltity().equals("ISIS")){
+               /* if(e.getFacility().equalsIgnoreCase("ISIS")){
                     Thread.sleep(10000);
                 } else Thread.sleep(5000);
-                results[0] = "glen";
-            } catch (InterruptedException ex) {
-                log.debug("Imterrupted", ex);
+                results[0] = "glen";*/
+                
+                //init the dp access layer
+                String db_host = "elektra.dl.ac.uk";
+                String db_port = "1521";
+                String db_sid = "minerva2" ;
+                String db_user = "icat_v2copy2" ;
+                String db_pass = "l1verp00lfc" ;
+                String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
+                        "(PROTOCOL=tcp)(PORT="+db_port+"))"+
+                        "(CONNECT_DATA=(SID="+db_sid+")))";
+                
+                DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
+                
+                log.debug("Querying: "+e.getDN()+" with facilities: "+e.getFacility());
+                log.debug("keyword is "+e.getKeyword());
+                
+                r_s_l = dpal.getStudies(e.getKeyword(),e.getDN());
+                
+                
+            } catch (Exception ex) {
+                log.debug("Interrupted", ex);
             }
-             results[0] = "glen";
+            
             log.debug("Query finished..");
-            QueryManager.addRecord(e.getId(),e.getSid(),e.getSent(), results);
+            QueryManager.addRecord(e.getId(),e.getSid(),e.getSent(), r_s_l);
             
         }
         

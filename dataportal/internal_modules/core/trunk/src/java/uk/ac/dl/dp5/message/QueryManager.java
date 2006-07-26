@@ -15,7 +15,9 @@ package uk.ac.dl.dp5.message;
  */
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import org.apache.log4j.Logger;
+import uk.ac.cclrc.dpal.beans.Study;
 
 public class QueryManager {
     
@@ -47,12 +49,12 @@ public class QueryManager {
         }
     }
     
-    public static void addRecord(String id, String sid,  Timestamp sent, Object[] result) {
+    public static void addRecord(String id, String sid,  Timestamp sent, Collection<Study> result) {
         // Remove the earliest item if the cache is full
         if (crs.size() > maxSize) {
             crs.remove(0);
         }
-        
+        log.debug("Adding record for sid: "+sid+" with "+result.size()+" results");
         
         Timestamp processed =
                 new Timestamp(System.currentTimeMillis());

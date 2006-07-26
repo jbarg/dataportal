@@ -57,14 +57,8 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         log.debug("getSession()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         return new SessionUtil(sid,em).getSessionDTO();
-    }
-    
-    public boolean addSessionI(Role role) throws SessionNotFoundException{
-        log.debug("addSessionI Test()");
-        if(role == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        em.merge(role);
-        return true;
-    }
+    }   
+   
     
     public String login(String username,String password, int lifetime) throws LoginMyProxyException, CannotCreateNewUserException{
         log.debug("login()");
@@ -160,7 +154,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.info("New session created for user: "+DN+" sid: "+sid);
             
             //add login event
-            userutil.sendEventLog(DPEvent.LOG_ON,"Logged on at "+new Date());
+          //  userutil.sendEventLog(DPEvent.LOG_ON,"Logged on at "+new Date());
             
             return sid;
             

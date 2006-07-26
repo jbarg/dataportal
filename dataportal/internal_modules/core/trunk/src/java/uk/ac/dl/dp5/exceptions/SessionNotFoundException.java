@@ -13,7 +13,7 @@ package uk.ac.dl.dp5.exceptions;
  *
  * @author gjd37
  */
-public class SessionNotFoundException extends DataPortalException {
+public class SessionNotFoundException extends SessionException {
     
     /**
      * Creates a new instance of <code>UserNotFoundException</code> without detail message.
