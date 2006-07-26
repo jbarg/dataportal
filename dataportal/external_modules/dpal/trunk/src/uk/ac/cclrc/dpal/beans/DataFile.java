@@ -3,7 +3,7 @@ package uk.ac.cclrc.dpal.beans;
 import java.io.Serializable;
 
 
-public class DataFile extends Common implements Serializable
+public class DataFile extends Common 
 {
    //bean begins
    private String uri = null ;
