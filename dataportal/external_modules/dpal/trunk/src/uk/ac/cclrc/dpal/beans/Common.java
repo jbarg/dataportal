@@ -1,6 +1,8 @@
 package uk.ac.cclrc.dpal.beans;
 
-public class Common
+import java.io.Serializable;
+
+public class Common implements Serializable
 {
    //bean begins
    protected String name = null ;

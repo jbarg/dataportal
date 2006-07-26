@@ -2,7 +2,7 @@ package uk.ac.cclrc.dpal.beans;
 
 import java.io.Serializable;
 
-public class DataSet extends Common implements Serializable
+public class DataSet extends Common 
 {
    //bean begins
    private String dataSetStatus = null ;
