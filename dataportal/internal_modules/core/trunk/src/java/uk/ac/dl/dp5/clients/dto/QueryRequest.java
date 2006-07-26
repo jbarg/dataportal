@@ -11,6 +11,7 @@ package uk.ac.dl.dp5.clients.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import uk.ac.cclrc.dpal.DPAccessLayer;
 
 /**
  *
@@ -25,7 +26,7 @@ public class QueryRequest implements Serializable{
     private Timestamp sent;
     private String sid ;
     private String DN;
-    
+    private DPAccessLayer dpal;
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
@@ -77,6 +78,14 @@ public class QueryRequest implements Serializable{
 
     public void setDN(String DN) {
         this.DN = DN;
+    }
+
+    public DPAccessLayer getDpal() {
+        return dpal;
+    }
+
+    public void setDpal(DPAccessLayer dpal) {
+        this.dpal = dpal;
     }
     
 }

@@ -16,7 +16,7 @@ package uk.ac.dl.dp5.util;
 public enum DPFacilityType {
     
     ACM("ACM"),
-    WRAPPER("WRAPPER");
+    WRAPPER("dpal");
     
      
     DPFacilityType(String value) {

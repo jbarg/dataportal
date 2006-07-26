@@ -11,6 +11,7 @@ package uk.ac.dl.dp5.message;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -20,7 +21,10 @@ import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp5.clients.dto.QueryRequest;
+import uk.ac.dl.dp5.entity.ModuleLookup;
+import uk.ac.dl.dp5.sessionbeans.lookup.LookupLocal;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
+import uk.ac.dl.dp5.util.DPFacilityType;
 
 /**
  *
@@ -31,13 +35,15 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
     
     static Logger log = Logger.getLogger(QueryMessageBean.class);
     
+    @EJB
+    private LookupLocal lookupLocal;
     
     public void onMessage(Message message) {
         
         
         log.debug("onMessage();  Event message received");
         ObjectMessage msg = null;
-       
+        
         Collection<Study> r_s_l = new ArrayList<Study>() ;
         
         if (message instanceof ObjectMessage) {
@@ -50,27 +56,22 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
             }
             
             //TODO do search here
+            DPAccessLayer dpal = null;
             log.debug("Query : Keyword "+e.getKeyword()+" on fac: "+e.getFacility()+" sent at "+e.getSent());
             try {
-               /* if(e.getFacility().equalsIgnoreCase("ISIS")){
-                    Thread.sleep(10000);
-                } else Thread.sleep(5000);
-                results[0] = "glen";*/
-                
-                //init the dp access layer
-                String db_host = "elektra.dl.ac.uk";
-                String db_port = "1521";
-                String db_sid = "minerva2" ;
-                String db_user = "icat_v2copy2" ;
-                String db_pass = "l1verp00lfc" ;
-                String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
-                        "(PROTOCOL=tcp)(PORT="+db_port+"))"+
-                        "(CONNECT_DATA=(SID="+db_sid+")))";
-                
-                DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
-                
                 log.debug("Querying: "+e.getDN()+" with facilities: "+e.getFacility());
                 log.debug("keyword is "+e.getKeyword());
+                
+                Collection<ModuleLookup>  moduleLookup = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+                
+                for(ModuleLookup mlu : moduleLookup ){
+                    if(e.getFacility().equals(mlu.getFacility())){
+                        log.debug("Got facility "+e.getFacility());
+                        dpal  = new DPAccessLayer(mlu.getFacility(),mlu.getConnection(),mlu.getUsername(),mlu.getPassword());
+                        
+                    }
+                    
+                }
                 
                 r_s_l = dpal.getStudies(e.getKeyword(),e.getDN());
                 

@@ -29,7 +29,7 @@ import uk.ac.dl.dp5.util.CachingServiceLocator;
  * @author gjd37
  */
 public class QueryClient {
-    String sid = "79188395-f022-43c9-8e84-f9b59e87a171";
+    String sid = "19e62f8f-0b35-4d34-97a5-47a80f76d8ee";
     boolean loggingin = false;
     QuerySlaveMasterRemote qsmr;
     SessionRemote sless1;
@@ -59,9 +59,9 @@ public class QueryClient {
             
             
             ArrayList<String> facs = new ArrayList<String>();
-            facs.add("isis");
+            facs.add("ISIS");
             
-            qsmr.queryByKeyword(sid,facs,new String[]{"raw","hrpd"});
+            qsmr.queryByKeyword(sid,facs,new String[]{"edinburgh","hrpd"});
             printTime("printed query");
             
             
