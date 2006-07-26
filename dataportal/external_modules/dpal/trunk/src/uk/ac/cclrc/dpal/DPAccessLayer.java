@@ -83,6 +83,36 @@ public class DPAccessLayer {
         return ;
     }
     
+    ////////////////////////////////////////////////////////////
+    //special method for GetStudies to supress duplicates where multiple studies might be attached
+    //to specific keywords - we only really want one and the keyword being put in the beans list
+    public ArrayList<Study> MergeDuplicateStudies(ArrayList<Study> sal) 
+    {
+       ArrayList<Study> result = new ArrayList<Study>() ;
+
+       boolean exists = false ;
+
+       for(Study os : sal) {
+          for(Study ns : result) {
+             if(os.getName().compareTo(ns.getName())==0){
+                //we have a match - i.e. same study different keyword 
+                ns.setKeyword(os.getFirstKeyword()) ;
+                exists = true ;
+             }
+          }
+          if (exists == false) {
+             result.add(os) ;
+             exists = true ;
+          } 
+          exists = false ;
+       }
+
+       return result ;
+    }
+
+       
+
+
     /////////////////////////////////////////////////////////////
     public ArrayList<Study> getStudies(String[] keyword_array, String DN) throws SQLException {
         log.debug("getStudies()");
@@ -107,7 +137,7 @@ public class DPAccessLayer {
             study_array.add(st) ;
         }
         r.close() ;
-        return study_array ;
+        return MergeDuplicateStudies(study_array) ;
     }
     
     public ArrayList<Study> getStudies(ArrayList<String> keyword_list, String DN) throws SQLException {

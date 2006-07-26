@@ -22,6 +22,13 @@ public class Study extends Common
    public LinkedHashSet getKeyword() {
       return this.keyword ;
    }
+
+   public String getFirstKeyword() {
+      for (String s : keyword){
+         return s;
+      }
+      return null ;
+   }
  
    //setters
    public void setStartDate(String startDate) {

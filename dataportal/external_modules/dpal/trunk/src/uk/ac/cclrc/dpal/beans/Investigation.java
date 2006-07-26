@@ -5,8 +5,6 @@ import java.io.Serializable;
 public class Investigation extends Common 
 {
    //bean begins
-   private String name = null ;
-   private String id = null ;
    private String investigationType = null ;
    private String investigationAbstract = null ;
    private String studyId = null ;
@@ -39,6 +37,7 @@ public class Investigation extends Common
 
    //support for printing
    public String toString() {
+      //can't use variable names of superclass as there are not inherited
       return "[name]:"+name+
              " [id]:"+id+
              " [type]:"+investigationType+
