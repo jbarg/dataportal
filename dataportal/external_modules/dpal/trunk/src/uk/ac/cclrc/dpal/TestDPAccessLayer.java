@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.* ;
 
 //for catching exceptions
-import java.sql.*;
+import java.sql.SQLException;
 
 //for processing the beans
 import uk.ac.cclrc.dpal.beans.* ;
