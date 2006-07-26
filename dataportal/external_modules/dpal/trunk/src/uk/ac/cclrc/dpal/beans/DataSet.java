@@ -1,6 +1,8 @@
 package uk.ac.cclrc.dpal.beans;
 
-public class DataSet extends Common
+import java.io.Serializable;
+
+public class DataSet extends Common implements Serializable
 {
    //bean begins
    private String dataSetStatus = null ;

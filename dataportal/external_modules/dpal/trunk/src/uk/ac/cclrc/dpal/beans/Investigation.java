@@ -1,6 +1,8 @@
 package uk.ac.cclrc.dpal.beans;
 
-public class Investigation extends Common
+import java.io.Serializable;
+
+public class Investigation extends Common implements Serializable
 {
    //bean begins
    private String name = null ;
