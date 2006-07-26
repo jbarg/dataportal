@@ -30,15 +30,10 @@ public interface QuerySlaveMasterRemote {
     public Collection<String> getCompleted();
     
     public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
-    
-    public Collection<Investigation> getInvestigations(String sid, String[] ids) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
-    
-    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
-    
-    public Collection<DataSet> getDataSets(String sid, String[] ids) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
         
+    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
+            
     public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
     
-    public Collection<DataFile> getDataFiles(String sid, String[] ids) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
-    
+      
 }

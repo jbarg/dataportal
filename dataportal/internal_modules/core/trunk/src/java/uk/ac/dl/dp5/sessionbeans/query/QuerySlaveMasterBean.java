@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -34,6 +35,7 @@ import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp5.clients.dto.QueryRequest;
+import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.exceptions.QueryException;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
@@ -41,14 +43,15 @@ import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
 import uk.ac.dl.dp5.message.QueryManager;
 import uk.ac.dl.dp5.message.QueryRecord;
+import uk.ac.dl.dp5.sessionbeans.lookup.LookupLocal;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
+import uk.ac.dl.dp5.util.DPFacilityType;
 import uk.ac.dl.dp5.util.UserUtil;
 /**
  *
  * @author gjd37
  */
 @Stateful(mappedName="QuerySlaveMasterEJB")
-@EJB(name="QuerySlave", beanInterface=QuerySlaveLocal.class)
 public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlaveMasterRemote {
     
     static Logger log = Logger.getLogger(QuerySlaveMasterBean.class);
@@ -62,12 +65,17 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     @Resource(mappedName="jms/QueryMDBQueue")
     private  Queue queue;
     
+    @EJB
+    private LookupLocal lookupLocal;
+    
     private String sid ;
     private Collection<String> facilities;
     
     //stateful info
-    String DN;
-    User user;
+    private String userDN;
+    private User user;
+    
+    private HashMap<String,DPAccessLayer> connections;
     
     @PrePassivate
     public void prePassivate(){
@@ -81,7 +89,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     public void preDestory(){
         this.sid = null;
         this.facilities = null;
-        this.DN = null;
+        this.userDN = null;
         this.user = null;
         
         log.info("Destroying..");
@@ -90,12 +98,11 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     public void queryByKeyword(String sid, Collection<String> facilities, String[] keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
-        
-        User user = new UserUtil(sid,em).getUser();
-        String userDN = user.getDn();
-        log.debug("User DN: "+userDN+" is searching");
         this.sid = sid;
         this.facilities = facilities;
+        
+        getUserInfo(sid);
+        checkConnections();
         
         Connection connection = null;
         Session session = null;
@@ -106,7 +113,8 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             messageProducer = session.createProducer(queue);
         } catch (JMSException ex) {
-            ex.printStackTrace();
+            log.error("JMSExcption on connection to meesage: ",ex);
+            throw new QueryException("Unexpected error, JSMException with connecting to message queue",ex);
         }
         
         //TODO real query
@@ -123,7 +131,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
                 e.setDN(userDN);
                 e.setKeyword(keyword);
                 e.setSent(new Timestamp(System.currentTimeMillis()));
-                
+             
                 message.setObject(e);
                 //TODO  should we do first in first out on QueryManager so can have more than one per session
                 //250 is not going to be full
@@ -190,132 +198,129 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         return qra;
     }
     
-    
-    public Collection<Investigation> getInvestigations(String sid, String[] ids) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        //TODO check for nulls
-        
-        User user = new UserUtil(sid,em).getUser();
-        String userDN = user.getDn();
-        
-        //init the dp access layer
-        String db_host = "elektra.dl.ac.uk";
-        String db_port = "1521";
-        String db_sid = "minerva2" ;
-        String db_user = "icat_v2copy2" ;
-        String db_pass = "l1verp00lfc" ;
-        String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
-                "(PROTOCOL=tcp)(PORT="+db_port+"))"+
-                "(CONNECT_DATA=(SID="+db_sid+")))";
-        
-        DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
-        try {
-            
-            return  dpal.getInvestigations(ids, userDN) ;
-        } catch (SQLException ex) {
-            log.error("Unable to search study ids: ",ex);
-            throw new QueryException("Unable to search study ids: ",ex);
-        }
-    }
     public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
-        String[] study_ids = new String[studies.size()];
-        log.debug("Searching for investigations with Study ids:");
-        int i = 0;
-        for(Study study : studies){
-            log.debug(study.getId());
-            study_ids[i] = study.getId();
-            i++;
+        getUserInfo(sid);
+        checkConnections();
+        
+        Collection<Investigation> investigations = new ArrayList<Investigation>();
+        
+        for(String fac : facilities){
+            ArrayList<String> study_id = new ArrayList<String>();
+            
+            for(Study st : studies){
+                if(st.getFacility().equalsIgnoreCase(fac)) study_id.add(st.getId());
+            }
+            
+            if(study_id.size() == 0) continue ;
+            
+            try {
+                
+                investigations.addAll(connections.get(fac).getInvestigations(study_id, userDN));
+            } catch (SQLException ex) {
+                log.error("Unable to search Investigations ids: ",ex);
+                throw new QueryException("Unable to search Investigations ids: ",ex);
+            }
         }
         
-        return getInvestigations(sid, study_ids);
+        return investigations;
         
     }
     
-    public Collection<DataSet> getDataSets(String sid, String[] ids) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        //TODO check for nulls
-        
-        User user = new UserUtil(sid,em).getUser();
-        String userDN = user.getDn();
-        
-        //init the dp access layer
-        String db_host = "elektra.dl.ac.uk";
-        String db_port = "1521";
-        String db_sid = "minerva2" ;
-        String db_user = "icat_v2copy2" ;
-        String db_pass = "l1verp00lfc" ;
-        String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
-                "(PROTOCOL=tcp)(PORT="+db_port+"))"+
-                "(CONNECT_DATA=(SID="+db_sid+")))";
-        
-        DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
-        try {
-            
-            return  dpal.getDataSets(ids, userDN) ;
-        } catch (SQLException ex) {
-            log.error("Unable to search study ids: ",ex);
-            throw new QueryException("Unable to search study ids: ",ex);
-        }
-    }
     public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
-        String[] investigations_ids = new String[investigations.size()];
-        log.debug("Searching for datasets with investigation ids:");
-        int i = 0;
-        for(Investigation invest : investigations){
-            log.debug(invest.getId());
-            investigations_ids[i] = invest.getId();
-            i++;
+        getUserInfo(sid);
+        checkConnections();
+        
+        Collection<DataSet> datasets = new ArrayList<DataSet>();
+        
+        for(String fac : facilities){
+            ArrayList<String> investigation_id = new ArrayList<String>();
+            
+            for(Investigation in : investigations){
+                if(in.getFacility().equalsIgnoreCase(fac)) investigation_id.add(in.getId());
+            }
+            
+            if(investigation_id.size() == 0) continue ;
+            
+            try {
+                
+                datasets.addAll(connections.get(fac).getDataSets(investigation_id, userDN));
+            } catch (SQLException ex) {
+                log.error("Unable to search Investigations ids: ",ex);
+                throw new QueryException("Unable to search Investigations ids: ",ex);
+            }
         }
         
-        return getDataSets(sid, investigations_ids);        
+        return datasets;
     }
     
-    public Collection<DataFile> getDataFiles(String sid, String[] ids) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        //TODO check for nulls
-        
-        User user = new UserUtil(sid,em).getUser();
-        String userDN = user.getDn();
-        
-        //init the dp access layer
-        String db_host = "elektra.dl.ac.uk";
-        String db_port = "1521";
-        String db_sid = "minerva2" ;
-        String db_user = "icat_v2copy2" ;
-        String db_pass = "l1verp00lfc" ;
-        String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
-                "(PROTOCOL=tcp)(PORT="+db_port+"))"+
-                "(CONNECT_DATA=(SID="+db_sid+")))";
-        
-        DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
-        try {
-            
-            return  dpal.getDataFiles(ids, userDN) ;
-        } catch (SQLException ex) {
-            log.error("Unable to search study ids: ",ex);
-            throw new QueryException("Unable to search study ids: ",ex);
-        }
-    }
+    
     public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
-        String[] dataset_ids = new String[datasets.size()];
-        log.debug("Searching for datafile with dataset ids:");
-        int i = 0;
-        for(DataSet ds : datasets){
-            log.debug(ds.getId());
-            dataset_ids[i] = ds.getId();
-            i++;
+        getUserInfo(sid);
+        checkConnections();
+        
+        Collection<DataFile> datafiles = new ArrayList<DataFile>();
+        
+        for(String fac : facilities){
+            ArrayList<String> datasets_id = new ArrayList<String>();
+            
+            for(DataSet ds : datasets){
+                if(ds.getFacility().equalsIgnoreCase(fac)) datasets_id.add(ds.getId());
+            }
+            
+            if(datasets_id.size() == 0) continue ;
+            
+            try {
+                
+                datafiles.addAll(connections.get(fac).getDataFiles(datasets_id, userDN));
+            } catch (SQLException ex) {
+                log.error("Unable to search Investigations ids: ",ex);
+                throw new QueryException("Unable to search Investigations ids: ",ex);
+            }
         }
         
-        return getDataFiles(sid, dataset_ids);        
+        return datafiles;
+    }
+    
+    private void getUserInfo(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException{
+        if(user == null){
+            this.user = new UserUtil(sid,em).getUser();
+            this.userDN = user.getDn();
+            log.debug("User DN: "+userDN+" is searching");
+        }
+    }
+    
+    private void checkConnections() {
+        //nothing
+        if(connections == null){
+            connections = new HashMap<String,DPAccessLayer>();
+            //look up connection info
+            Collection<ModuleLookup>  moduleLookup = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+            log.debug("Looked up facility info, results : "+moduleLookup.size());
+            for(ModuleLookup mlu : moduleLookup){
+                log.debug(mlu.getFacility());
+            }
+            
+            
+            for(String fac : facilities){
+                for(ModuleLookup mlu : moduleLookup ){
+                    if(fac.equals(mlu.getFacility())){
+                        log.debug("Got facility "+fac+", creating DPAccessLayer and adding to hashmap.");
+                        DPAccessLayer dpal  = new DPAccessLayer(mlu.getFacility(),mlu.getConnection(),mlu.getUsername(),mlu.getPassword());
+                        connections.put(fac, dpal);
+                    }
+                }
+            }
+        }
+        
     }
     
     

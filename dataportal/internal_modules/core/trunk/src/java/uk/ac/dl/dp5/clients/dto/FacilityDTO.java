@@ -20,7 +20,7 @@ import uk.ac.dl.dp5.util.DPFacilityType;
 public class FacilityDTO implements Serializable {
     
     
-    private String connection;
+    //private String connection;
     
     private String platform;
     
@@ -41,13 +41,13 @@ public class FacilityDTO implements Serializable {
         this.setActive(mlo.getActive());
     }
 
-    public String getConnection() {
+   /* public String getConnection() {
         return connection;
     }
 
     public void setConnection(String connection) {
         this.connection = connection;
-    }
+    }*/
 
     public String getPlatform() {
         return platform;
