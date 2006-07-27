@@ -39,7 +39,7 @@ public class SessionUtil {
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         try {
             session  = (Session) em.createNamedQuery("Session.findByUserSessionId").setParameter("userSessionId",sid).getSingleResult();
-           if(!isValid()) throw new SessionTimedOutException("sid: "+sid+" has expired.");                
+           if(!isValid()) throw new SessionTimedOutException(sid);                
       
         } catch(EntityNotFoundException enfe){
             throw new SessionNotFoundException("No session found for sid: "+sid);

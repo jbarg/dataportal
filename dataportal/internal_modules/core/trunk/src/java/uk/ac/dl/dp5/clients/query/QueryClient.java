@@ -8,9 +8,9 @@ import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
+import uk.ac.dl.dp5.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp5.message.QueryRecord;
 import uk.ac.dl.dp5.sessionbeans.query.QuerySlaveMasterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -29,7 +29,7 @@ import uk.ac.dl.dp5.util.CachingServiceLocator;
  * @author gjd37
  */
 public class QueryClient {
-    String sid = "19e62f8f-0b35-4d34-97a5-47a80f76d8ee";
+    String sid = "bf934753-a6bf-4635-8549-cc37e4aa2bf8";
     boolean loggingin = false;
     QuerySlaveMasterRemote qsmr;
     SessionRemote sless1;
@@ -60,9 +60,12 @@ public class QueryClient {
             
             ArrayList<String> facs = new ArrayList<String>();
             facs.add("ISIS");
+             facs.add("ISIS2");
+             
+            System.out.println("About to query");
             
-            qsmr.queryByKeyword(sid,facs,new String[]{"edinburgh","hrpd"});
-            printTime("printed query");
+            qsmr.queryByKeyword(sid,facs,new String[]{"hrpd"});
+            printTime("printed query: ");
             
             
             while(!qsmr.isFinished()){
@@ -80,43 +83,59 @@ public class QueryClient {
                 }
             }
             printTime("finished");
-            Collection<QueryRecord> qr = (Collection<QueryRecord>) qsmr.getQueryResults();
+            Collection<Study> qr =  qsmr.getQueryResults();
             
-            Collection<Study> st = new ArrayList<Study>();
-            for(QueryRecord rec : qr){
+            
+            for(Study rec : qr){
                 System.out.println(rec);
                 
-                for(Study res : rec.getResult()){
-                    System.out.println(res);
-                    st.add(res);                    
-                }
+                
             }
             printTime("got study results");
             
-                        
-            Collection<Investigation> ins = (Collection<Investigation>) qsmr.getInvestigations(sid,st);
+            
+            Collection<Investigation> ins =  qsmr.getInvestigations(sid,qr);
             
             for(Investigation in : ins){
-                System.out.println(in);               
+                System.out.println(in);
             }
             printTime("got investigation results");
             
-            Collection<DataSet> daset = (Collection<DataSet>) qsmr.getDataSets(sid,ins);
+            Collection<DataSet> daset =  qsmr.getDataSets(sid,ins);
             
             for(DataSet ds : daset){
-                System.out.println(ds);                
+                System.out.println(ds);
             }
             printTime("got dataset results");
             
-             Collection<DataFile> dafile = (Collection<DataFile>) qsmr.getDataFiles(sid,daset);
+            Collection<DataFile> dafile =  qsmr.getDataFiles(sid,daset);
             
             for(DataFile df : dafile){
-                System.out.println(df);                
+                System.out.println(df);
             }
             printTime("got datafile results");
             
+            
+            //get all current querys
+            Collection<QueryRecordDTO> dtos =  qsmr.getCurrentResults(sid);
+            
+            for(QueryRecordDTO dto : dtos){
+                System.out.println(dto);
+            }
+            printTime("got current results");
+            
+            
+            //get current results studies
+             Collection<Study> dtos1 =  qsmr.getPastQueryResults(sid,dtos.iterator().next());
+            System.out.println("Studies for: "+dtos1.iterator().next().getName());
+            for(Study dto : dtos1){
+                System.out.println(dto);
+            }
+            printTime("got current results studies");
+            
+            
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("Error:" +e.getMessage());
             if(e.getCause() instanceof java.sql.SQLException){
                 System.out.println("sql");
             } else e.printStackTrace();
