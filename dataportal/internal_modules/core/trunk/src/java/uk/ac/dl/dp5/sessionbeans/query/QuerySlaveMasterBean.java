@@ -1,11 +1,11 @@
-/*
- * QuerySlaveMasterBean.java
- *
- * Created on 30 June 2006, 08:43
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+ /*
+  * QuerySlaveMasterBean.java
+  *
+  * Created on 30 June 2006, 08:43
+  *
+  * To change this template, choose Tools | Template Manager
+  * and open the template in the editor.
+  */
 
 package uk.ac.dl.dp5.sessionbeans.query;
 
@@ -13,7 +13,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.UUID;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -29,11 +32,13 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
 import org.apache.log4j.Logger;
+import org.globus.ftp.exception.NotImplementedException;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
+import uk.ac.dl.dp5.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp5.clients.dto.QueryRequest;
 import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.entity.User;
@@ -46,6 +51,7 @@ import uk.ac.dl.dp5.message.QueryRecord;
 import uk.ac.dl.dp5.sessionbeans.lookup.LookupLocal;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.util.DPQueryType;
 import uk.ac.dl.dp5.util.UserUtil;
 /**
  *
@@ -74,6 +80,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     //stateful info
     private String userDN;
     private User user;
+    private String search_id;
     
     private HashMap<String,DPAccessLayer> connections;
     
@@ -91,15 +98,17 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         this.facilities = null;
         this.userDN = null;
         this.user = null;
+        this.connections = null;
         
         log.info("Destroying..");
     }
     
-    public void queryByKeyword(String sid, Collection<String> facilities, String[] keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+    public String queryByKeyword(String sid, Collection<String> facilities, String[] keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         this.sid = sid;
         this.facilities = facilities;
+        this.search_id =  UUID.randomUUID().toString();
         
         getUserInfo(sid);
         checkConnections();
@@ -107,6 +116,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         Connection connection = null;
         Session session = null;
         MessageProducer messageProducer = null;
+        
         try {
             
             connection = connectionFactory.createConnection();
@@ -125,20 +135,23 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
                 
                 // here we create NewsEntity, that will be sent in JMS message
                 QueryRequest e = new QueryRequest();
-                e.setId(sid+fac);
+                e.setId(search_id+fac);
                 e.setFacility(fac);
+                e.setFacilities(facilities);
                 e.setSid(sid);
+                e.setQueryid(search_id);
                 e.setDN(userDN);
                 e.setKeyword(keyword);
                 e.setSent(new Timestamp(System.currentTimeMillis()));
-             
+                e.setQt(DPQueryType.KEYWORD);
+                
                 message.setObject(e);
                 //TODO  should we do first in first out on QueryManager so can have more than one per session
                 //250 is not going to be full
                 //TODO tuen QueryManager into Session Bean so can search for own data and remove when needed
                 ///and get old results.
                 //clear out old messages
-                QueryManager.removeRecord(sid+fac);
+                // QueryManager.removeRecord(sid+fac);
                 
                 messageProducer.send(message);
                 
@@ -149,7 +162,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             }
         }
         log.debug("sent off querys to MDBs");
-        
+        return search_id;
         
     }
     
@@ -157,7 +170,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         Collection<String> completed  = new ArrayList<String>();
         
         for(String fac : facilities){
-            QueryRecord qr = QueryManager.getRecord(sid+fac);
+            QueryRecord qr = QueryManager.getRecord(search_id+fac);
             if(qr == null){
                 log.debug("No results from: "+fac);
             } else completed.add(fac);
@@ -168,7 +181,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     public boolean isFinished(){
         
         for(String fac : facilities){
-            QueryRecord qr = QueryManager.getRecord(sid+fac);
+            QueryRecord qr = QueryManager.getRecord(search_id+fac);
             if(qr == null){
                 log.debug("No results from: "+fac);
                 return false;
@@ -183,19 +196,23 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     }
     
     //TODO put together a single method to recurse over QueryManager
-    public Collection<QueryRecord> getQueryResults(){
+    public Collection<Study> getQueryResults(){
         log.debug("getQueryResults()");
-        Collection<QueryRecord> qra = new ArrayList<QueryRecord>();
+        //Collection<QueryRecord> qra = new ArrayList<QueryRecord>();
+        Collection<Study> st = new ArrayList<Study>();
         for(String fac : getCompleted()){
             log.debug("Compeleted query for: "+fac);
-            QueryRecord qr = QueryManager.getRecord(sid+fac);
+            QueryRecord qr = QueryManager.getRecord(search_id+fac);
             if(qr != null){
-                log.debug("Added result from "+fac+", "+qr);
-                qra.add(qr);
+                log.debug("Added result from "+fac+", "+qr.getQueryid());
+                //qra.add(qr);
+                for(Study study : qr.getResult()){
+                    st.add(study);
+                }
             }
         }
-        
-        return qra;
+        return st;
+        //return qra;
     }
     
     public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
@@ -320,8 +337,94 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
                 }
             }
         }
-        
     }
     
+    public Collection<QueryRecordDTO> getCurrentResults(String sid){
+        QueryRecord[] qrs = QueryManager.getAll();
+        log.debug("Getting all results, size: "+qrs.length);
+        Collection<QueryRecordDTO> current = Collections.synchronizedSet(new HashSet<QueryRecordDTO>());
+        Collection<QueryRecordDTO> currentAdded = Collections.synchronizedSet(new HashSet<QueryRecordDTO>());
+        
+        
+        //TODO poor coding this needs to thought out (cannot loop through collection and modify at same time)
+        for(QueryRecord qr : qrs){
+            log.debug("Got Sid: "+qr.getSid());
+            if(qr.getSid().equals(sid)){
+                if(current.size() == 0 ) {
+                    log.debug("Adding: "+qr.getQueryid());
+                    current.add(new QueryRecordDTO(qr.getQueryid(),qr.getSent(),qr.getProcessed(),qr.getFacilities()));
+                } else{
+                    for(QueryRecordDTO qrdto : current){
+                        if(!qrdto.getQueryid().equals(qr.getQueryid())){
+                            
+                            boolean alreadyAdded = false;
+                            //check not already added
+                            for(QueryRecordDTO qrdto1 : currentAdded){
+                                log.debug("currentAdded: "+qrdto1.getQueryid());
+                                if(qrdto1.getQueryid().equals(qr.getQueryid())){
+                                    alreadyAdded = true;
+                                    log.debug("Already added: "+qrdto1.getQueryid());
+                                }
+                            }
+                            
+                            if(!alreadyAdded){
+                                log.debug("Adding: "+qr.getQueryid());
+                                currentAdded.add(new QueryRecordDTO(qr.getQueryid(),qr.getSent(),qr.getProcessed(),qr.getFacilities()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        current.addAll(currentAdded);
+        return current;
+    }
+    
+  /*  public Collection<QueryRecordDTO> getAllResults(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        if(true ) throw new NotImplementedException();
+      /*  QueryRecord[] qrs = QueryManager.getAll();
+        Collection<QueryRecordDTO> all = new HashSet<QueryRecordDTO>();
+   
+        String userDn  = new UserUtil(sid,em).getUser().getDn();
+   
+        for(QueryRecord qr : qrs){
+            if(qr.getDN().equals(userDn)){
+   
+                for(QueryRecordDTO qrdto : all){
+                    if(qrdto.getQueryid().equals(qr.getQueryid())){
+                        qrdto.addFac(qr.getFac());
+                    } else all.add(new QueryRecordDTO(qr.getQueryid(),qr.getSent(),qr.getProcessed(),qr.getFac()));
+                }
+            }
+        }
+   
+        return all;*/
+    //}
+    
+    public Collection<Study> getPastQueryResults(String sid, QueryRecordDTO qdto){
+        return getPastQueryResults(sid,qdto.getQueryid(),qdto.getFacs());
+    }
+    
+    
+    public Collection<Study> getPastQueryResults(String sid, String queryid, Collection<String> facilities){
+        Collection<Study> st = new ArrayList<Study>();
+        for(String fac : facilities){
+            
+            QueryRecord qr = QueryManager.getRecord(queryid+fac);
+            if(qr != null){
+                log.debug("Added result from "+fac+", "+qr.getQueryid());
+                //qra.add(qr);
+                //check sid are the same
+                if(qr.getSid().equals(sid)){
+                    for(Study study : qr.getResult()){
+                        st.add(study);
+                    }
+                }
+            }
+        }
+        return st;
+        
+    }
     
 }

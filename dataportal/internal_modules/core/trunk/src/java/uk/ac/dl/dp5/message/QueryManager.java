@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.beans.Study;
+import uk.ac.dl.dp5.clients.dto.QueryRequest;
 
 public class QueryManager {
     
@@ -30,7 +31,7 @@ public class QueryManager {
     // The manager holds 250 messages maximum
     // This should work for low volume sites
     // user can do say 3 sites at once, thats 80 users at once
-    private static int maxSize = 250;
+    private static int maxSize = 2;
     
     public static QueryRecord[] getAll(){
         return crs.toArray(new QueryRecord[crs.size()]);
@@ -42,24 +43,26 @@ public class QueryManager {
         for (int i = 0; i < crs.size(); i++) {
             QueryRecord cr = crs.get(i);
             if (cr.getId().equals(id)) {                
-                log.debug("Removing it "+id+" ? "+    crs.remove(i));
+                log.debug("Removing "+id);
+                crs.remove(i);
                 
                 return ;
             }
         }
     }
     
-    public static void addRecord(String id, String sid,  Timestamp sent, Collection<Study> result) {
+    public static void addRecord(QueryRequest qr, Collection<Study> result,Exception ex) {
         // Remove the earliest item if the cache is full
         if (crs.size() > maxSize) {
+            log.debug("Cache full, removing: "+crs.get(0).getQueryid());
             crs.remove(0);
         }
-        log.debug("Adding record for sid: "+sid+" with "+result.size()+" results");
+        log.debug("Adding record for sid: "+qr.getSid()+" with "+result.size()+" results");
         
         Timestamp processed =
                 new Timestamp(System.currentTimeMillis());
-        addRecord(id,new QueryRecord(id, sid, sent, processed,  result ));
-        log.debug("Adding record with id "+id);
+        addRecord(qr.getId(),new QueryRecord(qr,processed, result,ex));
+        log.debug("Added record with id "+qr.getId());
     }
     
     // The sent timestamp acts as the ID of the message

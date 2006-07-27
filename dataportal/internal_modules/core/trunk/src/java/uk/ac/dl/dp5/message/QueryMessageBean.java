@@ -25,6 +25,7 @@ import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.sessionbeans.lookup.LookupLocal;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.util.DPQueryType;
 
 /**
  *
@@ -49,10 +50,11 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
         if (message instanceof ObjectMessage) {
             msg = (ObjectMessage) message;
             QueryRequest e = null;
+            Exception ex = null;
             try {
                 e = (QueryRequest) msg.getObject();
-            } catch (JMSException ex) {
-                log.debug("Object not correct",ex);
+            } catch (JMSException jmsex) {
+                log.debug("Object not correct",jmsex);
             }
             
             //TODO do search here
@@ -72,20 +74,23 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
                     }
                     
                 }
+                if(e.getQt() == DPQueryType.KEYWORD){
+                    r_s_l = dpal.getStudies(e.getKeyword(),e.getDN());
+                }
                 
-                r_s_l = dpal.getStudies(e.getKeyword(),e.getDN());
                 
-                
-            } catch (Exception ex) {
+            } catch (Exception exception) {
                 log.debug("Interrupted", ex);
+                ex  = exception;
+                       
             }
             
-            log.debug("Query finished..");
-            QueryManager.addRecord(e.getId(),e.getSid(),e.getSent(), r_s_l);
+            log.debug("Query finished.. with id: "+e.getId());
+            QueryManager.addRecord(e , r_s_l, ex);
             
         }
         
-        System.out.println("Message finished");
+        log.debug("Message finished");
     }
     
 }

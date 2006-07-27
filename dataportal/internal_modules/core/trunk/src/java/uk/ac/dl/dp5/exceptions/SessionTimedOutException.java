@@ -26,7 +26,7 @@ public class SessionTimedOutException extends SessionException {
      * Constructs an instance of <code>SessionTimedOutException</code> with the specified detail message.
      * @param msg the detail message.
      */
-    public SessionTimedOutException(String msg) {
-        super(msg);
+    public SessionTimedOutException(String sid) {
+        super("sid: "+sid+" has expired.");
     }
 }

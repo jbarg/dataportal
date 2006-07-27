@@ -11,7 +11,8 @@ package uk.ac.dl.dp5.clients.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import uk.ac.cclrc.dpal.DPAccessLayer;
+import java.util.Collection;
+import uk.ac.dl.dp5.util.DPQueryType;
 
 /**
  *
@@ -22,11 +23,13 @@ public class QueryRequest implements Serializable{
     
     private String id;
     private String facility;
+    private Collection<String> facilities;
     private String[] keyword;
     private Timestamp sent;
     private String sid ;
+    private String queryid;
     private String DN;
-    private DPAccessLayer dpal;
+    private DPQueryType qt;
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
@@ -79,13 +82,31 @@ public class QueryRequest implements Serializable{
     public void setDN(String DN) {
         this.DN = DN;
     }
-
-    public DPAccessLayer getDpal() {
-        return dpal;
+    
+    public DPQueryType getQt() {
+        return qt;
     }
 
-    public void setDpal(DPAccessLayer dpal) {
-        this.dpal = dpal;
+    public void setQt(DPQueryType qt) {
+        this.qt = qt;
     }
+
+    public String getQueryid() {
+        return queryid;
+    }
+
+    public void setQueryid(String queryid) {
+        this.queryid = queryid;
+    }
+
+    public Collection<String> getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(Collection<String> facilities) {
+        this.facilities = facilities;
+    }
+
+ 
     
 }
