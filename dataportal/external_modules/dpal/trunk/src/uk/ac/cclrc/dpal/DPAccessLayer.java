@@ -20,6 +20,9 @@ import uk.ac.cclrc.dpal.beans.* ;
 //log4j
 import org.apache.log4j.Logger;
 
+//for the jdni lookup
+import javax.naming.InitialContext;
+
 public class DPAccessLayer {
     //jdbc handles
     Connection conn = null ;
@@ -28,8 +31,19 @@ public class DPAccessLayer {
     
     //the name of the facility
     String facility = null ;
+
+    //flag to say whether or not we are using a connection pool
+    boolean using_pool = false ;
     
     static Logger log = Logger.getLogger(DPAccessLayer.class);
+
+    ////////////////////////////////////////////////////////////
+    // single param constructor for using a connection pool
+    public DPAccessLayer(String facility)throws javax.naming.NamingException {
+       this.facility = facility ;
+       using_pool = true ;
+       connectToDB() ;
+    }
     
     
     /////////////////////////////////////////////////////////////
@@ -37,6 +51,76 @@ public class DPAccessLayer {
         this.facility = facility ;
         connectToDB(connect_string, username, password) ;
     }
+ 
+    /////////////////////////////////////////////////////////////
+    public void connectToDB() throws javax.naming.NamingException {
+
+        boolean connected = false ;
+        boolean reconnection_attempt = false ;
+
+        while (connected == false) {
+            try {
+                if(r != null) {
+                    r.close() ;
+                }
+                if(s != null) {
+                    s.close() ;
+                }
+                if(conn != null) {
+                    conn.close() ;
+                }
+                log.debug("getting connection from pool:" + "jdbc/" + this.facility);
+
+                InitialContext ctx = new InitialContext();
+                javax.sql.DataSource ds = (javax.sql.DataSource) ctx.lookup("jdbc/" + this.facility);
+ 
+                conn = ds.getConnection();
+
+                log.debug("received a pooled connection");
+
+                s = conn.createStatement() ;
+                connected = true ;
+                if(reconnection_attempt == true) {
+                    log.info("Now reconnected to Relational Database") ;
+                }
+            } catch (SQLException sqle) {
+                log.error("Unable to get connection" ,sqle);
+            }
+            if(connected == false) {
+                log.debug("Attempting reconnection in 30 seconds...") ;
+                try {
+                    Thread.sleep(30000) ;
+                } catch(InterruptedException ie) {
+
+                }
+            }
+        } // end of while - i.e. if exceptions thrown should re-try the connection
+        return ;
+    }
+
+   //////////////////////////////////////////////////////////////
+   // disconnect should work with both direct jdbc and pooled connections
+   public void disconnectFromDB() {
+      try{
+             if(r != null) {
+                 r.close() ;
+             }
+             if(s != null) {
+                 s.close() ;
+             }
+             if(conn != null) {
+                 conn.close() ;
+             }
+       } catch (SQLException sqle) {
+           log.error(sqle.toString());
+       }
+
+       return ;
+     }
+
+
+
+     
     //////////////////////////////////////////////////////////////
     public void connectToDB(String connect_string, String username, String password) {
         try {

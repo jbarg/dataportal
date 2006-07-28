@@ -88,6 +88,9 @@ public class TestDPAccessLayer
          }
          System.out.println("---") ;
          //////
+
+         //test disconnection code
+         dpal.disconnectFromDB() ;
       }
       catch (SQLException sqle)
       {
