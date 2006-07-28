@@ -37,6 +37,7 @@ public class LoginClient {
     public static void main(String[] args) {
         
         try{
+          //  System.setProperty("org.omg.CORBA.ORBInitialHost","volga.dl.ac.uk");
             
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
             

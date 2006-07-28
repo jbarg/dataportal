@@ -2,14 +2,16 @@ package uk.ac.dl.dp5.sessionbeans.lookup;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.ejb.*;
+
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.RunAs;
 import org.apache.log4j.Logger;
-import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.dl.dp5.clients.dto.FacilityDTO;
 import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.DPFacilityType;
-
+import javax.ejb.Stateless;
 
 /**
  * This is the bean class for the LookupBean enterprise bean.
@@ -20,7 +22,9 @@ import uk.ac.dl.dp5.util.DPFacilityType;
 public class LookupBean extends SessionEJBObject implements LookupRemote, LookupLocal {
     
     static Logger log = Logger.getLogger(LookupBean.class);
-    
+       
+    @PermitAll()   
+   //@RolesAllowed("ANYONE")
     public Collection<FacilityDTO> getFacilities(DPFacilityType type){
         //change this to a DTO??  maybe later
         log.info("Looking for facilities type: "+type);

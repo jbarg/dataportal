@@ -9,6 +9,7 @@
 
 package uk.ac.dl.dp5.sessionbeans.session;
 
+import java.io.File;
 import javax.annotation.PostConstruct;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptors;
@@ -17,7 +18,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import uk.ac.dl.dp5.sessionbeans.LoggerInvoker;
 
 /**
  *
@@ -51,7 +51,9 @@ public abstract class SessionEJBObject {
     
     @PostConstruct
     public void init(){
-        PropertyConfigurator.configure("c:/log4j.properties");
+        
+        PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
+        
         log.debug("Loaded log4j properties");
     }
     
@@ -73,7 +75,7 @@ public abstract class SessionEJBObject {
         } finally {
             long time = System.currentTimeMillis() - start;
             //log.debug("Exiting " + target +" , This method takes " +
-                    //time/1000 + "s to execute\n");
+            //time/1000 + "s to execute\n");
             log.debug("\n");
         }
     }

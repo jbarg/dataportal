@@ -44,21 +44,21 @@ public class LookupClient {
             // InitialContext ctx = new InitialContext();
             
             //LookupBean  remote = (LookupBean)ctx.lookup("LookupBeanStateless");
-            
+            //System.setProperty("org.omg.CORBA.ORBInitialHost","volga.dl.ac.uk");
+           
             InitialContext ic = new InitialContext();
             //   LookupRemote sless = (LookupRemote) ic.lookup("uk.ac.dl.dp5.sessionbeans.lookup.LookupRemote");
             
             LookupRemote sless = (LookupRemote) ic.lookup("LookupEJB");
+            
+            
             System.out.println("Looking for facilities type: "+DPFacilityType.ACM);
             Collection<FacilityDTO> facs = (Collection<FacilityDTO>)sless.getFacilities(DPFacilityType.WRAPPER);
-            
+                        
             for(FacilityDTO f : facs){
                 System.out.println(f.getFacility()+" has connection "+f.getModuleType());
             }
            
-            
-           
-            
             
         }catch(Exception e){
             

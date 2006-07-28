@@ -23,8 +23,8 @@ import uk.ac.dl.dp5.entity.Session;
 import uk.ac.dl.dp5.exceptions.DataPortalException;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp5.message.QueryManager;
-import uk.ac.dl.dp5.message.QueryRecord;
+import uk.ac.dl.dp5.message.query.QueryManager;
+import uk.ac.dl.dp5.message.query.QueryRecord;
 import uk.ac.dl.dp5.util.SessionUtil;
 
 
@@ -65,6 +65,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
             sessions = (Collection<Session>) em.createQuery("Session.findAll").getResultList();
         } catch(Exception e){
             log.warn("Error with query in Timer",e);
+            return ;
         }
         log.debug("Number sessions returned is "+sessions.size());
         Calendar now = GregorianCalendar.getInstance();
@@ -84,27 +85,33 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     
     @Timeout
     public void timeoutQueryManager(Timer timer) {
-        QueryRecord[] qr = QueryManager.getAll();
+        Collection<Collection<QueryRecord>> ccqr = QueryManager.getAll();
         
-        for(QueryRecord rec : qr){
+        for(Collection<QueryRecord> cqr : ccqr){
+            QueryRecord qr = cqr.iterator().next();
+            //get Sid
+            String sid  = qr.getSid();
+            //gte query id
+            String queryId = qr.getQueryid();
             try {
-                new SessionUtil(rec.getSid(), em);
+                
+                new SessionUtil(sid, em);
             } catch (DataPortalException ex) {
-                log.info("Remove old query from cache: "+rec.getId());
-                QueryManager.removeRecord(rec.getId());
-            }            
+                log.info("Remove old query from cache: "+queryId);
+                QueryManager.removeRecord(queryId);
+            }
         }
     }
     
     public void removeSessionFromQueryCache(String sid){
-        QueryRecord[] qr = QueryManager.getAll();
+        Collection<String> qr_ids = QueryManager.getUserQueryIds(sid);
         
-        for(QueryRecord rec : qr){
-            if(rec.getSid().equals(sid)){
-                log.info("Remove old query from cache: "+rec.getId());
-                QueryManager.removeRecord(rec.getId());                
-            }
-        }        
-    }    
+        for(String ids : qr_ids){
+            
+            log.info("Remove old query from cache: "+ids);
+            QueryManager.removeRecord(ids);
+            
+        }
+    }
 }
 

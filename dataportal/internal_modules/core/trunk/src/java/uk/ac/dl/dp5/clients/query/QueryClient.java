@@ -29,7 +29,7 @@ import uk.ac.dl.dp5.util.CachingServiceLocator;
  * @author gjd37
  */
 public class QueryClient {
-    String sid = "bf934753-a6bf-4635-8549-cc37e4aa2bf8";
+    String sid = "1e19b8ce-7690-4b8e-b5b5-2f7879669b24";
     boolean loggingin = false;
     QuerySlaveMasterRemote qsmr;
     SessionRemote sless1;
@@ -56,17 +56,21 @@ public class QueryClient {
             
             qsmr = (QuerySlaveMasterRemote)csl.lookup("QuerySlaveMasterEJB");
             printTime("looked up SF bean");
-            
+            time =  new Date().getTime();
+                     
             
             ArrayList<String> facs = new ArrayList<String>();
             facs.add("ISIS");
-             facs.add("ISIS2");
-             
+            facs.add("ISIS2");
+            
             System.out.println("About to query");
             
             qsmr.queryByKeyword(sid,facs,new String[]{"hrpd"});
             printTime("printed query: ");
+                      
+           
             
+            System.out.println("is stateful still there??");
             
             while(!qsmr.isFinished()){
                 System.out.println("not finished yet!");
@@ -91,7 +95,7 @@ public class QueryClient {
                 
                 
             }
-            printTime("got study results");
+            printTime("got study results: # "+qr.size());
             
             
             Collection<Investigation> ins =  qsmr.getInvestigations(sid,qr);
@@ -126,7 +130,7 @@ public class QueryClient {
             
             
             //get current results studies
-             Collection<Study> dtos1 =  qsmr.getPastQueryResults(sid,dtos.iterator().next());
+            Collection<Study> dtos1 =  qsmr.getPastQueryResults(sid,dtos.iterator().next());
             System.out.println("Studies for: "+dtos1.iterator().next().getName());
             for(Study dto : dtos1){
                 System.out.println(dto);
