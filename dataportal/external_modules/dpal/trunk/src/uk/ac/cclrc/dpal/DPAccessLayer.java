@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 //for the jdni lookup
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 public class DPAccessLayer {
     //jdbc handles
@@ -31,18 +32,23 @@ public class DPAccessLayer {
     
     //the name of the facility
     String facility = null ;
-
+    
     //flag to say whether or not we are using a connection pool
     boolean using_pool = false ;
     
+    //cache used for lookup
+    private static Map cache;
+    private static InitialContext ctx;
+    
     static Logger log = Logger.getLogger(DPAccessLayer.class);
-
+        
     ////////////////////////////////////////////////////////////
     // single param constructor for using a connection pool
-    public DPAccessLayer(String facility)throws javax.naming.NamingException {
-       this.facility = facility ;
-       using_pool = true ;
-       connectToDB() ;
+    public DPAccessLayer(String facility)throws NamingException {
+        this.facility = facility ;
+        using_pool = true ;
+        lookupInitialContext();
+        connectToDB() ;
     }
     
     
@@ -51,13 +57,13 @@ public class DPAccessLayer {
         this.facility = facility ;
         connectToDB(connect_string, username, password) ;
     }
- 
+    
     /////////////////////////////////////////////////////////////
     public void connectToDB() throws javax.naming.NamingException {
-
+        
         boolean connected = false ;
         boolean reconnection_attempt = false ;
-
+        
         while (connected == false) {
             try {
                 if(r != null) {
@@ -70,14 +76,13 @@ public class DPAccessLayer {
                     conn.close() ;
                 }
                 log.debug("getting connection from pool:" + "jdbc/" + this.facility);
-
-                InitialContext ctx = new InitialContext();
-                javax.sql.DataSource ds = (javax.sql.DataSource) ctx.lookup("jdbc/" + this.facility);
- 
+                               
+                javax.sql.DataSource ds = (javax.sql.DataSource) lookup("jdbc/" + this.facility);
+                
                 conn = ds.getConnection();
-
+                
                 log.debug("received a pooled connection");
-
+                
                 s = conn.createStatement() ;
                 connected = true ;
                 if(reconnection_attempt == true) {
@@ -91,36 +96,36 @@ public class DPAccessLayer {
                 try {
                     Thread.sleep(30000) ;
                 } catch(InterruptedException ie) {
-
+                    
                 }
             }
         } // end of while - i.e. if exceptions thrown should re-try the connection
         return ;
     }
-
-   //////////////////////////////////////////////////////////////
-   // disconnect should work with both direct jdbc and pooled connections
-   public void disconnectFromDB() {
-      try{
-             if(r != null) {
-                 r.close() ;
-             }
-             if(s != null) {
-                 s.close() ;
-             }
-             if(conn != null) {
-                 conn.close() ;
-             }
-       } catch (SQLException sqle) {
-           log.error(sqle.toString());
-       }
-
-       return ;
-     }
-
-
-
-     
+    
+    //////////////////////////////////////////////////////////////
+    // disconnect should work with both direct jdbc and pooled connections
+    public void disconnectFromDB() {
+        try{
+            if(r != null) {
+                r.close() ;
+            }
+            if(s != null) {
+                s.close() ;
+            }
+            if(conn != null) {
+                conn.close() ;
+            }
+        } catch (SQLException sqle) {
+            log.error(sqle.toString());
+        }
+        
+        return ;
+    }
+    
+    
+    
+    
     //////////////////////////////////////////////////////////////
     public void connectToDB(String connect_string, String username, String password) {
         try {
@@ -167,36 +172,55 @@ public class DPAccessLayer {
         return ;
     }
     
+    private void lookupInitialContext() throws NamingException {
+        if(ctx == null){
+            ctx = new InitialContext();
+            cache = Collections.synchronizedMap(new HashMap());
+        }
+    }
+    
+    //looks up jndi name from cache
+    private Object lookup(String jndiName) throws NamingException {
+        
+        log.debug("Looking up: "+jndiName);
+        Object cachedObj = cache.get(jndiName);
+        if (cachedObj == null) {
+            log.debug(jndiName+ "not found in cache, jndi lookup required.");
+            cachedObj = ctx.lookup(jndiName);
+            cache.put(jndiName, cachedObj);
+        }
+        return cachedObj;
+    }
+    
     ////////////////////////////////////////////////////////////
     //special method for GetStudies to supress duplicates where multiple studies might be attached
     //to specific keywords - we only really want one and the keyword being put in the beans list
-    public ArrayList<Study> MergeDuplicateStudies(ArrayList<Study> sal) 
-    {
-       ArrayList<Study> result = new ArrayList<Study>() ;
-
-       boolean exists = false ;
-
-       for(Study os : sal) {
-          for(Study ns : result) {
-             if(os.getName().compareTo(ns.getName())==0){
-                //we have a match - i.e. same study different keyword 
-                ns.setKeyword(os.getFirstKeyword()) ;
+    public ArrayList<Study> MergeDuplicateStudies(ArrayList<Study> sal) {
+        ArrayList<Study> result = new ArrayList<Study>() ;
+        
+        boolean exists = false ;
+        
+        for(Study os : sal) {
+            for(Study ns : result) {
+                if(os.getName().compareTo(ns.getName())==0){
+                    //we have a match - i.e. same study different keyword
+                    ns.setKeyword(os.getFirstKeyword()) ;
+                    exists = true ;
+                }
+            }
+            if (exists == false) {
+                result.add(os) ;
                 exists = true ;
-             }
-          }
-          if (exists == false) {
-             result.add(os) ;
-             exists = true ;
-          } 
-          exists = false ;
-       }
-
-       return result ;
+            }
+            exists = false ;
+        }
+        
+        return result ;
     }
-
-       
-
-
+    
+    
+    
+    
     /////////////////////////////////////////////////////////////
     public ArrayList<Study> getStudies(String[] keyword_array, String DN) throws SQLException {
         log.debug("getStudies()");
