@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.* ;
+import javax.sql.DataSource;
 
 //for oracle jdbc
 
@@ -26,7 +27,8 @@ import javax.naming.NamingException;
 
 public class DPAccessLayer {
     //jdbc handles
-    Connection conn = null ;
+    Connection normal_conn = null ;
+    OracleConnection conn = null;
     Statement s = null ;
     ResultSet r = null ;
     
@@ -41,7 +43,7 @@ public class DPAccessLayer {
     private static InitialContext ctx;
     
     static Logger log = Logger.getLogger(DPAccessLayer.class);
-        
+    
     ////////////////////////////////////////////////////////////
     // single param constructor for using a connection pool
     public DPAccessLayer(String facility)throws NamingException {
@@ -76,11 +78,15 @@ public class DPAccessLayer {
                     conn.close() ;
                 }
                 log.debug("getting connection from pool:" + "jdbc/" + this.facility);
-                               
-                javax.sql.DataSource ds = (javax.sql.DataSource) lookup("jdbc/" + this.facility);
                 
-                conn = ds.getConnection();
+                DataSource normal_ds = (DataSource)new InitialContext().lookup("jdbc/" + this.facility);
                 
+                com.sun.appserv.jdbc.DataSource ds = (com.sun.appserv.jdbc.DataSource) normal_ds;
+                
+                //need reference to normal conn as this is the connection we close back to pool
+                normal_conn = normal_ds.getConnection();
+                conn = (OracleConnection)ds.getConnection(normal_conn);
+                                                
                 log.debug("received a pooled connection");
                 
                 s = conn.createStatement() ;
@@ -106,15 +112,16 @@ public class DPAccessLayer {
     //////////////////////////////////////////////////////////////
     // disconnect should work with both direct jdbc and pooled connections
     public void disconnectFromDB() {
+        log.debug("Closing");
         try{
             if(r != null) {
-                r.close() ;
+                r.close();
             }
             if(s != null) {
-                s.close() ;
+                s.close();
             }
-            if(conn != null) {
-                conn.close() ;
+            if(normal_conn != null) {
+                normal_conn.close() ;
             }
         } catch (SQLException sqle) {
             log.error(sqle.toString());
@@ -150,7 +157,8 @@ public class DPAccessLayer {
                     conn.close() ;
                 }
                 log.debug("Creating connection");
-                conn = DriverManager.getConnection("jdbc:oracle:thin:@"+connect_string, username, password);
+                normal_conn = DriverManager.getConnection("jdbc:oracle:thin:@"+connect_string, username, password);
+                conn  = (OracleConnection)normal_conn;
                 log.debug("Got a connection");
                 s = conn.createStatement() ;
                 connected = true ;
@@ -223,7 +231,7 @@ public class DPAccessLayer {
     
     /////////////////////////////////////////////////////////////
     public ArrayList<Study> getStudies(String[] keyword_array, String DN) throws SQLException {
-        log.debug("getStudies()");
+        log.debug("getStudies()");        
         
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
