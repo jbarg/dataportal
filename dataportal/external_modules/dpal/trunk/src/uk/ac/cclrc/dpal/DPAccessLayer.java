@@ -123,6 +123,10 @@ public class DPAccessLayer {
             if(normal_conn != null) {
                 normal_conn.close() ;
             }
+            if(using_pool == false && conn != null)
+            {
+               conn.close() ;
+            }
         } catch (SQLException sqle) {
             log.error(sqle.toString());
         }
