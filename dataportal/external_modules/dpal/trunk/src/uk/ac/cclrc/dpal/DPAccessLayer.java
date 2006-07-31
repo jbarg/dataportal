@@ -79,7 +79,7 @@ public class DPAccessLayer {
                 }
                 log.debug("getting connection from pool:" + "jdbc/" + this.facility);
                 
-                DataSource normal_ds = (DataSource)new InitialContext().lookup("jdbc/" + this.facility);
+                DataSource normal_ds = (DataSource) lookup("jdbc/" + this.facility);
                 
                 com.sun.appserv.jdbc.DataSource ds = (com.sun.appserv.jdbc.DataSource) normal_ds;
                 
