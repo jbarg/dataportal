@@ -39,7 +39,7 @@ public class DPAccessLayer {
     boolean using_pool = false ;
     
     //cache used for lookup
-    private static Map cache;
+    private static Map<String,DataSource> cache;
     private static InitialContext ctx;
     
     static Logger log = Logger.getLogger(DPAccessLayer.class);
@@ -79,7 +79,7 @@ public class DPAccessLayer {
                 }
                 log.debug("getting connection from pool:" + "jdbc/" + this.facility);
                 
-                DataSource normal_ds = (DataSource) lookup("jdbc/" + this.facility);
+                DataSource normal_ds =  lookup("jdbc/" + this.facility);
                 
                 com.sun.appserv.jdbc.DataSource ds = (com.sun.appserv.jdbc.DataSource) normal_ds;
                 
@@ -187,18 +187,18 @@ public class DPAccessLayer {
     private void lookupInitialContext() throws NamingException {
         if(ctx == null){
             ctx = new InitialContext();
-            cache = Collections.synchronizedMap(new HashMap());
+            cache = Collections.synchronizedMap(new HashMap<String,DataSource>());
         }
     }
     
     //looks up jndi name from cache
-    private Object lookup(String jndiName) throws NamingException {
+    private DataSource lookup(String jndiName) throws NamingException {
         
         log.debug("Looking up: "+jndiName);
-        Object cachedObj = cache.get(jndiName);
+        DataSource cachedObj = cache.get(jndiName);
         if (cachedObj == null) {
             log.debug(jndiName+ "not found in cache, jndi lookup required.");
-            cachedObj = ctx.lookup(jndiName);
+            cachedObj = (DataSource)ctx.lookup(jndiName);
             cache.put(jndiName, cachedObj);
         }
         return cachedObj;
