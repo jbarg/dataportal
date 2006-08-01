@@ -1,6 +1,6 @@
 package uk.ac.dl.dp5.clients.datacenter;
 import java.util.Collection;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
+import uk.ac.dl.dp5.entity.Bookmark;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
@@ -38,9 +38,9 @@ public class GetBookmarksClient {
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
             
             
-            Collection<BookmarkDTO> dto =  sless.getBookmarks(sid);
+            Collection<Bookmark> dto =  sless.getBookmarks(sid);
             int idremove = 0;
-            for(BookmarkDTO dtos : dto){
+            for(Bookmark dtos : dto){
                 System.out.println("-----------------");
                 System.out.println(dtos.getId());
                 System.out.println(dtos.getFacility());

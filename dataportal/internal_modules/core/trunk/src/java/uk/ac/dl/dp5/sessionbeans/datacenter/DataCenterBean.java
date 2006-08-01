@@ -32,156 +32,130 @@ import uk.ac.dl.dp5.util.*;
  * @author gjd37
  */
 @Stateless(mappedName=DataPortalConstants.DATA_CENTER)
-public class DataCenterBean extends SessionEJBObject implements DataCenterRemote, DataCenterLocal {
+public class DataCenterBean extends SessionEJBObject implements DataCenterRemote {
     
     static Logger log = Logger.getLogger(DataCenterBean.class);
     
-    public Collection<BookmarkDTO> addBookmark(String sid, BookmarkDTO dto) throws  SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
-        Collection<BookmarkDTO> dtos = new ArrayList<BookmarkDTO>();
+    public void addBookmark(String sid, Bookmark dto) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        Collection<Bookmark> dtos = new ArrayList<Bookmark>();
         dtos.add(dto);
-        return addBookmark(sid, dtos );
+        addBookmark(sid, dtos );
     }
     
     
-    public Collection<BookmarkDTO> addBookmark(String sid, Collection<BookmarkDTO> dtos) throws  SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void addBookmark(String sid, Collection<Bookmark> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addBookmark()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         User user = new UserUtil(sid).getUser();
         
-        Collection<BookmarkDTO> uce = new ArrayList<BookmarkDTO>();
-        for(BookmarkDTO dto : dtos){
-            try{
-                Bookmark  bookmark = dto.toBookmark();
-                bookmark.setUserId(user);
-                boolean contains = em.contains(bookmark);
+        for(Bookmark dto : dtos){
+            
+            //users the same
+            if(dto.getId() != null && user.getId() != dto.getUserId().getId()){
+                throw new NoAccessToDataCenterException("Access to add bookmark, Id: "+dto.getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
+            } else {
+                dto.setUserId(user);
+                //no bookmark id, new bookmark or they are equal
+                boolean contains = em.contains(dto);
                 log.trace("Does this bookmark exist in DB: dto name: "+dto.getName()+": ? "+contains);
                 if(contains){
-                    em.merge(bookmark);
-                } else em.persist(bookmark);
-                
-                em.flush();
-            } catch(PersistenceException e){
-                log.debug("eerorr "+e.getCause().getClass(),e);
-                if(e.getCause().getCause() instanceof SQLException){
-                    //unique constraint error //Oracel Only??
-                    SQLException sql = (SQLException)e.getCause().getCause();
-                    log.error("Unable to add bookmark to db.  Error code: "+sql.getErrorCode(),e);
-                    if(sql.getErrorCode() == 1 ){
-                        uce.add(dto);
-                    }
-                } else throw e;
+                    //modified bookmark so merge
+                    em.merge(dto);
+                } else {
+                    //new one so persist
+                    em.persist(dto);
+                }
             }
         }
-        
-        return uce;
-        
     }
     
-    public Collection<BookmarkDTO> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<Bookmark> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("getBookmarks()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         User user = new UserUtil(sid).getUser();
         Collection<Bookmark> bookmarks  = user.getBookmark();
         
-        log.debug("User had "+bookmarks.size()+" number of bookmarks");
+        log.debug("User "+user.getDn()+" has "+bookmarks.size()+" number of bookmarks");
         
-        Collection<BookmarkDTO> dto = new  ArrayList<BookmarkDTO>();
-        
-        for(Bookmark bm : bookmarks){
-            log.debug(""+bm.getId());
-            dto.add(new BookmarkDTO(bm));
-        }
-        return dto;
+        return bookmarks;
     }
     
-    public void removeBookmark(String sid, Collection<BookmarkDTO> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeBookmark(String sid, Collection<Bookmark> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("removeBookmark()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         User user = new UserUtil(sid).getUser();
         
-        for(BookmarkDTO bm : dtos){
+        for(Bookmark bm : dtos){
             //security, check if users bookmark
-            Bookmark foundBookmark = em.find(Bookmark.class,bm.getId());
-            if(foundBookmark.getUserId().getId().intValue() == user.getId().intValue()) em.remove(foundBookmark);
+            if(bm.getUserId().getId() == user.getId()) em.remove(bm);
             else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+bm.getId()+" denied for user "+user.getDn());
         }
     }
     
-    public Collection<DataUrlDTO> addDataUrl(String sid, DataUrlDTO dto) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
-        Collection<DataUrlDTO> dtos = new ArrayList<DataUrlDTO>();
+    public void addDataUrl(String sid, DataReference dto) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        Collection<DataReference> dtos = new ArrayList<DataReference>();
         dtos.add(dto);
-        return addDataUrl(sid, dtos );
+        addDataUrl(sid, dtos);
     }
     
-    public Collection<DataUrlDTO> addDataUrl(String sid, Collection<DataUrlDTO> dtos) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void addDataUrl(String sid, Collection<DataReference> dtos) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addDataUrl()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        for(DataUrlDTO dto: dtos){
-            if(dto.getUrl() == null ) throw new IllegalArgumentException("Urls to add cannot be null");
+        for(DataReference dto: dtos){
+            if(dto.getUrls() == null || dto.getUrls().size() == 0) throw new IllegalArgumentException("Urls to add cannot be null");
         }
         
         User user = new UserUtil(sid).getUser();
         
-        Collection<DataUrlDTO> uce = new ArrayList<DataUrlDTO>();
-        
-        for(DataUrlDTO dto: dtos){
-            try{
-                DataReference dr = dto.toDataReference();
-                dr.setUserId(user);
-                boolean contains = em.contains(dr);
+        for(DataReference dto: dtos){
+            //users the same
+            if(dto.getUserId() != null && user.getId() != dto.getUserId().getId()){
+                throw new NoAccessToDataCenterException("Access to add bookmark, Id: "+dto.getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
+                
+            } else{
+                //set the user to sid user
+                dto.setUserId(user);
+                boolean contains = em.contains(dto);
                 log.trace("Does this URL exist in DB: dto name: "+dto.getName()+": ? "+contains);
                 if(contains){
-                    em.merge(dr);
-                } else em.persist(dr);
-                em.flush();
-            } catch(PersistenceException e){
-                log.debug("eerorr "+e.getCause().getClass(),e);
-                if(e.getCause().getCause() instanceof SQLException){
-                    //unique constraint error //Oracle Only??
-                    SQLException sql = (SQLException)e.getCause().getCause();
-                    log.error("Unable to add bookmark to db.  Error code: "+sql.getErrorCode(),e);
-                    if(sql.getErrorCode() == 1 ){
-                        uce.add(dto);
-                    }
-                } else throw e;
+                    em.merge(dto);
+                } else em.persist(dto);
             }
         }
-        return uce;
-        
     }
     
-    public void removeUrl(String sid, Collection<DataUrlDTO> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeUrl(String sid, Collection<DataReference> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("removeUrl()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         User user = new UserUtil(sid).getUser();
         
-        for(DataUrlDTO url : dtos){
+        for(DataReference url : dtos){
             //security, check if users bookmark
-            DataReference foundDataReference = em.find(DataReference.class,url.getId());
-            if(foundDataReference.getUserId().getId().intValue() == user.getId().intValue()) em.remove(foundDataReference);
-            else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+url.getId()+" denied for user "+user.getDn());
+            if(url.getUserId().getId() == user.getId()) em.remove(url);
+            else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+url.getId()+" denied for user "+user.getDn()+"with id: "+user.getId());
         }
     }
     
-    public Collection<DataUrlDTO> getUrls(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<DataReference> getUrls(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("getUrls()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         User user = new UserUtil(sid).getUser();
         
         Collection<DataReference> urls  = user.getDataReference();
-        log.debug("User had "+urls.size()+" number of bookmarks");
-        Collection<DataUrlDTO> dto = new  ArrayList<DataUrlDTO>();
+        log.debug("User "+user.getDn()+" has "+urls.size()+" number of bookmarks");
         
-        for(DataReference dr : urls){
-            log.debug(""+dr.getId());
-            dto.add(new DataUrlDTO(dr));
+        //initialize urls for detatchment
+        for(DataReference ref : urls){
+            ref.getUrls().size();
+            ref.getUrls().size();
         }
-        return dto;
+        
+        return urls;
     }
     
     

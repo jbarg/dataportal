@@ -1,7 +1,6 @@
 package uk.ac.dl.dp5.clients.datacenter;
 import java.util.Collection;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
-import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
+import uk.ac.dl.dp5.entity.DataReference;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -20,7 +19,7 @@ import uk.ac.dl.dp5.util.DataPortalConstants;
  * @author gjd37
  */
 public class GetUrlsClient {
-    String sid = "";
+    String sid = "1472de3f-b7a4-45a6-8eaa-ff902a320af8";
     /** Creates a new instance of BookmarkClient */
     public GetUrlsClient() {
         try{
@@ -36,14 +35,15 @@ public class GetUrlsClient {
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
             
             
-            Collection<DataUrlDTO> dto =  sless.getUrls(sid);
+            Collection<DataReference> dto =  sless.getUrls(sid);
             
-            for(DataUrlDTO dtos : dto){
+            for(DataReference dtos : dto){
                 System.out.println("-----------------");
                 System.out.println(dtos.getFacility());
                 System.out.println(dtos.getName());
                 System.out.println(dtos.getNote());
                 System.out.println(dtos.getQuery());
+                System.out.println(dtos.getUrls().size());
                 System.out.println("-----------------\n");
             }
             //
