@@ -1,6 +1,7 @@
 package uk.ac.dl.dp5.clients.datacenter;
-import java.util.Collection;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
+import uk.ac.dl.dp5.entity.Bookmark;
+import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -20,6 +21,8 @@ import uk.ac.dl.dp5.util.DataPortalConstants;
  */
 public class AddBookmarkClient {
     String sid = "";
+    boolean loggingin = false;
+    SessionRemote sless1 ;
     /** Creates a new instance of BookmarkClient */
     public AddBookmarkClient() {
         try{
@@ -28,32 +31,39 @@ public class AddBookmarkClient {
             
             
             if(sid == null || sid.equals("")){
-                SessionRemote sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
+                sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);
+                loggingin = true;
             }
             
-            DataCenterRemote sless = (DataCenterRemote) csl.lookup("DataCenterEJB");
-            BookmarkDTO dto = new BookmarkDTO();
+            DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
+            Bookmark dto = new Bookmark();
             //dto.setId(759);
-            dto.setStudyid(454545654);
+            dto.setStudyId(111);
             dto.setFacility("ISIS");
-            dto.setName("BB");
+            dto.setName("no DTO");
             dto.setNote("SS");
             dto.setQuery("QQ");
             
-           Collection<BookmarkDTO> notadded =   sless.addBookmark(sid,dto);
-           for(BookmarkDTO dto1 : notadded){
-               System.out.println("Not added: "+dto1.getStudyid());
-           }
+            sless.addBookmark(sid,dto);
+            
             //
         }catch(Exception e){
             System.out.println(e.getMessage());
             if(e.getCause() instanceof java.sql.SQLException){
                 System.out.println("sql");
-            } else e.printStackTrace();            
-        }
+            } else e.printStackTrace();
+        }  if(loggingin)
+            try {
+                if(sless1 != null) sless1.logout(sid);
+            } catch (SessionTimedOutException ex) {
+                ex.printStackTrace();
+            } catch (SessionNotFoundException ex) {
+                ex.printStackTrace();
+                
+            }
     }
     
     /**

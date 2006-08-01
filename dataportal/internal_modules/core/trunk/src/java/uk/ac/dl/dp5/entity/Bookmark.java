@@ -44,7 +44,7 @@ import javax.persistence.TemporalType;
 public class Bookmark implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)    
+    @GeneratedValue(strategy=GenerationType.AUTO)    
     @Column(name = "ID", nullable = false)
     private Integer id;
 

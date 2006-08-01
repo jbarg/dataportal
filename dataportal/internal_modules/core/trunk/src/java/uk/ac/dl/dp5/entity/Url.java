@@ -63,23 +63,23 @@ public class Url implements Serializable {
     public Url() {
     }
     
-    public Url(Integer id) {
-        this.id = id;
+    public Url(String url) {
+        this.url = url;
     }
     
-    public Url(Integer id, String url, Date modTime) {
+  /*  public Url(Integer id, String url, Date modTime) {
         this.id = id;
         this.url = url;
         this.modTime = modTime;
-    }
+    }*/
     
     public Integer getId() {
         return this.id;
     }
     
-    public void setId(Integer id) {
+    /*public void setId(Integer id) {
         this.id = id;
-    }
+    }*/
     
     public String getUrl() {
         return this.url;

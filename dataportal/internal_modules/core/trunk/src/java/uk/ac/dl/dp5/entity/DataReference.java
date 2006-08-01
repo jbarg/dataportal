@@ -82,7 +82,7 @@ public class DataReference implements Serializable {
     @ManyToOne
     private User userId;
     
-    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name="DP_DATA_REF_URL",
     joinColumns=
             @JoinColumn(name="DATA_REF_ID", referencedColumnName="ID"),
@@ -119,9 +119,9 @@ public class DataReference implements Serializable {
         return this.id;
     }
     
-    public void setId(Integer id) {
+   /* public void setId(Integer id) {
         this.id = id;
-    }
+    }*/
     
     public String getName() {
         return this.name;

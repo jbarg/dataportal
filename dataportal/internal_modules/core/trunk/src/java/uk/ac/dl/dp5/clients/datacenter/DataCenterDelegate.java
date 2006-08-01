@@ -12,18 +12,13 @@ import java.util.Collection;
 import javax.naming.NamingException;
 import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
 import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
-import uk.ac.dl.dp5.clients.dto.SessionDTO;
-import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
-import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
-
-import uk.ac.dl.dp5.exceptions.LoginMyProxyException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
-import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
 
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
+import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemoteDTO;
 import uk.ac.dl.dp5.util.DataPortalConstants;
 
 /**
@@ -33,7 +28,7 @@ import uk.ac.dl.dp5.util.DataPortalConstants;
 public class DataCenterDelegate {
     
     private static DataCenterDelegate dcd;
-    private static DataCenterRemote dcr ;
+    private static DataCenterRemoteDTO dcr ;
     
     public static DataCenterDelegate getInstance(){
         synchronized(DataCenterDelegate.class){
@@ -52,7 +47,7 @@ public class DataCenterDelegate {
     /** Creates a new instance of SessionDelegate */
     private  DataCenterDelegate() throws NamingException {
         CachingServiceLocator csl =  CachingServiceLocator.getInstance();
-        dcr  = (DataCenterRemote)csl.lookup("DataCenterEJB");
+        dcr  = (DataCenterRemoteDTO)csl.lookup(DataPortalConstants.DATA_CENTER+"DTO");
     }
     
     /*All DataCenterBean methods here*/

@@ -1,8 +1,8 @@
 package uk.ac.dl.dp5.clients.datacenter;
 import java.util.ArrayList;
 import java.util.Collection;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
-import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
+import uk.ac.dl.dp5.entity.DataReference;
+import uk.ac.dl.dp5.entity.Url;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
@@ -40,21 +40,22 @@ public class AddUrlClient {
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);
+               
             }
             
-            DataCenterRemote sless = (DataCenterRemote) csl.lookup("DataCenterEJB");
-            DataUrlDTO dto = new DataUrlDTO();
-             dto.setId(1757);
+            DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
+            DataReference dto = new DataReference();
+             
             
-            dto.setTypeOfReference(DPUrlRefType.DATA_SET);
-            dto.setTypeOfObject("txt");
+            dto.setTypeOfReference(DPUrlRefType.DATA_SET.toString());
+            dto.setTypeOfObject("exe");
             dto.setFacility("ISIS");
-            dto.setName("New Bookmark 4");
+            dto.setName("New Data Set no DTO");
             dto.setNote("note");
             dto.setQuery("sql select");
-            Collection<String> cs = new ArrayList<String>();
-            cs.add("srb://www.test.com/moredata"+(int)(Math.random()*10000L));
-            dto.setUrl(cs);
+            Collection<Url> cs = new ArrayList<Url>();
+            cs.add(new Url("srb://www.test.com/moredata"+(int)(Math.random()*10000L)));
+            dto.setUrls(cs);
             
             sless.addDataUrl(sid,dto);
             

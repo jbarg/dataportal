@@ -35,7 +35,7 @@ public class DataCenterDelegateClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        PropertyConfigurator.configure("c:/log4j.properties");
+        //PropertyConfigurator.configure("c:/log4j.properties");
         time =  new Date().getTime();
         try{
             DataCenterDelegate dd = DataCenterDelegate.getInstance();

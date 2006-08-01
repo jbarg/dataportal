@@ -43,7 +43,7 @@ public class DataUrlDTO implements Serializable{
     }
     
     public DataUrlDTO(DataReference dref){
-        this.id = dref.getId().intValue();
+   //     this.id = dref.getId().intValue();
         this.facility = dref.getFacility();
         this.query = dref.getQuery();
         this.note = dref.getNote();
@@ -126,7 +126,7 @@ public class DataUrlDTO implements Serializable{
         
         //if got id, then its an update, adding urls not allowed
         if(getId() != 0){
-            dr.setId(getId());
+           // dr.setId(getId());
         } else{
             Collection<Url> dataUrls = new ArrayList<Url>();
             for(String surl : getUrl()){
