@@ -9,9 +9,9 @@
 
 package uk.ac.dl.dp5.clients.query;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
@@ -26,6 +26,11 @@ public class QueryMain {
     public QueryMain() {
     }
     
+      private static void printTime(String message){
+       System.out.println(message+": "+(new Date().getTime()-time)/1000+" secs\n");
+        
+    }
+     static  double time ;
     /**
      * @param args the command line arguments
      */
@@ -40,15 +45,17 @@ public class QueryMain {
                 "(CONNECT_DATA=(SID="+db_sid+")))";
         
         // TODO code application logic here
-        DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
+        printTime("starting");
+        DPAccessLayer dpal = new DPAccessLayer("ISIS", dbConnectString, db_user, db_pass) ;
         ArrayList<String> keyword_list = new ArrayList<String>() ;
         Collection<Study> r_s_l = new ArrayList<Study>() ;
          Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
-        keyword_list.add("hrhpd");
-        //  keyword_list.add("raw");
+        keyword_list.add("hrpd");
+          keyword_list.add("edinburgh");
         try {
             
             r_s_l =  dpal.getStudies(keyword_list,"DNfffgfgf");
+            printTime("got results");
             for(Study s : r_s_l) {
                 System.out.println("\t"+s.toString()) ; //note need to write beans.toString methods
                 
@@ -56,13 +63,17 @@ public class QueryMain {
             
             
             r_i_l =    dpal.getInvestigations(new String[]{"14155"}, "DNfffgfgf") ;
+            System.out.println("erere");
             for(Investigation in : r_i_l) {
+                System.out.println("tt");
                 System.out.println("\t"+in.toString()) ; //note need to write beans.toString methods
                 
             }
             
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
+        }finally{
+            dpal.disconnectFromDB();
         }
     }
     

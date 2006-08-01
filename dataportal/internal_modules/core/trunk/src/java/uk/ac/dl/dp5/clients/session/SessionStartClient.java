@@ -20,6 +20,7 @@ import java.util.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -39,7 +40,7 @@ public class SessionStartClient {
             
             InitialContext ic = new InitialContext();
             
-            SessionRemote sless = (SessionRemote) ic.lookup("SessionEJB");
+            SessionRemote sless = (SessionRemote) ic.lookup(DataPortalConstants.SESSION);
             
             Certificate cert = new Certificate(new File("c:/x509up_u_gjd37"));
             System.out.println("lifetime left : "+cert.getLifetime());

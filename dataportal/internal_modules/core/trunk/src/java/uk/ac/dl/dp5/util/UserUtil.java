@@ -33,6 +33,7 @@ import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 
 /**
  *
@@ -51,10 +52,10 @@ public class UserUtil {
     protected EntityManager em;
     
     /** Creates a new instance of SessionUtil */
-    public UserUtil(String sid, EntityManager em) throws SessionNotFoundException ,UserNotFoundException,SessionTimedOutException {
-        this.em = em;
+    public UserUtil(String sid) throws SessionNotFoundException ,UserNotFoundException,SessionTimedOutException {
+        this.em = CachingServiceLocator.getInstance().getEntityManager();
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        user =  new SessionUtil(sid,em).getSession().getUserId();
+        user =  new SessionUtil(sid).getSession().getUserId();
         
         /*try {
             String DN = new SessionUtil(sid,em).getCertificate().getDName();
@@ -68,8 +69,8 @@ public class UserUtil {
     }
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(Certificate certificate, EntityManager em) throws UserNotFoundException, CertificateException {
-        this.em = em;
+    public UserUtil(Certificate certificate) throws UserNotFoundException, CertificateException {
+        this.em = CachingServiceLocator.getInstance().getEntityManager();
         if(certificate == null) throw new IllegalArgumentException("Certificate cannot be null.");
         String DN = certificate.getDName();
         log.debug("Loading user with DN "+DN);
@@ -83,8 +84,8 @@ public class UserUtil {
     }
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(EntityManager em, String DN) throws UserNotFoundException {
-        this.em = em;
+    public UserUtil(String DN,String defaultS) throws UserNotFoundException {
+        this.em = CachingServiceLocator.getInstance().getEntityManager();
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");        
         log.debug("Loading user with DN "+DN);
         try {
@@ -98,17 +99,17 @@ public class UserUtil {
     
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(int userId, EntityManager em) throws UserNotFoundException {
-        this.em = em;
+    public UserUtil(int userId) throws UserNotFoundException {
+        this.em = CachingServiceLocator.getInstance().getEntityManager();
         if(userId == 0) throw new IllegalArgumentException("User ID cannot be 0.");
         user = (User)em.createNamedQuery("User.findById").setParameter("id",userId).getSingleResult();
         
     }
     
     /** Creates a new instance of SessionUtil */
-    public UserUtil(User user, EntityManager em) {
-        this.em = em;
-        
+    public UserUtil(User user) {
+         this.em = CachingServiceLocator.getInstance().getEntityManager();
+       
         if(user == null) throw new IllegalArgumentException("User cannot be null.");
         this.user = user;
     }
@@ -116,7 +117,7 @@ public class UserUtil {
     
     private void loadUser(String DN){
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
-        user = (User)em.createNamedQuery("User.findByDn").setParameter("dn",DN).getSingleResult();
+        user = (User)em.createNamedQuery("User.findByDn").setParameter("dn",DN).getSingleResult();      
         log.debug("Loaded user with user id "+user.getId());
     }
     
@@ -142,15 +143,17 @@ public class UserUtil {
     }
          
     
-    public static User createDefaultUser(String DN,EntityManager em) throws CannotCreateNewUserException {
+    public static User createDefaultUser(String DN) throws CannotCreateNewUserException {
         User user;
+        EntityManager em = CachingServiceLocator.getInstance().getEntityManager();
+       
         try {
             user = new User();
             
             user.setDn(DN);
              
             //set up default role
-            Collection<Role> roles = (Collection<Role>) em.createNamedQuery("Role.findByName").setParameter("name",DPRole.USER).getResultList();
+            Collection<Role> roles = (Collection<Role>) CachingServiceLocator.getInstance().getEntityManager().createNamedQuery("Role.findByName").setParameter("name",DPRole.USER).getResultList();
             log.debug("Default roles found for user are  "+roles.iterator().next().getName());
             log.debug("Role is  "+roles.iterator().next().getName().getClass());
             user.setRoles(roles);
@@ -159,7 +162,7 @@ public class UserUtil {
             em.persist(user);
             
             //save prefs
-            DpUserPreference dpup = getDefaultUserPreferences(em);
+            DpUserPreference dpup = getDefaultUserPreferences();
             dpup.setUserId(user);
             em.persist(dpup);
             
@@ -174,8 +177,9 @@ public class UserUtil {
         return user;
     }
     
-     private static DpUserPreference getDefaultUserPreferences(EntityManager em) {
+     private static DpUserPreference getDefaultUserPreferences() {
         DpUserPreference prefs = new DpUserPreference();
+        EntityManager em  = CachingServiceLocator.getInstance().getEntityManager();
         
         Collection<Facility> facilities =  (Collection<Facility>)  em.createNamedQuery("Facility.findAll").getResultList();
         prefs.setDefaultFacility(facilities.iterator().next().getShortName());
@@ -203,9 +207,9 @@ public class UserUtil {
         
         try {
             CachingServiceLocator csl =  CachingServiceLocator.getInstance();
-            mdbQueue  = csl.lookupQueue("jms/MDBQueue");
+            mdbQueue  = csl.lookupQueue(DataPortalConstants.EVENT_MDB);
             QueueConnectionFactory queueCF =
-                    (QueueConnectionFactory) csl.lookup("MDBQueueConnectionFactory");
+                    (QueueConnectionFactory) csl.lookup(DataPortalConstants.CONNECTION_FACTORY);
             
             queueCon = queueCF.createQueueConnection();
             queueSession = queueCon.createQueueSession

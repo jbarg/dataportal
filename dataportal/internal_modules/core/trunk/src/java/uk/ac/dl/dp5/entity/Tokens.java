@@ -30,7 +30,12 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_TOKENS")
-@NamedQueries( {@NamedQuery(name = "Tokens.findById", query = "SELECT t FROM Tokens t WHERE t.id = :id"), @NamedQuery(name = "Tokens.findByToken", query = "SELECT t FROM Tokens t WHERE t.token = :token"), @NamedQuery(name = "Tokens.findByFacilityCert", query = "SELECT t FROM Tokens t WHERE t.facilityCert = :facilityCert"), @NamedQuery(name = "Tokens.findByModTime", query = "SELECT t FROM Tokens t WHERE t.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "Tokens.findById", query = "SELECT t FROM Tokens t WHERE t.id = :id"), 
+    @NamedQuery(name = "Tokens.findByToken", query = "SELECT t FROM Tokens t WHERE t.token = :token"), 
+    @NamedQuery(name = "Tokens.findByFacilityCert", query = "SELECT t FROM Tokens t WHERE t.facilityCert = :facilityCert"), 
+    @NamedQuery(name = "Tokens.findByModTime", query = "SELECT t FROM Tokens t WHERE t.modTime = :modTime")}
+)
 public class Tokens implements Serializable {
 
     @Id

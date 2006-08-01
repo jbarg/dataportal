@@ -4,6 +4,7 @@ import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /*
  * BookmarkClient.java
  *
@@ -27,7 +28,7 @@ public class AddBookmarkClient {
             
             
             if(sid == null || sid.equals("")){
-                SessionRemote sless1 = (SessionRemote) csl.lookup("SessionEJB");
+                SessionRemote sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);

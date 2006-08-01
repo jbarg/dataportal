@@ -21,6 +21,7 @@ import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -41,7 +42,7 @@ public class LoginClient {
             
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
             
-            SessionRemote sless = (SessionRemote) csl.lookup("SessionEJB");
+            SessionRemote sless = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
             
             String session =  sless.login("glen","kkkkkk",2);
             System.out.println("Got session : "+session);

@@ -14,6 +14,7 @@ import java.util.*;
 import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.DPResolution;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 
 /**
  *
@@ -34,7 +35,7 @@ public class GetUserPrefsClient {
             
             InitialContext ic = new InitialContext();
             
-            SessionRemote sless = (SessionRemote) ic.lookup("SessionEJB");
+            SessionRemote sless = (SessionRemote) ic.lookup(DataPortalConstants.SESSION);
             
             
                     

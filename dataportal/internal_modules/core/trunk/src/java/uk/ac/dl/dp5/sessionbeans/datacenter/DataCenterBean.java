@@ -25,13 +25,13 @@ import uk.ac.dl.dp5.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
-import uk.ac.dl.dp5.util.UserUtil;
+import uk.ac.dl.dp5.util.*;
 
 /**
  *
  * @author gjd37
  */
-@Stateless(mappedName="DataCenterEJB")
+@Stateless(mappedName=DataPortalConstants.DATA_CENTER)
 public class DataCenterBean extends SessionEJBObject implements DataCenterRemote, DataCenterLocal {
     
     static Logger log = Logger.getLogger(DataCenterBean.class);
@@ -47,14 +47,19 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         log.debug("addBookmark()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
-        User user = new UserUtil(sid,em).getUser();
+        User user = new UserUtil(sid).getUser();
         
         Collection<BookmarkDTO> uce = new ArrayList<BookmarkDTO>();
         for(BookmarkDTO dto : dtos){
             try{
                 Bookmark  bookmark = dto.toBookmark();
                 bookmark.setUserId(user);
-                em.merge(bookmark);
+                boolean contains = em.contains(bookmark);
+                log.trace("Does this bookmark exist in DB: dto name: "+dto.getName()+": ? "+contains);
+                if(contains){
+                    em.merge(bookmark);
+                } else em.persist(bookmark);
+                
                 em.flush();
             } catch(PersistenceException e){
                 log.debug("eerorr "+e.getCause().getClass(),e);
@@ -77,7 +82,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         log.debug("getBookmarks()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
-        User user = new UserUtil(sid,em).getUser();
+        User user = new UserUtil(sid).getUser();
         Collection<Bookmark> bookmarks  = user.getBookmark();
         
         log.debug("User had "+bookmarks.size()+" number of bookmarks");
@@ -95,8 +100,8 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         log.debug("removeBookmark()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
-        User user = new UserUtil(sid,em).getUser();        
-         
+        User user = new UserUtil(sid).getUser();
+        
         for(BookmarkDTO bm : dtos){
             //security, check if users bookmark
             Bookmark foundBookmark = em.find(Bookmark.class,bm.getId());
@@ -118,7 +123,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
             if(dto.getUrl() == null ) throw new IllegalArgumentException("Urls to add cannot be null");
         }
         
-        User user = new UserUtil(sid,em).getUser();
+        User user = new UserUtil(sid).getUser();
         
         Collection<DataUrlDTO> uce = new ArrayList<DataUrlDTO>();
         
@@ -126,7 +131,11 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
             try{
                 DataReference dr = dto.toDataReference();
                 dr.setUserId(user);
-                em.merge(dr);
+                boolean contains = em.contains(dr);
+                log.trace("Does this URL exist in DB: dto name: "+dto.getName()+": ? "+contains);
+                if(contains){
+                    em.merge(dr);
+                } else em.persist(dr);
                 em.flush();
             } catch(PersistenceException e){
                 log.debug("eerorr "+e.getCause().getClass(),e);
@@ -144,11 +153,11 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         
     }
     
-      public void removeUrl(String sid, Collection<DataUrlDTO> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeUrl(String sid, Collection<DataUrlDTO> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("removeUrl()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
-        User user = new UserUtil(sid,em).getUser();
+        User user = new UserUtil(sid).getUser();
         
         for(DataUrlDTO url : dtos){
             //security, check if users bookmark
@@ -162,7 +171,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         log.debug("getUrls()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
-        User user = new UserUtil(sid,em).getUser();
+        User user = new UserUtil(sid).getUser();
         
         Collection<DataReference> urls  = user.getDataReference();
         log.debug("User had "+urls.size()+" number of bookmarks");

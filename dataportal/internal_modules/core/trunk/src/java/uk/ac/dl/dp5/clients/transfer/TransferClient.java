@@ -26,6 +26,7 @@ import uk.ac.dl.dp5.sessionbeans.transfer.TransferRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -45,7 +46,7 @@ public class TransferClient {
     public static void main(String[] args) {
         PropertyConfigurator.configure("c:/log4j.properties");
         
-        String sid ="e42dcdf3-dddc-4207-9c0e-6e681786c780";
+        String sid ="34663f96-2a34-4ba1-a489-1e5dbad7531e";
         boolean loggingin = false;
         SessionRemote sless1 = null;
         TransferRemote tr =  null;
@@ -57,7 +58,7 @@ public class TransferClient {
             if(sid == null || sid.equals("")){
                 System.out.println("Logging on, no sid");
                 loggingin = true;
-                sless1 = (SessionRemote) csl.lookup("SessionEJB");
+                sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);
@@ -69,10 +70,11 @@ public class TransferClient {
             Collection<String> srb = new ArrayList<String>();
             srb.add("srb://dfdfd:676/ngs/home/glen-drinkwater.ngs/test");
             
-            tr = (TransferRemote) csl.lookup("TransferEJB");
+            tr = (TransferRemote) csl.lookup(DataPortalConstants.TRANSFER);
             printTime("Looked up transfer");
+            time = new Date().getTime();
             
-           /* tr.startDownloadSRBFile(sid,srb);
+            tr.startDownloadSRBFile(sid,srb);
             
             System.out.println("Percent complete...");
             while(true){
@@ -84,7 +86,7 @@ public class TransferClient {
                     break;
                 } else if(tr.getException() == null){
                     System.out.println(""+tr.percentageComplete()+" %");
-                    Thread.sleep(2000);
+                    Thread.sleep(500);
                 }
             }
             printTime("download complete");
@@ -101,7 +103,7 @@ public class TransferClient {
             } else {
                 System.out.println("Exception: "+tr.getException());
             }
-            */
+            
             printTime("finished");
             
         }catch(Exception e){

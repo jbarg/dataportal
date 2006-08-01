@@ -14,7 +14,7 @@ import java.util.*;
 import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.DPResolution;
-
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -34,7 +34,7 @@ public class SetUserPrefsClient {
             
             InitialContext ic = new InitialContext();
             
-            SessionRemote sless = (SessionRemote) ic.lookup("SessionEJB");
+            SessionRemote sless = (SessionRemote) ic.lookup(DataPortalConstants.SESSION);
             
             UserPreferencesDTO dtp  =new UserPreferencesDTO();
             dtp.setDefaultFacility("ISIS");

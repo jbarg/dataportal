@@ -28,7 +28,12 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_CREDENTIAL_TYPE")
-@NamedQueries( {@NamedQuery(name = "CredentialType.findById", query = "SELECT c FROM CredentialType c WHERE c.id = :id"), @NamedQuery(name = "CredentialType.findByName", query = "SELECT c FROM CredentialType c WHERE c.name = :name"), @NamedQuery(name = "CredentialType.findByInfoUrl", query = "SELECT c FROM CredentialType c WHERE c.infoUrl = :infoUrl"), @NamedQuery(name = "CredentialType.findByModTime", query = "SELECT c FROM CredentialType c WHERE c.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "CredentialType.findById", query = "SELECT c FROM CredentialType c WHERE c.id = :id"),
+    @NamedQuery(name = "CredentialType.findByName", query = "SELECT c FROM CredentialType c WHERE c.name = :name"), 
+    @NamedQuery(name = "CredentialType.findByInfoUrl", query = "SELECT c FROM CredentialType c WHERE c.infoUrl = :infoUrl"), 
+    @NamedQuery(name = "CredentialType.findByModTime", query = "SELECT c FROM CredentialType c WHERE c.modTime = :modTime")}
+)
 public class CredentialType implements Serializable {
 
     @Id

@@ -32,7 +32,12 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_EVENT_LOG")
-@NamedQueries( {@NamedQuery(name = "EventLog.findById", query = "SELECT e FROM EventLog e WHERE e.id = :id"), @NamedQuery(name = "EventLog.findByEvent", query = "SELECT e FROM EventLog e WHERE e.event = :event"), @NamedQuery(name = "EventLog.findByDetails", query = "SELECT e FROM EventLog e WHERE e.details = :details"), @NamedQuery(name = "EventLog.findByModTime", query = "SELECT e FROM EventLog e WHERE e.modTime = :modTime")})
+@NamedQueries( {
+    @NamedQuery(name = "EventLog.findById", query = "SELECT e FROM EventLog e WHERE e.id = :id"), 
+    @NamedQuery(name = "EventLog.findByEvent", query = "SELECT e FROM EventLog e WHERE e.event = :event"),
+    @NamedQuery(name = "EventLog.findByDetails", query = "SELECT e FROM EventLog e WHERE e.details = :details"), 
+    @NamedQuery(name = "EventLog.findByModTime", query = "SELECT e FROM EventLog e WHERE e.modTime = :modTime")}
+)
 public class EventLog implements Serializable {
 
     @Id

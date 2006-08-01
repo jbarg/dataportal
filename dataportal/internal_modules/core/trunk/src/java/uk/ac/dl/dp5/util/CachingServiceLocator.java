@@ -21,7 +21,7 @@ import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 import javax.mail.Session;
 import org.apache.log4j.Logger;
-
+import javax.persistence.EntityManager;
 /**
  *
  * @author gjd37
@@ -33,7 +33,7 @@ public class CachingServiceLocator {
     private Map cache;
     private boolean remote = false;
     private  static Logger log = Logger.getLogger(CachingServiceLocator.class);
-  
+    
     private static CachingServiceLocator me;
     
     static {
@@ -70,11 +70,20 @@ public class CachingServiceLocator {
         return (Object) lookupImpl(jndiHomeName);
     }
     
-     public <T> Queue lookupQueue(String jndiHomeName) throws NamingException {
+    public <T> Queue lookupQueue(String jndiHomeName) throws NamingException {
         if(remote) jndiHomeName += "Remote";
         return (Queue) lookupImpl(jndiHomeName);
     }
     
+    public void put(EntityManager em){
+        log.trace("inserting entityManager");
+        cache.put("entityManager",em);
+    }
+    
+    public EntityManager getEntityManager(){
+        log.trace("Looking up entityManager");
+        return (EntityManager)cache.get("entityManager");
+    }
     /**
      * will get the ejb Local home factory. If this ejb home factory has already been
      * clients need to cast to the type of EJBHome they desire

@@ -18,6 +18,7 @@ import uk.ac.dl.dp5.sessionbeans.lookup.*;
 import javax.naming.*;
 import java.util.*;
 import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -49,7 +50,7 @@ public class LookupClient {
             InitialContext ic = new InitialContext();
             //   LookupRemote sless = (LookupRemote) ic.lookup("uk.ac.dl.dp5.sessionbeans.lookup.LookupRemote");
             
-            LookupRemote sless = (LookupRemote) ic.lookup("LookupEJB");
+            LookupRemote sless = (LookupRemote) ic.lookup(DataPortalConstants.LOOKUP);
             
             
             System.out.println("Looking for facilities type: "+DPFacilityType.ACM);

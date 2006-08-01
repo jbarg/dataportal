@@ -23,16 +23,16 @@ import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp5.message.query.QueryRequest;
 import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.sessionbeans.lookup.LookupLocal;
-import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
+import uk.ac.dl.dp5.sessionbeans.session.MessageEJBObject;
 import uk.ac.dl.dp5.util.DPFacilityType;
-import uk.ac.dl.dp5.util.DPQueryType;
+import uk.ac.dl.dp5.util.*;
 
 /**
  *
  * @author gjd37
  */
-@MessageDriven(mappedName="jms/QueryMDBQueue")
-public class QueryMessageBean extends SessionEJBObject implements MessageListener {
+@MessageDriven(mappedName=DataPortalConstants.QUERY_MDB)
+public class QueryMessageBean extends MessageEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(QueryMessageBean.class);
     
@@ -66,17 +66,19 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
                 
                 //TODO
                 ////////this can go when access layer can look up connection
-                Collection<ModuleLookup>  moduleLookup = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
-                
+              /*  Collection<ModuleLookup>  moduleLookup = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+               
                 for(ModuleLookup mlu : moduleLookup ){
                     if(e.getFacility().equals(mlu.getFacility())){
                         log.debug("Got facility "+e.getFacility());
                         dpal  = new DPAccessLayer(mlu.getFacility(),mlu.getConnection(),mlu.getUsername(),mlu.getPassword());
-                        
+               
                     }
-                    
-                }
+               
+                }*/
                 ///////////////////////////////////
+                
+                dpal = new DPAccessLayer(e.getFacility());
                 
                 if(e.getQt() == DPQueryType.KEYWORD){
                     r_s_l = dpal.getStudies(e.getKeyword(),e.getDN());
@@ -84,9 +86,9 @@ public class QueryMessageBean extends SessionEJBObject implements MessageListene
                 
                 
             } catch (Exception exception) {
-                log.debug("Interrupted", ex);
+                log.debug("Interrupted", exception);
                 ex  = exception;
-                       
+                
             }
             
             log.debug("Query finished.. with id: "+e.getId());
