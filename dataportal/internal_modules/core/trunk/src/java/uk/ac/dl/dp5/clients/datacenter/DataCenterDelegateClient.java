@@ -10,12 +10,12 @@ package uk.ac.dl.dp5.clients.datacenter;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
-import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
-import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import java.util.*;
+
 import uk.ac.dl.dp5.clients.session.SessionDelegate;
-import uk.ac.dl.dp5.util.DPResolution;
+import uk.ac.dl.dp5.entity.Bookmark;
+import uk.ac.dl.dp5.entity.DataReference;
+import uk.ac.dl.dp5.entity.Url;
 import uk.ac.dl.dp5.util.DPUrlRefType;
 /**
  *
@@ -54,40 +54,38 @@ public class DataCenterDelegateClient {
             printTime("lookup again");
             
             //adding a bookmark
-            BookmarkDTO dto = new BookmarkDTO();
+            Bookmark dto = new Bookmark();
             
-            dto.setStudyid((int)(Math.random()*10000L));
+            dto.setStudyId((int)(Math.random()*10000L));
             dto.setFacility("ISIS");
             dto.setName(""+(int)(Math.random()*10000L)+" Random name");
-            dto.setNote("Silly ");
-            dto.setQuery("Query ");
+            dto.setNote("bookmark ");
+            dto.setQuery("sql select ");
             
-            Collection<BookmarkDTO> notadded =   dd.addBookmark(sid,dto);
-            for(BookmarkDTO dto1 : notadded){
-                System.out.println("Not added: "+dto1.getStudyid());
-            }
+            dd.addBookmark(sid,dto);
+            
             printTime("Adding bookmark");
             
             //addUrl
-            DataUrlDTO duto = new DataUrlDTO();
+            DataReference duto = new DataReference();
             
-            duto.setTypeOfReference(DPUrlRefType.DATA_SET);
+            duto.setTypeOfReference(DPUrlRefType.DATA_SET.toString());
             duto.setTypeOfObject("txt");
             duto.setFacility("ISIS");
             duto.setName("Bookmark");
             duto.setNote("Silly");
             duto.setQuery("query");
-            Collection<String> cs = new ArrayList<String>();
-            cs.add("srb://www.data.com"+(int)(Math.random()*10000L));
-            duto.setUrl(cs);
+            Collection<Url> cs = new ArrayList<Url>();
+            cs.add(new Url("srb://www.data.com"+(int)(Math.random()*10000L)));
+            duto.setUrls(cs);
             
             dd.addDataUrl(sid,duto);
             printTime("Adding urls");
             
             //getting bookmarks
-            Collection<BookmarkDTO> dto2 =  dd.getBookmarks(sid);
+            Collection<Bookmark> dto2 =  dd.getBookmarks(sid);
             
-            for(BookmarkDTO dtos : dto2){
+            for(Bookmark dtos : dto2){
                 
                 System.out.print(dtos.getFacility());
                 System.out.print(" ,"+dtos.getName());
@@ -97,15 +95,15 @@ public class DataCenterDelegateClient {
             printTime("bookmarks");
             
             //getting urls
-            Collection<DataUrlDTO> dto1 =  dd.getUrls(sid);
+            Collection<DataReference> dto1 =  dd.getUrls(sid);
             
-            for(DataUrlDTO dtos : dto1){
+            for(DataReference dtos : dto1){
                 System.out.print(dtos.getFacility());
                 System.out.print(" ,"+dtos.getName());
                 System.out.print(" ,"+dtos.getNote());
                 System.out.print(" ,"+dtos.getQuery());
-                for(String url : dtos.getUrl()){
-                    System.out.print("    "+url+      "\n");
+                for(Url url : dtos.getUrls()){
+                    System.out.print("    "+url.getUrl()+      "\n");
                     
                 }
             }

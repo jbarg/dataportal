@@ -151,8 +151,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         
         //initialize urls for detatchment
         for(DataReference ref : urls){
-            ref.getUrls().size();
-            ref.getUrls().size();
+            ref.getUrls().size();                        
         }
         
         return urls;
