@@ -26,10 +26,11 @@ import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.message.query.QueryManager;
 import uk.ac.dl.dp5.message.query.QueryRecord;
 import uk.ac.dl.dp5.util.SessionUtil;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 
 
-@Stateless(mappedName="TimerServiceEJB")
-public class TimerServiceBean extends SessionEJBObject implements TimerServiceLocal  {
+@Stateless(mappedName=DataPortalConstants.TIMER)
+public class TimerServiceBean extends SessionEJBObject implements TimerServiceLocal ,TimerServiceRemote {
     
     @Resource
     TimerService timerService;
@@ -59,10 +60,10 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     
     @Timeout
     public void timeout(Timer timer) {
-        log.info("Timeout occurred");
+        log.debug("Timeout occurred: timeout()");
         Collection<Session> sessions =  null;
         try {
-            sessions = (Collection<Session>) em.createQuery("Session.findAll").getResultList();
+            sessions = (Collection<Session>) em.createNamedQuery("Session.findAll").getResultList();
         } catch(Exception e){
             log.warn("Error with query in Timer",e);
             return ;
@@ -85,6 +86,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     
     @Timeout
     public void timeoutQueryManager(Timer timer) {
+          log.info("Timeout occurred: timeoutQueryManager()");
         Collection<Collection<QueryRecord>> ccqr = QueryManager.getAll();
         
         for(Collection<QueryRecord> cqr : ccqr){
@@ -95,7 +97,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
             String queryId = qr.getQueryid();
             try {
                 
-                new SessionUtil(sid, em);
+                new SessionUtil(sid);
             } catch (DataPortalException ex) {
                 log.info("Remove old query from cache: "+queryId);
                 QueryManager.removeRecord(queryId);

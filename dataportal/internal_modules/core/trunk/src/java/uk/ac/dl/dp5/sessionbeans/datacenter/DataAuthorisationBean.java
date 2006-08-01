@@ -28,12 +28,12 @@ import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.DPAuthType;
-import uk.ac.dl.dp5.util.UserUtil;
+import uk.ac.dl.dp5.util.*;
 /**
  *
  * @author gjd37
  */
-@Stateless(mappedName="DataAuthorisationEJB")
+@Stateless(mappedName=DataPortalConstants.DATA_AUTHORISATOIN)
 public class DataAuthorisationBean extends SessionEJBObject implements DataAuthorisationRemote {
     
     static Logger log = Logger.getLogger(DataAuthorisationBean.class);
@@ -44,9 +44,9 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         
         
         //TODO find if already there and update the record
-        User userSource = new UserUtil(sid,em).getUser();
+        User userSource = new UserUtil(sid).getUser();
         
-        User givenSource = new UserUtil(em,DN).getUser();
+        User givenSource = new UserUtil(DN,null).getUser();
         
         DataRefAuthorisation dpr = new DataRefAuthorisation();
         dpr.setAuthEndDate(endDate);
@@ -69,7 +69,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         log.debug("getGivenAuthorisedList()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
-        User user = new UserUtil(sid,em).getUser();
+        User user = new UserUtil(sid).getUser();
         
         log.debug("Finding user auth given by : "+user.getDn());
         Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisationSource();
@@ -105,7 +105,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         if(type == null) throw new IllegalArgumentException("DPAuthType cannot be null.");
         
-        User user = new UserUtil(sid,em).getUser();
+        User user = new UserUtil(sid).getUser();
         
         log.debug("Finding user auth given to: "+user.getDn());
         Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisation();
@@ -151,7 +151,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         }
         if(accessAllowed){
             //get users bookmarks
-            User user = new UserUtil(em,DN).getUser();
+            User user = new UserUtil(DN,null).getUser();
             Collection<Bookmark> bookmarks  = user.getBookmark();
             
             log.debug("User had "+bookmarks.size()+" number of bookmarks");

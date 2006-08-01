@@ -22,6 +22,7 @@ import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.DPFacilityType;
 import uk.ac.dl.dp5.entity.Role;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -40,7 +41,7 @@ public class GetSessionIDClient {
         try{
             InitialContext ic = new InitialContext();
             
-            SessionRemote sless = (SessionRemote) ic.lookup("SessionEJB");
+            SessionRemote sless = (SessionRemote) ic.lookup(DataPortalConstants.SESSION);
             //sless.isValid("ed046b97-3fac-49d9-9b70-8df0031e7d05");
             
             SessionDTO session =  sless.getSession(sid);

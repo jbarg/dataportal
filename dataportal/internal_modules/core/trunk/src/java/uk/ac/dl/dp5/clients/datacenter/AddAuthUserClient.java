@@ -7,6 +7,7 @@ import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.DPAuthType;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /*
  * BookmarkClient.java
  *
@@ -30,13 +31,13 @@ public class AddAuthUserClient {
             
             
             if(sid == null || sid.equals("")){
-                SessionRemote sless1 = (SessionRemote) csl.lookup("SessionEJB");
+                SessionRemote sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);
             }
             
-            DataAuthorisationRemote sless = (DataAuthorisationRemote) csl.lookup("DataAuthorisationEJB");
+            DataAuthorisationRemote sless = (DataAuthorisationRemote) csl.lookup(DataPortalConstants.DATA_AUTHORISATOIN);
             //   sless.addAuthoriserUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",new Date(),new Date(System.currentTimeMillis()+100000000),DPAuthType.ALL);
             
             Collection<String> e = sless.getGivenAuthorisedList(sid, DPAuthType.ALL);

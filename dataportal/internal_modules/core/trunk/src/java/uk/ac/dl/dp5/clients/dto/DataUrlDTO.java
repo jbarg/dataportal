@@ -12,6 +12,7 @@ package uk.ac.dl.dp5.clients.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import uk.ac.dl.dp5.entity.DataReference;
 import uk.ac.dl.dp5.entity.Url;
 import uk.ac.dl.dp5.util.DPUrlRefType;
@@ -130,7 +131,8 @@ public class DataUrlDTO implements Serializable{
             Collection<Url> dataUrls = new ArrayList<Url>();
             for(String surl : getUrl()){
                 Url url = new Url();
-                  url.setUrl(surl);
+                url.setUrl(surl);
+                url.setModTime(new Date());
                 dataUrls.add(url);
             }
             dr.setUrls(dataUrls);
@@ -141,7 +143,7 @@ public class DataUrlDTO implements Serializable{
         dr.setQuery(getQuery());
         dr.setTypeOfReference(getTypeOfReference().toString());
         dr.setTypeOfObject(getTypeOfObject());
-         return dr;
+        return dr;
     }
     
 }

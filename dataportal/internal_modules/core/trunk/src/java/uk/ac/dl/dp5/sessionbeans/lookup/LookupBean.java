@@ -12,13 +12,13 @@ import uk.ac.dl.dp5.entity.ModuleLookup;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.DPFacilityType;
 import javax.ejb.Stateless;
-
+import uk.ac.dl.dp5.util.*;
 /**
  * This is the bean class for the LookupBean enterprise bean.
  * Created 13-Apr-2006 11:47:07
  * @author gjd37
  */
-@Stateless(mappedName="LookupEJB")
+@Stateless(mappedName=DataPortalConstants.LOOKUP)
 public class LookupBean extends SessionEJBObject implements LookupRemote, LookupLocal {
     
     static Logger log = Logger.getLogger(LookupBean.class);

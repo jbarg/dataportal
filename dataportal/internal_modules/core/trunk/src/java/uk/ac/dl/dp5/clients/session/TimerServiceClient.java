@@ -9,18 +9,12 @@
 
 package uk.ac.dl.dp5.clients.session;
 
-import java.io.File;
 import javax.ejb.EJB;
-import uk.ac.dl.dp5.entity.Facility;
-import uk.ac.dl.dp5.entity.ModuleLookup;
-import uk.ac.dl.dp5.entity.Session;
-import uk.ac.dl.dp5.sessionbeans.lookup.*;
 import javax.naming.*;
 import java.util.*;
-import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
-import uk.ac.dl.dp5.sessionbeans.session.TimerServiceLocal;
-import uk.ac.dl.dp5.util.Certificate;
-import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.sessionbeans.session.TimerServiceRemote;
+import uk.ac.dl.dp5.util.DataPortalConstants;
+
 /**
  *
  * @author gjd37
@@ -40,7 +34,7 @@ public class TimerServiceClient {
             
             InitialContext ic = new InitialContext();
             
-            TimerServiceLocal sless = (TimerServiceLocal) ic.lookup("TimerServiceEJB");
+            TimerServiceRemote sless = (TimerServiceRemote) ic.lookup(DataPortalConstants.TIMER);
             
            sless.createTimer(1000*10,1000*60*30);
             //

@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.UUID;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.PrePassivate;
 import javax.ejb.Remove;
@@ -53,28 +55,25 @@ import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.DPEvent;
 import uk.ac.dl.dp5.util.DPFacilityType;
 import uk.ac.dl.dp5.util.DPQueryType;
-import uk.ac.dl.dp5.util.UserUtil;
+import uk.ac.dl.dp5.util.*;
 /**
  *
  * @author gjd37
  */
-@Stateful(mappedName="QuerySlaveMasterEJB")
-public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlaveMasterRemote {
+@Stateful(mappedName=DataPortalConstants.QUERY)
+public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlaveMasterRemote, QuerySlaveMasterLocal{
     
     static Logger log = Logger.getLogger(QuerySlaveMasterBean.class);
     
     @Resource
     SessionContext sc;
     
-    @Resource(mappedName="MDBQueueConnectionFactory")
+    @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
     private  ConnectionFactory connectionFactory;
     
-    @Resource(mappedName="jms/QueryMDBQueue")
+    @Resource(mappedName=DataPortalConstants.QUERY_MDB)
     private  Queue queue;
-    
-    @EJB
-    private LookupLocal lookupLocal;
-    
+       
     private String sid ;
     private Collection<String> facilities;
     
@@ -84,14 +83,13 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     private UserUtil userutil;
     private String search_id;
     
-    private HashMap<String,DPAccessLayer> connections;
     
     @PrePassivate
     public void prePassivate(){
         //only needs this on destory
         //this.sid = null;
         //this.facilities = null;
-        log.info("Unloading..");
+        log.debug("Unloading..");
     }
     
     @PreDestroy
@@ -101,12 +99,12 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         this.userDN = null;
         this.user = null;
         this.userutil = null;
-        this.connections = null;
         
-        log.info("Destroying..");
+        log.debug("Destroying..");
     }
-    
+     @PermitAll
     public String queryByKeyword(String sid, Collection<String> facilities, String[] keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+        log.debug("queryByKeyword()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         this.sid = sid;
@@ -114,7 +112,6 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         this.search_id =  UUID.randomUUID().toString();
         
         getUserInfo(sid);
-        checkConnections();
         
         Connection connection = null;
         Session session = null;
@@ -125,6 +122,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             connection = connectionFactory.createConnection();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             messageProducer = session.createProducer(queue);
+            log.debug("Created connections to MDBs OK");
         } catch (JMSException ex) {
             log.error("JMSExcption on connection to meesage: ",ex);
             throw new QueryException("Unexpected error, JSMException with connecting to message queue",ex);
@@ -157,22 +155,22 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
                 // QueryManager.removeRecord(sid+fac);
                 
                 messageProducer.send(message);
-                
+                log.debug("sent message for facility: "+fac);
                 
             } catch (Exception e) {
-                log.error("Unable to locate EventBean",e);
-                throw new QueryException("Unable to locate EventBean",e);
+                log.error("Unable to send off query to fac "+fac,e);
+                throw new QueryException("Unable to send off query to fac: "+fac,e);
             }
         }
-        
+        log.trace("sent off querys to MDBs");
         //send off basic search event
         //TODO sort out facility, keyword strings properly
         this.userutil.sendEventLog(DPEvent.BASIC_SEARCH,"Basic Search: "+DPQueryType.KEYWORD+". Keyword(s): "+keyword+". Facility(s): "+facilities);
-        log.debug("sent off querys to MDBs");
+        log.trace("sent search event log");
         return search_id;
         
     }
-    
+     @PermitAll
     public Collection<String> getCompleted(){
         Collection<String> completed  = new ArrayList<String>();
         
@@ -185,6 +183,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         return completed;
     }
     
+    @PermitAll
     public boolean isFinished(){
         
         for(String fac : facilities){
@@ -198,11 +197,13 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     }
     
     @Remove
+     @PermitAll
     public void remove(){
         //TODO remove objects
     }
     
     //TODO put together a single method to recurse over QueryManager
+     @PermitAll
     public Collection<Study> getQueryResults(){
         log.debug("getQueryResults()");
         //Collection<QueryRecord> qra = new ArrayList<QueryRecord>();
@@ -225,7 +226,6 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         //TODO check for nulls
         
         getUserInfo(sid);
-        checkConnections();
         
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         
@@ -238,12 +238,16 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             
             if(study_id.size() == 0) continue ;
             
+            DPAccessLayer dpal = null;
             try {
+                dpal = new DPAccessLayer(fac);
+                investigations.addAll(dpal.getInvestigations(study_id, userDN));
                 
-                investigations.addAll(connections.get(fac).getInvestigations(study_id, userDN));
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 log.error("Unable to search Investigations ids: ",ex);
                 throw new QueryException("Unable to search Investigations ids: ",ex);
+            } finally{
+                dpal.disconnectFromDB();
             }
         }
         
@@ -256,9 +260,6 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         
         
         getUserInfo(sid);
-        //TODO need to change the way we use shoiabs, need to add jdbc lookup
-        //TODO need to remove checkConnections
-        checkConnections();
         
         Collection<DataSet> datasets = new ArrayList<DataSet>();
         
@@ -271,12 +272,16 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             
             if(investigation_id.size() == 0) continue ;
             
+            DPAccessLayer dpal = null;
             try {
+                dpal = new DPAccessLayer(fac);
                 
-                datasets.addAll(connections.get(fac).getDataSets(investigation_id, userDN));
-            } catch (SQLException ex) {
+                datasets.addAll(dpal.getDataSets(investigation_id, userDN));
+            } catch (Exception ex) {
                 log.error("Unable to search Investigations ids: ",ex);
                 throw new QueryException("Unable to search Investigations ids: ",ex);
+            } finally{
+                dpal.disconnectFromDB();
             }
         }
         
@@ -289,7 +294,6 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         //TODO check for nulls
         
         getUserInfo(sid);
-        checkConnections();
         
         Collection<DataFile> datafiles = new ArrayList<DataFile>();
         
@@ -302,12 +306,17 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             
             if(datasets_id.size() == 0) continue ;
             
+            
+            DPAccessLayer dpal = null;
             try {
+                dpal = new DPAccessLayer(fac);
                 
-                datafiles.addAll(connections.get(fac).getDataFiles(datasets_id, userDN));
-            } catch (SQLException ex) {
+                datafiles.addAll(dpal.getDataFiles(datasets_id, userDN));
+            } catch (Exception ex) {
                 log.error("Unable to search Investigations ids: ",ex);
                 throw new QueryException("Unable to search Investigations ids: ",ex);
+            } finally{
+                dpal.disconnectFromDB();
             }
         }
         
@@ -316,41 +325,18 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     
     private void getUserInfo(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException{
         if(user == null){
-            this.userutil = new UserUtil(sid,em);
+            this.userutil = new UserUtil(sid);
             this.user = this.userutil.getUser();
             this.userDN = user.getDn();
-            log.debug("User DN: "+userDN+" is searching");
+            log.trace("User DN: "+userDN+" is searching");
         }
     }
     
-    //TODO this can go when DP Access layer has onw lookup
-    private void checkConnections() {
-        //nothing
-        if(connections == null){
-            connections = new HashMap<String,DPAccessLayer>();
-            //look up connection info
-            Collection<ModuleLookup>  moduleLookup = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
-            log.debug("Looked up facility info, results : "+moduleLookup.size());
-            for(ModuleLookup mlu : moduleLookup){
-                log.debug(mlu.getFacility());
-            }
-            
-            
-            for(String fac : facilities){
-                for(ModuleLookup mlu : moduleLookup ){
-                    if(fac.equals(mlu.getFacility())){
-                        log.debug("Got facility "+fac+", creating DPAccessLayer and adding to hashmap.");
-                        DPAccessLayer dpal  = new DPAccessLayer(mlu.getFacility(),mlu.getConnection(),mlu.getUsername(),mlu.getPassword());
-                        connections.put(fac, dpal);
-                    }
-                }
-            }
-        }
-    }
     
     public Collection<QueryRecordDTO> getCurrentResults(String sid){
+        log.debug("getCurrentResults(String sid)");
         Collection<Collection<QueryRecord>> ccqr = QueryManager.getUserAll(sid);
-        log.debug("Getting all results, size: "+ccqr.size());
+        log.trace("Getting all results, size: "+ccqr.size());
         
         Collection<QueryRecordDTO> dto  = new ArrayList<QueryRecordDTO>();
         
@@ -376,7 +362,6 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
                 st.addAll(qr.getResult());
             }
         }
-        
         return st;
         
     }

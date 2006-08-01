@@ -20,6 +20,7 @@ import java.util.*;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.DPFacilityType;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -40,7 +41,7 @@ public class EndSessionClient {
             
             InitialContext ic = new InitialContext();
             
-            SessionRemote sless = (SessionRemote) ic.lookup("SessionEJB");
+            SessionRemote sless = (SessionRemote) ic.lookup(DataPortalConstants.SESSION);
             
             boolean session =  sless.logout("4ba83fdd-4081-48b9-888b-910462f34bf5");
             System.out.println("Got session : "+session);

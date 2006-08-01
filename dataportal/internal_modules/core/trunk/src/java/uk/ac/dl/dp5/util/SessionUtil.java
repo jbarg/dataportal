@@ -34,8 +34,8 @@ public class SessionUtil {
     protected EntityManager em;
     
     /** Creates a new instance of SessionUtil */
-    public SessionUtil(String sid, EntityManager em) throws SessionNotFoundException , SessionTimedOutException{
-        this.em = em;
+    public SessionUtil(String sid) throws SessionNotFoundException , SessionTimedOutException{
+        this.em = CachingServiceLocator.getInstance().getEntityManager();
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         try {
             session  = (Session) em.createNamedQuery("Session.findByUserSessionId").setParameter("userSessionId",sid).getSingleResult();

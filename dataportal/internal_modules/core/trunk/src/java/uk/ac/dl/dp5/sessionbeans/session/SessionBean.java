@@ -27,10 +27,12 @@ import uk.ac.dl.dp5.util.DPCredentialType;
 import uk.ac.dl.dp5.entity.Session;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.DPEvent;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 import uk.ac.dl.dp5.exceptions.LoginMyProxyException;
 
-import uk.ac.dl.dp5.util.PortalCredential;
+
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp5.util.PortalCredential;
 
 
 import uk.ac.dl.dp5.util.SessionUtil;
@@ -44,7 +46,7 @@ import uk.ac.dl.dp5.util.cog.DelegateCredential;
  * Created 30-Mar-2006 11:44:43
  * @author gjd37
  */
-@Stateless(mappedName="SessionEJB")
+@Stateless(mappedName=DataPortalConstants.SESSION)
 public class SessionBean extends SessionEJBObject  implements SessionRemote, SessionLocal {
     
     static Logger log = Logger.getLogger(SessionBean.class);
@@ -56,7 +58,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException{
         log.debug("getSession()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        return new SessionUtil(sid,em).getSessionDTO();
+        return new SessionUtil(sid).getSessionDTO();
     }   
    
     
@@ -132,15 +134,15 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
                 log.debug("Getting user.");
                 //need to get user corresponding to DN
                 
-                userutil = new UserUtil(certificate,em);
+                userutil = new UserUtil(certificate);
                 user = userutil.getUser();
                 
                 session.setUserId(user);
             } catch(UserNotFoundException enfe){
                 //no entity found, so create one
                 log.debug("No user found, creating one.");
-                user = UserUtil.createDefaultUser(DN,em);
-                userutil = new UserUtil(user,em);
+                user = UserUtil.createDefaultUser(DN);
+                userutil = new UserUtil(user);
                 
                 //add new user to session
                 session.setUserId(user);
@@ -173,7 +175,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     public Boolean isValid(String sid) throws SessionNotFoundException  {
         log.debug("isValid()");
         try {
-            return  new SessionUtil(sid,em).isValid();
+            return  new SessionUtil(sid).isValid();
         }  catch (SessionTimedOutException ex) {
             return false;
         }
@@ -185,14 +187,14 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
       */
     public boolean logout(String sid) throws SessionNotFoundException ,SessionTimedOutException{
         log.debug("logout()");
-        Session session = new SessionUtil(sid,em).getSession();
+        Session session = new SessionUtil(sid).getSession();
         em.remove(session);
         
         //clear query cache
         ts.removeSessionFromQueryCache(sid);
         
         //send logout event
-        new UserUtil(session.getUserId(),em).sendEventLog(DPEvent.LOG_OPF,"Logged off at "+new Date());
+        new UserUtil(session.getUserId()).sendEventLog(DPEvent.LOG_OPF,"Logged off at "+new Date());
         
         log.info("Ended session: "+sid);
         return true;
@@ -200,7 +202,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("setUserPrefs()");
-        UserUtil userutil = new UserUtil(sid,em);
+        UserUtil userutil = new UserUtil(sid);
         User user = userutil.getUser();
         
         DpUserPreference prefs = userutil.getUserPrefs();
@@ -218,7 +220,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException ,SessionTimedOutException{
         log.debug("getUserPrefs()");
-        UserUtil userutil = new UserUtil(sid,em);
+        UserUtil userutil = new UserUtil(sid);
         User user = userutil.getUser();
         DpUserPreference dto = userutil.getUserPrefs();
         return new UserPreferencesDTO(dto);
@@ -227,9 +229,10 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
    
     @PostConstruct
     public void postConstruct(){
-        PropertyConfigurator.configure("c:/log4j.properties");
+        //PropertyConfigurator.configure("c:/log4j.properties");
         log.debug("Loaded log4j properties");
         log.debug("Starting timer service");
+        //in 30mins every 30 mins
         ts.createTimer(1000*60*30,1000*60*30);
     }
     

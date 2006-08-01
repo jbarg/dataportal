@@ -19,16 +19,16 @@ import javax.jms.TextMessage;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp5.entity.EventLog;
 import uk.ac.dl.dp5.entity.User;
-import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
+import uk.ac.dl.dp5.sessionbeans.session.MessageEJBObject;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
-import uk.ac.dl.dp5.util.UserUtil;
+import uk.ac.dl.dp5.util.*;
 
 /**
  *
  * @author gjd37
  */
-@MessageDriven(mappedName="jms/MDBQueue")
-public class EventMessageBean extends SessionEJBObject implements MessageListener {
+@MessageDriven(mappedName=DataPortalConstants.EVENT_MDB)
+public class EventMessageBean extends MessageEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(EventMessageBean.class);
           
@@ -53,7 +53,7 @@ public class EventMessageBean extends SessionEJBObject implements MessageListene
             eventType = st.nextToken();
             description = st.nextToken();
             
-               user =  new UserUtil(userId,em).getUser();
+               user =  new UserUtil(userId).getUser();
         } catch (NumberFormatException ex) {
             log.error("Unable to parse int sent in message",ex);
             return ;

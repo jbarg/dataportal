@@ -24,6 +24,7 @@ import uk.ac.dl.dp5.util.CachingServiceLocator;
 
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 
 /**
  *

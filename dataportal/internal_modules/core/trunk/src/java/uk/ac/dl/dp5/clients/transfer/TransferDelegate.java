@@ -14,6 +14,7 @@ import uk.ac.dl.dp5.sessionbeans.transfer.TransferRemote;
 
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 
 /**
  *
@@ -31,7 +32,7 @@ public class TransferDelegate {
     /** Creates a new instance of SessionDelegate */
     public  TransferDelegate(String sid, Collection<String> srbUrl) throws NamingException {
         Context ic = new InitialContext();
-        tr  = (TransferRemote)ic.lookup("TransferEJB");
+        tr  = (TransferRemote)ic.lookup(DataPortalConstants.TRANSFER);
         this.sid = sid;
         this.srbUrl = srbUrl;
     }

@@ -14,7 +14,7 @@ import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp5.sessionbeans.query.QuerySlaveMasterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
-
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /*
  * BookmarkClient.java
  *
@@ -29,7 +29,7 @@ import uk.ac.dl.dp5.util.CachingServiceLocator;
  * @author gjd37
  */
 public class QueryClient {
-    String sid = "1e19b8ce-7690-4b8e-b5b5-2f7879669b24";
+    String sid = "6c2670d0-22a0-40df-9aea-1e743e015183";
     boolean loggingin = false;
     QuerySlaveMasterRemote qsmr;
     SessionRemote sless1;
@@ -48,20 +48,20 @@ public class QueryClient {
             time =  new Date().getTime();
             if(sid == null || sid.equals("")){
                 loggingin = true;
-                sless1 = (SessionRemote) csl.lookup("SessionEJB");
+                sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);
             }
             
-            qsmr = (QuerySlaveMasterRemote)csl.lookup("QuerySlaveMasterEJB");
+            qsmr = (QuerySlaveMasterRemote)csl.lookup(DataPortalConstants.QUERY);
             printTime("looked up SF bean");
             time =  new Date().getTime();
                      
             
             ArrayList<String> facs = new ArrayList<String>();
             facs.add("ISIS");
-            facs.add("ISIS2");
+            //facs.add("ISIS2");
             
             System.out.println("About to query");
             
@@ -81,20 +81,20 @@ public class QueryClient {
                     }
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
             }
             printTime("finished");
             Collection<Study> qr =  qsmr.getQueryResults();
-            
+            double size = 0;
             
             for(Study rec : qr){
-                System.out.println(rec);
+                System.out.println(rec);              
                 
-                
-            }
+            }           
+            
             printTime("got study results: # "+qr.size());
             
             
