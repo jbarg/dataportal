@@ -132,7 +132,7 @@ public class DataUrlDTO implements Serializable{
             for(String surl : getUrl()){
                 Url url = new Url();
                 url.setUrl(surl);
-                url.setModTime(new Date());
+                //url.setModTime(new Date());
                 dataUrls.add(url);
             }
             dr.setUrls(dataUrls);
