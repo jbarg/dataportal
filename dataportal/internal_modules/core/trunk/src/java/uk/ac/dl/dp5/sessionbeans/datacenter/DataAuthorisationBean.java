@@ -39,7 +39,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
     
     static Logger log = Logger.getLogger(DataAuthorisationBean.class);
     
-    public void addAuthoriserUser(String sid, String DN, Date startDate, Date endDate, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void addAuthorisedUser(String sid, String DN, Date startDate, Date endDate, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addAuthoriserUser()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
@@ -61,8 +61,13 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         pk.setSourceUserId(userSource.getId());
         dpr.setDataRefAuthorisationPK(pk);
         
-        //throw exception if composite primary ket already exists
-        em.merge(dpr);
+        DataRefAuthorisation pk1 = em.find(DataRefAuthorisation.class,pk);
+        
+        if(pk1 == null){
+            em.persist(dpr);
+        } else{
+            em.merge(dpr);
+        }
         
     }
     /* Gets the list of auth given out by current user */
@@ -155,8 +160,8 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             User user = new UserUtil(DN,null).getUser();
             Collection<DataReference> dataReferences  = user.getDataReference();
             
-            log.debug("User had "+dataReferences.size()+" number of DataReferences");         
-                        
+            log.debug("User had "+dataReferences.size()+" number of DataReferences");
+            
             return dataReferences;
         } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s DataReferences");
         
@@ -181,8 +186,8 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             User user = new UserUtil(DN,null).getUser();
             Collection<Bookmark> bookmarks  = user.getBookmark();
             
-            log.debug("User had "+bookmarks.size()+" number of bookmarks");          
-                        
+            log.debug("User had "+bookmarks.size()+" number of bookmarks");
+            
             return bookmarks;
         } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s Bookmarks");
         

@@ -20,7 +20,7 @@ import uk.ac.dl.dp5.util.DPAuthType;
  */
 @Remote
 public interface DataAuthorisationRemote {
-    public void addAuthoriserUser(String sid, String DN, Date startDate, Date endDate, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    public void addAuthorisedUser(String sid, String DN, Date startDate, Date endDate, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
     
     public Collection<String> getGivenAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
        

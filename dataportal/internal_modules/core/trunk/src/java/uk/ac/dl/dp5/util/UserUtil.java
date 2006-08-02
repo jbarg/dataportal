@@ -153,9 +153,10 @@ public class UserUtil {
             user.setDn(DN);
              
             //set up default role
-            Collection<Role> roles = (Collection<Role>) CachingServiceLocator.getInstance().getEntityManager().createNamedQuery("Role.findByName").setParameter("name",DPRole.USER).getResultList();
-            log.debug("Default roles found for user are  "+roles.iterator().next().getName());
-            log.debug("Role is  "+roles.iterator().next().getName().getClass());
+            Collection<Role> roles = (Collection<Role>) em.createNamedQuery("Role.findByName").setParameter("name",DPRole.USER).getResultList();
+            Role role = roles.iterator().next();
+            log.debug("Default roles found for user are  "+role.getName());
+            log.debug("Role is  "+role.getName().getClass());
             user.setRoles(roles);
             
             //add to DB
