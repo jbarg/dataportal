@@ -92,28 +92,23 @@ public class DataReference implements Serializable {
             private java.util.Collection <uk.ac.dl.dp5.entity.Url> urls;
     
     @PrePersist
+    @PreUpdate    
     public void prePersist(){
         modTime = new Date();
-    }
-    
-    @PreUpdate
-    public void preUpdate(){
-        modTime = new Date();
-    }
-    
-    
+    }    
+        
     /** Creates a new instance of DataReference */
     public DataReference() {
     }
     
-    public DataReference(Integer id) {
+    /*public DataReference(Integer id) {
         this.id = id;
-    }
+    }*/
     
-    public DataReference(Integer id, String name) {
+   /* public DataReference(Integer id, String name) {
         this.id = id;
         this.name = name;
-    }
+    }*/
     
     public Integer getId() {
         return this.id;

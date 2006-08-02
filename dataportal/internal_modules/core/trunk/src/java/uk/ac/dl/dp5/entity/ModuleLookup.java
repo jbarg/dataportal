@@ -85,12 +85,12 @@ public class ModuleLookup implements Serializable {
     public ModuleLookup() {
     }
 
-    public ModuleLookup(Integer id) {
+    /*public ModuleLookup(Integer id) {
         this.id = id;
-    }
+    }*/
 
-    public ModuleLookup(Integer id, String connection, String moduleType, String facility, Date modTime) {
-        this.id = id;
+    public ModuleLookup(String connection, String moduleType, String facility, Date modTime) {
+        //this.id = id;
         this.connection = connection;
         this.moduleType = moduleType;
         this.facility = facility;
@@ -101,9 +101,9 @@ public class ModuleLookup implements Serializable {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    /*public void setId(Integer id) {
         this.id = id;
-    }
+    }*/
 
     public String getConnection() {
         return this.connection;

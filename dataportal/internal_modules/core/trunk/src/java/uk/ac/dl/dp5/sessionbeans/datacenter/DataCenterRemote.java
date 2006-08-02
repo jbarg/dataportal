@@ -24,14 +24,19 @@ public interface DataCenterRemote {
     
     public Collection<Bookmark> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
     
-    public void addDataUrl(String sid, Collection<DataReference> dto) throws NoAccessToDataCenterException ,SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-    
-    public void addDataUrl(String sid, DataReference dto) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-    
-    public Collection<DataReference> getUrls(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-    
     public void removeBookmark(String sid, Collection<Bookmark> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
     
-    public void removeUrl(String sid, Collection<DataReference> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    public void removeBookmark(String sid, Bookmark dto) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    
+    public void addDataReference(String sid, Collection<DataReference> dto) throws NoAccessToDataCenterException ,SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public void addDataReference(String sid, DataReference dto) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public Collection<DataReference> getDataReferences(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public void removeDataReference(String sid, DataReference dto) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public void removeDataReference(String sid, Collection<DataReference> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
     
 }

@@ -50,21 +50,20 @@ public class Url implements Serializable {
     private Date modTime;
     
     @PrePersist
+    @PreUpdate
     public void prePersist(){
         modTime = new Date();
-    }
-    
-    @PreUpdate
-    public void preUpdate(){
-        modTime = new Date();
-    }
+    }   
     
     /** Creates a new instance of Url */
     public Url() {
+        this.modTime = new Date();
     }
     
     public Url(String url) {
         this.url = url;
+        this.modTime = new Date();
+        
     }
     
   /*  public Url(Integer id, String url, Date modTime) {

@@ -30,7 +30,7 @@ public class GetBookmarksClient {
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
             
             if(sid == null || sid.equals("")){
-                 sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
+                sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
                 sid =  sless1.login("glen","kkkkkk",2);
                 System.out.println(sid);
@@ -51,16 +51,26 @@ public class GetBookmarksClient {
                 System.out.println("-----------------\n");
                 idremove = dtos.getId();
             }
-           // dto.remove(dto.iterator().next());
-           // dto.remove(dto.iterator().next());
-           // sless.removeBookmark(sid,dto);
+            if(dto.size() != 0){
+                System.out.println("Updating a bookmark");
+                Bookmark mod = dto.iterator().next();
+                
+                mod.setName("NEW BOOKMARK AGAIN!!!");
+                mod.setQuery("STUPID QUERY");
+                
+                
+                
+                sless.addBookmark(sid,mod);
+            }
+            // dto.remove(dto.iterator().next());
+            // dto.remove(dto.iterator().next());
+            // sless.removeBookmark(sid,dto);
             //
         }catch(Exception e){
             
             if(e.getCause()   instanceof java.sql.SQLException){
                 System.out.println("sql");
-            }   
-            else e.printStackTrace();
+            } else e.printStackTrace();
         } finally {
             System.out.println("Logging out");
             try {

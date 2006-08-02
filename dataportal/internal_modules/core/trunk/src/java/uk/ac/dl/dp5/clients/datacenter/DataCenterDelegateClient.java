@@ -79,7 +79,7 @@ public class DataCenterDelegateClient {
             cs.add(new Url("srb://www.data.com"+(int)(Math.random()*10000L)));
             duto.setUrls(cs);
             
-            dd.addDataUrl(sid,duto);
+            dd.addDataReference(sid,duto);
             printTime("Adding urls");
             
             //getting bookmarks
@@ -95,7 +95,7 @@ public class DataCenterDelegateClient {
             printTime("bookmarks");
             
             //getting urls
-            Collection<DataReference> dto1 =  dd.getUrls(sid);
+            Collection<DataReference> dto1 =  dd.getDataReferences(sid);
             
             for(DataReference dtos : dto1){
                 System.out.print(dtos.getFacility());

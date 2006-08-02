@@ -40,7 +40,7 @@ public interface QuerySlaveMasterLocal {
   
     public Collection<QueryRecordDTO> getCurrentResults(String sid);
     
-   public Collection<Study> getPastQueryResults(String sid, String queryid, Collection<String> facilities);
+   public Collection<Study> getPastQueryResults(String sid, String queryid);
    
     public Collection<Study> getPastQueryResults(String sid, QueryRecordDTO dto);
    

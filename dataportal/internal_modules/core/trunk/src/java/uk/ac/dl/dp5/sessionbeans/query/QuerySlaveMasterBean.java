@@ -73,7 +73,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     
     @Resource(mappedName=DataPortalConstants.QUERY_MDB)
     private  Queue queue;
-       
+    
     private String sid ;
     private Collection<String> facilities;
     
@@ -102,7 +102,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         
         log.debug("Destroying..");
     }
-     @PermitAll
+    @PermitAll
     public String queryByKeyword(String sid, Collection<String> facilities, String[] keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         log.debug("queryByKeyword()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
@@ -170,7 +170,8 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         return search_id;
         
     }
-     @PermitAll
+    
+    @PermitAll
     public Collection<String> getCompleted(){
         Collection<String> completed  = new ArrayList<String>();
         
@@ -197,13 +198,13 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     }
     
     @Remove
-     @PermitAll
+    @PermitAll
     public void remove(){
         //TODO remove objects
     }
     
     //TODO put together a single method to recurse over QueryManager
-     @PermitAll
+    @PermitAll
     public Collection<Study> getQueryResults(){
         log.debug("getQueryResults()");
         //Collection<QueryRecord> qra = new ArrayList<QueryRecord>();
@@ -341,7 +342,9 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         Collection<QueryRecordDTO> dto  = new ArrayList<QueryRecordDTO>();
         
         for(Collection<QueryRecord> cqr : ccqr){
-            dto.add(new QueryRecordDTO(cqr.iterator().next()));
+            for(QueryRecord qr : cqr){
+                dto.add(new QueryRecordDTO(qr));
+            }
         }
         
         return dto;
@@ -349,11 +352,11 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     }
     
     public Collection<Study> getPastQueryResults(String sid, QueryRecordDTO qdto){
-        return getPastQueryResults(sid,qdto.getQueryid(),qdto.getFacilities());
+        return getPastQueryResults(sid,qdto.getQueryid());
     }
     
     
-    public Collection<Study> getPastQueryResults(String sid, String queryid, Collection<String> facilities){
+    public Collection<Study> getPastQueryResults(String sid, String queryid){
         Collection<Study> st = new ArrayList<Study>();
         Collection<Collection<QueryRecord>> ccqr = QueryManager.getUserAll(sid);
         
