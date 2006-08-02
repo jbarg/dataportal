@@ -156,7 +156,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.info("New session created for user: "+DN+" sid: "+sid);
             
             //add login event
-          //  userutil.sendEventLog(DPEvent.LOG_ON,"Logged on at "+new Date());
+            userutil.sendEventLog(DPEvent.LOG_ON,"Logged on at "+new Date());
             
             return sid;
             

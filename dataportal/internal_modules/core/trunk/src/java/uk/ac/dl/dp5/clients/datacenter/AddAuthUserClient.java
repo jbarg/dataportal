@@ -1,5 +1,6 @@
 package uk.ac.dl.dp5.clients.datacenter;
 import java.util.Collection;
+import java.util.Date;
 import uk.ac.dl.dp5.entity.DataReference;
 
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataAuthorisationRemote;
@@ -37,7 +38,7 @@ public class AddAuthUserClient {
             }
             
             DataAuthorisationRemote sless = (DataAuthorisationRemote) csl.lookup(DataPortalConstants.DATA_AUTHORISATOIN);
-            //   sless.addAuthoriserUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",new Date(),new Date(System.currentTimeMillis()+100000000),DPAuthType.ALL);
+            sless.addAuthorisedUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",new Date(),new Date(System.currentTimeMillis()+100000000),DPAuthType.ALL);
             
             Collection<String> e = sless.getGivenAuthorisedList(sid, DPAuthType.ALL);
             System.out.println("given");
