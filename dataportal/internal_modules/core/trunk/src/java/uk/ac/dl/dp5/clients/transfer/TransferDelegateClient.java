@@ -10,8 +10,7 @@ package uk.ac.dl.dp5.clients.transfer;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
-import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
+
 import java.util.*;
 import uk.ac.dl.dp5.clients.datacenter.DataCenterDelegate;
 import uk.ac.dl.dp5.clients.session.SessionDelegate;
@@ -57,9 +56,37 @@ public class TransferDelegateClient {
             try {                
                 //start download
                 dd.start();
-                printTime("Download");
+                printTime("Downloading ...");
             } catch (Exception ex) {
                 log.fatal("Download error ",ex);
+                return ;
+            }
+            
+             while(true){
+                if(dd.isFinished()){
+                    
+                    break;
+                } else if(dd.getException() != null){
+                    //System.out.println("exception "+th.getException());
+                    break;
+                } else if(dd.getException() == null){
+                    System.out.println(""+dd.percentageComplete()+" %");
+                    Thread.sleep(500);
+                }
+            }
+            printTime("download complete");
+            //System.out.println("Finished upload, awaiting error report.");
+            System.out.println("");
+            if(dd.getException() == null){
+                System.out.println("No errors");
+                System.out.println("Returned file path is: "+dd.getFile().getAbsolutePath());                
+                printTime("file path");
+                
+                System.out.println(dd.getStats());
+                printTime("stats");
+                
+            } else {
+                System.out.println("Exception: "+dd.getException());
             }
                         
             //end session

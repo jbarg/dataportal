@@ -53,7 +53,7 @@ public class LookupClient {
             LookupRemote sless = (LookupRemote) ic.lookup(DataPortalConstants.LOOKUP);
             
             
-            System.out.println("Looking for facilities type: "+DPFacilityType.ACM);
+            System.out.println("Looking for facilities type: "+DPFacilityType.WRAPPER);
             Collection<FacilityDTO> facs = (Collection<FacilityDTO>)sless.getFacilities(DPFacilityType.WRAPPER);
                         
             for(FacilityDTO f : facs){

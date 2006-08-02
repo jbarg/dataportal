@@ -16,10 +16,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.ejb.Stateless;
 import org.apache.log4j.Logger;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
+
 import uk.ac.dl.dp5.entity.Bookmark;
 import uk.ac.dl.dp5.entity.DataRefAuthorisation;
 import uk.ac.dl.dp5.entity.DataRefAuthorisationPK;
+import uk.ac.dl.dp5.entity.DataReference;
 import uk.ac.dl.dp5.entity.User;
 
 import uk.ac.dl.dp5.exceptions.NoAccessToDataCenterException;
@@ -52,7 +53,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         dpr.setAuthEndDate(endDate);
         dpr.setAuthStartDate(startDate);
         dpr.setAuthType(type.toString());
-         dpr.setSource_user(userSource);
+        dpr.setSource_user(userSource);
         dpr.setUser(givenSource);
         
         DataRefAuthorisationPK pk = new DataRefAuthorisationPK();
@@ -87,7 +88,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             
             //still in date
             if(now.after(start) && now.before(expire)){
-                if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){                    
+                if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){
                     log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType());
                     sc.add(givenUser.getDn());
                 }
@@ -135,12 +136,38 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         return sc;
     }
     
-    public Collection<BookmarkDTO> getOtherUsersDataCenter(String sid, String DN, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+    public Collection<DataReference> getOtherUsersDataReferences(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+        log.debug("getOtherUsersDataReferences()");
+        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
+        
+        Collection<String> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.DATA);
+        
+        boolean accessAllowed = false;
+        for(String dn : DNs_given){
+            if(dn.equals(DN)) {
+                accessAllowed = true;
+                break;
+            }
+        }
+        if(accessAllowed){
+            //get users bookmarks
+            User user = new UserUtil(DN,null).getUser();
+            Collection<DataReference> dataReferences  = user.getDataReference();
+            
+            log.debug("User had "+dataReferences.size()+" number of DataReferences");         
+                        
+            return dataReferences;
+        } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s DataReferences");
+        
+    }
+    
+    public Collection<Bookmark> getOtherUsersBookmarks(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
         log.debug("getUserBookmarks()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         
-        Collection<String> DNs_given = getRecievedAuthorisedList(sid, type);
+        Collection<String> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.BOOKMARK);
         
         boolean accessAllowed = false;
         for(String dn : DNs_given){
@@ -154,19 +181,12 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             User user = new UserUtil(DN,null).getUser();
             Collection<Bookmark> bookmarks  = user.getBookmark();
             
-            log.debug("User had "+bookmarks.size()+" number of bookmarks");
-            
-            Collection<BookmarkDTO> dto = new  ArrayList<BookmarkDTO>();
-            
-            for(Bookmark bm : bookmarks){
-                log.debug(""+bm.getId());
-                dto.add(new BookmarkDTO(bm));
-            }
-            return dto;
-        } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s bookmarks");
+            log.debug("User had "+bookmarks.size()+" number of bookmarks");          
+                        
+            return bookmarks;
+        } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s Bookmarks");
         
     }
-    
     
     
 }

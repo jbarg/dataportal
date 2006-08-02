@@ -26,6 +26,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -86,6 +87,7 @@ public class User implements Serializable {
     private java.util.Collection <DataRefAuthorisation> DataRefAuthorisationSource;
     
     @PrePersist
+    @PreUpdate
     public void prePersist(){
         modTime = new Date();
     }

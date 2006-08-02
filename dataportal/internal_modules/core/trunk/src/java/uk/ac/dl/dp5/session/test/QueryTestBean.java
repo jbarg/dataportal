@@ -19,6 +19,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 import javax.ejb.*;
+import uk.ac.dl.dp5.entity.Session;
+import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.exceptions.QueryException;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
@@ -26,6 +28,8 @@ import uk.ac.dl.dp5.exceptions.UserNotFoundException;
 import uk.ac.dl.dp5.sessionbeans.query.QuerySlaveMasterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.DataPortalConstants;
+import uk.ac.dl.dp5.util.SessionUtil;
+import uk.ac.dl.dp5.util.UserUtil;
 
 /**
  *
@@ -36,18 +40,18 @@ public class QueryTestBean extends SessionEJBObject implements QueryTestRemote {
     
     static Logger log = Logger.getLogger(QueryTestBean.class);
     
-  
+    
     private QuerySlaveMasterRemote queryBean;
     private @Resource SessionContext sessionCtx;
     
     public double doQuery(String sid, Collection<String> facilities, String[] keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         
-            try {
-                
-                queryBean = (QuerySlaveMasterRemote) new InitialContext().lookup("QuerySlaveMasterEJB");
-            } catch (NamingException ex) {
-                ex.printStackTrace();
-            }
+        try {
+            
+            queryBean = (QuerySlaveMasterRemote) new InitialContext().lookup("QuerySlaveMasterEJB");
+        } catch (NamingException ex) {
+            ex.printStackTrace();
+        }
         
         
         double time = new Date().getTime();
@@ -72,4 +76,23 @@ public class QueryTestBean extends SessionEJBObject implements QueryTestRemote {
         return (new Date().getTime()-time)/1000;
     }
     
+    
+    public User getUser(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        
+        User user =  new UserUtil(sid).getUser();
+        user.getBookmark().size();
+        user.getEventLog().size();
+        
+        return user;
+        
+    }
+    
+    public void setUser(User user) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        
+        User user2 = em.merge(user);
+        
+        log.trace("User has bookmarks size "+user.getBookmark().size());
+        log.trace("User has getEventLog size "+user.getEventLog().size());
+        
+    }
 }

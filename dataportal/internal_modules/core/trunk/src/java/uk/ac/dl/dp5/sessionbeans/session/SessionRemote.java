@@ -19,13 +19,7 @@ import uk.ac.dl.dp5.exceptions.*;
  */
 @Remote
 public interface SessionRemote {
-    Object mergeEntity(Object entity);
     
-    Object persistEntity(Object entity);
-    
-    Object refreshEntity(Object entity);
-    
-    void removeEntity(Object entity);
     
    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException;    
     

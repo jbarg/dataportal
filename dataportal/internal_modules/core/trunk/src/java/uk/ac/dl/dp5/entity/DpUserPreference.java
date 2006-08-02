@@ -23,6 +23,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -71,6 +72,7 @@ public class DpUserPreference implements Serializable {
     private User userId;
     
     @PrePersist
+    @PreUpdate
     public void prePersist(){
         modTime = new Date();
     }

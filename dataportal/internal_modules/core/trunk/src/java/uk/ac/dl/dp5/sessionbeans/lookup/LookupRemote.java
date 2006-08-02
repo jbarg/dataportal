@@ -10,14 +10,7 @@ import uk.ac.dl.dp5.util.DPFacilityType;
  * This is the business interface for Lookup enterprise bean.
  */
 @Remote
-public interface LookupRemote {
-    Object mergeEntity(Object entity);
-    
-    Object persistEntity(Object entity);
-    
-    Object refreshEntity(Object entity);
-    
-    void removeEntity(Object entity);
+public interface LookupRemote {    
     
     public Collection<FacilityDTO> getFacilities(DPFacilityType type);      
    

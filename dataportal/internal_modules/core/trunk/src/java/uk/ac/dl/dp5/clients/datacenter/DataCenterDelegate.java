@@ -52,25 +52,47 @@ public class DataCenterDelegate {
     
     /*All DataCenterBean methods here*/
     
-    
+    ////BOOKMARKS  //
     public void addBookmark(String sid, Bookmark dto) throws  UserNotFoundException,SessionTimedOutException, SessionNotFoundException, NoAccessToDataCenterException{
-         dcr.addBookmark(sid,dto);
+        dcr.addBookmark(sid,dto);
     }
     
-     public void addBookmark(String sid, Collection<Bookmark> dto) throws  UserNotFoundException,SessionTimedOutException, SessionNotFoundException, NoAccessToDataCenterException{
-         dcr.addBookmark(sid,dto);
+    public void addBookmark(String sid, Collection<Bookmark> dto) throws  UserNotFoundException,SessionTimedOutException, SessionNotFoundException, NoAccessToDataCenterException{
+        dcr.addBookmark(sid,dto);
     }
     
     public Collection<Bookmark> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         return dcr.getBookmarks(sid);
     }
     
-    void addDataUrl(String sid, DataReference dto) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
-        dcr.addDataUrl(sid,dto);
+    public void removeBookmark(String sid, Collection<Bookmark> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        dcr.removeBookmark(sid,dtos);
     }
     
-    public Collection<DataReference> getUrls(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
-        return dcr.getUrls(sid);
+    public void removeBookmark(String sid, Bookmark dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        dcr.removeBookmark(sid,dtos);
+    }
+    
+    
+    //  DATAREFERNECE  //
+    public void addDataReference(String sid, DataReference dto) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+        dcr.addDataReference(sid,dto);
+    }
+    
+    public void addDataReference(String sid, Collection<DataReference> dtos) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+        dcr.addDataReference(sid,dtos);
+    }
+    
+    public void removeDataReference(String sid, DataReference dto) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        dcr.removeDataReference(sid,dto);
+    }
+    
+    public void removeDataReference(String sid, Collection<DataReference> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        dcr.removeDataReference(sid,dtos);
+    }
+    
+    public Collection<DataReference> getDataReferences(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        return dcr.getDataReferences(sid);
     }
     
     

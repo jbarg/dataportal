@@ -1,6 +1,7 @@
 package uk.ac.dl.dp5.clients.datacenter;
 import java.util.Collection;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
+import uk.ac.dl.dp5.entity.DataReference;
+
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataAuthorisationRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -50,9 +51,9 @@ public class AddAuthUserClient {
                 System.out.println(g);
             }
             
-            Collection<BookmarkDTO> e2 = sless.getOtherUsersDataCenter(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater", DPAuthType.ALL);
+            Collection<DataReference> e2 = sless.getOtherUsersDataReferences(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater");
             System.out.println("others");
-            for(BookmarkDTO g: e2){
+            for(DataReference g: e2){
                 System.out.println(g.getName());
             }
             

@@ -1,6 +1,7 @@
 package uk.ac.dl.dp5.clients.datacenter;
 import java.util.Collection;
 import uk.ac.dl.dp5.entity.DataReference;
+import uk.ac.dl.dp5.entity.Url;
 import uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterRemote;
 import uk.ac.dl.dp5.sessionbeans.session.SessionRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
@@ -19,7 +20,7 @@ import uk.ac.dl.dp5.util.DataPortalConstants;
  * @author gjd37
  */
 public class GetUrlsClient {
-    String sid = "1472de3f-b7a4-45a6-8eaa-ff902a320af8";
+    String sid = "";
     /** Creates a new instance of BookmarkClient */
     public GetUrlsClient() {
         try{
@@ -35,7 +36,7 @@ public class GetUrlsClient {
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
             
             
-            Collection<DataReference> dto =  sless.getUrls(sid);
+            Collection<DataReference> dto =  sless.getDataReferences(sid);
             
             for(DataReference dtos : dto){
                 System.out.println("-----------------");
@@ -47,12 +48,29 @@ public class GetUrlsClient {
                 System.out.println("-----------------\n");
             }
             //
+            if(dto.size() != 0){
+                System.out.println("updating a url");
+                
+                DataReference dr = dto.iterator().next();
+                
+                Collection<Url> urls = dr.getUrls();
+                
+                Url op = new Url("http://nefgfgfgfw");
+                urls.add(op);
+                
+                dr.setUrls(urls);
+                
+                dr.setName("STUPID NAME3");
+                
+                sless.addDataReference(sid,dr);
+            }
+            
+            
         }catch(Exception e){
             
             if(e.getCause()   instanceof java.sql.SQLException){
                 System.out.println("sql");
-            }   
-            else e.printStackTrace();
+            } else e.printStackTrace();
         }
     }
     

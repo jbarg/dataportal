@@ -61,12 +61,12 @@ public class Facility implements Serializable {
     public Facility() {
     }
 
-    public Facility(Integer id) {
+    /*public Facility(Integer id) {
         this.id = id;
-    }
+    }*/
 
-    public Facility(Integer id, String shortName, String infoUrl, Date modTime) {
-        this.id = id;
+    public Facility(String shortName, String infoUrl, Date modTime) {
+        
         this.shortName = shortName;
         this.infoUrl = infoUrl;
         this.modTime = modTime;
@@ -76,9 +76,9 @@ public class Facility implements Serializable {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    /*public void setId(Integer id) {
         this.id = id;
-    }
+    }*/
 
     public String getShortName() {
         return this.shortName;

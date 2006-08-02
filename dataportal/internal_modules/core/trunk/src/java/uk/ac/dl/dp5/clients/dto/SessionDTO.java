@@ -10,6 +10,7 @@
 package uk.ac.dl.dp5.clients.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 import uk.ac.dl.dp5.entity.Session;
 import uk.ac.dl.dp5.util.DPCredentialType;
 
@@ -24,11 +25,14 @@ public class SessionDTO implements Serializable{
     private String credential;
    
     private DPCredentialType credentialType;
+    
+    private Date expireTime;
    
    // private User userId;
     
     /** Creates a new instance of SessionDTO */
     public SessionDTO(Session session) {
+        this.setExpireTime(session.getExpireDateTime());
         this.setCredential(session.getCredential());
         this.setCredentialType(session.getCredentialType());
         this.setUserSessionId(session.getUserSessionId());
@@ -56,6 +60,14 @@ public class SessionDTO implements Serializable{
 
     public void setCredentialType(DPCredentialType credentialType) {
         this.credentialType = credentialType;
+    }
+
+    public Date getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Date expireTime) {
+        this.expireTime = expireTime;
     }
     
 }

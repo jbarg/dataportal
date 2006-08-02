@@ -57,7 +57,7 @@ public class AddUrlClient {
             cs.add(new Url("srb://www.test.com/moredata"+(int)(Math.random()*10000L)));
             dto.setUrls(cs);
             
-            sless.addDataUrl(sid,dto);
+            sless.addDataReference(sid,dto);
             
             
             //

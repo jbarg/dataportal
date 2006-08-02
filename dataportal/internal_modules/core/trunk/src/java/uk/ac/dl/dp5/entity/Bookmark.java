@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -72,6 +73,7 @@ public class Bookmark implements Serializable {
     private User userId;
     
     @PrePersist
+    @PreUpdate
     public void prePersist(){
         modTime = new Date();
     }
@@ -80,12 +82,12 @@ public class Bookmark implements Serializable {
     public Bookmark() {
     }
 
-    public Bookmark(Integer id) {
+    /*public Bookmark(Integer id) {
         this.id = id;
-    }
+    }*/
 
-     public Bookmark(Integer id, Integer studyId, String name, String query, String facility) {
-        this.id = id;
+     public Bookmark(Integer studyId, String name, String query, String facility) {
+       
         this.studyId = studyId;
         this.name = name;
         this.query = query;
@@ -96,9 +98,9 @@ public class Bookmark implements Serializable {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    /*public void setId(Integer id) {
         this.id = id;
-    }
+    }*/
     
      public Integer getStudyId() {
         return this.studyId;

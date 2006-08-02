@@ -3,8 +3,9 @@ package uk.ac.dl.dp5.sessionbeans.datacenter;
 
 import java.util.Collection;
 import javax.ejb.Local;
-import uk.ac.dl.dp5.clients.dto.BookmarkDTO;
-import uk.ac.dl.dp5.clients.dto.DataUrlDTO;
+import uk.ac.dl.dp5.entity.Bookmark;
+import uk.ac.dl.dp5.entity.DataReference;
+
 import uk.ac.dl.dp5.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
@@ -18,21 +19,21 @@ import uk.ac.dl.dp5.exceptions.UserNotFoundException;
 @Local
 public interface DataCenterLocal {
     
-    public Collection<BookmarkDTO> addBookmark(String sid, BookmarkDTO dto) throws UserNotFoundException,SessionTimedOutException, SessionNotFoundException;
+    public void addBookmark(String sid, Bookmark dto) throws NoAccessToDataCenterException, UserNotFoundException, SessionTimedOutException, SessionNotFoundException;
     
-     public Collection<BookmarkDTO> addBookmark(String sid, Collection<BookmarkDTO> dto) throws UserNotFoundException,SessionTimedOutException, SessionNotFoundException;
+    public void addBookmark(String sid, Collection<Bookmark> dto) throws NoAccessToDataCenterException, UserNotFoundException,SessionTimedOutException, SessionNotFoundException;
+    
+    public Collection<Bookmark> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public void removeBookmark(String sid, Collection<Bookmark> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public void removeBookmark(String sid, Bookmark dto) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    
+    public void addDataReference(String sid, Collection<DataReference> dto) throws NoAccessToDataCenterException ,SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public void addDataReference(String sid, DataReference dto) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    
+    public Collection<DataReference> getDataReferences(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
   
-     
-    public Collection<BookmarkDTO> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-    
-   public Collection<DataUrlDTO> addDataUrl(String sid, Collection<DataUrlDTO> dto) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-   
-       public Collection<DataUrlDTO> addDataUrl(String sid, DataUrlDTO dto) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-   
-    public Collection<DataUrlDTO> getUrls(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-    
-      public void removeBookmark(String sid, Collection<BookmarkDTO> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-    
-    public void removeUrl(String sid, Collection<DataUrlDTO> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
-   
 }
