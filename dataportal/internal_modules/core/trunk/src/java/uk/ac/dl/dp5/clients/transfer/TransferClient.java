@@ -44,9 +44,9 @@ public class TransferClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        PropertyConfigurator.configure("c:/log4j.properties");
+       // PropertyConfigurator.configure("c:/log4j.properties");
         
-        String sid ="34663f96-2a34-4ba1-a489-1e5dbad7531e";
+        String sid ="";
         boolean loggingin = false;
         SessionRemote sless1 = null;
         TransferRemote tr =  null;
@@ -68,7 +68,7 @@ public class TransferClient {
             
             
             Collection<String> srb = new ArrayList<String>();
-            srb.add("srb://dfdfd:676/ngs/home/glen-drinkwater.ngs/test");
+            srb.add("srb://srb1.ngs.rl.ac.uk:5544/ngs/home/glen-drinkwater.ngs/test");
             
             tr = (TransferRemote) csl.lookup(DataPortalConstants.TRANSFER);
             printTime("Looked up transfer");

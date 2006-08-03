@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,7 +41,7 @@ import javax.persistence.TemporalType;
 public class Facility implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private Integer id;
 
@@ -56,6 +57,9 @@ public class Facility implements Serializable {
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
+    
+    @OneToMany(mappedBy = "facilityId")
+    private java.util.Collection <SrbServer> srbServerCollection;
     
     /** Creates a new instance of Facility */
     public Facility() {
@@ -110,6 +114,14 @@ public class Facility implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+    
+     public java.util.Collection <SrbServer> getSrbServerCollection() {
+        return this.srbServerCollection;
+    }
+
+    public void setSrbServerCollection(java.util.Collection <SrbServer> srbServerCollection) {
+        this.srbServerCollection = srbServerCollection;
     }
 
     public int hashCode() {

@@ -39,7 +39,7 @@ import javax.persistence.TemporalType;
 public class ProxyServers implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
     private Integer id;
 
@@ -49,6 +49,9 @@ public class ProxyServers implements Serializable {
     @Column(name = "CA_ROOT_CERTIFICATE", nullable = false)
     private String caRootCertificate;
 
+    @Column(name = "PORT_NUMBER", nullable = false)    
+    private Integer portNumber;
+        
     @Column(name = "MOD_TIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
@@ -61,13 +64,13 @@ public class ProxyServers implements Serializable {
     }
 
     public ProxyServers(Integer id) {
-        this.id = id;
+        this.setId(id);
     }
 
     public ProxyServers(Integer id, String proxyServerAddress, String caRootCertificate) {
-        this.id = id;
-        this.proxyServerAddress = proxyServerAddress;
-        this.caRootCertificate = caRootCertificate;
+        this.setId(id);
+        this.setProxyServerAddress(proxyServerAddress);
+        this.setCaRootCertificate(caRootCertificate);
     }
 
     public Integer getId() {
@@ -112,7 +115,7 @@ public class ProxyServers implements Serializable {
 
     public int hashCode() {
         int hash = 0;
-        hash += (this.id != null ? this.id.hashCode() : 0);
+        hash += (this.getId() != null ? this.getId().hashCode() : 0);
         return hash;
     }
 
@@ -121,13 +124,21 @@ public class ProxyServers implements Serializable {
             return false;
         }
         ProxyServers other = (ProxyServers)object;
-        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) return false;
+        if (this.getId() != other.getId() && (this.getId() == null || !this.getId().equals(other.getId()))) return false;
         return true;
     }
 
     public String toString() {
         //TODO change toString() implementation to return a better display name
-        return "" + this.id;
+        return "" + this.getId();
+    }
+
+    public Integer getPortNumber() {
+        return this.portNumber;
+    }
+
+    public void setPortNumber(Integer portNumber) {
+        this.portNumber = portNumber;
     }
     
 }
