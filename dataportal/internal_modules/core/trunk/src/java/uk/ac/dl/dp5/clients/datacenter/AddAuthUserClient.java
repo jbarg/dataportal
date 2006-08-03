@@ -38,7 +38,7 @@ public class AddAuthUserClient {
             }
             
             DataAuthorisationRemote sless = (DataAuthorisationRemote) csl.lookup(DataPortalConstants.DATA_AUTHORISATOIN);
-            sless.addAuthorisedUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",new Date(),new Date(System.currentTimeMillis()+100000000),DPAuthType.ALL);
+            sless.addAuthorisedUser(sid,"/C=UK/O=eScience/OU=UCL/L=EISD/CN=louise price",new Date(),new Date(System.currentTimeMillis()+100000000),DPAuthType.ALL);
             
             Collection<String> e = sless.getGivenAuthorisedList(sid, DPAuthType.ALL);
             System.out.println("given");
@@ -52,7 +52,7 @@ public class AddAuthUserClient {
                 System.out.println(g);
             }
             
-            Collection<DataReference> e2 = sless.getOtherUsersDataReferences(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater");
+            Collection<DataReference> e2 = sless.getOtherUsersDataReferences(sid, "/C=UK/O=eScience/OU=UCL/L=EISD/CN=louise price");
             System.out.println("others");
             for(DataReference g: e2){
                 System.out.println(g.getName());

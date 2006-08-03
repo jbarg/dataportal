@@ -147,6 +147,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         
         Collection<String> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.DATA);
+        User thisUser = new UserUtil(sid).getUser();
         
         boolean accessAllowed = false;
         for(String dn : DNs_given){
@@ -163,7 +164,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             log.debug("User had "+dataReferences.size()+" number of DataReferences");
             
             return dataReferences;
-        } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s DataReferences");
+        } else throw new NoAccessToDataCenterException("No access allowed to view user: "+DN+"'s data references for user: "+thisUser.getDn());
         
     }
     
@@ -173,7 +174,8 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         
         Collection<String> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.BOOKMARK);
-        
+          User thisUser = new UserUtil(sid).getUser();
+      
         boolean accessAllowed = false;
         for(String dn : DNs_given){
             if(dn.equals(DN)) {
@@ -189,7 +191,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             log.debug("User had "+bookmarks.size()+" number of bookmarks");
             
             return bookmarks;
-        } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s Bookmarks");
+        } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s bookmarks for user: "+thisUser.getDn());
         
     }
     
