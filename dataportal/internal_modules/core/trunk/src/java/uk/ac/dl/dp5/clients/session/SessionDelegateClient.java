@@ -43,14 +43,13 @@ public class SessionDelegateClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        PropertyConfigurator.configure("c:/log4j.properties");
+     //   PropertyConfigurator.configure("c:/log4j.properties");
         time =  new Date().getTime();
         try{
             SessionDelegate sd = SessionDelegate.getInstance();
             printTime("initial lookup");
             log.debug("Restarting timer");
-            time =  new Date().getTime();
-            
+            time =  new Date().getTime();            
             
             SessionDelegate.getInstance();
             printTime("lookup again");

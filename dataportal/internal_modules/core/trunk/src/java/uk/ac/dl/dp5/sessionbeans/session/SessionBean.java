@@ -74,7 +74,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
         GSSCredential myproxy_proxy;
         try {
-            
+            //lookup proxy and contact for users credential
             ProxyServers proxyserver = lookup.getDefaultProxyServer();
             myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy(),
                     proxyserver.getProxyServerAddress(),proxyserver.getPortNumber(),proxyserver.getCaRootCertificate());
@@ -113,7 +113,8 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             
         }
         
-        if (lifetimeLeft) {
+        if (lifetimeLeft) {            
+            //set up new session
             
             //create UUID for session
             String sid = UUID.randomUUID().toString();
@@ -124,6 +125,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             session.setCredential(certificate.getStringRepresentation());
             session.setCredentialType(DPCredentialType.PROXY);
             
+            //set expire time on session
             Calendar cal =  GregorianCalendar.getInstance();
             try {
                 cal.add(GregorianCalendar.SECOND,(int)certificate.getLifetime()-60*5); //minus 5 mins
@@ -139,7 +141,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             
             //get user
             try {
-                log.debug("Getting user.");
+                log.trace("Getting user.");
                 //need to get user corresponding to DN
                 
                 userutil = new UserUtil(certificate);
@@ -148,7 +150,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
                 session.setUserId(user);
             } catch(UserNotFoundException enfe){
                 //no entity found, so create one
-                log.debug("No user found, creating one.");
+                log.info("No user found, creating new user.");
                 user = UserUtil.createDefaultUser(DN);
                 userutil = new UserUtil(user);
                 
@@ -159,7 +161,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
                 throw new LoginMyProxyException("Unable to load certificate",LoginError.UNKNOWN,ex);
                 
             }
-            log.debug("Persiting session.");
+            
+            //save session
+            log.trace("Persiting session.");
             em.persist(session);
             log.info("New session created for user: "+DN+" sid: "+sid);
             
@@ -199,7 +203,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         em.remove(session);
         
         //clear query cache
-        ts.removeSessionFromQueryCache(sid);
+        //ts.removeSessionFromQueryCache(sid);
         
         //send logout event
         new UserUtil(session.getUserId()).sendEventLog(DPEvent.LOG_OPF,"Logged off at "+new Date());
