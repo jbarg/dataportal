@@ -720,11 +720,11 @@ INSERT INTO SEQUENCE(SEQ_NAME, SEQ_COUNT) values ('SEQ_GEN', 0) ;
 insert into DP_ROLE values (1, 'USER',systimestamp);
 insert into DP_ROLE values (2, 'ADMIN',systimestamp);
 
-insert into DP_PROXY_SERVERS values (1,'myproxy.grid-support.ac.uk', 1521, '/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/myproxy.grid-support.ac.uk/E=a.j.richards@dl.ac.uk', systimestamp);
+insert into DP_PROXY_SERVERS values (1,'myproxy.grid-support.ac.uk', 7521, '/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/myproxy.grid-support.ac.uk/E=a.j.richards@dl.ac.uk', systimestamp);
 
 insert into DP_FACILITY values (1,'ISIS', 'ISIS Pulsed Neutron \& Muon Source','http://www.isis.rl.ac.uk/', systimestamp);
 
-insert into DP_MODULE_LOOKUP values (1, '(DESCRIPTION=(ADDRESS=(HOST=elektra.dl.ac.uk)(PROTOCOL=tcp)(PORT=1521))(CONNECT_DATA=(SID=minerva2)))', 'icat_v2copy2', 'l1verp00lfc', 'oracle', 'dpal', 'ISIS', 'Y', systimestamp) ;
+insert into DP_MODULE_LOOKUP values (1, '(DESCRIPTION=(ADDRESS=(HOST=elektra.dl.ac.uk)(PROTOCOL=tcp)(PORT=1521))(CONNECT_DATA=(SID=minerva2)))', 'user', 'password', 'oracle', 'dpal', 'ISIS', 'Y', systimestamp) ;
 
 insert into DP_EVENT values (1,'LOG_OFF','User logging off event',systimestamp);
 insert into DP_EVENT values (2,'LOG_ON','User logging on event',systimestamp);
