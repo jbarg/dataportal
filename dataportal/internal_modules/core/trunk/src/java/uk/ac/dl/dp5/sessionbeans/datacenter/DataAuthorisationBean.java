@@ -118,7 +118,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         
         Collection<String> sc = new ArrayList<String>();
         for(DataRefAuthorisation df : dra){
-            User givenUser = df.getUser();
+            User recievedUser = df.getSource_user();
             
             Calendar expire = new GregorianCalendar();
             expire.setTime(df.getAuthEndDate());
@@ -130,11 +130,11 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             //still in date
             if(now.after(start) && now.before(expire)){
                 if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){
-                    log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType());
-                    sc.add(givenUser.getDn());
+                    log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType());
+                    sc.add(recievedUser.getDn());
                 }
             } else {
-                log.debug("Removing auth for user: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
+                log.debug("Removing auth for user: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
                 em.remove(df);
             }
         }
