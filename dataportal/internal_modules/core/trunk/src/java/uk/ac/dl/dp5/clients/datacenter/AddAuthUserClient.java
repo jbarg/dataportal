@@ -28,34 +28,37 @@ public class AddAuthUserClient {
         try{
             
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
-            
+            String name = "LouisePrice";
+            // String name = "glen";
             
             if(sid == null || sid.equals("")){
                 SessionRemote sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
-                
-                sid =  sless1.login("glen","kkkkkk",2);
+                // sid =  sless1.login(name,"kkkkkk",2);
+                sid =  sless1.login(name,"llllll",2);
                 System.out.println(sid);
             }
             
             DataAuthorisationRemote sless = (DataAuthorisationRemote) csl.lookup(DataPortalConstants.DATA_AUTHORISATOIN);
-            sless.addAuthorisedUser(sid,"/C=UK/O=eScience/OU=UCL/L=EISD/CN=louise price",new Date(),new Date(System.currentTimeMillis()+100000000),DPAuthType.ALL);
+            //sless.addAuthorisedUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",new Date(),new Date(System.currentTimeMillis()+100000000),DPAuthType.ALL);
             
             Collection<String> e = sless.getGivenAuthorisedList(sid, DPAuthType.ALL);
-            System.out.println("given");
+            System.out.println(name +" has given access to:");
             for(String g: e){
                 System.out.println(g);
             }
             
-            System.out.println("received");
+            System.out.println(name +" has received access from");
             Collection<String> e1 = sless.getRecievedAuthorisedList(sid, DPAuthType.ALL);
             for(String g: e1){
                 System.out.println(g);
             }
             
-            Collection<DataReference> e2 = sless.getOtherUsersDataReferences(sid, "/C=UK/O=eScience/OU=UCL/L=EISD/CN=louise price");
-            System.out.println("others");
-            for(DataReference g: e2){
-                System.out.println(g.getName());
+            if(!e1.isEmpty()){
+                Collection<DataReference> e2 = sless.getOtherUsersDataReferences(sid,e1.iterator().next() );
+                System.out.println("others");
+                for(DataReference g: e2){
+                    System.out.println(g.getName());
+                }
             }
             
             //
