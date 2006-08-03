@@ -233,12 +233,19 @@ public class UserUtil {
             queueSender = queueSession.createSender(mdbQueue);
             queueSender.send(msg);
             // sess.commit ();
-            queueSession.close();
+            
             
         } catch (JMSException ex) {
             log.error("Unable send event: "+event+" by userId: "+this.user.getId(),ex);
         }
-        
+        finally{
+            try {
+                queueSession.close();
+                queueCon.close();
+            } catch (JMSException ex) {
+                
+            }
+        }
         
     }
     
