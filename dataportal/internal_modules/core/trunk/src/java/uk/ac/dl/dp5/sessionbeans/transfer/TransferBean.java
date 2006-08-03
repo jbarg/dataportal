@@ -10,10 +10,13 @@
 package uk.ac.dl.dp5.sessionbeans.transfer;
 
 import java.io.File;
+import java.net.URL;
 import java.security.cert.CertificateException;
 import java.util.Collection;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
+import javax.ejb.Init;
 import javax.ejb.PrePassivate;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
@@ -23,6 +26,7 @@ import uk.ac.dl.dp5.entity.Session;
 import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp5.sessionbeans.lookup.LookupLocal;
 import uk.ac.dl.dp5.sessionbeans.session.SessionEJBObject;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.Certificate;
@@ -40,6 +44,9 @@ import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
 public class TransferBean extends SessionEJBObject implements TransferRemote, TransferLocal {
     
     static Logger log = Logger.getLogger(TransferBean.class);
+    
+    @EJB()
+    LookupLocal lookup;
     
     //information about the download
     private int percentageComplete;
@@ -128,13 +135,27 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
         }
     }
     
+    @Init()
+    public void lookupSRBServer(){
+        log.debug("Init of transfer bean");
+       // log.trace("Looking up SRBServer");        
+    }
+    
     private void download(GSSCredential credential, Collection<String> srbUrl) {
         //use default configuration location ~/.srb
         th = new SRBFileManagerThread();
         
         try {
+            
+            //get the host and port number of download
+            String url = srbUrl.iterator().next();
+            URL url_s  = new URL(url.replaceFirst("srb","http"));
+            String host = url_s.getHost();
+            int port  = url_s.getPort();
+            
+            log.debug("SRB Host Information: "+host+":"+port);
             th.setSRBFile(srbUrl.toArray(new String[srbUrl.size()]));
-            th.setCredentials(DataPortalConstants.SRB_HOST,DataPortalConstants.SRB_PORT,credential);
+            th.setCredentials(host,port,credential);
         } catch (Exception ex) {
             log.warn("Unable to set credentials and srb file info.");
             exception = new CertificateException("Unable to set credentials and srb file info.",ex);

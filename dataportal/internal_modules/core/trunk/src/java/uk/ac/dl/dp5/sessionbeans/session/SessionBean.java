@@ -16,12 +16,14 @@ import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp5.clients.dto.SessionDTO;
 import uk.ac.dl.dp5.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp5.entity.DpUserPreference;
+import uk.ac.dl.dp5.entity.ProxyServers;
 import uk.ac.dl.dp5.entity.Role;
 
 import uk.ac.dl.dp5.entity.User;
 import uk.ac.dl.dp5.exceptions.CannotCreateNewUserException;
 import uk.ac.dl.dp5.exceptions.LoginError;
 import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp5.sessionbeans.lookup.LookupLocal;
 
 import uk.ac.dl.dp5.util.DPCredentialType;
 import uk.ac.dl.dp5.entity.Session;
@@ -51,16 +53,19 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     static Logger log = Logger.getLogger(SessionBean.class);
     
-     @EJB
+    @EJB
     private TimerServiceLocal ts;
     
+    @EJB
+    private LookupLocal lookup;
     
+        
     public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException{
         log.debug("getSession()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         return new SessionUtil(sid).getSessionDTO();
-    }   
-   
+    }
+    
     
     public String login(String username,String password, int lifetime) throws LoginMyProxyException, CannotCreateNewUserException{
         log.debug("login()");
@@ -69,7 +74,10 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
         GSSCredential myproxy_proxy;
         try {
-            myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy());
+            
+            ProxyServers proxyserver = lookup.getDefaultProxyServer();
+            myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy(),
+                    proxyserver.getProxyServerAddress(),proxyserver.getPortNumber(),proxyserver.getCaRootCertificate());
         } catch (MyProxyException mex) {
             log.warn("Error from myproxy server: "+mex.getMessage(),mex);
             throw new LoginMyProxyException(mex);
@@ -226,7 +234,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return new UserPreferencesDTO(dto);
     }
     
-   
+    
     @PostConstruct
     public void postConstruct(){
         //PropertyConfigurator.configure("c:/log4j.properties");
@@ -234,6 +242,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         log.debug("Starting timer service");
         //in 30mins every 30 mins
         ts.createTimer(1000*60*30,1000*60*30);
+        
+        //lookup default myproxy server
+        
     }
     
     

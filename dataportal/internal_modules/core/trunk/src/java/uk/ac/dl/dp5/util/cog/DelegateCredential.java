@@ -13,36 +13,35 @@ import org.globus.common.*;
 import org.gridforum.jgss.ExtendedGSSManager;
 import org.gridforum.jgss.ExtendedGSSCredential;
 import org.globus.myproxy.*;
+import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.DataPortalConstants;
+import javax.persistence.EntityManager;
 /**
  *
  * @author  gjd37
  */
-public abstract class DelegateCredential 
-{
+public abstract class DelegateCredential {
 // Data specific to MyProxyServer
-
-     static Logger log = Logger.getLogger(DelegateCredential.class);
     
-    public static GSSCredential getProxy( String aUsername, String aPassPhrase,int lifetime, GSSCredential thePortalProxy ) 
-                                              throws GSSException,  MyProxyException
-    {
+    static Logger log = Logger.getLogger(DelegateCredential.class);
+    
+    public static GSSCredential getProxy( String aUsername, String aPassPhrase,int lifetime, GSSCredential thePortalProxy , String host, Integer port, String dn)
+    throws GSSException,  MyProxyException {
         GSSCredential portalProxy = thePortalProxy;
         String username = aUsername;
         String userPassphrase = aPassPhrase;
-
+        
         // check that portal proxy hasn't expired
-        if( portalProxy == null || portalProxy.getRemainingLifetime() <= 0 ) 
-        {
+        if( portalProxy == null || portalProxy.getRemainingLifetime() <= 0 ) {
             throw new MyProxyException( "Invalid server portal proxy: "+portalProxy.getName().toString() );
         }
-         
-        log.info("Server Proxy Ok");
         
-        org.globus.myproxy.MyProxy proxy = new org.globus.myproxy.MyProxy( DataPortalConstants.MYPROXY_HOST, DataPortalConstants.MYPROXY_PORT );
-        log.info("Connecting to "+DataPortalConstants.MYPROXY_HOST+":"+DataPortalConstants.MYPROXY_PORT); 
-        GSSCredential delegateUserProxy = proxy.get( DataPortalConstants.MYPROXY_HOST, DataPortalConstants.MYPROXY_PORT, portalProxy, username, userPassphrase, lifetime *3600 /*turn into seconds*/, DataPortalConstants.MYPROXY_DN );
-        log.info("Retrieved user proxy.");
+        log.debug("Server Proxy Ok");
+        log.info("Connecting to "+host+":"+port+", with DN: "+dn);
+        
+        org.globus.myproxy.MyProxy proxy = new org.globus.myproxy.MyProxy( host, port );
+        GSSCredential delegateUserProxy = proxy.get( host, port, portalProxy, username, userPassphrase, lifetime *3600 /*turn into seconds*/, dn );
+        log.trace("Retrieved user proxy.");
         return delegateUserProxy;
     }
 }
