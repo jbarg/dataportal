@@ -154,7 +154,7 @@ public class SessionUtilTest extends TestCase {
         
         Certificate result = new SessionUtil(sid).getCertificate();
         assertNotNull("Result cannot be null", result);
-        assertEquals("DN should be /C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater","/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater", result.getDName());
+        assertEquals("DN should be /C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater","/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater", result.getDn());
         assertNotSame("Lifetime must be positive", 0, result.isLifetimeLeft());
         
         // Commit the transaction

@@ -99,10 +99,59 @@ public class SessionBeanTest extends TestCase {
         System.out.println("isValid");
         
         
-        
         Boolean expResult = true;
         Boolean result = sd.isValid(sid);
         assertEquals("sid: "+sid +" should be valid",expResult, result);
+        
+        
+        
+        
+    }
+    
+    public void testInvalidisValid() throws Exception {
+        System.out.println("testInvalidStuff");
+        
+        System.out.println("isValid");
+        Boolean result1 = false;
+        try {
+            result1 = sd.isValid("dfgdf");
+        } catch (SessionNotFoundException ex) {
+            return ;
+        } catch (SessionTimedOutException ex) {
+            return ;
+        }
+        assertFalse("sid: dfgdf should be invalid",true);
+        
+    }
+    
+    public void testInvalidgetSession() throws Exception {
+        //getSession
+        System.out.println("getSession");
+        SessionDTO result2 = null;
+        try {
+            result2 = sd.getSession("dfgdf");
+        } catch (SessionNotFoundException ex) {
+            return ;
+        } catch (SessionTimedOutException ex) {
+            return ;
+        }
+        assertFalse("sid: dfgdf should not get session",true);
+        
+    }
+    
+    public void testInvalidgetUserPrefs() throws Exception {
+                
+        //getSession
+        System.out.println("getUserPrefs");
+        UserPreferencesDTO result3 = null;
+        try {
+            result3 = sd.getUserPrefs("dfgdf");
+        } catch (SessionNotFoundException ex) {
+            return ;
+        } catch (SessionTimedOutException ex) {
+            return ;
+        }
+        assertFalse("sid: dfgdf should not get getUserPrefs",true);
         
         
     }
@@ -142,9 +191,10 @@ public class SessionBeanTest extends TestCase {
     public void testLogin() throws Exception {
         System.out.println("testLogin");
         
-        for(int i =0 ; i < 20 ; i++){
+        int MAX = 500;
+        for(int i =0 ; i < MAX ; i++){
             setUp();
-            if(i !=19){
+            if(i !=MAX){
                 tearDown();
             }
             try {

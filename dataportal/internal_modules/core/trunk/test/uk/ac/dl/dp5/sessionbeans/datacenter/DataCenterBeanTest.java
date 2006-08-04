@@ -110,7 +110,7 @@ public class DataCenterBeanTest extends TestCase {
         //check DNs
         System.out.println("Checking Dns");
         Certificate cert = new Certificate(sd.getSession(sid).getCredential());
-        assertEquals("getQuery() cannot be different",cert.getDName(),result1.getUserId().getDn());
+        assertEquals("getQuery() cannot be different",cert.getDn(),result1.getUserId().getDn());
     }
     
     /**

@@ -22,5 +22,5 @@ public class TestConstants {
     
     public static int MYPROXY_PORT = 7512;
     
-      public static String USER_DN = "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater";
+    public static String USER_DN = "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater";
 }
