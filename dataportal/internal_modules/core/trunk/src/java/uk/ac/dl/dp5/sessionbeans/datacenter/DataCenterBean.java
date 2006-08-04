@@ -9,12 +9,12 @@
 
 package uk.ac.dl.dp5.sessionbeans.datacenter;
 
-import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.ejb.Stateless;
-import javax.persistence.PersistenceException;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 import uk.ac.dl.dp5.entity.Bookmark;
@@ -73,10 +73,37 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                     }
                     
                 } else {
-                    log.debug("Bookmark has id: "+dto.getId()+" not in DB, persisting.");
+                    //no bookmark id
+                    log.debug("Bookmark has no id, checking data already in DB.");
                     
                     //new one so persist
-                    em.persist(dto);
+                    //could have same studyid, facility and user (UNIQUE KEY in bookmarks db here)
+                    Query query = em.createNamedQuery("Bookmark.findByUniqueKey");
+                    query.setParameter("studyId",dto.getStudyId());
+                    query.setParameter("userId",user);
+                    query.setParameter("facility",dto.getFacility());
+                    
+                    Bookmark unique = null;
+                    try {
+                        unique = (Bookmark)query.getSingleResult();
+                        log.trace("Found existing entity with same data, merging data");
+                    } catch(EntityNotFoundException enfe){
+                        //no entity then persist
+                        log.trace("Entity not found with unique data, persisting new entity");
+                        em.persist(dto);
+                        return ;
+                    } catch(NoResultException nre){
+                        //no entity then persist
+                        log.trace("Entity not found with unique data, persisting new entity");
+                        em.persist(dto);
+                        return ;
+                    }
+                    
+                    //entity here so need to update
+                    unique.setNote(dto.getNote());
+                    unique.setName(dto.getName());
+                    unique.setQuery(dto.getQuery());
+                    em.merge(unique);
                 }
             }
         }
@@ -99,10 +126,19 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         User user = new UserUtil(sid).getUser();
+        log.trace("Trying to remove bookmark for user "+user.getDn());
         
         for(Bookmark bm : dtos){
-            //security, check if users bookmark
-            if(bm.getUserId().getId() == user.getId()) em.remove(bm);
+            //TODO add log warn to continue
+            if(bm.getId() == null) continue;
+            //security, check if users bookmark            
+            if(bm.getUserId().getId().intValue() == user.getId().intValue()) {
+                //TODO trouble with detatched entities
+                //could do it this way
+                //Bookmark bookmark = em.find(Bookmark.class,bm.getId());
+                Bookmark bookmark = em.merge(bm);
+                em.remove(bookmark);
+            }
             else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+bm.getId()+" denied for user "+user.getDn());
         }
     }
@@ -170,8 +206,14 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         User user = new UserUtil(sid).getUser();
         
         for(DataReference url : dtos){
+            //TODO add log warn to continue
+            if(url.getId() == null) continue;
             //security, check if users bookmark
-            if(url.getUserId().getId() == user.getId()) em.remove(url);
+            if(url.getUserId().getId().intValue() == user.getId().intValue()) {
+                //TODO trouble with detatched entities
+                DataReference dataReference = em.merge(url);
+                em.remove(dataReference);
+            }
             else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+url.getId()+" denied for user "+user.getDn()+"with id: "+user.getId());
         }
     }
@@ -194,6 +236,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         
         //initialize urls for detatchment
         for(DataReference ref : urls){
+            //need to call size to get the data, get() methods dont do it
             ref.getUrls().size();
         }
         

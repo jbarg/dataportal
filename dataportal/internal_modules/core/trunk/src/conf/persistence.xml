@@ -6,4 +6,35 @@
     <properties>
     </properties>
   </persistence-unit>
+  <persistence-unit name="dataportal_unit_test" transaction-type="RESOURCE_LOCAL">    
+    <provider>oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider</provider>
+    
+    <class>uk.ac.dl.dp5.entity.Session</class> 
+    <class>uk.ac.dl.dp5.entity.User</class> 
+    
+    <class>uk.ac.dl.dp5.entity.Role</class> 
+    <class>uk.ac.dl.dp5.entity.Bookmark</class> 
+    
+    <class>uk.ac.dl.dp5.entity.Facility</class> 
+    <class>uk.ac.dl.dp5.entity.ModuleLookup</class> 
+    <class>uk.ac.dl.dp5.entity.ProxyServers</class> 
+    <class>uk.ac.dl.dp5.entity.Url</class> 
+    <class>uk.ac.dl.dp5.entity.Tokens</class> 
+    <class>uk.ac.dl.dp5.entity.SrbServer</class> 
+    <class>uk.ac.dl.dp5.entity.EventLog</class> 
+    <class>uk.ac.dl.dp5.entity.Event</class> 
+    <class>uk.ac.dl.dp5.entity.DataReference</class> 
+    <class>uk.ac.dl.dp5.entity.CredentialType</class> 
+    <class>uk.ac.dl.dp5.entity.DataRefAuthorisation</class> 
+    <class>uk.ac.dl.dp5.entity.DataRefAuthorisationPK</class> 
+    <class>uk.ac.dl.dp5.entity.DpUserPreference</class> 
+    
+    <properties>
+        <property name="toplink.jdbc.driver" value="oracle.jdbc.xa.client.OracleXADataSource"/>
+        <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@volga.dl.ac.uk:1521:XE"/>
+        <property name="toplink.jdbc.user" value="dp5user"/>
+        <property name="toplink.jdbc.password" value="dp5pass"/>
+        <property name="toplink.logging.level" value="INFO"/>
+    </properties>
+  </persistence-unit>
 </persistence>

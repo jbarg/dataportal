@@ -40,7 +40,8 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Bookmark.findByQuery", query = "SELECT b FROM Bookmark b WHERE b.query = :query"),
     @NamedQuery(name = "Bookmark.findByFacility", query = "SELECT b FROM Bookmark b WHERE b.facility = :facility"), 
     @NamedQuery(name = "Bookmark.findByNote", query = "SELECT b FROM Bookmark b WHERE b.note = :note"), 
-    @NamedQuery(name = "Bookmark.findByModTime", query = "SELECT b FROM Bookmark b WHERE b.modTime = :modTime")}
+    @NamedQuery(name = "Bookmark.findByModTime", query = "SELECT b FROM Bookmark b WHERE b.modTime = :modTime"),
+    @NamedQuery(name = "Bookmark.findByUniqueKey", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId AND b.facility = :facility AND b.userId = :userId")}
 )
 public class Bookmark implements Serializable {
 

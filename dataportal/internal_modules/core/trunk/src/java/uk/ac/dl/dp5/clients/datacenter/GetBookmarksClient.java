@@ -64,7 +64,7 @@ public class GetBookmarksClient {
             }
             // dto.remove(dto.iterator().next());
             // dto.remove(dto.iterator().next());
-            // sless.removeBookmark(sid,dto);
+             sless.removeBookmark(sid,dto.iterator().next());
             //
         }catch(Exception e){
             
