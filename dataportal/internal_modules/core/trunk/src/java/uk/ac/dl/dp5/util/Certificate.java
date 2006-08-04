@@ -48,8 +48,6 @@ public class Certificate {
     private GSSCredential credential;
     static Logger log = Logger.getLogger(Certificate.class);
     
-    @PersistenceContext(unitName="dataportal")
-    protected EntityManager em;
     
     public Certificate(String certificate) throws CertificateException {
         this.certificate = certificate;
@@ -152,7 +150,7 @@ public class Certificate {
         } catch (GSSException ex) {
             
         }
-        if(lifetime < 60*2 /*secs*/) throw new CertificateExpiredException("Credential for "+getDName()+" has expired");
+        if(lifetime < 60*2 /*secs*/) throw new CertificateExpiredException("Credential for "+getDn()+" has expired");
         
         
     }
@@ -176,7 +174,7 @@ public class Certificate {
         return result;
     }
     
-    public String getDName() throws CertificateException {
+    public String getDn() throws CertificateException {
         try {
             String DN =  credential.getName().toString();
             return DN;
@@ -191,7 +189,7 @@ public class Certificate {
     
     public String toString(){
         try {
-            return getDName()+" has lifetime "+getLifetime()+" seconds";
+            return getDn()+" has lifetime "+getLifetime()+" seconds";
         } catch (Exception ex) {
             return "UNKNOWN has lifetime UNKNOWN seconds";
         }
@@ -224,7 +222,7 @@ public class Certificate {
         System.out.println("Certificate: "+c.toString());
         System.out.println("Lifetime: "+c.getLifetime());
         System.out.println("Any life left? "+c.isLifetimeLeft());
-        System.out.println("DN: "+c.getDName());
+        System.out.println("DN: "+c.getDn());
     }
     
     private static synchronized String turnintoString(GSSCredential cred) throws IOException, GSSException{
@@ -256,10 +254,12 @@ public class Certificate {
             
         }
         in.close();
+        in2.close();
+        out.close();
         //end of file save
         
         
-        file.delete();
+        log.trace("Deleted file: "+file.getAbsolutePath()+" ? "+file.delete());
         //System.out.println(cert);
         return cert.toString();
         
