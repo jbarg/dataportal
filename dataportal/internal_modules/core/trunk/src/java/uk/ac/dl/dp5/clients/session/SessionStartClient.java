@@ -45,9 +45,9 @@ public class SessionStartClient {
             Certificate cert = new Certificate(new File("c:/x509up_u_gjd37"));
             System.out.println("lifetime left : "+cert.getLifetime());
             System.out.println("lifetime left : "+cert.getLifetime());
-            System.out.println("lifetime left : "+cert.getDName());
+            System.out.println("lifetime left : "+cert.getDn());
             Certificate cert2 = new Certificate(cert.getCredential());
-            System.out.println("lifetime left : "+cert2.getDName());
+            System.out.println("lifetime left : "+cert2.getDn());
             System.out.println("lifetime left : "+cert2.getCredential().getClass());
             
             

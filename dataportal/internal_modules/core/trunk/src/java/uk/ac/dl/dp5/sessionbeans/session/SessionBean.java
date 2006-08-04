@@ -99,7 +99,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
         try {
             certificate = new Certificate(credential);
-            DN  = certificate.getDName();
+            DN  = certificate.getDn();
             lifetimeLeft = certificate.isLifetimeLeft();
             
             log.debug("Loaded credential, user "+DN);

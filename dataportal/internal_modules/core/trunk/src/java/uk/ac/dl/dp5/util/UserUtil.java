@@ -72,7 +72,7 @@ public class UserUtil {
     public UserUtil(Certificate certificate) throws UserNotFoundException, CertificateException {
         this.em = CachingServiceLocator.getInstance().getEntityManager();
         if(certificate == null) throw new IllegalArgumentException("Certificate cannot be null.");
-        String DN = certificate.getDName();
+        String DN = certificate.getDn();
         log.debug("Loading user with DN "+DN);
         try {
             loadUser(DN);
