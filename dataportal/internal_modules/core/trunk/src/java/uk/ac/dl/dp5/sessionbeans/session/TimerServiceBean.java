@@ -46,7 +46,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
             log.debug("Creating timer.");
             createTimer(1000*10L, 1000*60*30L); //10s , 30 mins
             timerCreated = true;
-        }
+        }TimerServiceBean.java:89
     }*/
     
     public void createTimer(long starttime,long intervalDuration) {
@@ -59,8 +59,21 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     }
     
     @Timeout
-    public void timeout(Timer timer) {
-        log.debug("Timeout occurred: timeout()");
+    public void startTimeouts(Timer timer){
+        log.debug("startTimeouts()");
+        try {
+            timeoutSession(timer);
+        } finally {
+        }
+        try {
+            timeoutQueryManager(timer);
+        } finally {
+        }
+    }
+    
+    
+    public void timeoutSession(Timer timer) {
+        log.debug("Timeout occurred: timeoutSession()");
         Collection<Session> sessions =  null;
         try {
             sessions = (Collection<Session>) em.createNamedQuery("Session.findAll").getResultList();
@@ -84,9 +97,9 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
         }
     }
     
-    @Timeout
+    
     public void timeoutQueryManager(Timer timer) {
-          log.info("Timeout occurred: timeoutQueryManager()");
+        log.info("Timeout occurred: timeoutQueryManager()");
         Collection<Collection<QueryRecord>> ccqr = QueryManager.getAll();
         
         for(Collection<QueryRecord> cqr : ccqr){

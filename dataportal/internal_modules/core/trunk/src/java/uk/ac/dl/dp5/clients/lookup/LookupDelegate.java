@@ -3,6 +3,7 @@ package uk.ac.dl.dp5.clients.lookup;
 import java.util.Collection;
 import javax.naming.NamingException;
 import uk.ac.dl.dp5.clients.dto.FacilityDTO;
+import uk.ac.dl.dp5.entity.ProxyServers;
 import uk.ac.dl.dp5.sessionbeans.lookup.LookupRemote;
 import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.DPFacilityType;
@@ -28,15 +29,23 @@ public class LookupDelegate {
             }
             return dcd;
         }
-    }    
+    }
     
     /** Creates a new instance of SessionDelegate */
     private  LookupDelegate() throws NamingException {
         CachingServiceLocator csl =  CachingServiceLocator.getInstance();
         lur  = (LookupRemote)csl.lookup(DataPortalConstants.LOOKUP);
     }
-      
-    public Collection<FacilityDTO> lookup(DPFacilityType ft) {
-        return lur.getFacilities(ft);
-    }   
+    
+    public Collection<ProxyServers> getProxyServers() {
+        return lur.getProxyServers();
+    }
+    
+    public ProxyServers getDefaultProxyServer() {
+        return lur.getDefaultProxyServer();
+    }
+
+    public Collection<FacilityDTO> lookup(DPFacilityType type) {
+        return lur.getFacilities(type);
+    }
 }

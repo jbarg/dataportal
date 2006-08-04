@@ -16,7 +16,7 @@ public interface LookupRemote {
     
     public Collection<FacilityDTO> getFacilities(DPFacilityType type);
     
-    public Collection<ModuleLookup> getFacilityInfo(DPFacilityType type);
+   // public Collection<ModuleLookup> getFacilityInfo(DPFacilityType type);
     
     public Collection<ProxyServers> getProxyServers();
     
