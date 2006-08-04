@@ -62,7 +62,7 @@ public class SessionBeanTest extends TestCase {
     protected void setUp() throws Exception {
         //login
         sid = sd.login("glen","kkkkkk",3);
-        System.out.println("logging in");
+        System.out.println("logged in with sid: "+sid);
     }
     
     protected void tearDown() throws Exception {
@@ -112,7 +112,7 @@ public class SessionBeanTest extends TestCase {
      * Test of setUserPrefs method, of class uk.ac.dl.dp5.sessionbeans.session.SessionBean.
      */
     public void testSetUserPrefs() throws Exception {
-        System.out.println("setUserPrefs");        
+        System.out.println("setUserPrefs");
         
         userprefs = new UserPreferencesDTO();
         userprefs.setDefaultFacility("ISIS");
@@ -127,7 +127,7 @@ public class SessionBeanTest extends TestCase {
      * Test of getUserPrefs method, of class uk.ac.dl.dp5.sessionbeans.session.SessionBean.
      */
     public void testGetUserPrefs() throws Exception {
-        System.out.println("getUserPrefs");               
+        System.out.println("getUserPrefs");
         
         UserPreferencesDTO expResult = userprefs;
         UserPreferencesDTO result = sd.getUserPrefs(sid);
@@ -139,6 +139,20 @@ public class SessionBeanTest extends TestCase {
         
     }
     
-    
+    public void testLogin() throws Exception {
+        System.out.println("testLogin");
+        
+        for(int i =0 ; i < 20 ; i++){
+            setUp();
+            if(i !=19){
+                tearDown();
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
     
 }
