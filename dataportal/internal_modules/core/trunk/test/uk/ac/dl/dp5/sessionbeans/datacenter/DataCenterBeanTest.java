@@ -14,6 +14,7 @@ import uk.ac.dl.dp5.clients.session.SessionDelegate;
 import uk.ac.dl.dp5.entity.Bookmark;
 import uk.ac.dl.dp5.entity.DataReference;
 import uk.ac.dl.dp5.util.Certificate;
+import uk.ac.dl.dp5.util.TestConstants;
 
 /**
  *
@@ -25,6 +26,7 @@ public class DataCenterBeanTest extends TestCase {
     private static SessionDelegate sd = SessionDelegate.getInstance();
     private static DataCenterDelegate dcd = DataCenterDelegate.getInstance();
     private static  Bookmark dto;
+    private static  Bookmark retrieved;
     
     public DataCenterBeanTest(String testName) {
         super(testName);
@@ -32,7 +34,7 @@ public class DataCenterBeanTest extends TestCase {
     
     protected void setUp() throws Exception {
         //login
-        sid = sd.login("glen","kkkkkk",3);
+        sid = sd.login(TestConstants.MYPROXY_USERNAME,TestConstants.MYPROXY_PASSWORD,3);
         System.out.println("logging in");
     }
     
@@ -51,9 +53,10 @@ public class DataCenterBeanTest extends TestCase {
         
         dto = new Bookmark();
         dto.setFacility("ISIS");
+        //make nmae unique to look for in search
         dto.setName("Unit Test "+Math.random());
         dto.setNote("unit test note");
-        dto.setQuery("unit test query");
+        dto.setQuery("unit test query!!!!");
         dto.setStudyId(1);
         
         System.out.println("adding bookmark");
@@ -83,6 +86,7 @@ public class DataCenterBeanTest extends TestCase {
             System.out.println("One bookmark returned");
             
             result1 = result.iterator().next();
+            retrieved = result1;
             System.out.println("setting iterator;");
             
         } else {
@@ -93,6 +97,7 @@ public class DataCenterBeanTest extends TestCase {
                     found = true;
                     System.out.println("Found bookmark with name: "+dto.getName());
                     result1 = bk;
+                    retrieved = bk;
                 }
             }
             if(!found) assertFalse("Unable to find bookmarks Name: "+dto.getName(), true);
@@ -111,31 +116,41 @@ public class DataCenterBeanTest extends TestCase {
     /**
      * Test of removeBookmark method, of class uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterBean.
      */
-  /*  public void testRemoveBookmark() throws Exception {
+    public void testRemoveBookmark() throws Exception {
         System.out.println("removeBookmark");
+        if(retrieved == null){
+            System.out.println("null bookmark");
+            assertFalse("Bookmark retrieved is null", true);
+        }
+        System.out.println(retrieved.getUserId().getDn());
+        dcd.removeBookmark(sid, retrieved);
         
-        String sid = "";
-        Collection<Bookmark> dtos = null;
-        DataCenterBean instance = new DataCenterBean();
-        
-        instance.removeBookmark(sid, dtos);
-        
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+        //now check if bookmark is still in DB
+        Collection<Bookmark> result = dcd.getBookmarks(sid);
+        boolean found  = false;
+        for(Bookmark bk : result){
+            if(bk.getName().equals(dto.getName())) {
+                found = true;
+                System.out.println("Found bookmark with name: "+dto.getName());
+                
+            }
+        }
+        if(found) assertFalse("Found bookmark with name: "+dto.getName()+", should have been removed", true);
+    }
+    
     
     /**
      * Test of addDataReference method, of class uk.ac.dl.dp5.sessionbeans.datacenter.DataCenterBean.
      */
    /* public void testAddDataReference() throws Exception {
         System.out.println("addDataReference");
-        
+    
         String sid = "";
         DataReference dto = null;
         DataCenterBean instance = new DataCenterBean();
-        
+    
         instance.addDataReference(sid, dto);
-        
+    
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }*/
@@ -145,13 +160,13 @@ public class DataCenterBeanTest extends TestCase {
      */
     /*public void testRemoveDataReference() throws Exception {
         System.out.println("removeDataReference");
-        
+     
         String sid = "";
         Collection<DataReference> dtos = null;
         DataCenterBean instance = new DataCenterBean();
-        
+     
         instance.removeDataReference(sid, dtos);
-        
+     
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }*/
@@ -161,14 +176,14 @@ public class DataCenterBeanTest extends TestCase {
      */
     /*public void testGetDataReferences() throws Exception {
         System.out.println("getDataReferences");
-        
+     
         String sid = "";
         DataCenterBean instance = new DataCenterBean();
-        
+     
         Collection<DataReference> expResult = null;
         Collection<DataReference> result = instance.getDataReferences(sid);
         assertEquals(expResult, result);
-        
+     
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }*/
