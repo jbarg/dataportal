@@ -90,9 +90,11 @@ public class UserUtilTest extends TestCase {
             assertTrue("Sid is invalid",true);
             return ;
         } catch (SessionTimedOutException ex) {
-            ex.printStackTrace();
+           assertTrue("Sid is invalid",true);
+            return ;
         } catch (UserNotFoundException ex) {
-            ex.printStackTrace();
+            assertTrue("Sid is invalid",true);
+            return ;
         }
         assertFalse("Session in valid, it should not be",true);
         
