@@ -72,7 +72,7 @@ public class UserUtilTest extends TestCase {
      */
     public void testGetUser() throws Exception {
         System.out.println("getUser");
-             
+        
         // Begin transaction
         em.getTransaction().begin();
         
@@ -83,17 +83,23 @@ public class UserUtilTest extends TestCase {
         
         
         try {
-        
-        //test not valid sid
+            
+            //test not valid sid
             User result1 = new UserUtil("dfd").getUser();
         } catch (SessionNotFoundException ex) {
             assertTrue("Sid is invalid",true);
+            // Commit the transaction
+            em.getTransaction().commit();
             return ;
         } catch (SessionTimedOutException ex) {
-           assertTrue("Sid is invalid",true);
+            assertTrue("Sid is invalid",true);
+            // Commit the transaction
+            em.getTransaction().commit();
             return ;
         } catch (UserNotFoundException ex) {
             assertTrue("Sid is invalid",true);
+            // Commit the transaction
+            em.getTransaction().commit();
             return ;
         }
         assertFalse("Session in valid, it should not be",true);
@@ -101,24 +107,38 @@ public class UserUtilTest extends TestCase {
         // Commit the transaction
         em.getTransaction().commit();
         
-        closeEnitiyManager();
         
     }
     
     /**
      * Test of getProxyServers method, of class uk.ac.dl.dp5.util.UserUtil.
      */
-    /*public void testGetProxyServers() {
+    public void testGetProxyServers() {
         System.out.println("getProxyServers");
         
+        // Begin transaction
+        em.getTransaction().begin();
         UserUtil instance = null;
         
         ProxyServers expResult = null;
-        ProxyServers result = instance.getProxyServers();
-        assertEquals(expResult, result);
+        ProxyServers result = null;
+        try {
+            result = new UserUtil(sid).getProxyServers();
+        } catch (SessionNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (SessionTimedOutException ex) {
+            ex.printStackTrace();
+        } catch (UserNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        assertEquals("proxy address should be "+TestConstants.MYPROXY_ADDRESS, TestConstants.MYPROXY_ADDRESS,result.getProxyServerAddress());
+        assertEquals("proxy port should be "+TestConstants.MYPROXY_PORT, TestConstants.MYPROXY_PORT,result.getPortNumber().intValue());
         
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        // Commit the transaction
+        em.getTransaction().commit();
+        
+        
     }
     
     /**
@@ -126,31 +146,54 @@ public class UserUtilTest extends TestCase {
      */
     /*public void testGetUserPrefs() {
         System.out.println("getUserPrefs");
-        
+     
         UserUtil instance = null;
-        
+     
         DpUserPreference expResult = null;
         DpUserPreference result = instance.getUserPrefs();
         assertEquals(expResult, result);
-        
+     
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-    
+     
     /**
      * Test of createDefaultUser method, of class uk.ac.dl.dp5.util.UserUtil.
      */
-    /*public void testCreateDefaultUser() throws Exception {
+    public void testCreateDefaultUser() throws Exception {
         System.out.println("createDefaultUser");
         
-        String DN = "";
+        // Begin transaction
+        em.getTransaction().begin();
+        
+        String DN = "test deafult user "+Math.random();
         
         User expResult = null;
         User result = UserUtil.createDefaultUser(DN);
-        assertEquals(expResult, result);
         
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        // Commit the transaction before checking them
+        em.getTransaction().commit();
+        
+        // Begin transaction
+        em.getTransaction().begin();
+        
+        result = new UserUtil(DN,null).getUser();
+        DpUserPreference user_prefs = new UserUtil(DN,null).getUserPrefs();
+        
+        assertEquals("dns should be the same",DN, result.getDn());
+        assertEquals("roles should be the same",DPRole.USER.toString(), result.getRoles().iterator().next().getName().toString());
+        assertEquals("number of roles should be the same",1, result.getRoles().size());
+        
+        assertEquals("proxy server id should be 1 should be the same",1, user_prefs.getProxyServerId().getId().intValue());
+        assertEquals("default results per pages should be 20",20, user_prefs.getResultsPerPage().intValue());
+        assertEquals("default resoultion should be 1024x768",DPResolution.res_1024x768.toString(), user_prefs.getResolution());
+        
+        // Commit the transaction
+        em.getTransaction().commit();
+        
+        closeEnitiyManager();
+        
+        
     }
     
     /**
@@ -158,16 +201,16 @@ public class UserUtilTest extends TestCase {
      */
     /*public void testSendEventLog() {
         System.out.println("sendEventLog");
-        
+     
      // Begin transaction
         em.getTransaction().begin();
      
         DPEvent event = null;
         String description = "";
         UserUtil instance = null;
-        
+     
         instance.sendEventLog(event, description);
-        
+     
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }*/

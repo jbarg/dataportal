@@ -41,6 +41,7 @@ import uk.ac.dl.dp5.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp5.util.PortalCredential;
 import uk.ac.dl.dp5.util.SessionUtil;
 import uk.ac.dl.dp5.exceptions.UserNotFoundException;
+import uk.ac.dl.dp5.util.TestConstants;
 import uk.ac.dl.dp5.util.UserUtil;
 import uk.ac.dl.dp5.util.cog.DelegateCredential;
 import uk.ac.dl.dp5.clients.session.SessionDelegate;
@@ -55,13 +56,16 @@ public class SessionBeanTest extends TestCase {
     private static SessionDelegate sd = SessionDelegate.getInstance();
     private static  UserPreferencesDTO userprefs;
     
+     private long time = new Date().getTime();
+    
+     
     public SessionBeanTest(String testName) {
         super(testName);
     }
     
     protected void setUp() throws Exception {
         //login
-        sid = sd.login("glen","kkkkkk",3);
+        sid = sd.login(TestConstants.MYPROXY_USERNAME,TestConstants.MYPROXY_PASSWORD,3);
         System.out.println("logged in with sid: "+sid);
     }
     
@@ -203,6 +207,8 @@ public class SessionBeanTest extends TestCase {
                 ex.printStackTrace();
             }
         }
+        
+        System.out.println("Time taken was : "+(new Date().getTime() - time)/1000+" seconds");
     }
     
 }

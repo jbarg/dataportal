@@ -33,8 +33,7 @@ public class SessionUtilTest extends TestCase {
     static EntityManager em;
     static String sid;
     static SessionDelegate sd = SessionDelegate.getInstance();
-    
-    
+   
     public SessionUtilTest(String testName) {
         super(testName);
     }
