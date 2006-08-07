@@ -17,6 +17,7 @@ import uk.ac.dl.dp5.clients.datacenter.DataCenterDelegate;
 import uk.ac.dl.dp5.clients.session.SessionDelegate;
 import uk.ac.dl.dp5.clients.transfer.TransferDelegate;
 import uk.ac.dl.dp5.util.DPUrlRefType;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -44,7 +45,7 @@ public class QueryDelegateClient {
             printTime("initial lookup");
             
             //start session
-            String sid  = sd.login("glen","kkkkkk",2);
+            String sid  = sd.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
             log.debug("Started session with sid "+sid);
             printTime("login");
             

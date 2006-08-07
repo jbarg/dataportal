@@ -25,6 +25,7 @@ import uk.ac.dl.dp5.util.CachingServiceLocator;
 import uk.ac.dl.dp5.util.Certificate;
 import uk.ac.dl.dp5.util.DPFacilityType;
 import uk.ac.dl.dp5.util.DPResolution;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -55,7 +56,7 @@ public class SessionDelegateClient {
             printTime("lookup again");
             
             //start session
-            String sid  = sd.login("glen","kkkkkk",2);
+            String sid  = sd.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
             log.debug("Started session with sid "+sid);
             printTime("login");
             

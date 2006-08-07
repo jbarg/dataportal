@@ -17,6 +17,7 @@ import uk.ac.dl.dp5.entity.Bookmark;
 import uk.ac.dl.dp5.entity.DataReference;
 import uk.ac.dl.dp5.entity.Url;
 import uk.ac.dl.dp5.util.DPUrlRefType;
+import uk.ac.dl.dp5.util.DataPortalConstants;
 /**
  *
  * @author gjd37
@@ -43,7 +44,7 @@ public class DataCenterDelegateClient {
             printTime("initial lookup");
             
             //start session
-            String sid  = sd.login("glen","kkkkkk",2);
+            String sid  = sd.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
             log.debug("Started session with sid "+sid);
             printTime("login");
             

@@ -24,6 +24,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -34,28 +35,29 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "DP_EVENT_LOG")
 @NamedQueries( {
-    @NamedQuery(name = "EventLog.findById", query = "SELECT e FROM EventLog e WHERE e.id = :id"), 
+    @NamedQuery(name = "EventLog.findById", query = "SELECT e FROM EventLog e WHERE e.id = :id"),
     @NamedQuery(name = "EventLog.findByEvent", query = "SELECT e FROM EventLog e WHERE e.event = :event"),
-    @NamedQuery(name = "EventLog.findByDetails", query = "SELECT e FROM EventLog e WHERE e.details = :details"), 
+    @NamedQuery(name = "EventLog.findByDetails", query = "SELECT e FROM EventLog e WHERE e.details = :details"),
     @NamedQuery(name = "EventLog.findByModTime", query = "SELECT e FROM EventLog e WHERE e.modTime = :modTime")}
 )
 public class EventLog implements Serializable {
-
+    
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)  
+    @TableGenerator(name="ID", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="EVENT_LOG",valueColumnName="SEQ_COUNT")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="ID")
     @Column(name = "ID", nullable = false)
     private Integer id;
-
+    
     @Column(name = "EVENT", nullable = false)
     private String event;
-
+    
     @Column(name = "DETAILS")
     private String details;
-
+    
     @Column(name = "MOD_TIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
-
+    
     @JoinColumn(name = "USER_ID")
     @ManyToOne
     private uk.ac.dl.dp5.entity.User userId;
@@ -69,62 +71,62 @@ public class EventLog implements Serializable {
     /** Creates a new instance of EventLog */
     public EventLog() {
     }
-
+    
     public EventLog(Integer id) {
         this.id = id;
     }
-
+    
     public EventLog(Integer id, String event) {
         this.id = id;
         this.event = event;
     }
-
+    
     public Integer getId() {
         return this.id;
     }
-
+    
     public void setId(Integer id) {
         this.id = id;
     }
-
+    
     public String getEvent() {
         return this.event;
     }
-
+    
     public void setEvent(String event) {
         this.event = event;
     }
-
+    
     public String getDetails() {
         return this.details;
     }
-
+    
     public void setDetails(String details) {
         this.details = details;
     }
-
+    
     public Date getModTime() {
         return this.modTime;
     }
-
+    
     /*public void setModTime(Date modTime) {
         this.modTime = modTime;
     }*/
-
+    
     public uk.ac.dl.dp5.entity.User getUserId() {
         return this.userId;
     }
-
+    
     public void setUserId(uk.ac.dl.dp5.entity.User userId) {
         this.userId = userId;
     }
-
+    
     public int hashCode() {
         int hash = 0;
         hash += (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
-
+    
     public boolean equals(Object object) {
         if (object == null || !this.getClass().equals(object.getClass())) {
             return false;
@@ -133,7 +135,7 @@ public class EventLog implements Serializable {
         if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) return false;
         return true;
     }
-
+    
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;

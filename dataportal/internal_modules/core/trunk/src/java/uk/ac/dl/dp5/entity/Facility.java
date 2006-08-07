@@ -41,7 +41,7 @@ import javax.persistence.TemporalType;
 public class Facility implements Serializable {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
     private Integer id;
 

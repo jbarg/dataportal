@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -37,7 +38,8 @@ import javax.persistence.TemporalType;
 public class CredentialType implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
+    @TableGenerator(name="SEQ_GEN", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="SEQ_GEN",valueColumnName="SEQ_COUNT")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
     private Integer id;
 

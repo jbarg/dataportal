@@ -21,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -38,7 +39,8 @@ import javax.persistence.TemporalType;
 public class Url implements Serializable {
     
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @TableGenerator(name="DATA_URL", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="DATA_URL",valueColumnName="SEQ_COUNT")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="DATA_URL")
     @Column(name = "ID", nullable = false)
     private Integer id;
     
