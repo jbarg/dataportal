@@ -125,6 +125,11 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
             log.debug("Created connections to MDBs OK");
         } catch (JMSException ex) {
             log.error("JMSExcption on connection to meesage: ",ex);
+            try {
+                //close connections
+                if(session != null) session.close();
+                if(connection != null)   connection.close();
+            } catch (JMSException e) {}
             throw new QueryException("Unexpected error, JSMException with connecting to message queue",ex);
         }
         
@@ -159,9 +164,20 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
                 
             } catch (Exception e) {
                 log.error("Unable to send off query to fac "+fac,e);
+                try {
+                    //close connections
+                    if(session != null) session.close();
+                    if(connection != null)   connection.close();
+                } catch (JMSException ex) {}
                 throw new QueryException("Unable to send off query to fac: "+fac,e);
             }
         }
+        try {
+            //close connections
+            if(session != null) session.close();
+            if(connection != null)   connection.close();
+        } catch (JMSException ex) {}
+        
         log.trace("sent off querys to MDBs");
         //send off basic search event
         //TODO sort out facility, keyword strings properly

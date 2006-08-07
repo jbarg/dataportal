@@ -135,11 +135,11 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
         }
     }
     
-    @Init()
+   /* @Init()
     public void lookupSRBServer(){
         log.debug("Init of transfer bean");
        // log.trace("Looking up SRBServer");        
-    }
+    }*/
     
     private void download(GSSCredential credential, Collection<String> srbUrl) {
         //use default configuration location ~/.srb

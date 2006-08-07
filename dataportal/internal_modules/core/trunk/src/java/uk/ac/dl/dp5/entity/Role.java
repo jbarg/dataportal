@@ -39,7 +39,7 @@ import uk.ac.dl.dp5.util.DPRole;
 public class Role implements Serializable {
 
     @Id
-     @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
     private Integer id;
 

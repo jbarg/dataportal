@@ -28,6 +28,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -45,7 +46,8 @@ import javax.persistence.TemporalType;
 public class User implements Serializable {
     
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @TableGenerator(name="USER", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="USER",valueColumnName="SEQ_COUNT")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="USER")
     @Column(name = "ID", nullable = false)
     private Integer id;
     

@@ -33,7 +33,8 @@ public class AddAuthUserClient {
             
             if(sid == null || sid.equals("")){
                 SessionRemote sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
-                // sid =  sless1.login(name,"kkkkkk",2);
+                // sid = sless1.login(TestConstants.MYPROXY_USERNAME,TestConstants.MYPROXY_PASSWORD,3);
+     
                 sid =  sless1.login(name,"llllll",2);
                 System.out.println(sid);
             }

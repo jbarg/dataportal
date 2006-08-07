@@ -27,6 +27,8 @@ public class DataPortalConstants {
     //query cache limit
     public final static int QUERY_LIMIT = 250;
     
+      public static String MYPROXY_USERNAME = "glen";
+    public static String MYPROXY_PASSWORD = "kkkkkk";
     
     //EJB Session names
     public final static String SESSION = "SessionEJB";

@@ -33,7 +33,7 @@ public class AddBookmarkClient {
             if(sid == null || sid.equals("")){
                 sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
-                sid =  sless1.login("glen","kkkkkk",2);
+                sid =  sless1.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
                 System.out.println(sid);
                 loggingin = true;
             }
@@ -41,7 +41,7 @@ public class AddBookmarkClient {
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
             Bookmark dto = new Bookmark();
             //dto.setId(759);
-            dto.setStudyId(111);
+            dto.setStudyId(11);
             dto.setFacility("ISIS");
             dto.setName("no DTO");
             dto.setNote("SS");

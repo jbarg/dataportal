@@ -45,7 +45,7 @@ public class QueryTestClient {
                 loggingin = true;
                 sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
-                sid =  sless1.login("glen","kkkkkk",2);
+                sid =  sless1.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
                 System.out.println(sid);
             }
             

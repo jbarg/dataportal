@@ -44,7 +44,7 @@ public class LoginClient {
             
             SessionRemote sless = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
             
-            String session =  sless.login("LousiePrice","llllll",2);
+            String session =  sless.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
             System.out.println("Got session : "+session);
             //
         }catch(Exception e){
