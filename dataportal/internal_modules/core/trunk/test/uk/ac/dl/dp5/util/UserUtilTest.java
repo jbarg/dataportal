@@ -18,11 +18,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.*;
 import org.ietf.jgss.GSSCredential;
-import uk.ac.dl.dp5.clients.dto.SessionDTO;
-import uk.ac.dl.dp5.clients.session.SessionDelegate;
-import uk.ac.dl.dp5.entity.*;
-import uk.ac.dl.dp5.exceptions.*;
-import uk.ac.dl.dp5.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
+import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
+import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
+import uk.ac.dl.dp.coreutil.entity.ProxyServers;
+import uk.ac.dl.dp.coreutil.entity.User;
+import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
+import uk.ac.dl.dp.coreutil.util.DPResolution;
+import uk.ac.dl.dp.coreutil.util.DPRole;
+import uk.ac.dl.dp.coreutil.util.UserUtil;
 
 /**
  *
