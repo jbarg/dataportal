@@ -9,11 +9,11 @@ package uk.ac.dl.dp5.sessionbeans.datacenter;
 
 import junit.framework.*;
 import java.util.Collection;
-import uk.ac.dl.dp5.clients.datacenter.DataCenterDelegate;
-import uk.ac.dl.dp5.clients.session.SessionDelegate;
-import uk.ac.dl.dp5.entity.Bookmark;
-import uk.ac.dl.dp5.entity.DataReference;
-import uk.ac.dl.dp5.util.Certificate;
+import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
+import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
+import uk.ac.dl.dp.coreutil.entity.Bookmark;
+import uk.ac.dl.dp.coreutil.entity.DataReference;
+import uk.ac.dl.dp.coreutil.util.Certificate;
 import uk.ac.dl.dp5.util.TestConstants;
 
 /**

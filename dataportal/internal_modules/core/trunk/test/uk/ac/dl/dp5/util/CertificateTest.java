@@ -16,6 +16,7 @@ import junit.framework.*;
 import org.globus.gsi.*;
 import org.globus.gsi.gssapi.*;
 import org.ietf.jgss.GSSCredential;
+import uk.ac.dl.dp.coreutil.util.Certificate;
 
 /**
  *
