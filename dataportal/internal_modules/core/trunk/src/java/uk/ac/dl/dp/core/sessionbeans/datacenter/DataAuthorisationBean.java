@@ -177,8 +177,8 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         
         Collection<String> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.BOOKMARK);
-          User thisUser = new UserUtil(sid).getUser();
-      
+        User thisUser = new UserUtil(sid).getUser();
+        
         boolean accessAllowed = false;
         for(String dn : DNs_given){
             if(dn.equals(DN)) {
@@ -196,6 +196,37 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             return bookmarks;
         } else throw new NoAccessToDataCenterException("No access allowed to user: "+DN+"'s bookmarks for user: "+thisUser.getDn());
         
+    }
+    
+    public Collection<String>  searchUserDns(String sid, String search) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        log.debug("searchUserDns()");
+        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        
+        User thisUser = new UserUtil(sid).getUser();
+        Collection<String> dns = new ArrayList<String>();
+        Collection<User> users = null;
+        
+        if(search == null || search.equals("")){
+            users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
+        } else{
+            //     users = (Collection<User>)em.createNamedQuery("User.findByDnLike").setParameter(1,search).getResultList();
+            users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
+            
+            //TODO need to get the LIKE cluase in the User to work properly
+            for(User user : users){
+                if(!user.getDn().equals(thisUser.getDn())){
+                    log.trace("Looking for "+search +" in "+user.getDn());
+                    if(user.getDn().contains(search)) dns.add(user.getDn());
+                }
+            }
+             return dns;
+            
+        }
+        for(User user : users){
+            if(!user.getDn().equals(thisUser.getDn())) dns.add(user.getDn());
+        }
+        
+        return dns;
     }
     
     
