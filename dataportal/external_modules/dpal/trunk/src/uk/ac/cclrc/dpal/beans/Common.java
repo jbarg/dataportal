@@ -5,10 +5,10 @@ import java.io.Serializable;
 public class Common implements Serializable
 {
    //bean begins
-   protected String name = null ;
-   protected String id = null ;
-   protected String facility = null ;
-
+   private String name = null ;
+   private String id = null ;
+   private String facility = null ;
+private boolean selected = false;
    //getters
    public String getName() {
       return this.name ;
@@ -37,10 +37,19 @@ public class Common implements Serializable
  
    //to support printing
    public String toString() {
-            return "[name]:"+name+
-             " [id]:"+id+
-             " [facility]:"+facility;
+            return "[name]:"+getName()+
+             " [id]:"+getId()+
+             " [facility]:"+getFacility();
    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
 
 }
   

@@ -10,6 +10,7 @@ public class Study extends Common
    //using the following as it supresses duplicates(just in case)
    private LinkedHashSet<String> keyword = new LinkedHashSet<String>() ;
 
+   
    //getters
    public String getStartDate() {
       return this.startDate ;
@@ -29,6 +30,7 @@ public class Study extends Common
       }
       return null ;
    }
+   
  
    //setters
    public void setStartDate(String startDate) {
@@ -52,11 +54,11 @@ public class Study extends Common
          sb.append(" ") ;
       }
 
-      return "[name]:"+name+
-             " [id]:"+id+
+      return "[name]:"+getName()+
+             " [id]:"+getId()+
              " [start_date]:"+startDate+
              " [end_date]:"+endDate+
-             " [facility]:"+facility+
+             " [facility]:"+getFacility()+
              " [keyword]:"+sb.toString()  ;
    }
 
