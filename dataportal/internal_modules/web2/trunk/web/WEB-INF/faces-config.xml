@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="1.2" 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+    
+    <managed-bean>
+        <managed-bean-name>navigationMenu</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.navigation.NavigationMenu</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>visit</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.Visit</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>authorisationBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.AuthorisationBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>            
+            <property-name>visit</property-name>
+            <value>#{sessionScope.visit}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <navigation-rule>
+        <description>
+            
+        </description>
+        <from-view-id>/logon.jsp</from-view-id>
+        <navigation-case>
+           
+            <from-outcome>login_success</from-outcome>
+            <to-view-id>/basic_search.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+</faces-config>
