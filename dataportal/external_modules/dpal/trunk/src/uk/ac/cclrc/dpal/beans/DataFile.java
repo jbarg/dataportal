@@ -29,10 +29,10 @@ public class DataFile extends Common
 
    //to support printing
    public String toString() {
-            return "[name]:"+name+
-             " [id]:"+id+
+            return "[name]:"+getName()+
+             " [id]:"+getId()+
              " [uri]:"+uri+
-             " [facility]:"+facility+
+             " [facility]:"+getFacility()+
              " [dataset id]:"+dataSetId ;
    }
 

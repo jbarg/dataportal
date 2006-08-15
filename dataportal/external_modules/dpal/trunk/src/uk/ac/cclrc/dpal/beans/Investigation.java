@@ -38,11 +38,11 @@ public class Investigation extends Common
    //support for printing
    public String toString() {
       //can't use variable names of superclass as there are not inherited
-      return "[name]:"+name+
-             " [id]:"+id+
+      return "[name]:"+getName()+
+             " [id]:"+getId()+
              " [type]:"+investigationType+
              " [abstract]:"+investigationAbstract+
-             " [facility]:"+facility+
+             " [facility]:"+getFacility()+
              " [study id]:"+studyId ;
 
    }

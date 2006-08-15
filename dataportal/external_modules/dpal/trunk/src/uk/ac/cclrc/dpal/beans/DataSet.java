@@ -46,12 +46,12 @@ public class DataSet extends Common
 
    //support for printing
    public String toString() {
-            return "[name]:"+name+
-             " [id]:"+id+
+            return "[name]:"+getName()+
+             " [id]:"+getId()+
              " [status]:"+dataSetStatus+
              " [type]:"+dataSetType+
              " [description]:"+description+
-             " [facility]:"+facility+
+             " [facility]:"+getFacility()+
              " [investigation id]:"+investigationId ;
    }
 
