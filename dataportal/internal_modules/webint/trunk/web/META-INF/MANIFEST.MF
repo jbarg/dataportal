@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: mrmaven
+Build-Jdk: 1.5.0_07
+Extension-Name: myfaces-example-tiles
+Specification-Title: Apache MyFaces Tomahawk is a sub-project of Apach
+ e MyFaces which provides an extensive sets
+   of custom components for use in your JSF-projects. Additionally, To
+ mahawk includes many custom
+   features helping you to implement JSF-projects more easily.
+Specification-Vendor: Apache Software Foundation
+Implementation-Vendor: Apache Software Foundation
+Implementation-Title: myfaces-example-tiles
+Implementation-Version: 1.1.5-SNAPSHOT
+
