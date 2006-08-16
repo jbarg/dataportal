@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import org.apache.log4j.Logger;
+import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
@@ -84,7 +85,7 @@ public class QueryManager {
     }
     
     
-    public static void addRecord(QueryRequest qr, Collection<Study> result,Exception ex) {
+    public static void addRecord(QueryRequest qr, Collection<Investigation> result,Exception ex) {
         
         log.trace("Adding record for sid: "+qr.getSid()+" with "+result.size()+" results");
         
