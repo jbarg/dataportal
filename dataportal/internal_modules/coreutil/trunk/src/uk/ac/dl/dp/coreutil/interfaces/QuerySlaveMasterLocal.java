@@ -26,7 +26,7 @@ public interface QuerySlaveMasterLocal {
     
     public void remove();
     
-    public Collection<Study> getQueryResults();
+    public Collection<Investigation> getQueryResults();
     
     public Collection<String> getCompleted();
     
@@ -40,9 +40,9 @@ public interface QuerySlaveMasterLocal {
   
     public Collection<QueryRecordDTO> getCurrentResults(String sid);
     
-   public Collection<Study> getPastQueryResults(String sid, String queryid);
+   public Collection<Investigation> getPastQueryResults(String sid, String queryid);
    
-    public Collection<Study> getPastQueryResults(String sid, QueryRecordDTO dto);
+    public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO dto);
    
    
       
