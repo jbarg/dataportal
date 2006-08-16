@@ -209,17 +209,17 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(search == null || search.equals("")){
             users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
         } else{
-            //     users = (Collection<User>)em.createNamedQuery("User.findByDnLike").setParameter(1,search).getResultList();
-            users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
+                users = (Collection<User>)em.createNamedQuery("User.findByDnLike").setParameter("dn",search).getResultList();
+           // users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
             
             //TODO need to get the LIKE cluase in the User to work properly
-            for(User user : users){
+           /* for(User user : users){
                 if(!user.getDn().equals(thisUser.getDn())){
                     log.trace("Looking for "+search +" in "+user.getDn());
                     if(user.getDn().contains(search)) dns.add(user.getDn());
                 }
             }
-             return dns;
+             return dns;*/
             
         }
         for(User user : users){

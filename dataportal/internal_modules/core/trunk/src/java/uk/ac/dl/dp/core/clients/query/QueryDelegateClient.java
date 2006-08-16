@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.util.*;
+import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
@@ -89,10 +90,10 @@ public class QueryDelegateClient {
             printTime("query complete");
            
             
-            Collection<Study> qr =  dd.getQueryResults();
+            Collection<Investigation> qr =  dd.getQueryResults();
             double size = 0;
             
-            for(Study rec : qr){
+            for(Investigation rec : qr){
                 System.out.println(rec);              
                 
             }           

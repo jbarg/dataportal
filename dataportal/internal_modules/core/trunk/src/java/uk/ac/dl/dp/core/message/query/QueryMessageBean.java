@@ -19,6 +19,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.DPAccessLayer;
+import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -48,6 +49,8 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
         ObjectMessage msg = null;
         
         Collection<Study> r_s_l = new ArrayList<Study>() ;
+        Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
+        
         
         if (message instanceof ObjectMessage) {
             msg = (ObjectMessage) message;
@@ -83,7 +86,15 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 dpal = new DPAccessLayer(e.getFacility());
                 
                 if(e.getQt() == DPQueryType.KEYWORD){
+                    
                     r_s_l = dpal.getStudies(e.getKeyword(),e.getDN());
+                    log.trace("Finished searching for studies");
+                    ArrayList<String> studies = new ArrayList<String>();
+                    for(Study study : r_s_l){
+                        studies.add(study.getId());
+                    }
+                    r_i_l =  dpal.getInvestigations(studies,e.getDN());
+                    log.trace("Finished searching for investigations");
                 }
                 
                 
@@ -94,7 +105,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             }
             
             log.debug("Query finished.. with id: "+e.getId());
-            QueryManager.addRecord(e , r_s_l, ex);
+            QueryManager.addRecord(e , r_i_l, ex);
             
         }
         

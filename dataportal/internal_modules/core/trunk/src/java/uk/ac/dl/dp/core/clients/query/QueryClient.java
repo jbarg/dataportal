@@ -87,10 +87,10 @@ public class QueryClient {
                 }
             }
             printTime("finished");
-            Collection<Study> qr =  qsmr.getQueryResults();
+            Collection<Investigation> qr =  qsmr.getQueryResults();
             double size = 0;
             
-            for(Study rec : qr){
+            for(Investigation rec : qr){
                 System.out.println(rec);              
                 
             }           
@@ -98,14 +98,9 @@ public class QueryClient {
             printTime("got study results: # "+qr.size());
             
             
-            Collection<Investigation> ins =  qsmr.getInvestigations(sid,qr);
             
-            for(Investigation in : ins){
-                System.out.println(in);
-            }
-            printTime("got investigation results");
             
-            Collection<DataSet> daset =  qsmr.getDataSets(sid,ins);
+            Collection<DataSet> daset =  qsmr.getDataSets(sid,qr);
             
             for(DataSet ds : daset){
                 System.out.println(ds);
@@ -130,9 +125,9 @@ public class QueryClient {
             
             
             //get current results studies
-            Collection<Study> dtos1 =  qsmr.getPastQueryResults(sid,dtos.iterator().next());
+            Collection<Investigation> dtos1 =  qsmr.getPastQueryResults(sid,dtos.iterator().next());
             System.out.println("Studies for: "+dtos1.iterator().next().getName());
-            for(Study dto : dtos1){
+            for(Investigation dto : dtos1){
                 System.out.println(dto);
             }
             printTime("got current results studies");

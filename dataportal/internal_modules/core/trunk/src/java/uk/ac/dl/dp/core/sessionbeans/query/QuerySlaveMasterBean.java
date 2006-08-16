@@ -225,15 +225,15 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     
     //TODO put together a single method to recurse over QueryManager
     @PermitAll
-    public Collection<Study> getQueryResults(){
+    public Collection<Investigation> getQueryResults(){
         log.debug("getQueryResults()");
         //Collection<QueryRecord> qra = new ArrayList<QueryRecord>();
-        Collection<Study> st = new ArrayList<Study>();
+        Collection<Investigation> st = new ArrayList<Investigation>();
         
         Collection<QueryRecord> cqr =  QueryManager.getRecord(search_id);
         
         for(QueryRecord qr : cqr){
-            for(Study study : qr.getResult()){
+            for(Investigation study : qr.getResult()){
                 st.add(study);
             }
         }
@@ -371,13 +371,13 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         
     }
     
-    public Collection<Study> getPastQueryResults(String sid, QueryRecordDTO qdto){
+    public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO qdto){
         return getPastQueryResults(sid,qdto.getQueryid());
     }
     
     
-    public Collection<Study> getPastQueryResults(String sid, String queryid){
-        Collection<Study> st = new ArrayList<Study>();
+    public Collection<Investigation> getPastQueryResults(String sid, String queryid){
+        Collection<Investigation> st = new ArrayList<Investigation>();
         Collection<Collection<QueryRecord>> ccqr = QueryManager.getUserAll(sid);
         
         for(Collection<QueryRecord> cqr : ccqr){
