@@ -95,7 +95,7 @@ public class QueryDelegate {
         }
     }
     
-    public Collection<Study> getQueryResults(){
+    public Collection<Investigation> getQueryResults(){
         return qsmr.getQueryResults();
     }
     
@@ -115,11 +115,11 @@ public class QueryDelegate {
         return qsmr.getDataFiles(this.sid,  datasets);
     }
     
-    public Collection<Study> getPastQueryResults(String query_id){
+    public Collection<Investigation> getPastQueryResults(String query_id){
         return qsmr.getPastQueryResults(this.sid, query_id);
     }
     
-    public Collection<Study> getPastQueryResults(QueryRecordDTO query_dto){
+    public Collection<Investigation> getPastQueryResults(QueryRecordDTO query_dto){
         return qsmr.getPastQueryResults(this.sid, query_dto);
     }
     

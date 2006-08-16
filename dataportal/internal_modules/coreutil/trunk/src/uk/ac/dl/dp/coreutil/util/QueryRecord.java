@@ -13,6 +13,7 @@ package uk.ac.dl.dp.coreutil.util;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
 
 
@@ -24,7 +25,7 @@ import uk.ac.cclrc.dpal.beans.Study;
 public class QueryRecord implements Serializable {
     private Timestamp sent;
     private Timestamp processed;
-    private Collection<Study> result;
+    private Collection<Investigation> result;
     private String id;
     private String queryid;
     private String DN;
@@ -45,7 +46,7 @@ public class QueryRecord implements Serializable {
         this.setFac(fac);
     }*/
     
-    public QueryRecord(QueryRequest qr, Timestamp processed, Collection<Study> result, Exception ex) {
+    public QueryRecord(QueryRequest qr, Timestamp processed, Collection<Investigation> result, Exception ex) {
         this.setSent(qr.getSent());
         this.setProcessed(processed);
         this.setResult(result);
@@ -74,11 +75,11 @@ public class QueryRecord implements Serializable {
         this.processed = processed;
     }
     
-    public Collection<Study> getResult() {
+    public Collection<Investigation> getResult() {
         return result;
     }
     
-    public void setResult(Collection<Study> result) {
+    public void setResult(Collection<Investigation> result) {
         this.result = result;
     }
     
@@ -100,7 +101,7 @@ public class QueryRecord implements Serializable {
     
     public String toString(){
         StringBuilder b = new StringBuilder();
-        for(Study study : result){
+        for(Investigation study : result){
             b.append(study.getName()+", ");
         }
         
