@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config>
+    
+    
+    <managed-bean>
+        <managed-bean-name>user</managed-bean-name>
+        <managed-bean-class>org.uk.clrc.userBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>  
+  
+  
+    <!-- Managed Beans for tree.jsp -->
+    <!--<managed-bean>
+    <managed-bean-name>treeTable</managed-bean-name>
+    <managed-bean-class>org.apache.myfaces.examples.listexample.TreeTable</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>-->
+    
+    <!-- Managed Beans for tree2.jsp -->
+    <managed-bean>
+        <managed-bean-name>treeBacker</managed-bean-name>
+        <managed-bean-class>org.apache.myfaces.examples.tree.TreeBacker</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+
+    <!-- Managed Beans for calendar.jsp -->
+
+    <managed-bean>
+        <managed-bean-name>calendarBean</managed-bean-name>
+        <managed-bean-class>org.apache.myfaces.examples.calendarexample.CalendarBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
+    <!-- Managed Beans for NavigationMenu -->
+
+    <managed-bean>
+        <managed-bean-name>navigationMenu</managed-bean-name>
+        <managed-bean-class>org.apache.myfaces.examples.misc.NavigationMenu</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+
+    
+        <!-- Managed Beans for simpleList.jsp -->
+
+    <managed-bean>
+        <managed-bean-name>countryList</managed-bean-name>
+        <managed-bean-class>org.apache.myfaces.examples.listexample.SimpleCountryList</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <!--
+    <navigation-rule>
+    <description>
+    Navigation rules for navigation component.
+    </description>
+    <from-view-id>*</from-view-id>
+
+    <navigation-case>
+    <from-outcome>go_login</from-outcome>
+    <to-view-id>../JSF/dp5/login/login.jsp</to-view-id>
+    </navigation-case>
+    </navigation-rule>
+    -->
+  
+</faces-config>
