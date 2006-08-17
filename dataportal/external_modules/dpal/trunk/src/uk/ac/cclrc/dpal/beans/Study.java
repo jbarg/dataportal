@@ -2,7 +2,7 @@ package uk.ac.cclrc.dpal.beans;
 import java.io.Serializable;
 import java.util.* ;
 
-public class Study extends Common 
+public class Study extends Common implements Serializable
 {
    //bean begins
    private String startDate = null ;

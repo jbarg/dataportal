@@ -2,7 +2,7 @@ package uk.ac.cclrc.dpal.beans;
 
 import java.io.Serializable;
 
-public class Investigation extends Common 
+public class Investigation extends Common implements Serializable
 {
    //bean begins
    private String investigationType = null ;
