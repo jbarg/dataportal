@@ -1,12 +1,15 @@
-calling test function
+installing the sql package
 -------------------------------
+-- connect as
+
+sqlplus icat_v2copy2@minerva.dl.ac.uk/l1verp00lfc
+
+-- copy .sql file into /tmp/dpal.sql from <dpal>/src/dpal.sql
+
+@/tmp/dpal.sql
+
+exit ;
 -------------------------------
-
-java uk.ac.cclrc.dpal.TestDPAccessLayer
-
-javac uk/ac/cclrc/dpal/DPAccessLayer.java
-javac uk/ac/cclrc/dpal/TestDPAccessLayer.java
-
 -------------------------------
 importing ca cert into keystore
 
