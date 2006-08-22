@@ -20,6 +20,7 @@ public class TestDPAccessLayer
      ArrayList<String> study_id_list = new ArrayList<String>() ;
      ArrayList<String> inv_id_list   = new ArrayList<String>() ;
      ArrayList<String> ds_id_list    = new ArrayList<String>() ;
+     ArrayList<String> stated_study_id_list    = new ArrayList<String>() ;
 
      //for results
      ArrayList<Study> r_s_l = null ;
@@ -60,7 +61,7 @@ public class TestDPAccessLayer
          //////
          r_s_l = dpal.getStudies(keyword_list, "DN") ;
          for(Study s : r_s_l) {
-            System.out.println("\t"+s.toString()) ; //note need to write beans.toString methods
+            System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
             study_id_list.add(s.getId()) ;
          }
          System.out.println("-") ;
@@ -88,6 +89,18 @@ public class TestDPAccessLayer
          }
          System.out.println("---") ;
          //////
+         System.out.println("---MISC Tests---") ;
+         //////setup
+         stated_study_id_list.add("20") ; 
+         stated_study_id_list.add("21") ; 
+         stated_study_id_list.add("22") ; 
+         r_s_l = null ;
+         //////
+         System.out.println("The list of STUDIES for the study_ids"+stated_study_id_list.toString()+":") ;
+         r_s_l = dpal.getStudiesById(stated_study_id_list, "DN") ;
+         for(Study s : r_s_l) {
+            System.out.println("\t"+s.toString()) ;
+         }
 
          //test disconnection code
          dpal.disconnectFromDB() ;
