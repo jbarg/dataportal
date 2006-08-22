@@ -13,7 +13,9 @@ END;
 
 -- package spec:
 create or replace package dpaccess as
+    function getKeywords (dn in varchar2) RETURN types.ref_cursor;
     function getStudies (keyword_array in vc_array, dn in varchar2) RETURN types.ref_cursor;
+    function getStudiesById (study_id_array in vc_array, dn in varchar2) RETURN types.ref_cursor;
     function getInvestigations (study_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
     function getDataSets (inv_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
     function getDataFiles (ds_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
@@ -22,6 +24,18 @@ end dpaccess;
 
 --package body:
 create or replace package body dpaccess as
+
+    function getKeywords (dn in varchar2)
+       RETURN types.ref_cursor
+    is
+       c_study types.ref_cursor;
+    begin
+       OPEN c_study FOR
+          select  distinct(name), '-99' as  id
+             from keyword order by name asc ;
+       RETURN c_study;
+    end;
+
     function getStudies (keyword_array in vc_array, dn in varchar2) 
        RETURN types.ref_cursor
     is
@@ -38,6 +52,20 @@ create or replace package body dpaccess as
                  kl.keyword_id=k.id   ;
        RETURN c_study;
     end;
+
+    function getStudiesById (study_id_array in vc_array, dn in varchar2)
+       RETURN types.ref_cursor
+    is
+       c_study types.ref_cursor;
+    begin
+       OPEN c_study FOR
+          select  s.id as id, s.name as name,s.start_date as start_date,s.end_date as end_date
+             from study s
+             where
+                 s.id in (select * from TABLE(cast(study_id_array as VC_ARRAY))) ;
+       RETURN c_study;
+    end;
+
 
     function getInvestigations (study_id_array in num_array, dn in varchar2) 
        RETURN types.ref_cursor

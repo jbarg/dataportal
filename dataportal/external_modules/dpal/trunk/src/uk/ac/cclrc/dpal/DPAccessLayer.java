@@ -231,7 +231,28 @@ public class DPAccessLayer {
     }
     
     
-    
+    /////////////////////////////////////////////////////////////
+
+     public ArrayList<Keyword> getKeywords(String DN) throws SQLException {
+        log.debug("getKeywords()");
+
+        String query = "begin ? := dpaccess.getKeywords('"+DN+"'); end;";
+        OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
+        cs.registerOutParameter(1, OracleTypes.CURSOR);
+        cs.execute();
+        r=(ResultSet)cs.getObject(1) ;
+        ArrayList<Keyword> keyword_array = new ArrayList<Keyword>() ;
+        while(r.next()) {
+            Keyword kw = new Keyword() ;
+            kw.setId(r.getString("ID")) ;
+            kw.setName(r.getString("NAME")) ;
+            kw.setFacility(this.facility);
+            keyword_array.add(kw) ;
+        }
+        r.close() ;
+        return keyword_array ;
+    }
+ 
     
     /////////////////////////////////////////////////////////////
     public ArrayList<Study> getStudies(String[] keyword_array, String DN) throws SQLException {
@@ -270,6 +291,45 @@ public class DPAccessLayer {
             ka[i++] = (String)li.next() ;
         }
         return getStudies(ka,DN);
+    }
+
+    //////////////////////////////////////////////////////////////
+
+    public ArrayList<Study> getStudiesById(String[] study_id_array, String DN) throws SQLException {
+        log.debug("getStudiesById()");
+
+        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
+        ARRAY array_to_pass = new ARRAY( descriptor, conn, study_id_array );
+        String query = "begin ? := dpaccess.getStudiesById(?,'"+DN+"'); end;";
+        OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
+        cs.registerOutParameter(1, OracleTypes.CURSOR);
+        cs.setARRAY( 2, array_to_pass );
+        cs.execute();
+        r=(ResultSet)cs.getObject(1) ;
+        ArrayList<Study> study_array = new ArrayList<Study>() ;
+        while(r.next()) {
+            Study st = new Study() ;
+            st.setId(r.getString("ID")) ;
+            st.setName(r.getString("NAME")) ;
+            st.setStartDate(r.getString("START_DATE")) ;
+            st.setEndDate(r.getString("END_DATE")) ;
+            st.setFacility(this.facility);
+            study_array.add(st) ;
+        }
+        r.close() ;
+        return study_array ;
+    }
+
+    public ArrayList<Study> getStudiesById(ArrayList<String> study_id_list, String DN) throws SQLException {
+        log.debug("getStudiesById(ArrayList)");
+
+        String[] ka = new String[study_id_list.size()] ;
+        ListIterator li = study_id_list.listIterator() ;
+        int i = 0 ;
+        while(li.hasNext()) {
+            ka[i++] = (String)li.next() ;
+        }
+        return getStudiesById(ka,DN);
     }
     
     //////////////////////////////////////////////////////////////
