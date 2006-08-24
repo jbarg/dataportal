@@ -18,6 +18,9 @@ import oracle.jdbc.driver.*;
 // to include the study, investigation, dataset and datafile beans
 import uk.ac.cclrc.dpal.beans.* ;
 
+// include the enums also
+import uk.ac.cclrc.dpal.enums.* ;
+
 //log4j
 import org.apache.log4j.Logger;
 
@@ -255,6 +258,18 @@ public class DPAccessLayer {
  
     
     /////////////////////////////////////////////////////////////
+    public ArrayList<Study> getStudies(String[] keyword_array, String DN, LogicalExpression aggreg) throws SQLException {
+
+       if (aggreg == LogicalExpression.OR)
+       {
+          return getStudies(keyword_array, DN) ;
+       }
+       else
+       {
+          return getStudiesAnd(keyword_array, DN) ;
+       }
+    }
+
     public ArrayList<Study> getStudies(String[] keyword_array, String DN) throws SQLException {
         log.debug("getStudies()");        
         
@@ -280,6 +295,50 @@ public class DPAccessLayer {
         r.close() ;
         return MergeDuplicateStudies(study_array) ;
     }
+
+    //the sql needs to be built on the fly so there is no need to make it a pl/sql call as the sql needs parsing each time anyway
+   public ArrayList<Study> getStudiesAnd(String[] keyword_array, String DN) throws SQLException {
+        log.debug("getStudiesAnd()");
+
+        StringBuffer sb = new StringBuffer("select distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date " +
+                                           "from study s where id in (") ;
+
+        for (int i = 0 ; i < keyword_array.length; i ++) {
+           sb.append("select  study_id " +
+                     "from study s, keyword_list kl, keyword k " +
+                     "where " +
+                     "k.name = '" + keyword_array[i] +"' " +
+                     "and " +
+                     "s.id=kl.study_id " +
+                     "and " +
+                     "kl.keyword_id=k.id ") ;
+           if( (i + 1) < keyword_array.length) {
+              sb.append ("\nINTERSECT\n") ;
+           }
+           else {
+              sb.append ("\n)") ;
+           }
+         }
+      
+         log.debug ("query: " + sb.toString()) ;
+         System.out.println("query: " + sb.toString()) ;
+
+         r = s.executeQuery(sb.toString());  
+
+        ArrayList<Study> study_array = new ArrayList<Study>() ;
+        while(r.next()) {
+            Study st = new Study() ;
+            st.setId(r.getString("ID")) ;
+            st.setName(r.getString("NAME")) ;
+            st.setStartDate(r.getString("START_DATE")) ;
+            st.setEndDate(r.getString("END_DATE")) ;
+            //st.setKeyword(r.getString("KEYWORD")) ;
+            st.setFacility(this.facility);
+            study_array.add(st) ;
+        }
+        r.close() ;
+        return MergeDuplicateStudies(study_array) ;
+    }
     
     public ArrayList<Study> getStudies(ArrayList<String> keyword_list, String DN) throws SQLException {
         log.debug("getStudies(ArrayList)");
@@ -291,6 +350,29 @@ public class DPAccessLayer {
             ka[i++] = (String)li.next() ;
         }
         return getStudies(ka,DN);
+    }
+
+    public ArrayList<Study> getStudies(ArrayList<String> keyword_list, String DN, LogicalExpression aggreg) throws SQLException {
+       if (aggreg == LogicalExpression.OR)
+       {
+          return getStudies(keyword_list, DN) ;
+       }
+       else
+       {
+          return getStudiesAnd(keyword_list, DN) ;
+       }
+    }
+
+    public ArrayList<Study> getStudiesAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
+       log.debug("getStudiesAnd(ArrayList)");
+
+        String[] ka = new String[keyword_list.size()] ;
+        ListIterator li = keyword_list.listIterator() ;
+        int i = 0 ;
+        while(li.hasNext()) {
+            ka[i++] = (String)li.next() ;
+        }
+        return getStudiesAnd(ka,DN);
     }
 
     //////////////////////////////////////////////////////////////

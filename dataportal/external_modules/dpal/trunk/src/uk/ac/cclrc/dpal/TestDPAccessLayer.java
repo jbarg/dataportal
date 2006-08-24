@@ -10,6 +10,9 @@ import java.sql.SQLException;
 //for processing the beans
 import uk.ac.cclrc.dpal.beans.* ;
  
+//for the enums
+import uk.ac.cclrc.dpal.enums.* ;
+ 
 public class TestDPAccessLayer
 {
 
@@ -100,6 +103,12 @@ public class TestDPAccessLayer
          r_s_l = dpal.getStudiesById(stated_study_id_list, "DN") ;
          for(Study s : r_s_l) {
             System.out.println("\t"+s.toString()) ;
+         }
+         //////
+         System.out.println("The list of STUDIES linked to all the keywords"+keyword_list.toString()+":") ;
+         r_s_l = dpal.getStudies(keyword_list, "DN", LogicalExpression.AND) ;
+         for(Study s : r_s_l) {
+            System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
          }
 
          //test disconnection code
