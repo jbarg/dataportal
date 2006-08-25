@@ -68,7 +68,7 @@ public class SessionDelegate {
         return  sb.isValid(sid);
     }
     
-    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException{
+    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException{
         return sb.getSession(sid);
     }
     

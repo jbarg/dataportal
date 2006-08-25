@@ -12,6 +12,7 @@ package uk.ac.dl.dp.coreutil.util;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
+import uk.ac.cclrc.dpal.enums.LogicalExpression;
 
 /**
  *
@@ -29,6 +30,7 @@ public class QueryRequest implements Serializable{
     private String queryid;
     private String DN;
     private DPQueryType qt;
+    private LogicalExpression logicalExpression;
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
@@ -104,6 +106,14 @@ public class QueryRequest implements Serializable{
 
     public void setFacilities(Collection<String> facilities) {
         this.facilities = facilities;
+    }
+
+    public LogicalExpression getLogicalExpression() {
+        return logicalExpression;
+    }
+
+    public void setLogicalExpression(LogicalExpression logicalExpression) {
+        this.logicalExpression = logicalExpression;
     }
 
  

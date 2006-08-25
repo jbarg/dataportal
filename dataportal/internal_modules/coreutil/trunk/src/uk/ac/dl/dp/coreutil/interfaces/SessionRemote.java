@@ -25,7 +25,7 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 public interface SessionRemote {
     
     
-   public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException;    
+   public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException;    
     
     public String login(String username,String password, int lifetime) throws CannotCreateNewUserException, LoginMyProxyException ;
             
