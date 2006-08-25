@@ -29,6 +29,7 @@ NOTE VARCHAR2(4000),
 FACILITY VARCHAR2(4000),
 QUERY VARCHAR2(4000),
 TYPE_OF_REFERENCE VARCHAR2(4000),
+REFERENCE_ID NUMBER,
 TYPE_OF_OBJECT VARCHAR2(4000),
 MOD_TIME TIMESTAMP(1)
 )
@@ -651,6 +652,9 @@ COMMENT ON COLUMN DP_BOOKMARK.STUDY_ID IS 'The study_id in the facility catalog 
 COMMENT ON COLUMN DP_DATA_REFERENCE.TYPE_OF_REFERENCE IS 'is this a DC or DO'
 ;
 
+COMMENT ON COLUMN DP_DATA_REFERENCE.REFERENCE_ID IS 'this is the reference of the dataobject or datafile in the facility catalog. to find out which type_of_reference needs to be checked'
+;
+
 COMMENT ON COLUMN DP_DATA_REFERENCE.TYPE_OF_OBJECT IS 'e.g. filetype'
 ;
 
@@ -691,7 +695,6 @@ COMMENT ON COLUMN DP_USER_PREFERENCE.PROXY_SERVER_ID IS 'in hours'
 ;
 
 COMMENT ON COLUMN DP_USER_ROLE.USER_ID IS 'weak entity, many to many mapping table'
-;
 
 
 -- 
