@@ -25,7 +25,7 @@ import javax.ejb.EJB;
 import javax.ejb.PrePassivate;
 import javax.ejb.Remove;
 import javax.ejb.SessionContext;
-import javax.ejb.Stateful;
+import javax.ejb.*;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -64,7 +64,7 @@ import uk.ac.dl.dp.coreutil.util.DPQueryType;
  *
  * @author gjd37
  */
-@Stateful(mappedName=DataPortalConstants.QUERY)
+@Stateful(mappedName=DataPortalConstants.QUERY+"StateFul")
 public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlaveMasterRemote, QuerySlaveMasterLocal{
     
     static Logger log = Logger.getLogger(QuerySlaveMasterBean.class);
@@ -106,6 +106,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         
         log.debug("Destroying..");
     }
+    
     @PermitAll
     public String queryByKeyword(String sid, Collection<String> facilities, String[] keyword) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         log.debug("queryByKeyword()");
@@ -235,9 +236,13 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         for(QueryRecord qr : cqr){
             for(Investigation study : qr.getResult()){
                 st.add(study);
+                log.trace(study);
             }
         }
-        
+        log.trace("Sending back this");
+        for(Investigation invest : st){
+            log.trace("Invest info :"+invest);
+        }
         return st;
         //return qra;
     }

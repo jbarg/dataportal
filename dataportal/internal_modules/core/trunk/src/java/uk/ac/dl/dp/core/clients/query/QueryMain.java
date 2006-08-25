@@ -50,7 +50,7 @@ public class QueryMain {
         ArrayList<String> keyword_list = new ArrayList<String>() ;
         Collection<Study> r_s_l = new ArrayList<Study>() ;
          Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
-        keyword_list.add("hrpd");
+        keyword_list.add("raw");
           keyword_list.add("edinburgh");
         try {
             

@@ -2,6 +2,7 @@ package uk.ac.dl.dp.core.clients.query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import javax.management.Query;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import uk.ac.cclrc.dpal.beans.DataFile;
@@ -9,6 +10,7 @@ import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
+import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterRemote;
@@ -29,7 +31,7 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
  * @author gjd37
  */
 public class QueryClient {
-    String sid = "6c2670d0-22a0-40df-9aea-1e743e015183";
+    String sid = "";
     boolean loggingin = false;
     QuerySlaveMasterRemote qsmr;
     SessionRemote sless1;
@@ -43,8 +45,9 @@ public class QueryClient {
         PropertyConfigurator.configure("c:/log4j.properties");
         
         try{
-            
+            System.out.println("t");
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
+            System.out.println("tt");
             time =  new Date().getTime();
             if(sid == null || sid.equals("")){
                 loggingin = true;
@@ -57,7 +60,7 @@ public class QueryClient {
             qsmr = (QuerySlaveMasterRemote)csl.lookup(DataPortalConstants.QUERY);
             printTime("looked up SF bean");
             time =  new Date().getTime();
-                     
+            
             
             ArrayList<String> facs = new ArrayList<String>();
             facs.add("ISIS");
@@ -65,10 +68,10 @@ public class QueryClient {
             
             System.out.println("About to query");
             
-            qsmr.queryByKeyword(sid,facs,new String[]{"hrpd"});
+            String qId = qsmr.queryByKeyword(sid,facs,new String[]{"raw"});
             printTime("printed query: ");
-                      
-           
+            
+            
             
             System.out.println("is stateful still there??");
             
@@ -91,46 +94,57 @@ public class QueryClient {
             double size = 0;
             
             for(Investigation rec : qr){
-                System.out.println(rec);              
+                System.out.println(rec);
                 
-            }           
+            }
             
             printTime("got study results: # "+qr.size());
             
             
+            Collection<Investigation> qr1 =  QueryDelegate.getInstance().getQueryResults("15e4b8f5-e200-4d3a-8810-c71c329b3da3");
+            size = 0;
             
             
-            Collection<DataSet> daset =  qsmr.getDataSets(sid,qr);
+            System.out.println("second stuff");
+            for(Investigation rec : qr1){
+                System.out.println(rec);
+                
+            }
             
+            printTime("got study results: # "+qr1.size());
+            
+            
+         /*   Collection<DataSet> daset =  qsmr.getDataSets(sid,qr);
+          
             for(DataSet ds : daset){
                 System.out.println(ds);
             }
             printTime("got dataset results");
-            
+          
             Collection<DataFile> dafile =  qsmr.getDataFiles(sid,daset);
-            
+          
             for(DataFile df : dafile){
                 System.out.println(df);
             }
             printTime("got datafile results");
-            
-            
+          
+          
             //get all current querys
             Collection<QueryRecordDTO> dtos =  qsmr.getCurrentResults(sid);
-            
+          
             for(QueryRecordDTO dto : dtos){
                 System.out.println(dto);
             }
             printTime("got current results");
-            
-            
+          
+          
             //get current results studies
             Collection<Investigation> dtos1 =  qsmr.getPastQueryResults(sid,dtos.iterator().next());
             System.out.println("Studies for: "+dtos1.iterator().next().getName());
             for(Investigation dto : dtos1){
                 System.out.println(dto);
             }
-            printTime("got current results studies");
+            printTime("got current results studies");*/
             
             
         }catch(Exception e){

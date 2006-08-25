@@ -17,7 +17,7 @@ import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.delegates.TransferDelegate;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
+import uk.ac.dl.dp.coreutil.delegates.QueryDelegateStateFul;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 /**
@@ -30,7 +30,7 @@ public class QueryDelegateClient {
     
     private  static Logger log = Logger.getLogger(QueryDelegateClient.class);
     
-   static  QueryDelegate dd;
+   static  QueryDelegateStateFul dd;
     
     /** Creates a new instance of NewMain */
     public QueryDelegateClient() {
@@ -40,8 +40,10 @@ public class QueryDelegateClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //PropertyConfigurator.configure("c:/log4j.properties");
+        PropertyConfigurator.configure("c:/log4j.properties");
+         printTime("initial lookup");
         time =  new Date().getTime();
+        System.out.println("tttt");
         try{
             SessionDelegate sd = SessionDelegate.getInstance();
             printTime("initial lookup");
@@ -62,7 +64,7 @@ public class QueryDelegateClient {
             
             String[] keywords = {"raw"};
             
-            dd = QueryDelegate.getInstance(sid);
+            dd = QueryDelegateStateFul.getInstance(sid);
             printTime("lookup again");
             try {
                 //start download
@@ -106,6 +108,7 @@ public class QueryDelegateClient {
             printTime("logout");
             
         }catch(Exception e){
+            System.out.println(e);
            log.error(e);
         } finally{
             log.trace("removing bean");

@@ -91,8 +91,12 @@ public class SessionDelegateClient {
             System.out.println("DN: "+session.getDN());
             for(DPRole role : session.getRoles()){
                 System.out.println("Role: "+role.toString());
+                
             }
-            
+             UserPreferencesDTO gdto1 =session.getUserPrefs();      
+            log.debug("Facility: "+gdto1.getDefaultFacility());
+            log.debug("Res: "+gdto1.getResolution());
+            log.debug("Results: "+gdto1.getResultsPerPage());
             
             //end session
             sd.logout(sid);

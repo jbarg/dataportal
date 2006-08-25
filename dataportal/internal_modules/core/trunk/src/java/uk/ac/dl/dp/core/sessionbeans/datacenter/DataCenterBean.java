@@ -94,12 +94,12 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
                         em.persist(dto);
-                        return ;
+                        continue;
                     } catch(NoResultException nre){
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
                         em.persist(dto);
-                        return ;
+                        continue ;
                     }
                     
                     //entity here so need to update
@@ -193,10 +193,11 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                         em.merge(dto);
                     }
                 } else {
-                    log.debug("DataReference has id: "+dto.getId()+" not in DB, persisting.");
+                    log.debug("DataReference has id: "+dto.getId()+" not in DB, checking data already in DB.");
                     
-                    //new one so persist
+                     //new one so persist
                     em.persist(dto);
+                   
                 }
             }
         }
