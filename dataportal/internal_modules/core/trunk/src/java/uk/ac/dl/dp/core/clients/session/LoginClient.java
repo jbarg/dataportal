@@ -38,10 +38,11 @@ public class LoginClient {
     public static void main(String[] args) {
         
         try{
-          //  System.setProperty("org.omg.CORBA.ORBInitialHost","volga.dl.ac.uk");
+            //System.setProperty("org.omg.CORBA.ORBInitialHost","lennon.dl.ac.uk");
             
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
             
+        //    SessionRemote sless = (SessionRemote) csl.lookup("java:comp/env/uk.ac.dl.dp.core.Session.SessionEJB");
             SessionRemote sless = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
             
             String session =  sless.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);

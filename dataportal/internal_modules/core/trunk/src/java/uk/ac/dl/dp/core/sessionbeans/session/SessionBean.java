@@ -3,6 +3,7 @@ package uk.ac.dl.dp.core.sessionbeans.session;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
@@ -35,6 +37,7 @@ import uk.ac.dl.dp.coreutil.util.DPCredentialType;
 import uk.ac.dl.dp.coreutil.entity.Session;
 import uk.ac.dl.dp.coreutil.util.Certificate;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
+import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 
@@ -68,17 +71,21 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     @EJB
     private LookupLocal lookup;
     
-        
-    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException{
+    
+    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException, UserNotFoundException{
         log.debug("getSession()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        return new SessionUtil(sid).getSessionDTO();
+        SessionDTO sessionDTO = new SessionUtil(sid).getSessionDTO();
+        sessionDTO.setUserPrefs(getUserPrefs(sid));
+        
+        Collection<FacilityDTO> facilities = lookup.getFacilities(DPFacilityType.WRAPPER);
+        sessionDTO.setFacilities(facilities);
+        return sessionDTO;
     }
-    
     
     public String login(String username,String password, int lifetime) throws LoginMyProxyException, CannotCreateNewUserException{
         log.debug("login(): " +sc.getCallerPrincipal() );
-       // log.debug("login()" +sc.isCallerInRole("ANYONE") );
+        // log.debug("login()" +sc.isCallerInRole("ANYONE") );
         if(username == null || username.equals("")) throw new IllegalArgumentException("Usrname cannot be null or empty.");
         if(password == null || password.equals("")) throw new IllegalArgumentException("Password cannot be null or empty.");
         
@@ -123,7 +130,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             
         }
         
-        if (lifetimeLeft) {            
+        if (lifetimeLeft) {
             //set up new session
             
             //create UUID for session
@@ -245,6 +252,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         UserUtil userutil = new UserUtil(sid);
         User user = userutil.getUser();
         DpUserPreference dto = userutil.getUserPrefs();
+        log.trace("User prefs are: "+dto.getResultsPerPage());
         return new UserPreferencesDTO(dto);
     }
     
