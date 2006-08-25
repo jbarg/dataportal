@@ -46,7 +46,7 @@ public class TestDPAccessLayer
      //use command line for keywords if supplied
      if (args.length == 0)
      {
-        keyword_list.add("hrpd") ;
+       // keyword_list.add("hrpd") ;
         keyword_list.add("raw") ;
      }
      else
@@ -70,6 +70,7 @@ public class TestDPAccessLayer
          System.out.println("-") ;
          //////
          System.out.println("The list of INVESTIGATIONS for these study_ids"+study_id_list.toString()+":") ;
+         study_id_list.remove(1);
          r_i_l = dpal.getInvestigations(study_id_list, "DN") ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;
@@ -78,6 +79,7 @@ public class TestDPAccessLayer
          System.out.println("-") ;
          //////
          System.out.println("The list of DATASETS for the investigation_ids"+inv_id_list.toString()+":") ;
+        // inv_id_list.remove(0);
          r_d_l = dpal.getDataSets(inv_id_list, "DN") ;
          for(DataSet ds : r_d_l) {
             System.out.println("\t"+ds.toString()) ;
