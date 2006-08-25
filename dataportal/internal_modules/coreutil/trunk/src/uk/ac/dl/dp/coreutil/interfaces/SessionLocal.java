@@ -23,7 +23,7 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 @Local
 public interface SessionLocal {
     
-    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException;    
+    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException;    
     
     public String login(String username,String password, int lifetime) throws CannotCreateNewUserException, LoginMyProxyException ;
             

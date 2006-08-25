@@ -30,6 +30,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import javax.persistence.CascadeType;
 /**
@@ -46,12 +47,13 @@ import javax.persistence.CascadeType;
     @NamedQuery(name = "DataReference.findByQuery", query = "SELECT d FROM DataReference d WHERE d.query = :query"),
     @NamedQuery(name = "DataReference.findByTypeOfReference", query = "SELECT d FROM DataReference d WHERE d.typeOfReference = :typeOfReference"),
     @NamedQuery(name = "DataReference.findByTypeOfObject", query = "SELECT d FROM DataReference d WHERE d.typeOfObject = :typeOfObject"),
+    @NamedQuery(name = "DataReference.findByUniqueKey", query = "SELECT d FROM DataReference d WHERE d.name = :name AND d.facility = :facility AND d.userId = :userId"),
     @NamedQuery(name = "DataReference.findByModTime", query = "SELECT d FROM DataReference d WHERE d.modTime = :modTime")}
 )
 public class DataReference implements Serializable {
     
     @Id
-     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
     private Integer id;
     
@@ -89,14 +91,21 @@ public class DataReference implements Serializable {
     inverseJoinColumns=
             @JoinColumn(name="URL_ID", referencedColumnName="ID")
             )
+            
             private java.util.Collection <uk.ac.dl.dp.coreutil.entity.Url> urls;
     
+    @Transient
+    private boolean selected;
+    
+    @Transient
+    private String printURLS;
+    
     @PrePersist
-    @PreUpdate    
+    @PreUpdate
     public void prePersist(){
         modTime = new Date();
-    }    
-        
+    }
+    
     /** Creates a new instance of DataReference */
     public DataReference() {
     }
@@ -205,9 +214,29 @@ public class DataReference implements Serializable {
     public java.util.Collection<uk.ac.dl.dp.coreutil.entity.Url> getUrls() {
         return urls;
     }
-    
+        
     public void setUrls(java.util.Collection<uk.ac.dl.dp.coreutil.entity.Url> urls) {
         this.urls = urls;
     }
     
+    public boolean isSelected() {
+        return selected;
+    }
+    
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+    
+    public String getPrintURLS() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<table>");
+        for(Url url : urls){
+            int i = url.getUrl().lastIndexOf("/");
+            if(i == -1) i = url.getUrl().lastIndexOf("\\");
+            builder.append("<tr><td>"+url.getUrl().substring(i+1,url.getUrl().length())+"</td></tr>");
+            
+        }
+        builder.append("</table>");
+        return builder.toString();
+    }            
 }

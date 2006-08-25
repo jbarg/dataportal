@@ -186,7 +186,7 @@ public class UserUtil {
         prefs.setDefaultFacility(facilities.iterator().next().getShortName());
         
         
-        prefs.setResultsPerPage(20);
+        prefs.setResultsPerPage(15);
         prefs.setResolution(DPResolution.res_1024x768.toString());
         
         //get the myproxy

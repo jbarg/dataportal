@@ -35,6 +35,9 @@ public class SessionDTO implements Serializable{
     
     private String DN;
     
+    private UserPreferencesDTO userPrefs;
+    
+    private Collection<FacilityDTO> facilities;
     // private User userId;
     
     /** Creates a new instance of SessionDTO */
@@ -89,4 +92,19 @@ public class SessionDTO implements Serializable{
         return DN;
     }
     
+    public void setUserPrefs(UserPreferencesDTO userPrefs){
+        this.userPrefs = userPrefs;
+    }
+    
+     public UserPreferencesDTO getUserPrefs(){
+       return  this.userPrefs;
+    }
+
+    public Collection<FacilityDTO> getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(Collection<FacilityDTO> facilities) {
+        this.facilities = facilities;
+    }
 }

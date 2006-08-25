@@ -26,6 +26,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -74,6 +75,9 @@ public class Bookmark implements Serializable {
     @JoinColumn(name = "USER_ID")
     @ManyToOne
     private User userId;
+        
+     @Transient
+    private boolean selected;
     
     @PrePersist
     @PreUpdate
@@ -179,6 +183,14 @@ public class Bookmark implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
     
 }

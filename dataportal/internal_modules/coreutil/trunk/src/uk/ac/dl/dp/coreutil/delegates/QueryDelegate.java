@@ -2,6 +2,7 @@ package uk.ac.dl.dp.coreutil.delegates;
 
 import java.io.File;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import javax.naming.NamingException;
@@ -10,14 +11,17 @@ import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
+import uk.ac.cclrc.dpal.enums.LogicalExpression;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.interfaces.QueryRemote;
 import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterRemote;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
+import uk.ac.dl.dp.coreutil.util.QueryRequest;
 
 /**
  *
@@ -25,22 +29,14 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
  */
 public class QueryDelegate {
     
-    private static QuerySlaveMasterRemote qsmr ;
+    private static QueryRemote qsmr ;
     private static QueryDelegate qd;
     
     private  static Logger log = Logger.getLogger(QueryDelegate.class);
     
-    private static String sid;
-    private Collection<String> srbUrl;
-    private File file;
-    private String stats;
-    private Exception exception;
-    private boolean isFinished = false;
-    private Collection<String> query_history = new LinkedList<String>();
-    
     /** Creates a new instance of LookupDelegate */
-    public static QueryDelegate getInstance(String sessionid){
-        sid = sessionid;
+    public static QueryDelegate getInstance(){
+        
         synchronized(QueryDelegate.class){
             if(qd == null){
                 try {
@@ -55,80 +51,66 @@ public class QueryDelegate {
     
     private  QueryDelegate() throws NamingException {
         CachingServiceLocator csl =  CachingServiceLocator.getInstance();
-        qsmr = (QuerySlaveMasterRemote)csl.lookup(DataPortalConstants.QUERY);
+        qsmr = (QueryRemote)csl.lookup(DataPortalConstants.QUERY);
     }
     
-    /** Creates a new instance of SessionDelegate */
-    /*public  QueryDelegate(String sid) throws NamingException {
-        Context ic = new InitialContext();
-        qsmr  = (QuerySlaveMasterRemote)ic.lookup(DataPortalConstants.QUERY);
-        this.sid = sid;
-        this.srbUrl = srbUrl;
-    }*/
     
     /*All TransferBean methods here*/
-    public String queryByKeyword(String[] keywords, Collection<String> facilities) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
-        String query_id  = qsmr.queryByKeyword(this.sid, facilities, keywords);
-        query_history.add(query_id);
-        return query_id;
+    public QueryRequest queryByKeyword(String sid, String[] keywords, Collection<String> facilities, LogicalExpression logicalExpression) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
+        return  qsmr.queryByKeyword(sid, facilities, keywords, logicalExpression);
     }
     
-    public String  queryByKeyword(String keyword, Collection<String> facilities) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
-        String query_id  = qsmr.queryByKeyword(this.sid, facilities, new String[] {keyword});
-        query_history.add(query_id);
-        return query_id;
+    public QueryRequest queryByKeyword(String sid ,String keyword, Collection<String> facilities, LogicalExpression logicalExpression) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
+        return qsmr.queryByKeyword(sid, facilities, new String[] {keyword},logicalExpression);
+        
     }
     
-    public boolean isFinished(){
-        return qsmr.isFinished();
+    public boolean isFinished(QueryRequest query_request){
+        return qsmr.isFinished(query_request);
     }
     
-    public Collection<String> getCompleted(){
-        return qsmr.getCompleted();
+    public Collection<String> getCompleted(QueryRequest query_request){
+        return qsmr.getCompleted(query_request);
     }
     
-    public void remove(){
-        if(qsmr != null) {
-            try {
-                qsmr.remove();
-            } catch(Throwable e){}
-        }
+    public Collection<Investigation> getQueryResults(String queryId){
+        return qsmr.getQueryResults(queryId);
     }
     
-    public Collection<Investigation> getQueryResults(){
-        return qsmr.getQueryResults();
+    public Collection<Investigation> getQueryResults(QueryRequest query_request){
+        return qsmr.getQueryResults(query_request);
     }
     
-    public Collection<QueryRecordDTO> getCurrentResults(){
-        return qsmr.getCurrentResults(this.sid);
+    public Collection<Investigation> getPastQueryResults(String sid,String query_id){
+        return qsmr.getPastQueryResults(sid, query_id);
     }
     
-    public Collection<Investigation> getInvestigations(Collection<Study> study) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
-        return qsmr.getInvestigations(this.sid,  study);
+    public Collection<QueryRecordDTO> getCurrentResults(String sid){
+        return qsmr.getCurrentResults(sid);
     }
     
-    public Collection<DataSet> getDataSets(Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
-        return qsmr.getDataSets(this.sid,  investigations);
+    public Collection<Investigation> getInvestigations(String sid,Collection<Study> study) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
+        return qsmr.getInvestigations(sid,  study);
     }
     
-    public Collection<DataFile> getDataFiles(Collection<DataSet> datasets)throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
-        return qsmr.getDataFiles(this.sid,  datasets);
-    }
-    
-    public Collection<Investigation> getPastQueryResults(String query_id){
-        return qsmr.getPastQueryResults(this.sid, query_id);
-    }
-    
-    public Collection<Investigation> getPastQueryResults(QueryRecordDTO query_dto){
-        return qsmr.getPastQueryResults(this.sid, query_dto);
-    }
-    
-    public Collection<String> getPastQueryIds(){
-        return query_history;
-    }
-    
-    /*protected void finalize() throws Throwable {
-        super.finalize();
-        remove();
+   /* public Collection<DataSet> getDataSets(String sid, String[][] investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
+         return qsmr.getDataSets(sid, investigations);
     }*/
+    
+     public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+          return qsmr.getInvestigationByStudyId(sid, fac, studyId);
+     }
+  
+    
+    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
+        return qsmr.getDataSets(sid, investigations);
+    }
+    
+    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets)throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
+        return qsmr.getDataFiles(sid, datasets);
+    }
+    
+    public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO query_dto){
+        return qsmr.getPastQueryResults(sid, query_dto);
+    }
 }

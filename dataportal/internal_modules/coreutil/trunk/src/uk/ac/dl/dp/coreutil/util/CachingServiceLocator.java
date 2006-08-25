@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
 import java.net.URL;
+import java.util.Properties;
 
 import javax.ejb.EJBHome;
 import javax.ejb.EJBLocalHome;
@@ -44,8 +45,8 @@ public class CachingServiceLocator {
         }
     }
     
-    private CachingServiceLocator() throws NamingException  {
-        ic = new InitialContext();
+    private CachingServiceLocator() throws NamingException  {       
+            ic = new InitialContext();      
         cache = Collections.synchronizedMap(new HashMap());
     }
     
