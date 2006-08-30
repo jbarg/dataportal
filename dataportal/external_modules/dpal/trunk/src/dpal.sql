@@ -31,7 +31,7 @@ create or replace package body dpaccess as
        c_study types.ref_cursor;
     begin
        OPEN c_study FOR
-          select  distinct(name), '-99' as  id
+          select  distinct(lower(name)), '-99' as  id
              from keyword order by name asc ;
        RETURN c_study;
     end;
@@ -45,11 +45,13 @@ create or replace package body dpaccess as
           select  distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date, k.name as keyword 
              from study s, keyword_list kl, keyword k
              where 
-                 k.name in (select * from TABLE(cast(keyword_array as VC_ARRAY)))
+                 lower(k.name) in (select * from TABLE(cast(keyword_array as VC_ARRAY)))
                and
                  s.id=kl.study_id
                and
-                 kl.keyword_id=k.id   ;
+                 kl.keyword_id=k.id  
+               and
+                 s.name is not null ;
        RETURN c_study;
     end;
 

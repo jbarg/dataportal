@@ -46,8 +46,9 @@ public class TestDPAccessLayer
      //use command line for keywords if supplied
      if (args.length == 0)
      {
-       // keyword_list.add("hrpd") ;
-        keyword_list.add("raw") ;
+        //funny case to test the automatic case insensitivety of the searches
+        keyword_list.add("hRpd") ;
+        keyword_list.add("raW") ;
      }
      else
      {
