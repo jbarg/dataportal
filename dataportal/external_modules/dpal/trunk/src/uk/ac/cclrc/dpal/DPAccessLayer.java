@@ -217,6 +217,7 @@ public class DPAccessLayer {
         
         for(Study os : sal) {
             for(Study ns : result) {
+                //System.out.println("outer study:\t"+os.getName() + "\ninner study:\t" + ns.getName()) ;
                 if(os.getName().compareTo(ns.getName())==0){
                     //we have a match - i.e. same study different keyword
                     ns.setKeyword(os.getFirstKeyword()) ;
@@ -273,6 +274,12 @@ public class DPAccessLayer {
     public ArrayList<Study> getStudies(String[] keyword_array, String DN) throws SQLException {
         log.debug("getStudies()");        
         
+        //need to convert all keywords to lowercase
+        for (int i = 0 ; i < keyword_array.length ; i ++ )
+        {
+           keyword_array[i] = keyword_array[i].toLowerCase() ;
+        }
+        
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
         String query = "begin ? := dpaccess.getStudies(?,'"+DN+"'); end;";
@@ -307,7 +314,7 @@ public class DPAccessLayer {
            sb.append("select  study_id " +
                      "from study s, keyword_list kl, keyword k " +
                      "where " +
-                     "k.name = '" + keyword_array[i] +"' " +
+                     "lower(k.name) = '" + keyword_array[i].toLowerCase() +"' " +
                      "and " +
                      "s.id=kl.study_id " +
                      "and " +
@@ -321,7 +328,6 @@ public class DPAccessLayer {
          }
       
          log.debug ("query: " + sb.toString()) ;
-         System.out.println("query: " + sb.toString()) ;
 
          r = s.executeQuery(sb.toString());  
 
