@@ -17,6 +17,7 @@ create or replace package dpaccess as
     function getStudies (keyword_array in vc_array, dn in varchar2) RETURN types.ref_cursor;
     function getStudiesById (study_id_array in vc_array, dn in varchar2) RETURN types.ref_cursor;
     function getInvestigations (study_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
+    function getInvestigationsById (inv_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
     function getDataSets (inv_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
     function getDataFiles (ds_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
 end dpaccess;
@@ -51,7 +52,9 @@ create or replace package body dpaccess as
                and
                  kl.keyword_id=k.id  
                and
-                 s.name is not null ;
+                 s.name is not null 
+               and 
+                 rownum < 501 ;
        RETURN c_study;
     end;
 
@@ -83,6 +86,19 @@ create or replace package body dpaccess as
                  i.id=il.investigation_id
               and
                  il.study_id=s.id ;
+       RETURN c_inv;
+    end;
+
+   function getInvestigationsById (inv_id_array in num_array, dn in varchar2)
+       RETURN types.ref_cursor
+    is
+       c_inv types.ref_cursor;
+    begin
+       OPEN c_inv FOR
+          select i.title as title,i.id as id,i.investigation_type as investigation_type, i.inv_abstract as inv_abstract
+             from investigation i
+             where
+                 i.id in (select * from TABLE(cast(inv_id_array as NUM_ARRAY))) ;
        RETURN c_inv;
     end;
 
