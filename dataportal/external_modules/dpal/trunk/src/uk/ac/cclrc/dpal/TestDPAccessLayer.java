@@ -101,11 +101,20 @@ public class TestDPAccessLayer
          stated_study_id_list.add("21") ; 
          stated_study_id_list.add("22") ; 
          r_s_l = null ;
+         r_i_l = null ;
          //////
-         System.out.println("The list of STUDIES for the study_ids"+stated_study_id_list.toString()+":") ;
+         System.out.println("The list of STUDIES for the study_ids "+stated_study_id_list.toString()+":") ;
          r_s_l = dpal.getStudiesById(stated_study_id_list, "DN") ;
          for(Study s : r_s_l) {
             System.out.println("\t"+s.toString()) ;
+         }
+         //////
+            /// can use the same id's as study as this is the way icat2 is setup but may need to change depending
+            /// on data in test db used
+         System.out.println("The list of Investigations for the inv_ids "+stated_study_id_list.toString()+":") ;
+         r_i_l = dpal.getInvestigationsById(stated_study_id_list, "DN") ;
+         for(Investigation i : r_i_l) {
+            System.out.println("\t"+i.toString()) ;
          }
          //////
          System.out.println("The list of STUDIES linked to all the keywords"+keyword_list.toString()+":") ;

@@ -308,7 +308,7 @@ public class DPAccessLayer {
         log.debug("getStudiesAnd()");
 
         StringBuffer sb = new StringBuffer("select distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date " +
-                                           "from study s where id in (") ;
+                                           "from study s where rownum < 501 and id in (") ;
 
         for (int i = 0 ; i < keyword_array.length; i ++) {
            sb.append("select  study_id " +
@@ -451,10 +451,10 @@ public class DPAccessLayer {
         r.close() ;
         return inv_array ;
     }
-    
-    public ArrayList<Investigation> getInvestigations(ArrayList<String> study_id_list, String DN) throws SQLException {
+
+     public ArrayList<Investigation> getInvestigations(ArrayList<String> study_id_list, String DN) throws SQLException {
         log.debug("getInvestigations(ArrayList)");
-        
+
         String[] sa = new String[study_id_list.size()] ;
         ListIterator li = study_id_list.listIterator() ;
         int i = 0 ;
@@ -462,6 +462,52 @@ public class DPAccessLayer {
             sa[i++] = (String)li.next() ;
         }
         return getInvestigations(sa,DN);
+    }
+
+
+    //////////////////////////////////////////////////////////////
+
+    public ArrayList<Investigation> getInvestigationsById(String[] inv_id_array, String DN) throws SQLException {
+        log.debug("getInvestigationsById()");
+
+        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
+        //convert string array to integer array
+        int[] intArray = new int [inv_id_array.length] ;
+        for(int i=0; i < inv_id_array.length; i++) {
+            intArray[i]=Integer.parseInt(inv_id_array[i]);
+        }
+        ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
+        String query = "begin ? := dpaccess.getInvestigationsById(?,'"+DN+"'); end;";
+        OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
+        cs.registerOutParameter(1, OracleTypes.CURSOR);
+        cs.setARRAY( 2, array_to_pass );
+        cs.execute();
+        r=(ResultSet)cs.getObject(1) ;
+        ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
+        while(r.next()) {
+            Investigation in = new Investigation() ;
+            in.setId(r.getString("ID")) ;
+            in.setName(r.getString("TITLE")) ; //note title in db and name in beans
+            in.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
+            in.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
+            //note StudyId not set in bean as we don't have that information
+            in.setFacility(this.facility);
+            inv_array.add(in);
+        }
+        r.close() ;
+        return inv_array ;
+    }
+    
+    public ArrayList<Investigation> getInvestigationsById(ArrayList<String> inv_id_list, String DN) throws SQLException {
+        log.debug("getInvestigations(ArrayList)");
+
+        String[] sa = new String[inv_id_list.size()] ;
+        ListIterator li = inv_id_list.listIterator() ;
+        int i = 0 ;
+        while(li.hasNext()) {
+            sa[i++] = (String)li.next() ;
+        }
+        return getInvestigationsById(sa,DN);
     }
     
     
