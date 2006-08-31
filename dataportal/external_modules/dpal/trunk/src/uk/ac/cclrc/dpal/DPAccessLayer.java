@@ -307,8 +307,8 @@ public class DPAccessLayer {
    public ArrayList<Study> getStudiesAnd(String[] keyword_array, String DN) throws SQLException {
         log.debug("getStudiesAnd()");
 
-        StringBuffer sb = new StringBuffer("select distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date " +
-                                           "from study s where rownum < 501 and id in (") ;
+        StringBuffer sb = new StringBuffer("select * from (select distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date " +
+                                           "from study s where id in (") ;
 
         for (int i = 0 ; i < keyword_array.length; i ++) {
            sb.append("select  study_id " +
@@ -323,11 +323,12 @@ public class DPAccessLayer {
               sb.append ("\nINTERSECT\n") ;
            }
            else {
-              sb.append ("\n)") ;
+              sb.append ("\n)) where rownum < 501") ;
            }
          }
       
          log.debug ("query: " + sb.toString()) ;
+         //System.out.println("query: " + sb.toString()) ;
 
          r = s.executeQuery(sb.toString());  
 
