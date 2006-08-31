@@ -43,7 +43,7 @@ create or replace package body dpaccess as
        c_study types.ref_cursor;
     begin
        OPEN c_study FOR 
-          select  distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date, k.name as keyword 
+          select * from (select  distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date, k.name as keyword 
              from study s, keyword_list kl, keyword k
              where 
                  lower(k.name) in (select * from TABLE(cast(keyword_array as VC_ARRAY)))
@@ -52,8 +52,8 @@ create or replace package body dpaccess as
                and
                  kl.keyword_id=k.id  
                and
-                 s.name is not null 
-               and 
+                 s.name is not null) 
+               where 
                  rownum < 501 ;
        RETURN c_study;
     end;
