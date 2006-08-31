@@ -308,7 +308,7 @@ public class DPAccessLayer {
         log.debug("getStudiesAnd()");
 
         StringBuffer sb = new StringBuffer("select * from (select distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date " +
-                                           "from study s where id in (") ;
+                                           "from study s where s.name is not null and id in (") ;
 
         for (int i = 0 ; i < keyword_array.length; i ++) {
            sb.append("select  study_id " +
