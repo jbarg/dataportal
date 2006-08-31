@@ -123,6 +123,14 @@ public class TestDPAccessLayer
             System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
          }
 
+         ArrayList<String> k_l = new ArrayList<String>() ;
+         k_l.add("Edinburgh") ;
+         System.out.println("The list of STUDIES linked to Edinburgh"+k_l.toString()+":") ;
+         r_s_l = dpal.getStudies(k_l, "DN", LogicalExpression.AND) ;
+         for(Study s : r_s_l) {
+            System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
+         }
+
          //test disconnection code
          dpal.disconnectFromDB() ;
       }
