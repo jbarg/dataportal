@@ -15,7 +15,7 @@
         
               
         <t:navigationMenuItem id="nav_1"  itemLabel="Basic Search" itemValue="basicSearch" action="basicSearch"/>
-        <t:navigationMenuItem id="nav_2"  itemLabel="Investigations" action="investigations" rendered="#{visit.isInvestigations}" />
+        <t:navigationMenuItem id="nav_2"  itemLabel="Results" action="investigations" rendered="#{visit.isInvestigations}" />
         <t:navigationMenuItem id="nav_3"  itemLabel="Data Sets" action="dataset_success" rendered="#{visit.isDatasets}" />
       
         <t:navigationMenuItem id="nav_4"  itemLabel="Data Center" >                  

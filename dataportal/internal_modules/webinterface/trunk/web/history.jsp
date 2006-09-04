@@ -3,6 +3,7 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
@@ -20,17 +21,14 @@
              <table width="${sessionScope.visit.width}"  >  
               <td width="100%">
             
-                    <table  border="0" width="950" bgcolor="#666">
-                        <td width="100%"  height="50" > 
+             <table  border="0" width="100%" >
+                        <td width="100%"  height="45" > 
                             <f:subview id="header">
                                 <c:import url="/inc/header.jsp" />
                             </f:subview>
                         </td>
                     </table>   
-              
-                    <!--  <br />
-                    <br /><br />
-                    <br />-->
+           
               
            
                     <table border="0" width="100%">

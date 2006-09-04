@@ -240,6 +240,25 @@
                 <t:graphicImage url="../images/arrow-fr.gif" border="1" />
             </f:facet>
         </t:dataScroller>
+         <t:dataScroller id="scroll_2"
+                    for="data"
+                    rowsCountVar="rowsCount"
+                    displayedRowsCountVar="displayedRowsCountVar"
+                    firstRowIndexVar="firstRowIndex"
+                    lastRowIndexVar="lastRowIndex"
+                    pageCountVar="pageCount"
+                    immediate="true"
+                    pageIndexVar="pageIndex"
+                    >
+                <h:outputFormat value="{0} Investigations found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                    <f:param value="#{rowsCount}" />
+                    <f:param value="#{displayedRowsCountVar}" />
+                    <f:param value="#{firstRowIndex}" />
+                    <f:param value="#{lastRowIndex}" />
+                    <f:param value="#{pageIndex}" />
+                    <f:param value="#{pageCount}" />
+                </h:outputFormat>
+            </t:dataScroller>
     </h:panelGrid>
     <br />
 

@@ -89,7 +89,7 @@
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-             &nbsp;&nbsp;
+             &nbsp;
              
               <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                 closePopupOnExitingPopup="true"
@@ -109,7 +109,7 @@
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-           
+           &nbsp;
         </h:column>
         
         <h:column>

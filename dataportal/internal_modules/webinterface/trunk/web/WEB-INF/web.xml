@@ -53,6 +53,10 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>uk.ac.dl.dp.web.util.DownloadServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
@@ -60,6 +64,10 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.faces</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/servlet/DownloadServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

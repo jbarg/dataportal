@@ -7,6 +7,102 @@
 
 <h:form>
 
+    <script type="text/javascript">
+       
+        var win;
+        function download(id,type, from){
+        
+        //locat center
+        var leftprop, topprop, screenX, screenY, cursorX, cursorY, padAmt
+
+        if(navigator.appName == "Microsoft Internet Explorer")
+        {
+        screenY = document.body.offsetHeight
+        screenX = window.screen.availWidth
+        }
+        else
+        { 
+        screenY = window.outerHeight
+		screenX = window.outerWidth
+
+        // change made 3/16/01 to work with Netscape:
+      //  screenY = screen.height;
+      //  screenX = screen.width;
+        }
+
+
+
+        leftvar = (screenX - 300) / 2
+        rightvar = (screenY - 40) / 2
+		
+        if(navigator.appName == "Microsoft Internet Explorer")
+        {
+        leftprop = leftvar
+        topprop = rightvar
+        }
+        else
+        { // adjust Netscape coordinates for scrolling
+        leftprop = (leftvar + pageXOffset)
+        topprop = (rightvar + pageYOffset)
+        }
+
+        
+        if(navigator.appVersion.indexOf("MSIE") !=-1 ){
+
+        // alert("micrsoft");
+        if(win) win.close();
+       
+        // alert("/servlet/DownloadServlet?url="+id+"&type="+type+"&from="+from+"");
+        
+        win = window.open("../servlet/DownloadServlet?url="+id+"&type="+type+"&from="+from+"","Download","toolbar=no,directories=no,status=no,menubar=no,width=300px,height=160px,left="+leftprop+",top="+topprop+"");
+
+        }
+        else if(navigator.userAgent.indexOf("Mozilla/4") != -1 && navigator.appName.indexOf("Netscape") !=-1 && parseInt(navigator.appVersion) < 5){
+        //alert("netsacpe 4");
+        win = window.open("../servlet/DownloadServlet?url="+id+"&type="+type+"","Download Data","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=300,height=150,left=0,top=0");
+        }
+        else{
+        win = window.open("../servlet/DownloadServlet?url="+id+"&type="+type+"","Download Data","toolbar=no, width=300, height=160");
+        }
+        }
+        
+       
+
+        var leftprop, topprop, screenX, screenY, cursorX, cursorY, padAmt
+
+        if(navigator.appName == "Microsoft Internet Explorer")
+        {
+        screenY = document.body.offsetHeight
+        screenX = window.screen.availWidth
+        }
+        else
+        { // Navigator coordinates
+        //		screenY = window.outerHeight
+        //		screenX = window.outerWidth
+        // change made 3/16/01 to work with Netscape:
+        screenY = screen.height;
+        screenX = screen.width;
+        }
+
+
+
+        leftvar = (screenX - width) / 2
+        rightvar = (screenY - height) / 2
+		
+        if(navigator.appName == "Microsoft Internet Explorer")
+        {
+        leftprop = leftvar
+        topprop = rightvar
+        }
+        else
+        { // adjust Netscape coordinates for scrolling
+        leftprop = (leftvar - pageXOffset)
+        topprop = (rightvar - pageYOffset)
+        }
+
+
+       
+    </script>
     <table width="90%" border="0" >
         <td width="30">&nbsp;</td>
         <td>
@@ -16,7 +112,7 @@
             <td width="70%">   <h:outputText id="text321" value="Investigations" styleClass="nodeFolder"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </td>           
             <td align="right">&nbsp;&nbsp;&nbsp;
-               <t:popup styleClass="popup" closePopupOnExitingElement="true"
+                <t:popup styleClass="popup" closePopupOnExitingElement="true"
                     closePopupOnExitingPopup="true"
                     displayAtDistanceX="5"
                     displayAtDistanceY="-40" >
@@ -187,7 +283,11 @@
                     <f:facet name="collapse">
                         <t:graphicImage id="gr98" value="../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                     </f:facet>
-                    <h:outputText id="text90" value="#{node.description}" styleClass="nodeFolder"/>
+                    <h:commandLink onclick="download('#{node.identifier}','DATA_SET','DATA_SETS'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
+                        <h:outputText id="text90" value="#{node.description}" styleClass="nodeFolder"/>
+                  
+                        <f:param name="id" value="#{node.identifier}"/>               
+                    </h:commandLink>
                     <h:outputText id="text891" value=" (#{node.childCount-3})" styleClass="childCount" rendered="#{!empty node.children}"/>
                     <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">
                         <f:param name="datasets" value="#{node.identifier}"/>
@@ -211,7 +311,7 @@
             <f:facet name="foo1-folder">
                 <h:panelGroup>
                       
-                    <t:graphicImage id="gr991" value="../images/blue-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                    <t:graphicImage id="gr991" value="../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
                        
                     <t:graphicImage id="gr918" value="../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                        
@@ -272,11 +372,17 @@
                         <t:graphicImage id="gr1613" value="../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                     </f:facet>
                     &nbsp;  
-                    <h:commandLink immediate="true" styleClass="#{t.nodeSelected ? 'documentSelected':'document'}" actionListener="#{datasetTree.setNodeSelected}">
-                        <t:graphicImage value="../images/document.png" border="0"/>
+                    <%-- <h:commandLink immediate="true" styleClass="#{t.nodeSelected ? 'documentSelected':'document'}" actionListener="#{datasetTree.setNodeSelected}">
+                    <t:graphicImage value="../images/document.png" border="0"/>
+                    <h:outputText value="#{node.description}" styleClass="file" />
+                    <f:param name="id" value="#{node.identifier}"/>
+                    </h:commandLink>      --%>
+                    <t:graphicImage value="../images/document.png" border="0"/>
+                        
+                    <h:commandLink onclick="download('#{node.identifier}','FILE','DATA_SETS'); return false;" style="color:black" id="downloadname1">
                         <h:outputText value="#{node.description}" styleClass="file" />
-                        <f:param name="id" value="#{node.identifier}"/>
-                    </h:commandLink>      
+                        <f:param name="id1" value="#{node.identifier}"/>              
+                    </h:commandLink>
                     <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">
                         <f:param name="datafiles" value="#{node.identifier}"/>
                     </h:selectBooleanCheckbox>
