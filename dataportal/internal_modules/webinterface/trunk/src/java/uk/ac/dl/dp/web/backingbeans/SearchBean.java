@@ -39,8 +39,9 @@ public class SearchBean extends BaseBean {
     private String keywords[];
     private String currentQueryId;
     private List<String> facilities ;
+    private List<SelectItem> facilityList;
     private Collection<String> facilitiesColl ;
-     private List<String> logicalExpression ;
+    private String logicalExpression ;
     private boolean logicalExpressionBoolean = true;
     
     /** Creates a new instance of SearchBean */
@@ -61,13 +62,16 @@ public class SearchBean extends BaseBean {
         String sid = null;
         QueryRequest query_request = null;
         
-        log.trace("searching for keyword : "+getKeywords());
+        log.trace("searching for keywords : "+getKeywords());
+        for(String keyword : getKeywords()){
+            log.trace(keyword);
+        }
         log.trace("searching for facilities :"+getFacilities());
         log.trace("radio box :"+getLogicalExpression());
         
         LogicalExpression type = LogicalExpression.AND;
         if(logicalExpressionBoolean == false ) type = LogicalExpression.OR;
-            
+        
         
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
@@ -83,7 +87,7 @@ public class SearchBean extends BaseBean {
             log.fatal("exception : "+sid,ex);
             return null;
         }
-               
+        
         long time = new Date().getTime();
         while(!qd.isFinished(query_request)){
             
@@ -101,7 +105,7 @@ public class SearchBean extends BaseBean {
                 }
                 /*else if(((new Date().getTime() - time)/1000) > 1) {
                     return "search_sent_success";
-                    
+                 
                 }*/
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
@@ -120,11 +124,11 @@ public class SearchBean extends BaseBean {
         //set investigations
         log.debug("Adding found investigations to session, size: "+investigations.size());
         getVisit().setSearchedInvestigations(investigations);
-                
+        
         log.trace("list of studies for keyword: "+getKeywords());
         
         return "search_success";
-         
+        
         
     }
     
@@ -150,26 +154,39 @@ public class SearchBean extends BaseBean {
     }
     
     public void setFacilities(List<String> facilities) {
-        this.facilities = facilities;          
-    }  
-    
-    public List<String> getLogicalExpression() {
-        return logicalExpression;
+        this.facilities = facilities;
     }
-
-    public void setLogicalExpression(List<String> logicalExpression) {
+    
+    public String getLogicalExpression() {
+        
+        return "AND";
+    }
+    
+    public void setLogicalExpression(String logicalExpression) {
         this.logicalExpression = logicalExpression;
     }
-
+    
     public boolean isLogicalExpressionBoolean() {
         return logicalExpressionBoolean;
     }
-
+    
     public void setLogicalExpressionBoolean(boolean logicalExpressionBoolean) {
         this.logicalExpressionBoolean = logicalExpressionBoolean;
     }
     
-   
+    public List<SelectItem> getFacilityList() {
+        SelectItem item  = getVisit().getFacilities().get(1);
+        List<String> list = new ArrayList<String>();
+        list.add((String)item.getValue());
+        this.setFacilities(list);
+        return getVisit().getFacilities();
+    }
+    
+    public void setFacilityList(List<SelectItem> facilityList) {
+        this.facilityList = facilityList;
+    }
+    
+    
     
     
 }
