@@ -41,6 +41,7 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.navigation.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
+import javax.faces.FacesException;
 
 /**
  *
@@ -137,7 +138,7 @@ public class DataCenterBean extends SortableList {
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
         Collection<DataReference> dataReference = getVisit().getCurrentDataReferences();
-    
+        
         DataReference d = (DataReference)table.getRowData();
         if(e.getNewValue().equals(new Boolean(true)) ){
             log.trace("true selected boolean");
@@ -145,7 +146,7 @@ public class DataCenterBean extends SortableList {
                 if(df.getId().equals(d.getId())) {
                     df.setSelected(true);
                     log.trace(df.isSelected()+" for "+df.getId());
-    
+                    
                 }
             }
         }
@@ -161,7 +162,7 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-     public String viewData(){
+    public String viewData(){
         log.trace("view data");
         DataReference qrdto =   (DataReference) table.getRowData();
         log.trace("viewing studyId: "+qrdto.getInvestigationId());
@@ -262,11 +263,11 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-     public String addNote(){
+    public String addNote(){
         
         
         DataReference bk = (DataReference)table.getRowData();
-        log.trace("Note id is "+bk.getId()+" with new note: "+bk.getNote());       
+        log.trace("Note id is "+bk.getId()+" with new note: "+bk.getNote());
         try {
             DataCenterDelegate.getInstance().addDataReference(getVisit().getSid(),bk);
         } catch (SessionTimedOutException ex) {
@@ -278,9 +279,44 @@ public class DataCenterBean extends SortableList {
         } catch (UserNotFoundException ex) {
             ex.printStackTrace();
         }
-       
+        
         getVisit().setCurrentDataReferences(null);
         return null;
+    }
+    
+    public void download(ActionEvent event){
+        log.trace("Sorting column");
+        List children  = event.getComponent().getChildren();
+        int i = 0;
+        for(Object ob : children){
+            if(ob instanceof UIParameter){
+                UIParameter current = (UIParameter)children.get(i);
+                log.trace("Param name "+current.getName());
+                if(current.getName().equals("id") && current.getValue() != null){
+                    String param = current.getValue().toString();
+                    log.trace("downloading id: "+param);
+                    forward_url("/servlet/DownloadServlet?url=test");
+                    break;
+                }
+            }
+            i++;
+        }
+    }
+    
+   
+    public void forward_url(String url) {
+        log.debug("Forwardng: "+url);
+        FacesContext context = getFacesContext();
+//forward to an external servlet for submission;
+        try{
+            context.getExternalContext().dispatch(url);
+        } catch(Exception e) {
+//throw exception here
+            log.warn("Exception here:",e);
+            throw new FacesException(e);
+        } finally {
+            context.responseComplete();
+        }
     }
     
     

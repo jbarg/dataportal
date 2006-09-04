@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.io.Serializable;
+import org.apache.taglibs.standard.tag.common.core.ParamSupport;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
@@ -27,6 +28,7 @@ import java.util.*;
 import javax.faces.model.SelectItem;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
 /**
  *
  * @author gjd37
@@ -68,6 +70,7 @@ public class Visit implements Serializable {
     
     private boolean finished;
     
+    private HashMap<String, SRBFileManagerThread> srbManager = new HashMap<String, SRBFileManagerThread>();
     
     
     private static Logger log = Logger.getLogger(Visit.class);
@@ -298,6 +301,28 @@ public class Visit implements Serializable {
     public boolean getIsDatasets(){
         if(currentDatasets == null ) return false;
         else return true;
+    }
+
+    public SRBFileManagerThread getSrbManager(String param) {
+        return srbManager.get(param);
+    }
+
+    public void putSrbManager(String param, SRBFileManagerThread srbManager) {
+       // if(!this.srbManager.containsKey(param)){
+            this.srbManager.put(param, srbManager);
+        //}
+    }
+    
+    
+    public void removeSrbManager(String param) {
+        if(this.srbManager.containsKey(param)){
+            log.trace("removing "+param+" from cache");
+            this.srbManager.remove(param);
+        }
+    }
+    
+    public boolean contains(String param){
+        return this.srbManager.containsKey(param);
     }
     
     
