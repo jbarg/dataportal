@@ -3,11 +3,13 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
 
    
+    
     
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
@@ -18,13 +20,19 @@
     <body>
         <f:view>                  
             <table width="954" >  
-                <td width="100%">
+            <td width="100%">
            
-            <table  border="0" width="100%" bgcolor="#666">
-                <td width="950"  height="50" > 
-                    <f:subview id="header">
-                        <c:import url="/inc/header.jsp" />
-                    </f:subview>
+            <table  border="0" width="100%" >
+                <td width="950"  height="45" >                    
+                    <t:div styleClass="outerbar">
+                    <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
+                        itemMaxHeight="200" orientation="horizontal" effectUnits="2"
+                        itemPadding="10" attachEdge="top" labelEdge="bottom">                    
+
+                    
+
+                    </s:fishEyeNavigationMenu>                    </t:div>
+             
                 </td>
             </table>   
               
@@ -32,6 +40,7 @@
             <br /><br />
             <br />-->              
            
+        
             <table border="0" width="100%">
     
                 <td width="100%" align="right">
@@ -64,11 +73,11 @@
                 <td width="*" valign="top" >
                     <table border="0" width="100%" >  
                         <td align="right">
-                           <%-- <f:subview id="title">
-                                <c:import url="/inc/title.jsp" />
+                            <%-- <f:subview id="title">
+                            <c:import url="/inc/title.jsp" />
                             </f:subview>--%>
-                           <br />
-                           <br />
+                            <br />
+                            <br />
                         </td>
                     </table>
                     <hr size="-1" width="100%"  />

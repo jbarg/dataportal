@@ -17,21 +17,18 @@
     <body>
         <f:view>
             
-             <table width="${sessionScope.visit.width}"  >  
-              <td width="100%">
-            
-                    <table  border="0" width="950" bgcolor="#666">
-                        <td width="100%"  height="50" > 
+            <table width="${sessionScope.visit.width}"  >  
+                <td width="100%">
+                        
+                    <table  border="0" width="100%" >
+                        <td width="100%"  height="45" > 
                             <f:subview id="header">
                                 <c:import url="/inc/header.jsp" />
                             </f:subview>
                         </td>
                     </table>   
               
-                    <!--  <br />
-                    <br /><br />
-                    <br />-->
-              
+                   
            
                     <table border="0" width="100%">
     
@@ -75,7 +72,7 @@
                                 <td width="7%">&nbsp;</td>
                                 <td valign="top" width="93%" >
                                     <f:subview id="body">
-                                        <c:import url="basic_search_inc.jsp" />
+                                        <c:import url="basic_search_inc_1.jsp" />
                                     </f:subview>
                          
                                 </td>
