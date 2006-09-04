@@ -32,7 +32,7 @@ create or replace package body dpaccess as
        c_study types.ref_cursor;
     begin
        OPEN c_study FOR
-          select  distinct(lower(name)), '-99' as  id
+          select  distinct(lower(name)) as name, '-99' as  id
              from keyword order by name asc ;
        RETURN c_study;
     end;
