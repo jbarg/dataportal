@@ -63,7 +63,7 @@ public class TestDPAccessLayer
          System.out.println("---") ;
          System.out.println("The list of STUDIES for the keywords"+keyword_list.toString()+":") ;
          //////
-         r_s_l = dpal.getStudies(keyword_list, "DN") ;
+         r_s_l = dpal.getStudies(keyword_list, "DN", LogicalOperator.OR ) ;
          for(Study s : r_s_l) {
             System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
             study_id_list.add(s.getId()) ;
@@ -118,7 +118,7 @@ public class TestDPAccessLayer
          }
          //////
          System.out.println("The list of STUDIES linked to all the keywords"+keyword_list.toString()+":") ;
-         r_s_l = dpal.getStudies(keyword_list, "DN", LogicalExpression.AND) ;
+         r_s_l = dpal.getStudies(keyword_list, "DN", LogicalOperator.AND) ;
          for(Study s : r_s_l) {
             System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
          }
@@ -126,7 +126,7 @@ public class TestDPAccessLayer
          ArrayList<String> k_l = new ArrayList<String>() ;
          k_l.add("Edinburgh") ;
          System.out.println("The list of STUDIES linked to Edinburgh"+k_l.toString()+":") ;
-         r_s_l = dpal.getStudies(k_l, "DN", LogicalExpression.AND) ;
+         r_s_l = dpal.getStudies(k_l, "DN", LogicalOperator.AND) ;
          for(Study s : r_s_l) {
             System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
          }

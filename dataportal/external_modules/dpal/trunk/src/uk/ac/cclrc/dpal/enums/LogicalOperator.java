@@ -1,11 +1,11 @@
 package uk.ac.cclrc.dpal.enums ;
 
 
-public enum LogicalExpression {
+public enum LogicalOperator {
     
     AND("AND"), OR("OR"), NOT("NOT"), XOR("XOR") ;
     
-    LogicalExpression(String value) {
+    LogicalOperator(String value) {
         this.value = value;
     }
     

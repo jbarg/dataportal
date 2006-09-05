@@ -112,33 +112,6 @@ public class DPAccessLayer {
         return ;
     }
     
-    //////////////////////////////////////////////////////////////
-    // disconnect should work with both direct jdbc and pooled connections
-    public void disconnectFromDB() {
-        log.debug("Closing");
-        try{
-            if(r != null) {
-                r.close();
-            }
-            if(s != null) {
-                s.close();
-            }
-            if(normal_conn != null) {
-                normal_conn.close() ;
-            }
-            if(using_pool == false && conn != null)
-            {              
-               conn.close() ;
-            }
-        } catch (SQLException sqle) {
-            log.error(sqle.toString());
-        }
-        
-        return ;
-    }
-    
-    
-    
     
     //////////////////////////////////////////////////////////////
     public void connectToDB(String connect_string, String username, String password) {
@@ -186,6 +159,33 @@ public class DPAccessLayer {
         } // end of while - i.e. if exceptions thrown should re-try the connection
         return ;
     }
+
+    //////////////////////////////////////////////////////////////
+    // disconnect should work with both direct jdbc and pooled connections
+    public void disconnectFromDB() {
+        log.debug("Closing");
+        try{
+            if(r != null) {
+                r.close();
+            }
+            if(s != null) {
+                s.close();
+            }
+            if(normal_conn != null) {
+                normal_conn.close() ;
+            }
+            if(using_pool == false && conn != null)
+            {
+               conn.close() ;
+            }
+        } catch (SQLException sqle) {
+            log.error(sqle.toString());
+        }
+
+        return ;
+    }
+
+      //////////////////////////////////////////////////////////
     
     private void lookupInitialContext() throws NamingException {
         if(ctx == null){
@@ -259,30 +259,33 @@ public class DPAccessLayer {
  
     
     /////////////////////////////////////////////////////////////
-    public ArrayList<Study> getStudies(String[] keyword_array, String DN, LogicalExpression aggreg) throws SQLException {
 
-       if (aggreg == LogicalExpression.OR)
+     public ArrayList<Study> getStudies(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg) throws SQLException {
+       if (aggreg == LogicalOperator.OR)
        {
-          return getStudies(keyword_array, DN) ;
+          return getStudiesOr(keyword_list, DN) ;
        }
        else
        {
-          return getStudiesAnd(keyword_array, DN) ;
+          return getStudiesAnd(keyword_list, DN) ;
        }
     }
 
-    public ArrayList<Study> getStudies(String[] keyword_array, String DN) throws SQLException {
-        log.debug("getStudies()");        
+    
+    public ArrayList<Study> getStudiesOr(ArrayList<String> keyword_list, String DN) throws SQLException {
+        log.debug("getStudiesOr()");
         
-        //need to convert all keywords to lowercase
-        for (int i = 0 ; i < keyword_array.length ; i ++ )
-        {
-           keyword_array[i] = keyword_array[i].toLowerCase() ;
+        //convert keyword_list to array
+        String[] keyword_array = new String[keyword_list.size()] ;
+        ListIterator li = keyword_list.listIterator() ;
+        int i = 0 ;
+        while(li.hasNext()) {
+            keyword_array[i++] = ((String)li.next()).toLowerCase() ;
         }
-        
+
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
-        String query = "begin ? := dpaccess.getStudies(?,'"+DN+"'); end;";
+        String query = "begin ? := dpaccess.getStudiesOr(?,'"+DN+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.setARRAY( 2, array_to_pass );
@@ -301,11 +304,21 @@ public class DPAccessLayer {
         }
         r.close() ;
         return MergeDuplicateStudies(study_array) ;
+
     }
 
     //the sql needs to be built on the fly so there is no need to make it a pl/sql call as the sql needs parsing each time anyway
-   public ArrayList<Study> getStudiesAnd(String[] keyword_array, String DN) throws SQLException {
-        log.debug("getStudiesAnd()");
+    public ArrayList<Study> getStudiesAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
+       log.debug("getStudiesAnd()");
+
+        //convert arraylist to array
+        String[] keyword_array = new String[keyword_list.size()] ;
+        ListIterator li = keyword_list.listIterator() ;
+        int j = 0 ;
+        while(li.hasNext()) {
+            keyword_array[j++] = (String)li.next() ;
+        }
+
 
         StringBuffer sb = new StringBuffer("select * from (select distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date " +
                                            "from study s where s.name is not null and id in (") ;
@@ -326,11 +339,11 @@ public class DPAccessLayer {
               sb.append ("\n)) where rownum < 501") ;
            }
          }
-      
+
          log.debug ("query: " + sb.toString()) ;
          //System.out.println("query: " + sb.toString()) ;
 
-         r = s.executeQuery(sb.toString());  
+         r = s.executeQuery(sb.toString());
 
         ArrayList<Study> study_array = new ArrayList<Study>() ;
         while(r.next()) {
@@ -346,46 +359,19 @@ public class DPAccessLayer {
         r.close() ;
         return MergeDuplicateStudies(study_array) ;
     }
-    
-    public ArrayList<Study> getStudies(ArrayList<String> keyword_list, String DN) throws SQLException {
-        log.debug("getStudies(ArrayList)");
-        
-        String[] ka = new String[keyword_list.size()] ;
-        ListIterator li = keyword_list.listIterator() ;
-        int i = 0 ;
-        while(li.hasNext()) {
-            ka[i++] = (String)li.next() ;
-        }
-        return getStudies(ka,DN);
-    }
-
-    public ArrayList<Study> getStudies(ArrayList<String> keyword_list, String DN, LogicalExpression aggreg) throws SQLException {
-       if (aggreg == LogicalExpression.OR)
-       {
-          return getStudies(keyword_list, DN) ;
-       }
-       else
-       {
-          return getStudiesAnd(keyword_list, DN) ;
-       }
-    }
-
-    public ArrayList<Study> getStudiesAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
-       log.debug("getStudiesAnd(ArrayList)");
-
-        String[] ka = new String[keyword_list.size()] ;
-        ListIterator li = keyword_list.listIterator() ;
-        int i = 0 ;
-        while(li.hasNext()) {
-            ka[i++] = (String)li.next() ;
-        }
-        return getStudiesAnd(ka,DN);
-    }
 
     //////////////////////////////////////////////////////////////
 
-    public ArrayList<Study> getStudiesById(String[] study_id_array, String DN) throws SQLException {
+    public ArrayList<Study> getStudiesById(ArrayList<String> study_id_list, String DN) throws SQLException {
         log.debug("getStudiesById()");
+
+        //convert array_list to array
+        String[] study_id_array = new String[study_id_list.size()] ;
+        ListIterator li = study_id_list.listIterator() ;
+        int i = 0 ;
+        while(li.hasNext()) {
+            study_id_array[i++] = (String)li.next() ;
+        }
 
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, study_id_array );
@@ -408,29 +394,20 @@ public class DPAccessLayer {
         r.close() ;
         return study_array ;
     }
+    
+    //////////////////////////////////////////////////////////////
+    public ArrayList<Investigation> getInvestigations(ArrayList<String> study_id_list, String DN) throws SQLException {
+        log.debug("getInvestigations()");
 
-    public ArrayList<Study> getStudiesById(ArrayList<String> study_id_list, String DN) throws SQLException {
-        log.debug("getStudiesById(ArrayList)");
-
-        String[] ka = new String[study_id_list.size()] ;
+        //convert array_list to int array
+        int[] intArray = new int [study_id_list.size()] ;
         ListIterator li = study_id_list.listIterator() ;
         int i = 0 ;
         while(li.hasNext()) {
-            ka[i++] = (String)li.next() ;
+            intArray[i++] = Integer.parseInt((String)li.next()) ;
         }
-        return getStudiesById(ka,DN);
-    }
-    
-    //////////////////////////////////////////////////////////////
-    public ArrayList<Investigation> getInvestigations(String[] study_id_array, String DN) throws SQLException {
-        log.debug("getInvestigations()");
         
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
-        //convert string array to integer array
-        int[] intArray = new int [study_id_array.length] ;
-        for(int i=0; i < study_id_array.length; i++) {
-            intArray[i]=Integer.parseInt(study_id_array[i]);
-        }
         ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
         String query = "begin ? := dpaccess.getInvestigations(?,'"+DN+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
@@ -453,30 +430,22 @@ public class DPAccessLayer {
         return inv_array ;
     }
 
-     public ArrayList<Investigation> getInvestigations(ArrayList<String> study_id_list, String DN) throws SQLException {
-        log.debug("getInvestigations(ArrayList)");
-
-        String[] sa = new String[study_id_list.size()] ;
-        ListIterator li = study_id_list.listIterator() ;
-        int i = 0 ;
-        while(li.hasNext()) {
-            sa[i++] = (String)li.next() ;
-        }
-        return getInvestigations(sa,DN);
-    }
 
 
     //////////////////////////////////////////////////////////////
 
-    public ArrayList<Investigation> getInvestigationsById(String[] inv_id_array, String DN) throws SQLException {
+    public ArrayList<Investigation> getInvestigationsById(ArrayList<String> inv_id_list, String DN) throws SQLException {
         log.debug("getInvestigationsById()");
 
-        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
-        //convert string array to integer array
-        int[] intArray = new int [inv_id_array.length] ;
-        for(int i=0; i < inv_id_array.length; i++) {
-            intArray[i]=Integer.parseInt(inv_id_array[i]);
+        //convert array_list to int array
+        int[] intArray = new int [inv_id_list.size()] ;
+        ListIterator li = inv_id_list.listIterator() ;
+        int i = 0 ;
+        while(li.hasNext()) {
+            intArray[i++] = Integer.parseInt((String)li.next()) ;
         }
+
+        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
         String query = "begin ? := dpaccess.getInvestigationsById(?,'"+DN+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
@@ -499,29 +468,19 @@ public class DPAccessLayer {
         return inv_array ;
     }
     
-    public ArrayList<Investigation> getInvestigationsById(ArrayList<String> inv_id_list, String DN) throws SQLException {
-        log.debug("getInvestigations(ArrayList)");
+    //////////////////////////////////////////////////////////////
+    public ArrayList<DataSet> getDataSets(ArrayList<String> inv_id_list, String DN) throws SQLException {
+        log.debug("getDataSets()");
 
-        String[] sa = new String[inv_id_list.size()] ;
+        //convert array_list to int array
+        int[] intArray = new int [inv_id_list.size()] ;
         ListIterator li = inv_id_list.listIterator() ;
         int i = 0 ;
         while(li.hasNext()) {
-            sa[i++] = (String)li.next() ;
+            intArray[i++] = Integer.parseInt((String)li.next()) ;
         }
-        return getInvestigationsById(sa,DN);
-    }
-    
-    
-    //////////////////////////////////////////////////////////////
-    public ArrayList<DataSet> getDataSets(String[] inv_id_array, String DN) throws SQLException {
-        log.debug("getDataSets()");
         
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
-        //convert string array to integer array
-        int[] intArray = new int [inv_id_array.length] ;
-        for(int i=0; i < inv_id_array.length; i++) {
-            intArray[i]=Integer.parseInt(inv_id_array[i]);
-        }
         ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
         String query = "begin ? := dpaccess.getDataSets(?,'"+DN+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
@@ -545,29 +504,19 @@ public class DPAccessLayer {
         return ds_array ;
     }
     
-    public ArrayList<DataSet> getDataSets(ArrayList<String> inv_list, String DN) throws SQLException {
-        log.debug("getDataSets(ArrayList)");
-        
-        String[] ia = new String[inv_list.size()] ;
-        ListIterator li = inv_list.listIterator() ;
+    //////////////////////////////////////////////////////////////
+    public ArrayList<DataFile> getDataFiles(ArrayList<String> ds_id_list, String DN) throws SQLException {
+        log.debug("getDataFiles()");
+
+        //convert array_list to int array
+        int[] intArray = new int [ds_id_list.size()] ;
+        ListIterator li = ds_id_list.listIterator() ;
         int i = 0 ;
         while(li.hasNext()) {
-            ia[i++] = (String)li.next() ;
+            intArray[i++] = Integer.parseInt((String)li.next()) ;
         }
-        return getDataSets(ia,DN);
-    }
-    
-    
-    //////////////////////////////////////////////////////////////
-    public ArrayList<DataFile> getDataFiles(String[] ds_id_array, String DN) throws SQLException {
-        log.debug("getDataFiles()");
         
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
-        //convert string array to integer array
-        int[] intArray = new int [ds_id_array.length] ;
-        for(int i=0; i < ds_id_array.length; i++) {
-            intArray[i]=Integer.parseInt(ds_id_array[i]);
-        }
         ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
         String query = "begin ? := dpaccess.getDataFiles(?,'"+DN+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
@@ -588,19 +537,6 @@ public class DPAccessLayer {
         r.close() ;
         return df_array ;
     }
-    
-    public ArrayList<DataFile> getDataFiles(ArrayList<String> ds_list, String DN) throws SQLException {
-        log.debug("getDataFiles(ArrayList)");
-        
-        String[] dsa = new String[ds_list.size()] ;
-        ListIterator li = ds_list.listIterator() ;
-        int i = 0 ;
-        while(li.hasNext()) {
-            dsa[i++] = (String)li.next() ;
-        }
-        return getDataFiles(dsa,DN);
-    }
-    
     
     //////////////////////////////////////////////////////////////
     

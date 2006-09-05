@@ -14,7 +14,7 @@ END;
 -- package spec:
 create or replace package dpaccess as
     function getKeywords (dn in varchar2) RETURN types.ref_cursor;
-    function getStudies (keyword_array in vc_array, dn in varchar2) RETURN types.ref_cursor;
+    function getStudiesOr (keyword_array in vc_array, dn in varchar2) RETURN types.ref_cursor;
     function getStudiesById (study_id_array in vc_array, dn in varchar2) RETURN types.ref_cursor;
     function getInvestigations (study_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
     function getInvestigationsById (inv_id_array in num_array, dn in varchar2) RETURN types.ref_cursor;
@@ -37,7 +37,7 @@ create or replace package body dpaccess as
        RETURN c_study;
     end;
 
-    function getStudies (keyword_array in vc_array, dn in varchar2) 
+    function getStudiesOr (keyword_array in vc_array, dn in varchar2) 
        RETURN types.ref_cursor
     is
        c_study types.ref_cursor;
