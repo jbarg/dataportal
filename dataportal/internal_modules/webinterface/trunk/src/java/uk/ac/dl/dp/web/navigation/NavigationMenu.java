@@ -50,9 +50,9 @@ public class NavigationMenu {
         
         
         // Main
-        NavigationMenuItem data = getMenuNaviagtionItem("User Data", null);
+        NavigationMenuItem data = getMenuNaviagtionItem("Data Center", null);
         menu.add(data);
-        data.add(getMenuNaviagtionItem("Data Center", "#{navigationMenu.getAction2}"));
+        data.add(getMenuNaviagtionItem("Data References", "#{navigationMenu.getAction2}"));
         NavigationMenuItem bookmark = getMenuNaviagtionItem("Bookmark", "addToBookmark_success");
         //bookmark.setOpen(true);
         data.add(bookmark);
@@ -71,6 +71,9 @@ public class NavigationMenu {
         NavigationMenuItem user = getMenuNaviagtionItem("User", null);
         menu.add(user);
         user.add(getMenuNaviagtionItem("User Preferences", "#{navigationMenu.getAction2}"));
+         user.add(getMenuNaviagtionItem("Grant Authorisation", "give_data_authorisation"));
+         user.add(getMenuNaviagtionItem("View Authorisations", "view_data_authorisation"));
+       
         user.add(getMenuNaviagtionItem("History", "history"));
         user.add(getMenuNaviagtionItem("Logout", "#{authorisationBean.logout}"));
         

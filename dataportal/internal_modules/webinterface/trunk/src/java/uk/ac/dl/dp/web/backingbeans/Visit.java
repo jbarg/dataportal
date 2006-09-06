@@ -10,7 +10,7 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.io.Serializable;
-import org.apache.taglibs.standard.tag.common.core.ParamSupport;
+
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
@@ -18,11 +18,14 @@ import uk.ac.cclrc.dpal.beans.Study;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
+import uk.ac.dl.dp.coreutil.delegates.DataCenterAuthDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegateStateFul;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
+import uk.ac.dl.dp.coreutil.entity.DataRefAuthorisation;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.User;
+import uk.ac.dl.dp.coreutil.interfaces.DataAuthorisationRemote;
 import uk.ac.dl.dp.coreutil.util.DPRole;
 import java.util.*;
 import javax.faces.model.SelectItem;
@@ -46,6 +49,12 @@ public class Visit implements Serializable {
     
     //private Collection<Study> currentStudies;
     
+    private Collection<DataRefAuthorisation> currentGivenAuthorisations;
+    
+    private Collection<DataRefAuthorisation> currentRecievedAuthorisations;
+    
+    private String currentUserAuthDN;
+        
     private Collection<Investigation> searchedInvestigations;
     
     private Collection<Investigation> currentInvestigations;
@@ -72,6 +81,7 @@ public class Visit implements Serializable {
     
     private HashMap<String, SRBFileManagerThread> srbManager = new HashMap<String, SRBFileManagerThread>();
     
+    private List<SelectItem> searchedUsers;
     
     private static Logger log = Logger.getLogger(Visit.class);
     
@@ -217,8 +227,8 @@ public class Visit implements Serializable {
         this.currentDatafiles = currentDatafiles;
     }
     
-    public Collection<Investigation> getSearchedInvestigations() {            
-            return searchedInvestigations;       
+    public Collection<Investigation> getSearchedInvestigations() {
+        return searchedInvestigations;
     }
     
     public void setSearchedInvestigations(Collection<Investigation> searchedInvestigations) {
@@ -267,10 +277,10 @@ public class Visit implements Serializable {
         if(currentBookmarks == null) log.trace("Setting bookmarks to null");
         else log.trace("Setting bookmarks to "+currentBookmarks);
         this.currentBookmarks = currentBookmarks;
-       if(this.currentBookmarks == null) log.trace("bookmarks is null");
+        if(this.currentBookmarks == null) log.trace("bookmarks is null");
         else log.trace("bookmarks size "+this.currentBookmarks.size());
         
-                
+        
         
     }
     
@@ -302,14 +312,14 @@ public class Visit implements Serializable {
         if(currentDatasets == null ) return false;
         else return true;
     }
-
+    
     public SRBFileManagerThread getSrbManager(String param) {
         return srbManager.get(param);
     }
-
+    
     public void putSrbManager(String param, SRBFileManagerThread srbManager) {
-       // if(!this.srbManager.containsKey(param)){
-            this.srbManager.put(param, srbManager);
+        // if(!this.srbManager.containsKey(param)){
+        this.srbManager.put(param, srbManager);
         //}
     }
     
@@ -325,6 +335,46 @@ public class Visit implements Serializable {
         return this.srbManager.containsKey(param);
     }
     
+    public List<SelectItem> getSearchedUsers() {
+        return searchedUsers;
+    }
     
+    public void setSearchedUsers(List<SelectItem> searchedUsers) {
+        this.searchedUsers = searchedUsers;
+    }
+    
+    public boolean isSearched(){
+        if(this.searchedUsers == null) return false;
+        else return true;
+    }
+
+    public Collection<DataRefAuthorisation> getCurrentGivenAuthorisations() {
+        return currentGivenAuthorisations;
+    }
+
+    public void setCurrentGivenAuthorisations(Collection<DataRefAuthorisation> currentGivenAuthorisations) {
+        this.currentGivenAuthorisations = currentGivenAuthorisations;
+    }
+
+    public Collection<DataRefAuthorisation> getCurrentReceivedAuthorisations() {
+        return currentRecievedAuthorisations;
+    }
+
+    public void setCurrentReceivedAuthorisations(Collection<DataRefAuthorisation> currentRecievedAuthorisations) {
+        this.currentRecievedAuthorisations = currentRecievedAuthorisations;
+    }
+
+    public String getCurrentUserAuthDN() {
+        return currentUserAuthDN;
+    }
+
+    public void setCurrentUserAuthDN(String currentUserAuthDN) {
+        this.currentUserAuthDN = currentUserAuthDN;
+    }
+    
+    public boolean isOtherUserDn(){
+        if (currentUserAuthDN == null) return false;
+        else return true;
+    }
     
 }

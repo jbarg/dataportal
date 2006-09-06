@@ -33,7 +33,7 @@ public class AuthorisationBean extends BaseBean {
     
     private static Logger log = Logger.getLogger(AuthorisationBean.class);
     
-               
+    
     private String username;
     private String password;
     private int lifetime;
@@ -74,20 +74,20 @@ public class AuthorisationBean extends BaseBean {
         FacesContext facesContext = getFacesContext();
         String sid = null;
         SessionDTO session = null;
-                
+        
         log.trace("Trying to log in");
         try {
             SessionDelegate sd = SessionDelegate.getInstance();
             
             //start session
-            sid  = sd.login(this.username,"kkkkkk",2);
+            sid  = sd.login(this.username,this.password,2);
             
             log.info("Logged in with sid "+sid);
             //get session info
             session  = sd.getSession(sid);
             
             log.info("Expire time: "+session.getExpireTime());
-         log.trace("User prefs: "+session.getUserPrefs().getResultsPerPage());
+            log.trace("User prefs: "+session.getUserPrefs().getResultsPerPage());
             
         } catch (CannotCreateNewUserException ex) {
             facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"Database exception",""));
@@ -110,7 +110,7 @@ public class AuthorisationBean extends BaseBean {
         //logged in ok
         Visit visit = new Visit();
         visit.setSession(session);
-        visit.setAuthorisationBean(this);       
+        visit.setAuthorisationBean(this);
         
         //set the visit object in the session
         getApplication().createValueBinding("#{"+WebConstants.SESSION_SCOPE_KEY+WebConstants.SESSION_KEY+"}").setValue(facesContext,visit);
@@ -120,12 +120,14 @@ public class AuthorisationBean extends BaseBean {
     }
     
     public String logout(){
-        log.info("Loggin out of session");        
+        log.info("Loggin out of session");
         
         FacesContext facesContext = getFacesContext();
         HttpSession http_session  = (HttpSession)facesContext.getExternalContext().getSession(false);
         http_session.removeAttribute(WebConstants.SESSION_SCOPE_KEY+WebConstants.SESSION_KEY);
-        http_session.invalidate();
+        http_session.removeAttribute(WebConstants.SESSION_KEY);
+        
+        http_session.invalidate();      
         
         return "logout";
     }
