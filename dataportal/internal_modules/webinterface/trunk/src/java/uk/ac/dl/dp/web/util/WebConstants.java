@@ -16,6 +16,8 @@ package uk.ac.dl.dp.web.util;
 public class WebConstants {
     
     public final static String SESSION_SCOPE_KEY= "sessionScope.";
-     public final static String SESSION_KEY= "visit";
-   
+    public final static String SESSION_KEY= "visit";
+    
+    public final static int MAXIMIUM_RESULTS = 100;
+    
 }

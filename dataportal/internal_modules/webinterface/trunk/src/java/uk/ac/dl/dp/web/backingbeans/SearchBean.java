@@ -27,6 +27,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import javax.faces.model.SelectItem;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dl.dp.web.util.WebConstants;
 /**
  *
  * @author gjd37
@@ -119,6 +120,20 @@ public class SearchBean extends BaseBean {
         if(investigations.size() == 0){
             facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"No results found. Please refine your query.",""));
             return null;
+        }
+        if(investigations.size() >= WebConstants.MAXIMIUM_RESULTS){
+            //TODO constants 500
+            log.warn("More than "+WebConstants.MAXIMIUM_RESULTS+" investigations returned "+investigations.size()+" removing all but "+WebConstants.MAXIMIUM_RESULTS);
+            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"More than the "+WebConstants.MAXIMIUM_RESULTS+" results shown was returned.  Please refine your query next time.",""));
+            int i = 0;
+            Collection<Investigation> limited = new ArrayList<Investigation>();
+            for(Investigation invest : investigations){
+                
+                if(i < WebConstants.MAXIMIUM_RESULTS) limited.add(invest);
+                else break;
+                i++;
+            }
+            investigations = limited;
         }
         
         //set investigations
