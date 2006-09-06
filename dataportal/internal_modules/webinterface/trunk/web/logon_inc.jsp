@@ -18,7 +18,7 @@
     <h:panelGrid columns="3">
                                               
         <h:outputLabel for="usernameinput">
-            <h:outputText value="Username"/>
+            <h:outputText styleClass="body" value="Username: "/>
         </h:outputLabel  >
                                                                                            
         <h:inputText id="Username" size="20" required="true" value="#{authorisationBean.username}">
@@ -27,7 +27,7 @@
         <h:message for="Username" styleClass="error" showSummary="false" showDetail="true" />
 
         <h:outputLabel for="passwordinput">
-            <h:outputText value="Password"/>
+            <h:outputText styleClass="body" value="Password: "/>
         </h:outputLabel  >
 
         <h:inputSecret id="Password"  size="20" required="true" value="#{authorisationBean.password}">
