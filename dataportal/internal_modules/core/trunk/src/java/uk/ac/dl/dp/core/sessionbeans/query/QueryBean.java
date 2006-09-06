@@ -468,4 +468,27 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         return r_i_l;
     }
     
+      public Collection<Investigation> getInvestigationById(String sid, String fac, String investigastionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
+         log.debug("getInvestigationId(String sid)");
+        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        //TODO check for nulls
+        User user =  new UserUtil(sid).getUser();
+        
+        DPAccessLayer dpal = null;
+        Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
+        
+        try {
+            dpal = new DPAccessLayer(fac);
+            
+            r_i_l = dpal.getInvestigationsById(new String[]{investigastionId}, user.getDn());
+                       
+        } catch (Exception ex) {
+            log.error("Unable to search Investigations ids: ",ex);
+            throw new QueryException("Unable to search Investigations ids: ",ex);
+        } finally{
+            dpal.disconnectFromDB();
+        }
+        return r_i_l;
+    }
+    
 }

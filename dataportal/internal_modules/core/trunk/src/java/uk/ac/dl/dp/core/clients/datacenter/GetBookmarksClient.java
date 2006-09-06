@@ -51,7 +51,7 @@ public class GetBookmarksClient {
                 System.out.println("-----------------\n");
                 idremove = dtos.getId();
             }
-            if(dto.size() != 0){
+           /* if(dto.size() != 0){
                 System.out.println("Updating a bookmark");
                 Bookmark mod = dto.iterator().next();
                 
@@ -61,10 +61,10 @@ public class GetBookmarksClient {
                 
                 
                 sless.addBookmark(sid,mod);
-            }
+            }*/
             // dto.remove(dto.iterator().next());
             // dto.remove(dto.iterator().next());
-             sless.removeBookmark(sid,dto.iterator().next());
+             //sless.removeBookmark(sid,dto.iterator().next());
             //
         }catch(Exception e){
             

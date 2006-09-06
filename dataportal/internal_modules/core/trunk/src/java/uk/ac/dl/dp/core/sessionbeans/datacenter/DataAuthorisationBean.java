@@ -37,10 +37,37 @@ import uk.ac.dl.dp.coreutil.util.DPAuthType;
  *
  * @author gjd37
  */
-@Stateless(mappedName=DataPortalConstants.DATA_AUTHORISATOIN)
+@Stateless(mappedName=DataPortalConstants.DATA_AUTHORISATION)
 public class DataAuthorisationBean extends SessionEJBObject implements DataAuthorisationRemote {
     
     static Logger log = Logger.getLogger(DataAuthorisationBean.class);
+    
+    
+    public void removeAuthorisedUser(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        log.debug("addAuthoriserUser()");
+        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        
+        User userSource = new UserUtil(sid).getUser();
+        
+        User givenSource = new UserUtil(DN,null).getUser();
+        
+        DataRefAuthorisationPK pk = new DataRefAuthorisationPK();
+        pk.setAuthorisedUserId(givenSource.getId());
+        pk.setSourceUserId(userSource.getId());
+        
+        
+        DataRefAuthorisation pk1 = em.find(DataRefAuthorisation.class,pk);
+        
+        if(pk1 == null){
+            log.warn("No authorisation for user: "+userSource.getDn()+" to "+givenSource.getDn()+" to remove");
+        } else{
+            em.remove(pk1);
+        }
+    }
+    
+    public void removeAuthorisedUser(String sid, DataRefAuthorisation dataRef) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        removeAuthorisedUser(sid,dataRef.getUser().getDn());
+    }
     
     public void addAuthorisedUser(String sid, String DN, Date startDate, Date endDate, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addAuthoriserUser()");
@@ -74,7 +101,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         
     }
     /* Gets the list of auth given out by current user */
-    public Collection<String> getGivenAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<DataRefAuthorisation> getGivenAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("getGivenAuthorisedList()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
@@ -82,8 +109,8 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         
         log.debug("Finding user auth given by : "+user.getDn());
         Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisationSource();
-        
-        Collection<String> sc = new ArrayList<String>();
+        log.trace("Number given: "+dra.size());
+        Collection<DataRefAuthorisation> sc = new ArrayList<DataRefAuthorisation>();
         for(DataRefAuthorisation df : dra){
             User givenUser = df.getUser();
             
@@ -96,10 +123,10 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             
             //still in date
             if(now.after(start) && now.before(expire)){
-                if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){
-                    log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType());
-                    sc.add(givenUser.getDn());
-                }
+                //if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){
+                log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType());
+                sc.add(df);
+                // }
             } else {
                 log.debug("Removing auth for user: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
                 em.remove(df);
@@ -109,8 +136,8 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
     }
     
     /* Gets the list of auth given to current user */
-    public Collection<String> getRecievedAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
-        log.debug("getGivenAuthorisedList()");
+    public Collection<DataRefAuthorisation> getRecievedAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        log.debug("getRecievedAuthorisedList()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         if(type == null) throw new IllegalArgumentException("DPAuthType cannot be null.");
         
@@ -119,7 +146,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         log.debug("Finding user auth given to: "+user.getDn());
         Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisation();
         
-        Collection<String> sc = new ArrayList<String>();
+        Collection<DataRefAuthorisation> sc = new ArrayList<DataRefAuthorisation>();
         for(DataRefAuthorisation df : dra){
             User recievedUser = df.getSource_user();
             
@@ -132,10 +159,10 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             
             //still in date
             if(now.after(start) && now.before(expire)){
-                if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){
-                    log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType());
-                    sc.add(recievedUser.getDn());
-                }
+                // if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){
+                log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType());
+                sc.add(df);
+                //}
             } else {
                 log.debug("Removing auth for user: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
                 em.remove(df);
@@ -149,12 +176,12 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         
-        Collection<String> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.DATA);
+        Collection<DataRefAuthorisation> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.DATA);
         User thisUser = new UserUtil(sid).getUser();
         
         boolean accessAllowed = false;
-        for(String dn : DNs_given){
-            if(dn.equals(DN)) {
+        for(DataRefAuthorisation dn : DNs_given){
+            if(dn.getSource_user().getDn().equals(DN)) {
                 accessAllowed = true;
                 break;
             }
@@ -163,6 +190,12 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             //get users bookmarks
             User user = new UserUtil(DN,null).getUser();
             Collection<DataReference> dataReferences  = user.getDataReference();
+            
+            //initialize urls for detatchment
+            for(DataReference ref : dataReferences){
+                //need to call size to get the data, get() methods dont do it
+                ref.getUrls().size();
+            }
             
             log.debug("User had "+dataReferences.size()+" number of DataReferences");
             
@@ -176,12 +209,13 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         
-        Collection<String> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.BOOKMARK);
+        //source user is recieved user
+        Collection<DataRefAuthorisation> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.BOOKMARK);
         User thisUser = new UserUtil(sid).getUser();
         
         boolean accessAllowed = false;
-        for(String dn : DNs_given){
-            if(dn.equals(DN)) {
+        for(DataRefAuthorisation dn : DNs_given){
+            if(dn.getSource_user().getDn().equals(DN)) {
                 accessAllowed = true;
                 break;
             }
@@ -209,17 +243,17 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(search == null || search.equals("")){
             users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
         } else{
-                users = (Collection<User>)em.createNamedQuery("User.findByDnLike").setParameter("dn",search).getResultList();
-           // users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
+            //users = (Collection<User>)em.createNamedQuery("User.findByDnLike").setParameter("dn",search).getResultList();
+            users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
             
             //TODO need to get the LIKE cluase in the User to work properly
-           /* for(User user : users){
+            for(User user : users){
                 if(!user.getDn().equals(thisUser.getDn())){
                     log.trace("Looking for "+search +" in "+user.getDn());
                     if(user.getDn().contains(search)) dns.add(user.getDn());
                 }
             }
-             return dns;*/
+            return dns;
             
         }
         for(User user : users){
