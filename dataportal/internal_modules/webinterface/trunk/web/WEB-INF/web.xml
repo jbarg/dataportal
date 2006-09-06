@@ -12,7 +12,7 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>client</param-value>
     </context-param>
-  <!--  <filter>
+   <!--<filter>
         <filter-name>AuthorisationFilter</filter-name>
         <filter-class>uk.ac.dl.dp.web.util.AuthorisationFilter</filter-class>
     </filter>-->
@@ -29,13 +29,13 @@
     </filter>
     
     <!-- extension mapping for adding <script/>, <link/>, and other resource tags to JSF-pages  -->
-    
-   <!--  <filter-mapping>
+  <!--   <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
-     <url-pattern>/*</url-pattern>
+     <url-pattern>/protected/*</url-pattern>
       
     </filter-mapping>-->
     
+  
     <filter-mapping>
         <filter-name>MyFacesExtensionsFilter</filter-name>
         <!-- servlet-name must match the name of your javax.faces.webapp.FacesServlet entry -->
