@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
@@ -24,7 +25,8 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 /**
  *
  * @author gjd37
@@ -51,11 +53,18 @@ public class Url implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
     
+    @JoinColumn(name = "DATA_REF_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private DataReference dataRefId;
+    
+    @Transient
+    private String name;
+    
     @PrePersist
     @PreUpdate
     public void prePersist(){
         modTime = new Date();
-    }   
+    }
     
     /** Creates a new instance of Url */
     public Url() {
@@ -98,6 +107,14 @@ public class Url implements Serializable {
         this.modTime = modTime;
     }
     
+    public DataReference getDataRefId() {
+        return this.dataRefId;
+    }
+    
+    public void setDataRefId(DataReference dataRefId) {
+        this.dataRefId = dataRefId;
+    }
+    
     public int hashCode() {
         int hash = 0;
         hash += (this.id != null ? this.id.hashCode() : 0);
@@ -116,6 +133,17 @@ public class Url implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
+    }
+    
+    public String getName() {
+        int i = this.url.lastIndexOf("/");
+        if(i == -1) i = this.url.lastIndexOf("\\");
+       return this.url.substring(i+1,url.length());
+       
+    }
+    
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

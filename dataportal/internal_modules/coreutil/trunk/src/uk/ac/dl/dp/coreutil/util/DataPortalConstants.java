@@ -35,7 +35,7 @@ public class DataPortalConstants {
     public final static String TRANSFER = "TransferEJB";
     public final static String QUERY = "QueryEJB";
     public final static String DATA_CENTER = "DataCenterEJB";
-    public final static String DATA_AUTHORISATOIN = "DataAuthorisationEJB";
+    public final static String DATA_AUTHORISATION = "DataAuthorisationEJB";
     public final static String LOOKUP = "LookupEJB";
     public final static String TIMER = "TimerEJB";
     

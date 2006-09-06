@@ -33,6 +33,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+
 /**
  *
  * @author gjd37
@@ -45,10 +47,12 @@ import javax.persistence.CascadeType;
     @NamedQuery(name = "DataReference.findByNote", query = "SELECT d FROM DataReference d WHERE d.note = :note"),
     @NamedQuery(name = "DataReference.findByFacility", query = "SELECT d FROM DataReference d WHERE d.facility = :facility"),
     @NamedQuery(name = "DataReference.findByQuery", query = "SELECT d FROM DataReference d WHERE d.query = :query"),
+    @NamedQuery(name = "DataReference.findByInvestigationId", query = "SELECT d FROM DataReference d WHERE d.investigationId = :investigationId"),
     @NamedQuery(name = "DataReference.findByTypeOfReference", query = "SELECT d FROM DataReference d WHERE d.typeOfReference = :typeOfReference"),
+    @NamedQuery(name = "DataReference.findByReferenceId", query = "SELECT d FROM DataReference d WHERE d.referenceId = :referenceId"),
     @NamedQuery(name = "DataReference.findByTypeOfObject", query = "SELECT d FROM DataReference d WHERE d.typeOfObject = :typeOfObject"),
-    @NamedQuery(name = "DataReference.findByUniqueKey", query = "SELECT d FROM DataReference d WHERE d.name = :name AND d.facility = :facility AND d.userId = :userId"),
-    @NamedQuery(name = "DataReference.findByModTime", query = "SELECT d FROM DataReference d WHERE d.modTime = :modTime")}
+    @NamedQuery(name = "DataReference.findByModTime", query = "SELECT d FROM DataReference d WHERE d.modTime = :modTime"),
+    @NamedQuery(name = "DataReference.findByUniqueKey", query = "SELECT d FROM DataReference d WHERE d.typeOfReference = :typeOfReference AND d.facility = :facility AND d.userId = :userId AND d.referenceId = :referenceId")}
 )
 public class DataReference implements Serializable {
     
@@ -73,6 +77,12 @@ public class DataReference implements Serializable {
     //  @Enumerated(EnumType.STRING)
     private String typeOfReference;
     
+    @Column(name = "INVESTIGATION_ID", nullable = false)
+    private Integer investigationId;
+    
+    @Column(name = "REFERENCE_ID")
+    private Integer referenceId;
+    
     @Column(name = "TYPE_OF_OBJECT")
     private String typeOfObject;
     
@@ -84,22 +94,21 @@ public class DataReference implements Serializable {
     @ManyToOne
     private User userId;
     
-    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinTable(name="DP_DATA_REF_URL",
-    joinColumns=
-            @JoinColumn(name="DATA_REF_ID", referencedColumnName="ID"),
-    inverseJoinColumns=
-            @JoinColumn(name="URL_ID", referencedColumnName="ID")
-            )
-            
-            private java.util.Collection <uk.ac.dl.dp.coreutil.entity.Url> urls;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dataRefId")
+    private java.util.Collection <Url> urls;
     
     @Transient
     private boolean selected;
     
     @Transient
+    private boolean dataset;
+    
+    @Transient
     private String printURLS;
     
+       @Transient
+    private boolean hasNote;
+       
     @PrePersist
     @PreUpdate
     public void prePersist(){
@@ -159,12 +168,28 @@ public class DataReference implements Serializable {
         this.query = query;
     }
     
+    public Integer getInvestigationId() {
+        return this.investigationId;
+    }
+    
+    public void setInvestigationId(Integer investigationId) {
+        this.investigationId = investigationId;
+    }
+    
     public String getTypeOfReference() {
         return this.typeOfReference;
     }
     
     public void setTypeOfReference(String typeOfReference) {
         this.typeOfReference = typeOfReference;
+    }
+    
+    public Integer getReferenceId() {
+        return this.referenceId;
+    }
+    
+    public void setReferenceId(Integer referenceId) {
+        this.referenceId = referenceId;
     }
     
     public String getTypeOfObject() {
@@ -191,6 +216,8 @@ public class DataReference implements Serializable {
         this.userId = userId;
     }
     
+   
+    
     public int hashCode() {
         int hash = 0;
         hash += (this.id != null ? this.id.hashCode() : 0);
@@ -209,15 +236,8 @@ public class DataReference implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
-    }
-    
-    public java.util.Collection<uk.ac.dl.dp.coreutil.entity.Url> getUrls() {
-        return urls;
-    }
-        
-    public void setUrls(java.util.Collection<uk.ac.dl.dp.coreutil.entity.Url> urls) {
-        this.urls = urls;
-    }
+    }   
+   
     
     public boolean isSelected() {
         return selected;
@@ -230,13 +250,54 @@ public class DataReference implements Serializable {
     public String getPrintURLS() {
         StringBuilder builder = new StringBuilder();
         builder.append("<table>");
+        int j = 0;
         for(Url url : urls){
             int i = url.getUrl().lastIndexOf("/");
             if(i == -1) i = url.getUrl().lastIndexOf("\\");
             builder.append("<tr><td>"+url.getUrl().substring(i+1,url.getUrl().length())+"</td></tr>");
+            j++;
+            if(j == 20 ) {
+                builder.append("<tr><td>more ...</td></tr>");
+           
+                break;
+            }
             
         }
         builder.append("</table>");
         return builder.toString();
-    }            
+    }
+    
+    public boolean isDataset() {
+        if(getTypeOfReference().equals(DPUrlRefType.DATA_SET.toString())) return true;
+        else return false;
+    }
+    
+    public void setDataset(boolean dataset) {
+        this.dataset = dataset;
+    }
+
+    public java.util.Collection<Url> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(java.util.Collection<Url> urls) {
+        this.urls = urls;
+    }
+    
+      public boolean isHasNote() {
+        if(getNote() == null || getNote().equals("")) return false;
+        else return true;
+    }
+
+    public void setHasNote(boolean hasNote) {
+        this.hasNote = hasNote;
+    }
+    
+    public int getNumberOfFiles(){
+        return urls.size();
+    }
+    
+    
+    
+    
 }

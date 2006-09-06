@@ -100,6 +100,10 @@ public class QueryDelegate {
      public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
           return qsmr.getInvestigationByStudyId(sid, fac, studyId);
      }
+     
+     public Collection<Investigation> getInvestigationById(String sid, String fac, String investigationId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+          return qsmr.getInvestigationById(sid, fac, investigationId);
+     }
   
     
     public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{

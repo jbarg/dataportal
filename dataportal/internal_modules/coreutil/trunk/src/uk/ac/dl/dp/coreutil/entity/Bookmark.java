@@ -78,6 +78,9 @@ public class Bookmark implements Serializable {
         
      @Transient
     private boolean selected;
+     
+      @Transient
+    private boolean hasNote;
     
     @PrePersist
     @PreUpdate
@@ -191,6 +194,15 @@ public class Bookmark implements Serializable {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public boolean isHasNote() {
+        if(getNote() == null || getNote().equals("")) return false;
+        else return true;
+    }
+
+    public void setHasNote(boolean hasNote) {
+        this.hasNote = hasNote;
     }
     
 }
