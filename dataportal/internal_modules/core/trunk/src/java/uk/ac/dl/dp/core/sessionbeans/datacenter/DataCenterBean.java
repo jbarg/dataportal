@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
+import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
@@ -133,13 +134,17 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         
         for(Bookmark bm : dtos){
             //TODO add log warn to continue
-            if(bm.getId() == null) continue;
+            if(bm.getId() == null) {
+                log.warn("trying to remove bookmark with no id");
+                continue;
+            }
             //security, check if users bookmark            
             if(bm.getUserId().getId().intValue() == user.getId().intValue()) {
                 //TODO trouble with detatched entities
                 //could do it this way
                 //Bookmark bookmark = em.find(Bookmark.class,bm.getId());
                 Bookmark bookmark = em.merge(bm);
+                log.trace("Removing bookmark with id: "+bm.getId());
                 em.remove(bookmark);
             }
             else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+bm.getId()+" denied for user "+user.getDn());
@@ -195,8 +200,37 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 } else {
                     log.debug("DataReference has id: "+dto.getId()+" not in DB, checking data already in DB.");
                     
-                     //new one so persist
-                    em.persist(dto);
+                    
+                    //new one so persist
+                    //could have same type of reference, reference id, facility and user (UNIQUE KEY in DataReference db here)
+                    //this is because file and dataset might have same id, hence type of reference is there
+                    Query query = em.createNamedQuery("DataReference.findByUniqueKey");
+                    query.setParameter("referenceId",dto.getReferenceId());
+                    query.setParameter("userId",user);
+                    query.setParameter("facility",dto.getFacility());
+                    query.setParameter("typeOfReference",dto.getTypeOfReference());
+                    
+                    DataReference unique = null;
+                    try {
+                        unique = (DataReference)query.getSingleResult();
+                        log.trace("Found existing entity with same data, merging data");
+                    } catch(EntityNotFoundException enfe){
+                        //no entity then persist
+                        log.trace("Entity not found with unique data, persisting new entity");
+                        em.persist(dto);
+                        continue;
+                    } catch(NoResultException nre){
+                        //no entity then persist
+                        log.trace("Entity not found with unique data, persisting new entity");
+                        em.persist(dto);
+                        continue ;
+                    }
+                    
+                    //entity here so need to update
+                    unique.setNote(dto.getNote());
+                    unique.setName(dto.getName());
+                    unique.setQuery(dto.getQuery());
+                    em.merge(unique);
                    
                 }
             }
@@ -211,11 +245,22 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         
         for(DataReference url : dtos){
             //TODO add log warn to continue
-            if(url.getId() == null) continue;
+            if(url.getId() == null) {
+                log.warn("Trying to remove null id datareference");
+                continue;
+            }
             //security, check if users bookmark
             if(url.getUserId().getId().intValue() == user.getId().intValue()) {
                 //TODO trouble with detatched entities
+                log.trace("trying to remove "+url.getId());
                 DataReference dataReference = em.merge(url);
+                
+               //need to remove all urls first cos cannot cascade through a mapping table
+                /*Collection<Url> urls = dataReference.getUrls();
+                for(Url dr_url : urls){
+                    em.remove(dr_url);
+                }*/
+                
                 em.remove(dataReference);
             }
             else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+url.getId()+" denied for user "+user.getDn()+"with id: "+user.getId());

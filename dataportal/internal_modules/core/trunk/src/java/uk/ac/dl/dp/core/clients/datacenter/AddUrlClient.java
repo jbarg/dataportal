@@ -53,6 +53,8 @@ public class AddUrlClient {
             dto.setName("New Data Set no DTO");
             dto.setNote("note");
             dto.setQuery("sql select");
+            dto.setInvestigationId(3);
+            dto.setReferenceId(5);
             Collection<Url> cs = new ArrayList<Url>();
             cs.add(new Url("srb://www.test.com/moredata"+(int)(Math.random()*10000L)));
             dto.setUrls(cs);
