@@ -18,7 +18,14 @@
      
     </head>
     <body>
-        <f:view>                  
+        <f:view>   
+            <%
+                // This is just if you want to kill the session for the current user so you can start fresh without restarting tomcat.
+                // Good for when making changes to the component tree
+           // if(!session.isNew()){
+           //     session.invalidate();
+           // }
+            %>
             <table width="954" >  
             <td width="100%">
            
@@ -45,7 +52,7 @@
     
                 <td width="100%" align="right">
                     <f:subview id="header_2">
-                        <c:import url="/inc/header_2.jsp" />
+                        <c:import url="protected/inc/header_2.jsp" />
                     </f:subview>
                 </td>
                     
@@ -98,7 +105,7 @@
 
             <table border="0" align="right">
                 <f:subview id="footer">
-                    <c:import url="/inc/footer.jsp" />
+                    <c:import url="inc/footer.jsp" />
                 </f:subview>    
             </table>
         </f:view>
