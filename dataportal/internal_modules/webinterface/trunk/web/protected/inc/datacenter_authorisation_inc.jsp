@@ -78,8 +78,8 @@
                     <t:inputCalendar  binding="#{dataAuthorisationBean.calendarFirst}" id="thirdOne" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                     currentDayCellClass="currentDayCell" value="#{dataAuthorisationBean.firstDate}" renderAsPopup="true"
                     popupTodayString="Today is:"
-                    popupDateFormat="MM/dd/yyyy" popupWeekString="Wk"
-                    helpText="MM/DD/YYYY" />
+                    popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
+                    helpText="DD/MM/YYYY" />
  
                     <h:message for="thirdOne" styleClass="error" showSummary="false" showDetail="true" />
 
@@ -92,8 +92,8 @@
                     <t:inputCalendar binding="#{dataAuthorisationBean.calendarSecond}" id="forthOne" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                     currentDayCellClass="currentDayCell" value="#{dataAuthorisationBean.secondDate}" renderAsPopup="true"
                     popupTodayString="Today is:"
-                    popupDateFormat="MM/dd/yyyy" popupWeekString="Wk"
-                    helpText="MM/DD/YYYY" validator="#{dataAuthorisationBean.validateDate}"/>
+                    popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
+                    helpText="DD/MM/YYYY" validator="#{dataAuthorisationBean.validateDate}"/>
                     
                     <h:message for="forthOne" styleClass="error" showSummary="false" showDetail="true" />
 

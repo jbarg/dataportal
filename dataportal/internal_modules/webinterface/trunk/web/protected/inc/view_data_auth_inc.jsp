@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <h:form>
@@ -106,6 +106,8 @@
                
             </t:dataTable>
 
+              <c:if test="${fn:length(requestScope.viewDataReceivedAuthorisationBean.receivedDataRefs) > sessionScope.visit.userPreferences.resultsPerPage}" >
+    
             <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 <t:dataScroller id="scroll_11"
                     for="givendatatable"
@@ -137,8 +139,11 @@
                         <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
                     </f:facet>
                 </t:dataScroller>
+                
             </h:panelGrid>
+              </c:if>
            
+            <br />
             <br />
             <br />
             <t:dataTable id="receiveddatatable" width="95%"
@@ -220,6 +225,8 @@
                
             </t:dataTable>
 
+              <c:if test="${fn:length(requestScope.viewDataGivenAuthorisationBean.givenDataRefs) > sessionScope.visit.userPreferences.resultsPerPage}" >
+    
             <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 <t:dataScroller id="scroll_1"
                     for="givendatatable"
@@ -252,7 +259,7 @@
                     </f:facet>
                 </t:dataScroller>
             </h:panelGrid>
-            
+              </c:if>
         </td>
     </table>
 </h:form>

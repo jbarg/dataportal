@@ -101,7 +101,7 @@
                     </f:facet>
                     &nbsp;  
                     <h:commandLink disabled="true" immediate="true" styleClass="#{t.nodeSelected ? 'documentSelected':'document'}" >
-                        <t:graphicImage value="../images/document.png" border="0"/>
+                        <t:graphicImage value="../../images/document.png" border="0"/>
                         <h:outputText value="#{node.description}" styleClass="file" />
                         <f:param name="id" value="#{node.identifier}"/>
                     </h:commandLink>      
