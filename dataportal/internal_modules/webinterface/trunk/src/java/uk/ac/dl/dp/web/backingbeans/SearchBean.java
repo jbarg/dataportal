@@ -190,9 +190,9 @@ public class SearchBean extends BaseBean {
     }
     
     public List<SelectItem> getFacilityList() {
-        SelectItem item  = getVisit().getFacilities().get(1);
+        String defaultFacility  = getVisit().getUserPreferences().getDefaultFacility();
         List<String> list = new ArrayList<String>();
-        list.add((String)item.getValue());
+        list.add(defaultFacility);
         this.setFacilities(list);
         return getVisit().getFacilities();
     }

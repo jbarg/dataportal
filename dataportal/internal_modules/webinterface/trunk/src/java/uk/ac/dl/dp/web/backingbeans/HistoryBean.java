@@ -72,11 +72,12 @@ public class HistoryBean extends SortableList {
     }
     
     public List<QueryRecordDTO> getHistory() {
-        
+         log.trace("Getting history..");
+               
         if(history == null){
             
             try {
-                log.trace("Getting bookmarks..");
+                log.trace("is null, getting history..");
                 history = (List<QueryRecordDTO>) QueryDelegate.getInstance().getCurrentResults(getVisit().getSid());
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);

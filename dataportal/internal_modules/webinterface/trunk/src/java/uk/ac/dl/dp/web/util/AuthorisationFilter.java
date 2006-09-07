@@ -38,17 +38,22 @@ public class AuthorisationFilter implements Filter{
         log.trace("do filter");
         HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpServletResponse httpResponse = (HttpServletResponse)response;
-        HttpSession session = httpRequest.getSession();
-        
-        Visit visit = (Visit)session.getAttribute(WebConstants.SESSION_KEY);
-        
-        if(visit == null || visit.getDn() == null){
-            httpResponse.sendRedirect("/index.jsp");
-            log.trace("sending to logon, no request");
+        HttpSession session = httpRequest.getSession(false);
+        if(session == null){
+            httpResponse.sendRedirect(httpRequest.getContextPath()+"/index.jsp");
+            log.trace("session null, sending to logon");
+        }else{
             
-        } else{
-            log.trace("Everything ok: "+visit.getDn());
-            chain.doFilter(request,response);
+            Visit visit = (Visit)session.getAttribute(WebConstants.SESSION_KEY);
+            
+            if(visit == null || visit.getDn() == null){
+                httpResponse.sendRedirect(httpRequest.getContextPath()+"/index.jsp");
+                log.trace("sending to logon, no visit");
+                
+            } else{
+                log.trace("Everything ok: "+visit.getDn());
+                chain.doFilter(request,response);
+            }
         }
         
     }
