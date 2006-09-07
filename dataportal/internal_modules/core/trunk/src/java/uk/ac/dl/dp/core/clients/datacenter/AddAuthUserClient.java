@@ -44,14 +44,14 @@ public class AddAuthUserClient {
             DataAuthorisationRemote sless = (DataAuthorisationRemote) csl.lookup(DataPortalConstants.DATA_AUTHORISATION);
             //sless.addAuthorisedUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",new Date(),new Date(System.currentTimeMillis()+100000000),DPAuthType.ALL);
             
-            Collection<DataRefAuthorisation> e = sless.getGivenAuthorisedList(sid, DPAuthType.ALL);
+            Collection<DataRefAuthorisation> e = sless.getGivenAuthorisedList(sid, DPAuthType.NONE);
             System.out.println(name +" has given access to:");
             for(DataRefAuthorisation g: e){
                 System.out.println(g.getUser().getDn());
             }
             
             System.out.println(name +" has received access from");
-            Collection<DataRefAuthorisation> e1 = sless.getRecievedAuthorisedList(sid, DPAuthType.ALL);
+            Collection<DataRefAuthorisation> e1 = sless.getRecievedAuthorisedList(sid, DPAuthType.NONE);
             for(DataRefAuthorisation g: e1){
                 System.out.println(g.getSource_user().getDn());
             }

@@ -104,10 +104,13 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
     public Collection<DataRefAuthorisation> getGivenAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("getGivenAuthorisedList()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(type == null) {
+            type = DPAuthType.NONE;
+        }
         
         User user = new UserUtil(sid).getUser();
         
-        log.debug("Finding user auth given by : "+user.getDn());
+        log.debug("Finding user auth given by : "+user.getDn()+" type: "+type);
         Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisationSource();
         log.trace("Number given: "+dra.size());
         Collection<DataRefAuthorisation> sc = new ArrayList<DataRefAuthorisation>();
@@ -123,13 +126,21 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             
             //still in date
             if(now.after(start) && now.before(expire)){
-                //if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){
-                log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType());
-                sc.add(df);
-                // }
-            } else {
+                 if(DPAuthType.NONE.equals(type)){
+                   log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+" wiht query auth type NONE");
+                    sc.add(df);
+                } else if(DPAuthType.valueOf(df.getAuthType()).equals(type) || DPAuthType.valueOf(df.getAuthType()).equals(DPAuthType.ALL)){
+                    log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType());
+                    sc.add(df);
+                } else{
+                    log.debug("Is valid but type is "+type+" and auth type given is: "+df.getAuthType());
+                }
+            } else if(now.after(expire)){
                 log.debug("Removing auth for user: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
                 em.remove(df);
+            } else if(now.before(start)){
+                log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+" is not valid yet but going to show for given");                
+                sc.add(df);
             }
         }
         return sc;
@@ -139,13 +150,15 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
     public Collection<DataRefAuthorisation> getRecievedAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("getRecievedAuthorisedList()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        if(type == null) throw new IllegalArgumentException("DPAuthType cannot be null.");
+        if(type == null) {
+            type = DPAuthType.NONE;
+        }
         
         User user = new UserUtil(sid).getUser();
         
-        log.debug("Finding user auth given to: "+user.getDn());
+        log.debug("Finding user auth given to: "+user.getDn()+" tyoe: "+type );
         Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisation();
-        
+        log.trace("Number given: "+dra.size());
         Collection<DataRefAuthorisation> sc = new ArrayList<DataRefAuthorisation>();
         for(DataRefAuthorisation df : dra){
             User recievedUser = df.getSource_user();
@@ -159,13 +172,22 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             
             //still in date
             if(now.after(start) && now.before(expire)){
-                // if(DPAuthType.valueOf(df.getAuthType()) == type || DPAuthType.valueOf(df.getAuthType()) == DPAuthType.ALL){
-                log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType());
-                sc.add(df);
-                //}
-            } else {
+                if(DPAuthType.NONE.equals(type)){
+                    log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType()+" wiht query auth type NONE");
+                    sc.add(df);
+                } else if(DPAuthType.valueOf(df.getAuthType()).equals(type) || DPAuthType.valueOf(df.getAuthType()).equals(DPAuthType.ALL)){
+                    log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType());
+                    sc.add(df);
+                } else{
+                    log.debug("Is valid but type is "+type+" and auth type given is: "+df.getAuthType());
+                }
+                
+            } else if(now.after(expire)){
                 log.debug("Removing auth for user: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
                 em.remove(df);
+            } else if(now.before(start)){
+                log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType()+" is not valid yet");
+                
             }
         }
         return sc;
