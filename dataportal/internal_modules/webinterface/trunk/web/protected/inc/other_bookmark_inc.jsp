@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <h:form>
@@ -23,7 +23,7 @@
                 headerClass="standardTable_Header"
                 footerClass="standardTable_Header"
                 rowClasses="standardTable_Row1,standardTable_Row2"
-                columnClasses="standardTable_Column,standardTable_ColumnCentered,standardTable_Column"
+                columnClasses="standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered"
                 var="data"
                 value="#{otherbookmarkBean.dataRefs}"
                 preserveDataModel="true"
@@ -37,10 +37,10 @@
                     <h:outputText value="#{visit.currentUserAuthDN}'s Bookmarks" />
                 </f:facet>
 
-                <h:column>
+               <%-- <h:column>
                     <f:facet name="header"></f:facet>            
                     <h:outputText value="#{data.id}" />              
-                </h:column>
+                </h:column>--%>
                 <h:column>
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="name" actionListener="#{otherbookmarkBean.sortColumn}">
@@ -75,8 +75,8 @@
                         displayAtDistanceX="5"
                         displayAtDistanceY="-40" rendered="#{data.hasNote}">
 
-                        <h:outputText  rendered="#{data.hasNote}" style="table-header; color : blue; font-size: 10px" value="view"/>
-                        <f:facet name="popup">
+                       <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
+ <f:facet name="popup">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
                                     <table width="150" >
@@ -105,16 +105,20 @@
                 <h:column>
             
                     <f:facet name="header">
-                        <h:outputText value="" />
+                            <h:outputText value="Goto" style="table-header; color:blue"/>
+                   
                     </f:facet>
+                     &nbsp; &nbsp; 
                     <h:commandLink style="table-header" id="goto" action="#{otherbookmarkBean.viewData}">
-                        <h:outputText value=" goto " />
+                         <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                      
                                 
                     </h:commandLink>
                 </h:column>
                
             </t:dataTable>
-
+  <c:if test="${fn:length(requestScopeScope.otherbookmarkBean.dataRefs) > sessionScope.visit.userPreferences.resultsPerPage}" >
+    
             <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 <t:dataScroller id="scroll_11"
                     for="datatable"
@@ -148,7 +152,7 @@
                 </t:dataScroller>
             </h:panelGrid>
            
-
+  </c:if>
             
         </td>
     </table>

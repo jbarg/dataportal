@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <h:form>
@@ -16,14 +16,13 @@
                 <tr ><br />&nbsp;</tr>             
             </table>
 
-   
 
             <t:dataTable id="datatable" width="95%"
                 styleClass="scrollerTable"
                 headerClass="standardTable_Header"
                 footerClass="standardTable_Header"
                 rowClasses="standardTable_Row1,standardTable_Row2"
-                columnClasses="standardTable_Column,standardTable_ColumnCentered,standardTable_Column"
+                columnClasses="standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered"
                 var="data"
                 value="#{bookmarkBean.dataRefs}"
                 preserveDataModel="true"
@@ -37,10 +36,10 @@
                     <h:outputText value="Bookmarks" />
                 </f:facet>
 
-                <h:column>
+               <%-- <h:column>
                     <f:facet name="header"></f:facet>            
                     <h:outputText value="#{data.id}" />              
-                </h:column>
+                </h:column>--%>
                 <h:column>
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="name" actionListener="#{bookmarkBean.sortColumn}">
@@ -68,13 +67,13 @@
                             <f:param name="column" value="notes"/>               
                         </h:commandLink>
                     </f:facet>
-                    &nbsp;
+                       
                     <t:popup styleClass="popup" closePopupOnExitingElement="true"
                         closePopupOnExitingPopup="true"
                         displayAtDistanceX="-175"
                         displayAtDistanceY="-40" >
 
-                        <h:outputText style="table-header; color : blue; font-size: 10px" value="add"/>
+                        <t:graphicImage id="add_button"  value="../../images/addButton.gif"  border="0"/>
                         <f:facet name="popup">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
@@ -94,8 +93,8 @@
                         closePopupOnExitingPopup="true"
                         displayAtDistanceX="5"
                         displayAtDistanceY="-40" rendered="#{data.hasNote}">
+                        <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
 
-                        <h:outputText  rendered="#{data.hasNote}" style="table-header; color : blue; font-size: 10px" value="view"/>
                         <f:facet name="popup">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
@@ -125,11 +124,13 @@
                 <h:column>
             
                     <f:facet name="header">
-                        <h:outputText value="" />
+                        <h:outputText value="Goto" style="table-header; color:blue"/>
+                   
                     </f:facet>
+                        
                     <h:commandLink style="table-header" id="goto" action="#{bookmarkBean.viewData}">
-                        <h:outputText value=" goto " />
-                                
+                        <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                             
                     </h:commandLink>
                 </h:column>
                 <h:column>
@@ -141,52 +142,57 @@
                     </h:selectBooleanCheckbox>
                 </h:column>
             </t:dataTable>
-
-            <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
-                <t:dataScroller id="scroll_11"
-                    for="datatable"
-                    fastStep="10"
-                    pageCountVar="pageCount"
-                    pageIndexVar="pageIndex"
-                    styleClass="scroller"
-                    paginator="true"
-                    paginatorMaxPages="9"
-                    paginatorTableClass="paginator"
-                    paginatorActiveColumnStyle="font-weight:bold;">
-                    <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
-                    <f:facet name="first" >
-                        <t:graphicImage url="../../images/arrow-first.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="last">
-                        <t:graphicImage url="../../images/arrow-last.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="previous">
-                        <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="next">
-                        <t:graphicImage url="../../images/arrow-next.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="fastforward">
-                        <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="fastrewind">
-                        <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
-                    </f:facet>
-                </t:dataScroller>
-            </h:panelGrid>
+          
+            <c:if test="${fn:length(sessionScope.visit.currentBookmarks) > sessionScope.visit.userPreferences.resultsPerPage}" >
+    
+                <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+                    <t:dataScroller id="scroll_11"
+                        for="datatable"
+                        fastStep="10"
+                        pageCountVar="pageCount"
+                        pageIndexVar="pageIndex"
+                        styleClass="scroller"
+                        paginator="true"
+                        paginatorMaxPages="9"
+                        paginatorTableClass="paginator"
+                        paginatorActiveColumnStyle="font-weight:bold;">
+                        <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                        <f:facet name="first" >
+                            <t:graphicImage url="../../images/arrow-first.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="last">
+                            <t:graphicImage url="../../images/arrow-last.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="previous">
+                            <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="next">
+                            <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="fastforward">
+                            <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="fastrewind">
+                            <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                        </f:facet>
+                    </t:dataScroller>
+                </h:panelGrid>
+            </c:if>
             <br />
+            <c:if test="${fn:length(requestScope.bookmarkBean.dataRefs) > 0}" >
 
-            <table width="95%" border="0">
-                <td>
-                    <h:commandButton action="#{bookmarkBean.removeBookmarks}" title="View selections" value="Delete selections"/>
+                <table width="95%" border="0">
+                    <td>
+                        <h:commandButton action="#{bookmarkBean.removeBookmarks}" title="View selections" value="Delete selections"/>
              
-                </td>
-                <td align="right">
-                    Select:&nbsp; <h:commandButton action="#{bookmarkBean.selectall}" title="All" value=" All "/>
-                    &nbsp; 
-                    <h:commandButton action="#{bookmarkBean.selectnone}" title="None" value="None"/>
-                </td>
-            </table>
+                    </td>
+                    <td align="right">
+                        Select:&nbsp; <h:commandButton action="#{bookmarkBean.selectall}" title="All" value=" All "/>
+                        &nbsp; 
+                        <h:commandButton action="#{bookmarkBean.selectnone}" title="None" value="None"/>
+                    </td>
+                </table>
+            </c:if>
         </td>
     </table>
 </h:form>

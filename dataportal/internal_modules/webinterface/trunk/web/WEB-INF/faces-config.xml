@@ -151,6 +151,16 @@
             <value>#{sessionScope.visit}</value>
         </managed-property>
     </managed-bean>
+    
+     <managed-bean>
+        <managed-bean-name>userPreferencesBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.UserPreferencesBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <property-name>visit</property-name>
+            <value>#{sessionScope.visit}</value>
+        </managed-property>
+    </managed-bean>
     <navigation-rule>
         <description>
             
@@ -334,6 +344,11 @@
         <navigation-case>
             <from-outcome>history</from-outcome>
             <to-view-id>/protected/history.jsp</to-view-id>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>user_prefs</from-outcome>
+            <to-view-id>/protected/preferences.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     <component>

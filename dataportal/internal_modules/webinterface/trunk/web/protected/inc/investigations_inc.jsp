@@ -11,11 +11,8 @@
         <td width="30">&nbsp;</td>
         <td>
             <table border="0" width="100%">
-                <tr>
-                    
-                    <c:if test="${fn:length(sessionScope.visit.searchedInvestigations) > 500}" >
-                        <h:outputText styleClass="info"  value="More than the 500 results shown was returned.  Please refine your query next time."/><br />
-                    </c:if>
+                <tr>        
+                   
                     <h:messages globalOnly="true" errorClass="error" warnClass="info" infoClass="info" />
                 </tr>                 
                 <td width="60%">    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -27,8 +24,8 @@
                         displayAtDistanceX="5"
                         displayAtDistanceY="-40" >
 
-                         <t:graphicImage url="../../images/help.gif" border="0" />
-              &nbsp;&nbsp;&nbsp;
+                        <t:graphicImage url="../../images/help.gif" border="0" />
+                        &nbsp;&nbsp;&nbsp;
                         <f:facet name="popup">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
@@ -136,7 +133,7 @@
         headerClass="standardTable_Header"
         footerClass="standardTable_Header"
         rowClasses="standardTable_Row1,standardTable_Row2"
-        columnClasses="standardTable_Column,standardTable_ColumnCentered,standardTable_Column"
+        columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
         var="invest"
         value="#{investigationBean.investigations}"
         preserveDataModel="true"
@@ -150,11 +147,11 @@
             <h:outputText value="Investigations" />
         </f:facet>
 
-        <h:column>
+        <%--<h:column>
             <f:facet name="header"></f:facet>            
             <h:outputText value="#{invest.id}" />
               
-        </h:column>
+        </h:column>--%>
         <h:column>
             <f:facet name="header">
                 <h:commandLink style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
@@ -209,47 +206,51 @@
 
     </t:dataTable>
 
-    <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
-        <t:dataScroller id="scroll_1"
-            for="data"
-            fastStep="10"
-            pageCountVar="pageCount"
-            pageIndexVar="pageIndex"
-            styleClass="scroller"
-            paginator="true"
-            paginatorMaxPages="9"
-            paginatorTableClass="paginator"
-            paginatorActiveColumnStyle="font-weight:bold;">
-            <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
-            <f:facet name="first" >
-                <t:graphicImage url="../../images/arrow-first.gif" border="1" />
-            </f:facet>
-            <f:facet name="last">
-                <t:graphicImage url="../../images/arrow-last.gif" border="1" />
-            </f:facet>
-            <f:facet name="previous">
-                <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
-            </f:facet>
-            <f:facet name="next">
-                <t:graphicImage url="../../images/arrow-next.gif" border="1" />
-            </f:facet>
-            <f:facet name="fastforward">
-                <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
-            </f:facet>
-            <f:facet name="fastrewind">
-                <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
-            </f:facet>
-        </t:dataScroller>
-         <t:dataScroller id="scroll_2"
-                    for="data"
-                    rowsCountVar="rowsCount"
-                    displayedRowsCountVar="displayedRowsCountVar"
-                    firstRowIndexVar="firstRowIndex"
-                    lastRowIndexVar="lastRowIndex"
-                    pageCountVar="pageCount"
-                    immediate="true"
-                    pageIndexVar="pageIndex"
-                    >
+    <c:if test="${fn:length(sessionScope.visit.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
+                      
+        <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+       
+            <t:dataScroller id="scroll_1"
+                for="data"
+                fastStep="10"
+                pageCountVar="pageCount"
+                pageIndexVar="pageIndex"
+                styleClass="scroller"
+                paginator="true"
+                paginatorMaxPages="9"
+                paginatorTableClass="paginator"
+                paginatorActiveColumnStyle="font-weight:bold;">
+                <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                <f:facet name="first" >
+                    <t:graphicImage url="../../images/arrow-first.gif" border="1" />
+                </f:facet>
+                <f:facet name="last">
+                    <t:graphicImage url="../../images/arrow-last.gif" border="1" />
+                </f:facet>
+                <f:facet name="previous">
+                    <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
+                </f:facet>
+                <f:facet name="next">
+                    <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                </f:facet>
+                <f:facet name="fastforward">
+                    <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                </f:facet>
+                <f:facet name="fastrewind">
+                    <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                </f:facet>
+            </t:dataScroller>
+       
+            <t:dataScroller id="scroll_2"
+                for="data"
+                rowsCountVar="rowsCount"
+                displayedRowsCountVar="displayedRowsCountVar"
+                firstRowIndexVar="firstRowIndex"
+                lastRowIndexVar="lastRowIndex"
+                pageCountVar="pageCount"
+                immediate="true"
+                pageIndexVar="pageIndex"
+                >
                 <h:outputFormat value="{0} Investigations found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
                     <f:param value="#{rowsCount}" />
                     <f:param value="#{displayedRowsCountVar}" />
@@ -259,7 +260,8 @@
                     <f:param value="#{pageCount}" />
                 </h:outputFormat>
             </t:dataScroller>
-    </h:panelGrid>
+        </h:panelGrid>
+    </c:if>
     <br />
 
     <table width="90%" border="0">

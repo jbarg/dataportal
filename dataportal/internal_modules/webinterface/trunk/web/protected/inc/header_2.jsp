@@ -22,8 +22,8 @@
             <t:navigationMenuItem id="nav_4_1"  itemLabel="Data References" action="addToDataCenter_success" />
             <t:navigationMenuItem id="nav_4_2"  itemLabel="Bookmarks" action="addToBookmark_success" />
             <t:navigationMenuItem id="nav_4_3" rendered="#{visit.otherUserDn}"  itemLabel="Others" >                  
-                <t:navigationMenuItem id="nav_4_3_1"  itemLabel="Data References" action="other_data_center" />
-                <t:navigationMenuItem id="nav_4_3_2"  itemLabel="Bookmarks" action="other_bookmark" />
+                <t:navigationMenuItem id="nav_4_3_1" rendered="#{visit.datacenterEnabled}"  itemLabel="Data References" action="other_data_center" />
+                <t:navigationMenuItem id="nav_4_3_2" rendered="#{visit.bookmarkEnabled}"  itemLabel="Bookmarks" action="other_bookmark" />
                                          
             </t:navigationMenuItem>             
         </t:navigationMenuItem>

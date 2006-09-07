@@ -26,8 +26,8 @@
                 headerClass="standardTable_Header"
                 footerClass="standardTable_Header"
                 rowClasses="standardTable_Row1,standardTable_Row2"
-                columnClasses="standardTable_Column,standardTable_ColumnCentered,standardTable_Column"
-                var="data"
+              columnClasses="standardTable_Column,standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+               var="data"
                 value="#{otherdatacenterBean.dataRefs}"
                 preserveDataModel="true"
                 rows="#{visit.userPreferences.resultsPerPage}"
@@ -46,6 +46,17 @@
                 <f:facet name="header"></f:facet>            
                 <h:outputText value="#{data.id}" />              
                 </h:column>--%>
+                 <h:column>
+                    <f:facet name="header"></f:facet>            
+                    <h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">
+                        <t:graphicImage id="down" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                        <t:graphicImage id="down-f" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                      
+                        <t:graphicImage id="up" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                        <t:graphicImage id="up-f" value="../../images/blue-folder-open.png" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                      
+                    </h:commandLink>            
+                </h:column>
                 <h:column>
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="name" actionListener="#{otherdatacenterBean.sortColumn}">
@@ -56,12 +67,7 @@
                     <h:commandLink onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
                         <h:outputText  value="#{data.name}" />
                         <f:param name="id" value="#{data.id}"/>               
-                    </h:commandLink>
-                    &nbsp; <h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">
-                        <t:graphicImage id="down" value="../../images/descending-arrow.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                        <t:graphicImage id="up" value="../../images/ascending-arrow.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                    
-                    </h:commandLink>
+                    </h:commandLink>                   
            
                 </h:column>
                 <h:column>
@@ -119,8 +125,8 @@
                         displayAtDistanceX="5"
                         displayAtDistanceY="-40" rendered="#{data.hasNote}">
 
-                        <h:outputText  rendered="#{data.hasNote}" style="table-header; color : blue; font-size: 10px" value="view"/>
-                        <f:facet name="popup">
+                      <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
+  <f:facet name="popup">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
                                     <table width="150" >
@@ -148,11 +154,13 @@
                 <h:column>
             
                     <f:facet name="header">
-                        <h:outputText value="" />
-                    </f:facet>          
+                        <h:outputText value="Goto" style="table-header; color:blue"/>
+                    </f:facet>       
+    &nbsp; &nbsp; 
 
                     <h:commandLink style="table-header" id="view" action="#{otherdatacenterBean.viewData}" rendered="#{data.dataset}">
-                        <h:outputText value=" goto " />                                
+                         <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                                                   
                     </h:commandLink>           
                 </h:column>
                
@@ -169,6 +177,8 @@
                 </f:facet>
             </t:dataTable>
 
+              <c:if test="${fn:length(requestScope.otherdatacenterBean.dataRefs) > sessionScope.visit.userPreferences.resultsPerPage}" >
+    
             <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 <t:dataScroller id="scroll_11"
                     for="datatable"
@@ -201,6 +211,7 @@
                     </f:facet>
                 </t:dataScroller>
             </h:panelGrid>
+              </c:if>
             <br />
 
    
