@@ -17,6 +17,7 @@ public enum DPAuthType {
     
     ALL("ALL"),
     BOOKMARK("BOOKMARK"),
+    NONE("NONE"),
     DATA("DATA");
     
     DPAuthType(String value) {
