@@ -78,21 +78,16 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
     
     public List<DataRefAuthorisation> getReceivedDataRefs() {
         
-        
-        //TODO having trouble with this, was always thinking it was not null even though i was setting it as null
         if(receivedDataRefs == null){
-            
             try {
                 log.trace("Getting data auth..");
-                receivedDataRefs = (List<DataRefAuthorisation>) DataCenterAuthDelegate.getInstance().getRecievedAuthorisedList(getVisit().getSid(), DPAuthType.BOOKMARK);
+                receivedDataRefs = (List<DataRefAuthorisation>) DataCenterAuthDelegate.getInstance().getRecievedAuthorisedList(getVisit().getSid(), DPAuthType.NONE);
                 if(getVisit().getCurrentUserAuthDN() != null){
                     for(DataRefAuthorisation auth : receivedDataRefs){
                         if(auth.getSource_user().getDn().equals(getVisit().getCurrentUserAuthDN())){
-                            
                             auth.setSelected(true);
                             break;
                         }
-                        
                     }
                 }
                 getVisit().setCurrentReceivedAuthorisations(receivedDataRefs);
@@ -104,7 +99,6 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
         } else{
             return (List<DataRefAuthorisation>)receivedDataRefs;
         }
-        
     }
     
     public void setReceivedDataRefs(List<DataRefAuthorisation> receivedDataRefs) {
@@ -154,7 +148,14 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
         DataRefAuthorisation dfa =   (DataRefAuthorisation) table.getRowData();
         log.trace("set other users: "+dfa.getSource_user().getDn());
         getVisit().setCurrentUserAuthDN(dfa.getSource_user().getDn());
-        
+        if(dfa.getAuthType().equals(DPAuthType.ALL.toString())){
+            getVisit().setBookmarkEnabled(true);
+            getVisit().setDatacenterEnabled(true);
+        } else if(dfa.getAuthType().equals(DPAuthType.BOOKMARK.toString())){
+            getVisit().setBookmarkEnabled(true);
+        } else if(dfa.getAuthType().equals(DPAuthType.DATA.toString())){
+            getVisit().setDatacenterEnabled(true);
+        }
         return null;
         
     }
@@ -164,7 +165,8 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
         DataRefAuthorisation dfa =   (DataRefAuthorisation) table.getRowData();
         log.trace("unset other users: "+dfa.getSource_user().getDn());
         getVisit().setCurrentUserAuthDN(null);
-        
+        getVisit().setBookmarkEnabled(false);
+        getVisit().setDatacenterEnabled(false);
         return null;
         
     }

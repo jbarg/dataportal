@@ -83,8 +83,16 @@ public class OtherDataCenterBean extends SortableList {
                 log.trace("Getting bookmarks..");
                 dataRefs = (List<DataReference>) DataCenterAuthDelegate.getInstance().getOtherUsersDataReferences(getVisit().getSid(),getVisit().getCurrentUserAuthDN());
                 getVisit().setCurrentDataReferences(dataRefs);
+            } catch (NoAccessToDataCenterException ex) {
+                log.error("Access to others data center ("+getVisit().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
+                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Access to "+getVisit().getCurrentUserAuthDN()+"'s data center denied.",""));
+                dataRefs = new ArrayList<DataReference>();
+                getFacesContext().renderResponse(); 
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
+                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error attempting to retrieve data references",""));
+                dataRefs = new ArrayList<DataReference>();
+                getFacesContext().renderResponse(); 
             }
             sort(getSort(), isAscending());
             return (List<DataReference>)dataRefs;
@@ -136,7 +144,7 @@ public class OtherDataCenterBean extends SortableList {
         
     }
     
-  
+    
     
     public String viewData(){
         log.trace("view data");

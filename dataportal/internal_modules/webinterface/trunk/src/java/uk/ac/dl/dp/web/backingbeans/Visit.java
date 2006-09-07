@@ -54,6 +54,10 @@ public class Visit implements Serializable {
     private Collection<DataRefAuthorisation> currentRecievedAuthorisations;
     
     private String currentUserAuthDN;
+    
+    private boolean bookmarkEnabled;
+    
+    private boolean datacenterEnabled;
         
     private Collection<Investigation> searchedInvestigations;
     
@@ -200,6 +204,8 @@ public class Visit implements Serializable {
     }
     
     public void setUserPreferences(UserPreferencesDTO userPreferences) {
+        getSession().setUserPrefs(userPreferences);
+        width = getWidth(userPreferences.getResolution().toString());
         this.userPreferences = userPreferences;
     }
     
@@ -211,7 +217,7 @@ public class Visit implements Serializable {
         this.width = width;
     }
     
-    private String getWidth(String res) {
+    public String getWidth(String res) {
         int length = res.length();
         String split_res = res.substring(4, length);
         int width_int = new  Integer(split_res.split("x")[0]).intValue() - 70;
@@ -375,6 +381,22 @@ public class Visit implements Serializable {
     public boolean isOtherUserDn(){
         if (currentUserAuthDN == null) return false;
         else return true;
+    }
+
+    public boolean isBookmarkEnabled() {
+        return bookmarkEnabled;
+    }
+
+    public void setBookmarkEnabled(boolean bookmarkEnabled) {
+        this.bookmarkEnabled = bookmarkEnabled;
+    }
+
+    public boolean isDatacenterEnabled() {
+        return datacenterEnabled;
+    }
+
+    public void setDatacenterEnabled(boolean datacenterEnabled) {
+        this.datacenterEnabled = datacenterEnabled;
     }
     
 }

@@ -74,17 +74,23 @@ public class OtherBookmarkBean extends SortableList {
         return true;
     }
     
-    public List<Bookmark> getDataRefs() {      
-             
+    public List<Bookmark> getDataRefs() {
+        
         if(dataRefs == null){
             try {
                 log.trace("Getting bookmarks.., bookmarks is null");
                 dataRefs = (List<Bookmark>) DataCenterAuthDelegate.getInstance().getOtherUsersBookmarks(getVisit().getSid(), getVisit().getCurrentUserAuthDN());
-              
+                
+            }catch (NoAccessToDataCenterException ex) {
+                log.error("Access to others bookmarks ("+getVisit().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
+                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Access to "+getVisit().getCurrentUserAuthDN()+"'s bookmarks denied.",""));
+                dataRefs = new ArrayList<Bookmark>();
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
-            }           
-            return (List<Bookmark>)dataRefs;        
+                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error attempting to retrieve bookmarks",""));
+                dataRefs = new ArrayList<Bookmark>();
+            }
+            return (List<Bookmark>)dataRefs;
         }else return dataRefs;
         
     }
@@ -130,7 +136,7 @@ public class OtherBookmarkBean extends SortableList {
         Collections.sort( (List<Bookmark>)getDataRefs(), comparator);
         
     }
-       
+    
     
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
@@ -171,7 +177,7 @@ public class OtherBookmarkBean extends SortableList {
         return "search_success";
         
     }
-      
+    
     
     //Faces objects
     public FacesContext getFacesContext(){

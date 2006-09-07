@@ -84,7 +84,7 @@ public class ViewDataGivenAuthorisationBean extends SortableList {
             
             try {
                 log.trace("Getting data auth..");
-                givenDataRefs = (List<DataRefAuthorisation>) DataCenterAuthDelegate.getInstance().getGivenAuthorisedList(getVisit().getSid(), DPAuthType.BOOKMARK);
+                givenDataRefs = (List<DataRefAuthorisation>) DataCenterAuthDelegate.getInstance().getGivenAuthorisedList(getVisit().getSid(), DPAuthType.NONE);
                 getVisit().setCurrentGivenAuthorisations(givenDataRefs);
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
