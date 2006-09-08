@@ -56,6 +56,8 @@ public class BookmarkBean extends SortableList {
     private List<Bookmark> dataRefs;
     private Visit visit;
     private String note;
+    private boolean populated; 
+    private boolean length;
     
     public BookmarkBean(){
         super("name");
@@ -307,6 +309,25 @@ public class BookmarkBean extends SortableList {
         
         getVisit().setCurrentBookmarks(null);
         return null;
+    }
+
+    public boolean isPopulated() {
+        if(getDataRefs().size() > 0){
+        return true;
+        }
+        else return false;
+    }
+
+    public void setPopulated(boolean populated) {
+        this.populated = populated;
+    }
+
+    public boolean getLength() {
+        return getDataRefs().size() > getVisit().getUserPreferences().getResultsPerPage();
+    }
+
+    public void setLength(boolean length) {
+        this.length = length;
     }
     
     

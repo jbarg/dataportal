@@ -55,6 +55,8 @@ public class DataCenterBean extends SortableList {
     private HtmlDataTable table;
     private List<DataReference> dataRefs;
     private Visit visit;
+    private boolean populated; 
+    private boolean length;
     
     public DataCenterBean(){
         super("name");
@@ -336,6 +338,24 @@ public class DataCenterBean extends SortableList {
     
     public void setVisit(Visit visit) {
         this.visit = visit;
+    }
+     public boolean isPopulated() {
+        if(getDataRefs().size() > 0){
+        return true;
+        }
+        else return false;
+    }
+
+    public void setPopulated(boolean populated) {
+        this.populated = populated;
+    }
+
+    public boolean getLength() {
+        return getDataRefs().size() > getVisit().getUserPreferences().getResultsPerPage();
+    }
+
+    public void setLength(boolean length) {
+        this.length = length;
     }
     
     

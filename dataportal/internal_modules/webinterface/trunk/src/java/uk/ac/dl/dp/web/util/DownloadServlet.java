@@ -19,8 +19,8 @@ import java.net.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import uk.ac.dl.srbapi.srb.SRBFileManager;
-import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
+import uk.ac.dl.srbapi.srb.*;
+
 
 /**
  *
@@ -129,51 +129,64 @@ public class DownloadServlet extends HttpServlet {
             log.trace("SrbManager not null");
             SRBFileManagerThread man = visit.getSrbManager(id);
             if(man.isFinished()){
-                log.trace("Download complete");
-                
-                srbDownload = man.getFile();
-                //downloadedFiles.add(srbDownload.getAbsolutePath());
-                log.trace("Downloading: "+srbDownload.getAbsolutePath());
-                log.trace("setting srbman to null");
-                visit.removeSrbManager(id);
-                
-                ServletOutputStream out = response.getOutputStream();
-                
-                //downloaded file, pump to page
-                ////My Way
-                String contenttype = getContentType(srbDownload.getAbsolutePath());
-                response.setContentType(contenttype);
-                response.setBufferSize(65536);
-                if(type.equals(DPUrlRefType.DATA_SET.toString())) {
-                    response.setHeader("Content-disposition","attachment; filename="+name+".zip"+" ");
+                if(man.getException() == null){
+                    log.trace("Download complete");
+                    
+                    srbDownload = man.getFile();
+                    //downloadedFiles.add(srbDownload.getAbsolutePath());
+                    log.trace("Downloading: "+srbDownload.getAbsolutePath());
+                    log.trace("setting srbman to null");
+                    visit.removeSrbManager(id);
+                    
+                    ServletOutputStream out = response.getOutputStream();
+                    
+                    //downloaded file, pump to page
+                    ////My Way
+                    String contenttype = getContentType(srbDownload.getAbsolutePath());
+                    response.setContentType(contenttype);
+                    response.setBufferSize(65536);
+                    if(type.equals(DPUrlRefType.DATA_SET.toString())) {
+                        response.setHeader("Content-disposition","attachment; filename="+name+".zip"+" ");
+                    } else {
+                        response.setHeader("Content-disposition","attachment; filename="+name+" ");
+                    }
+                    
+                    //my downlaod way
+                    FileInputStream myFileInputStream = new FileInputStream(srbDownload);
+                    BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
+                    
+                    BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(out);
+                    
+                    byte[] buffer = new byte[65536];
+                    int c=0;
+                    log.trace("nothing after this");
+                    while ((c=myBufferedInputStream.read(buffer)) > -1) {
+                        myBufferedOutputStream.write(buffer,0,c);
+                    }
+                    
+                    myBufferedOutputStream.flush();
+                    myBufferedOutputStream.close();
+                    myBufferedInputStream.close();
+                    myFileInputStream.close();
+                    myFileInputStream = null;
+                    
+                    log.trace("deleting "+srbDownload.getAbsolutePath()+"?:"+srbDownload.delete());
+                    if(type.equals(DPUrlRefType.FILE.toString())) log.trace("deleting "+srbDownload.getParentFile().getAbsolutePath()+"?:"+srbDownload.getParentFile().delete());
+                    
+                    out.close();
                 } else {
-                    response.setHeader("Content-disposition","attachment; filename="+name+" ");
+                    String message = "";
+                    if(man.getException() instanceof NoAccessToDataStorage){
+                        log.warn("User: "+visit.getDn()+" is not registered to SRB: "+srbUrl);
+                        message = "No access to data storage.";
+                    }else if(man.getException() instanceof ReadAccessException){
+                        log.warn("User: "+visit.getDn()+" has no read access to: "+srbUrl);
+                        message = "Insufficient access rights to the data.";
+                    }
+                    RequestDispatcher dispatcher =
+                            req.getRequestDispatcher("/protected/downloaderror.jsp?message="+message+"&name="+name);
+                    if (dispatcher != null) dispatcher.forward(req, response);
                 }
-                
-                //my downlaod way
-                FileInputStream myFileInputStream = new FileInputStream(srbDownload);
-                BufferedInputStream myBufferedInputStream = new BufferedInputStream(myFileInputStream);
-                
-                BufferedOutputStream myBufferedOutputStream = new BufferedOutputStream(out);
-                
-                byte[] buffer = new byte[65536];
-                int c=0;
-                log.trace("nothing after this");
-                while ((c=myBufferedInputStream.read(buffer)) > -1) {
-                    myBufferedOutputStream.write(buffer,0,c);
-                }
-                
-                myBufferedOutputStream.flush();
-                myBufferedOutputStream.close();
-                myBufferedInputStream.close();
-                myFileInputStream.close();
-                myFileInputStream = null;
-                
-                log.trace("deleting "+srbDownload.getAbsolutePath()+"?:"+srbDownload.delete());
-                if(type.equals(DPUrlRefType.FILE.toString())) log.trace("deleting "+srbDownload.getParentFile().getAbsolutePath()+"?:"+srbDownload.getParentFile().delete());
-                
-                out.close();
-                
             } else{
                 log.trace("Download : "+man.getPercentageComplete());
                 RequestDispatcher dispatcher =
