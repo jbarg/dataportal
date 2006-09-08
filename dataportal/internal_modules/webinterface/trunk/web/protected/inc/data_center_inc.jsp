@@ -16,8 +16,12 @@
                 <tr height="10"><br />&nbsp;</tr>
              
             </table>
+            <h:outputText rendered="#{!bookmarkBean.populated}" escape="false "value="<br />"  styleClass="info" />            
+            <h:outputText rendered="#{!bookmarkBean.populated}" value="There are no items in data center" styleClass="info" />
+            <h:outputText rendered="#{!bookmarkBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
+           
 
-            <t:dataTable id="datatable" width="95%"
+            <t:dataTable rendered="#{bookmarkBean.populated}" id="datatable" width="95%"
                 styleClass="scrollerTable"
                 headerClass="standardTable_Header"
                 footerClass="standardTable_Header"
@@ -33,7 +37,7 @@
                 sortAscending="#{datacenterBean.ascending}"
                 preserveSort="true" 
                 varDetailToggler="detailToggler">                                
-                       <f:facet name="header">
+                <f:facet name="header">
                     <h:outputText value="Data References" />
                 </f:facet>          
                 <%-- <f:facet name="header">
@@ -185,7 +189,7 @@
                         <f:param name="id" value="#{data.id}"/>
                     </h:selectBooleanCheckbox>
                 </h:column>
-             <f:facet name="detailStamp">
+                <f:facet name="detailStamp">
                     <t:dataTable preserveSort="true" rendered="#{data.dataset}" width="95%" id="cities" styleClass="standardTable_Column" var="url" value="#{data.urls}">
                                                      
                         <h:column>
@@ -200,44 +204,42 @@
                 </f:facet>
             </t:dataTable>
           
-            <c:if test="${fn:length(sessionScope.visit.currentDataReferences) > sessionScope.visit.userPreferences.resultsPerPage}" >
-    
-                <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
-                    <t:dataScroller id="scroll_11"
-                        for="datatable"
-                        fastStep="10"
-                        pageCountVar="pageCount"
-                        pageIndexVar="pageIndex"
-                        styleClass="scroller"
-                        paginator="true"
-                        paginatorMaxPages="9"
-                        paginatorTableClass="paginator"
-                        paginatorActiveColumnStyle="font-weight:bold;">
-                        <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
-                        <f:facet name="first" >
-                            <t:graphicImage url="../../images/arrow-first.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="last">
-                            <t:graphicImage url="../../images/arrow-last.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="previous">
-                            <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="next">
-                            <t:graphicImage url="../../images/arrow-next.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="fastforward">
-                            <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="fastrewind">
-                            <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
-                        </f:facet>
-                    </t:dataScroller>
-                </h:panelGrid>
-            </c:if>
+            
+            <h:panelGrid columns="1" rendered="#{bookmarkBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+                <t:dataScroller id="scroll_11"
+                    for="datatable"
+                    fastStep="10"
+                    pageCountVar="pageCount"
+                    pageIndexVar="pageIndex"
+                    styleClass="scroller"
+                    paginator="true"
+                    paginatorMaxPages="9"
+                    paginatorTableClass="paginator"
+                    paginatorActiveColumnStyle="font-weight:bold;">
+                    <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                    <f:facet name="first" >
+                        <t:graphicImage url="../../images/arrow-first.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="last">
+                        <t:graphicImage url="../../images/arrow-last.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="previous">
+                        <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="next">
+                        <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="fastforward">
+                        <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="fastrewind">
+                        <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                    </f:facet>
+                </t:dataScroller>
+            </h:panelGrid>
+          
             <br />
-            <c:if test="${fn:length(requestScope.datacenterBean.dataRefs) > 0}" >
-
+            <f:verbatim rendered="#{bookmarkBean.length}">
                 <table width="95%" border="0">
                     <td>
                         <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
@@ -249,7 +251,7 @@
                         <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
                     </td>
                 </table>
-            </c:if>
+            </f:verbatim>
         </td>
     </table>
 </h:form>

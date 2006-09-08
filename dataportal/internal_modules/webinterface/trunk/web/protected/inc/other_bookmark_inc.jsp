@@ -15,10 +15,13 @@
         
                 <tr ><br />&nbsp;</tr>             
             </table>
-
+ <h:outputText rendered="#{!otherbookmarkBean.populated}" escape="false "value="<br />"  styleClass="info" />            
+            <h:outputText rendered="#{!otherbookmarkBean.populated}" value="There are no items in #{visit.currentUserAuthDN}'s bookmarks" styleClass="info" />
+            <h:outputText rendered="#{!otherbookmarkBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
+           
    
 
-            <t:dataTable id="datatable" width="95%"
+            <t:dataTable rendered="#{otherbookmarkBean.populated}" id="datatable" width="95%"
                 styleClass="scrollerTable"
                 headerClass="standardTable_Header"
                 footerClass="standardTable_Header"
@@ -68,7 +71,7 @@
                             <f:param name="column" value="notes"/>               
                         </h:commandLink>
                     </f:facet>
-                    &nbsp;                   
+                                       
              
                     <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                         closePopupOnExitingPopup="true"
@@ -117,9 +120,8 @@
                 </h:column>
                
             </t:dataTable>
-  <c:if test="${fn:length(requestScopeScope.otherbookmarkBean.dataRefs) > sessionScope.visit.userPreferences.resultsPerPage}" >
     
-            <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+            <h:panelGrid columns="1" rendered="#{otherbookmarkBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 <t:dataScroller id="scroll_11"
                     for="datatable"
                     fastStep="10"
@@ -152,7 +154,7 @@
                 </t:dataScroller>
             </h:panelGrid>
            
-  </c:if>
+
             
         </td>
     </table>

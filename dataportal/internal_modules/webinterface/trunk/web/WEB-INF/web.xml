@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+   
+    
     <context-param>
         <param-name>com.sun.faces.verifyObjects</param-name>
         <param-value>false</param-value>
@@ -12,7 +14,7 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>client</param-value>
     </context-param>
-   <filter>
+    <filter>
         <filter-name>AuthorisationFilter</filter-name>
         <filter-class>uk.ac.dl.dp.web.util.AuthorisationFilter</filter-class>
     </filter>
@@ -31,12 +33,12 @@
     <!-- extension mapping for adding <script/>, <link/>, and other resource tags to JSF-pages  -->
     <filter-mapping>
         <filter-name>AuthorisationFilter</filter-name>
-     <url-pattern>/protected/*</url-pattern>
-       <url-pattern>/faces/protected/*</url-pattern>
-      
+        <url-pattern>/protected/*</url-pattern>
+        <url-pattern>/faces/protected/*</url-pattern>
+        
     </filter-mapping>
     
-  
+    
     <filter-mapping>
         <filter-name>MyFacesExtensionsFilter</filter-name>
         <!-- servlet-name must match the name of your javax.faces.webapp.FacesServlet entry -->

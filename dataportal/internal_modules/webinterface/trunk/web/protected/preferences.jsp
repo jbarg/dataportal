@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
@@ -11,8 +11,8 @@
    
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
-        <title>Data Portal | History</title>
-        <link rel="stylesheet" type="text/css" href="../css/basic.css" />
+     <title>CCLRC Data Portal </title>
+          <link rel="stylesheet" type="text/css" href="../css/basic.css" />
          
     </head>
     <body>

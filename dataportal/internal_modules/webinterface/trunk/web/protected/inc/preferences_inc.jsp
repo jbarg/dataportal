@@ -60,7 +60,7 @@
                     
                     <h:panelGroup/>
 
-                    <h:commandButton action="#{userPreferencesBean.save}" title="Search" value="Save"/>
+                    <h:commandButton action="#{userPreferencesBean.save}" title="Search" value="Update"/>
                     <h:panelGroup/>
                    
                 </h:panelGrid>

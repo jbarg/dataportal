@@ -15,12 +15,65 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Error</title>
+        <link rel="stylesheet" type="text/css" href="../css/basic.css" />
+       
+        <title>Download Error </title>
+                 
+      
+        <style>
+            .bpui_progressbar_barAreaContainer {
+            border-style: groove !important;
+            border-width: medium !important;
+            }
+    
+            .bpui_progressbar_portionComplete {
+            background: #FF0000 !important;
+            }
+
+            .bpui_progressbar_portionRemaining {
+            background: lightgrey !important;
+            }    
+            .bpui_progressbar_barAreaContainer {
+            }
+
+            .bpui_progressbar_barArea {
+            height: 18px;
+            }
+
+            .bpui_progressbar_portionComplete {
+            background: #00FF00;
+            }
+
+            .bpui_progressbar_portionRemaining {
+            background: #D9E6EC;
+            }
+
+            .bpui_progressbar_percentageText {
+            text-align: center;
+            }
+
+        </style>        
     </head>
     <body>
+        <br />
+        <p align="center"><font size="2">Error downloading:</font>   <%= request.getParameter("name") %></p>               
+      
+      
+        <br />
+        <p align="center" class="error"><% 
 
-    <h1>Error Downloading File</h1>
-    
-    
+            String error = request.getParameter("message");
+            if(error == null){
+                error = "Unexpected error downloading data.";
+            }
+            out.print(error);
+
+        %></p>
+        <br />
+        <table align="center">
+            <td align="right"> <input type="button"  value="Close" onclick="window.close()"/>
+            </td>
+        </table>
+        
     </body>
 </html>

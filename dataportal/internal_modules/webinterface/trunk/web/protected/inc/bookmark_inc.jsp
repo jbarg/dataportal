@@ -15,9 +15,12 @@
         
                 <tr ><br />&nbsp;</tr>             
             </table>
-
-
-            <t:dataTable id="datatable" width="95%"
+            <h:outputText rendered="#{!bookmarkBean.populated}" escape="false "value="<br />"  styleClass="info" />            
+            <h:outputText rendered="#{!bookmarkBean.populated}" value="There are no items in bookmarks" styleClass="info" />
+            <h:outputText rendered="#{!bookmarkBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
+            
+ 
+            <t:dataTable rendered="#{bookmarkBean.populated}" id="datatable" width="95%"
                 styleClass="scrollerTable"
                 headerClass="standardTable_Header"
                 footerClass="standardTable_Header"
@@ -36,9 +39,9 @@
                     <h:outputText value="Bookmarks" />
                 </f:facet>
 
-               <%-- <h:column>
-                    <f:facet name="header"></f:facet>            
-                    <h:outputText value="#{data.id}" />              
+                <%-- <h:column>
+                <f:facet name="header"></f:facet>            
+                <h:outputText value="#{data.id}" />              
                 </h:column>--%>
                 <h:column>
                     <f:facet name="header">
@@ -143,9 +146,8 @@
                 </h:column>
             </t:dataTable>
           
-            <c:if test="${fn:length(sessionScope.visit.currentBookmarks) > sessionScope.visit.userPreferences.resultsPerPage}" >
-    
-                <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+           
+                <h:panelGrid  rendered="#{bookmarkBean.length}" columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                     <t:dataScroller id="scroll_11"
                         for="datatable"
                         fastStep="10"
@@ -177,10 +179,9 @@
                         </f:facet>
                     </t:dataScroller>
                 </h:panelGrid>
-            </c:if>
+           
             <br />
-            <c:if test="${fn:length(requestScope.bookmarkBean.dataRefs) > 0}" >
-
+            <f:verbatim rendered="#{bookmarkBean.length}">
                 <table width="95%" border="0">
                     <td>
                         <h:commandButton action="#{bookmarkBean.removeBookmarks}" title="View selections" value="Delete selections"/>
@@ -192,7 +193,7 @@
                         <h:commandButton action="#{bookmarkBean.selectnone}" title="None" value="None"/>
                     </td>
                 </table>
-            </c:if>
+            </f:verbatim>
         </td>
     </table>
 </h:form>

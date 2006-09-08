@@ -16,18 +16,19 @@
                 <tr height="10"><br />&nbsp;</tr>
              
             </table>
+            <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
+            <h:outputText rendered="#{!otherdatacenterBean.populated}" value="There are no items in #{visit.currentUserAuthDN}'s data references" styleClass="info" />
+            <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
+          
+ 
 
-
-
-    
-
-            <t:dataTable id="datatable" width="95%"
+            <t:dataTable rendered="#{otherdatacenterBean.populated}" id="datatable" width="95%"
                 styleClass="scrollerTable"
                 headerClass="standardTable_Header"
                 footerClass="standardTable_Header"
                 rowClasses="standardTable_Row1,standardTable_Row2"
-              columnClasses="standardTable_Column,standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
-               var="data"
+                columnClasses="standardTable_Column,standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+                var="data"
                 value="#{otherdatacenterBean.dataRefs}"
                 preserveDataModel="true"
                 rows="#{visit.userPreferences.resultsPerPage}"
@@ -46,7 +47,7 @@
                 <f:facet name="header"></f:facet>            
                 <h:outputText value="#{data.id}" />              
                 </h:column>--%>
-                 <h:column>
+                <h:column>
                     <f:facet name="header"></f:facet>            
                     <h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">
                         <t:graphicImage id="down" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
@@ -118,15 +119,15 @@
                         </h:commandLink>
                     </f:facet>
                        
-                    &nbsp;&nbsp;
+                  
              
                     <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                         closePopupOnExitingPopup="true"
                         displayAtDistanceX="5"
                         displayAtDistanceY="-40" rendered="#{data.hasNote}">
 
-                      <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
-  <f:facet name="popup">
+                        <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
+                        <f:facet name="popup">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
                                     <table width="150" >
@@ -156,10 +157,10 @@
                     <f:facet name="header">
                         <h:outputText value="Goto" style="table-header; color:blue"/>
                     </f:facet>       
-    &nbsp; &nbsp; 
+    
 
                     <h:commandLink style="table-header" id="view" action="#{otherdatacenterBean.viewData}" rendered="#{data.dataset}">
-                         <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                        <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
                                                    
                     </h:commandLink>           
                 </h:column>
@@ -168,7 +169,10 @@
                     <t:dataTable preserveSort="true"  width="95%" id="cities" styleClass="standardTable_Column" var="url" value="#{data.urls}">
                                                      
                         <h:column>
-                            &nbsp; <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" >
+                            &nbsp;&nbsp; &nbsp;
+                            <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
+                     
+                            <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" >
                                 <h:outputText  value="#{url.name}" style="font-size: 10px"/>
                          
                             </h:commandLink>
@@ -177,9 +181,8 @@
                 </f:facet>
             </t:dataTable>
 
-              <c:if test="${fn:length(requestScope.otherdatacenterBean.dataRefs) > sessionScope.visit.userPreferences.resultsPerPage}" >
-    
-            <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+         
+            <h:panelGrid columns="1"  rendered="#{otherdatacenterBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 <t:dataScroller id="scroll_11"
                     for="datatable"
                     fastStep="10"
@@ -211,7 +214,7 @@
                     </f:facet>
                 </t:dataScroller>
             </h:panelGrid>
-              </c:if>
+              
             <br />
 
    
