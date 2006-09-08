@@ -19,7 +19,7 @@
                 <h:panelGrid columns="4">
                                               
                     <h:outputLabel>
-                        <h:outputText styleClass="body" value="Search DNs"/>
+                        <h:outputText styleClass="body" value="Search DNs:"/>
                     </h:outputLabel  >
                                                                                            
                     <h:inputText id="dn" size="30" required="true" value="#{dataAuthorisationBean.searchString}">
@@ -30,8 +30,8 @@
                         displayAtDistanceX="5"
                         displayAtDistanceY="-40" rendered="#{data.hasNote}">
 
-                          <t:graphicImage url="../../images/help.gif" border="0" />
-                   <f:facet name="popup">
+                        <t:graphicImage url="../../images/help.gif" border="0" />
+                        <f:facet name="popup">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
                                     <table width="100" >
@@ -56,7 +56,7 @@
             <h:form>
                 <h:panelGrid rendered="#{visit.searched}" columns="3">
                     <h:outputLabel >
-                        <h:outputText styleClass="body" value="Grant User: "/>
+                        <h:outputText styleClass="body" value="Grant User: "/>&nbsp;
                     </h:outputLabel  >
                                                                                            
                     <h:selectOneMenu id="usernameselect" required="true" value="#{dataAuthorisationBean.searchUser}" >
@@ -84,7 +84,7 @@
                     <h:message for="thirdOne" styleClass="error" showSummary="false" showDetail="true" />
 
 
-                    <h:outputLabel>&nbsp;&nbsp;
+                    <h:outputLabel>
                         <h:outputText styleClass="body" value="Access to:"/>
                     </h:outputLabel  >
                                                                                            
@@ -97,10 +97,10 @@
                     
                     <h:message for="forthOne" styleClass="error" showSummary="false" showDetail="true" />
 
-                       
-                </h:panelGrid>
-                <br />
-                <h:panelGrid  rendered="#{visit.searched}" columns="3">
+                    <h:panelGroup><br /></h:panelGroup>
+                    <h:panelGroup/>
+               
+                    <h:panelGroup/>
                                               
                     <h:outputLabel>
                         <h:outputText styleClass="body" value="To your: "/>
@@ -116,13 +116,14 @@
                     </h:selectOneMenu>
                     <h:message for="typeAccess" styleClass="error" showSummary="false" showDetail="true" />
 
-                </h:panelGrid>
-            
-                <br />
-                <h:panelGrid rendered="#{visit.searched}" columns="1">                 
-                                                                                           
+                    <h:panelGroup><br /></h:panelGroup>
+                    <h:panelGroup/>
+               
+                    <h:panelGroup/> 
+    
+                    <h:panelGroup/>                                                                      
                     <h:commandButton action="#{dataAuthorisationBean.grant}" title="Search" value="Grant Access"/>     
-                  
+                    <h:panelGroup/>    
                 </h:panelGrid>
             </h:form>    
         </td>

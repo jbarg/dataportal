@@ -11,7 +11,7 @@
          
        </h:panelGrid>
                    
-       <h:panelGrid  border="0" columns="3">      
+       <h:panelGrid  border="0" columns="4">      
                  
            <h:outputLabel for="facilities">
                <h:outputText value="Search: " style="font-size:14px"/>
@@ -23,6 +23,8 @@
                <f:validateLength minimum="1" />
            </s:selectManyPicklist>
               
+           <h:panelGroup/>
+            
            <h:message for="facilities" styleClass="error"/>
                
            <h:outputLabel for="keyword">
@@ -31,7 +33,22 @@
            
            <s:inputSuggestAjax required="true" suggestedItemsMethod="#{keyword.getSuggest}"
            id="keyword" value="#{searchBean.keyword}" charset="utf-8"/>
-                            
+            
+           <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+               closePopupOnExitingPopup="true"
+               displayAtDistanceX="5"
+               displayAtDistanceY="-40">
+
+               <t:graphicImage url="../../images/help.gif" border="0" />
+               <f:facet name="popup">
+                   <h:panelGroup>
+                       <h:panelGrid columns="1" >
+                           <h:outputText value="Exact keyword match only. Case insensititve."/>                                 
+                          
+                       </h:panelGrid>
+                   </h:panelGroup>
+               </f:facet>
+           </t:popup>       
            <%--<s:inputSuggest id="keyword" value="#{searchBean.keyword}" required="true">
            <f:selectItems value="#{keyword.keywords}"/>
            </s:inputSuggest>--%>
@@ -50,7 +67,7 @@
            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                closePopupOnExitingPopup="true"
                displayAtDistanceX="5"
-               displayAtDistanceY="-40" rendered="#{data.hasNote}">
+               displayAtDistanceY="-40" >
 
                <t:graphicImage url="../../images/help.gif" border="0" />
                <f:facet name="popup">
@@ -67,8 +84,9 @@
 
            
            <h:panelGroup/>
-
+           <h:panelGroup/>
            <h:commandButton action="#{searchBean.searchByKeyword}" title="search" value="Search"/>
+          
            <h:panelGroup/>
        </h:panelGrid>
       

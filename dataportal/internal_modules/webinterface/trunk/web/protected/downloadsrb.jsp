@@ -16,8 +16,10 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="refresh" content="1">
-        <title>Download</title>
-        
+          <link rel="stylesheet" type="text/css" href="../css/basic.css" />
+      
+        <title>Downloading... </title>
+          
         <script>
             function remove(){
             var close = <%= request.getParameter("close")%>;
@@ -77,8 +79,8 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         </style>        
     </head>
     <body onload="Func1Delay();">
-
-        <p><font size="3">Downloading</font>..   <%= request.getParameter("name") %></p>               
+<br />  
+        <p align="center"><font size="2">Downloading:</font>   <%= request.getParameter("name") %></p>               
       
         <%
             String percent = request.getParameter("percentage") ;
@@ -87,15 +89,19 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             }
         %>  
         
-        <br />
-        <table id="progressBar_barAreaContainer" class="bpui_progressbar_barAreaContainer" border="0" cellspacing="0" cellpadding="0" width="100%">
+        
+        <table align="center" id="progressBar_barAreaContainer" class="bpui_progressbar_barAreaContainer" border="0" cellspacing="0" cellpadding="0" width="90%">
             <tr id="progressBar_barArea" class="bpui_progressbar_barArea">
                 <td id="progressBar_portionIndeterminate" class="bpui_progressbar_portionRemaining" width="0%"></td>
                 <td id="progressBar_portionComplete" class="bpui_progressbar_portionComplete" width="<%= percent %>%"></td>
                 <td id="progressBar_portionRemaining" class="bpui_progressbar_portionRemaining" width="<%= (100-Integer.valueOf(percent)) %>%"></td>
             </tr>
         </table><div id="progressBar_percentageText" class="bpui_progressbar_percentageText"><%= percent %>%</div>
-
+        <br />
+        <table align="center">
+            <td align="right"> <input type="button"  value="Cancel" onclick="window.close()"/>
+            </td>
+        </table>
         <%-- <TABLE border=0 width='<%= percent %>%' bgcolor='red'>
         <TR><TD width='100%'> </TD></TR>
         </TABLE>--%>
