@@ -16,30 +16,35 @@ package uk.ac.dl.dp.core.message.query;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
+import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dl.dp.coreutil.util.UserUtil;
 
 public class QueryManager {
     
     static Logger log = Logger.getLogger(QueryManager.class);
     
     
-  //  private static LinkedHashMap <String, Collection<QueryRecord>> crs =
-  //          new LinkedHashMap <String, Collection<QueryRecord>> ();     
+    //  private static LinkedHashMap <String, Collection<QueryRecord>> crs =
+    //          new LinkedHashMap <String, Collection<QueryRecord>> ();
     private static QueryCache <String, Collection<QueryRecord>> crs;
     
-      static {
-          crs = new QueryCache <String, Collection<QueryRecord>> ();  
-         // crs.setMAX_ENTRIES(2);
-      }
-     
+    static {
+        crs = new QueryCache <String, Collection<QueryRecord>> ();
+        // crs.setMAX_ENTRIES(2);
+    }
     
     
-   // private static ArrayList<String> id_list = new ArrayList<String>();
+    
+    // private static ArrayList<String> id_list = new ArrayList<String>();
     
     // The manager holds 250 messages maximum
     // This should work for low volume sites
@@ -51,25 +56,72 @@ public class QueryManager {
         return crs.values();
     }
     
-    public static Collection<Collection<QueryRecord>> getUserAll(String sid){
+    public static Collection<Collection<QueryRecord>> getSessionAll(String sid){
         Collection<Collection<QueryRecord>> ccqr = getAll();
         Collection<Collection<QueryRecord>> ccqr_user = new ArrayList<Collection<QueryRecord>>();
         
         for(Collection<QueryRecord> cqr : ccqr){
-            if(cqr.iterator().next().getSid().equals(sid)){
-                ccqr_user.add(cqr);
+            
+            QueryRecord qr = cqr.iterator().next();
+            if(qr.getSid().equals(sid)){
+                if(ccqr_user.size() == 0) ccqr_user.add(cqr);
+                else{
+                    //now check if already had query id in ccqr_user
+                    boolean alreadyIn = false;
+                    for(Collection<QueryRecord> cqr2 : ccqr_user){
+                        if(cqr2.iterator().next().getQueryid().equals(qr.getQueryid())){
+                            alreadyIn = true;
+                            break;
+                        }
+                        if(!alreadyIn) ccqr_user.add(cqr);
+                    }
+                }
             }
         }
         return ccqr_user;
     }
     
-    public static Collection<String> getUserQueryIds(String sid){
+    public static Collection<Collection<QueryRecord>> getUserAll(String sid){
+        UserUtil user = null;
+        try {
+            user = new UserUtil(sid);
+        } catch (Exception ex) {
+            log.error("Unable to find users DN");
+            return new ArrayList<Collection<QueryRecord>>();
+        }
+        String DN = user.getUser().getDn();
+        
         Collection<Collection<QueryRecord>> ccqr = getAll();
-        Collection<String> ccqr_queryIds = new ArrayList<String>();
+        Collection<Collection<QueryRecord>> ccqr_user_all = new ArrayList<Collection<QueryRecord>>();
         
         for(Collection<QueryRecord> cqr : ccqr){
             QueryRecord qr = cqr.iterator().next();
-            if(qr.getSid().equals(sid)){
+            log.trace("Query Record is "+qr.getQueryid()+" with DN: "+qr.getDN()+" search by : "+DN);
+            if(qr.getDN().equals(DN)){
+                ccqr_user_all.add(cqr);
+                
+            }
+        }
+        
+        return ccqr_user_all;
+    }
+    
+    public static Collection<String> getUserQueryIds(String sid){
+        UserUtil user = null;
+        try {
+            user = new UserUtil(sid);
+        } catch (Exception ex) {
+            log.error("Unable to find users DN");
+            return new ArrayList<String>();
+        }
+        String DN = user.getUser().getDn();
+        
+        Collection<Collection<QueryRecord>> ccqr = getAll();
+        Collection<String> ccqr_queryIds = new HashSet<String>();
+        
+        for(Collection<QueryRecord> cqr : ccqr){
+            QueryRecord qr = cqr.iterator().next();
+            if(qr.getDN().equals(DN)){
                 ccqr_queryIds.add(qr.getQueryid());
             }
         }
@@ -87,14 +139,14 @@ public class QueryManager {
     
     public static void addRecord(QueryRequest qr, Collection<Investigation> result,Exception ex) {
         
-        log.trace("Adding record for sid: "+qr.getSid()+" with "+result.size()+" results");
+        log.trace("Adding record for "+qr.getFacility()+ " sid: "+qr.getSid()+" with "+result.size()+" results");
         
         Timestamp processed =
                 new Timestamp(System.currentTimeMillis());
         
         
         addRecord(qr.getId(),new QueryRecord(qr,processed, result,ex));
-        log.trace("Added record with id "+qr.getId());
+        log.trace("Added record with id "+qr.getId()+" for facility "+qr.getFacility());
     }
     
     // The sent timestamp acts as the ID of the message
@@ -117,26 +169,29 @@ public class QueryManager {
     
     // The sent timestamp acts as the ID of the message
     // reasonable for low volume sites
-    private static void addRecord(String id, QueryRecord record) {
+    private synchronized static void addRecord(String id, QueryRecord record) {
         if(crs.containsKey(id)){
             Collection<QueryRecord> coll = crs.get(id);
+            boolean alreadyIn = false;
             for(QueryRecord qr : coll){
                 if(qr.getFac().equals(record.getFac())){
-                    //item alredy in
-                } else{
-                    coll.add(record);
+                    alreadyIn = true;
+                    break;
                 }
+            }
+            if(!alreadyIn){
+                log.trace("Adding record "+record.getFac()+" to "+id);
+                coll.add(record);
             }
         } else {
             //add new record to cache, so check cache size first
-           // checkCache();
+            // checkCache();
+            log.trace("Adding new record "+record.getFac()+" to "+id);
             
             Collection<QueryRecord> coll  = new ArrayList<QueryRecord>();
             coll.add(record);
-            crs.put(id,coll);           
-           
+            crs.put(id,coll);
         }
-        
     }
     
    /* private static void checkCache(){

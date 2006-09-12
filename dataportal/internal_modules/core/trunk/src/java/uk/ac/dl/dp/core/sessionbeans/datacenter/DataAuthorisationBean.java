@@ -126,20 +126,20 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
             
             //still in date
             if(now.after(start) && now.before(expire)){
-                 if(DPAuthType.NONE.equals(type)){
-                   log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+" wiht query auth type NONE");
+                if(DPAuthType.NONE.equals(type)){
+                    log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+" wiht query auth type NONE");
                     sc.add(df);
                 } else if(DPAuthType.valueOf(df.getAuthType()).equals(type) || DPAuthType.valueOf(df.getAuthType()).equals(DPAuthType.ALL)){
                     log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType());
                     sc.add(df);
                 } else{
-                    log.debug("Is valid but type is "+type+" and auth type given is: "+df.getAuthType());
+                    log.debug("Is valid but type is "+type+" and auth type given is: "+df.getAuthType()+":: "+DPAuthType.NONE.equals(type));
                 }
             } else if(now.after(expire)){
                 log.debug("Removing auth for user: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
                 em.remove(df);
             } else if(now.before(start)){
-                log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+" is not valid yet but going to show for given");                
+                log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+" is not valid yet but going to show for given");
                 sc.add(df);
             }
         }
@@ -179,7 +179,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
                     log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType());
                     sc.add(df);
                 } else{
-                    log.debug("Is valid but type is "+type+" and auth type given is: "+df.getAuthType());
+                    log.debug("Is valid but type is "+type+" and auth type given is: "+df.getAuthType()+":: "+DPAuthType.NONE.equals(type));
                 }
                 
             } else if(now.after(expire)){
