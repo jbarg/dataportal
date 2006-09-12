@@ -39,7 +39,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.navigation.SortableList;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 import javax.faces.FacesException;
@@ -48,7 +48,7 @@ import javax.faces.FacesException;
  *
  * @author gjd37
  */
-public class OtherDataCenterBean extends SortableList {
+public class OtherDataCenterBean extends BaseSortableList {
     
     private static Logger log = Logger.getLogger(OtherDataCenterBean.class);
     
@@ -83,11 +83,11 @@ public class OtherDataCenterBean extends SortableList {
             
             try {
                 log.trace("Getting bookmarks..");
-                dataRefs = (List<DataReference>) DataCenterAuthDelegate.getInstance().getOtherUsersDataReferences(getVisit().getSid(),getVisit().getCurrentUserAuthDN());
-                getVisit().setCurrentDataReferences(dataRefs);
+                dataRefs = (List<DataReference>) DataCenterAuthDelegate.getInstance().getOtherUsersDataReferences(getVisit().getSid(),getVisitData().getCurrentUserAuthDN());
+                getVisitData().setCurrentDataReferences(dataRefs);
             } catch (NoAccessToDataCenterException ex) {
-                log.error("Access to others data center ("+getVisit().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
-                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Access to "+getVisit().getCurrentUserAuthDN()+"'s data center denied.",""));
+                log.error("Access to others data center ("+getVisitData().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
+                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Access to "+getVisitData().getCurrentUserAuthDN()+"'s data center denied.",""));
                 dataRefs = new ArrayList<DataReference>();
                 getFacesContext().renderResponse(); 
             } catch (Exception ex) {
@@ -164,7 +164,7 @@ public class OtherDataCenterBean extends SortableList {
         } catch (QueryException ex) {
             ex.printStackTrace();
         }
-        getVisit().setSearchedInvestigations(investigations);
+        getVisitData().setSearchedInvestigations(investigations);
         return "search_success";
         
     }
@@ -186,25 +186,8 @@ public class OtherDataCenterBean extends SortableList {
             }
             i++;
         }
-    }
+    }    
     
-    //Faces objects
-    public FacesContext getFacesContext(){
-        return FacesContext.getCurrentInstance();
-    }
-    
-    public Application getApplication(){
-        return getFacesContext().getApplication();
-    }
-    
-    //application objects
-    public Visit getVisit(){
-        return visit;
-    }
-    
-    public void setVisit(Visit visit) {
-        this.visit = visit;
-    }
     
       public boolean isPopulated() {
         if(getDataRefs().size() > 0){

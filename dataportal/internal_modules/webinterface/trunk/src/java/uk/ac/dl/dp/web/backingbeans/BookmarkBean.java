@@ -40,7 +40,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.navigation.SortableList;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 
@@ -48,7 +48,7 @@ import javax.faces.application.*;
  *
  * @author gjd37
  */
-public class BookmarkBean extends SortableList {
+public class BookmarkBean extends BaseSortableList {
     
     private static Logger log = Logger.getLogger(BookmarkBean.class);
     
@@ -77,23 +77,23 @@ public class BookmarkBean extends SortableList {
     
     public List<Bookmark> getDataRefs() {
         
-        if(getVisit().getCurrentBookmarks() == null){
+        if(getVisitData().getCurrentBookmarks() == null){
             
             try {
                 log.trace("Getting bookmarks.., bookmarks is null");
                 dataRefs = (List<Bookmark>) DataCenterDelegate.getInstance().getBookmarks(getVisit().getSid());
-                getVisit().setCurrentBookmarks(dataRefs);
+                getVisitData().setCurrentBookmarks(dataRefs);
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
             }
             sort(getSort(), isAscending());
-            return (List<Bookmark>)getVisit().getCurrentBookmarks();
+            return (List<Bookmark>)getVisitData().getCurrentBookmarks();
         }else {
-            if(getVisit().getCurrentBookmarks() == null){
+            if(getVisitData().getCurrentBookmarks() == null){
                 log.trace("bookmarks is null?????");
             }
-            log.trace("Bookmarks already got is Visit(): "+getVisit().getCurrentBookmarks().size());
-            return (List<Bookmark>) getVisit().getCurrentBookmarks();
+            log.trace("Bookmarks already got is Visit(): "+getVisitData().getCurrentBookmarks().size());
+            return (List<Bookmark>) getVisitData().getCurrentBookmarks();
         }
         
     }
@@ -136,13 +136,13 @@ public class BookmarkBean extends SortableList {
         if(dataRefs == null){
             log.trace("Is bookmarks is null ");
         }
-        Collections.sort( (List<Bookmark>)getVisit().getCurrentBookmarks(), comparator);
+        Collections.sort( (List<Bookmark>)getVisitData().getCurrentBookmarks(), comparator);
         
     }
     
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
-        Collection<Bookmark> bookmarks = getVisit().getCurrentBookmarks();
+        Collection<Bookmark> bookmarks = getVisitData().getCurrentBookmarks();
         
         Bookmark d = (Bookmark)table.getRowData();
         if(e.getNewValue().equals(new Boolean(true)) ){
@@ -202,21 +202,21 @@ public class BookmarkBean extends SortableList {
         } catch (QueryException ex) {
             ex.printStackTrace();
         }
-        getVisit().setSearchedInvestigations(investigations);
+        getVisitData().setSearchedInvestigations(investigations);
         return "search_success";
         
     }
     
     
     public String selectall(){
-        for(Bookmark hist : getVisit().getCurrentBookmarks()){
+        for(Bookmark hist : getVisitData().getCurrentBookmarks()){
             hist.setSelected(true);
         }
         return null;
     }
     
     public String selectnone(){
-        for(Bookmark hist : getVisit().getCurrentBookmarks()){
+        for(Bookmark hist : getVisitData().getCurrentBookmarks()){
             hist.setSelected(false);
         }
         return null;
@@ -224,14 +224,14 @@ public class BookmarkBean extends SortableList {
     
     public String removeBookmarks(){
         Collection<Bookmark> bookmarks = new ArrayList<Bookmark>();
-        for(Bookmark hist : getVisit().getCurrentBookmarks()){
+        for(Bookmark hist : getVisitData().getCurrentBookmarks()){
             if(hist.isSelected()){
                 bookmarks.add(hist);
             }
         }
         try {
             DataCenterDelegate.getInstance().removeBookmark(getVisit().getSid(), bookmarks);
-            getVisit().setCurrentBookmarks(null);
+            getVisitData().setCurrentBookmarks(null);
         } catch (SessionNotFoundException ex) {
             ex.printStackTrace();
         } catch (SessionTimedOutException ex) {
@@ -245,24 +245,6 @@ public class BookmarkBean extends SortableList {
     }
     
     
-    //Faces objects
-    public FacesContext getFacesContext(){
-        return FacesContext.getCurrentInstance();
-    }
-    
-    public Application getApplication(){
-        return getFacesContext().getApplication();
-    }
-    
-    //application objects
-    public Visit getVisit(){
-        return visit;
-    }
-    
-    public void setVisit(Visit visit) {
-        this.visit = visit;
-    }
-    
     public void note(ValueChangeEvent event){
         log.trace("new value: "+event.getNewValue());
         List children  = event.getComponent().getChildren();
@@ -274,7 +256,7 @@ public class BookmarkBean extends SortableList {
                 if(current.getName().equals("note") && current.getValue() != null){
                     String param = current.getValue().toString();
                     log.trace("noteSorting by: "+param);
-                    for(Bookmark bk : getVisit().getCurrentBookmarks()){
+                    for(Bookmark bk : getVisitData().getCurrentBookmarks()){
                         if(bk.getId().intValue() == Integer.valueOf(param).intValue() && !event.getNewValue().equals("")){
                             log.trace("Adding new value: "+event.getNewValue()+" to bookmark: "+bk.getId());
                             bk.setNote((String)event.getNewValue());
@@ -284,15 +266,11 @@ public class BookmarkBean extends SortableList {
                 }
             }
             i++;
-        }
-        
-        
-    }
-    
+        }                
+    }    
     
     public String addNote(){
-        
-        
+                
         Bookmark bk = (Bookmark)table.getRowData();
         log.trace("Note id is "+bk.getId()+" with new note: "+bk.getNote());
         try {
@@ -307,7 +285,7 @@ public class BookmarkBean extends SortableList {
             ex.printStackTrace();
         }
         
-        getVisit().setCurrentBookmarks(null);
+        getVisitData().setCurrentBookmarks(null);
         return null;
     }
 
@@ -323,6 +301,7 @@ public class BookmarkBean extends SortableList {
     }
 
     public boolean getLength() {
+        log.trace(getDataRefs().size()+" size of bookmarks, "+getVisit().getUserPreferences().getResultsPerPage()+" results per page");
         return getDataRefs().size() > getVisit().getUserPreferences().getResultsPerPage();
     }
 

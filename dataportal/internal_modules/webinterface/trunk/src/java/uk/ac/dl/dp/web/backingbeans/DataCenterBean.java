@@ -38,7 +38,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.navigation.SortableList;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 import javax.faces.FacesException;
@@ -47,7 +47,7 @@ import javax.faces.FacesException;
  *
  * @author gjd37
  */
-public class DataCenterBean extends SortableList {
+public class DataCenterBean extends BaseSortableList {
     
     private static Logger log = Logger.getLogger(DataCenterBean.class);
     
@@ -78,19 +78,19 @@ public class DataCenterBean extends SortableList {
         
         
         //TODO having trouble with this, was always thinking it was not null even though i was setting it as null
-        if(getVisit().getCurrentDataReferences() == null){
+        if(getVisitData().getCurrentDataReferences() == null){
             
             try {
                 log.trace("Getting bookmarks..");
                 dataRefs = (List<DataReference>) DataCenterDelegate.getInstance().getDataReferences(getVisit().getSid());
-                getVisit().setCurrentDataReferences(dataRefs);
+                getVisitData().setCurrentDataReferences(dataRefs);
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
             }
             sort(getSort(), isAscending());
-            return (List<DataReference>)getVisit().getCurrentDataReferences();
+            return (List<DataReference>)getVisitData().getCurrentDataReferences();
         } else{
-            return (List<DataReference>)getVisit().getCurrentDataReferences();
+            return (List<DataReference>)getVisitData().getCurrentDataReferences();
         }
         
     }
@@ -133,13 +133,13 @@ public class DataCenterBean extends SortableList {
         if(dataRefs == null){
             log.trace("Is dataRefs is null ");
         }
-        Collections.sort( (List<DataReference>)getVisit().getCurrentDataReferences(), comparator);
+        Collections.sort( (List<DataReference>)getVisitData().getCurrentDataReferences(), comparator);
         
     }
     
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
-        Collection<DataReference> dataReference = getVisit().getCurrentDataReferences();
+        Collection<DataReference> dataReference = getVisitData().getCurrentDataReferences();
         
         DataReference d = (DataReference)table.getRowData();
         if(e.getNewValue().equals(new Boolean(true)) ){
@@ -180,7 +180,7 @@ public class DataCenterBean extends SortableList {
         } catch (QueryException ex) {
             ex.printStackTrace();
         }
-        getVisit().setSearchedInvestigations(investigations);
+        getVisitData().setSearchedInvestigations(investigations);
         return "search_success";
         
     }
@@ -207,14 +207,14 @@ public class DataCenterBean extends SortableList {
     public String removeDatasets(){
         
         Collection<DataReference> dataReference = new ArrayList<DataReference>();
-        for(DataReference hist : getVisit().getCurrentDataReferences()){
+        for(DataReference hist : getVisitData().getCurrentDataReferences()){
             if(hist.isSelected()){
                 dataReference.add(hist);
             }
         }
         try {
             DataCenterDelegate.getInstance().removeDataReference(getVisit().getSid(), dataReference);
-            getVisit().setCurrentDataReferences(null);
+            getVisitData().setCurrentDataReferences(null);
         } catch (SessionNotFoundException ex) {
             ex.printStackTrace();
         } catch (SessionTimedOutException ex) {
@@ -252,7 +252,7 @@ public class DataCenterBean extends SortableList {
                 if(current.getName().equals("note") && current.getValue() != null){
                     String param = current.getValue().toString();
                     log.trace("noteSorting by: "+param);
-                    for(DataReference bk : getVisit().getCurrentDataReferences()){
+                    for(DataReference bk : getVisitData().getCurrentDataReferences()){
                         if(bk.getId().intValue() == Integer.valueOf(param).intValue() && !event.getNewValue().equals("")){
                             log.trace("Adding new value: "+event.getNewValue()+" to bookmark: "+bk.getId());
                             bk.setNote((String)event.getNewValue());
@@ -282,63 +282,15 @@ public class DataCenterBean extends SortableList {
             ex.printStackTrace();
         }
         
-        getVisit().setCurrentDataReferences(null);
+        getVisitData().setCurrentDataReferences(null);
         return null;
     }
     
-    public void download(ActionEvent event){
-        log.trace("Sorting column");
-        List children  = event.getComponent().getChildren();
-        int i = 0;
-        for(Object ob : children){
-            if(ob instanceof UIParameter){
-                UIParameter current = (UIParameter)children.get(i);
-                log.trace("Param name "+current.getName());
-                if(current.getName().equals("id") && current.getValue() != null){
-                    String param = current.getValue().toString();
-                    log.trace("downloading id: "+param);
-                    forward_url("/servlet/DownloadServlet?url=test");
-                    break;
-                }
-            }
-            i++;
-        }
-    }
+  
     
    
-    public void forward_url(String url) {
-        log.debug("Forwardng: "+url);
-        FacesContext context = getFacesContext();
-//forward to an external servlet for submission;
-        try{
-            context.getExternalContext().dispatch(url);
-        } catch(Exception e) {
-//throw exception here
-            log.warn("Exception here:",e);
-            throw new FacesException(e);
-        } finally {
-            context.responseComplete();
-        }
-    }
     
     
-    //Faces objects
-    public FacesContext getFacesContext(){
-        return FacesContext.getCurrentInstance();
-    }
-    
-    public Application getApplication(){
-        return getFacesContext().getApplication();
-    }
-    
-    //application objects
-    public Visit getVisit(){
-        return visit;
-    }
-    
-    public void setVisit(Visit visit) {
-        this.visit = visit;
-    }
      public boolean isPopulated() {
         if(getDataRefs().size() > 0){
         return true;

@@ -16,89 +16,66 @@ import java.util.TreeMap;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.Keyword;
 import org.apache.log4j.*;
-
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import com.sun.j2ee.blueprints.ui.autocomplete.AutoCompleteUtilities;
+import com.sun.j2ee.blueprints.ui.autocomplete.CompletionResult;
+import uk.ac.dl.dp.web.backingbeans.ApplicationBean;
+import uk.ac.dl.dp.web.backingbeans.BaseBean;
+import uk.ac.dl.dp.web.backingbeans.Visit;
+import javax.faces.event.ValueChangeEvent;
 /**
  *
  * @author gjd37
  */
-public class KeywordBean {
+public class KeywordBean extends BaseBean{
     
     private static Logger log = Logger.getLogger(KeywordBean.class);
     
+    private Visit visit;
     
-    private TreeMap keywords;
-    private List<String> suggest;
     /** Creates a new instance of Keyword */
     public KeywordBean() {
-        //for results
-        ArrayList<Keyword> r_k_l = null ;
-        keywords = new TreeMap();
-        suggest = new ArrayList<String>();
+        log.trace("Keyword bean init");
+    }
+    
+    public void completeCity(FacesContext context, String prefix, CompletionResult result) {
+        String defaultFacility= getVisit().getUserPreferences().getDefaultFacility();
+        log.trace("Completing City - " + prefix +" for default: "+defaultFacility);
+        ArrayList<String> words2 = new ArrayList<String>();
         
-        //init the dp access layer
-        String db_host = "elektra.dl.ac.uk";
-        String db_port = "1521";
-        String db_sid = "minerva2" ;
-        String db_user = "icat_v2copy2" ;
-        String db_pass = "l1verp00lfc" ;
-        String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
-                "(PROTOCOL=tcp)(PORT="+db_port+"))"+
-                "(CONNECT_DATA=(SID="+db_sid+")))";
-        
-        DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
-        
-        try {
-            
-            //////
-            r_k_l = dpal.getKeywords("DN") ;
-            int i = 0;
-            for(Keyword k : r_k_l) {
-                // System.out.println("\t"+k.toString()) ;
-                boolean word = true;
-                for(int j = 0 ; j < k.getName().length(); j++){
-                    if(!Character.isLetter(k.getName().charAt(j))){
-                        word = false;
-                        break;
-                    }
-                }
-                if(word){
-                    keywords.put(""+i,k.getName());
-                    
-                    i++;
-                }
+        for(String item : getVisitData().getCurrentSelectedFacilities()){
+            log.trace("ApplicationBean.getKeywords: "+item);
+            String[] keywords2 = ApplicationBean.getKeywords(item);
+            for(String j : keywords2){
+                words2.add(j);
             }
-            
-            
-            
-            //test disconnection code
-            
-        } catch (SQLException sqle) {
-            sqle.printStackTrace() ;
-        } finally{
-            dpal.disconnectFromDB() ;
         }
         
-    }
-    
-    public TreeMap getKeywords() {
-        return keywords;
-    }
-    
-    public void setKeywords(TreeMap keywords) {
-        this.keywords = keywords;
-    }
-    
-    public List getSuggest(String prefix) {
-        List newList = new ArrayList();
-        log.trace("Searching for "+prefix);
-        for(String j : suggest){
-            if(j.startsWith(prefix)) newList.add(j);
+        if(prefix.indexOf(" ") != -1 ){
+            String[] words = prefix.split(" ");
+            AutoCompleteUtilities.addMatchingItems(words2.toArray(new String[words2.size()]), words[words.length-1], result);
+            
+            
+        } else if(prefix.indexOf("%20") != -1 ){
+            String[] words = prefix.split("%20");
+            AutoCompleteUtilities.addMatchingItems(words2.toArray(new String[words2.size()]), words[words.length-1], result);
+            
+        } else{
+            AutoCompleteUtilities.addMatchingItems(words2.toArray(new String[words2.size()]), prefix, result);
+            
+            
         }
-        return newList;
     }
     
-    public void setSuggest(List suggest) {
-        this.suggest = suggest;
+    
+    public void selectedFacilities(ValueChangeEvent event){
+        log.trace("new value: "+event.getNewValue()+" "+event.getNewValue().getClass());
+        
+        getVisitData().setCurrentSelectedFacilities((ArrayList<String>)event.getNewValue());
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.renderResponse();
+        
     }
     
 }

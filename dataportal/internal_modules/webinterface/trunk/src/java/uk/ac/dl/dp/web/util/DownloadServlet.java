@@ -268,7 +268,7 @@ public class DownloadServlet extends HttpServlet {
         String fac = param.split("-")[0];
         String id = param.split("-")[1];
         
-        for(DataFile file : visit.getCurrentDatafiles()){
+        for(DataFile file : visit.getVisitData().getCurrentDatafiles()){
             if(file.getId().equals(id)&& file.getFacility().equals(fac)){
                 log.debug("Found datafile: "+file);
                 return file;
@@ -281,7 +281,7 @@ public class DownloadServlet extends HttpServlet {
         String fac = param.split("-")[0];
         String id = param.split("-")[1];
         
-        for(DataSet file : visit.getCurrentDatasets()){
+        for(DataSet file : visit.getVisitData().getCurrentDatasets()){
             if(file.getId().equals(id)&& file.getFacility().equals(fac)){
                 log.debug("Found dataset: "+file);
                 return file;
@@ -295,7 +295,7 @@ public class DownloadServlet extends HttpServlet {
         String id = param.split("-")[1];
         log.trace("looking for:"+ fac+"-"+id);
         
-        for(DataReference file : visit.getCurrentDataReferences()){
+        for(DataReference file : visit.getVisitData().getCurrentDataReferences()){
             log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
             if(file.getId().toString().equals(id) && file.getFacility().equals(fac) ){
                 log.debug("Found dataref: "+file);
@@ -310,7 +310,7 @@ public class DownloadServlet extends HttpServlet {
         String data_ref_id = param.split("-")[1];
         String url_id = param.split("-")[2];
         
-        for(DataReference file : visit.getCurrentDataReferences()){
+        for(DataReference file : visit.getVisitData().getCurrentDataReferences()){
             if(file.getId().toString().equals(data_ref_id) && file.getFacility().equals(fac) ){
                 log.debug("Found dataref: "+file);
                 Collection<Url> urls = file.getUrls();

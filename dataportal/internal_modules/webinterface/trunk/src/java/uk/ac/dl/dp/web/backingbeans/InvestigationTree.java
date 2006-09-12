@@ -71,7 +71,7 @@ public class InvestigationTree extends BaseBean {
         if(data == null){
             data = new TreeNodeBase("foo-folder", "Search results", false);
             
-            Collection<Investigation> invests = getVisit().getSearchedInvestigations();
+            Collection<Investigation> invests = getVisitData().getSearchedInvestigations();
             
           //  if(invests.size() > 400 ){
             //    log.info("Search results too large, "+invests.size()+" creating message");
@@ -140,7 +140,7 @@ public class InvestigationTree extends BaseBean {
     public String minimise(){
         log.trace("Minimizing for "+getNodePath().getDescription());
         Collection<Investigation> investigations = new ArrayList<Investigation>();
-        for(Investigation invest :  getVisit().getSearchedInvestigations()){
+        for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             if(invest.getFacility().equals(getNodePath().getDescription())){
                 investigations.add(invest);
                 log.trace(invest.getId()+" is added");
@@ -193,9 +193,9 @@ public class InvestigationTree extends BaseBean {
                 log.trace(datafile);
             }
             
-            getVisit().setCurrentInvestigations(investigations);
-            getVisit().setCurrentDatasets(datasets);
-            getVisit().setCurrentDatafiles(datafiles);
+            getVisitData().setCurrentInvestigations(investigations);
+            getVisitData().setCurrentDatasets(datasets);
+            getVisitData().setCurrentDatafiles(datafiles);
             
         } catch (DataPortalException ex) {
             getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"DataPortal exception:"+ex.getMessage(),""));
@@ -270,7 +270,7 @@ public class InvestigationTree extends BaseBean {
         String fac = param.split("-")[0];
         String id = param.split("-")[1];
         
-        for(Investigation file : getVisit().getCurrentInvestigations()){
+        for(Investigation file : getVisitData().getCurrentInvestigations()){
             if(file.getId().equals(id)&& file.getFacility().equals(fac)){
                 log.debug("Found invest: "+file);
                 return file;

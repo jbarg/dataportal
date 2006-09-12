@@ -12,7 +12,7 @@ package uk.ac.dl.dp.web.backingbeans;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 import java.io.*;
-import uk.ac.dl.dp.web.navigation.SortableList;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
 /**
  *
  * @author gjd37
@@ -40,10 +40,19 @@ public class BaseBean implements Serializable{
     public Visit getVisit(){
         return visit;
     }
-
+    
     public void setVisit(Visit visit) {
         this.visit = visit;
     }
+    
+    public VisitData getVisitData(){
+        return this.visit.getVisitData();
+    }
+    
+    public SearchData getSearchData(){
+        return this.visit.getSearchData();
+    }
+    
     
 }
 

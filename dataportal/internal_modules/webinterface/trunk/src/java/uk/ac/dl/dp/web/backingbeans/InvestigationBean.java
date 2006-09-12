@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.model.*;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.context.FacesContext;
@@ -31,22 +32,21 @@ import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.navigation.SortableList;
-import javax.faces.context.FacesContext;
-import javax.faces.application.*;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
+
 
 /**
  *
  * @author gjd37
  */
-public class InvestigationBean extends SortableList {
+public class InvestigationBean extends BaseSortableList {
     
     private static Logger log = Logger.getLogger(InvestigationBean.class);
     
     private DataModel model;
     private  HtmlDataTable table;
     private List<Investigation> investigations;
-    private Visit visit;
+    
     
     public InvestigationBean(){
         super("name");
@@ -66,7 +66,7 @@ public class InvestigationBean extends SortableList {
     
     public List<Investigation> getInvestigations() {
         sort(getSort(), isAscending());
-        return (List<Investigation>)getVisit().getSearchedInvestigations();
+        return (List<Investigation>)getVisitData().getSearchedInvestigations();
     }
     
     public void setInvestigations(List<Investigation> investigations) {
@@ -82,7 +82,7 @@ public class InvestigationBean extends SortableList {
                 Investigation c2 = (Investigation) o2;
                 if (column == null) {
                     return 0;
-                }              
+                }
                 if (column.equals("facility")) {
                     return ascending ? c1.getFacility().compareTo(c2.getFacility()) : c2.getFacility()
                     .compareTo(c1.getFacility());
@@ -101,19 +101,19 @@ public class InvestigationBean extends SortableList {
                     return 0;
             }
         };
-        Collections.sort((List<Investigation>)getVisit().getSearchedInvestigations(), comparator);
+        Collections.sort((List<Investigation>)getVisitData().getSearchedInvestigations(), comparator);
         
     }
     
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
-        Collection<Investigation> investigations = getVisit().getSearchedInvestigations();
+        Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
         
         Investigation d = (Investigation)table.getRowData();
         if(e.getNewValue().equals(new Boolean(true)) ){
             log.trace("true selected boolean");
             for(Investigation invest : investigations){
-                if(invest.getId().equals(d.getId())) {
+                if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
                     invest.setSelected(true);
                     log.trace(invest.isSelected()+" for "+invest.getId());
                     
@@ -123,7 +123,7 @@ public class InvestigationBean extends SortableList {
         if(e.getNewValue().equals(new Boolean(false)) ){
             log.trace("false selected boolean");
             for(Investigation invest : investigations){
-                if(invest.getId().equals(d.getId())) {
+                if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
                     log.trace("setting false");
                     invest.setSelected(false);
                     log.trace(invest.isSelected()+" for "+invest.getId());
@@ -166,41 +166,26 @@ public class InvestigationBean extends SortableList {
     };
     
     public String selectall(){
-        for(Investigation invest :  getVisit().getSearchedInvestigations()){
+        for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             invest.setSelected(true);
         }
         return null;
     }
     
     public String selectnone(){
-        for(Investigation invest :  getVisit().getSearchedInvestigations()){
+        for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             invest.setSelected(false);
         }
         return null;
     }
     
-    //Faces objects
-    public FacesContext getFacesContext(){
-        return FacesContext.getCurrentInstance();
-    }
     
-    public Application getApplication(){
-        return getFacesContext().getApplication();
-    }
-    
-    //application objects
-    public Visit getVisit(){
-        return visit;
-    }
-    
-    public void setVisit(Visit visit) {
-        this.visit = visit;
-    }
+     
     
     public String datasets(){
         
         Collection<Investigation> investigations = new ArrayList<Investigation>();
-        for(Investigation invest :  getVisit().getSearchedInvestigations()){
+        for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             if(invest.isSelected()){
                 investigations.add(invest);
                 log.trace(invest.getId()+" is selected");
@@ -235,9 +220,9 @@ public class InvestigationBean extends SortableList {
                 log.trace(datafile);
             }
             
-            getVisit().setCurrentInvestigations(investigations);
-            getVisit().setCurrentDatasets(datasets);
-            getVisit().setCurrentDatafiles(datafiles);
+            getVisitData().setCurrentInvestigations(investigations);
+            getVisitData().setCurrentDatasets(datasets);
+            getVisitData().setCurrentDatafiles(datafiles);
             
         } catch (DataPortalException ex) {
             getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"DataPortal exception:"+ex.getMessage(),""));

@@ -18,7 +18,7 @@ import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
-import uk.ac.cclrc.dpal.enums.LogicalExpression;
+import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
@@ -50,7 +50,12 @@ public class SearchBean extends BaseBean {
     }
     
     public void setKeyword(String keyword){
-        this.setKeywords(keyword.split(" "));
+        String[] keys = keyword.split(" ");
+        ArrayList<String> keys2 = new ArrayList<String>();
+        for(String k : keys){
+            if(!k.trim().equals("")) keys2.add(k.trim());
+        }
+        this.setKeywords(keys2.toArray(new String[keys2.size()]));
         this.keyword = keyword;
     }
     
@@ -70,14 +75,14 @@ public class SearchBean extends BaseBean {
         log.trace("searching for facilities :"+getFacilities());
         log.trace("radio box :"+getLogicalExpression());
         
-        LogicalExpression type = LogicalExpression.AND;
-        if(logicalExpressionBoolean == false ) type = LogicalExpression.OR;
+        LogicalOperator type = LogicalOperator.AND;
+        if(logicalExpressionBoolean == false ) type = LogicalOperator.OR;
         
         
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.queryByKeyword(getVisit().getSid(), getKeywords(), getFacilities(), type);
-            getVisit().setQueryRequest(query_request);
+            query_request = qd.queryByKeyword(getVisit().getSid(), getKeywords(),getVisitData().getCurrentSelectedFacilities(), type);
+            getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"DataPortal exception",""));
@@ -100,8 +105,11 @@ public class SearchBean extends BaseBean {
                 Thread.sleep(250);
                 //TODO put max wait in DB
                 if(((new Date().getTime() - time)/1000) > 15) {
-                    facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Query timed out, no results found. Please refine your query.",""));
-                    return null;
+                    if(facs2 == null ||facs2.size() == 0 ){
+                        facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Query timed out, no results found. Please refine your query.",""));                        
+                        return null;
+                    }
+                    else break;
                     
                 }
                 /*else if(((new Date().getTime() - time)/1000) > 1) {
@@ -138,7 +146,7 @@ public class SearchBean extends BaseBean {
         
         //set investigations
         log.debug("Adding found investigations to session, size: "+investigations.size());
-        getVisit().setSearchedInvestigations(investigations);
+        getVisitData().setSearchedInvestigations(investigations);
         
         log.trace("list of studies for keyword: "+getKeywords());
         
@@ -189,17 +197,17 @@ public class SearchBean extends BaseBean {
         this.logicalExpressionBoolean = logicalExpressionBoolean;
     }
     
-    public List<SelectItem> getFacilityList() {
+   /* public List<SelectItem> getFacilityList() {
         String defaultFacility  = getVisit().getUserPreferences().getDefaultFacility();
         List<String> list = new ArrayList<String>();
         list.add(defaultFacility);
         this.setFacilities(list);
-        return getVisit().getFacilities();
+        return getVisit().getSession().getFacilities();
     }
     
     public void setFacilityList(List<SelectItem> facilityList) {
         this.facilityList = facilityList;
-    }
+    }*/
     
     
     
