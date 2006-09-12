@@ -54,13 +54,13 @@
             </h:form>
             <br />
             <h:form>
-                <h:panelGrid rendered="#{visit.searched}" columns="3">
+                <h:panelGrid rendered="#{visit.visitData.searched}" columns="3">
                     <h:outputLabel >
                         <h:outputText styleClass="body" value="Grant User: "/>&nbsp;
                     </h:outputLabel  >
                                                                                            
                     <h:selectOneMenu id="usernameselect" required="true" value="#{dataAuthorisationBean.searchUser}" >
-                        <f:selectItems value="#{visit.searchedUsers}"/>
+                        <f:selectItems value="#{visit.visitData.searchedUsers}"/>
                         <f:validateLength minimum="1" />
                     </h:selectOneMenu>
                      
@@ -68,7 +68,7 @@
 
                 </h:panelGrid> 
                 <br />
-                <h:panelGrid rendered="#{visit.searched}" columns="3">
+                <h:panelGrid rendered="#{visit.visitData.searched}" columns="3">
                                               
                     <h:outputLabel>
                         <h:outputText styleClass="body" value="Access from:"/>

@@ -205,7 +205,7 @@
             </t:dataTable>
           
             
-            <h:panelGrid columns="1" rendered="#{bookmarkBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+            <h:panelGrid columns="1" rendered="#{datacenterBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 <t:dataScroller id="scroll_11"
                     for="datatable"
                     fastStep="10"
@@ -239,7 +239,17 @@
             </h:panelGrid>
           
             <br />
-            <f:verbatim rendered="#{bookmarkBean.length}">
+              <h:panelGrid  rendered="#{datacenterBean.populated}" width="95%" columns="5">
+             
+                        <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
+             
+                 
+                        Select:&nbsp; <h:commandButton action="#{datacenterBean.selectall}" title="All" value=" All "/>
+                        &nbsp; 
+                        <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
+                 
+            </h:panelGrid>
+           <%-- <f:verbatim rendered="#{bookmarkBean.populated}">
                 <table width="95%" border="0">
                     <td>
                         <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
@@ -251,7 +261,7 @@
                         <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
                     </td>
                 </table>
-            </f:verbatim>
+            </f:verbatim>--%>
         </td>
     </table>
 </h:form>

@@ -40,7 +40,7 @@
                 varDetailToggler="detailToggler">                                
                                 
                 <f:facet name="header">
-                    <h:outputText value="#{visit.currentUserAuthDN}'s Data References" />
+                    <h:outputText value="#{visit.visitData.currentUserAuthDN}'s Data References" />
                 </f:facet>
 
                 <%--<h:column>

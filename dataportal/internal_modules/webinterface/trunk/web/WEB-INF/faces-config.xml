@@ -13,10 +13,20 @@
         <managed-bean-class>uk.ac.dl.dp.web.navigation.NavigationMenu</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>
     </managed-bean>
+      <managed-bean>
+        <managed-bean-name>ApplicationBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ApplicationBean</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+       
+    </managed-bean>
     <managed-bean>
         <managed-bean-name>keyword</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.navigation.KeywordBean</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
+         <managed-property>
+            <property-name>visit</property-name>
+            <value>#{sessionScope.visit}</value>
+        </managed-property>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>visit</managed-bean-name>

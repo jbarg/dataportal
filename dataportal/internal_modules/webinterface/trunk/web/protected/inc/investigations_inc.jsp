@@ -138,7 +138,7 @@
         value="#{investigationBean.investigations}"
         preserveDataModel="true"
         rows="#{visit.userPreferences.resultsPerPage}"
-        rowId="#{invest.id}"
+       
         binding="#{investigationBean.table}"
         sortColumn="#{investigationBean.sort}"
         sortAscending="#{investigationBean.ascending}"
@@ -206,7 +206,7 @@
 
     </t:dataTable>
 
-    <c:if test="${fn:length(sessionScope.visit.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
+    <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
                       
         <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
        

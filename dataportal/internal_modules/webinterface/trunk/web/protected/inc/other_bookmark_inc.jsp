@@ -37,7 +37,7 @@
                 sortAscending="#{otherbookmarkBean.ascending}"
                 preserveSort="true">
                 <f:facet name="header">
-                    <h:outputText value="#{visit.currentUserAuthDN}'s Bookmarks" />
+                    <h:outputText value="#{visit.visitData.currentUserAuthDN}'s Bookmarks" />
                 </f:facet>
 
                <%-- <h:column>

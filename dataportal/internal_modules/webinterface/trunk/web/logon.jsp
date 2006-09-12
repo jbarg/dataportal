@@ -51,9 +51,9 @@
             <table border="0" width="100%">
     
                 <td width="100%" align="right">
-                    <f:subview id="header_2">
+                 <%--   <f:subview id="header_2">
                         <c:import url="protected/inc/header_2.jsp" />
-                    </f:subview>
+                    </f:subview>--%>
                 </td>
                     
             </table>
@@ -61,21 +61,23 @@
             <table border="0" width="100%">
     
                 <td valign="top" width="200">
+                  
+                   
                     <!-- does not work inside subview??? -->
                     <%--  <f:subview id="navigation">
                     <c:import url="/inc/header2.jsp" />
                     </f:subview>--%>
-                    <img align="center" src="../images/cclrc.jpg" width="160" height="40" />
+                    <img align="center" src="../images/cclrc.jpg" width=170" height="60" />
                     <br />
                     <br />
-                    <t:div id="subnavigation_outer">
+                   <%-- <t:div id="subnavigation_outer">
                         <t:div id="subnavigation">
                             <t:panelNavigation2 id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
                                 disabledStyle="color:red;padding: 2px 20px 2px 25px">
                                 <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
                             </t:panelNavigation2>
                         </t:div>
-                    </t:div>
+                    </t:div>--%>
                 </td>
                 <td width="*" valign="top" >
                     <table border="0" width="100%" >  

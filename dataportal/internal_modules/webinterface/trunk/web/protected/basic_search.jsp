@@ -12,7 +12,7 @@
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
         <title>CCLRC Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
-         
+      
     </head>
     <body>
         <f:view>
@@ -47,8 +47,8 @@
                             <%--  <f:subview id="navigation">
                             <c:import url="/inc/header2.jsp" />
                             </f:subview>--%>
-                            <img align="center" src="../../images/cclrc.jpg" width="160" height="48" />
-                            <br />
+                           <img align="center" src="../../images/cclrc.jpg" width=170" height="60" />
+                       <br />
                             <br />
                             <t:div id="subnavigation_outer">
                                 <t:div id="subnavigation">
