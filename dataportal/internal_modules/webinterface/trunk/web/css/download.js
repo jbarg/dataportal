@@ -49,10 +49,10 @@
         }
         else if(navigator.userAgent.indexOf("Mozilla/4") != -1 && navigator.appName.indexOf("Netscape") !=-1 && parseInt(navigator.appVersion) < 5){
         //alert("netsacpe 4");
-        win = window.open("../../servlet/DownloadServlet?url="+id+"&type="+type+"","Download Data","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=300,height=150,left=0,top=0");
+        win = window.open("../../servlet/DownloadServlet?url="+id+"&type="+type+"&from="+from+"","Download Data","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=300,height=150,left=0,top=0");
         }
         else{
-        win = window.open("../../servlet/DownloadServlet?url="+id+"&type="+type+"","Download Data","toolbar=no, width=300, height=160");
+        win = window.open("../../servlet/DownloadServlet?url="+id+"&type="+type+"&from="+from+"","Download Data","toolbar=no, width=300, height=160");
         }
         }
         

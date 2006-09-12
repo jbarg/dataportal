@@ -43,7 +43,7 @@
                 <f:facet name="header"></f:facet>            
                 <h:outputText value="#{data.id}" />              
                 </h:column>--%>
-                <h:column>
+                <h:column >
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="name" actionListener="#{bookmarkBean.sortColumn}">
                             <h:outputText value="Name" />
@@ -181,8 +181,17 @@
                 </h:panelGrid>
            
             <br />
-            <f:verbatim rendered="#{bookmarkBean.length}">
-                <table width="95%" border="0">
+          <h:panelGrid  rendered="#{bookmarkBean.populated}" width="95%" columns="5">
+             
+                        <h:commandButton action="#{bookmarkBean.removeBookmarks}" title="View selections" value="Delete selections"/>
+             
+                 
+                        Select:&nbsp; <h:commandButton action="#{bookmarkBean.selectall}" title="All" value=" All "/>
+                        &nbsp; 
+                        <h:commandButton action="#{bookmarkBean.selectnone}" title="None" value="None"/>
+                 
+            </h:panelGrid>
+                 <%--  <table width="95%" border="0">
                     <td>
                         <h:commandButton action="#{bookmarkBean.removeBookmarks}" title="View selections" value="Delete selections"/>
              
@@ -192,8 +201,7 @@
                         &nbsp; 
                         <h:commandButton action="#{bookmarkBean.selectnone}" title="None" value="None"/>
                     </td>
-                </table>
-            </f:verbatim>
+                </table>--%>
         </td>
     </table>
 </h:form>
