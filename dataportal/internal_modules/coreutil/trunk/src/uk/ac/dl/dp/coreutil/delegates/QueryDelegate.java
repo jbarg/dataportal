@@ -11,7 +11,8 @@ import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Study;
-import uk.ac.cclrc.dpal.enums.LogicalExpression;
+
+import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
@@ -56,12 +57,12 @@ public class QueryDelegate {
     
     
     /*All TransferBean methods here*/
-    public QueryRequest queryByKeyword(String sid, String[] keywords, Collection<String> facilities, LogicalExpression logicalExpression) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
-        return  qsmr.queryByKeyword(sid, facilities, keywords, logicalExpression);
+    public QueryRequest queryByKeyword(String sid, String[] keywords, Collection<String> facilities, LogicalOperator logicalOperator) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
+        return  qsmr.queryByKeyword(sid, facilities, keywords, logicalOperator);
     }
     
-    public QueryRequest queryByKeyword(String sid ,String keyword, Collection<String> facilities, LogicalExpression logicalExpression) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
-        return qsmr.queryByKeyword(sid, facilities, new String[] {keyword},logicalExpression);
+    public QueryRequest queryByKeyword(String sid ,String keyword, Collection<String> facilities, LogicalOperator logicalOperator) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
+        return qsmr.queryByKeyword(sid, facilities, new String[] {keyword},logicalOperator);
         
     }
     
@@ -97,14 +98,14 @@ public class QueryDelegate {
          return qsmr.getDataSets(sid, investigations);
     }*/
     
-     public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
-          return qsmr.getInvestigationByStudyId(sid, fac, studyId);
-     }
-     
-     public Collection<Investigation> getInvestigationById(String sid, String fac, String investigationId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
-          return qsmr.getInvestigationById(sid, fac, investigationId);
-     }
-  
+    public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+        return qsmr.getInvestigationByStudyId(sid, fac, studyId);
+    }
+    
+    public Collection<Investigation> getInvestigationById(String sid, String fac, String investigationId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+        return qsmr.getInvestigationById(sid, fac, investigationId);
+    }
+    
     
     public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
         return qsmr.getDataSets(sid, investigations);
@@ -116,5 +117,10 @@ public class QueryDelegate {
     
     public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO query_dto){
         return qsmr.getPastQueryResults(sid, query_dto);
+    }
+    
+    public String[] getKeywords(String facility) throws Exception{
+        return qsmr.getKeywords(facility);
+        
     }
 }
