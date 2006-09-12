@@ -30,4 +30,10 @@ public enum DPAuthType {
         return value;
     }
     
+    public boolean equals(DPAuthType type){
+        if(type != null && this.toString().equals(type.toString())) return true;
+        else return false;
+    }
+       
+    
 }

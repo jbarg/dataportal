@@ -25,5 +25,8 @@ public interface TimerServiceLocal {
     public void startTimeouts(Timer timer);
     
     public void removeSessionFromQueryCache(String sid);
+    
+      public void downloadKeywords() throws Exception;
+  
 }
 

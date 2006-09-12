@@ -9,6 +9,8 @@
 
 package uk.ac.dl.dp.coreutil.util;
 
+import java.io.File;
+
 /**
  *
  * @author gjd37
@@ -43,6 +45,9 @@ public class DataPortalConstants {
     public final static String QUERY_MDB = "jms/QueryMDBQueue";
     public final static String EVENT_MDB = "jms/EventMDBQueue";
     public final static String CONNECTION_FACTORY = "MDBQueueConnectionFactory";
+    
+    //location of the keyword files
+    public final static String KEYWORD_LOCATION= System.getProperty("java.io.tmpdir")+File.separator;
     
     
 }

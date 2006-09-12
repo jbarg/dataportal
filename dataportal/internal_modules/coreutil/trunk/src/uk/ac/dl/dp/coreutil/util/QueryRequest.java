@@ -11,8 +11,9 @@ package uk.ac.dl.dp.coreutil.util;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
-import uk.ac.cclrc.dpal.enums.LogicalExpression;
+import uk.ac.cclrc.dpal.enums.LogicalOperator;
 
 /**
  *
@@ -30,7 +31,7 @@ public class QueryRequest implements Serializable{
     private String queryid;
     private String DN;
     private DPQueryType qt;
-    private LogicalExpression logicalExpression;
+    private LogicalOperator logicalOperator;
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
@@ -54,6 +55,14 @@ public class QueryRequest implements Serializable{
 
     public String[] getKeyword() {
         return keyword;
+    }
+    
+    public Collection<String> getKeywords() {
+        Collection<String> d = new ArrayList<String>();
+        for(String keyword : getKeyword()){
+            d.add(keyword);
+        }
+        return d;
     }
 
     public void setKeyword(String[] keyword) {
@@ -108,12 +117,12 @@ public class QueryRequest implements Serializable{
         this.facilities = facilities;
     }
 
-    public LogicalExpression getLogicalExpression() {
-        return logicalExpression;
+    public LogicalOperator getLogicalLogicalOperator() {
+        return logicalOperator;
     }
 
-    public void setLogicalExpression(LogicalExpression logicalExpression) {
-        this.logicalExpression = logicalExpression;
+    public void setLogicalOperator(LogicalOperator logicalOperator) {
+        this.logicalOperator = logicalOperator;
     }
 
  
