@@ -364,8 +364,11 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         Collection<Collection<QueryRecord>> ccqr = QueryManager.getUserAll(sid);
         log.trace("Getting all results, size: "+ccqr.size());
         
+        //no duplicates
+        Collection<String> queryIds = QueryManager.getUserQueryIds(sid);
+                        
         Collection<QueryRecordDTO> dto  = new ArrayList<QueryRecordDTO>();
-        
+        for(String queryId : queryIds)
         for(Collection<QueryRecord> cqr : ccqr){
             for(QueryRecord qr : cqr){
                 dto.add(new QueryRecordDTO(qr));

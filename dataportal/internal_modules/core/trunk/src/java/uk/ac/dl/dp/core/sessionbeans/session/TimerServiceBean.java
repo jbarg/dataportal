@@ -9,24 +9,34 @@
 
 package uk.ac.dl.dp.core.sessionbeans.session;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.ejb.EJB;
 import javax.ejb.TimerService;
 import org.apache.log4j.*;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
+import uk.ac.cclrc.dpal.DPAccessLayer;
+import uk.ac.cclrc.dpal.beans.Keyword;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.Session;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceLocal;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceRemote;
 import uk.ac.dl.dp.core.message.query.QueryManager;
+import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -37,6 +47,9 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     
     @Resource
     TimerService timerService;
+    
+    @EJB()
+    LookupLocal lookup;
     
     static Logger log = Logger.getLogger(TimerServiceBean.class);
     
@@ -70,6 +83,14 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
         }
         try {
             timeoutQueryManager(timer);
+        } finally {
+        }
+        try {
+            try {
+                timeoutKeyword(timer);
+            } catch (Exception ex) {
+                log.error("Error with keywords: ",ex);
+            }
         } finally {
         }
     }
@@ -120,6 +141,74 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
             }
         }
     }
+    
+    public void downloadKeywords() throws Exception{
+        log.info("downloadKeywords");       
+        
+        boolean addFac = false;
+        Collection<ModuleLookup> facilities = lookup.getFacilityInfo(DPFacilityType.WRAPPER);
+        //    addFac = true;
+        // }
+        
+        DPAccessLayer dpal = null ;
+        
+        for(ModuleLookup mod : facilities){
+            ArrayList<String> suggest  = new ArrayList<String>();
+            ArrayList<Keyword> r_k_l = null;
+            try {
+                dpal = new DPAccessLayer(mod.getFacility()) ;
+                
+                //////
+                r_k_l = dpal.getKeywords("DN") ;
+                int i = 0;
+                for(Keyword k : r_k_l) {
+                    // System.out.println("\t"+k.toString()) ;
+                    boolean word = true;
+                    for(int j = 0 ; j < k.getName().length(); j++){
+                        if(!Character.isLetter(k.getName().charAt(j))){
+                            word = false;
+                            break;
+                        }
+                    }
+                    if(word){
+                        if(addFac){
+                            suggest.add(k.getName() +"    -"+mod.getFacility()+"-");
+                        } else  suggest.add(k.getName());
+                        //log.trace(k.getName());
+                        i++;
+                    }
+                }
+                
+                log.trace("Facility: "+mod.getFacility()+" has: "+suggest.size()+" keywords");
+                String[] facKeyWords =  suggest.toArray(new String[suggest.size()]);
+                
+                //save to file
+                FileOutputStream f_out = new FileOutputStream(DataPortalConstants.KEYWORD_LOCATION+mod.getFacility()+".keyworddata");
+                
+                // Use an ObjectOutputStream to send object data to the
+                // FileOutputStream for writing to disk.
+                ObjectOutputStream obj_out = new  ObjectOutputStream(f_out);
+                
+                // Pass our object to the ObjectOutputStream's
+                // writeObject() method to cause it to be written out
+                // to disk.
+                obj_out.writeObject(facKeyWords);
+                
+                
+            } catch (Exception sqle) {
+                log.error("Unable to initialize keywords for "+mod.getFacility(),sqle);
+                throw sqle;
+            } finally{
+                dpal.disconnectFromDB() ;
+            }
+        }
+        
+    }
+    
+    public void timeoutKeyword(Timer timer) throws Exception{
+        downloadKeywords();
+    }
+    
     
     public void removeSessionFromQueryCache(String sid){
         Collection<String> qr_ids = QueryManager.getUserQueryIds(sid);

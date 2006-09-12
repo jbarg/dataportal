@@ -87,7 +87,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 
                 if(e.getQt() == DPQueryType.KEYWORD){
                     
-                    r_s_l = dpal.getStudies(e.getKeyword(),e.getDN(),e.getLogicalExpression());
+                    r_s_l = dpal.getStudies( (ArrayList<String>) e.getKeywords(), e.getDN(),e.getLogicalLogicalOperator());
                     log.trace("Finished searching for studies");
                     ArrayList<String> studies = new ArrayList<String>();
                     for(Study study : r_s_l){
@@ -106,7 +106,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                  dpal.disconnectFromDB();
             }
             
-            log.debug("Query finished.. with id: "+e.getId());
+            log.debug("Query finished for "+e.getFacility()+"  with id: "+e.getId());
             QueryManager.addRecord(e , r_i_l, ex);
             
         }
