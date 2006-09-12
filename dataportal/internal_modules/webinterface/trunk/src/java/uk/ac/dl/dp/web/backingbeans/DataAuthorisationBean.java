@@ -71,7 +71,7 @@ public class DataAuthorisationBean extends BaseBean {
         try {
             results = DataCenterAuthDelegate.getInstance().searchUserDns(getVisit().getSid(), getSearchString());
             if(results.size() == 0){
-                getVisit().setSearchedUsers(null);
+                getVisitData().setSearchedUsers(null);
                 getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"No users found with: "+getSearchString(),""));
                 return ;
             }
@@ -87,7 +87,7 @@ public class DataAuthorisationBean extends BaseBean {
         }
         
         log.trace("Setting searched results");
-        getVisit().setSearchedUsers(dns);
+        getVisitData().setSearchedUsers(dns);
         setSearchString("");
         
     }
@@ -104,7 +104,7 @@ public class DataAuthorisationBean extends BaseBean {
         }
         getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Authorisation sucessfully added.",""));
         
-        getVisit().setSearchedUsers(null);
+        getVisitData().setSearchedUsers(null);
         return null;
     }
     

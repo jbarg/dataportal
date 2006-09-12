@@ -41,7 +41,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.navigation.SortableList;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 
@@ -49,7 +49,7 @@ import javax.faces.application.*;
  *
  * @author gjd37
  */
-public class OtherBookmarkBean extends SortableList {
+public class OtherBookmarkBean extends BaseSortableList {
     
     private static Logger log = Logger.getLogger(OtherBookmarkBean.class);
     
@@ -57,7 +57,7 @@ public class OtherBookmarkBean extends SortableList {
     private List<Bookmark> dataRefs;
     private Visit visit;
     private String note;
-    private boolean populated; 
+    private boolean populated;
     private boolean length;
     
     public OtherBookmarkBean(){
@@ -81,11 +81,11 @@ public class OtherBookmarkBean extends SortableList {
         if(dataRefs == null){
             try {
                 log.trace("Getting bookmarks.., bookmarks is null");
-                dataRefs = (List<Bookmark>) DataCenterAuthDelegate.getInstance().getOtherUsersBookmarks(getVisit().getSid(), getVisit().getCurrentUserAuthDN());
+                dataRefs = (List<Bookmark>) DataCenterAuthDelegate.getInstance().getOtherUsersBookmarks(getVisit().getSid(), getVisitData().getCurrentUserAuthDN());
                 
             }catch (NoAccessToDataCenterException ex) {
-                log.error("Access to others bookmarks ("+getVisit().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
-                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Access to "+getVisit().getCurrentUserAuthDN()+"'s bookmarks denied.",""));
+                log.error("Access to others bookmarks ("+getVisitData().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
+                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Access to "+getVisitData().getCurrentUserAuthDN()+"'s bookmarks denied.",""));
                 dataRefs = new ArrayList<Bookmark>();
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
@@ -175,45 +175,26 @@ public class OtherBookmarkBean extends SortableList {
         } catch (QueryException ex) {
             ex.printStackTrace();
         }
-        getVisit().setSearchedInvestigations(investigations);
+        getVisitData().setSearchedInvestigations(investigations);
         return "search_success";
         
     }
     
     
-    //Faces objects
-    public FacesContext getFacesContext(){
-        return FacesContext.getCurrentInstance();
-    }
-    
-    public Application getApplication(){
-        return getFacesContext().getApplication();
-    }
-    
-    //application objects
-    public Visit getVisit(){
-        return visit;
-    }
-    
-    public void setVisit(Visit visit) {
-        this.visit = visit;
-    }
-    
-      public boolean isPopulated() {
+    public boolean isPopulated() {
         if(getDataRefs().size() > 0){
-        return true;
-        }
-        else return false;
+            return true;
+        } else return false;
     }
-
+    
     public void setPopulated(boolean populated) {
         this.populated = populated;
     }
-
+    
     public boolean getLength() {
         return getDataRefs().size() > getVisit().getUserPreferences().getResultsPerPage();
     }
-
+    
     public void setLength(boolean length) {
         this.length = length;
     }

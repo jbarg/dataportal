@@ -82,9 +82,9 @@ public class DataSetTree extends BaseBean implements Serializable{
     
     
     public TreeNode getData() {
-        Collection<Investigation> investigations = getVisit().getCurrentInvestigations();
-        Collection<DataSet> datasets = getVisit().getCurrentDatasets();
-        Collection<DataFile> datafiles = getVisit().getCurrentDatafiles();
+        Collection<Investigation> investigations = getVisitData().getCurrentInvestigations();
+        Collection<DataSet> datasets = getVisitData().getCurrentDatasets();
+        Collection<DataFile> datafiles = getVisitData().getCurrentDatafiles();
         
         
         data = new TreeNodeBase("foo-folder", "Investigations ("+investigations.size()+")", false);
@@ -262,7 +262,7 @@ public class DataSetTree extends BaseBean implements Serializable{
         log.trace("Selected file for addition :");
         
         Collection<DataReference> toAddDataReference = new ArrayList<DataReference>();
-        for(DataFile file : getVisit().getCurrentDatafiles()){
+        for(DataFile file : getVisitData().getCurrentDatafiles()){
             
             if(file.isSelected()){
                 DataReference ref = new DataReference();
@@ -290,7 +290,7 @@ public class DataSetTree extends BaseBean implements Serializable{
         }
         log.trace("Selected sets for addition :");
         
-        for(DataSet file : getVisit().getCurrentDatasets()){
+        for(DataSet file : getVisitData().getCurrentDatasets()){
             
             if(file.isSelected()){
                 log.trace(file);
@@ -307,7 +307,7 @@ public class DataSetTree extends BaseBean implements Serializable{
                 
                 Collection<Url> cs = new ArrayList<Url>();
                 
-                for(DataFile df : getVisit().getCurrentDatafiles()){
+                for(DataFile df : getVisitData().getCurrentDatafiles()){
                     if(df.getFacility().equals(file.getFacility()) && df.getDataSetId().equals(file.getId())){
                         Url url = new Url();
                         url.setDataRefId(ref);
@@ -324,7 +324,7 @@ public class DataSetTree extends BaseBean implements Serializable{
         
         log.trace("Selected invest for addition :");
         Collection<Bookmark> toAddBookmarks = new ArrayList<Bookmark>();
-        for(Investigation file : getVisit().getCurrentInvestigations()){
+        for(Investigation file : getVisitData().getCurrentInvestigations()){
             
             if(file.isSelected()){
                 Bookmark bookmark = new Bookmark();
@@ -351,8 +351,8 @@ public class DataSetTree extends BaseBean implements Serializable{
             }
             
             log.trace("Setting bookamrks and references to null");
-            getVisit().setCurrentBookmarks(null);
-            getVisit().setCurrentDataReferences(null);
+            getVisitData().setCurrentBookmarks(null);
+            getVisitData().setCurrentDataReferences(null);
             
         } catch (SessionTimedOutException ex) {
             getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"Session Timed Out: "+ex.getMessage(),""));
@@ -376,44 +376,44 @@ public class DataSetTree extends BaseBean implements Serializable{
             //add all stuff to datacenter
             return "addToBookmark_success";
         } else return "addToDataCenter_success";
-        }
-        
-        private DataFile getDataFile(String param) {
-            String fac = param.split("-")[0];
-            String id = param.split("-")[1];
-            
-            for(DataFile file : getVisit().getCurrentDatafiles()){
-                if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                    log.debug("Found datafile: "+file);
-                    return file;
-                }
-            }
-            return null;
-        }
-        
-        private DataSet getDataSet(String param) {
-            String fac = param.split("-")[0];
-            String id = param.split("-")[1];
-            
-            for(DataSet file : getVisit().getCurrentDatasets()){
-                if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                    log.debug("Found dataset: "+file);
-                    return file;
-                }
-            }
-            return null;
-        }
-        
-        private Investigation getInvestigation(String param) {
-            String fac = param.split("-")[0];
-            String id = param.split("-")[1];
-            
-            for(Investigation file : getVisit().getCurrentInvestigations()){
-                if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                    log.debug("Found invest: "+file);
-                    return file;
-                }
-            }
-            return null;
-        }
     }
+    
+    private DataFile getDataFile(String param) {
+        String fac = param.split("-")[0];
+        String id = param.split("-")[1];
+        
+        for(DataFile file : getVisitData().getCurrentDatafiles()){
+            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+                log.debug("Found datafile: "+file);
+                return file;
+            }
+        }
+        return null;
+    }
+    
+    private DataSet getDataSet(String param) {
+        String fac = param.split("-")[0];
+        String id = param.split("-")[1];
+        
+        for(DataSet file : getVisitData().getCurrentDatasets()){
+            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+                log.debug("Found dataset: "+file);
+                return file;
+            }
+        }
+        return null;
+    }
+    
+    private Investigation getInvestigation(String param) {
+        String fac = param.split("-")[0];
+        String id = param.split("-")[1];
+        
+        for(Investigation file : getVisitData().getCurrentInvestigations()){
+            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+                log.debug("Found invest: "+file);
+                return file;
+            }
+        }
+        return null;
+    }
+}

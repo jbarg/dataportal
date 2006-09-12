@@ -41,7 +41,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPAuthType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.navigation.SortableList;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 import javax.faces.FacesException;
@@ -50,7 +50,7 @@ import javax.faces.FacesException;
  *
  * @author gjd37
  */
-public class ViewDataReceivedAuthorisationBean extends SortableList {
+public class ViewDataReceivedAuthorisationBean extends BaseSortableList {
     
     private static Logger log = Logger.getLogger(ViewDataReceivedAuthorisationBean.class);
     
@@ -82,20 +82,20 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
             try {
                 log.trace("Getting data auth..");
                 receivedDataRefs = (List<DataRefAuthorisation>) DataCenterAuthDelegate.getInstance().getRecievedAuthorisedList(getVisit().getSid(), DPAuthType.NONE);
-                if(getVisit().getCurrentUserAuthDN() != null){
+                if(getVisitData().getCurrentUserAuthDN() != null){
                     for(DataRefAuthorisation auth : receivedDataRefs){
-                        if(auth.getSource_user().getDn().equals(getVisit().getCurrentUserAuthDN())){
+                        if(auth.getSource_user().getDn().equals(getVisitData().getCurrentUserAuthDN())){
                             auth.setSelected(true);
                             break;
                         }
                     }
                 }
-                getVisit().setCurrentReceivedAuthorisations(receivedDataRefs);
+                getVisitData().setCurrentReceivedAuthorisations(receivedDataRefs);
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
             }
             sort(getSort(), isAscending());
-            return (List<DataRefAuthorisation>)getVisit().getCurrentReceivedAuthorisations();
+            return (List<DataRefAuthorisation>)getVisitData().getCurrentReceivedAuthorisations();
         } else{
             return (List<DataRefAuthorisation>)receivedDataRefs;
         }
@@ -138,7 +138,7 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
         if(receivedDataRefs == null){
             log.trace("Is givsnData is null ");
         }
-        Collections.sort( (List<DataRefAuthorisation>)getVisit().getCurrentReceivedAuthorisations(), comparator);
+        Collections.sort( (List<DataRefAuthorisation>)getVisitData().getCurrentReceivedAuthorisations(), comparator);
         
     }
     
@@ -147,14 +147,14 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
         log.trace("view data");
         DataRefAuthorisation dfa =   (DataRefAuthorisation) table.getRowData();
         log.trace("set other users: "+dfa.getSource_user().getDn());
-        getVisit().setCurrentUserAuthDN(dfa.getSource_user().getDn());
+        getVisitData().setCurrentUserAuthDN(dfa.getSource_user().getDn());
         if(dfa.getAuthType().equals(DPAuthType.ALL.toString())){
-            getVisit().setBookmarkEnabled(true);
-            getVisit().setDatacenterEnabled(true);
+            getVisitData().setBookmarkEnabled(true);
+            getVisitData().setDatacenterEnabled(true);
         } else if(dfa.getAuthType().equals(DPAuthType.BOOKMARK.toString())){
-            getVisit().setBookmarkEnabled(true);
+            getVisitData().setBookmarkEnabled(true);
         } else if(dfa.getAuthType().equals(DPAuthType.DATA.toString())){
-            getVisit().setDatacenterEnabled(true);
+            getVisitData().setDatacenterEnabled(true);
         }
         return null;
         
@@ -164,9 +164,9 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
         log.trace("unview data");
         DataRefAuthorisation dfa =   (DataRefAuthorisation) table.getRowData();
         log.trace("unset other users: "+dfa.getSource_user().getDn());
-        getVisit().setCurrentUserAuthDN(null);
-        getVisit().setBookmarkEnabled(false);
-        getVisit().setDatacenterEnabled(false);
+        getVisitData().setCurrentUserAuthDN(null);
+        getVisitData().setBookmarkEnabled(false);
+        getVisitData().setDatacenterEnabled(false);
         return null;
         
     }
@@ -189,25 +189,5 @@ public class ViewDataReceivedAuthorisationBean extends SortableList {
             i++;
         }
     }
-    
-//Faces objects
-    public FacesContext getFacesContext(){
-        return FacesContext.getCurrentInstance();
-    }
-    
-    public Application getApplication(){
-        return getFacesContext().getApplication();
-    }
-    
-//application objects
-    public Visit getVisit(){
-        return visit;
-    }
-    
-    public void setVisit(Visit visit) {
-        this.visit = visit;
-    }
-    
-    
     
 }

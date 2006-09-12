@@ -38,7 +38,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.navigation.SortableList;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 
@@ -46,7 +46,7 @@ import javax.faces.application.*;
  *
  * @author gjd37
  */
-public class HistoryBean extends SortableList {
+public class HistoryBean extends BaseSortableList {
     
     private static Logger log = Logger.getLogger(HistoryBean.class);
     
@@ -72,8 +72,8 @@ public class HistoryBean extends SortableList {
     }
     
     public List<QueryRecordDTO> getHistory() {
-         log.trace("Getting history..");
-               
+        log.trace("Getting history..");
+        
         if(history == null){
             
             try {
@@ -151,34 +151,13 @@ public class HistoryBean extends SortableList {
     
     public String viewData(){
         log.trace("view data");
-        QueryRecordDTO qrdto =   (QueryRecordDTO) table.getRowData();        
+        QueryRecordDTO qrdto =   (QueryRecordDTO) table.getRowData();
         log.trace("viewing : "+qrdto.getQueryid());
         Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults(qrdto.getQueryid());
-        getVisit().setSearchedInvestigations(investigations);
+        getVisitData().setSearchedInvestigations(investigations);
         return "search_success";
         
     }
-    
-    
-    
-    //Faces objects
-    public FacesContext getFacesContext(){
-        return FacesContext.getCurrentInstance();
-    }
-    
-    public Application getApplication(){
-        return getFacesContext().getApplication();
-    }
-    
-    //application objects
-    public Visit getVisit(){
-        return visit;
-    }
-    
-    public void setVisit(Visit visit) {
-        this.visit = visit;
-    }
-    
     
     
 }

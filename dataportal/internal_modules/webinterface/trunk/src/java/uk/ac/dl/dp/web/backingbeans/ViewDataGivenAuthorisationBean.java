@@ -41,7 +41,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPAuthType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.navigation.SortableList;
+import uk.ac.dl.dp.web.backingbeans.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 import javax.faces.FacesException;
@@ -50,7 +50,7 @@ import javax.faces.FacesException;
  *
  * @author gjd37
  */
-public class ViewDataGivenAuthorisationBean extends SortableList {
+public class ViewDataGivenAuthorisationBean extends BaseSortableList {
     
     private static Logger log = Logger.getLogger(ViewDataGivenAuthorisationBean.class);
     
@@ -85,12 +85,12 @@ public class ViewDataGivenAuthorisationBean extends SortableList {
             try {
                 log.trace("Getting data auth..");
                 givenDataRefs = (List<DataRefAuthorisation>) DataCenterAuthDelegate.getInstance().getGivenAuthorisedList(getVisit().getSid(), DPAuthType.NONE);
-                getVisit().setCurrentGivenAuthorisations(givenDataRefs);
+                getVisitData().setCurrentGivenAuthorisations(givenDataRefs);
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
             }
             sort(getSort(), isAscending());
-            return (List<DataRefAuthorisation>)getVisit().getCurrentGivenAuthorisations();
+            return (List<DataRefAuthorisation>)getVisitData().getCurrentGivenAuthorisations();
         } else{
             return (List<DataRefAuthorisation>)givenDataRefs;
         }
@@ -134,7 +134,7 @@ public class ViewDataGivenAuthorisationBean extends SortableList {
         if(givenDataRefs == null){
             log.trace("Is givsnData is null ");
         }
-        Collections.sort( (List<DataRefAuthorisation>)getVisit().getCurrentGivenAuthorisations(), comparator);
+        Collections.sort( (List<DataRefAuthorisation>)getVisitData().getCurrentGivenAuthorisations(), comparator);
         
     }
     
@@ -145,7 +145,7 @@ public class ViewDataGivenAuthorisationBean extends SortableList {
         log.trace("Removing from user: "+qrdto.getSource_user()+" access for user "+qrdto.getUser());
         try {
             DataCenterAuthDelegate.getInstance().removeAuthorisedUser(getVisit().getSid(), qrdto);
-            getVisit().setCurrentGivenAuthorisations(null);
+            getVisitData().setCurrentGivenAuthorisations(null);
         } catch (Exception ex) {
             log.error("Unable to remove user auth",ex);
         }
@@ -172,25 +172,5 @@ public class ViewDataGivenAuthorisationBean extends SortableList {
             i++;
         }
     }
-    
-    //Faces objects
-    public FacesContext getFacesContext(){
-        return FacesContext.getCurrentInstance();
-    }
-    
-    public Application getApplication(){
-        return getFacesContext().getApplication();
-    }
-    
-    //application objects
-    public Visit getVisit(){
-        return visit;
-    }
-    
-    public void setVisit(Visit visit) {
-        this.visit = visit;
-    }
-    
-    
     
 }

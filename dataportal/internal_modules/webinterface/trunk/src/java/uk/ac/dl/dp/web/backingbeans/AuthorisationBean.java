@@ -9,6 +9,10 @@
 
 package uk.ac.dl.dp.web.backingbeans;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import javax.faces.application.FacesMessage;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegateStateFul;
@@ -70,7 +74,7 @@ public class AuthorisationBean extends BaseBean {
     //methods action
     public String login(){
         
-        PropertyConfigurator.configure("c:/log4j.properties");
+        PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
         FacesContext facesContext = getFacesContext();
         String sid = null;
         SessionDTO session = null;
@@ -107,10 +111,18 @@ public class AuthorisationBean extends BaseBean {
             return "error";
         }
         
+        //TODO remove
+        //added security
+        boolean loggedIn = checkUser(session);
+        if(!loggedIn){
+            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"You have no access to the Data Portal",""));
+            return "login_failure";
+            
+        }
+        
         //logged in ok
         Visit visit = new Visit();
         visit.setSession(session);
-        visit.setAuthorisationBean(this);
         
         //set the visit object in the session
         getApplication().createValueBinding("#{"+WebConstants.SESSION_SCOPE_KEY+WebConstants.SESSION_KEY+"}").setValue(facesContext,visit);
@@ -127,9 +139,23 @@ public class AuthorisationBean extends BaseBean {
         http_session.removeAttribute(WebConstants.SESSION_SCOPE_KEY+WebConstants.SESSION_KEY);
         http_session.removeAttribute(WebConstants.SESSION_KEY);
         
-        http_session.invalidate();      
+        http_session.invalidate();
         
         return "logout";
+    }
+    
+    private boolean checkUser(SessionDTO session) {
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream(System.getProperty("user.home")+File.separator+"users.properties"));
+        } catch (IOException ex) {
+            log.error(ex);
+            return false;
+        }
+        
+        if(!prop.containsValue(session.getDN())){
+            return false;
+        } else return true;
     }
 }
 
