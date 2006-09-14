@@ -11,18 +11,13 @@ package uk.ac.dl.dp.web.backingbeans;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.model.*;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -31,30 +26,31 @@ import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
-import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
-import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.backingbeans.SortableList;
+import uk.ac.dl.dp.web.navigation.NavigationConstants;
+import uk.ac.dl.dp.web.util.SortableList;
 import javax.faces.context.FacesContext;
-import javax.faces.application.*;
 import javax.faces.FacesException;
 
 /**
  *
  * @author gjd37
  */
-public class DataCenterBean extends BaseSortableList {
+public class DataCenterBean extends SortableList {
     
     private static Logger log = Logger.getLogger(DataCenterBean.class);
-    
-    private DataModel model;
+        
     private HtmlDataTable table;
-    private List<DataReference> dataRefs;
-    private Visit visit;
+    
+     //list of all of the DataReference from DB
+    private List<DataReference> dataRefs;     
+    
+    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+    //need this is see if bookmarks is > 0 and the lenght of them
     private boolean populated; 
     private boolean length;
     
@@ -85,8 +81,12 @@ public class DataCenterBean extends BaseSortableList {
                 dataRefs = (List<DataReference>) DataCenterDelegate.getInstance().getDataReferences(getVisit().getSid());
                 getVisitData().setCurrentDataReferences(dataRefs);
             } catch (Exception ex) {
-                log.error("Unable to get bookmarks",ex);
+                 log.error("Unable to get data references for user: "+getVisit().getDn(),ex);
+                error("Error:  Unable to retrieve your data references.");
+                getVisitData().setCurrentDataReferences(new ArrayList<DataReference>());
+                return null;
             }
+             //sort column by default column in constructor
             sort(getSort(), isAscending());
             return (List<DataReference>)getVisitData().getCurrentDataReferences();
         } else{
@@ -105,6 +105,8 @@ public class DataCenterBean extends BaseSortableList {
         
     }
     
+    //listens for sort column action events, and gets the column by thge param name passed in
+    // then calls sort on the column
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -130,13 +132,12 @@ public class DataCenterBean extends BaseSortableList {
                     return 0;
             }
         };
-        if(dataRefs == null){
-            log.trace("Is dataRefs is null ");
-        }
         Collections.sort( (List<DataReference>)getVisitData().getCurrentDataReferences(), comparator);
         
     }
     
+    //This listens to changes in the users isSelected.  This is because the list could be
+    //larger than one page so have to do it this way
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
         Collection<DataReference> dataReference = getVisitData().getCurrentDataReferences();
@@ -164,6 +165,8 @@ public class DataCenterBean extends BaseSortableList {
         }
     }
     
+    //Gets the current data ref and then gets the investigation and searches for the investigation
+    // returns back to the investigations page
     public String viewData(){
         log.trace("view data");
         DataReference qrdto =   (DataReference) table.getRowData();
@@ -171,20 +174,24 @@ public class DataCenterBean extends BaseSortableList {
         Collection<Investigation> investigations = null;
         try {
             investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
-        } catch (SessionNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (SessionTimedOutException ex) {
-            ex.printStackTrace();
-        } catch (UserNotFoundException ex) {
-            ex.printStackTrace();
         } catch (QueryException ex) {
-            ex.printStackTrace();
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unable to search for "+qrdto.getName());
+            return null;
+        } catch (Exception ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unexpected error searching for "+qrdto.getName());
+            return null;
         }
+        
+        //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
-        return "search_success";
+        return NavigationConstants.SEARCH_SUCCESS;
         
     }
     
+    //listens for sort column action events, and gets the column by thge param name passed in
+    // then calls sort on the column
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -202,6 +209,8 @@ public class DataCenterBean extends BaseSortableList {
             }
             i++;
         }       
+        //collaspe all details in the data table.
+        getTable().collapseAllDetails();
     }
     
     public String removeDatasets(){
@@ -215,18 +224,19 @@ public class DataCenterBean extends BaseSortableList {
         try {
             DataCenterDelegate.getInstance().removeDataReference(getVisit().getSid(), dataReference);
             getVisitData().setCurrentDataReferences(null);
-        } catch (SessionNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (SessionTimedOutException ex) {
-            ex.printStackTrace();
-        } catch (UserNotFoundException ex) {
-            ex.printStackTrace();
         } catch (NoAccessToDataCenterException ex) {
-            ex.printStackTrace();
+            log.warn("User: "+getVisit().getDn()+" has no access to remove from: "+getVisitData().getCurrentUserAuthDN());
+            error("You do not have access for this operation.");
+            return null;
+        } catch (Exception ex) {
+            log.warn("User: "+getVisit().getDn()+" cannot remove data references");
+            error("Error whilst removing data references.");
+            return null;
         }
         return null;
     }
     
+    //method to select all data
     public String selectnone(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(false);
@@ -234,6 +244,7 @@ public class DataCenterBean extends BaseSortableList {
         return null;
     }
     
+     //mehtod to remove select all
     public String selectall(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(true);
@@ -241,6 +252,10 @@ public class DataCenterBean extends BaseSortableList {
         return null;
     }
     
+    //listens for changes in the add note section in data center page
+    //iterates over paramaters and gets the data center ID passedd in and sets the note on the data center
+    //once the change has been made they need to press the addNote method and then the data center will be sent
+    // to the EJB to save
     public void note(ValueChangeEvent event){
         log.trace("new value: "+event.getNewValue());
         List children  = event.getComponent().getChildren();
@@ -265,32 +280,32 @@ public class DataCenterBean extends BaseSortableList {
         }
     }
     
-    public String addNote(){
-        
+     //save to DB
+    public String addNote(){        
         
         DataReference bk = (DataReference)table.getRowData();
         log.trace("Note id is "+bk.getId()+" with new note: "+bk.getNote());
         try {
             DataCenterDelegate.getInstance().addDataReference(getVisit().getSid(),bk);
-        } catch (SessionTimedOutException ex) {
-            ex.printStackTrace();
-        } catch (SessionNotFoundException ex) {
-            ex.printStackTrace();
         } catch (NoAccessToDataCenterException ex) {
-            ex.printStackTrace();
-        } catch (UserNotFoundException ex) {
-            ex.printStackTrace();
+            log.warn("User: "+getVisit().getDn()+" has no access to add note to: "+getVisitData().getCurrentUserAuthDN());
+            error("You do not have access for this operation.");
+            return null;
+        } catch (Exception ex) {
+            log.warn("User: "+getVisit().getDn()+" cannot add note to data center: "+bk.getId()+" , facility: "+bk.getFacility());
+            error("Error whilst adding note.");
+            return null;
         }
         
         getVisitData().setCurrentDataReferences(null);
         return null;
     }
     
-  
-    
    
     
-    
+    ///////////////////////////////////////////////////
+    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+    //need this is see if bookmarks is > 0 and the lenght of them
      public boolean isPopulated() {
         if(getDataRefs().size() > 0){
         return true;
@@ -309,7 +324,8 @@ public class DataCenterBean extends BaseSortableList {
     public void setLength(boolean length) {
         this.length = length;
     }
-    
+    ////////////////////////////////////////////////////////////////////
+ 
     
     
 }

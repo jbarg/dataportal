@@ -10,41 +10,30 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
-import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
-import uk.ac.dl.dp.coreutil.delegates.DataCenterAuthDelegate;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegateStateFul;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
-import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
-import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import javax.faces.event.ActionEvent;
 import javax.faces.context.FacesContext;
 import org.apache.log4j.*;
-import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import javax.faces.model.SelectItem;
-import uk.ac.dl.dp.coreutil.util.DPAuthType;
 import javax.faces.validator.ValidatorException;
 import javax.faces.component.UIComponent;
-import org.apache.myfaces.custom.calendar.HtmlInputCalendar;
 import javax.faces.component.UIInput;
 import uk.ac.dl.dp.coreutil.util.DPResolution;
+import uk.ac.dl.dp.web.util.AbstractRequestBean;
 
 /**
  *
  * @author gjd37
  */
-public class UserPreferencesBean extends BaseBean {
+public class UserPreferencesBean extends AbstractRequestBean {
     
     
     private static Logger log = Logger.getLogger(UserPreferencesBean.class);
     
+    //uicomponets on page
     private List<SelectItem> facilities;
     private String defaultFacility;
     
@@ -57,7 +46,7 @@ public class UserPreferencesBean extends BaseBean {
     /** Creates a new instance of AuthorisationBean */
     public UserPreferencesBean() {
     }
-    
+    //get list of facilities form the session
     public List<SelectItem> getFacilities() {
         return getVisit().getFacilities();
     }
@@ -66,6 +55,7 @@ public class UserPreferencesBean extends BaseBean {
         this.facilities = facilities;
     }
     
+    //get default from users prefs
     public String getDefaultFacility() {
         return getVisit().getSession().getUserPrefs().getDefaultFacility();
     }
@@ -74,6 +64,7 @@ public class UserPreferencesBean extends BaseBean {
         this.defaultFacility = defaultFacility;
     }
     
+    //add list of default resolutions
     public List<SelectItem> getResolution() {
         List<SelectItem> res = new ArrayList<SelectItem>();
         res.add(new SelectItem(DPResolution.res_1024x768.toString(),DPResolution.res_1024x768.toString().split("_")[1]));
@@ -96,6 +87,7 @@ public class UserPreferencesBean extends BaseBean {
         this.defaultResolution = defaultResolution;
     }
     
+    //add list of number of results on a page
     public List<SelectItem> getResults() {
         List<SelectItem> results = new ArrayList<SelectItem>();
         results.add(new SelectItem("5","5"));
@@ -119,6 +111,8 @@ public class UserPreferencesBean extends BaseBean {
         this.defaultresults = defaultresults;
     }
     
+    
+    //save the new prefs
     public String save(){
         log.trace("Setting user prefs to: Facility: "+defaultFacility+", Resolution: "+defaultResolution+", Number Results: "+defaultresults );
         UserPreferencesDTO userPrefs= new UserPreferencesDTO();
@@ -126,14 +120,14 @@ public class UserPreferencesBean extends BaseBean {
         userPrefs.setResolution(DPResolution.valueOf(defaultResolution));
         userPrefs.setResultsPerPage(Integer.parseInt(defaultresults));
         try {
-            SessionDelegate.getInstance().setUserPrefs(getVisit().getSid(),userPrefs);            
-            getVisit().setUserPreferences(userPrefs);            
+            SessionDelegate.getInstance().setUserPrefs(getVisit().getSid(),userPrefs);
+            getVisit().setUserPreferences(userPrefs);
         } catch (Exception ex) {
             log.warn("Unable to update user: "+getVisit().getDn()+"'s user preferences",ex);
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error updating user preferences.",""));
+            error("Error updating user preferences.");
             return null;
         }
-        getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Preferences sucessfully updated.",""));
+        info("Preferences sucessfully updated.");
         
         return null;
         

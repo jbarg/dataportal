@@ -41,7 +41,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPAuthType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.backingbeans.SortableList;
+import uk.ac.dl.dp.web.util.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 import javax.faces.FacesException;
@@ -50,7 +50,7 @@ import javax.faces.FacesException;
  *
  * @author gjd37
  */
-public class ViewDataReceivedAuthorisationBean extends BaseSortableList {
+public class ViewDataReceivedAuthorisationBean extends SortableList {
     
     private static Logger log = Logger.getLogger(ViewDataReceivedAuthorisationBean.class);
     

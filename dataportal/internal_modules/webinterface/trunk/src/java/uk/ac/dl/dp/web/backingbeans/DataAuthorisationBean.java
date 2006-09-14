@@ -14,35 +14,27 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
-import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterAuthDelegate;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegateStateFul;
-import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
-import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
-import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import javax.faces.event.ActionEvent;
 import javax.faces.context.FacesContext;
 import org.apache.log4j.*;
-import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import javax.faces.model.SelectItem;
 import uk.ac.dl.dp.coreutil.util.DPAuthType;
 import javax.faces.validator.ValidatorException;
 import javax.faces.component.UIComponent;
-import org.apache.myfaces.custom.calendar.HtmlInputCalendar;
 import javax.faces.component.UIInput;
+import uk.ac.dl.dp.web.util.AbstractRequestBean;
 
 /**
  *
  * @author gjd37
  */
-public class DataAuthorisationBean extends BaseBean {
+public class DataAuthorisationBean extends AbstractRequestBean {
     
     
     private static Logger log = Logger.getLogger(DataAuthorisationBean.class);
-    
+   
+    //  All page components 
     private String searchString;
     private Date firstDate;
     private Date secondDate;
@@ -56,6 +48,8 @@ public class DataAuthorisationBean extends BaseBean {
     public DataAuthorisationBean() {
     }
     
+    
+    //string that the user wants to search the DNs for
     public String getSearchString() {
         return searchString;
     }
@@ -64,22 +58,26 @@ public class DataAuthorisationBean extends BaseBean {
         this.searchString = searchString;
     }
     
+    //search for the search string
     public void search(ActionEvent event){
         log.trace("Searching for users: "+getSearchString());
         Collection<String> results = null;
         if(getSearchString().equals("*")) setSearchString("");
         try {
             results = DataCenterAuthDelegate.getInstance().searchUserDns(getVisit().getSid(), getSearchString());
+            //no users found
             if(results.size() == 0){
+                //make sure bottom section of page is not displayed
                 getVisitData().setSearchedUsers(null);
-                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"No users found with: "+getSearchString(),""));
+                info("No users found with: "+getSearchString());
                 return ;
             }
         } catch (Exception ex) {
             log.error("Unable to search users DNs",ex);
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable to search user's DNs",""));
+            error("Unable to search user's DNs");
             return ;
         }
+        //got results, not create a list of select items to be displayed
         List<SelectItem> dns = new ArrayList<SelectItem>();
         for(String result : results){
             log.trace("Adding user: "+results+" to list");
@@ -87,11 +85,13 @@ public class DataAuthorisationBean extends BaseBean {
         }
         
         log.trace("Setting searched results");
+        //add this list of the user can then add the auth to selected one
         getVisitData().setSearchedUsers(dns);
         setSearchString("");
         
     }
     
+    //grants access to the users data to choosen dn
     public String grant(){
         log.trace("grant: "+getVisit().getSid()+" "+ getSearchUser()+ " "+getFirstDate()+" "+getSecondDate()+" "+getType());
         
@@ -99,15 +99,19 @@ public class DataAuthorisationBean extends BaseBean {
             DataCenterAuthDelegate.getInstance().addAuthorisedUser(getVisit().getSid(), getSearchUser(),getFirstDate(),getSecondDate(),DPAuthType.valueOf(getType()));
         } catch (Exception ex) {
             log.error("Unable to add auth for user "+getVisit().getDn()+" to user "+getSearchUser(),ex);
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Unable to add authorisation.",""));
+            error("Unable to add authorisation.");
             return null;
         }
-        getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Authorisation sucessfully added.",""));
+        //display to user than it was ok
+        info("Authorisation sucessfully added.");
         
+        //remove this so grant section is not displayed again
         getVisitData().setSearchedUsers(null);
+        //go back to same page
         return null;
     }
     
+    //this is own validation so that if user chooses "Select One" error displayed
     public void validateType(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
         log.debug("validateType: "+value);
         String val = (String)value;
@@ -119,6 +123,9 @@ public class DataAuthorisationBean extends BaseBean {
         }
     }
     
+    //way to validate two components.  Put val on last one and then check the local value (in this class)
+    // of the other one abobve it in the page
+    // before cannot be after after !!
     public void validateDate(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
         log.debug("validateDate: ");
         if (value != null) {
@@ -131,7 +138,7 @@ public class DataAuthorisationBean extends BaseBean {
     }
     
     
-    
+    /////////////////////  All page components //////////////////////////////////
     public Date getFirstDate() {
         return firstDate;
     }
@@ -187,7 +194,8 @@ public class DataAuthorisationBean extends BaseBean {
     public void setCalendarSecond(UIInput calendarSecond) {
         this.calendarSecond = calendarSecond;
     }
-    
+    ///////////////////// End all page components //////////////////////////////////
+   
     
 }
 

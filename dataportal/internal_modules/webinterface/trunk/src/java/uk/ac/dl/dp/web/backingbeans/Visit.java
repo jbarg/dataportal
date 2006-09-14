@@ -31,12 +31,13 @@ import java.util.*;
 import javax.faces.model.SelectItem;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dl.dp.web.util.AbstractSessionBean;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
 /**
  *
  * @author gjd37
  */
-public class Visit implements Serializable {
+public class Visit  extends AbstractSessionBean implements Serializable{
     
     private String dn;
     private Collection<DPRole> roles;

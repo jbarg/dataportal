@@ -26,6 +26,7 @@ import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.web.navigation.KeywordBean;
 import org.apache.log4j.*;
+import uk.ac.dl.dp.web.util.AbstractApplicationBean;
 
 /**
  * This application bean is a managed JSF bean in application scope.
@@ -36,7 +37,7 @@ import org.apache.log4j.*;
  * @author Tor Norbye
  * @author Mark Basler
  */
-public class ApplicationBean {
+public class ApplicationBean extends AbstractApplicationBean {
     private static Logger log = Logger.getLogger(ApplicationBean.class);
     
     

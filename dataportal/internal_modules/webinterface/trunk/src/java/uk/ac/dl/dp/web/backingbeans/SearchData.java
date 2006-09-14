@@ -9,6 +9,7 @@
 
 package uk.ac.dl.dp.web.backingbeans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
@@ -18,7 +19,7 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
  *
  * @author gjd37
  */
-public class SearchData {
+public class SearchData implements Serializable {
     
     private QueryRequest queryRequest;
     
