@@ -8,6 +8,6 @@
 <a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top"><font size="1" color="black">&copy;
 <script language="JavaScript"><!--
 document.write(new Date().getYear());
-//--></script> CCLRC Data Portal &nbsp;</font></a></td>
+//--></script> CCLRC Data Portal</font></a>&nbsp;</td>
 
 

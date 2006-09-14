@@ -62,7 +62,7 @@
            <h:messages globalOnly="true" errorClass="error" infoClass="info" />
          
        </h:panelGrid>
-                   
+                 
        <h:panelGrid  border="0" columns="4">      
                  
            <h:outputLabel for="facilities">

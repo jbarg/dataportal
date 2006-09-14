@@ -63,6 +63,10 @@
                         <h:commandLink style="table-header" id="name" actionListener="#{otherdatacenterBean.sortColumn}">
                             <h:outputText value="Name" />
                             <f:param name="column" value="name"/>
+                            <c:if test="${requestScope.otherdatacenterBean.sort == 'name'}" >
+                                <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:commandLink onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
@@ -76,7 +80,10 @@
                         <h:commandLink style="table-header" id="type" actionListener="#{otherdatacenterBean.sortColumn}">
                             <h:outputText value="Type" />
                             <f:param name="column" value="type"/>
-               
+                            <c:if test="${requestScope.otherdatacenterBean.sort == 'type'}" >
+                                <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
               
@@ -105,7 +112,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="facility" actionListener="#{otherdatacenterBean.sortColumn}">
                             <h:outputText value="Facility" />
-                            <f:param name="column" value="facility"/>              
+                            <f:param name="column" value="facility"/> 
+                            <c:if test="${requestScope.otherdatacenterBean.sort == 'facility'}" >
+                                <t:graphicImage id="acfacility" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="defacility" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText value="#{data.facility}" />
@@ -115,7 +126,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="notes" actionListener="#{otherdatacenterBean.sortColumn}">
                             <h:outputText value="Notes" />
-                            <f:param name="column" value="notes"/>               
+                            <f:param name="column" value="notes"/>     
+                            <c:if test="${requestScope.otherdatacenterBean.sort == 'notes'}" >
+                                <t:graphicImage id="acn" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="den" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                        
@@ -145,7 +160,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="time" actionListener="#{otherdatacenterBean.sortColumn}">
                             <h:outputText value="Time" />
-                            <f:param name="column" value="time"/>              
+                            <f:param name="column" value="time"/> 
+                            <c:if test="${requestScope.otherdatacenterBean.sort == 'time'}" >
+                                <t:graphicImage id="actime" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="detime" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText value="#{data.modTime}" >

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
-    <application>
-       
+    <application>       
         <message-bundle>uk.ac.dl.dp.web.messages.validation</message-bundle>
         <locale-config>
             <default-locale>en</default-locale>
@@ -13,211 +12,162 @@
         <managed-bean-class>uk.ac.dl.dp.web.navigation.NavigationMenu</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>
     </managed-bean>
+    
       <managed-bean>
         <managed-bean-name>ApplicationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ApplicationBean</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>
-       
+        <managed-bean-scope>application</managed-bean-scope>       
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>keyword</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.navigation.KeywordBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-         <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>application</managed-bean-scope>        
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>visit</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.Visit</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>authorisationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.AuthorisationBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>dataAuthorisationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DataAuthorisationBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>      
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>viewDataGivenAuthorisationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ViewDataGivenAuthorisationBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>          
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>viewDataReceivedAuthorisationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ViewDataReceivedAuthorisationBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>searchBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.SearchBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>investigationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>investigationTree</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationTree</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>       
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>investigationHelpTree</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationHelpTree</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>       
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>datasetTree</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DataSetTree</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>       
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>datasetHelpTree</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DataSetHelpTree</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>datacenterBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DataCenterBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>       
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>otherdatacenterBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.OtherDataCenterBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>       
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>bookmarkBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.BookmarkBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>otherbookmarkBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.OtherBookmarkBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>historyBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.HistoryBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
     
      <managed-bean>
         <managed-bean-name>userPreferencesBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.UserPreferencesBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-        <managed-property>
-            <property-name>visit</property-name>
-            <value>#{sessionScope.visit}</value>
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
+        
     <navigation-rule>
         <description>
-            
+            User logs into DP successfully, redirect to load images correctly
         </description>
         <from-view-id>/logon.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>login_success</from-outcome>
+            <from-outcome>LOGIN_SUCCESS</from-outcome>
             <to-view-id>/protected/basic_search.jsp</to-view-id>
-            <redirect />
-            
-        </navigation-case>
-        
+            <redirect />            
+        </navigation-case>        
     </navigation-rule>
+    
     <navigation-rule>
         <description>
-            
+            The search was success for investigations, now show then in the investigations page
         </description>
         <from-view-id>/protected/basic_search.jsp</from-view-id>
+        <!--
+          Not used, was going to put a progrss bar on the search, will do if searchs are getting long
         <navigation-case>
             <from-outcome>search_sent_success</from-outcome>
             <to-view-id>/protected/search_wait.jsp</to-view-id>
-        </navigation-case>
+        </navigation-case>-->
         <navigation-case>
-            <from-outcome>search_success</from-outcome>
+            <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
         <description>
-            
+            From history list, view results, so send back to invests..
         </description>
         <from-view-id>/protected/history.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>search_success</from-outcome>
+            <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
-    <navigation-rule>
+   <!-- <navigation-rule>
         <description>
             
         </description>
@@ -231,140 +181,138 @@
             <from-outcome>search_fail</from-outcome>
             <to-view-id>/protected/basic_search.jsp</to-view-id>
         </navigation-case>
-    </navigation-rule>
+    </navigation-rule>-->
+    
     <navigation-rule>
         <description>
-            
+            From when the data sets and files have been found from selected investigations
         </description>
         <from-view-id>/protected/investigations.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>dataset_success</from-outcome>
+            <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
             <to-view-id>/protected/data_sets.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
-        <description>            
+        <description>  
+            
         </description>
         <from-view-id>/protected/data_sets.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>addToDataCenter_success</from-outcome>
+            <from-outcome>ADD_DATA_REFERENCE_SUCCESS</from-outcome>
             <to-view-id>/protected/data_center.jsp</to-view-id>
         </navigation-case>
-    </navigation-rule>
+    </navigation-rule>     
     
     <navigation-rule>
-        <description>            
-        </description>
-        <from-view-id>/protected/history.jsp</from-view-id>
-        <navigation-case>
-            <from-outcome>search_success</from-outcome>
-            <to-view-id>/protected/investigations.jsp</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    
-    <navigation-rule>
-        <description>            
+        <description>  
+            when user wants to view investigation from the bookmark
         </description>
         <from-view-id>/protected/bookmark.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>search_success</from-outcome>
+            <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
-        <description>            
+        <description>  
+              when user wants to view investigation from the other user's bookmarks
         </description>
         <from-view-id>/protected/other_bookmark.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>search_success</from-outcome>
+            <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
-        <description>            
+        <description>  
+            when user wants to view investigation from the other user's data references
         </description>
         <from-view-id>/protected/other_data_center.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>search_success</from-outcome>
+            <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
-        <description>            
+        <description>     
+             when user wants to view investigation from the user's data references
         </description>
         <from-view-id>/protected/data_center.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>search_success</from-outcome>
+            <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
-        <description>            
+        <description>   
+            This is for all of the navigation bars actions
         </description>
         <from-view-id>/*</from-view-id>
+        
         <navigation-case>
-            <from-outcome>logout</from-outcome>
+            <from-outcome>LOGOUT_SUCCESS</from-outcome>
             <to-view-id>/logon.jsp</to-view-id>
             <redirect />            
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>basicSearch</from-outcome>
+            <from-outcome>GOTO_BASIC_SEARCH</from-outcome>
             <to-view-id>/protected/basic_search.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>give_data_authorisation</from-outcome>
+            <from-outcome>GIVE_DATA_AUTH</from-outcome>
             <to-view-id>/protected/datacenter_authorisation.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>view_data_authorisation</from-outcome>
+            <from-outcome>GOTO_DATA_AUTH</from-outcome>
             <to-view-id>/protected/view_data_auth.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>investigations</from-outcome>
+            <from-outcome>GOTO_INVESTIGATIONS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>addToDataCenter_success</from-outcome>
+            <from-outcome>GOTO_DATA_REFERENCES</from-outcome>
             <to-view-id>/protected/data_center.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>dataset_success</from-outcome>
+            <from-outcome>GOTO_DATASETS</from-outcome>
             <to-view-id>/protected/data_sets.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>addToBookmark_success</from-outcome>
+            <from-outcome>GOTO_BOOKMARKS</from-outcome>
             <to-view-id>/protected/bookmark.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>other_bookmark</from-outcome>
+            <from-outcome>VIEW_OTHER_BOOKMARKS</from-outcome>
             <to-view-id>/protected/other_bookmark.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>other_data_center</from-outcome>
+            <from-outcome>VIEW_OTHER_DATA_REFERENCES</from-outcome>
             <to-view-id>/protected/other_data_center.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
-            <from-outcome>history</from-outcome>
+            <from-outcome>GOTO_HISTORY</from-outcome>
             <to-view-id>/protected/history.jsp</to-view-id>
         </navigation-case>
         
          <navigation-case>
-            <from-outcome>user_prefs</from-outcome>
+            <from-outcome>GOTO_USER_PREFS</from-outcome>
             <to-view-id>/protected/preferences.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>

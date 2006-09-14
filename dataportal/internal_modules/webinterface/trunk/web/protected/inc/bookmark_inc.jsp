@@ -48,6 +48,10 @@
                         <h:commandLink style="table-header" id="name" actionListener="#{bookmarkBean.sortColumn}">
                             <h:outputText value="Name" />
                             <f:param name="column" value="name"/>
+                             <c:if test="${requestScope.bookmarkBean.sort == 'name'}" >
+                                <t:graphicImage id="acn" value="../../images/ascending-arrow.gif" rendered="#{!bookmarkBean.ascending}" border="0"/>
+                                <t:graphicImage id="den" value="../../images/descending-arrow.gif" rendered="#{bookmarkBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText  value="#{data.name}" />
@@ -58,7 +62,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="facility" actionListener="#{bookmarkBean.sortColumn}">
                             <h:outputText value="Facility" />
-                            <f:param name="column" value="facility"/>              
+                            <f:param name="column" value="facility"/>  
+             <c:if test="${requestScope.bookmarkBean.sort == 'facility'}" >
+                                <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!bookmarkBean.ascending}" border="0"/>
+                                <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{bookmarkBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText value="#{data.facility}" />
@@ -67,7 +75,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="notes" actionListener="#{bookmarkBean.sortColumn}">
                             <h:outputText value="Notes" />
-                            <f:param name="column" value="notes"/>               
+                            <f:param name="column" value="notes"/>   
+               <c:if test="${requestScope.bookmarkBean.sort == 'notes'}" >
+                                <t:graphicImage id="acnote" value="../../images/ascending-arrow.gif" rendered="#{!bookmarkBean.ascending}" border="0"/>
+                                <t:graphicImage id="denote" value="../../images/descending-arrow.gif" rendered="#{bookmarkBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                        
@@ -117,7 +129,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="time" actionListener="#{bookmarkBean.sortColumn}">
                             <h:outputText value="Time" />
-                            <f:param name="column" value="time"/>              
+                            <f:param name="column" value="time"/>   
+            <c:if test="${requestScope.bookmarkBean.sort == 'time'}" >
+                                <t:graphicImage id="actime" value="../../images/ascending-arrow.gif" rendered="#{!bookmarkBean.ascending}" border="0"/>
+                                <t:graphicImage id="detime" value="../../images/descending-arrow.gif" rendered="#{bookmarkBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText value="#{data.modTime}" >

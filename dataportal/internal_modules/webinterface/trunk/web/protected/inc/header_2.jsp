@@ -1,4 +1,3 @@
-
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
@@ -14,16 +13,16 @@
         
         
               
-        <t:navigationMenuItem id="nav_1"  itemLabel="Basic Search" itemValue="basicSearch" action="basicSearch"/>
-        <t:navigationMenuItem id="nav_2"  itemLabel="Results" action="investigations" rendered="#{visit.visitData.investigations}" />
-        <t:navigationMenuItem id="nav_3"  itemLabel="Data Sets" action="dataset_success" rendered="#{visit.visitData.datasets}" />
+        <t:navigationMenuItem id="nav_1"  itemLabel="Basic Search" itemValue="basicSearch" action="GOTO_BASIC_SEARCH"/>
+        <t:navigationMenuItem id="nav_2"  itemLabel="Results" action="GOTO_INVESTIGATIONS" rendered="#{visit.visitData.investigations}" />
+        <t:navigationMenuItem id="nav_3"  itemLabel="Data Sets" action="GOTO_DATASETS" rendered="#{visit.visitData.datasets}" />
       
         <t:navigationMenuItem id="nav_4"  itemLabel="Data Center" >                  
-            <t:navigationMenuItem id="nav_4_1"  itemLabel="Data References" action="addToDataCenter_success" />
-            <t:navigationMenuItem id="nav_4_2"  itemLabel="Bookmarks" action="addToBookmark_success" />
+            <t:navigationMenuItem id="nav_4_1"  itemLabel="Data References" action="GOTO_DATA_REFERENCES" />
+            <t:navigationMenuItem id="nav_4_2"  itemLabel="Bookmarks" action="GOTO_BOOKMARKS" />
             <t:navigationMenuItem id="nav_4_3" rendered="#{visit.visitData.otherUserDn}"  itemLabel="Others" >                  
-                <t:navigationMenuItem id="nav_4_3_1" rendered="#{visit.visitData.datacenterEnabled}"  itemLabel="Data References" action="other_data_center" />
-                <t:navigationMenuItem id="nav_4_3_2" rendered="#{visit.visitData.bookmarkEnabled}"  itemLabel="Bookmarks" action="other_bookmark" />
+                <t:navigationMenuItem id="nav_4_3_1" rendered="#{visit.visitData.datacenterEnabled}"  itemLabel="Data References" action="VIEW_OTHER_DATA_REFERENCES" />
+                <t:navigationMenuItem id="nav_4_3_2" rendered="#{visit.visitData.bookmarkEnabled}"  itemLabel="Bookmarks" action="VIEW_OTHER_BOOKMARKS" />
                                          
             </t:navigationMenuItem>             
         </t:navigationMenuItem>
