@@ -148,8 +148,8 @@
         </f:facet>
 
         <%--<h:column>
-            <f:facet name="header"></f:facet>            
-            <h:outputText value="#{invest.id}" />
+        <f:facet name="header"></f:facet>            
+        <h:outputText value="#{invest.id}" />
               
         </h:column>--%>
         <h:column>
@@ -157,6 +157,10 @@
                 <h:commandLink style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
                     <h:outputText value="Name" />
                     <f:param name="column" value="name"/>
+                    <c:if test="${requestScope.investigationBean.sort == 'name'}" >
+                        <t:graphicImage id="acname" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
+                        <t:graphicImage id="dename" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
+                    </c:if>
                 </h:commandLink>
             </f:facet>
             <h:outputText  value="#{invest.name}" />
@@ -167,7 +171,10 @@
                 <h:commandLink style="table-header" id="type" actionListener="#{investigationBean.sortColumn}">
                     <h:outputText value="Type" />
                     <f:param name="column" value="type"/>
-               
+                    <c:if test="${requestScope.investigationBean.sort == 'type'}" >
+                        <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
+                        <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
+                    </c:if>
                 </h:commandLink>
             </f:facet>
             <h:outputText  value="#{invest.investigationType}" />
@@ -178,7 +185,10 @@
                 <h:commandLink style="table-header" id="abstract" actionListener="#{investigationBean.sortColumn}">
                     <h:outputText value="Abstract" />
                     <f:param name="column" value="abstract"/>
-               
+                    <c:if test="${requestScope.investigationBean.sort == 'abstract'}" >
+                        <t:graphicImage id="acabstract" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
+                        <t:graphicImage id="deabstract" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
+                    </c:if>
                 </h:commandLink>
             </f:facet>
             <h:outputText  value="#{invest.investigationAbstract}" />
@@ -189,7 +199,10 @@
                 <h:commandLink style="table-header" id="facility" actionListener="#{investigationBean.sortColumn}">
                     <h:outputText value="Facility" />
                     <f:param name="column" value="facility"/>
-              
+                    <c:if test="${requestScope.investigationBean.sort == 'facility'}" >
+                        <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
+                        <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
+                    </c:if>
                 </h:commandLink>
             </f:facet>
             <h:outputText value="#{invest.facility}" />

@@ -31,7 +31,7 @@
            
             <table  border="0" width="100%" >
                 <td width="950"  height="45" >                    
-                    <t:div styleClass="outerbar">
+                    <t:div styleClass="outerbar" style="width:954px">
                     <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
                         itemMaxHeight="200" orientation="horizontal" effectUnits="2"
                         itemPadding="10" attachEdge="top" labelEdge="bottom">                    

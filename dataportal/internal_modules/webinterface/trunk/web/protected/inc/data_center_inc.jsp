@@ -20,7 +20,7 @@
             <h:outputText rendered="#{!bookmarkBean.populated}" value="There are no items in data center" styleClass="info" />
             <h:outputText rendered="#{!bookmarkBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
            
-
+                   
             <t:dataTable rendered="#{bookmarkBean.populated}" id="datatable" width="95%"
                 styleClass="scrollerTable"
                 headerClass="standardTable_Header"
@@ -60,7 +60,12 @@
                         <h:commandLink style="table-header" id="name" actionListener="#{datacenterBean.sortColumn}">
                             <h:outputText value="Name" />
                             <f:param name="column" value="name"/>
+                            <c:if test="${requestScope.datacenterBean.sort == 'name'}" >
+                                <t:graphicImage id="ac1" value="../../images/ascending-arrow.gif" rendered="#{!datacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="de1" value="../../images/descending-arrow.gif" rendered="#{datacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
+                       
                     </f:facet>
                     
                     <h:commandLink onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
@@ -74,6 +79,10 @@
                         <h:commandLink style="table-header" id="type" actionListener="#{datacenterBean.sortColumn}">
                             <h:outputText value="Type" />
                             <f:param name="column" value="type"/>
+                            <c:if test="${requestScope.datacenterBean.sort == 'type'}" >
+                                <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{!datacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{datacenterBean.ascending}" border="0"/>
+                            </c:if>
                
                         </h:commandLink>
                     </f:facet>
@@ -103,7 +112,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="facility" actionListener="#{datacenterBean.sortColumn}">
                             <h:outputText value="Facility" />
-                            <f:param name="column" value="facility"/>              
+                            <f:param name="column" value="facility"/>     
+                            <c:if test="${requestScope.datacenterBean.sort == 'facility'}" >
+                                <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!datacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{datacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText value="#{data.facility}" />
@@ -113,7 +126,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="notes" actionListener="#{datacenterBean.sortColumn}">
                             <h:outputText value="Notes" />
-                            <f:param name="column" value="notes"/>               
+                            <f:param name="column" value="notes"/>    
+                            <c:if test="${requestScope.datacenterBean.sort == 'note'}" >
+                                <t:graphicImage id="acn" value="../../images/ascending-arrow.gif" rendered="#{!datacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="den" value="../../images/descending-arrow.gif" rendered="#{datacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                    
@@ -164,7 +181,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="time" actionListener="#{datacenterBean.sortColumn}">
                             <h:outputText value="Time" />
-                            <f:param name="column" value="time"/>              
+                            <f:param name="column" value="time"/>   
+                            <c:if test="${requestScope.datacenterBean.sort == 'time'}" >
+                                <t:graphicImage id="act" value="../../images/ascending-arrow.gif" rendered="#{!datacenterBean.ascending}" border="0"/>
+                                <t:graphicImage id="det" value="../../images/descending-arrow.gif" rendered="#{datacenterBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText value="#{data.modTime}" >
@@ -189,7 +210,9 @@
                         <f:param name="id" value="#{data.id}"/>
                     </h:selectBooleanCheckbox>
                 </h:column>
+               
                 <f:facet name="detailStamp">
+                    
                     <t:dataTable preserveSort="true" rendered="#{data.dataset}" width="95%" id="cities" styleClass="standardTable_Column" var="url" value="#{data.urls}">
                                                      
                         <h:column>
@@ -201,10 +224,12 @@
                             </h:commandLink>
                         </h:column>               
                     </t:dataTable>
+                   
                 </f:facet>
-            </t:dataTable>
-          
+                 
             
+            </t:dataTable>
+        
             <h:panelGrid columns="1" rendered="#{datacenterBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 <t:dataScroller id="scroll_11"
                     for="datatable"
@@ -239,28 +264,28 @@
             </h:panelGrid>
           
             <br />
-              <h:panelGrid  rendered="#{datacenterBean.populated}" width="95%" columns="5">
+            <h:panelGrid  rendered="#{datacenterBean.populated}" width="95%" columns="5">
              
-                        <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
+                <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
              
                  
-                        Select:&nbsp; <h:commandButton action="#{datacenterBean.selectall}" title="All" value=" All "/>
-                        &nbsp; 
-                        <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
+                Select:&nbsp; <h:commandButton action="#{datacenterBean.selectall}" title="All" value=" All "/>
+                &nbsp; 
+                <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
                  
             </h:panelGrid>
-           <%-- <f:verbatim rendered="#{bookmarkBean.populated}">
-                <table width="95%" border="0">
-                    <td>
-                        <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
+            <%-- <f:verbatim rendered="#{bookmarkBean.populated}">
+            <table width="95%" border="0">
+            <td>
+            <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
              
-                    </td>
-                    <td align="right">
-                        Select:&nbsp; <h:commandButton action="#{datacenterBean.selectall}" title="All" value=" All "/>
-                        &nbsp; 
-                        <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
-                    </td>
-                </table>
+            </td>
+            <td align="right">
+            Select:&nbsp; <h:commandButton action="#{datacenterBean.selectall}" title="All" value=" All "/>
+            &nbsp; 
+            <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
+            </td>
+            </table>
             </f:verbatim>--%>
         </td>
     </table>

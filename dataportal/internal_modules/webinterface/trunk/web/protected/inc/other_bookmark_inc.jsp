@@ -15,7 +15,7 @@
         
                 <tr ><br />&nbsp;</tr>             
             </table>
- <h:outputText rendered="#{!otherbookmarkBean.populated}" escape="false "value="<br />"  styleClass="info" />            
+            <h:outputText rendered="#{!otherbookmarkBean.populated}" escape="false "value="<br />"  styleClass="info" />            
             <h:outputText rendered="#{!otherbookmarkBean.populated}" value="There are no items in #{visit.currentUserAuthDN}'s bookmarks" styleClass="info" />
             <h:outputText rendered="#{!otherbookmarkBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
            
@@ -40,15 +40,19 @@
                     <h:outputText value="#{visit.visitData.currentUserAuthDN}'s Bookmarks" />
                 </f:facet>
 
-               <%-- <h:column>
-                    <f:facet name="header"></f:facet>            
-                    <h:outputText value="#{data.id}" />              
+                <%-- <h:column>
+                <f:facet name="header"></f:facet>            
+                <h:outputText value="#{data.id}" />              
                 </h:column>--%>
                 <h:column>
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="name" actionListener="#{otherbookmarkBean.sortColumn}">
                             <h:outputText value="Name" />
                             <f:param name="column" value="name"/>
+                            <c:if test="${requestScope.otherbookmarkBean.sort == 'name'}" >
+                                <t:graphicImage id="acn" value="../../images/ascending-arrow.gif" rendered="#{!otherbookmarkBean.ascending}" border="0"/>
+                                <t:graphicImage id="den" value="../../images/descending-arrow.gif" rendered="#{otherbookmarkBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText  value="#{data.name}" />
@@ -59,7 +63,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="facility" actionListener="#{otherbookmarkBean.sortColumn}">
                             <h:outputText value="Facility" />
-                            <f:param name="column" value="facility"/>              
+                            <f:param name="column" value="facility"/> 
+                            <c:if test="${requestScope.otherbookmarkBean.sort == 'facility'}" >
+                                <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!otherbookmarkBean.ascending}" border="0"/>
+                                <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{otherbookmarkBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText value="#{data.facility}" />
@@ -68,7 +76,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="notes" actionListener="#{otherbookmarkBean.sortColumn}">
                             <h:outputText value="Notes" />
-                            <f:param name="column" value="notes"/>               
+                            <f:param name="column" value="notes"/> 
+                            <c:if test="${requestScope.otherbookmarkBean.sort == 'notes'}" >
+                                <t:graphicImage id="acno" value="../../images/ascending-arrow.gif" rendered="#{!otherbookmarkBean.ascending}" border="0"/>
+                                <t:graphicImage id="deno" value="../../images/descending-arrow.gif" rendered="#{otherbookmarkBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                                        
@@ -78,8 +90,8 @@
                         displayAtDistanceX="5"
                         displayAtDistanceY="-40" rendered="#{data.hasNote}">
 
-                       <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
- <f:facet name="popup">
+                        <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
+                        <f:facet name="popup">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
                                     <table width="150" >
@@ -98,7 +110,11 @@
                     <f:facet name="header">
                         <h:commandLink style="table-header" id="time" actionListener="#{otherbookmarkBean.sortColumn}">
                             <h:outputText value="Time" />
-                            <f:param name="column" value="time"/>              
+                            <f:param name="column" value="time"/>   
+                            <c:if test="${requestScope.otherbookmarkBean.sort == 'time'}" >
+                                <t:graphicImage id="actime" value="../../images/ascending-arrow.gif" rendered="#{!otherbookmarkBean.ascending}" border="0"/>
+                                <t:graphicImage id="detime" value="../../images/descending-arrow.gif" rendered="#{otherbookmarkBean.ascending}" border="0"/>
+                            </c:if>
                         </h:commandLink>
                     </f:facet>
                     <h:outputText value="#{data.modTime}" >
@@ -108,12 +124,12 @@
                 <h:column>
             
                     <f:facet name="header">
-                            <h:outputText value="Goto" style="table-header; color:blue"/>
+                        <h:outputText value="Goto" style="table-header; color:blue"/>
                    
                     </f:facet>
-                     &nbsp; &nbsp; 
+                    &nbsp; &nbsp; 
                     <h:commandLink style="table-header" id="goto" action="#{otherbookmarkBean.viewData}">
-                         <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                        <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
                       
                                 
                     </h:commandLink>
