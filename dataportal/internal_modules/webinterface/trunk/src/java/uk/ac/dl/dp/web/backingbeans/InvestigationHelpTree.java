@@ -30,12 +30,13 @@ import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
+import uk.ac.dl.dp.web.util.AbstractRequestBean;
 
 /**
  *
  * @author gjd37
  */
-public class InvestigationHelpTree extends BaseBean {
+public class InvestigationHelpTree extends AbstractRequestBean {
     
     private static Logger log = Logger.getLogger(InvestigationHelpTree.class);
     

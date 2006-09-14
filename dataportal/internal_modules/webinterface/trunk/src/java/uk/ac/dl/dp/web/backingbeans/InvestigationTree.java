@@ -9,16 +9,14 @@
 
 package uk.ac.dl.dp.web.backingbeans;
 
-import javax.faces.component.*;
+
 import java.util.Collection;
-import javax.faces.event.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 import javax.faces.context.FacesContext;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-
 import org.apache.myfaces.custom.tree2.HtmlTree;
 import org.apache.myfaces.custom.tree2.TreeNode;
 import org.apache.myfaces.custom.tree2.TreeNodeBase;
@@ -26,21 +24,26 @@ import org.apache.myfaces.custom.tree2.TreeModel;
 import org.apache.myfaces.custom.tree2.TreeModelBase;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
+import javax.faces.event.ActionEvent;
 import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
+import javax.faces.component.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
+import uk.ac.dl.dp.web.navigation.NavigationConstants;
+import uk.ac.dl.dp.web.util.AbstractRequestBean;
+import uk.ac.dl.dp.web.util.WebConstants;
 
 /**
  *
  * @author gjd37
  */
-public class InvestigationTree extends BaseBean {
+public class InvestigationTree extends AbstractRequestBean {
     
     private static Logger log = Logger.getLogger(InvestigationTree.class);
     
-    private TreeModelBase     _treeModel;
-    private HtmlTree          _tree;
+    private TreeModelBase  _treeModel;
+    private HtmlTree   _tree;
     
     private TreeNode data;
     
@@ -66,27 +69,23 @@ public class InvestigationTree extends BaseBean {
     }
     
     
-    public TreeNode getData() {       
+    public TreeNode getData() {
         
         if(data == null){
+            //top level node of results, not show at moment in page
             data = new TreeNodeBase("foo-folder", "Search results", false);
             
             Collection<Investigation> invests = getVisitData().getSearchedInvestigations();
             
-          //  if(invests.size() > 400 ){
-            //    log.info("Search results too large, "+invests.size()+" creating message");
-              //  getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"More than the 500 results shown was returned.  Please refine your query.",""));
-            //}
-            
+            //construct a list of returned facility results
             Collection<String> facs = new LinkedList<String>();
             for(Investigation invest :  invests){
                 if(!facs.contains(invest.getFacility())){
                     facs.add(invest.getFacility());
                 }
             }
-            // construct a set of fake data (normally your data would come from a database)
             
-            // populate Frank's portion of the tree
+            //iterate of the list and add investiagtions that are asscoicated with it
             TreeNodeBase node = null;
             for(String fac : facs){
                 
@@ -95,21 +94,26 @@ public class InvestigationTree extends BaseBean {
                 for(Investigation invest: invests){
                     if(invest.getFacility().equals(fac)) i++;
                 }
+                //add count to (#) on investigation page
                 node = new TreeNodeBase("foo-folder", fac, ""+i,false);
                 int j = 0;
                 
+                //loop, if equals fac then add node
                 for(Investigation invest : invests){
                     if(invest.getFacility().equals(fac)){
+                        //add node, but add identifer as facility-id for uniqueness
+                        //id of invest in ISIS could be same as DIAMOND
                         node.getChildren().add(new TreeNodeBase("foo1-folder", invest.getName(),invest.getFacility()+"-"+invest.getId(), true));
+                        
+                        //only show 50??  shoule change
                         j++;
-                        if(j == 50){
+                        if(j == WebConstants.MAXIMIUM_INVESTIGATION_TREE_RESULTS){
                             node.getChildren().add(new TreeNodeBase("foo1-folder","more ...", true));
-                            
                             break;
                         }
                     }
                 }
-                
+                //add  facility node to the top level node
                 data.getChildren().add(node);
             }
         }
@@ -117,6 +121,18 @@ public class InvestigationTree extends BaseBean {
         return data;
     }
     
+    
+    private TreeNodeBase _node;
+    
+    public void setNodePath(TreeNodeBase nodePath) {
+        _node = _node;
+    }
+    
+    public TreeNodeBase getNodePath(){
+        return _node;
+    }
+    
+    //action event to set which current node was clicked last
     public void setNodeSelected(ActionEvent event) {
         
         log.trace("node clicked: ");
@@ -137,8 +153,10 @@ public class InvestigationTree extends BaseBean {
         }
     }
     
+    //this takes the user to mext data set page and shows all the results from the facility (user clicked facility)
+    //could have done same for investigatiosns but got javascritp exceptions no weired name like ';;'type100'
     public String minimise(){
-        log.trace("Minimizing for "+getNodePath().getDescription());
+        log.trace("Showing all investigations for "+getNodePath().getDescription());
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             if(invest.getFacility().equals(getNodePath().getDescription())){
@@ -149,23 +167,26 @@ public class InvestigationTree extends BaseBean {
         return viewDataSets(investigations);
     }
     
-     public String selectone(){
+    //unclick all investigations
+    public String selectone(){
         log.trace("selecting for "+getNodePath().getIdentifier());
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         Investigation invest = getInvestigation(getNodePath().getIdentifier());
         investigations.add(invest);
         return viewDataSets(investigations);
     }
-     
+    
+    //selection to load up all the data files and datasets from the list of investigations
     public String viewDataSets(Collection<Investigation> investigations){
         
+        
         if(investigations.size() == 0 ){
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Please select atleast one investigation.",""));
+            info("Please select atleast one investigation.");
             return null;
         }
-        
-        if(investigations.size() >100 ){
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,"Please select less than 100 investigations to view.",""));
+        //canot display too many datsest, size of dowan too big for next page so limit
+        if(investigations.size() > WebConstants.MAXIMIUM_DATASET_RESULTS ){
+            warn("Please select less than "+WebConstants.MAXIMIUM_DATASET_RESULTS+" investigations to view.");
             return null;
         }
         
@@ -177,10 +198,9 @@ public class InvestigationTree extends BaseBean {
             QueryDelegate qd = QueryDelegate.getInstance();
             log.debug("About to get datasets from: "+investigations.size());
             for(Investigation invest :  investigations){
-                
                 log.trace(invest);
-                
             }
+            
             datasets = qd.getDataSets(getVisit().getSid(),investigations);
             for(DataSet dataset : datasets){
                 log.trace(dataset);
@@ -193,79 +213,29 @@ public class InvestigationTree extends BaseBean {
                 log.trace(datafile);
             }
             
+            //set all of the data is visit for next page
             getVisitData().setCurrentInvestigations(investigations);
             getVisitData().setCurrentDatasets(datasets);
             getVisitData().setCurrentDatafiles(datafiles);
             
         } catch (DataPortalException ex) {
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"DataPortal exception:"+ex.getMessage(),""));
+            error("Error:  Unable to search the information for the investigations.");
             log.fatal("Unable to create query user for: "+getVisit().getSid(),ex);
             return null;
         } catch (Exception ex) {
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"Exception: "+ex.getMessage(),""));
+            error("Error:  Unable to search the information for the investigations.");
             log.fatal("exception : "+getVisit().getSid(),ex);
             return null;
         }
         
-        return "dataset_success";
+        return NavigationConstants.GET_DATASETS_SUCCESS;
     }
     
     public void setData(TreeNode data) {
         this.data = data;
     }
-    
-    public TreeModel getExpandedTreeData() {
-        System.out.println("getExpandedTreeData");
-        return new TreeModelBase(getTreeData());
-    }
-    
-    
-    public String expandAll() {
-        _tree.expandAll();
-        return null;
-    }
-    
-    private TreeNodeBase _node;
-    
-    public void setNodePath(TreeNodeBase nodePath) {
-        _node = _node;
-    }
-    
-    public TreeNodeBase getNodePath() {
-        return _node;
-    }
-    
-    
-    public TreeNode getTreeData() {
-        return data;
-    }
-    
-    public void checkPath(FacesContext context, UIComponent component, java.lang.Object value) {
-        // make sure path is valid (leaves cannot be expanded or renderer will complain)
-        FacesMessage message = null;
-        System.out.println("check path");
-        String[] path = _tree.getPathInformation(value.toString());
         
-        for (int i = 0; i < path.length; i++) {
-            String nodeId = path[i];
-            try {
-                _tree.setNodeId(nodeId);
-            } catch (Exception e) {
-                throw new ValidatorException(message, e);
-            }
-            
-            if (_tree.getNode().isLeaf()) {
-                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid node path (cannot expand a leaf): "
-                        + nodeId, "Invalid node path (cannot expand a leaf): " + nodeId);
-                throw new ValidatorException(message);
-            }
-        }
-    }
-    
-    public void expandPath(ActionEvent event) {
-        // _tree.expandPath(_tree.getPathInformation(_nodePath));
-    }
-    
+    //helper class that splits the param sent in to identify the current investigation
     private Investigation getInvestigation(String param) {
         String fac = param.split("-")[0];
         String id = param.split("-")[1];

@@ -10,38 +10,31 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.model.*;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
-import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterAuthDelegate;
-import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
-import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
-import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.backingbeans.SortableList;
+import uk.ac.dl.dp.web.navigation.NavigationConstants;
+import uk.ac.dl.dp.web.util.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 
@@ -49,18 +42,22 @@ import javax.faces.application.*;
  *
  * @author gjd37
  */
-public class OtherBookmarkBean extends BaseSortableList {
+public class OtherBookmarkBean extends SortableList {
     
     private static Logger log = Logger.getLogger(OtherBookmarkBean.class);
     
     private HtmlDataTable table;
+    
+    //list of all of the other users bookmarks from DB
     private List<Bookmark> dataRefs;
-    private Visit visit;
-    private String note;
+    
+    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+    //need this is see if bookmarks is > 0 and the lenght of them
     private boolean populated;
     private boolean length;
     
     public OtherBookmarkBean(){
+        //sort default row
         super("name");
     }
     
@@ -80,16 +77,16 @@ public class OtherBookmarkBean extends BaseSortableList {
         
         if(dataRefs == null){
             try {
-                log.trace("Getting bookmarks.., bookmarks is null");
+                log.trace("Getting bookmarks because bookmarks is null");
                 dataRefs = (List<Bookmark>) DataCenterAuthDelegate.getInstance().getOtherUsersBookmarks(getVisit().getSid(), getVisitData().getCurrentUserAuthDN());
                 
             }catch (NoAccessToDataCenterException ex) {
                 log.error("Access to others bookmarks ("+getVisitData().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
-                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Access to "+getVisitData().getCurrentUserAuthDN()+"'s bookmarks denied.",""));
+                error("Access to "+getVisitData().getCurrentUserAuthDN()+"'s bookmarks denied.");
                 dataRefs = new ArrayList<Bookmark>();
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
-                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error attempting to retrieve bookmarks",""));
+                error("Error attempting to retrieve bookmarks");
                 dataRefs = new ArrayList<Bookmark>();
             }
             return (List<Bookmark>)dataRefs;
@@ -106,7 +103,7 @@ public class OtherBookmarkBean extends BaseSortableList {
         this.dataRefs. = dataRefs;*/
         
     }
-    
+    //this sorts the columns in the table,
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -132,14 +129,12 @@ public class OtherBookmarkBean extends BaseSortableList {
                     return 0;
             }
         };
-        if(dataRefs == null){
-            log.trace("Is bookmarks is null ");
-        }
         Collections.sort( (List<Bookmark>)getDataRefs(), comparator);
         
     }
     
-    
+    //This listens to changes in the users isSelected.  This is because the list could be
+    //larger than one page so have to do it this way
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -157,8 +152,11 @@ public class OtherBookmarkBean extends BaseSortableList {
             }
             i++;
         }
+        //collaspe all the details 
+        getTable().collapseAllDetails();
     }
-    
+    //Gets the current bookmark and then gets the investigation and searches for the investigation
+    // returns back to the investigations page
     public String viewData(){
         log.trace("view data");
         Bookmark qrdto =   (Bookmark) table.getRowData();
@@ -166,21 +164,24 @@ public class OtherBookmarkBean extends BaseSortableList {
         Collection<Investigation> investigations = null;
         try {
             investigations = QueryDelegate.getInstance().getInvestigationByStudyId(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
-        } catch (SessionNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (SessionTimedOutException ex) {
-            ex.printStackTrace();
-        } catch (UserNotFoundException ex) {
-            ex.printStackTrace();
         } catch (QueryException ex) {
-            ex.printStackTrace();
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unable to search for "+qrdto.getName());
+            return null;
+        } catch (Exception ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unexpected error searching for "+qrdto.getName());
+            return null;
         }
+        //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
-        return "search_success";
+        return NavigationConstants.SEARCH_SUCCESS;
         
     }
     
-    
+    ///////////////////////////////////////////////////
+    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+    //need this is see if bookmarks is > 0 and the lenght of them
     public boolean isPopulated() {
         if(getDataRefs().size() > 0){
             return true;
@@ -198,5 +199,6 @@ public class OtherBookmarkBean extends BaseSortableList {
     public void setLength(boolean length) {
         this.length = length;
     }
+    ////////////////////////////////////////////////////////////////////
     
 }

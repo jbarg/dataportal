@@ -38,7 +38,8 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.backingbeans.SortableList;
+import uk.ac.dl.dp.web.navigation.NavigationConstants;
+import uk.ac.dl.dp.web.util.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 
@@ -46,7 +47,7 @@ import javax.faces.application.*;
  *
  * @author gjd37
  */
-public class HistoryBean extends BaseSortableList {
+public class HistoryBean extends SortableList {
     
     private static Logger log = Logger.getLogger(HistoryBean.class);
     
@@ -120,10 +121,7 @@ public class HistoryBean extends BaseSortableList {
                 } else
                     return 0;
             }
-        };
-        if(history == null){
-            log.trace("Is history is null ");
-        }
+        };      
         Collections.sort( history, comparator);
         
     }
@@ -155,7 +153,7 @@ public class HistoryBean extends BaseSortableList {
         log.trace("viewing : "+qrdto.getQueryid());
         Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults(qrdto.getQueryid());
         getVisitData().setSearchedInvestigations(investigations);
-        return "search_success";
+        return NavigationConstants.SEARCH_SUCCESS;
         
     }
     

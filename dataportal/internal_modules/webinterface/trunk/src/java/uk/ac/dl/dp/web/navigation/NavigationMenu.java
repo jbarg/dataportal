@@ -39,9 +39,9 @@ public class NavigationMenu {
         // Main
         NavigationMenuItem main = getMenuNaviagtionItem("Main", null);
         menu.add(main);
-        main.add(getMenuNaviagtionItem("Basic Search", "basicSearch"));
+        main.add(getMenuNaviagtionItem("Basic Search", "GOTO_BASIC_SEARCH"));
         
-        NavigationMenuItem advanced = getMenuNaviagtionItem("Advanced Search", "#{navigationMenu.getAction2}");
+        NavigationMenuItem advanced = getMenuNaviagtionItem("Advanced Search", null);
         advanced.setOpen(true);
         main.add(advanced);
         
@@ -52,8 +52,8 @@ public class NavigationMenu {
         // Main
         NavigationMenuItem data = getMenuNaviagtionItem("Data Center", null);
         menu.add(data);
-        data.add(getMenuNaviagtionItem("Data References", "#{navigationMenu.getAction2}"));
-        NavigationMenuItem bookmark = getMenuNaviagtionItem("Bookmarks", "addToBookmark_success");
+        data.add(getMenuNaviagtionItem("Data References", "GOTO_DATA_REFERENCES"));
+        NavigationMenuItem bookmark = getMenuNaviagtionItem("Bookmarks", "GOTO_BOOKMARKS");
         
         //bookmark.setOpen(true);
         data.add(bookmark);
@@ -63,8 +63,8 @@ public class NavigationMenu {
         item.setSplit(true);
         item.setTarget("_blank");*
         products.add(item);*/
-         data.add(getMenuNaviagtionItem("Grant Authorisation", "give_data_authorisation"));
-         data.add(getMenuNaviagtionItem("View Authorisations", "view_data_authorisation"));
+         data.add(getMenuNaviagtionItem("Grant Authorisation", "GIVE_DATA_AUTH"));
+         data.add(getMenuNaviagtionItem("View Authorisations", "GOTO_DATA_AUTH"));
        
          NavigationMenuItem nullm1 = getMenuNaviagtionItem("", null);
         menu.add(nullm1);
@@ -73,9 +73,9 @@ public class NavigationMenu {
         //User
         NavigationMenuItem user = getMenuNaviagtionItem("User", null);
         menu.add(user);
-        user.add(getMenuNaviagtionItem("User Preferences", "user_prefs"));
+        user.add(getMenuNaviagtionItem("User Preferences", "GOTO_USER_PREFS"));
         
-        user.add(getMenuNaviagtionItem("History", "history"));
+        user.add(getMenuNaviagtionItem("History", "GOTO_HISTORY"));
         user.add(getMenuNaviagtionItem("Logout", "#{authorisationBean.logout}"));
         
         NavigationMenuItem nullm2 = getMenuNaviagtionItem("", null);
@@ -84,14 +84,14 @@ public class NavigationMenu {
         // Information
         NavigationMenuItem info = getMenuNaviagtionItem("Documentation", null);
         menu.add(info);
-        NavigationMenuItem help = getMenuNaviagtionItem("Help", "#{navigationMenu.getAction2}");
+        NavigationMenuItem help = getMenuNaviagtionItem("Help", null);
         help.setActive(true);
         //help.setOpen(true);
         help.setSplit(true);
         help.setTarget("_blank");
         info.add(help);
         
-        NavigationMenuItem documentation = getMenuNaviagtionItem("Documentation", "#{navigationMenu.getAction2}");
+        NavigationMenuItem documentation = getMenuNaviagtionItem("Documentation", null);
         documentation.setActive(true);
         //documentation.setOpen(true);
         documentation.setSplit(true);
@@ -130,19 +130,7 @@ public class NavigationMenu {
             log.info("ActionListener: " + outcome);
             return outcome;
         }
-    }
-    
-    public String getAction2() {
-        return "addToDataCenter_success";
-    }
-    
-    public String getAction3() {
-        return "go_panelnavigation_3";
-    }
-    
-    public String goHome() {
-        return "go_home";
-    }
+    }    
     
     public boolean getDisabled() {
         return true;

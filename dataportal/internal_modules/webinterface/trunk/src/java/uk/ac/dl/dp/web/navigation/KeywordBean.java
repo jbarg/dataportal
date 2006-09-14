@@ -21,14 +21,15 @@ import javax.faces.model.SelectItem;
 import com.sun.j2ee.blueprints.ui.autocomplete.AutoCompleteUtilities;
 import com.sun.j2ee.blueprints.ui.autocomplete.CompletionResult;
 import uk.ac.dl.dp.web.backingbeans.ApplicationBean;
-import uk.ac.dl.dp.web.backingbeans.BaseBean;
+import uk.ac.dl.dp.web.util.AbstractApplicationBean;
+import uk.ac.dl.dp.web.util.BaseBean;
 import uk.ac.dl.dp.web.backingbeans.Visit;
 import javax.faces.event.ValueChangeEvent;
 /**
  *
  * @author gjd37
  */
-public class KeywordBean extends BaseBean{
+public class KeywordBean extends AbstractApplicationBean {
     
     private static Logger log = Logger.getLogger(KeywordBean.class);
     

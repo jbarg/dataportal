@@ -10,36 +10,30 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.model.*;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterAuthDelegate;
-import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
-import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
-import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.backingbeans.SortableList;
+import uk.ac.dl.dp.web.navigation.NavigationConstants;
+import uk.ac.dl.dp.web.util.SortableList;
 import javax.faces.context.FacesContext;
 import javax.faces.application.*;
 import javax.faces.FacesException;
@@ -48,15 +42,18 @@ import javax.faces.FacesException;
  *
  * @author gjd37
  */
-public class OtherDataCenterBean extends BaseSortableList {
+public class OtherDataCenterBean extends SortableList {
     
     private static Logger log = Logger.getLogger(OtherDataCenterBean.class);
     
-    private DataModel model;
     private HtmlDataTable table;
+    
+    //list of all of the DataReference from DB
     private List<DataReference> dataRefs;
-    private Visit visit;
-    private boolean populated; 
+    
+    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+    //need this is see if bookmarks is > 0 and the lenght of them
+    private boolean populated;
     private boolean length;
     
     public OtherDataCenterBean(){
@@ -87,14 +84,14 @@ public class OtherDataCenterBean extends BaseSortableList {
                 getVisitData().setCurrentDataReferences(dataRefs);
             } catch (NoAccessToDataCenterException ex) {
                 log.error("Access to others data center ("+getVisitData().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
-                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Access to "+getVisitData().getCurrentUserAuthDN()+"'s data center denied.",""));
+                error("Access to "+getVisitData().getCurrentUserAuthDN()+"'s data center denied.");
                 dataRefs = new ArrayList<DataReference>();
-                getFacesContext().renderResponse(); 
+                // getFacesContext().renderResponse();
             } catch (Exception ex) {
                 log.error("Unable to get bookmarks",ex);
-                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error attempting to retrieve data references",""));
+                error("Error attempting to retrieve data references");
                 dataRefs = new ArrayList<DataReference>();
-                getFacesContext().renderResponse(); 
+                // getFacesContext().renderResponse();
             }
             sort(getSort(), isAscending());
             return (List<DataReference>)dataRefs;
@@ -114,6 +111,8 @@ public class OtherDataCenterBean extends BaseSortableList {
         
     }
     
+    //listens for sort column action events, and gets the column by thge param name passed in
+    // then calls sort on the column
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -146,8 +145,8 @@ public class OtherDataCenterBean extends BaseSortableList {
         
     }
     
-    
-    
+    //Gets the current data ref and then gets the investigation and searches for the investigation
+    // returns back to the investigations page
     public String viewData(){
         log.trace("view data");
         DataReference qrdto =   (DataReference) table.getRowData();
@@ -155,20 +154,23 @@ public class OtherDataCenterBean extends BaseSortableList {
         Collection<Investigation> investigations = null;
         try {
             investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
-        } catch (SessionNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (SessionTimedOutException ex) {
-            ex.printStackTrace();
-        } catch (UserNotFoundException ex) {
-            ex.printStackTrace();
         } catch (QueryException ex) {
-            ex.printStackTrace();
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unable to search for "+qrdto.getName());
+            return null;
+        } catch (Exception ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unexpected error searching for "+qrdto.getName());
+            return null;
         }
+        //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
-        return "search_success";
+        return NavigationConstants.SEARCH_SUCCESS;
         
     }
     
+    //listens for sort column action events, and gets the column by thge param name passed in
+    // then calls sort on the column
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -186,27 +188,31 @@ public class OtherDataCenterBean extends BaseSortableList {
             }
             i++;
         }
-    }    
-    
-    
-      public boolean isPopulated() {
-        if(getDataRefs().size() > 0){
-        return true;
-        }
-        else return false;
+        //collaspe all the details
+        getTable().collapseAllDetails();
     }
-
+    
+    ///////////////////////////////////////////////////
+    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+    //need this is see if bookmarks is > 0 and the lenght of them
+    public boolean isPopulated() {
+        if(getDataRefs().size() > 0){
+            return true;
+        } else return false;
+    }
+    
     public void setPopulated(boolean populated) {
         this.populated = populated;
     }
-
+    
     public boolean getLength() {
         return getDataRefs().size() > getVisit().getUserPreferences().getResultsPerPage();
     }
-
+    
     public void setLength(boolean length) {
         this.length = length;
     }
+    ////////////////////////////////////////////////////////////////////
     
     
 }

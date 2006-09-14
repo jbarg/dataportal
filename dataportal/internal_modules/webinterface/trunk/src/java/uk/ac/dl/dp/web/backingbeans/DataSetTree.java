@@ -10,8 +10,6 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.io.Serializable;
-import javax.faces.event.*;
-
 import java.util.Collection;
 import java.util.*;
 import org.apache.log4j.Logger;
@@ -25,12 +23,11 @@ import org.apache.myfaces.custom.tree2.TreeNode;
 import org.apache.myfaces.custom.tree2.TreeNodeBase;
 import org.apache.myfaces.custom.tree2.TreeModel;
 import org.apache.myfaces.custom.tree2.*;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
-import javax.faces.component.*;
-import uk.ac.cclrc.dpal.beans.*;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
@@ -40,17 +37,21 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
+import uk.ac.dl.dp.web.navigation.NavigationConstants;
+import uk.ac.dl.dp.web.util.AbstractRequestBean;
+import uk.ac.dl.dp.web.util.WebConstants;
+import javax.faces.component.*;
 
 /**
  *
  * @author gjd37
  */
-public class DataSetTree extends BaseBean implements Serializable{
+public class DataSetTree extends AbstractRequestBean implements Serializable{
     
     private static Logger log = Logger.getLogger(DataSetTree.class);
     
-    private TreeModelBase     _treeModel;
-    private HtmlTree          _tree;
+    private TreeModelBase _treeModel;
+    private HtmlTree  _tree;
     
     private TreeNode data;
     
@@ -58,6 +59,7 @@ public class DataSetTree extends BaseBean implements Serializable{
     private Collection<DataFile> datafiles = new ArrayList<DataFile>();
     private Collection<DataSet> datasets = new ArrayList<DataSet>();
     
+    private boolean clientSide;
     
     /** Creates a new instance of SearchBean */
     public DataSetTree() {
@@ -81,7 +83,26 @@ public class DataSetTree extends BaseBean implements Serializable{
     }
     
     
+    public boolean getClientSide() {
+        log.trace("is client side");
+        long totalsize = getVisitData().getCurrentInvestigations().size()+ getVisitData().getCurrentDatasets().size() +getVisitData().getCurrentDatafiles().size();
+        if(totalsize > WebConstants.MAXIMIUM_CLIENT_TOTAL_RESULTS){
+            log.debug("Data Set Tree is server side: "+totalsize);
+            return false;
+        } else{
+            log.debug("Data Set Tree is client side: "+totalsize);
+            return true;
+        }
+    }
+    
+    public void setClientSide(boolean clientSide) {
+        this.clientSide = clientSide;
+    }
+    
+    
+    
     public TreeNode getData() {
+        log.trace("Getting data");
         Collection<Investigation> investigations = getVisitData().getCurrentInvestigations();
         Collection<DataSet> datasets = getVisitData().getCurrentDatasets();
         Collection<DataFile> datafiles = getVisitData().getCurrentDatafiles();
@@ -91,6 +112,7 @@ public class DataSetTree extends BaseBean implements Serializable{
         
         TreeNodeBase node = null;
         for(Investigation invest : investigations){
+            // log.debug("Adding investigations: "+invest.getName());
             node = new TreeNodeBase("invest", invest.getName(), invest.getFacility()+"-"+invest.getId(),false);
             
             node.getChildren().add(new TreeNodeBase("type-folder", invest.getInvestigationType(),true));
@@ -98,13 +120,14 @@ public class DataSetTree extends BaseBean implements Serializable{
             
             TreeNodeBase datasetsNode = new TreeNodeBase("foo1-folder", "DataSets", false);
             
-            log.trace(invest);
+            // log.trace(invest);
             for(DataSet dataset : datasets){
-                log.trace(dataset);
+                //log.trace(dataset);
                 
                 TreeNodeBase datasetNode = null;
                 
                 if(dataset.getInvestigationId().equals(invest.getId()) && dataset.getFacility().equals(invest.getFacility()) ){
+                    // log.trace("Adding datasets : "+dataset.getName());
                     datasetNode = new TreeNodeBase("foo-folder", dataset.getName(),dataset.getFacility()+"-"+dataset.getId() ,false);
                     datasetNode.getChildren().add(new TreeNodeBase("status-folder",dataset.getDataSetStatus(),true));
                     datasetNode.getChildren().add(new TreeNodeBase("type-folder",dataset.getDataSetType(),true));
@@ -112,7 +135,7 @@ public class DataSetTree extends BaseBean implements Serializable{
                     
                     
                     for(DataFile datafile : datafiles){
-                        log.trace(datafile);
+                        //log.trace(datafile);
                         if(datafile.getDataSetId().equals(dataset.getId()) && datafile.getFacility().equals(dataset.getFacility())){
                             
                             datasetNode.getChildren().add(new TreeNodeBase("file-folder", datafile.getName(),datafile.getFacility()+"-"+datafile.getId(),true));
@@ -134,77 +157,8 @@ public class DataSetTree extends BaseBean implements Serializable{
         this.data = data;
     }
     
-    public TreeModel getExpandedTreeData() {
-        System.out.println("getExpandedTreeData");
-        return new TreeModelBase(getTreeData());
-    }
-    
-    
-    public String expandAll() {
-        _tree.expandAll();
-        return null;
-    }
-    
-    private String _nodePath;
-    
-    public void setNodePath(String nodePath) {
-        _nodePath = nodePath;
-    }
-    
-    public String getNodePath() {
-        return _nodePath;
-    }
-    
-    
     public TreeNode getTreeData() {
         return data;
-    }
-    
-    public void checkPath(FacesContext context, UIComponent component, java.lang.Object value) {
-        // make sure path is valid (leaves cannot be expanded or renderer will complain)
-        FacesMessage message = null;
-        System.out.println("check path");
-        String[] path = _tree.getPathInformation(value.toString());
-        
-        for (int i = 0; i < path.length; i++) {
-            String nodeId = path[i];
-            try {
-                _tree.setNodeId(nodeId);
-            } catch (Exception e) {
-                throw new ValidatorException(message, e);
-            }
-            
-            if (_tree.getNode().isLeaf()) {
-                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid node path (cannot expand a leaf): "
-                        + nodeId, "Invalid node path (cannot expand a leaf): " + nodeId);
-                throw new ValidatorException(message);
-            }
-        }
-    }
-    
-    public void expandPath(ActionEvent event) {
-        _tree.expandPath(_tree.getPathInformation(_nodePath));
-    }
-    
-    public void setNodeSelected(ActionEvent event) {
-        
-        log.trace("node clicked: ");
-        UIComponent component = (UIComponent) event.getSource();
-        while (!(component != null && component instanceof HtmlTree)) {
-            component = component.getParent();
-        }
-        if (component != null) {
-            HtmlTree tree = (HtmlTree) component;
-            TreeNodeBase node = (TreeNodeBase) tree.getNode();
-            tree.setNodeSelected(event);
-            log.trace("Hello: "+event);
-            //_tree.setNodeSelected(event);
-            
-            log.trace(node.getIdentifier());
-            log.trace(node.getDescription());
-        }
-        
-        
     }
     
     public void setSelected(ValueChangeEvent event){
@@ -355,27 +309,27 @@ public class DataSetTree extends BaseBean implements Serializable{
             getVisitData().setCurrentDataReferences(null);
             
         } catch (SessionTimedOutException ex) {
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"Session Timed Out: "+ex.getMessage(),""));
+            error("Session Timed Out: "+ex.getMessage());
             log.fatal("Session timed out for user for: "+sid,ex);
             return null;
         } catch (SessionNotFoundException ex) {
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"Session Not Found: "+ex.getMessage(),""));
+            error("Session Not Found: "+ex.getMessage());
             log.fatal("Session not found for user for: "+sid,ex);
             return null;
         } catch (UserNotFoundException ex) {
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"User Not Found : "+ex.getMessage(),""));
+            error("User Not Found : "+ex.getMessage());
             log.fatal("UserNotFoundException for user for: "+sid,ex);
             return null;
         } catch (NoAccessToDataCenterException ex) {
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"No access to data center: "+ex.getMessage(),""));
+            error("No access to data center: "+ex.getMessage());
             log.fatal("NoAccessToDataCenterException for user for: "+sid,ex);
             return null;
         }
         
         if(toAddBookmarks.size() != 0 &&  toAddDataReference.size() == 0){
             //add all stuff to datacenter
-            return "addToBookmark_success";
-        } else return "addToDataCenter_success";
+            return NavigationConstants.ADD_BOOKMARK_SUCCESS;
+        } else return NavigationConstants.ADD_DATA_REFERENCE_SUCCESS;
     }
     
     private DataFile getDataFile(String param) {
@@ -416,4 +370,8 @@ public class DataSetTree extends BaseBean implements Serializable{
         }
         return null;
     }
+    
+    
+    
+    
 }

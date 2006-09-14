@@ -13,9 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import javax.faces.application.FacesMessage;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegateStateFul;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
@@ -23,21 +21,21 @@ import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import javax.faces.context.FacesContext;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.web.util.AbstractRequestBean;
+import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.WebConstants;
 import javax.servlet.http.HttpSession;
 /**
  *
  * @author gjd37
  */
-public class AuthorisationBean extends BaseBean {
+public class AuthorisationBean extends AbstractRequestBean {
     
     
     private static Logger log = Logger.getLogger(AuthorisationBean.class);
     
-    
+    //user details on login page
     private String username;
     private String password;
     private int lifetime;
@@ -68,72 +66,77 @@ public class AuthorisationBean extends BaseBean {
     
     public void setLifetime(int lifetime) {
         this.lifetime = lifetime;
-    }
-    
+    }    
     
     //methods action
     public String login(){
-        
+        //first section, reload log4j
         PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
-        FacesContext facesContext = getFacesContext();
+        
         String sid = null;
         SessionDTO session = null;
         
         log.trace("Trying to log in");
         try {
+            //get sessiondeleegate instance
             SessionDelegate sd = SessionDelegate.getInstance();
             
-            //start session
+            //start session with lifetime 2 hours
             sid  = sd.login(this.username,this.password,2);
             
             log.info("Logged in with sid "+sid);
-            //get session info
-            session  = sd.getSession(sid);
             
+            //get session info once logged in to DP
+            session  = sd.getSession(sid);            
             log.info("Expire time: "+session.getExpireTime());
             log.trace("User prefs: "+session.getUserPrefs().getResultsPerPage());
             
         } catch (CannotCreateNewUserException ex) {
-            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"Database exception",""));
+            //error, user cannot be created in DB, fatal
+            fatal("Database exception");
             log.fatal("Unable to create new user for: "+username,ex);
-            return "error";
+            return NavigationConstants.LOGIN_ERROR;
         } catch (LoginMyProxyException ex) {
-            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,ex.getStandardMessage(),""));
-            log.fatal("Login error for: "+username+", type: "+ex.getType(),ex);
-            return "login_failure";
+            //problem with either myproxy or user inserted wrong details.
+            //LoginMyEx has be done so the the standard message returns a helpful message about the problem, 
+            //display this to the user         
+            error(ex.getStandardMessage());
+            log.error("Login error for: "+username+", type: "+ex.getType(),ex);
+            return NavigationConstants.LOGIN_FAILURE;            
         } catch (SessionException ex) {
-            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,ex.getMessage(),""));
-            log.fatal("Session exception for sid "+sid,ex);
-            return "error";
+            //some sort of session error, this should not be thrown normally
+            error(ex.getMessage());
+            log.error("Session exception for sid "+sid,ex);
+            return NavigationConstants.LOGIN_ERROR;            
         } catch (UserNotFoundException ex) {
-            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,ex.getMessage(),""));
+            error(ex.getMessage());
             log.fatal("Session exception for sid "+sid,ex);
-            return "error";
+            return NavigationConstants.LOGIN_ERROR;
+            
         }
         
         //TODO remove
         //added security
         boolean loggedIn = checkUser(session);
         if(!loggedIn){
-            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"You have no access to the Data Portal",""));
-            return "login_failure";
+            error("You have no access to the Data Portal");
+            return NavigationConstants.LOGIN_FAILURE;
             
         }
+        ////End of:  remove this////        
         
-        //logged in ok
-        Visit visit = new Visit();
-        visit.setSession(session);
-        
-        //set the visit object in the session
-        getApplication().createValueBinding("#{"+WebConstants.SESSION_SCOPE_KEY+WebConstants.SESSION_KEY+"}").setValue(facesContext,visit);
-        setVisit(visit);
-        
-        return "login_success";
+        //logged in ok, get session visit bean, if not there this methoid creates one and sets the returned session
+        Visit visit = (Visit) getBean(WebConstants.SESSION_KEY);  
+        visit.setSession(session);        
+      
+        //logged in, return ok          
+        return NavigationConstants.LOGIN_SUCCESS;
     }
     
     public String logout(){
-        log.info("Loggin out of session");
+        log.info("Logging out of session");
         
+        //remove all traces of session so auth filter can check for people entering        
         FacesContext facesContext = getFacesContext();
         HttpSession http_session  = (HttpSession)facesContext.getExternalContext().getSession(false);
         http_session.removeAttribute(WebConstants.SESSION_SCOPE_KEY+WebConstants.SESSION_KEY);
@@ -141,7 +144,7 @@ public class AuthorisationBean extends BaseBean {
         
         http_session.invalidate();
         
-        return "logout";
+        return NavigationConstants.LOGOUT_SUCCESS;
     }
     
     private boolean checkUser(SessionDTO session) {

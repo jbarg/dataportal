@@ -10,15 +10,13 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 
+
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import javax.faces.application.FacesMessage;
-import javax.faces.model.*;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -26,24 +24,24 @@ import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.component.*;
+import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
-import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.web.backingbeans.SortableList;
-
+import uk.ac.dl.dp.web.navigation.NavigationConstants;
+import uk.ac.dl.dp.web.util.SortableList;
+import uk.ac.dl.dp.web.util.WebConstants;
 
 /**
  *
  * @author gjd37
  */
-public class InvestigationBean extends BaseSortableList {
+public class InvestigationBean extends SortableList {
     
     private static Logger log = Logger.getLogger(InvestigationBean.class);
     
-    private DataModel model;
+
     private  HtmlDataTable table;
     private List<Investigation> investigations;
     
@@ -64,6 +62,7 @@ public class InvestigationBean extends BaseSortableList {
         return true;
     }
     
+    //data for the table to show, data already got from search bean
     public List<Investigation> getInvestigations() {
         sort(getSort(), isAscending());
         return (List<Investigation>)getVisitData().getSearchedInvestigations();
@@ -75,6 +74,8 @@ public class InvestigationBean extends BaseSortableList {
         
     }
     
+     //listens for sort column action events, and gets the column by thge param name passed in
+    // then calls sort on the column
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -92,7 +93,9 @@ public class InvestigationBean extends BaseSortableList {
                     else return ascending ? c1.getName().compareTo(c2.getName()) : c2.getName()
                     .compareTo(c1.getName());
                 }else if (column.equals("abstract")) {
-                    return ascending ? c1.getInvestigationAbstract().compareTo(c2.getInvestigationAbstract()) : c2.getInvestigationAbstract()
+                    //if no abstract put it behind it
+                    if(c1.getInvestigationAbstract() == null) return 1;
+                    else return ascending ? c1.getInvestigationAbstract().compareTo(c2.getInvestigationAbstract()) : c2.getInvestigationAbstract()
                     .compareTo(c1.getInvestigationAbstract());
                 } else if (column.equals("type")) {
                     return ascending ? c1.getInvestigationType().compareTo(c2.getInvestigationType()) : c2.getInvestigationType()
@@ -105,6 +108,8 @@ public class InvestigationBean extends BaseSortableList {
         
     }
     
+       //This listens to changes in the users isSelected.  This is because the list could be
+    //larger than one page so have to do it this way
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
         Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
@@ -132,6 +137,8 @@ public class InvestigationBean extends BaseSortableList {
         }
     }
     
+    //listens for sort column action events, and gets the column by thge param name passed in
+    // then calls sort on the column
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -150,21 +157,8 @@ public class InvestigationBean extends BaseSortableList {
             i++;
         }
     }
-    
-    
-    private static Comparator byName = new Comparator(){
-        public int compare(Object o1, Object o2){
-            Investigation c1 = (Investigation) o1;
-            Investigation c2 = (Investigation) o2;
-            
-            String name1 = c1.getName();
-            String name2 = c2.getName();
-            //log.trace("Comparing: "+name1+" with "+name2);
-            
-            return name2.compareTo(name1);
-        }
-    };
-    
+        
+    //method to select all data
     public String selectall(){
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             invest.setSelected(true);
@@ -172,18 +166,18 @@ public class InvestigationBean extends BaseSortableList {
         return null;
     }
     
+    //method to select no data
     public String selectnone(){
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             invest.setSelected(false);
         }
         return null;
     }
-    
-    
-     
-    
+       
+    //view selected datasets
     public String datasets(){
         
+        //check which ones are checked, add to arraylist and then send to EJBS
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             if(invest.isSelected()){
@@ -192,8 +186,17 @@ public class InvestigationBean extends BaseSortableList {
             }
         }
         
+        //user must have click one invest to view
         if(investigations.size() == 0 ){
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Please select atleast one investigation.",""));
+            info("Please select atleast one investigation.");
+            return null;
+        }
+        
+        //more than max datasets then the siz eof the html page returned is massice with Jtree2.
+        //if more than WebConstants.MAXIMIUM_CLIENT_DATASET_RESULTS then the server tree is serversided so can take more
+        //but max is  WebConstants.MAXIMIUM_DATASET_RESULTS
+        if(investigations.size() > WebConstants.MAXIMIUM_DATASET_RESULTS ){
+            info("Please select less than "+WebConstants.MAXIMIUM_DATASET_RESULTS+" investigations to view.");
             return null;
         }
         
@@ -203,38 +206,29 @@ public class InvestigationBean extends BaseSortableList {
         try{
             QueryDelegate qd = QueryDelegate.getInstance();
             log.debug("About to get datasets from: "+investigations.size());
-            for(Investigation invest :  investigations){
-                
-                log.trace(invest);
-                
-            }
-            datasets = qd.getDataSets(getVisit().getSid(),investigations);
-            for(DataSet dataset : datasets){
-                log.trace(dataset);
-            }
-            log.debug("Got datasets, getting datafiles");
+           
+            datasets = qd.getDataSets(getVisit().getSid(),investigations);            
+            log.debug("Got datasets, getting datafiles, size: "+datasets.size());
             
             datafiles = qd.getDataFiles(getVisit().getSid(), datasets);
-            log.debug("Got data files");
-            for(DataFile datafile : datafiles){
-                log.trace(datafile);
-            }
+            log.debug("Got data files, size: "+datafiles.size());
             
+            //add all the data to the visit
             getVisitData().setCurrentInvestigations(investigations);
             getVisitData().setCurrentDatasets(datasets);
             getVisitData().setCurrentDatafiles(datafiles);
             
         } catch (DataPortalException ex) {
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"DataPortal exception:"+ex.getMessage(),""));
+            error("Error: Unable to gets Data Sets.");
             log.fatal("Unable to create query user for: "+getVisit().getSid(),ex);
             return null;
         } catch (Exception ex) {
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL,"Exception: "+ex.getMessage(),""));
+            error("Error: Unexpected error getting Data Sets.");
             log.fatal("exception : "+getVisit().getSid(),ex);
             return null;
         }
         
-        return "dataset_success";
+        return NavigationConstants.GET_DATASETS_SUCCESS;
     }
     
 }

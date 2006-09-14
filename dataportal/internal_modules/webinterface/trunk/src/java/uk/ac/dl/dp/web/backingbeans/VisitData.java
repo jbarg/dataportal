@@ -9,6 +9,7 @@
 
 package uk.ac.dl.dp.web.backingbeans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +25,7 @@ import javax.faces.model.SelectItem;
  *
  * @author gjd37
  */
-public class VisitData {
+public class VisitData implements Serializable {
     
     
     private static Logger log = Logger.getLogger(VisitData.class);
@@ -71,13 +72,13 @@ public class VisitData {
     }
     //check weather user has picked investigations, used in the nav bar 
     public boolean isInvestigations(){
-        if(currentInvestigations == null) return false;
+        if(searchedInvestigations == null) return false;
         else return true;
     }
     
     //same with data sets
      public boolean isDatasets(){
-        if(currentDatasets == null) return false;
+        if(currentInvestigations == null) return false;
         else return true;
     }
     
@@ -197,7 +198,6 @@ public class VisitData {
     public boolean isSearched(){
         if(this.searchedUsers == null) return false;
         else return true;
-    }
-    
+    }        
     
 }
