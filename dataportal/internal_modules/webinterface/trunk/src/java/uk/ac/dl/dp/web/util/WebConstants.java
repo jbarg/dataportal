@@ -27,4 +27,6 @@ public class WebConstants {
      public final static int MAXIMIUM_INVESTIGATION_TREE_RESULTS = 50;
      
     public final static int MAXIMIUM_SEARCH_TIME = 15; //seconds
+    
+    
 }

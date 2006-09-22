@@ -22,7 +22,6 @@ import com.sun.j2ee.blueprints.ui.autocomplete.AutoCompleteUtilities;
 import com.sun.j2ee.blueprints.ui.autocomplete.CompletionResult;
 import uk.ac.dl.dp.web.backingbeans.ApplicationBean;
 import uk.ac.dl.dp.web.util.AbstractApplicationBean;
-import uk.ac.dl.dp.web.util.BaseBean;
 import uk.ac.dl.dp.web.backingbeans.Visit;
 import javax.faces.event.ValueChangeEvent;
 /**
