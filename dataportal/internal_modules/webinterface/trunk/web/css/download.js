@@ -54,7 +54,7 @@
         }
         else if(BrowserDetect.browser == "Netscape" && BrowserDetect.version == "Moziila"){
         //alert("netsacpe 4");
-        win = window.open("../../servlet/DownloadServlet?url="+id+"&type="+type+"&from="+from+"","Download Data","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=300,height=150,left=0,top=0");
+        win = window.open("../../servlet/DownloadServlet?url="+id+"&type="+type+"&from="+from+"","Download Data","toolbar=no,location=no,directories=no,status=no,menubar=no,resizable=no,copyhistory=yes,width=300,height=150,left=0,top=0");
         }
           else if(BrowserDetect.browser == "Firefox"){
       
