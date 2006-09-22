@@ -27,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import uk.ac.dl.dp.coreutil.util.Util;
 /**
  *
  * @author gjd37
@@ -144,6 +145,10 @@ public class Url implements Serializable {
     
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public boolean isImageJ(){
+       return  Util.isImageJ(getName());
     }
     
 }
