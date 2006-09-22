@@ -9,6 +9,7 @@
 
 package uk.ac.dl.dp.web.backingbeans;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.*;
@@ -37,6 +38,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
+import uk.ac.dl.dp.coreutil.util.Util;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.util.WebConstants;
@@ -137,8 +139,10 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     for(DataFile datafile : datafiles){
                         //log.trace(datafile);
                         if(datafile.getDataSetId().equals(dataset.getId()) && datafile.getFacility().equals(dataset.getFacility())){
-                            
-                            datasetNode.getChildren().add(new TreeNodeBase("file-folder", datafile.getName(),datafile.getFacility()+"-"+datafile.getId(),true));
+                            boolean isImageJ = Util.isImageJ(datafile.getName());  
+                            //set isLeaf is imageJ so can use it on the web page
+                            datasetNode.getChildren().add(new TreeNodeBase("file-folder", datafile.getName(),datafile.getFacility()+"-"+datafile.getId(),isImageJ));
+                        
                         }
                     }
                     datasetsNode.getChildren().add(datasetNode);
@@ -370,8 +374,6 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         }
         return null;
     }
-    
-    
     
     
 }
