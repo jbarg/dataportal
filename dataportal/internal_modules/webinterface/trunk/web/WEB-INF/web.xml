@@ -65,6 +65,7 @@
     <servlet>
         <servlet-name>DownloadServlet</servlet-name>
         <servlet-class>uk.ac.dl.dp.web.util.DownloadServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
@@ -77,6 +78,7 @@
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
         <url-pattern>/servlet/DownloadServlet</url-pattern>
+        
     </servlet-mapping>
     <session-config>
         <session-timeout>

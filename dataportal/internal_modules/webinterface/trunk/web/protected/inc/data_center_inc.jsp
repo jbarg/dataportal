@@ -136,7 +136,7 @@
                    
                     <t:popup styleClass="popup" closePopupOnExitingElement="true"
                         closePopupOnExitingPopup="true"
-                        displayAtDistanceX="-175"
+                        displayAtDistanceX="-165"
                         displayAtDistanceY="-20" >
 
                         <t:graphicImage id="add_button"  value="../../images/addButton.gif"  border="0"/>
@@ -146,7 +146,7 @@
                                     <h:inputTextarea value="#{data.note}" valueChangeListener="#{datacenterBean.note}"  id="note" rows="30" cols="17">
                                         <f:param name="note" value="#{data.id}"/>
                                     </h:inputTextarea>
-                                    <br />
+                                    
                                     <h:commandButton action="#{datacenterBean.addNote}" title="View selections" value="Add Note"/>
            
                                 </h:panelGrid>
@@ -197,10 +197,11 @@
                     <f:facet name="header">
                         <h:outputText value="Goto" style="table-header; color:blue"/>                   
                     </f:facet>          
-                       
-                    <h:commandLink style="table-header" id="view" action="#{datacenterBean.viewData}" rendered="#{data.dataset}">
-                        <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               
-                    </h:commandLink>           
+                    <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               
+                  
+                    <%--<h:commandLink style="table-header" id="view" action="#{datacenterBean.viewData}" rendered="#{data.dataset}">
+                    <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               
+                    </h:commandLink>           --%>
                 </h:column>
                 <h:column>
                     <f:facet name="header">
@@ -217,8 +218,13 @@
                                                      
                         <h:column>
                             &nbsp;&nbsp; &nbsp;
-                            <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
-                     
+                            <t:graphicImage rendered="#{url.imageJ}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>
+                          
+                            <h:commandLink rendered="#{!url.imageJ}" onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
+                                <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
+                                                     
+                            </h:commandLink>
+                           
                             <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
                                 <h:outputText  value="#{url.name}" style="font-size: 10px"/>                         
                             </h:commandLink>

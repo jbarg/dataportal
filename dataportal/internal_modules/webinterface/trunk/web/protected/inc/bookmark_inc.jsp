@@ -85,8 +85,8 @@
                        
                     <t:popup styleClass="popup" closePopupOnExitingElement="true"
                         closePopupOnExitingPopup="true"
-                        displayAtDistanceX="-175"
-                        displayAtDistanceY="-40" >
+                        displayAtDistanceX="-165"
+                        displayAtDistanceY="-20" >
 
                         <t:graphicImage id="add_button"  value="../../images/addButton.gif"  border="0"/>
                         <f:facet name="popup">
@@ -95,7 +95,7 @@
                                     <h:inputTextarea value="#{data.note}" valueChangeListener="#{bookmarkBean.note}" id="note" rows="10" cols="15">
                                         <f:param name="note" value="#{data.id}"/>
                                     </h:inputTextarea>
-                                    <br />
+                                   
                                     <h:commandButton action="#{bookmarkBean.addNote}" title="View selections" value="Add Note"/>
            
                                 </h:panelGrid>

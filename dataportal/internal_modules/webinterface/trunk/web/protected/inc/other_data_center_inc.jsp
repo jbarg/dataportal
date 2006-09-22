@@ -189,8 +189,10 @@
                                                      
                         <h:column>
                             &nbsp;&nbsp; &nbsp;
+                            <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
                             <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
-                     
+                                                     
+                        </h:commandLink>
                             <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" >
                                 <h:outputText  value="#{url.name}" style="font-size: 10px"/>
                          

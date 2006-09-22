@@ -196,12 +196,17 @@
     
     <navigation-rule>
         <description>  
-            
+            From data set tree, if added to bookmarks show bookmark, if added to data ref.. if both show data ref
         </description>
         <from-view-id>/protected/data_sets.jsp</from-view-id>
         <navigation-case>
             <from-outcome>ADD_DATA_REFERENCE_SUCCESS</from-outcome>
             <to-view-id>/protected/data_center.jsp</to-view-id>
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>ADD_BOOKMARK_SUCCESS</from-outcome>
+            <to-view-id>/protected/bookmark.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>     
     
