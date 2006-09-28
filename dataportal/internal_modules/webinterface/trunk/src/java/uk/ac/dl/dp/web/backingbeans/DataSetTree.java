@@ -140,6 +140,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                         //log.trace(datafile);
                         if(datafile.getDataSetId().equals(dataset.getId()) && datafile.getFacility().equals(dataset.getFacility())){
                             boolean isImageJ = Util.isImageJ(datafile.getName());  
+                            log.trace(datafile.getName()+" is imageJ "+isImageJ);
                             //set isLeaf is imageJ so can use it on the web page
                             datasetNode.getChildren().add(new TreeNodeBase("file-folder", datafile.getName(),datafile.getFacility()+"-"+datafile.getId(),isImageJ));
                         

@@ -156,6 +156,8 @@ public class InvestigationBean extends SortableList {
             }
             i++;
         }
+         //collaspe all details in the data table.
+        getTable().collapseAllDetails();
     }
         
     //method to select all data
