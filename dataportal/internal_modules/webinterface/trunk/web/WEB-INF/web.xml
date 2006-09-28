@@ -20,6 +20,18 @@
         <param-value>true</param-value>
     </context-param>
     
+ <filter>
+        <display-name>Ajax4jsf Filter</display-name>
+        <filter-name>ajax4jsf</filter-name>
+        <filter-class>org.ajax4jsf.Filter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ajax4jsf</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+          <url-pattern>/*</url-pattern>
+    </filter-mapping>
+  
+    
     <filter>
         <filter-name>AuthorisationFilter</filter-name>
         <filter-class>uk.ac.dl.dp.web.util.AuthorisationFilter</filter-class>
@@ -35,6 +47,8 @@
             
         </init-param>
     </filter>
+    
+   
     
     <!-- extension mapping for adding <script/>, <link/>, and other resource tags to JSF-pages  -->
     <filter-mapping>

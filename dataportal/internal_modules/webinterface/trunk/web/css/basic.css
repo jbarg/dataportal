@@ -51,6 +51,16 @@ a:hover		{ color: #999999; text-decoration: underline;  }
 a:active 	{ color: #9999CC; text-decoration: underline;  }
 
 
+.table_no_space {
+    margin-top: -50px;
+}
+
+
+.layout_table {
+    border: 0;
+    width: 100%;
+}
+
 outerbarbody {
 	font-family : arial, verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size : 12px;
@@ -75,9 +85,7 @@ outerbarbody {
 	color: #000000;
     padding: 2;
     border-style: solid;
-    border-width: 1px;
-
-    
+    border-width: 1px;    
 }
 
 .header_top {
@@ -85,9 +93,7 @@ font-size: 20px;
   color: #00008b;
   background: none;
   font-weight: bold
-
 }
-
 
 
 .scroller {

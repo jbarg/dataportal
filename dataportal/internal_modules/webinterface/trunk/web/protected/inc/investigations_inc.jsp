@@ -4,125 +4,131 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <h:form>
-   
 
-
-    <table width="90%" border="0">
-        <td width="30">&nbsp;</td>
-        <td>
-            <table border="0" width="100%">
-                <tr>        
-                   
-                    <h:messages globalOnly="true" errorClass="error" warnClass="info" infoClass="info" />
-                </tr>                 
-                <td width="60%">    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          
-                </td>
-                <td align="left">&nbsp;&nbsp;&nbsp;
-                    <t:popup styleClass="popup"   closePopupOnExitingElement="true"
-                        closePopupOnExitingPopup="true"
-                        displayAtDistanceX="5"
-                        displayAtDistanceY="-40" >
-
-                        <t:graphicImage url="../../images/help.gif" border="0" />
-                        &nbsp;&nbsp;&nbsp;
-                        <f:facet name="popup">
-                            <h:panelGroup>
-                                <h:panelGrid columns="1" >
-                                    <%--  <f:subview id="helpl">
-                                    <c:import url="/investigations_inc_help.jsp" />
-                                    </f:subview>--%>
-                                    <table width="300" border="0">
-                                        <td>
-                                            <t:tree2 id="tree166" value="#{investigationHelpTree.data}" var="node" varNodeToggler="t" showRootNode="false">
+    <table style="margin-top:-90px" width="90%" border="0">
+         <tbody>
+            <tr>
+            <td width="30">&nbsp;</td>
+            <tr>
+                <td>
+                    <table border="0" width="100%">
+                         <tbody>
+                            <tr>
+                                <tr>                   
+                                    <h:messages globalOnly="true" errorClass="error" warnClass="info" infoClass="info" />
+                                </tr>                 
+                                <td width="60%">    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
+                                </td>
+                                <td align="left">&nbsp;&nbsp;&nbsp;
+                                    <t:popup styleClass="popup"   closePopupOnExitingElement="true"
+                                        closePopupOnExitingPopup="true"
+                                        displayAtDistanceX="5"
+                                        displayAtDistanceY="-40" >
+                                        <t:graphicImage url="../../images/help.gif" border="0" />
+                                        &nbsp;&nbsp;&nbsp;
+                                        <f:facet name="popup">
+                                            <h:panelGroup>
+                                                <h:panelGrid columns="1" >
+                                                    <%--  <f:subview id="helpl">
+                                                    <c:import url="/investigations_inc_help.jsp" />
+                                                    </f:subview>--%>
+                                                    <table width="300" border="0">
+                                                         <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <t:tree2 id="tree166" value="#{investigationHelpTree.data}" var="node" varNodeToggler="t" showRootNode="false">
     
-                                                <f:facet name="hfoo-folder">
-                                                    <h:panelGroup>                
-                                                        <t:graphicImage id="gr34h" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                                                                        <f:facet name="hfoo-folder">
+                                                                            <h:panelGroup>                
+                                                                                <t:graphicImage id="gr34h" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
                                   
-                                                        <t:graphicImage id="gr3h" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                                                                <t:graphicImage id="gr3h" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                         
-                                                        <h:outputText id="text" value="#{node.description}" styleClass="nodeFolder"/>
+                                                                                <h:outputText id="text" value="#{node.description}" styleClass="nodeFolder"/>
                            
                        
-                                                        <h:outputText id="t3ext1h" value=" (#{node.identifier})" styleClass="childCount" rendered="#{!empty node.children}"/>
+                                                                                <h:outputText id="t3ext1h" value=" (#{node.identifier})" styleClass="childCount" rendered="#{!empty node.children}"/>
                             
-                                                    </h:panelGroup>
-                                                </f:facet>
-                                                <f:facet name="hfoo1-folder">
-                                                    <h:panelGroup>
-                                                        <f:facet name="expand22h">
-                                                            <t:graphicImage id="gr43h2" value="../../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
-                                                        </f:facet>
-                                                        <f:facet name="collapse2h">
-                                                            <t:graphicImage id="gr32h" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                                                        </f:facet>
-                                                        <h:outputText id="text2" value="#{node.description}" styleClass="nodeFolder"/>
+                                                                            </h:panelGroup>
+                                                                        </f:facet>
+                                                                        <f:facet name="hfoo1-folder">
+                                                                            <h:panelGroup>
+                                                                                <f:facet name="expand22h">
+                                                                                    <t:graphicImage id="gr43h2" value="../../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                                                                                </f:facet>
+                                                                                <f:facet name="collapse2h">
+                                                                                    <t:graphicImage id="gr32h" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                                                                </f:facet>
+                                                                                <h:outputText id="text2" value="#{node.description}" styleClass="nodeFolder"/>
                        
-                                                    </h:panelGroup>
-                                                </f:facet>
-               
+                                                                            </h:panelGroup>
+                                                                        </f:facet>   
+                                                                    </t:tree2>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </h:panelGrid>
+                                            </h:panelGroup>
+                                        </f:facet>
+                                    </t:popup>
+                                </td>
+                            </tr>
+                        </tbody>
+             
+                    </table>
+           
+                    <t:tree2 id="tree" value="#{investigationTree.data}" var="node" varNodeToggler="t" showRootNode="false">>
     
-                                            </t:tree2>
-                                        </td>
-                                    </table>
-                                </h:panelGrid>
+                        <f:facet name="foo-folder">
+                            <h:panelGroup>
+                                <f:facet name="expand">
+                                    <t:graphicImage id="gr4" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collapse">
+                                    <t:graphicImage id="gr3" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                      
+                                <%-- <h:outputText id="text" value="#{node.description}" styleClass="nodeFolder"/>--%>
+                                <h:commandLink  immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.minimise}" actionListener="#{investigationTree.setNodeSelected}">
+                                    <h:outputText value="#{node.description}"  />
+                                    <f:param name="id" value="#{node.description}"/>
+                                </h:commandLink>      
+                                <h:outputText id="text1" value=" (#{node.identifier})" styleClass="childCount" rendered="#{!empty node.children}"/>
                             </h:panelGroup>
                         </f:facet>
-                    </t:popup>
+                        <f:facet name="foo1-folder">
+                            <h:panelGroup>
+                                <f:facet name="expand22">
+                                    <t:graphicImage id="gr42" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collapse2">
+                                    <t:graphicImage id="gr32" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <%--  <h:outputText id="text2" value="#{node.description}" styleClass="nodeFolder"/>--%>
+                                <h:commandLink disabled="true" immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.selectone}" actionListener="#{investigationTree.setNodeSelected}">
+                                    <h:outputText value="#{node.description}"  />
+                                    <f:param name="id" value="#{node.description}"/>
+                                </h:commandLink>  
+                            </h:panelGroup>
+                        </f:facet>
+                        <f:facet name="bar-folder">
+                            <h:panelGroup>
+                                <f:facet name="expand2">
+                                    <t:graphicImage id="gr" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collapse3">
+                                    <t:graphicImage id="gr1" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="text3" styleClass="document" value="#{node.description}" />
+           
+                            </h:panelGroup>
+                        </f:facet>
+    
+                    </t:tree2>
                 </td>
-             
-            </table>
-           
-            <t:tree2 id="tree" value="#{investigationTree.data}" var="node" varNodeToggler="t" showRootNode="false">>
-    
-                <f:facet name="foo-folder">
-                    <h:panelGroup>
-                        <f:facet name="expand">
-                            <t:graphicImage id="gr4" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
-                        </f:facet>
-                        <f:facet name="collapse">
-                            <t:graphicImage id="gr3" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                        </f:facet>
-                      
-                        <%-- <h:outputText id="text" value="#{node.description}" styleClass="nodeFolder"/>--%>
-                        <h:commandLink  immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.minimise}" actionListener="#{investigationTree.setNodeSelected}">
-                            <h:outputText value="#{node.description}"  />
-                            <f:param name="id" value="#{node.description}"/>
-                        </h:commandLink>      
-                        <h:outputText id="text1" value=" (#{node.identifier})" styleClass="childCount" rendered="#{!empty node.children}"/>
-                    </h:panelGroup>
-                </f:facet>
-                <f:facet name="foo1-folder">
-                    <h:panelGroup>
-                        <f:facet name="expand22">
-                            <t:graphicImage id="gr42" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
-                        </f:facet>
-                        <f:facet name="collapse2">
-                            <t:graphicImage id="gr32" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                        </f:facet>
-                        <%--  <h:outputText id="text2" value="#{node.description}" styleClass="nodeFolder"/>--%>
-                        <h:commandLink disabled="true" immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.selectone}" actionListener="#{investigationTree.setNodeSelected}">
-                            <h:outputText value="#{node.description}"  />
-                            <f:param name="id" value="#{node.description}"/>
-                        </h:commandLink>  
-                    </h:panelGroup>
-                </f:facet>
-                <f:facet name="bar-folder">
-                    <h:panelGroup>
-                        <f:facet name="expand2">
-                            <t:graphicImage id="gr" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
-                        </f:facet>
-                        <f:facet name="collapse3">
-                            <t:graphicImage id="gr1" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                        </f:facet>
-                        <h:outputText id="text3" styleClass="document" value="#{node.description}" />
-           
-                    </h:panelGroup>
-                </f:facet>
-    
-            </t:tree2>
-        </td>
+            </tr>
+        </tbody>
     </table>                        
 </h:form>
 
@@ -137,12 +143,12 @@
         var="invest"
         value="#{investigationBean.investigations}"
         preserveDataModel="true"
-        rows="#{visit.userPreferences.resultsPerPage}"
-       
+        rows="#{visit.userPreferences.resultsPerPage}"       
         binding="#{investigationBean.table}"
         sortColumn="#{investigationBean.sort}"
         sortAscending="#{investigationBean.ascending}"
-        preserveSort="true">
+        preserveSort="true"
+        varDetailToggler="detailToggler"       >     
         <f:facet name="header">
             <h:outputText value="Investigations" />
         </f:facet>
@@ -191,7 +197,12 @@
                     </c:if>
                 </h:commandLink>
             </f:facet>
-            <h:outputText  value="#{invest.investigationAbstract}" />
+            <h:commandLink action="#{detailToggler.toggleDetail}">
+                <t:graphicImage id="up" value="../../images/descending-arrow.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                <t:graphicImage id="up-f" value="../../images/ascending-arrow.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+              
+            </h:commandLink>   
+                     
 
         </h:column>
         <h:column>
@@ -217,6 +228,17 @@
             </h:selectBooleanCheckbox>
         </h:column>
 
+        <f:facet name="detailStamp">
+                    
+            <t:dataTable preserveSort="true" width="95%" id="investigationAbstract" styleClass="standardTable_Column" var="abstract" value="#{invest.investigationAbstract}">
+                                                     
+                <h:column>
+                    <h:outputText  value="#{invest.investigationAbstract}" />
+                </h:column>               
+            </t:dataTable>
+                   
+        </f:facet>
+                
     </t:dataTable>
 
     <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
@@ -278,14 +300,18 @@
     <br />
 
     <table width="90%" border="0">
-        <td>
-            <h:commandButton action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
+         <tbody>
+            <tr>
+                <td>
+                    <h:commandButton action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
              
-        </td>
-        <td align="right">
-            Select:&nbsp; <h:commandButton action="#{investigationBean.selectall}" title="All" value=" All "/>
-            &nbsp; 
-            <h:commandButton action="#{investigationBean.selectnone}" title="None" value="None"/>
-        </td>
+                </td>
+                <td align="right">
+                    Select:&nbsp; <h:commandButton action="#{investigationBean.selectall}" title="All" value=" All "/>
+                    &nbsp; 
+                    <h:commandButton action="#{investigationBean.selectnone}" title="None" value="None"/>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </h:form>
