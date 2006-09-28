@@ -6,16 +6,23 @@
 
 <h:form>
     <table width="95%">
-        <td width="20">&nbsp;</td>
-        <td>
-            <table width="95%" border="0">
-                <tr> <h:messages globalOnly="true" errorClass="error" infoClass="info" />
-                </tr>                 
+         <tbody>
+            <tr>
+                <td width="20">&nbsp;</td>
+                <td>
+                    <table width="95%" border="0">
+                         <tbody>
+                            <tr>   
+                                <tr> <h:messages globalOnly="true" errorClass="error" infoClass="info" />
+                                </tr>                 
       
        
-                <tr height="10"><br />&nbsp;</tr>
-             
-            </table>
+                                <tr height="10"><br />&nbsp;</tr>
+                            </tr>
+                        </tbody>      
+                    </table>
+                </td>
+                <td>
             <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
             <h:outputText rendered="#{!otherdatacenterBean.populated}" value="There are no items in #{visit.currentUserAuthDN}'s data references" styleClass="info" />
             <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
@@ -146,9 +153,13 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="1" >
                                     <table width="150" >
+                                         <tbody>
+                                        <tr>
                                         <td nowrap="false" width="150">
                                             <h:outputText value="#{data.note}" />
                                         </td>
+                                        </tr>
+                                         </tbody>
                                     </table>
                                 </h:panelGrid>
                             </h:panelGroup>
@@ -240,5 +251,7 @@
 
    
         </td>
+            </tr>
+        </tbody>     
     </table>
 </h:form>
