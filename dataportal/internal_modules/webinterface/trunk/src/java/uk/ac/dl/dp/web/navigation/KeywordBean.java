@@ -78,4 +78,17 @@ public class KeywordBean extends AbstractApplicationBean {
         
     }
     
+    //For ajax4jsf
+    public void selectedFacilities(){
+        log.trace("New ajax request");
+        ArrayList<String> facs = getVisitData().getCurrentSelectedFacilities();
+        
+        for(String fac : facs){
+            log.trace(fac);
+        }
+        
+    }
+    
+    
+    
 }
