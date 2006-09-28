@@ -22,93 +22,106 @@
             <%
                 // This is just if you want to kill the session for the current user so you can start fresh without restarting tomcat.
                 // Good for when making changes to the component tree
-           // if(!session.isNew()){
-           //     session.invalidate();
-           // }
+                // if(!session.isNew()){
+                //     session.invalidate();
+                // }
             %>
-            <table width="954" >  
-            <td width="100%">
+            <table width="954" >
+                 <tbody>
+                    <tr>
+                        <td width="100%">
            
-            <table  border="0" width="100%" >
-                <td width="950"  height="45" >                    
-                    <t:div styleClass="outerbar" style="width:954px">
-                    <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
-                        itemMaxHeight="200" orientation="horizontal" effectUnits="2"
-                        itemPadding="10" attachEdge="top" labelEdge="bottom">                    
-
-                    
-
-                    </s:fishEyeNavigationMenu>                    </t:div>
+                            <table  border="0" width="100%" >
+                                 <tbody>
+                                    <tr>
+                                        <td width="950"  height="45" >                    
+                                            <t:div styleClass="outerbar" style="width:954px">
+                                            <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
+                                                itemMaxHeight="200" orientation="horizontal" effectUnits="2"
+                                                itemPadding="10" attachEdge="top" labelEdge="bottom">  
+                                            </s:fishEyeNavigationMenu>                    </t:div>
              
-                </td>
-            </table>   
-              
-            <!--  <br />
-            <br /><br />
-            <br />-->              
-           
-        
-            <table border="0" width="100%">
-    
-                <td width="100%" align="right">
-                 <%--   <f:subview id="header_2">
-                        <c:import url="protected/inc/header_2.jsp" />
-                    </f:subview>--%>
-                </td>
-                    
-            </table>
+                                        </td>
+                                    
+                                
+                                        <td width="100%" align="right">
+                                            <%--   <f:subview id="header_2">
+                                            <c:import url="protected/inc/header_2.jsp" />
+                                            </f:subview>--%>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
             
-            <table border="0" width="100%">
-    
-                <td valign="top" width="200">
+                            <table style="margin-top:-50px" border="0" width="100%">
+                                 <tbody>
+                                    <tr>
+                                        <td valign="top" width="200">
                   
                    
-                    <!-- does not work inside subview??? -->
-                    <%--  <f:subview id="navigation">
-                    <c:import url="/inc/header2.jsp" />
-                    </f:subview>--%>
-                    <img align="center" src="../images/cclrc.jpg" width=170" height="60" />
-                    <br />
-                    <br />
-                   <%-- <t:div id="subnavigation_outer">
-                        <t:div id="subnavigation">
-                            <t:panelNavigation2 id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
-                                disabledStyle="color:red;padding: 2px 20px 2px 25px">
-                                <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
-                            </t:panelNavigation2>
-                        </t:div>
-                    </t:div>--%>
-                </td>
-                <td width="*" valign="top" >
-                    <table border="0" width="100%" >  
-                        <td align="right">
-                            <%-- <f:subview id="title">
-                            <c:import url="/inc/title.jsp" />
-                            </f:subview>--%>
-                            <br />
-                            <br />
+                                            <!-- does not work inside subview??? -->
+                                            <%--  <f:subview id="navigation">
+                                            <c:import url="/inc/header2.jsp" />
+                                            </f:subview>--%>
+                                            <img align="center" src="../images/cclrc.jpg" width=170" height="60" />
+                                            <br />
+                                            <br />
+                                            <%-- <t:div id="subnavigation_outer">
+                                            <t:div id="subnavigation">
+                                            <t:panelNavigation2 id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
+                                            disabledStyle="color:red;padding: 2px 20px 2px 25px">
+                                            <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
+                                            </t:panelNavigation2>
+                                            </t:div>
+                                            </t:div>--%>
+                                        </td>
+                                        <td width="*" valign="top" >
+                                            <table border="0" width="100%" >  
+                                                 <tbody>
+                                                    <tr>
+                                                        <td align="right">
+                                                            <%-- <f:subview id="title">
+                                                            <c:import url="/inc/title.jsp" />
+                                                            </f:subview>--%>
+                                                            <br />
+                                                            <br />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <hr size="-1" width="100%"  />
+                                            <table border="0" width="100%" >    
+                                                 <tbody>
+                                                    <tr>
+                                                        <td width="7%">&nbsp;</td>
+                                                        <td valign="top" width="93%" >
+                                                            <f:subview id="body">
+                                                                <c:import url="logon_inc.jsp" />
+                                                            </f:subview>                         
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <br />
+                                            <br />
+                                            <hr size="-1" width="100%"  />                    
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                         
+                            <table border="0" align="right">
+                                 <tbody>
+                                    <tr>
+                                        <f:subview id="footer">
+                                            <c:import url="inc/footer.jsp" />
+                                        </f:subview>  
+                                    </tr>
+                                </tbody>
+                            </table>
                         </td>
-                    </table>
-                    <hr size="-1" width="100%"  />
-                    <table border="0" width="100%" >    
-                        <td width="7%">&nbsp;</td>
-                        <td valign="top" width="93%" >
-                            <f:subview id="body">
-                                <c:import url="logon_inc.jsp" />
-                            </f:subview>                         
-                        </td>
-                    </table>
-                    <br />
-                    <br />
-                    <hr size="-1" width="100%"  />                    
-                </td>
-            </table>
-            <br />
-
-            <table border="0" align="right">
-                <f:subview id="footer">
-                    <c:import url="inc/footer.jsp" />
-                </f:subview>    
+                    </tr>
+                </tbody>
             </table>
         </f:view>
        
