@@ -7,43 +7,43 @@
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
-
-   
+    
+    
     
     
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
         <title>CCLRC Data Portal</title>
         <link rel="stylesheet" type="text/css" href="css/basic.css" />
-     
+        
     </head>
     <body>
         <f:view>   
             <%
-                // This is just if you want to kill the session for the current user so you can start fresh without restarting tomcat.
-                // Good for when making changes to the component tree
-                // if(!session.isNew()){
-                //     session.invalidate();
-                // }
+            // This is just if you want to kill the session for the current user so you can start fresh without restarting tomcat.
+            // Good for when making changes to the component tree
+            // if(!session.isNew()){
+            //     session.invalidate();
+            // }
             %>
             <table width="954" >
                  <tbody>
                     <tr>
                         <td width="100%">
-           
+                            
                             <table  border="0" width="100%" >
                                  <tbody>
                                     <tr>
                                         <td width="950"  height="45" >                    
                                             <t:div styleClass="outerbar" style="width:954px">
-                                            <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
-                                                itemMaxHeight="200" orientation="horizontal" effectUnits="2"
-                                                itemPadding="10" attachEdge="top" labelEdge="bottom">  
+                                                <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
+                                                    itemMaxHeight="200" orientation="horizontal" effectUnits="2"
+                                                    itemPadding="10" attachEdge="top" labelEdge="bottom">  
                                             </s:fishEyeNavigationMenu>                    </t:div>
-             
+                                            
                                         </td>
-                                    
-                                
+                                        
+                                        
                                         <td width="100%" align="right">
                                             <%--   <f:subview id="header_2">
                                             <c:import url="protected/inc/header_2.jsp" />
@@ -52,13 +52,13 @@
                                     </tr>
                                 </tbody>
                             </table>
-            
+                            
                             <table style="margin-top:-50px" border="0" width="100%">
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">
-                  
-                   
+                                            
+                                            
                                             <!-- does not work inside subview??? -->
                                             <%--  <f:subview id="navigation">
                                             <c:import url="/inc/header2.jsp" />
@@ -109,7 +109,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                         
+                            
                             <table border="0" align="right">
                                  <tbody>
                                     <tr>
@@ -124,7 +124,7 @@
                 </tbody>
             </table>
         </f:view>
-       
+        
     </body>
-
+    
 </html>

@@ -29,10 +29,9 @@
                             <table  border="0" width="100%" >
                                  <tbody>
                                     <tr>
-                                        <td width="100%"  height="45" > 
-                                            <f:subview id="header">
-                                                <c:import url="inc/header.jsp" />
-                                            </f:subview>
+                                        <td id="nav_bar" width="100%"  >       <f:subview id="header">
+                                            <c:import url="inc/header.jsp" />
+                                        </f:subview>
                                         </td>
                 
     

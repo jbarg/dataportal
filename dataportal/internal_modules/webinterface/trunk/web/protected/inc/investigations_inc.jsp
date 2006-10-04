@@ -3,8 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<h:form>
+<%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 
+<h:form>
+    
     <table style="margin-top:-90px" width="90%" border="0">
          <tbody>
             <tr>
@@ -37,18 +39,18 @@
                                                             <tr>
                                                                 <td>
                                                                     <t:tree2 id="tree166" value="#{investigationHelpTree.data}" var="node" varNodeToggler="t" showRootNode="false">
-    
+                                                                        
                                                                         <f:facet name="hfoo-folder">
                                                                             <h:panelGroup>                
                                                                                 <t:graphicImage id="gr34h" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
-                                  
+                                                                                
                                                                                 <t:graphicImage id="gr3h" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                        
+                                                                                
                                                                                 <h:outputText id="text" value="#{node.description}" styleClass="nodeFolder"/>
-                           
-                       
+                                                                                
+                                                                                
                                                                                 <h:outputText id="t3ext1h" value=" (#{node.identifier})" styleClass="childCount" rendered="#{!empty node.children}"/>
-                            
+                                                                                
                                                                             </h:panelGroup>
                                                                         </f:facet>
                                                                         <f:facet name="hfoo1-folder">
@@ -60,7 +62,7 @@
                                                                                     <t:graphicImage id="gr32h" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                                                                 </f:facet>
                                                                                 <h:outputText id="text2" value="#{node.description}" styleClass="nodeFolder"/>
-                       
+                                                                                
                                                                             </h:panelGroup>
                                                                         </f:facet>   
                                                                     </t:tree2>
@@ -75,11 +77,11 @@
                                 </td>
                             </tr>
                         </tbody>
-             
+                        
                     </table>
-           
+                    
                     <t:tree2 id="tree" value="#{investigationTree.data}" var="node" varNodeToggler="t" showRootNode="false">>
-    
+                        
                         <f:facet name="foo-folder">
                             <h:panelGroup>
                                 <f:facet name="expand">
@@ -88,7 +90,7 @@
                                 <f:facet name="collapse">
                                     <t:graphicImage id="gr3" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 </f:facet>
-                      
+                                
                                 <%-- <h:outputText id="text" value="#{node.description}" styleClass="nodeFolder"/>--%>
                                 <h:commandLink  immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.minimise}" actionListener="#{investigationTree.setNodeSelected}">
                                     <h:outputText value="#{node.description}"  />
@@ -121,10 +123,10 @@
                                     <t:graphicImage id="gr1" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 </f:facet>
                                 <h:outputText id="text3" styleClass="document" value="#{node.description}" />
-           
+                                
                             </h:panelGroup>
                         </f:facet>
-    
+                        
                     </t:tree2>
                 </td>
             </tr>
@@ -133,118 +135,142 @@
 </h:form>
 
 <br />
+
 <h:form>
-    <t:dataTable id="data" width="90%"
-        styleClass="scrollerTable"
-        headerClass="standardTable_Header"
-        footerClass="standardTable_Header"
-        rowClasses="standardTable_Row1,standardTable_Row2"
-        columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
-        var="invest"
-        value="#{investigationBean.investigations}"
-        preserveDataModel="true"
-        rows="#{visit.userPreferences.resultsPerPage}"       
-        binding="#{investigationBean.table}"
-        sortColumn="#{investigationBean.sort}"
-        sortAscending="#{investigationBean.ascending}"
-        preserveSort="true"
-        varDetailToggler="detailToggler"       >     
-        <f:facet name="header">
-            <h:outputText value="Investigations" />
-        </f:facet>
-
-        <%--<h:column>
-        <f:facet name="header"></f:facet>            
-        <h:outputText value="#{invest.id}" />
-              
-        </h:column>--%>
-        <h:column>
+    <a4j:region  selfRendered="true"> 
+        
+        <t:dataTable id="data" width="90%"
+            styleClass="scrollerTable"
+            headerClass="standardTable_Header"
+            footerClass="standardTable_Header"
+            rowClasses="standardTable_Row1,standardTable_Row2"
+            columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+            var="invest"
+            value="#{investigationBean.investigations}"
+            preserveDataModel="true"
+            rows="#{visit.userPreferences.resultsPerPage}"       
+            binding="#{investigationBean.table}"
+            sortColumn="#{investigationBean.sort}"
+            sortAscending="#{investigationBean.ascending}"
+            preserveSort="true"
+            varDetailToggler="detailToggler"       >     
             <f:facet name="header">
-                <h:commandLink style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
-                    <h:outputText value="Name" />
-                    <f:param name="column" value="name"/>
-                    <c:if test="${requestScope.investigationBean.sort == 'name'}" >
-                        <t:graphicImage id="acname" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
-                        <t:graphicImage id="dename" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
-                    </c:if>
-                </h:commandLink>
+                <h:outputText value="Investigations" />
             </f:facet>
-            <h:outputText  value="#{invest.name}" />
-
-        </h:column>
-        <h:column>
-            <f:facet name="header">
-                <h:commandLink style="table-header" id="type" actionListener="#{investigationBean.sortColumn}">
-                    <h:outputText value="Type" />
-                    <f:param name="column" value="type"/>
-                    <c:if test="${requestScope.investigationBean.sort == 'type'}" >
-                        <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
-                        <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
-                    </c:if>
-                </h:commandLink>
-            </f:facet>
-            <h:outputText  value="#{invest.investigationType}" />
-
-        </h:column>
-        <h:column>
-            <f:facet name="header">
-                <h:commandLink style="table-header" id="abstract" actionListener="#{investigationBean.sortColumn}">
-                    <h:outputText value="Abstract" />
-                    <f:param name="column" value="abstract"/>
-                    <c:if test="${requestScope.investigationBean.sort == 'abstract'}" >
-                        <t:graphicImage id="acabstract" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
-                        <t:graphicImage id="deabstract" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
-                    </c:if>
-                </h:commandLink>
-            </f:facet>
-            <h:commandLink action="#{detailToggler.toggleDetail}">
-                <t:graphicImage id="up" value="../../images/descending-arrow.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                <t:graphicImage id="up-f" value="../../images/ascending-arrow.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-              
-            </h:commandLink>   
-                     
-
-        </h:column>
-        <h:column>
-            <f:facet name="header">
-                <h:commandLink style="table-header" id="facility" actionListener="#{investigationBean.sortColumn}">
-                    <h:outputText value="Facility" />
-                    <f:param name="column" value="facility"/>
-                    <c:if test="${requestScope.investigationBean.sort == 'facility'}" >
-                        <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
-                        <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
-                    </c:if>
-                </h:commandLink>
-            </f:facet>
-            <h:outputText value="#{invest.facility}" />
-        </h:column>
-       
-        <h:column>
-            <f:facet name="header">
-                <h:outputText value="" />
-            </f:facet>
-            <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{investigationBean.listen}" value="#{invest.selected}" >
-                <f:param name="id" value="#{invest.id}"/>
-            </h:selectBooleanCheckbox>
-        </h:column>
-
-        <f:facet name="detailStamp">
-                    
-            <t:dataTable preserveSort="true" width="95%" id="investigationAbstract" styleClass="standardTable_Column" var="abstract" value="#{invest.investigationAbstract}">
-                                                     
-                <h:column>
-                    <h:outputText  value="#{invest.investigationAbstract}" />
-                </h:column>               
-            </t:dataTable>
-                   
-        </f:facet>
+            
+            
+            <%--<h:column>
+            <f:facet name="header"></f:facet>            
+            <h:outputText value="#{invest.id}" />
+            
+            </h:column>--%>
+            <h:column>
+                <f:facet name="header">
+                  <%--  <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">--%>
+                                                
+                   <h:commandLink style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
+                        <h:outputText value="Name" />
+                        <f:param name="column" value="name"/>
+                        <c:if test="${requestScope.investigationBean.sort == 'name'}" >
+                            <t:graphicImage id="acname" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
+                            <t:graphicImage id="dename" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
+                        </c:if>
+                    </h:commandLink>
+                </f:facet>
+                <h:outputText  value="#{invest.name}" />
                 
-    </t:dataTable>
-
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:commandLink style="table-header" id="type" actionListener="#{investigationBean.sortColumn}">
+                        <h:outputText value="Type" />
+                        <f:param name="column" value="type"/>
+                        <c:if test="${requestScope.investigationBean.sort == 'type'}" >
+                            <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
+                            <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
+                        </c:if>
+                    </h:commandLink>
+                </f:facet>
+                <h:outputText  value="#{invest.investigationType}" />
+                
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGrid columns="2" >
+                        
+                        <h:commandLink  id="abstract" actionListener="#{investigationBean.sortColumn}">
+                            <h:outputText style="font-weight:bold; " value="Abstract" />
+                            <f:param name="column" value="abstract"/>
+                            <c:if test="${requestScope.investigationBean.sort == 'abstract'}" >
+                                <t:graphicImage id="acabstract" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
+                                <t:graphicImage id="deabstract" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
+                            </c:if>
+                        </h:commandLink>  
+                        
+                        <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">
+                            <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
+                        </h:commandLink>   
+                        <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">
+                            <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
+                        </h:commandLink> 
+                        
+                    </h:panelGrid>                  
+                </f:facet>
+                
+                <h:commandLink  rendered="#{invest.abstractNull}" action="#{detailToggler.toggleDetail}">
+                    <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                    <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                </h:commandLink>   
+                
+                
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <%--<a4j:commandLink reRender="data" style="table-header" id="facility" actionListener="#{investigationBean.sortColumn}">--%>
+                   
+                    <h:commandLink style="table-header" id="facility" actionListener="#{investigationBean.sortColumn}">
+                        <h:outputText value="Facility" />
+                        <f:param name="column" value="facility"/>
+                        <c:if test="${requestScope.investigationBean.sort == 'facility'}" >                            
+                            <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!investigationBean.ascending}" border="0"/>
+                            <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{investigationBean.ascending}" border="0"/>
+                        </c:if>
+                    </h:commandLink>
+                </f:facet>
+                <h:outputText value="#{invest.facility}" />
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="" />
+                </f:facet>
+                <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{investigationBean.listen}" value="#{invest.selected}" >
+                    <f:param name="id" value="#{invest.id}"/>
+                </h:selectBooleanCheckbox>
+            </h:column>
+            
+            <f:facet name="detailStamp">
+                
+                <t:dataTable preserveSort="true" width="95%" id="investigationAbstract" styleClass="standardTable_Column" var="abstract" value="#{invest.investigationAbstract}">
+                    
+                    <h:column>
+                        <h:outputText  value="#{invest.investigationAbstract}" />
+                    </h:column>               
+                </t:dataTable>
+                
+            </f:facet>
+            
+            
+            
+            
+        </t:dataTable>
+    </a4j:region>
+    
+    
     <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
-                      
+        
         <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
-       
+            
             <t:dataScroller id="scroll_1"
                 for="data"
                 fastStep="10"
@@ -275,7 +301,7 @@
                     <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
                 </f:facet>
             </t:dataScroller>
-       
+            
             <t:dataScroller id="scroll_2"
                 for="data"
                 rowsCountVar="rowsCount"
@@ -298,13 +324,13 @@
         </h:panelGrid>
     </c:if>
     <br />
-
+    
     <table width="90%" border="0">
          <tbody>
             <tr>
                 <td>
                     <h:commandButton action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
-             
+                    
                 </td>
                 <td align="right">
                     Select:&nbsp; <h:commandButton action="#{investigationBean.selectall}" title="All" value=" All "/>

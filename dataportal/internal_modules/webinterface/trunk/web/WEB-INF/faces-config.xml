@@ -6,14 +6,19 @@
         <locale-config>
             <default-locale>en</default-locale>
         </locale-config>
+      <!--  <view-handler>
+            com.sun.facelets.FaceletViewHandler
+        </view-handler>   -->
     </application>
+    
+    
     <managed-bean>
         <managed-bean-name>navigationMenu</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.navigation.NavigationMenu</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>
     </managed-bean>
     
-      <managed-bean>
+    <managed-bean>
         <managed-bean-name>ApplicationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ApplicationBean</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>       
@@ -121,12 +126,12 @@
         <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
     
-     <managed-bean>
+    <managed-bean>
         <managed-bean-name>userPreferencesBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.UserPreferencesBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
-        
+    
     <navigation-rule>
         <description>
             User logs into DP successfully, redirect to load images correctly
@@ -145,10 +150,10 @@
         </description>
         <from-view-id>/protected/basic_search.jsp</from-view-id>
         <!--
-          Not used, was going to put a progrss bar on the search, will do if searchs are getting long
+        Not used, was going to put a progrss bar on the search, will do if searchs are getting long
         <navigation-case>
-            <from-outcome>search_sent_success</from-outcome>
-            <to-view-id>/protected/search_wait.jsp</to-view-id>
+        <from-outcome>search_sent_success</from-outcome>
+        <to-view-id>/protected/search_wait.jsp</to-view-id>
         </navigation-case>-->
         <navigation-case>
             <from-outcome>SEARCH_SUCCESS</from-outcome>
@@ -167,20 +172,20 @@
         </navigation-case>
     </navigation-rule>
     
-   <!-- <navigation-rule>
-        <description>
-            
-        </description>
-        <from-view-id>/protected/search_wait.jsp</from-view-id>
-        <navigation-case>
-            <from-outcome>search_success</from-outcome>
-            <to-view-id>/protected/investigations.jsp</to-view-id>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-outcome>search_fail</from-outcome>
-            <to-view-id>/protected/basic_search.jsp</to-view-id>
-        </navigation-case>
+    <!-- <navigation-rule>
+    <description>
+    
+    </description>
+    <from-view-id>/protected/search_wait.jsp</from-view-id>
+    <navigation-case>
+    <from-outcome>search_success</from-outcome>
+    <to-view-id>/protected/investigations.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+    <from-outcome>search_fail</from-outcome>
+    <to-view-id>/protected/basic_search.jsp</to-view-id>
+    </navigation-case>
     </navigation-rule>-->
     
     <navigation-rule>
@@ -203,7 +208,7 @@
             <from-outcome>ADD_DATA_REFERENCE_SUCCESS</from-outcome>
             <to-view-id>/protected/data_center.jsp</to-view-id>
         </navigation-case>
-
+        
         <navigation-case>
             <from-outcome>ADD_BOOKMARK_SUCCESS</from-outcome>
             <to-view-id>/protected/bookmark.jsp</to-view-id>
@@ -223,7 +228,7 @@
     
     <navigation-rule>
         <description>  
-              when user wants to view investigation from the other user's bookmarks
+            when user wants to view investigation from the other user's bookmarks
         </description>
         <from-view-id>/protected/other_bookmark.jsp</from-view-id>
         <navigation-case>
@@ -245,7 +250,7 @@
     
     <navigation-rule>
         <description>     
-             when user wants to view investigation from the user's data references
+            when user wants to view investigation from the user's data references
         </description>
         <from-view-id>/protected/data_center.jsp</from-view-id>
         <navigation-case>
@@ -316,7 +321,7 @@
             <to-view-id>/protected/history.jsp</to-view-id>
         </navigation-case>
         
-         <navigation-case>
+        <navigation-case>
             <from-outcome>GOTO_USER_PREFS</from-outcome>
             <to-view-id>/protected/preferences.jsp</to-view-id>
         </navigation-case>
