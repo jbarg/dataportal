@@ -33,7 +33,7 @@ public class DataPortalConstants {
     public static String MYPROXY_PASSWORD = "kkkkkk";
     
         //allowd imageJ file types
-    public final static String[] IMAGEJ_TYPES = {"TIFF","JPEG","JPG","GIF","BMP","DICOM","FITS","PGM","ZIP","LUT","ROI","TEXT","TXT"};
+    public final static String[] IMAGEJ_TYPES = {"RAW","TIFF","JPEG","JPG","GIF","BMP","DICOM","FITS","PGM","ZIP","LUT","ROI","TEXT","TXT"};
 
     
     //EJB Session names
