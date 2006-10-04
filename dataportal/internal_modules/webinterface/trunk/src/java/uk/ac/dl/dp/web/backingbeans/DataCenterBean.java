@@ -43,15 +43,15 @@ import javax.faces.FacesException;
 public class DataCenterBean extends SortableList {
     
     private static Logger log = Logger.getLogger(DataCenterBean.class);
-        
+    
     private HtmlDataTable table;
     
-     //list of all of the DataReference from DB
-    private List<DataReference> dataRefs;     
+    //list of all of the DataReference from DB
+    private List<DataReference> dataRefs;
     
     //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
     //need this is see if bookmarks is > 0 and the lenght of them
-    private boolean populated; 
+    private boolean populated;
     private boolean length;
     
     public DataCenterBean(){
@@ -81,12 +81,12 @@ public class DataCenterBean extends SortableList {
                 dataRefs = (List<DataReference>) DataCenterDelegate.getInstance().getDataReferences(getVisit().getSid());
                 getVisitData().setCurrentDataReferences(dataRefs);
             } catch (Exception ex) {
-                 log.error("Unable to get data references for user: "+getVisit().getDn(),ex);
+                log.error("Unable to get data references for user: "+getVisit().getDn(),ex);
                 error("Error:  Unable to retrieve your data references.");
                 getVisitData().setCurrentDataReferences(new ArrayList<DataReference>());
                 return null;
             }
-             //sort column by default column in constructor
+            //sort column by default column in constructor
             sort(getSort(), isAscending());
             return (List<DataReference>)getVisitData().getCurrentDataReferences();
         } else{
@@ -208,7 +208,7 @@ public class DataCenterBean extends SortableList {
                 }
             }
             i++;
-        }       
+        }
         //collaspe all details in the data table.
         getTable().collapseAllDetails();
     }
@@ -244,7 +244,7 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-     //mehtod to remove select all
+    //mehtod to remove select all
     public String selectall(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(true);
@@ -280,8 +280,8 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-     //save to DB
-    public String addNote(){        
+    //save to DB
+    public String addNote(){
         
         DataReference bk = (DataReference)table.getRowData();
         log.trace("Note id is "+bk.getId()+" with new note: "+bk.getNote());
@@ -301,31 +301,79 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-   
+    
     
     ///////////////////////////////////////////////////
     //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
     //need this is see if bookmarks is > 0 and the lenght of them
-     public boolean isPopulated() {
+    public boolean isPopulated() {
         if(getDataRefs().size() > 0){
-        return true;
-        }
-        else return false;
+            return true;
+        } else return false;
     }
-
+    
     public void setPopulated(boolean populated) {
         this.populated = populated;
     }
-
+    
     public boolean getLength() {
         return getDataRefs().size() > getVisit().getUserPreferences().getResultsPerPage();
     }
-
+    
     public void setLength(boolean length) {
         this.length = length;
     }
+    
+    public boolean isName(){
+        return is("name");
+    }
+    
+    public boolean isNotName(){
+        return isNot("name");
+    }
+    
+    public boolean isType(){
+        return is("type");
+    }
+    
+    public boolean isNotType(){
+        return isNot("type");
+    }
+    
+     public boolean isFacility(){
+        return is("facility");
+    }
+    
+    public boolean isNotFacility(){
+        return isNot("facility");
+    }
+     public boolean isNotes(){
+        return is("notes");
+    }
+    
+    public boolean isNotNotes(){
+        return isNot("notes");
+    }
+    
+     public boolean isTime(){
+        return is("time");
+    }
+    
+    public boolean isNotTime(){
+        return isNot("time");
+    }
+    
+    private boolean is(String column){
+        if(getSort().equals(column) && isAscending()) return true;
+        else return false;
+    }
+    
+    private boolean isNot(String column){
+        if(getSort().equals(column) && !isAscending()) return true;
+        else return false;
+    }
     ////////////////////////////////////////////////////////////////////
- 
+    
     
     
 }

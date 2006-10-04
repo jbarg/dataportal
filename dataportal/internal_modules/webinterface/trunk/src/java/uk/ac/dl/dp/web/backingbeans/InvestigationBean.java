@@ -41,10 +41,10 @@ public class InvestigationBean extends SortableList {
     
     private static Logger log = Logger.getLogger(InvestigationBean.class);
     
-
+    
     private  HtmlDataTable table;
     private List<Investigation> investigations;
-    
+    private boolean expanded = false;
     
     public InvestigationBean(){
         super("name");
@@ -74,7 +74,7 @@ public class InvestigationBean extends SortableList {
         
     }
     
-     //listens for sort column action events, and gets the column by thge param name passed in
+    //listens for sort column action events, and gets the column by thge param name passed in
     // then calls sort on the column
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
@@ -108,7 +108,7 @@ public class InvestigationBean extends SortableList {
         
     }
     
-       //This listens to changes in the users isSelected.  This is because the list could be
+    //This listens to changes in the users isSelected.  This is because the list could be
     //larger than one page so have to do it this way
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
@@ -156,10 +156,10 @@ public class InvestigationBean extends SortableList {
             }
             i++;
         }
-         //collaspe all details in the data table.
+        //collaspe all details in the data table.
         getTable().collapseAllDetails();
     }
-        
+    
     //method to select all data
     public String selectall(){
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
@@ -175,7 +175,24 @@ public class InvestigationBean extends SortableList {
         }
         return null;
     }
-       
+    
+    //exapnds all the abstracts
+    public void expandAll(ActionEvent event){
+        
+        log.debug("Expanding");
+        getTable().expandAllDetails();
+        getVisitData().setInvestigationExpanded(true);
+        
+    }
+    
+    // collapses all the abstracts
+    public void collapseAll(ActionEvent event){
+        log.debug("Collapsing");
+        getTable().collapseAllDetails();
+        getVisitData().setInvestigationExpanded(false);
+        
+    }
+    
     //view selected datasets
     public String datasets(){
         
@@ -208,8 +225,8 @@ public class InvestigationBean extends SortableList {
         try{
             QueryDelegate qd = QueryDelegate.getInstance();
             log.debug("About to get datasets from: "+investigations.size());
-           
-            datasets = qd.getDataSets(getVisit().getSid(),investigations);            
+            
+            datasets = qd.getDataSets(getVisit().getSid(),investigations);
             log.debug("Got datasets, getting datafiles, size: "+datasets.size());
             
             datafiles = qd.getDataFiles(getVisit().getSid(), datasets);
@@ -233,4 +250,12 @@ public class InvestigationBean extends SortableList {
         return NavigationConstants.GET_DATASETS_SUCCESS;
     }
     
+    public boolean isExpanded() {
+        return expanded;
+    }
+    
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }    
+   
 }
