@@ -5,253 +5,250 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <h:form>
-    <table width="95%">
+    <table style="margin-top:-20px" width="95%" border="0">
          <tbody>
-            <tr>
-                <td width="20">&nbsp;</td>
+            <tr>            
                 <td>
-                    <table width="95%" border="0">
+                    <table style="margin-top:-20px" width="100%" border="0">
                          <tbody>
                             <tr>   
-                                <tr> <h:messages globalOnly="true" errorClass="error" infoClass="info" />
-                                </tr>                 
-      
-       
-                                <tr height="10"><br />&nbsp;</tr>
-                            </tr>
-                        </tbody>      
-                    </table>
-                </td>
-                <td>
-            <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
-            <h:outputText rendered="#{!otherdatacenterBean.populated}" value="There are no items in #{visit.currentUserAuthDN}'s data references" styleClass="info" />
-            <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
+                                <td>    <h:messages globalOnly="true" errorClass="error" infoClass="info" /></td>
+                            </tr>                                
+                            <tr>   
+                                <td>&nbsp;</td>
+                            </tr>   
+                            <tr>   
+                                <td>
+                                    <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
+                                    <h:outputText rendered="#{!otherdatacenterBean.populated}" value="There are no items in #{visit.currentUserAuthDN}'s data references" styleClass="info" />
+                                    <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
           
  
 
-            <t:dataTable rendered="#{otherdatacenterBean.populated}" id="datatable" width="95%"
-                styleClass="scrollerTable"
-                headerClass="standardTable_Header"
-                footerClass="standardTable_Header"
-                rowClasses="standardTable_Row1,standardTable_Row2"
-                columnClasses="standardTable_Column,standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
-                var="data"
-                value="#{otherdatacenterBean.dataRefs}"
-                preserveDataModel="true"
-                rows="#{visit.userPreferences.resultsPerPage}"
-                rowId="#{data.id}"
-                binding="#{otherdatacenterBean.table}"
-                sortColumn="#{otherdatacenterBean.sort}"
-                sortAscending="#{otherdatacenterBean.ascending}"
-                preserveSort="true" 
-                varDetailToggler="detailToggler">                                
+                                    <t:dataTable rendered="#{otherdatacenterBean.populated}" id="datatable" width="100%"
+                                        styleClass="scrollerTable"
+                                        headerClass="standardTable_Header"
+                                        footerClass="standardTable_Header"
+                                        rowClasses="standardTable_Row1,standardTable_Row2"
+                                        columnClasses="standardTable_Column,standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+                                        var="data"
+                                        value="#{otherdatacenterBean.dataRefs}"
+                                        preserveDataModel="true"
+                                        rows="#{visit.userPreferences.resultsPerPage}"
+                                        rowId="#{data.id}"
+                                        binding="#{otherdatacenterBean.table}"
+                                        sortColumn="#{otherdatacenterBean.sort}"
+                                        sortAscending="#{otherdatacenterBean.ascending}"
+                                        preserveSort="true" 
+                                        varDetailToggler="detailToggler">                                
                                 
-                <f:facet name="header">
-                    <h:outputText value="#{visit.visitData.currentUserAuthDN}'s Data References" />
-                </f:facet>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{visit.visitData.currentUserAuthDN}'s Data References" />
+                                        </f:facet>
 
-                <%--<h:column>
-                <f:facet name="header"></f:facet>            
-                <h:outputText value="#{data.id}" />              
-                </h:column>--%>
-                <h:column>
-                    <f:facet name="header"></f:facet>            
-                    <h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">
-                        <t:graphicImage id="down" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                        <t:graphicImage id="down-f" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                        <%--<h:column>
+                                        <f:facet name="header"></f:facet>            
+                                        <h:outputText value="#{data.id}" />              
+                                        </h:column>--%>
+                                        <h:column>
+                                            <f:facet name="header"></f:facet>            
+                                            <h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">
+                                                <t:graphicImage id="down" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                                <t:graphicImage id="down-f" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
                       
-                        <t:graphicImage id="up" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                        <t:graphicImage id="up-f" value="../../images/blue-folder-open.png" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                                                <t:graphicImage id="up" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                                                <t:graphicImage id="up-f" value="../../images/blue-folder-open.png" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
                       
-                    </h:commandLink>            
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <h:commandLink style="table-header" id="name" actionListener="#{otherdatacenterBean.sortColumn}">
-                            <h:outputText value="Name" />
-                            <f:param name="column" value="name"/>
-                            <c:if test="${requestScope.otherdatacenterBean.sort == 'name'}" >
-                                <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
-                                <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
-                            </c:if>
-                        </h:commandLink>
-                    </f:facet>
-                    <h:commandLink onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
-                        <h:outputText  value="#{data.name}" />
-                        <f:param name="id" value="#{data.id}"/>               
-                    </h:commandLink>                   
+                                            </h:commandLink>            
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:commandLink style="table-header" id="name" actionListener="#{otherdatacenterBean.sortColumn}">
+                                                    <h:outputText value="Name" />
+                                                    <f:param name="column" value="name"/>
+                                                    <c:if test="${requestScope.otherdatacenterBean.sort == 'name'}" >
+                                                        <t:graphicImage id="acf" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                                        <t:graphicImage id="def" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                                                    </c:if>
+                                                </h:commandLink>
+                                            </f:facet>
+                                            <h:commandLink onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
+                                                <h:outputText  value="#{data.name}" />
+                                                <f:param name="id" value="#{data.id}"/>               
+                                            </h:commandLink>                   
            
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <h:commandLink style="table-header" id="type" actionListener="#{otherdatacenterBean.sortColumn}">
-                            <h:outputText value="Type" />
-                            <f:param name="column" value="type"/>
-                            <c:if test="${requestScope.otherdatacenterBean.sort == 'type'}" >
-                                <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
-                                <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
-                            </c:if>
-                        </h:commandLink>
-                    </f:facet>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:commandLink style="table-header" id="type" actionListener="#{otherdatacenterBean.sortColumn}">
+                                                    <h:outputText value="Type" />
+                                                    <f:param name="column" value="type"/>
+                                                    <c:if test="${requestScope.otherdatacenterBean.sort == 'type'}" >
+                                                        <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                                        <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                                                    </c:if>
+                                                </h:commandLink>
+                                            </f:facet>
               
 
-                    <t:popup rendered="#{data.dataset}" styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                        closePopupOnExitingPopup="true"
-                        displayAtDistanceX="20"
-                        displayAtDistanceY="-40" >
-                        <h:outputText  value="#{data.typeOfObject}" />
+                                            <t:popup rendered="#{data.dataset}" styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                                                closePopupOnExitingPopup="true"
+                                                displayAtDistanceX="20"
+                                                displayAtDistanceY="-40" >
+                                                <h:outputText  value="#{data.typeOfObject}" />
                
-                        <f:facet name="popup">
-                            <h:panelGroup>
-                                <h:panelGrid columns="1" >
-                                    <h:outputText value="List of files: (#{data.numberOfFiles})"/> 
+                                                <f:facet name="popup">
+                                                    <h:panelGroup>
+                                                        <h:panelGrid columns="1" >
+                                                            <h:outputText value="List of files: (#{data.numberOfFiles})"/> 
                              
-                                    <h:outputText escape="false" value="#{data.printURLS}" />                                
-                                </h:panelGrid>
-                            </h:panelGroup>
-                        </f:facet>
-                    </t:popup>
-                    <%-- <h:outputText rendered="#{!data.dataset}" value="#{data.typeOfReference}" />--%>
+                                                            <h:outputText escape="false" value="#{data.printURLS}" />                                
+                                                        </h:panelGrid>
+                                                    </h:panelGroup>
+                                                </f:facet>
+                                            </t:popup>
+                                            <%-- <h:outputText rendered="#{!data.dataset}" value="#{data.typeOfReference}" />--%>
             
-                </h:column>
+                                        </h:column>
        
-                <h:column>
-                    <f:facet name="header">
-                        <h:commandLink style="table-header" id="facility" actionListener="#{otherdatacenterBean.sortColumn}">
-                            <h:outputText value="Facility" />
-                            <f:param name="column" value="facility"/> 
-                            <c:if test="${requestScope.otherdatacenterBean.sort == 'facility'}" >
-                                <t:graphicImage id="acfacility" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
-                                <t:graphicImage id="defacility" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
-                            </c:if>
-                        </h:commandLink>
-                    </f:facet>
-                    <h:outputText value="#{data.facility}" />
-                </h:column>        
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:commandLink style="table-header" id="facility" actionListener="#{otherdatacenterBean.sortColumn}">
+                                                    <h:outputText value="Facility" />
+                                                    <f:param name="column" value="facility"/> 
+                                                    <c:if test="${requestScope.otherdatacenterBean.sort == 'facility'}" >
+                                                        <t:graphicImage id="acfacility" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                                        <t:graphicImage id="defacility" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                                                    </c:if>
+                                                </h:commandLink>
+                                            </f:facet>
+                                            <h:outputText value="#{data.facility}" />
+                                        </h:column>        
          
-                <h:column>
-                    <f:facet name="header">
-                        <h:commandLink style="table-header" id="notes" actionListener="#{otherdatacenterBean.sortColumn}">
-                            <h:outputText value="Notes" />
-                            <f:param name="column" value="notes"/>     
-                            <c:if test="${requestScope.otherdatacenterBean.sort == 'notes'}" >
-                                <t:graphicImage id="acn" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
-                                <t:graphicImage id="den" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
-                            </c:if>
-                        </h:commandLink>
-                    </f:facet>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:commandLink style="table-header" id="notes" actionListener="#{otherdatacenterBean.sortColumn}">
+                                                    <h:outputText value="Notes" />
+                                                    <f:param name="column" value="notes"/>     
+                                                    <c:if test="${requestScope.otherdatacenterBean.sort == 'notes'}" >
+                                                        <t:graphicImage id="acn" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                                        <t:graphicImage id="den" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                                                    </c:if>
+                                                </h:commandLink>
+                                            </f:facet>
                        
                   
              
-                    <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                        closePopupOnExitingPopup="true"
-                        displayAtDistanceX="5"
-                        displayAtDistanceY="-40" rendered="#{data.hasNote}">
+                                            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                                                closePopupOnExitingPopup="true"
+                                                displayAtDistanceX="5"
+                                                displayAtDistanceY="-40" rendered="#{data.hasNote}">
 
-                        <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
-                        <f:facet name="popup">
-                            <h:panelGroup>
-                                <h:panelGrid columns="1" >
-                                    <table width="150" >
-                                         <tbody>
-                                        <tr>
-                                        <td nowrap="false" width="150">
-                                            <h:outputText value="#{data.note}" />
-                                        </td>
-                                        </tr>
-                                         </tbody>
-                                    </table>
-                                </h:panelGrid>
-                            </h:panelGroup>
-                        </f:facet>
-                    </t:popup>
+                                                <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
+                                                <f:facet name="popup">
+                                                    <h:panelGroup>
+                                                        <h:panelGrid columns="1" >
+                                                            <table width="150" >
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td nowrap="false" width="150">
+                                                                            <h:outputText value="#{data.note}" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </h:panelGrid>
+                                                    </h:panelGroup>
+                                                </f:facet>
+                                            </t:popup>
            
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <h:commandLink style="table-header" id="time" actionListener="#{otherdatacenterBean.sortColumn}">
-                            <h:outputText value="Time" />
-                            <f:param name="column" value="time"/> 
-                            <c:if test="${requestScope.otherdatacenterBean.sort == 'time'}" >
-                                <t:graphicImage id="actime" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
-                                <t:graphicImage id="detime" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
-                            </c:if>
-                        </h:commandLink>
-                    </f:facet>
-                    <h:outputText value="#{data.modTime}" >
-                        <f:convertDateTime pattern="HH:mm  dd.MM.yyyy "/>
-                    </h:outputText>
-                </h:column>       
-                <h:column>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:commandLink style="table-header" id="time" actionListener="#{otherdatacenterBean.sortColumn}">
+                                                    <h:outputText value="Time" />
+                                                    <f:param name="column" value="time"/> 
+                                                    <c:if test="${requestScope.otherdatacenterBean.sort == 'time'}" >
+                                                        <t:graphicImage id="actime" value="../../images/ascending-arrow.gif" rendered="#{!otherdatacenterBean.ascending}" border="0"/>
+                                                        <t:graphicImage id="detime" value="../../images/descending-arrow.gif" rendered="#{otherdatacenterBean.ascending}" border="0"/>
+                                                    </c:if>
+                                                </h:commandLink>
+                                            </f:facet>
+                                            <h:outputText value="#{data.modTime}" >
+                                                <f:convertDateTime pattern="HH:mm  dd.MM.yyyy "/>
+                                            </h:outputText>
+                                        </h:column>       
+                                        <h:column>
             
-                    <f:facet name="header">
-                        <h:outputText value="Goto" style="table-header; color:blue"/>
-                    </f:facet>       
+                                            <f:facet name="header">
+                                                <h:outputText value="Goto" style="table-header; color:blue"/>
+                                            </f:facet>       
     
 
-                    <h:commandLink style="table-header" id="view" action="#{otherdatacenterBean.viewData}" rendered="#{data.dataset}">
-                        <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                                            <h:commandLink style="table-header" id="view" action="#{otherdatacenterBean.viewData}" rendered="#{data.dataset}">
+                                                <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
                                                    
-                    </h:commandLink>           
-                </h:column>
+                                            </h:commandLink>           
+                                        </h:column>
                
-                <f:facet name="detailStamp">
-                    <t:dataTable preserveSort="true"  width="95%" id="cities" styleClass="standardTable_Column" var="url" value="#{data.urls}">
+                                        <f:facet name="detailStamp">
+                                            <t:dataTable preserveSort="true"  width="95%" id="cities" styleClass="standardTable_Column" var="url" value="#{data.urls}">
                                                      
-                        <h:column>
-                            &nbsp;&nbsp; &nbsp;
-                            <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
-                            <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
+                                                <h:column>
+                                                    &nbsp;&nbsp; &nbsp;
+                                                    <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
+                                                        <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
                                                      
-                        </h:commandLink>
-                            <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" >
-                                <h:outputText  value="#{url.name}" style="font-size: 10px"/>
+                                                    </h:commandLink>
+                                                    <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" >
+                                                        <h:outputText  value="#{url.name}" style="font-size: 10px"/>
                          
-                            </h:commandLink>
-                        </h:column>               
-                    </t:dataTable>
-                </f:facet>
-            </t:dataTable>
+                                                    </h:commandLink>
+                                                </h:column>               
+                                            </t:dataTable>
+                                        </f:facet>
+                                    </t:dataTable>
 
          
-            <h:panelGrid columns="1"  rendered="#{otherdatacenterBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
-                <t:dataScroller id="scroll_11"
-                    for="datatable"
-                    fastStep="10"
-                    pageCountVar="pageCount"
-                    pageIndexVar="pageIndex"
-                    styleClass="scroller"
-                    paginator="true"
-                    paginatorMaxPages="9"
-                    paginatorTableClass="paginator"
-                    paginatorActiveColumnStyle="font-weight:bold;">
-                    <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
-                    <f:facet name="first" >
-                        <t:graphicImage url="../../images/arrow-first.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="last">
-                        <t:graphicImage url="../../images/arrow-last.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="previous">
-                        <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="next">
-                        <t:graphicImage url="../../images/arrow-next.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="fastforward">
-                        <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
-                    </f:facet>
-                    <f:facet name="fastrewind">
-                        <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
-                    </f:facet>
-                </t:dataScroller>
-            </h:panelGrid>
+                                    <h:panelGrid columns="1"  rendered="#{otherdatacenterBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+                                        <t:dataScroller id="scroll_11"
+                                            for="datatable"
+                                            fastStep="10"
+                                            pageCountVar="pageCount"
+                                            pageIndexVar="pageIndex"
+                                            styleClass="scroller"
+                                            paginator="true"
+                                            paginatorMaxPages="9"
+                                            paginatorTableClass="paginator"
+                                            paginatorActiveColumnStyle="font-weight:bold;">
+                                            <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                                            <f:facet name="first" >
+                                                <t:graphicImage url="../../images/arrow-first.gif" border="1" />
+                                            </f:facet>
+                                            <f:facet name="last">
+                                                <t:graphicImage url="../../images/arrow-last.gif" border="1" />
+                                            </f:facet>
+                                            <f:facet name="previous">
+                                                <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
+                                            </f:facet>
+                                            <f:facet name="next">
+                                                <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                                            </f:facet>
+                                            <f:facet name="fastforward">
+                                                <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                                            </f:facet>
+                                            <f:facet name="fastrewind">
+                                                <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                                            </f:facet>
+                                        </t:dataScroller>
+                                    </h:panelGrid>
               
-            <br />
-
-   
-        </td>
+                                </td>
+                            </tr>
+                        </tbody>     
+                    </table>
+                </td>
             </tr>
-        </tbody>     
+        </tbody>   
     </table>
 </h:form>

@@ -59,7 +59,7 @@
   </script>
 <br />
 
-<a4j:region selfRendered="true"> 
+<a4j:region  selfRendered="true"> 
     <h:form id="autofillform">
         <h:panelGrid border="0" columns="2"> 
             <h:messages globalOnly="true" errorClass="error" infoClass="info" />
@@ -85,7 +85,9 @@
                 <f:selectItems value="#{visit.facilities}"/>
                 <f:validateLength minimum="1" />
             </h:selectManyListbox>
+                      
               
+               
             <h:outputText id="facilityDisplay" value="#{visit.visitData.currentSelectedFacilities}" style="font-size:14px"/>
             
             <h:message for="facilities" styleClass="error"/>
@@ -102,6 +104,7 @@
             value="#{searchBean.keyword}" required="true"
             ondisplay="function(item) { return extractCity(item); }"
             onchoose="function(item) { return chooseCity(item); }" />
+                        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                 closePopupOnExitingPopup="true"
@@ -131,10 +134,13 @@
             </h:outputLabel>
 
             <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-            <h:selectOneRadio style="font-size:14px" id="radio" value="#{searchBean.logicalExpression}" title="search">
+            <h:selectOneRadio style="font-size:14px" id="radio" value="#{searchBean.logicalExpression}" >
                 <f:selectItem itemLabel="AND" itemValue="AND" />
                 <f:selectItem itemLabel="OR" itemValue="OR" />
             </h:selectOneRadio>
+            
+           
+                
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                 closePopupOnExitingPopup="true"
                 displayAtDistanceX="5"
