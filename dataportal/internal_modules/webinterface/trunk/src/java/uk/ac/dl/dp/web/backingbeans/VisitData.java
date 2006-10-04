@@ -40,6 +40,8 @@ public class VisitData implements Serializable {
     
     private String currentUserAuthDN;
     
+    private boolean investigationExpanded;
+    
     private boolean bookmarkEnabled;
     
     private boolean datacenterEnabled;
@@ -199,5 +201,13 @@ public class VisitData implements Serializable {
         if(this.searchedUsers == null) return false;
         else return true;
     }        
+
+    public boolean isInvestigationExpanded() {
+        return investigationExpanded;
+    }
+
+    public void setInvestigationExpanded(boolean investigationExpanded) {
+        this.investigationExpanded = investigationExpanded;
+    }
     
 }
