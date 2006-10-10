@@ -1,0 +1,13 @@
+calling test function
+-------------------------------
+-------------------------------
+
+java uk.ac.cclrc.dpal.TestDPAccessLayer
+time java -Xms256m -Xmx512m uk.ac.cclrc.dpal.TestDPAccessLayerKeywords > output.txt
+
+
+
+--------------------------------
+javac uk/ac/cclrc/dpal/DPAccessLayer.java
+javac uk/ac/cclrc/dpal/TestDPAccessLayer.java
+
