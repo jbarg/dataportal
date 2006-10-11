@@ -7,7 +7,8 @@ public class Investigation extends Common implements Serializable
    //bean begins
    private String investigationType = null ;
    private String investigationAbstract = null ;
-   private String studyId = null ;
+   //using the following as it supresses duplicates(just in case)
+   private LinkedHashSet<String> keyword = new LinkedHashSet<String>() ;
 
    //getters
    public String getInvestigationType() {
@@ -17,12 +18,24 @@ public class Investigation extends Common implements Serializable
    public String getInvestigationAbstract() {
       return this.investigationAbstract ;
    }
-  
-   public String getStudyId() {
-      return this.studyId ;
+
+    public LinkedHashSet getKeyword() {
+      return this.keyword ;
    }
- 
+
+   public String getFirstKeyword() {
+      for (String s : keyword){
+         return s;
+      }
+      return null ;
+   }
+
+
    //setters
+   public void setKeyword(String keyword) {
+      this.keyword.add(keyword) ;
+  
+ 
    public void setInvestigationType(String investigationType) {
       this.investigationType=investigationType ;
    }
@@ -31,19 +44,21 @@ public class Investigation extends Common implements Serializable
       this.investigationAbstract=investigationAbstract ;
    }
   
-   public void setStudyId(String studyId) {
-      this.studyId=studyId ;
-   }
 
    //support for printing
    public String toString() {
       //can't use variable names of superclass as there are not inherited
+
+      for(String k : keyword){
+         sb.append(k);
+         sb.append(" ") ;
+
       return "[name]:"+getName()+
              " [id]:"+getId()+
              " [type]:"+investigationType+
              " [abstract]:"+investigationAbstract+
              " [facility]:"+getFacility()+
-             " [study id]:"+studyId ;
+             " [keyword]:"+sb.toString() ;
 
    }
 
