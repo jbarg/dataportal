@@ -20,13 +20,10 @@ public class TestDPAccessLayer
    {
      //for arguments
      ArrayList<String> keyword_list  = new ArrayList<String>() ;
-     ArrayList<String> study_id_list = new ArrayList<String>() ;
      ArrayList<String> inv_id_list   = new ArrayList<String>() ;
      ArrayList<String> ds_id_list    = new ArrayList<String>() ;
-     ArrayList<String> stated_study_id_list    = new ArrayList<String>() ;
 
      //for results
-     ArrayList<Study> r_s_l = null ;
      ArrayList<Investigation> r_i_l = null ;
      ArrayList<DataSet> r_d_l = null ;
      ArrayList<DataFile> r_f_l = null ;
@@ -35,8 +32,8 @@ public class TestDPAccessLayer
      String db_host = "elektra.dl.ac.uk";
      String db_port = "1521";
      String db_sid = "minerva2" ;
-     String db_user = "icat_v2copy2" ;
-     String db_pass = "l1verp00lfc" ;
+     String db_user = "icatisis" ;
+     String db_pass = "ihave4name" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
                              "(CONNECT_DATA=(SID="+db_sid+")))";
@@ -61,20 +58,12 @@ public class TestDPAccessLayer
      try
      {
          System.out.println("---") ;
-         System.out.println("The list of STUDIES for the keywords"+keyword_list.toString()+":") ;
-         //////
-         r_s_l = dpal.getStudies(keyword_list, "DN", LogicalOperator.OR ) ;
-         for(Study s : r_s_l) {
-            System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
-            study_id_list.add(s.getId()) ;
-         }
          System.out.println("-") ;
          //////
-         System.out.println("The list of INVESTIGATIONS for these study_ids"+study_id_list.toString()+":") ;
-         study_id_list.remove(1);
-         r_i_l = dpal.getInvestigations(study_id_list, "DN") ;
+         System.out.println("The list of INVESTIGATIONS for the keywords"+keywords_list.toString()+":") ;
+         r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.OR ) ;
          for(Investigation i : r_i_l) {
-            System.out.println("\t"+i.toString()) ;
+            System.out.println("\t"+i.toString()) ;  //note beans.toString methods are overridden
             inv_id_list.add(i.getId()) ;
          }
          System.out.println("-") ;
@@ -97,38 +86,29 @@ public class TestDPAccessLayer
          //////
          System.out.println("---MISC Tests---") ;
          //////setup
-         stated_study_id_list.add("20") ; 
-         stated_study_id_list.add("21") ; 
-         stated_study_id_list.add("22") ; 
-         r_s_l = null ;
+         inv_id_list.add("20") ; 
+         inv_id_list.add("21") ; 
+         inv_id_list.add("22") ; 
          r_i_l = null ;
          //////
-         System.out.println("The list of STUDIES for the study_ids "+stated_study_id_list.toString()+":") ;
-         r_s_l = dpal.getStudiesById(stated_study_id_list, "DN") ;
-         for(Study s : r_s_l) {
-            System.out.println("\t"+s.toString()) ;
-         }
-         //////
-            /// can use the same id's as study as this is the way icat2 is setup but may need to change depending
-            /// on data in test db used
-         System.out.println("The list of Investigations for the inv_ids "+stated_study_id_list.toString()+":") ;
-         r_i_l = dpal.getInvestigationsById(stated_study_id_list, "DN") ;
+         System.out.println("The list of Investigations for the investigation_ids "+inv_id_list.toString()+":") ;
+         r_s_l = dpal.getInvestigationsById(inv_id_list, "DN") ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;
          }
          //////
-         System.out.println("The list of STUDIES linked to all the keywords"+keyword_list.toString()+":") ;
-         r_s_l = dpal.getStudies(keyword_list, "DN", LogicalOperator.AND) ;
-         for(Study s : r_s_l) {
-            System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
+         System.out.println("The list of Investigations linked to all the keywords"+keyword_list.toString()+":") ;
+         r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.AND) ;
+         for(Investigation i : r_i_l) {
+            System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden
          }
 
          ArrayList<String> k_l = new ArrayList<String>() ;
          k_l.add("Edinburgh") ;
-         System.out.println("The list of STUDIES linked to Edinburgh"+k_l.toString()+":") ;
-         r_s_l = dpal.getStudies(k_l, "DN", LogicalOperator.AND) ;
-         for(Study s : r_s_l) {
-            System.out.println("\t"+s.toString()) ; //note beans.toString methods are overridden
+         System.out.println("The list of Investigations linked to Edinburgh"+k_l.toString()+":") ;
+         r_i_l = dpal.getInvestigations(k_l, "DN", LogicalOperator.AND) ;
+         for(Investigation i : r_i_l) {
+            System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden
          }
 
          //test disconnection code

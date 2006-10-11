@@ -210,13 +210,13 @@ public class DPAccessLayer {
     ////////////////////////////////////////////////////////////
     //special method for GetStudies to supress duplicates where multiple studies might be attached
     //to specific keywords - we only really want one and the keyword being put in the beans list
-    public ArrayList<Study> MergeDuplicateStudies(ArrayList<Study> sal) {
-        ArrayList<Study> result = new ArrayList<Study>() ;
+    public ArrayList<Study> MergeDuplicateInvestigations(ArrayList<Investigation> ial) {
+        ArrayList<Investigation> result = new ArrayList<Investigation>() ;
         
         boolean exists = false ;
         
-        for(Study os : sal) {
-            for(Study ns : result) {
+        for(Investigation os : sal) {
+            for(Investigation ns : result) {
                 //System.out.println("outer study:\t"+os.getName() + "\ninner study:\t" + ns.getName()) ;
                 if(os.getName().compareTo(ns.getName())==0){
                     //we have a match - i.e. same study different keyword
@@ -254,26 +254,27 @@ public class DPAccessLayer {
             keyword_array.add(kw) ;
         }
         r.close() ;
+        cs.close() ;
         return keyword_array ;
     }
  
     
     /////////////////////////////////////////////////////////////
 
-     public ArrayList<Study> getStudies(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg) throws SQLException {
+     public ArrayList<Study> getInvestigations(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg) throws SQLException {
        if (aggreg == LogicalOperator.OR)
        {
-          return getStudiesOr(keyword_list, DN) ;
+          return getInvestigationsOr(keyword_list, DN) ;
        }
        else
        {
-          return getStudiesAnd(keyword_list, DN) ;
+          return getInvestigationsAnd(keyword_list, DN) ;
        }
     }
 
     
-    public ArrayList<Study> getStudiesOr(ArrayList<String> keyword_list, String DN) throws SQLException {
-        log.debug("getStudiesOr()");
+    public ArrayList<Investigation> getInvestigationsOr(ArrayList<String> keyword_list, String DN) throws SQLException {
+        log.debug("getInvestigationsOr()");
         
         //convert keyword_list to array
         String[] keyword_array = new String[keyword_list.size()] ;
@@ -285,31 +286,32 @@ public class DPAccessLayer {
 
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
-        String query = "begin ? := dpaccess.getStudiesOr(?,'"+DN+"'); end;";
+        String query = "begin ? := dpaccess.getInvestigationsOr(?,'"+DN+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.setARRAY( 2, array_to_pass );
         cs.execute();
         r=(ResultSet)cs.getObject(1) ;
-        ArrayList<Study> study_array = new ArrayList<Study>() ;
+        ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
-            Study st = new Study() ;
+            Investigation st = new Investigation() ;
             st.setId(r.getString("ID")) ;
-            st.setName(r.getString("NAME")) ;
-            st.setStartDate(r.getString("START_DATE")) ;
-            st.setEndDate(r.getString("END_DATE")) ;
+            st.setName(r.getString("TITLE")) ; //note title in db and name in beans
+            st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
+            st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
             st.setKeyword(r.getString("KEYWORD")) ;
             st.setFacility(this.facility);
-            study_array.add(st) ;
+            inv_array.add(st) ;
         }
         r.close() ;
-        return MergeDuplicateStudies(study_array) ;
+        cs.close() ;
+        return MergeDuplicateInvestigations(inv_array) ;
 
     }
 
     //the sql needs to be built on the fly so there is no need to make it a pl/sql call as the sql needs parsing each time anyway
-    public ArrayList<Study> getStudiesAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
-       log.debug("getStudiesAnd()");
+    public ArrayList<Investigation> getStudiesAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
+       log.debug("getInvestigationsAnd()");
 
         //convert arraylist to array
         String[] keyword_array = new String[keyword_list.size()] ;
@@ -319,19 +321,15 @@ public class DPAccessLayer {
             keyword_array[j++] = (String)li.next() ;
         }
 
-
-        StringBuffer sb = new StringBuffer("select * from (select distinct(s.id) as id, s.name as name,s.start_date as start_date,s.end_date as end_date " +
-                                           "from study s where s.name is not null and id in (") ;
+        StringBuffer sb = new StringBuffer("select * from (select i.title as title,i.id as id,i.inv_type as investigation_type," +
+                                                                  "i.inv_abstract as inv_abstract " +
+                                           "from investigation i where i.title is not null and id in (") ;
 
         for (int i = 0 ; i < keyword_array.length; i ++) {
-           sb.append("select  study_id " +
-                     "from study s, keyword_list kl, keyword k " +
+           sb.append("select  k.investigation_id " +
+                     "from keyword k " +
                      "where " +
-                     "lower(k.name) = '" + keyword_array[i].toLowerCase() +"' " +
-                     "and " +
-                     "s.id=kl.study_id " +
-                     "and " +
-                     "kl.keyword_id=k.id ") ;
+                     "lower(k.name) = '" + keyword_array[i].toLowerCase() +"' " );
            if( (i + 1) < keyword_array.length) {
               sb.append ("\nINTERSECT\n") ;
            }
@@ -345,92 +343,19 @@ public class DPAccessLayer {
 
          r = s.executeQuery(sb.toString());
 
-        ArrayList<Study> study_array = new ArrayList<Study>() ;
-        while(r.next()) {
-            Study st = new Study() ;
-            st.setId(r.getString("ID")) ;
-            st.setName(r.getString("NAME")) ;
-            st.setStartDate(r.getString("START_DATE")) ;
-            st.setEndDate(r.getString("END_DATE")) ;
-            //st.setKeyword(r.getString("KEYWORD")) ;
-            st.setFacility(this.facility);
-            study_array.add(st) ;
-        }
-        r.close() ;
-        return MergeDuplicateStudies(study_array) ;
-    }
-
-    //////////////////////////////////////////////////////////////
-
-    public ArrayList<Study> getStudiesById(ArrayList<String> study_id_list, String DN) throws SQLException {
-        log.debug("getStudiesById()");
-
-        //convert array_list to array
-        String[] study_id_array = new String[study_id_list.size()] ;
-        ListIterator li = study_id_list.listIterator() ;
-        int i = 0 ;
-        while(li.hasNext()) {
-            study_id_array[i++] = (String)li.next() ;
-        }
-
-        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
-        ARRAY array_to_pass = new ARRAY( descriptor, conn, study_id_array );
-        String query = "begin ? := dpaccess.getStudiesById(?,'"+DN+"'); end;";
-        OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
-        cs.registerOutParameter(1, OracleTypes.CURSOR);
-        cs.setARRAY( 2, array_to_pass );
-        cs.execute();
-        r=(ResultSet)cs.getObject(1) ;
-        ArrayList<Study> study_array = new ArrayList<Study>() ;
-        while(r.next()) {
-            Study st = new Study() ;
-            st.setId(r.getString("ID")) ;
-            st.setName(r.getString("NAME")) ;
-            st.setStartDate(r.getString("START_DATE")) ;
-            st.setEndDate(r.getString("END_DATE")) ;
-            st.setFacility(this.facility);
-            study_array.add(st) ;
-        }
-        r.close() ;
-        return study_array ;
-    }
-    
-    //////////////////////////////////////////////////////////////
-    public ArrayList<Investigation> getInvestigations(ArrayList<String> study_id_list, String DN) throws SQLException {
-        log.debug("getInvestigations()");
-
-        //convert array_list to int array
-        int[] intArray = new int [study_id_list.size()] ;
-        ListIterator li = study_id_list.listIterator() ;
-        int i = 0 ;
-        while(li.hasNext()) {
-            intArray[i++] = Integer.parseInt((String)li.next()) ;
-        }
-        
-        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
-        ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
-        String query = "begin ? := dpaccess.getInvestigations(?,'"+DN+"'); end;";
-        OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
-        cs.registerOutParameter(1, OracleTypes.CURSOR);
-        cs.setARRAY( 2, array_to_pass );
-        cs.execute();
-        r=(ResultSet)cs.getObject(1) ;
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
-            Investigation in = new Investigation() ;
-            in.setId(r.getString("ID")) ;
-            in.setName(r.getString("TITLE")) ; //note title in db and name in beans
-            in.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
-            in.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
-            in.setStudyId(r.getString("STUDY_ID")) ;
-            in.setFacility(this.facility);
-            inv_array.add(in);
+            Investigation st = new Investigation() ;
+            st.setId(r.getString("ID")) ;
+            st.setName(r.getString("TITLE")) ; //note title in db and name in beans
+            st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
+            st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
+            st.setFacility(this.facility);
+            inv_array.add(st) ;
         }
         r.close() ;
-        return inv_array ;
+        return MergeDuplicateInvestigations(inv_array) ;
     }
-
-
 
     //////////////////////////////////////////////////////////////
 
@@ -465,6 +390,7 @@ public class DPAccessLayer {
             inv_array.add(in);
         }
         r.close() ;
+        cs.close() ;
         return inv_array ;
     }
     
@@ -501,6 +427,7 @@ public class DPAccessLayer {
             ds_array.add(ds) ;
         }
         r.close() ;
+        cs.close() ;
         return ds_array ;
     }
     
@@ -535,6 +462,7 @@ public class DPAccessLayer {
             df_array.add(df) ;
         }
         r.close() ;
+        cs.close() ; //perhaps this is the cause of the cursor leak
         return df_array ;
     }
     
