@@ -210,12 +210,12 @@ public class DPAccessLayer {
     ////////////////////////////////////////////////////////////
     //special method for GetStudies to supress duplicates where multiple studies might be attached
     //to specific keywords - we only really want one and the keyword being put in the beans list
-    public ArrayList<Study> MergeDuplicateInvestigations(ArrayList<Investigation> ial) {
+    public ArrayList<Investigation> MergeDuplicateInvestigations(ArrayList<Investigation> ial) {
         ArrayList<Investigation> result = new ArrayList<Investigation>() ;
         
         boolean exists = false ;
         
-        for(Investigation os : sal) {
+        for(Investigation os : ial) {
             for(Investigation ns : result) {
                 //System.out.println("outer study:\t"+os.getName() + "\ninner study:\t" + ns.getName()) ;
                 if(os.getName().compareTo(ns.getName())==0){
@@ -261,7 +261,7 @@ public class DPAccessLayer {
     
     /////////////////////////////////////////////////////////////
 
-     public ArrayList<Study> getInvestigations(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg) throws SQLException {
+     public ArrayList<Investigation> getInvestigations(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg) throws SQLException {
        if (aggreg == LogicalOperator.OR)
        {
           return getInvestigationsOr(keyword_list, DN) ;
@@ -310,7 +310,7 @@ public class DPAccessLayer {
     }
 
     //the sql needs to be built on the fly so there is no need to make it a pl/sql call as the sql needs parsing each time anyway
-    public ArrayList<Investigation> getStudiesAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
+    public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
        log.debug("getInvestigationsAnd()");
 
         //convert arraylist to array

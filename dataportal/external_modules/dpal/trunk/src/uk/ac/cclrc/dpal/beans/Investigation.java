@@ -1,5 +1,6 @@
 package uk.ac.cclrc.dpal.beans;
 
+import java.util.LinkedHashSet;
 import java.io.Serializable;
 
 public class Investigation extends Common implements Serializable
@@ -34,6 +35,7 @@ public class Investigation extends Common implements Serializable
    //setters
    public void setKeyword(String keyword) {
       this.keyword.add(keyword) ;
+   }
   
  
    public void setInvestigationType(String investigationType) {
@@ -49,9 +51,12 @@ public class Investigation extends Common implements Serializable
    public String toString() {
       //can't use variable names of superclass as there are not inherited
 
+      StringBuffer sb = new StringBuffer() ;
+
       for(String k : keyword){
          sb.append(k);
          sb.append(" ") ;
+      }
 
       return "[name]:"+getName()+
              " [id]:"+getId()+
@@ -59,6 +64,7 @@ public class Investigation extends Common implements Serializable
              " [abstract]:"+investigationAbstract+
              " [facility]:"+getFacility()+
              " [keyword]:"+sb.toString() ;
+    
 
    }
 

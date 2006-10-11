@@ -60,7 +60,7 @@ public class TestDPAccessLayer
          System.out.println("---") ;
          System.out.println("-") ;
          //////
-         System.out.println("The list of INVESTIGATIONS for the keywords"+keywords_list.toString()+":") ;
+         System.out.println("The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
          r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.OR ) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;  //note beans.toString methods are overridden
@@ -92,7 +92,7 @@ public class TestDPAccessLayer
          r_i_l = null ;
          //////
          System.out.println("The list of Investigations for the investigation_ids "+inv_id_list.toString()+":") ;
-         r_s_l = dpal.getInvestigationsById(inv_id_list, "DN") ;
+         r_i_l = dpal.getInvestigationsById(inv_id_list, "DN") ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;
          }
