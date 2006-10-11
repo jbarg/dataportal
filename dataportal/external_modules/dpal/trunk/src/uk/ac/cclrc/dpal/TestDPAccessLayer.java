@@ -44,7 +44,7 @@ public class TestDPAccessLayer
      if (args.length == 0)
      {
         //funny case to test the automatic case insensitivety of the searches
-        keyword_list.add("hRpd") ;
+        keyword_list.add("BirMingHam") ;
         keyword_list.add("raW") ;
      }
      else
@@ -91,6 +91,14 @@ public class TestDPAccessLayer
          inv_id_list.add("22") ; 
          r_i_l = null ;
          //////
+         ArrayList<String> k_l = new ArrayList<String>() ;
+         k_l.add("Edinburgh") ;
+         System.out.println("The list of Investigations linked to Edinburgh"+k_l.toString()+":") ;
+         r_i_l = dpal.getInvestigations(k_l, "DN", LogicalOperator.AND) ;
+         for(Investigation i : r_i_l) {
+            System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden
+         }
+         //////
          System.out.println("The list of Investigations for the investigation_ids "+inv_id_list.toString()+":") ;
          r_i_l = dpal.getInvestigationsById(inv_id_list, "DN") ;
          for(Investigation i : r_i_l) {
@@ -99,14 +107,6 @@ public class TestDPAccessLayer
          //////
          System.out.println("The list of Investigations linked to all the keywords"+keyword_list.toString()+":") ;
          r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.AND) ;
-         for(Investigation i : r_i_l) {
-            System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden
-         }
-
-         ArrayList<String> k_l = new ArrayList<String>() ;
-         k_l.add("Edinburgh") ;
-         System.out.println("The list of Investigations linked to Edinburgh"+k_l.toString()+":") ;
-         r_i_l = dpal.getInvestigations(k_l, "DN", LogicalOperator.AND) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden
          }
