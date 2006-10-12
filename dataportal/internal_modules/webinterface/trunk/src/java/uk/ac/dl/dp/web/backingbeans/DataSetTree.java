@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.*;
+import javax.faces.event.ActionEvent;
 import org.apache.log4j.Logger;
 import javax.faces.context.FacesContext;
 import uk.ac.cclrc.dpal.beans.DataFile;
@@ -108,7 +109,11 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         Collection<Investigation> investigations = getVisitData().getCurrentInvestigations();
         Collection<DataSet> datasets = getVisitData().getCurrentDatasets();
         Collection<DataFile> datafiles = getVisitData().getCurrentDatafiles();
-        
+        ///remove all download selections
+        log.trace("Setting all datafile download to false");
+        for(DataFile file : datafiles){
+            file.setDownload(false);
+        }
         
         data = new TreeNodeBase("foo-folder", "Investigations ("+investigations.size()+")", false);
         
@@ -139,11 +144,11 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     for(DataFile datafile : datafiles){
                         //log.trace(datafile);
                         if(datafile.getDataSetId().equals(dataset.getId()) && datafile.getFacility().equals(dataset.getFacility())){
-                            boolean isImageJ = Util.isImageJ(datafile.getName());  
+                            boolean isImageJ = Util.isImageJ(datafile.getName());
                             log.trace(datafile.getName()+" is imageJ "+isImageJ);
                             //set isLeaf is imageJ so can use it on the web page
                             datasetNode.getChildren().add(new TreeNodeBase("file-folder", datafile.getName(),datafile.getFacility()+"-"+datafile.getId(),isImageJ));
-                        
+                            
                         }
                     }
                     datasetsNode.getChildren().add(datasetNode);
@@ -164,6 +169,51 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
     
     public TreeNode getTreeData() {
         return data;
+    }
+    
+     public void setDataFileDownloadAction(ActionEvent event){
+        log.trace("Onchange action event: ");
+        List children = event.getComponent().getChildren();
+        log.trace("selected checkbox for download");
+        int i = 0;
+        for(Object ob : children){
+            if(ob instanceof UIParameter){
+                UIParameter current = (UIParameter)children.get(i);
+                log.trace("Param name "+current.getName());
+                
+                String param = current.getValue().toString();
+                log.trace("Param value: "+param);
+                DataFile df = getDataFile(param);
+                log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
+                df.setDownload(!df.isDownload());
+                break;
+            }
+        }
+    }
+    
+    public void setDataFileDownload(ValueChangeEvent event){
+        log.trace("Onchange event: ");
+        List children = event.getComponent().getChildren();
+        log.trace("selected checkbox for download");
+        int i = 0;
+        for(Object ob : children){
+            if(ob instanceof UIParameter){
+                UIParameter current = (UIParameter)children.get(i);
+                log.trace("Param name "+current.getName());
+                
+                String param = current.getValue().toString();
+                log.trace("Param value: "+param+"  "+event.getNewValue()+" "+event.getNewValue());
+                DataFile df = getDataFile(param);
+                if(event.getNewValue().equals(new Boolean(true)) ){
+                    df.setDownload(true);
+                    log.trace("setting to true");
+                } else {
+                    log.trace("Setting false");
+                    df.setDownload(false);
+                }
+                break;
+            }
+        }
     }
     
     public void setSelected(ValueChangeEvent event){

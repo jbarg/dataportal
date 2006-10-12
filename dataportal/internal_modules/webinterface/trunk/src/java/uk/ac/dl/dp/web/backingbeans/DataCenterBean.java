@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -26,6 +27,7 @@ import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
+import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
@@ -77,7 +79,7 @@ public class DataCenterBean extends SortableList {
         if(getVisitData().getCurrentDataReferences() == null){
             
             try {
-                log.trace("Getting bookmarks..");
+                log.trace("Getting data references..");
                 dataRefs = (List<DataReference>) DataCenterDelegate.getInstance().getDataReferences(getVisit().getSid());
                 getVisitData().setCurrentDataReferences(dataRefs);
             } catch (Exception ex) {
@@ -90,6 +92,7 @@ public class DataCenterBean extends SortableList {
             sort(getSort(), isAscending());
             return (List<DataReference>)getVisitData().getCurrentDataReferences();
         } else{
+            log.debug("Already got refs: "+getVisitData().getCurrentDataReferences().size());
             return (List<DataReference>)getVisitData().getCurrentDataReferences();
         }
         
@@ -136,6 +139,87 @@ public class DataCenterBean extends SortableList {
         
     }
     
+    public void setDataFileDownloadAction(ActionEvent event){
+        log.trace("setDataFileDownloadAction: ");
+        List children = event.getComponent().getChildren();
+        log.trace("selected checkbox for download");
+        int i = 0;
+        //checvk type first
+        boolean isFile = true;
+        for(Object ob : children){
+            if(ob instanceof UIParameter){
+                UIParameter current = (UIParameter)children.get(i);
+                if(current.getValue().toString().split("-").length == 2){
+                    log.trace("IsFile is false");
+                    isFile = false;
+                }
+            }
+        }
+        for(Object ob : children){
+            if(ob instanceof UIParameter){
+                if(isFile){
+                    UIParameter current = (UIParameter)children.get(i);
+                    log.trace("Param name "+current.getName());
+                    
+                    String param = current.getValue().toString();
+                    log.trace("Param value: "+param);
+                    Url df = getDataUrl(param);
+                    if(df == null) break;
+                    log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
+                    df.setDownload(!df.isDownload());
+                    break;
+                } else{
+                    //ref
+                    UIParameter current = (UIParameter)children.get(i);
+                    log.trace("Param name "+current.getName());
+                    
+                    String param = current.getValue().toString();
+                    log.trace("Param value: "+param);
+                    DataReference df = getDataRef(param);
+                    
+                    if(df == null) break;
+                    log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
+                    df.setDownload(!df.isDownload());
+                    break;
+                }
+            }
+        }
+    }
+    
+    private DataReference getDataRef(String param) {
+        String fac = param.split("-")[0];
+        String id = param.split("-")[1];
+        log.trace("looking for:"+ fac+"-"+id);
+        
+        for(DataReference file : getVisitData().getCurrentDataReferences()){
+            log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
+            if(file.getId().toString().equals(id) && file.getFacility().equals(fac) ){
+                log.debug("Found dataref: "+file);
+                return file;
+            }
+        }
+        return null;
+    }
+    
+    private Url getDataUrl(String param) {
+        String fac = param.split("-")[0];
+        String data_ref_id = param.split("-")[1];
+        String url_id = param.split("-")[2];
+        
+        for(DataReference file : getVisitData().getCurrentDataReferences()){
+            if(file.getId().toString().equals(data_ref_id) && file.getFacility().equals(fac) ){
+                log.debug("Found dataurlref: "+file);
+                Collection<Url> urls = file.getUrls();
+                for(Url url : urls){
+                    if(url.getId().toString().equals(url_id)){
+                        return url;
+                    }
+                }
+            }
+        }
+        log.trace("Nothing found with param: "+param);
+        return null;
+    }
     //This listens to changes in the users isSelected.  This is because the list could be
     //larger than one page so have to do it this way
     public void listen(ValueChangeEvent e){
@@ -340,14 +424,14 @@ public class DataCenterBean extends SortableList {
         return isNot("type");
     }
     
-     public boolean isFacility(){
+    public boolean isFacility(){
         return is("facility");
     }
     
     public boolean isNotFacility(){
         return isNot("facility");
     }
-     public boolean isNotes(){
+    public boolean isNotes(){
         return is("notes");
     }
     
@@ -355,7 +439,7 @@ public class DataCenterBean extends SortableList {
         return isNot("notes");
     }
     
-     public boolean isTime(){
+    public boolean isTime(){
         return is("time");
     }
     

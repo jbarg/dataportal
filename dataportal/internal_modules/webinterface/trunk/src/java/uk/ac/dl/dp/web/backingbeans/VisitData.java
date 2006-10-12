@@ -94,7 +94,7 @@ public class VisitData implements Serializable {
     }
     
       //current datafiles that the user has picked from the investigations page , used in data sets page
-    public Collection<DataFile> getCurrentDatafiles() {
+    public Collection<DataFile> getCurrentDatafiles() {        
         return currentDatafiles;
     }
     
