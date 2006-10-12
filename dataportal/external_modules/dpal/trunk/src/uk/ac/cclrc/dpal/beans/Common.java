@@ -46,7 +46,7 @@ public class Common implements Serializable {
         return selected;
     }
     
-    public void setSelected(boolean download) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
     
