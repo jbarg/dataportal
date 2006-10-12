@@ -61,6 +61,9 @@ public class Url implements Serializable {
     @Transient
     private String name;
     
+     @Transient
+    private boolean download;
+    
     @PrePersist
     @PreUpdate
     public void prePersist(){
@@ -149,6 +152,14 @@ public class Url implements Serializable {
     
     public boolean isImageJ(){
        return  Util.isImageJ(getName());
+    }
+
+    public boolean isDownload() {
+        return download;
+    }
+
+    public void setDownload(boolean download) {
+        this.download = download;
     }
     
 }
