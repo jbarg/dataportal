@@ -136,7 +136,7 @@
 
 <br />
 
-<h:form>
+<a4j:form>
     <a4j:region  selfRendered="true"> 
         
         <t:dataTable id="data" width="90%"
@@ -166,9 +166,9 @@
             </h:column>--%>
             <h:column>
                 <f:facet name="header">
-                  <%--  <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">--%>
+                    <%--  <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">--%>
                                                 
-                   <h:commandLink style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
+                    <h:commandLink style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
                         <h:outputText value="Name" />
                         <f:param name="column" value="name"/>
                         <c:if test="${requestScope.investigationBean.sort == 'name'}" >
@@ -207,21 +207,27 @@
                             </c:if>
                         </h:commandLink>  
                         
-                        <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">
+                        <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">
+           
+                            <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
                             <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
-                        </h:commandLink>   
-                        <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">
+                        </a4j:commandLink>   
+                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">
+           
+                            <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>
                             <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
-                        </h:commandLink> 
+                        </a4j:commandLink> 
                         
                     </h:panelGrid>                  
                 </f:facet>
-                
-                <h:commandLink  rendered="#{invest.abstractNull}" action="#{detailToggler.toggleDetail}">
-                    <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                    <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                </h:commandLink>   
-                
+             
+                          
+                    <a4j:commandLink rendered="#{invest.abstractNull}" reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
+                        <%--  <h:commandLink  rendered="#{invest.abstractNull}" action="#{detailToggler.toggleDetail}">--%>
+                        <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                        <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                    </a4j:commandLink>   
+               
                 
             </h:column>
             <h:column>
@@ -254,7 +260,7 @@
                 <t:dataTable preserveSort="true" width="95%" id="investigationAbstract" styleClass="standardTable_Column" var="abstract" value="#{invest.investigationAbstract}">
                     
                     <h:column>
-                        <h:outputText  value="#{invest.investigationAbstract}" />
+                        <h:outputText style="font-size:12px;" value="#{invest.investigationAbstract}" />
                     </h:column>               
                 </t:dataTable>
                 
@@ -340,4 +346,4 @@
             </tr>
         </tbody>
     </table>
-</h:form>
+</a4j:form>

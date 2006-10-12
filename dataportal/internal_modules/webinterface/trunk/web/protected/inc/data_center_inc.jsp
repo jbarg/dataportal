@@ -30,7 +30,7 @@
                                             headerClass="standardTable_Header"
                                             footerClass="standardTable_Header"
                                             rowClasses="standardTable_Row1,standardTable_Row2"
-                                            columnClasses="standardTable_Column,standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+                                            columnClasses="standardTable_Column,standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
                                             var="data"
                                             value="#{datacenterBean.dataRefs}"
                                             preserveDataModel="true"
@@ -62,9 +62,10 @@
   
                                                 <h:panelGrid columns="4" rendered="#{!data.dataset}">
                                                     
-                                                   <h:outputText value="                " />
-                                                    <h:outputText value="                " />
-                                                     <h:outputText value="                " />
+                                                    <h:outputText value="                  " />
+                                                    <h:outputText value="                  " />
+                                                    <h:outputText value="                  " />
+                                                    
                                                     <h:commandLink rendered="#{!data.dataset}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
                                                                                                         
                                                         <t:graphicImage value="../../images/document.png" border="0"/>                                   
@@ -92,7 +93,15 @@
                                                 <h:commandLink onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
                                                     <h:outputText  value="#{data.name}" />
                                                     <f:param name="id" value="#{data.id}"/>               
-                                                </h:commandLink>                    
+                                                </h:commandLink>      
+                                                <h:outputText escape="true" value="   " />
+                                                <h:selectBooleanCheckbox rendered="#{!data.dataset}"  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >
+                                                    
+                                                    <a4j:support event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
+                                                        <a4j:actionparam name="datafiles" value="#{data.facility}-#{data.id}" />
+                                                        <a4j:actionparam name="DATA_FILE"  />
+                                                    </a4j:support>
+                                                </h:selectBooleanCheckbox>
            
                                             </h:column>
                                             <h:column>
@@ -229,7 +238,19 @@
                                             </h:column>
                                             <h:column>
                                                 <f:facet name="header">
-                                                    <h:outputText value="" />
+                                                    <h:panelGrid columns="3">  
+                                                        <a4j:commandLink reRender="datatable" style="table-header" ajaxSingle="true" id="collapseAll" action="#{datacenterBean.selectnone}">           
+                                                            <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>
+                                                            <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
+                                                        </a4j:commandLink>  
+                                                        
+                                                        <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>                                                                            
+                                                          
+                                                        <a4j:commandLink reRender="datatable" style="table-header" ajaxSingle="true" id="expandAll" action="#{datacenterBean.selectall}">           
+                                                            <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
+                                                            <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
+                                                        </a4j:commandLink> 
+                                                    </h:panelGrid>           
                                                 </f:facet>
                                                 <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{datacenterBean.listen}" value="#{data.selected}" >
                                                     <f:param name="id" value="#{data.id}"/>
@@ -254,6 +275,15 @@
                                                         <h:commandLink onclick="download('#{data.facility}-#{data.id}-#{url.id}','DATA_CENTER_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
                                                             <h:outputText  value="#{url.name}" style="font-size: 10px"/>                         
                                                         </h:commandLink>
+                                                        <h:outputText escape="false" value=" &nbsp;&nbsp;&nbsp;" />
+                                                                                                                
+                                                        <h:selectBooleanCheckbox style="background-color:#D1E4E4" title="Add to download" value="#{url.download}" immediate="true" >
+                                                            <f:param name="datafiles" value="#{data.facility}-#{data.id}-#{url.id}"/>
+                                                            <a4j:support event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
+                                                                <a4j:actionparam name="datafiles"  value="#{data.facility}-#{data.id}-#{url.id}" />                                                                
+                                                 
+                                                            </a4j:support>
+                                                        </h:selectBooleanCheckbox>
                                                     </h:column>               
                                                 </t:dataTable>
                    
@@ -261,62 +291,75 @@
                  
             
                                         </t:dataTable>
-                                    </a4j:region>
+                                   
                                        
-                                    <h:panelGrid columns="1" rendered="#{datacenterBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
-                                        <t:dataScroller id="scroll_11"
-                                            for="datatable"
-                                            fastStep="10"
-                                            pageCountVar="pageCount"
-                                            pageIndexVar="pageIndex"
-                                            styleClass="scroller"
-                                            paginator="true"
-                                            paginatorMaxPages="9"
-                                            paginatorTableClass="paginator"
-                                            paginatorActiveColumnStyle="font-weight:bold;">
-                                            <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                                        <h:panelGrid columns="1" rendered="#{datacenterBean.length}" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+                                            <t:dataScroller id="scroll_11"
+                                                for="datatable"
+                                                fastStep="10"
+                                                pageCountVar="pageCount"
+                                                pageIndexVar="pageIndex"
+                                                styleClass="scroller"
+                                                paginator="true"
+                                                paginatorMaxPages="9"
+                                                paginatorTableClass="paginator"
+                                                paginatorActiveColumnStyle="font-weight:bold;">
+                                                <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
               
-                                            <%-- <a4j:ajaxListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>--%>
-                                            <f:facet name="first" >
-                                                <t:graphicImage url="../../images/arrow-first.gif" border="1" />
-                                            </f:facet>
-                                            <f:facet name="last">
-                                                <t:graphicImage url="../../images/arrow-last.gif" border="1" />
-                                            </f:facet>
-                                            <f:facet name="previous">
-                                                <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
-                                            </f:facet>
-                                            <f:facet name="next">
-                                                <t:graphicImage url="../../images/arrow-next.gif" border="1" />
-                                            </f:facet>
-                                            <f:facet name="fastforward">
-                                                <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
-                                            </f:facet>
-                                            <f:facet name="fastrewind">
-                                                <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
-                                            </f:facet>
-                                        </t:dataScroller>
-                                    </h:panelGrid>
+                                                <%-- <a4j:ajaxListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>--%>
+                                                <f:facet name="first" >
+                                                    <t:graphicImage url="../../images/arrow-first.gif" border="1" />
+                                                </f:facet>
+                                                <f:facet name="last">
+                                                    <t:graphicImage url="../../images/arrow-last.gif" border="1" />
+                                                </f:facet>
+                                                <f:facet name="previous">
+                                                    <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
+                                                </f:facet>
+                                                <f:facet name="next">
+                                                    <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                                                </f:facet>
+                                                <f:facet name="fastforward">
+                                                    <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                                                </f:facet>
+                                                <f:facet name="fastrewind">
+                                                    <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                                                </f:facet>
+                                            </t:dataScroller>
+                                        </h:panelGrid>
                                     
           
-                                    <br />
-                                    <h:panelGrid  rendered="#{datacenterBean.populated}" width="95%" columns="7">
-             
-                                        <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
-                                        <h:panelGroup/>
-                                        <h:panelGroup/>
-                                        <%-- Need panelGrid as need to check to render (cannot use HTML table, so no other waay of gettting butotn to the right??? --%>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 
+                                        <br />
+                                        <h:panelGrid  rendered="#{datacenterBean.populated}" width="95%" columns="8">
+                                       
+                                            <h:commandButton onclick="download('#{node.identifier}','DOWNLOAD','DATA_CENTER_DOWNLOAD'); return false;" action="#{datasetTree.select}" title="Download selections" value="Download selections"/>
+                                            &nbsp;
+                                            <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
+                               
+                                            </h:selectBooleanCheckbox> 
+                                            <h:panelGroup/>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a4j:commandButton action="#{datacenterBean.removeDatasets}" reRender="datatable" title="View selections" value="Delete selections"/>
+                                            &nbsp;
+                                        
+                                            <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>                                                                            
+                                                       
+                                            <%-- Need panelGrid as need to check to render (cannot use HTML table, so no other waay of gettting butotn to the right??? --%>
+                                            <%--  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            --%>
               
-                                        Select:&nbsp; <h:commandButton  action="#{datacenterBean.selectall}" title="All" value=" All "/>
-                                        &nbsp; 
-                                        <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
-                 
-                                    </h:panelGrid>
+                                            <%--  Select:&nbsp; <h:commandButton  action="#{datacenterBean.selectall}" title="All" value=" All "/>
+                                            &nbsp; 
+                                            <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
+                                            --%>
+                                        </h:panelGrid>
+                                    </a4j:region>
                                     <%-- <f:verbatim rendered="#{bookmarkBean.populated}">
                                     <table width="95%" border="0">
                                     <td>
