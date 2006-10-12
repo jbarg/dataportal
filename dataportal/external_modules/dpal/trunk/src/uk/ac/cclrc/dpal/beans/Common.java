@@ -47,15 +47,15 @@ public class Common implements Serializable {
     }
     
     public void setSelected(boolean download) {
-        this.download = download;
+        this.selected = selected;
     }
     
      public boolean isDownload() {
         return download;
     }
     
-    public void setDownload(boolean selected) {
-        this.selected = selected;
+    public void setDownload(boolean download) {
+        this.download = download;
     }
     
     
