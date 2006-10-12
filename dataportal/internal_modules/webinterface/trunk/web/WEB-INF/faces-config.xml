@@ -141,7 +141,12 @@
             <from-outcome>LOGIN_SUCCESS</from-outcome>
             <to-view-id>/protected/basic_search.jsp</to-view-id>
             <redirect />            
-        </navigation-case>        
+        </navigation-case>    
+         <navigation-case>
+            <from-outcome>LOGIN_FAILURE</from-outcome>
+            <to-view-id>/logon.jsp</to-view-id>
+            <redirect />            
+        </navigation-case>    
     </navigation-rule>
     
     <navigation-rule>
