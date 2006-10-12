@@ -69,7 +69,7 @@ public class DownloadServlet extends HttpServlet {
         String id = req.getParameter("url");
         String type = req.getParameter("type");
         String from = req.getParameter("from");
-        String srbUrl = null;
+        String[] srbUrl = null;
         String name = null;
         File srbDownload = null;
         
@@ -77,20 +77,32 @@ public class DownloadServlet extends HttpServlet {
             if(type.startsWith("DATA_CENTER_FILE")){
                 Url file = getDataUrl(id,visit);
                 name = file.getName();
-                srbUrl = file.getName();
+                srbUrl = new String[]{file.getName()};
             } else{
                 DataReference file = getDataRef(id,visit);
                 name = file.getName();
-                srbUrl = file.getName();
+                srbUrl = new String[]{file.getName()};
             }
-        } else if(type.startsWith(DPUrlRefType.FILE.toString())){
+        } else if(type.equals("DOWNLOAD")){
+            if(from.equals("DATA_SETS")){
+                //from data ref or data sets
+                srbUrl =  getDownloadSRBFiles(visit);
+                name = "Multiple_DataPortal_Download";
+            } else {
+                //from data center
+                srbUrl =  getDownloadSRBFilesRef(visit);
+                name = "Multiple_DataPortal_Download";
+                
+            }
+        }  else if(type.startsWith(DPUrlRefType.FILE.toString())){
+            
             DataFile file = getDataFile(id,visit);
             name = file.getName();
-            srbUrl = file.getName();
+            srbUrl = new String[]{file.getName()};
         } else{
             DataSet file = getDataSet(id,visit);
             name = file.getName();
-            srbUrl = file.getName();
+            srbUrl = new String[]{file.getName()};
         }
         
         log.info("Id for download is "+id+" type "+type+" name ");
@@ -112,7 +124,21 @@ public class DownloadServlet extends HttpServlet {
                 if(type.equals(DPUrlRefType.DATA_SET.toString())) {
                     man.setZipeFile(true);
                     man.setSRBFile(new String[]{"srb://dfdfd:676/ngs/home/glen-drinkwater.ngs"});
-                } else {
+                } else if(type.equals("DOWNLOAD")){
+                    
+                    //test
+                    Collection<String> urls = new ArrayList<String>();
+                    String[] files  = { "SSHTermApplet-signed.jar","extract.png", "hourglass-a.gif","view.jsp","FluorescentCells.jpg","webui.jar"};
+                    for(int i = 0; i < files.length;i++){
+                        if(i >= 5) break;
+                        else if(i == srbUrl.length) break;
+                        else urls.add("srb://dfdfd:676/ngs/home/glen-drinkwater.ngs/"+files[i]);
+                    }
+                    
+                    man.setSRBFile(urls.toArray(new String[urls.size()]));
+                    man.setZipeFile(true);
+                }else {
+                    
                     man.setSRBFile(new String[]{"srb://dfdfd:676/ngs/home/glen-drinkwater.ngs/FluorescentCells.jpg"});
                     man.setZipeFile(false);
                 }
@@ -181,7 +207,7 @@ public class DownloadServlet extends HttpServlet {
                         String contenttype = getContentType(srbDownload.getAbsolutePath());
                         response.setContentType(contenttype);
                         response.setBufferSize(65536);
-                        if(type.equals(DPUrlRefType.DATA_SET.toString())) {
+                        if(type.equals(DPUrlRefType.DATA_SET.toString()) || type.equals("DOWNLOAD")) {
                             response.setHeader("Content-disposition","attachment; filename="+name+".zip"+" ");
                         } else {
                             response.setHeader("Content-disposition","attachment; filename=FluorescentCells.jpg");
@@ -326,7 +352,7 @@ public class DownloadServlet extends HttpServlet {
         }
         return null;
     }
-    
+    //TODO add into VistData
     private DataReference getDataRef(String param, Visit visit) {
         String fac = param.split("-")[0];
         String id = param.split("-")[1];
@@ -369,7 +395,7 @@ public class DownloadServlet extends HttpServlet {
         
         log.warn("File names are "+source.toString() +"   and "+dest.toString());
         if(!dest.getParentFile().exists()) dest.getParentFile().mkdir();
-            
+        
         FileChannel sourceChannel = new   FileInputStream(source).getChannel();
         FileChannel destinationChannel = new   FileOutputStream(dest).getChannel();
         sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
@@ -470,12 +496,11 @@ public class DownloadServlet extends HttpServlet {
                         if(!Sfile.getName().equals(createDate())) {
                             log.trace("Deleting");
                             deleteDirectory(Sfile);
-                        }
-                        else log.trace("Not deleting");
+                        } else log.trace("Not deleting");
                     }
                 }
             } catch (IOException ex) {
-            log.warn("Error closing buffers",ex);
+                log.warn("Error closing buffers",ex);
             }
         }
         return filename;
@@ -520,6 +545,43 @@ public class DownloadServlet extends HttpServlet {
             return  directory.delete();
         }
         return directory.delete();
+    }
+    
+    private synchronized String[] getDownloadSRBFiles(Visit visit) {
+        Collection<String> urls = new ArrayList<String>();
+        for(DataFile file : visit.getVisitData().getCurrentDatafiles()){
+            if(file.isDownload()){
+                log.debug("Found datafile to download: "+file);
+                urls.add(file.getUri());
+                //now set to false
+                // file.setDownload(false);
+            }
+        }
+        
+        return urls.toArray(new String[urls.size()]);
+    }
+    
+    private synchronized String[] getDownloadSRBFilesRef(Visit visit) {
+        Collection<String> urls = new ArrayList<String>();
+        for(DataReference file : visit.getVisitData().getCurrentDataReferences()){
+            if(file.isDownload() && file.getTypeOfReference().equals(DPUrlRefType.FILE.toString())){
+                for(Url url : file.getUrls()){
+                    log.debug("Found dataref to download: "+file);                    
+                    urls.add(url.getUrl());
+                }
+            } else{
+                for(Url url : file.getUrls()){
+                    if(url.isDownload()){
+                        log.debug("Found datafile to download: "+url);
+                        urls.add(url.getUrl());
+                        //now set to false
+                        // file.setDownload(false);
+                    }
+                }
+            }
+        }       
+        
+        return urls.toArray(new String[urls.size()]);
     }
     
 }
