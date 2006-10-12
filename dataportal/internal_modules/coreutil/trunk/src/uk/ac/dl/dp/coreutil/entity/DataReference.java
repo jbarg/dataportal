@@ -109,6 +109,9 @@ public class DataReference implements Serializable {
        @Transient
     private boolean hasNote;
        
+        @Transient
+    private boolean download;
+       
     @PrePersist
     @PreUpdate
     public void prePersist(){
@@ -295,6 +298,14 @@ public class DataReference implements Serializable {
     
     public int getNumberOfFiles(){
         return urls.size();
+    }
+
+    public boolean isDownload() {
+        return download;
+    }
+
+    public void setDownload(boolean download) {
+        this.download = download;
     }
     
     
