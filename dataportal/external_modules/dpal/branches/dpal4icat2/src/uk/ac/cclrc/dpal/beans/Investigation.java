@@ -13,24 +13,24 @@ public class Investigation extends Common implements Serializable
    public String getInvestigationType() {
       return this.investigationType ;
    }
-  
+
    public String getInvestigationAbstract() {
       return this.investigationAbstract ;
    }
-  
+
    public String getStudyId() {
       return this.studyId ;
    }
- 
+
    //setters
    public void setInvestigationType(String investigationType) {
       this.investigationType=investigationType ;
    }
-  
+
    public void setInvestigationAbstract(String investigationAbstract) {
       this.investigationAbstract=investigationAbstract ;
    }
-  
+
    public void setStudyId(String studyId) {
       this.studyId=studyId ;
    }
@@ -46,6 +46,9 @@ public class Investigation extends Common implements Serializable
              " [study id]:"+studyId ;
 
    }
+    public boolean isAbstractNull(){
+           return (investigationAbstract == null || investigationAbstract.equals("")) ? true : false;
+    }
 
 }
-  
+
