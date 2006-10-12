@@ -39,12 +39,12 @@ public class TestDPAccessLayer
                              "(CONNECT_DATA=(SID="+db_sid+")))";
 
      DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
-
+System.out.println(dbConnectString);
      //use command line for keywords if supplied
      if (args.length == 0)
      {
         //funny case to test the automatic case insensitivety of the searches
-        keyword_list.add("BirMingHam") ;
+     //   keyword_list.add("BirMingHam") ;
         keyword_list.add("raW") ;
      }
      else
@@ -61,7 +61,7 @@ public class TestDPAccessLayer
          System.out.println("-") ;
          //////
          System.out.println("The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
-         r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.OR ) ;
+         r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.AND ) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;  //note beans.toString methods are overridden
             inv_id_list.add(i.getId()) ;

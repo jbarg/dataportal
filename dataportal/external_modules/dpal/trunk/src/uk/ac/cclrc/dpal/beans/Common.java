@@ -8,6 +8,7 @@ public class Common implements Serializable {
     private String id = null ;
     private String facility = null ;
     private boolean selected = false;
+    private boolean download = false;
     //getters
     public String getName() {
         return this.name ;
@@ -45,7 +46,15 @@ public class Common implements Serializable {
         return selected;
     }
     
-    public void setSelected(boolean selected) {
+    public void setSelected(boolean download) {
+        this.download = download;
+    }
+    
+     public boolean isDownload() {
+        return download;
+    }
+    
+    public void setDownload(boolean selected) {
         this.selected = selected;
     }
     
