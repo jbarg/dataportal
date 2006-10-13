@@ -14,7 +14,7 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 
 
 

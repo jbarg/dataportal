@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
@@ -90,17 +90,17 @@ public class QueryDelegate {
         return qsmr.getCurrentResults(sid);
     }
     
-    public Collection<Investigation> getInvestigations(String sid,Collection<Study> study) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
+   /* public Collection<Investigation> getInvestigations(String sid,Collection<Study> study) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
         return qsmr.getInvestigations(sid,  study);
-    }
+    }*/
     
    /* public Collection<DataSet> getDataSets(String sid, String[][] investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
          return qsmr.getDataSets(sid, investigations);
     }*/
     
-    public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+   /* public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         return qsmr.getInvestigationByStudyId(sid, fac, studyId);
-    }
+    }*/
     
     public Collection<Investigation> getInvestigationById(String sid, String fac, String investigationId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         return qsmr.getInvestigationById(sid, fac, investigationId);
