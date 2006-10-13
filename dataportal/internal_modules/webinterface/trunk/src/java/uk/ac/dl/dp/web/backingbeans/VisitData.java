@@ -21,6 +21,7 @@ import uk.ac.dl.dp.coreutil.entity.DataRefAuthorisation;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import org.apache.log4j.*;
 import javax.faces.model.SelectItem;
+import org.apache.myfaces.custom.tree2.*;
 /**
  *
  * @author gjd37
@@ -42,6 +43,8 @@ public class VisitData implements Serializable {
     
     private boolean investigationExpanded;
     
+    private boolean investigationsSelected;
+    
     private boolean bookmarkEnabled;
     
     private boolean datacenterEnabled;
@@ -58,6 +61,8 @@ public class VisitData implements Serializable {
     
     private Collection<DataReference> currentDataReferences;
     
+     private TreeNode dataSetTree;
+     
     /** Creates a new instance of VisitData */
     public VisitData() {
     }
@@ -208,6 +213,23 @@ public class VisitData implements Serializable {
 
     public void setInvestigationExpanded(boolean investigationExpanded) {
         this.investigationExpanded = investigationExpanded;
+    }
+
+
+    public TreeNode getDataSetTree() {
+        return dataSetTree;
+    }
+
+    public void setDataSetTree(TreeNode dataSetTree) {
+        this.dataSetTree = dataSetTree;
+    }
+
+    public boolean isInvestigationsSelected() {
+        return investigationsSelected;
+    }
+
+    public void setInvestigationsSelected(boolean investigationsSelected) {
+        this.investigationsSelected = investigationsSelected;
     }
     
 }

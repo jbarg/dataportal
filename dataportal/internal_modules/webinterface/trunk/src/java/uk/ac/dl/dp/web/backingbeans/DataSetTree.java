@@ -106,6 +106,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
     
     public TreeNode getData() {
         log.trace("Getting data");
+                
         Collection<Investigation> investigations = getVisitData().getCurrentInvestigations();
         Collection<DataSet> datasets = getVisitData().getCurrentDatasets();
         Collection<DataFile> datafiles = getVisitData().getCurrentDatafiles();
@@ -159,8 +160,9 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             data.getChildren().add(node);
         }
         
-        
+        getVisitData().setDataSetTree(data);
         return data;
+        
     }
     
     public void setData(TreeNode data) {
@@ -171,7 +173,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         return data;
     }
     
-     public void setDataFileDownloadAction(ActionEvent event){
+    public void setDataFileDownloadAction(ActionEvent event){
         log.trace("Onchange action event: ");
         List children = event.getComponent().getChildren();
         log.trace("selected checkbox for download");
@@ -189,6 +191,12 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 break;
             }
         }
+    }
+    public String setValueChangeListeners(){
+        //this is a dummy method so that all the valuechangelisteners are called and then the 
+        //ajax4jsf calls a javascript function
+        log.trace("Finished setting all valuelisteners.  No more action needed");
+        return null;
     }
     
     public void setDataFileDownload(ValueChangeEvent event){
@@ -288,6 +296,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 Collection<Url> cs = new ArrayList<Url>();
                 Url url = new Url();
                 url.setDataRefId(ref);
+                //TODO remove line, URL should neve be null
+                if(file.getUri() == null) file.setUri(" ");
                 url.setUrl(file.getUri());
                 cs.add(url);
                 log.trace("Adding: "+file);
@@ -320,6 +330,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     if(df.getFacility().equals(file.getFacility()) && df.getDataSetId().equals(file.getId())){
                         Url url = new Url();
                         url.setDataRefId(ref);
+                        //TODO remove line, URL should neve be null
+                        if(df.getUri() == null) df.setUri("dummy.raw");
                         url.setUrl(df.getUri());
                         cs.add(url);
                         log.trace("Adding: "+df);
@@ -340,7 +352,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 bookmark.setFacility(file.getFacility());
                 bookmark.setName(file.getName());
                 bookmark.setNote("");
-                bookmark.setStudyId(Integer.valueOf(file.getStudyId()));
+                bookmark.setStudyId(Integer.valueOf(file.getId()));
                 bookmark.setQuery("N/A");
                 toAddBookmarks.add(bookmark);
                 log.trace(file);
