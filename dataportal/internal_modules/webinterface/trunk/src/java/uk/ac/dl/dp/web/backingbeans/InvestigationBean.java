@@ -137,6 +137,24 @@ public class InvestigationBean extends SortableList {
         }
     }
     
+    //This listens to changes in the users isSelected using Ajax.  This is because the list could be
+    //larger than one page so have to do it this way
+    public void listenAjax(ActionEvent e){
+        log.debug("value change action ajax event");
+        Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
+        
+        Investigation d = (Investigation)table.getRowData();
+        
+        
+        for(Investigation invest : investigations){
+            if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
+                invest.setSelected(!invest.isSelected());
+                log.trace("setting " +invest.isSelected()+" for "+invest.getId());
+                
+            }
+        }
+    }
+    
     //listens for sort column action events, and gets the column by thge param name passed in
     // then calls sort on the column
     public void sortColumn(ActionEvent event){
@@ -193,9 +211,24 @@ public class InvestigationBean extends SortableList {
         
     }
     
+    //select none the investigations
+    public void selectNone(ActionEvent event){
+        selectnone();
+        getVisitData().setInvestigationsSelected(false);
+        log.trace("Setect selected false");
+    }
+    
+    //select all the investigations
+    public void selectAll(ActionEvent event){
+        selectall();
+        getVisitData().setInvestigationsSelected(true);
+        log.trace("Setect selected true");
+        
+        
+    }
+    
     //view selected datasets
     public String datasets(){
-        
         //check which ones are checked, add to arraylist and then send to EJBS
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
@@ -236,6 +269,8 @@ public class InvestigationBean extends SortableList {
             getVisitData().setCurrentInvestigations(investigations);
             getVisitData().setCurrentDatasets(datasets);
             getVisitData().setCurrentDatafiles(datafiles);
+            //reset tree so it loads it again
+            getVisitData().setDataSetTree(null);
             
         } catch (DataPortalException ex) {
             error("Error: Unable to gets Data Sets.");
@@ -246,7 +281,6 @@ public class InvestigationBean extends SortableList {
             log.fatal("exception : "+getVisit().getSid(),ex);
             return null;
         }
-        
         return NavigationConstants.GET_DATASETS_SUCCESS;
     }
     
@@ -256,6 +290,6 @@ public class InvestigationBean extends SortableList {
     
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
-    }    
-   
+    }
+    
 }
