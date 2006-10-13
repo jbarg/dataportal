@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
@@ -103,9 +103,9 @@ public class QueryDelegateStateFul {
         return qsmr.getCurrentResults(this.sid);
     }
     
-    public Collection<Investigation> getInvestigations(Collection<Study> study) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
+   /* public Collection<Investigation> getInvestigations(Collection<Study> study) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
         return qsmr.getInvestigations(this.sid,  study);
-    }
+    }*/
     
     public Collection<DataSet> getDataSets(Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
         return qsmr.getDataSets(this.sid,  investigations);

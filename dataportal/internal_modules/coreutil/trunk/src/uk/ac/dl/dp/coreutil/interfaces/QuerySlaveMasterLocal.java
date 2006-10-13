@@ -7,7 +7,7 @@ import javax.ejb.Local;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
@@ -30,7 +30,7 @@ public interface QuerySlaveMasterLocal {
     
     public Collection<String> getCompleted();
     
-    public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
+   // public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
         
     public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
             

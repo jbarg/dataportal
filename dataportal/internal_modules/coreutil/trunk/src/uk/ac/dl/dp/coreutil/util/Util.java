@@ -22,19 +22,23 @@ public class Util {
     }
     
     public static  boolean isImageJ(String filename) {
-        // Get extension from a File object
-        File f = new File(filename);
-        String s = f.getName().substring((f.getName().lastIndexOf('.')+1));
-        
-        for(String exe : DataPortalConstants.IMAGEJ_TYPES){
-            if(s.equalsIgnoreCase(exe)) return true;
+        try {
+            // Get extension from a File object
+            File f = new File(filename);
+            String s = f.getName().substring((f.getName().lastIndexOf('.')+1));
+            
+            for(String exe : DataPortalConstants.IMAGEJ_TYPES){
+                if(s.equalsIgnoreCase(exe)) return true;
+            }
+            return false;
+        } catch(Exception e) {
+            return false;
         }
-        return false;
         
     }
     
     public static void main(String args[]){
-        System.out.println(isImageJ("ddff.RAW"));
+        System.out.println(isImageJ("ddff.LOG"));
     }
     
 }
