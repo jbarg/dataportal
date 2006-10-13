@@ -20,7 +20,7 @@ import javax.jms.ObjectMessage;
 import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
@@ -48,7 +48,6 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
         log.debug("onMessage();  Event message received");
         ObjectMessage msg = null;
         
-        Collection<Study> r_s_l = new ArrayList<Study>() ;
         Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
         
         
@@ -87,13 +86,13 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 
                 if(e.getQt() == DPQueryType.KEYWORD){
                     
-                    r_s_l = dpal.getStudies( (ArrayList<String>) e.getKeywords(), e.getDN(),e.getLogicalLogicalOperator());
-                    log.trace("Finished searching for studies");
-                    ArrayList<String> studies = new ArrayList<String>();
-                    for(Study study : r_s_l){
-                        studies.add(study.getId());
+                   /* r_s_l = dpal.getStudies( (ArrayList<String>) e.getKeywords(), e.getDN(),e.getLogicalLogicalOperator());
+                    log.trace("Finished searching for studies");*/
+                    ArrayList<String> keywords = new ArrayList<String>();
+                    for(String keyword : e.getKeywords()){
+                        keywords.add(keyword);
                     }
-                    r_i_l =  dpal.getInvestigations(studies,e.getDN());
+                    r_i_l =  dpal.getInvestigations(keywords,e.getDN(),e.getLogicalLogicalOperator());
                     log.trace("Finished searching for investigations");
                 }
                 

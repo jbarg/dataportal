@@ -39,7 +39,7 @@ import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterLocal;
 import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterRemote;
@@ -247,7 +247,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         //return qra;
     }
     
-    public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
+  /*  public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
@@ -279,7 +279,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         
         return investigations;
         
-    }
+    }*/
     
     public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
