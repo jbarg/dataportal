@@ -89,20 +89,21 @@
                        
                                                 </f:facet>
                    
-                                                           
-                                                <h:commandLink onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
-                                                    <h:outputText  value="#{data.name}" />
-                                                    <f:param name="id" value="#{data.id}"/>               
-                                                </h:commandLink>      
-                                                <h:outputText escape="true" value="   " />
-                                                <h:selectBooleanCheckbox rendered="#{!data.dataset}"  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >
-                                                    
-                                                    <a4j:support event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
-                                                        <a4j:actionparam name="datafiles" value="#{data.facility}-#{data.id}" />
-                                                        <a4j:actionparam name="DATA_FILE"  />
-                                                    </a4j:support>
-                                                </h:selectBooleanCheckbox>
-           
+                                                <h:panelGrid columns="3">   
+                                                    <h:commandLink onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
+                                                        <h:outputText  value="#{data.name}" />
+                                                        <f:param name="id" value="#{data.id}"/>               
+                                                    </h:commandLink>      
+                                                    <h:outputText escape="true" value="   " />
+                                                
+                                                
+                                                    <h:selectBooleanCheckbox rendered="#{!data.dataset}"  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >                                                    
+                                                        <a4j:support event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
+                                                            <a4j:actionparam name="datafiles" value="#{data.facility}-#{data.id}" />
+                                                            <a4j:actionparam name="DATA_FILE"  />
+                                                        </a4j:support>
+                                                    </h:selectBooleanCheckbox>
+                                                </h:panelGrid>
                                             </h:column>
                                             <h:column>
                                                 <f:facet name="header">
@@ -176,7 +177,7 @@
                                                                     <f:param name="note" value="#{data.id}"/>
                                                                 </h:inputTextarea>
                                     
-                                                                <h:commandButton action="#{datacenterBean.addNote}" title="View selections" value="Add Note"/>
+                                                                <h:commandButton  action="#{datacenterBean.addNote}" title="View selections" value="Add Note"/>
            
                                                             </h:panelGrid>
                                                         </h:panelGroup>
@@ -239,17 +240,17 @@
                                             <h:column>
                                                 <f:facet name="header">
                                                     <h:panelGrid columns="3">  
-                                                        <a4j:commandLink reRender="datatable" style="table-header" ajaxSingle="true" id="collapseAll" action="#{datacenterBean.selectnone}">           
+                                                      <%--  <a4j:commandLink reRender="datatable" style="table-header" ajaxSingle="true" id="collapseAll" action="#{datacenterBean.selectnone}">           
                                                             <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>
-                                                            <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
-                                                        </a4j:commandLink>  
+                                                         <%--    <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
+                                                        </a4j:commandLink>  --%>
                                                         
                                                         <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>                                                                            
                                                           
-                                                        <a4j:commandLink reRender="datatable" style="table-header" ajaxSingle="true" id="expandAll" action="#{datacenterBean.selectall}">           
+                                                      <%--   <a4j:commandLink reRender="datatable" style="table-header" ajaxSingle="true" id="expandAll" action="#{datacenterBean.selectall}">           
                                                             <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
-                                                            <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
-                                                        </a4j:commandLink> 
+                                                      <%--       <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
+                                                        </a4j:commandLink> --%>
                                                     </h:panelGrid>           
                                                 </f:facet>
                                                 <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{datacenterBean.listen}" value="#{data.selected}" >
@@ -342,7 +343,7 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <a4j:commandButton action="#{datacenterBean.removeDatasets}" reRender="datatable" title="View selections" value="Delete selections"/>
+                                            <a4j:commandButton action="#{datacenterBean.removeDatasets}" reRender="datatable" title="Delete selections" value="Delete selections"/>
                                             &nbsp;
                                         
                                             <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>                                                                            
