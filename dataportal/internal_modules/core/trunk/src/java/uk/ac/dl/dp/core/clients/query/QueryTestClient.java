@@ -23,7 +23,7 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
  *
  * @author gjd37
  */
-public class QueryTestClient {
+/*public class QueryTestClient {
     String sid = "5bf6fe7c-5151-4afb-b4f5-21c5820bdae7";
     boolean loggingin = false;
     QueryTestRemote qsmr;
@@ -34,7 +34,7 @@ public class QueryTestClient {
     private  static Logger log = Logger.getLogger(QueryClient.class);
     
     /** Creates a new instance of BookmarkClient */
-    public QueryTestClient() {
+  /*  public QueryTestClient() {
         PropertyConfigurator.configure("c:/log4j.properties");
         
         try{
@@ -90,9 +90,9 @@ public class QueryTestClient {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         // TODO code application logic here
         new QueryTestClient();
-    }
+    }*/
     
-}
+//}

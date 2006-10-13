@@ -44,7 +44,7 @@ import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.beans.Keyword;
-import uk.ac.cclrc.dpal.beans.Study;
+
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.delegates.LookupDelegate;
@@ -240,7 +240,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         return getQueryResults(q_request.getQueryid());
     }
     
-    public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
+  /*  public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
@@ -278,7 +278,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         
         return investigations;
         
-    }
+    }*/
     
 //TODO delete this
    /* public Collection<DataSet> getDataSets(String sid, String[][] investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
@@ -448,7 +448,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         
     }
     
-    public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
+    //not needed
+  /*  public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
         log.debug("getInvestigationByStudyId(String sid)");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
@@ -476,7 +477,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             dpal.disconnectFromDB();
         }
         return r_i_l;
-    }
+    }*/
     
     public Collection<Investigation> getInvestigationById(String sid, String fac, String investigastionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
         log.debug("getInvestigationId(String sid)");

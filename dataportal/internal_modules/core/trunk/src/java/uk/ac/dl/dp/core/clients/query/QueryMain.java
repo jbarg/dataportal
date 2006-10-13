@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
 
 /**
@@ -49,15 +49,15 @@ public class QueryMain {
         printTime("starting");
         DPAccessLayer dpal = new DPAccessLayer("ISIS", dbConnectString, db_user, db_pass) ;
         ArrayList<String> keyword_list = new ArrayList<String>() ;
-        Collection<Study> r_s_l = new ArrayList<Study>() ;
+        Collection<Investigation> r_s_l = new ArrayList<Investigation>() ;
         ArrayList<Investigation> r_i_l = new ArrayList<Investigation>() ;
         keyword_list.add("raw");
         keyword_list.add("edinburgh");
         try {
             
-            r_s_l =  dpal.getStudies(keyword_list,"DNfffgfgf",LogicalOperator.AND);
+            r_s_l =  dpal.getInvestigations(keyword_list,"DNfffgfgf",LogicalOperator.AND);
             printTime("got results");
-            for(Study s : r_s_l) {
+            for(Investigation s : r_s_l) {
                 System.out.println("\t"+s.toString()) ; //note need to write beans.toString methods
                 
             }

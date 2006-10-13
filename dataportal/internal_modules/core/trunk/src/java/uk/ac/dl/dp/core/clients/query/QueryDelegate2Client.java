@@ -14,7 +14,8 @@ import org.apache.log4j.PropertyConfigurator;
 import java.util.*;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+import uk.ac.cclrc.dpal.enums.LogicalOperator;
+
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.delegates.TransferDelegate;
@@ -68,7 +69,7 @@ public class QueryDelegate2Client {
             printTime("lookup again");
             try {
                 //start download
-                queryRequest = dd.queryByKeyword(sid,keywords,facs, null);
+                queryRequest = dd.queryByKeyword(sid,keywords,facs, LogicalOperator.AND);
                 printTime("quering ...");
             } catch (Exception ex) {
                 log.fatal("Download error ",ex);
@@ -111,8 +112,7 @@ public class QueryDelegate2Client {
             Collection<DataSet> ds =  dd.getDataSets(sid,  qr2);
             
             for(DataSet rec : ds){
-                System.out.println(rec);
-                
+                System.out.println(rec);                
             }
             
             //end session
