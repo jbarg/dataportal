@@ -222,11 +222,11 @@
                 </f:facet>
              
                           
-                    <a4j:commandLink rendered="#{invest.abstractNull}" reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
-                        <%--  <h:commandLink  rendered="#{invest.abstractNull}" action="#{detailToggler.toggleDetail}">--%>
-                        <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                        <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                    </a4j:commandLink>   
+                <a4j:commandLink rendered="#{!invest.abstractNull}" reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
+                    <%--  <h:commandLink  rendered="#{invest.abstractNull}" action="#{detailToggler.toggleDetail}">--%>
+                    <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                    <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                </a4j:commandLink>   
                
                 
             </h:column>
@@ -244,31 +244,41 @@
                     </h:commandLink>
                 </f:facet>
                 <h:outputText value="#{invest.facility}" />
+                
             </h:column>
             
             <h:column>
+                
                 <f:facet name="header">
-                    <h:outputText value="" />
+                    <h:panelGrid columns="2" >
+                        <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="selectAll" rendered="#{visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectNone}">           
+                            <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
+                            <t:graphicImage  id="selectNonew" value="../../images/button_minus1.gif"  border="0"/>
+                        </a4j:commandLink>   
+                   
+                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="selectNone" rendered="#{!visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectAll}">           
+                            <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>                       
+                            <t:graphicImage  id="selectAllc" value="../../images/button_plus1.gif"  border="0"/>                 
+                        </a4j:commandLink> 
+                    </h:panelGrid>
                 </f:facet>
-                <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{investigationBean.listen}" value="#{invest.selected}" >
+                <h:selectBooleanCheckbox title="select_investigation" value="#{invest.selected}" >
                     <f:param name="id" value="#{invest.id}"/>
+                    <a4j:support event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{investigationBean.listenAjax}">
+                        <a4j:actionparam name="id" value="#{invest.id}"/>   
+                    </a4j:support>
                 </h:selectBooleanCheckbox>
             </h:column>
             
-            <f:facet name="detailStamp">
-                
+            <f:facet name="detailStamp">                
                 <t:dataTable preserveSort="true" width="95%" id="investigationAbstract" styleClass="standardTable_Column" var="abstract" value="#{invest.investigationAbstract}">
                     
                     <h:column>
                         <h:outputText style="font-size:12px;" value="#{invest.investigationAbstract}" />
-                    </h:column>               
-                </t:dataTable>
-                
-            </f:facet>
+                    </h:column>   
             
-            
-            
-            
+                </t:dataTable>                
+            </f:facet>            
         </t:dataTable>
     </a4j:region>
     
@@ -329,20 +339,25 @@
             </t:dataScroller>
         </h:panelGrid>
     </c:if>
-    <br />
+  
     
     <table width="90%" border="0">
          <tbody>
             <tr>
-                <td>
+                <td align="right">
                     <h:commandButton action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
                     
                 </td>
-                <td align="right">
-                    Select:&nbsp; <h:commandButton action="#{investigationBean.selectall}" title="All" value=" All "/>
-                    &nbsp; 
-                    <h:commandButton action="#{investigationBean.selectnone}" title="None" value="None"/>
-                </td>
+                <%--<td align="right">
+                <a4j:commandButton action="#{investigationBean.selectall}" reRender="datatable" title="Delete selections" value="Delete selections"/>
+                &nbsp;
+                                        
+                <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>                                                                            
+                                         
+                Select:&nbsp; <h:commandButton action="#{investigationBean.selectall}" title="All" value=" All "/>
+                &nbsp; 
+                <h:commandButton action="#{investigationBean.selectnone}" title="None" value="None"/>
+                </td>--%>
             </tr>
         </tbody>
     </table>
