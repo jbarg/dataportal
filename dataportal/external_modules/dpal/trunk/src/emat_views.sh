@@ -5,6 +5,15 @@
 #not an external schema which can view the emat/emin schema is used
 #to create the views as emat/emin.dataset and icat.dataset names clash otherwise
 
+#priveledges needed by the view schema:
+#GRANT CONNECT TO metaematview;
+#GRANT CREATE TABLE TO metaematview;
+#GRANT CREATE VIEW TO metaematview;
+#GRANT CREATE PROCEDURE TO metaematview;
+#GRANT CREATE TYPE TO metaematview;
+
+#after the views are created dpal.sql need to be run as the metaematview user.
+
 sqlplus metaematview/viewb4rk1ng@minerva.dl.ac.uk <<EOF
 
 create or replace view keyword as
