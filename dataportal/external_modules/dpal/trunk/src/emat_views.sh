@@ -5,7 +5,7 @@
 #not an external schema which can view the emat/emin schema is used
 #to create the views as emat/emin.dataset and icat.dataset names clash otherwise
 
-sqplus metaematview/viewb4rk1ng@minerva.dl.ac.uk <<EOF
+sqlplus metaematview/viewb4rk1ng@minerva.dl.ac.uk <<EOF
 
 create or replace view keyword as
 select st.study_id investigation_id, t.topic name, '-99' mod_id, systimestamp mod_time
