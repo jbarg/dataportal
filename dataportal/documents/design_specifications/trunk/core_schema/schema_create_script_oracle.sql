@@ -51,15 +51,7 @@ CREATE TABLE DP_EVENT
 (
 ID NUMBER NOT NULL,
 EVENT_NAME VARCHAR2(512),
-MOD_TIME TIMESTAMP(1) NOT NULL
-)
-;
-
-CREATE TABLE DP_EVENT_DETAILS
-(
-ID NUMBER NOT NULL,
-EVENT_ID NUMBER NOT NULL,
-DETAILS VARCHAR2(4000) NOT NULL,
+DP_EVENT_DETAILS VARCHAR2(4000),
 MOD_TIME TIMESTAMP(1) NOT NULL
 )
 ;
@@ -69,6 +61,15 @@ CREATE TABLE DP_EVENT_LOG
 ID NUMBER NOT NULL,
 USER_ID NUMBER,
 EVENT VARCHAR2(512) NOT NULL,
+DETAILS VARCHAR2(4000),
+MOD_TIME TIMESTAMP(1) NOT NULL
+)
+;
+
+CREATE TABLE DP_EVENT_LOG_DETAILS
+(
+ID NUMBER NOT NULL,
+EVENT_LOG_ID NUMBER NOT NULL,
 DETAILS VARCHAR2(4000),
 MOD_TIME TIMESTAMP(1) NOT NULL
 )
@@ -257,16 +258,16 @@ EVENT_NAME
  ENABLE
 ;
 
-ALTER TABLE DP_EVENT_DETAILS
-ADD CONSTRAINT DP_EVENT_DETAILS_PK PRIMARY KEY
+ALTER TABLE DP_EVENT_LOG
+ADD CONSTRAINT DP_EVENT_LOG_PK PRIMARY KEY
 (
 ID
 )
  ENABLE
 ;
 
-ALTER TABLE DP_EVENT_LOG
-ADD CONSTRAINT DP_EVENT_LOG_PK PRIMARY KEY
+ALTER TABLE DP_EVENT_LOG_DETAILS
+ADD CONSTRAINT DP_EVENT_LOG_DETAILS_PK PRIMARY KEY
 (
 ID
 )
@@ -492,17 +493,6 @@ ID
 ) ENABLE
 ;
 
-ALTER TABLE DP_EVENT_DETAILS
-ADD CONSTRAINT DP_EVENT_DETAILS_DP_EVENT_FK1 FOREIGN KEY
-(
-EVENT_ID
-)
-REFERENCES DP_EVENT
-(
-ID
-) ENABLE
-;
-
 ALTER TABLE DP_EVENT_LOG
 ADD CONSTRAINT DP_EVENT_LOG_DP_USER_FK1 FOREIGN KEY
 (
@@ -522,6 +512,17 @@ EVENT
 REFERENCES DP_EVENT
 (
 EVENT_NAME
+) ENABLE
+;
+
+ALTER TABLE DP_EVENT_LOG_DETAILS
+ADD CONSTRAINT DP_EVENT_LOG_DETAILS_DP_E_FK1 FOREIGN KEY
+(
+EVENT_LOG_ID
+)
+REFERENCES DP_EVENT_LOG
+(
+ID
 ) ENABLE
 ;
 
@@ -735,21 +736,44 @@ INSERT INTO SEQUENCE(SEQ_NAME, SEQ_COUNT) values ('EVENT_LOG', 0) ;
 insert into DP_ROLE values (1, 'USER',systimestamp);
 insert into DP_ROLE values (2, 'ADMIN',systimestamp);
 
-insert into DP_PROXY_SERVERS values (1,'myproxy.grid-support.ac.uk', 7512, '/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/myproxy.grid-support.ac.uk/E=a.j.richards@dl.ac.uk', systimestamp);
+insert into DP_PROXY_SERVERS values (1,'myproxy.grid-support.ac.uk', 7512, '/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/myproxy.grid-support.ac.uk/E=a.j.richards@dl.ac.uk',systimestamp);
+insert into DP_PROXY_SERVERS values (2,'myproxy-sso.grid-support.ac.uk', 7512, '/C=UK/O=eScience/OU=CLRC/L=RAL/CN=host/myproxy-ss0.grid-support.ac.uk/E=support@grid-support.ac.uk',systimestamp);
 
-insert into DP_FACILITY values (1,'ISIS', 'ISIS Pulsed Neutron \& Muon Source','http://www.isis.rl.ac.uk/', systimestamp);
+insert into DP_FACILITY values (1,'ISIS', 'ISIS Pulsed Neutron \& Muon Source','N','http://www.isis.rl.ac.uk/', systimestamp); 
+insert into DP_FACILITY values (2,'EMAT', 'E-Materials Project','Y','http://www.emat.rl.ac.uk/', systimestamp);
 
-insert into DP_MODULE_LOOKUP values (1, '(DESCRIPTION=(ADDRESS=(HOST=elektra.dl.ac.uk)(PROTOCOL=tcp)(PORT=1521))(CONNECT_DATA=(SID=minerva2)))', 'user', 'password', 'oracle', 'dpal', 'ISIS', 'Y', systimestamp) ;
+insert into DP_MODULE_LOOKUP values (1,'(DESCRIPTION=(ADDRESS=(HOST=elektra.dl.ac.uk)(PROTOCOL=tcp)(PORT=1521))(CONNECT_DATA=(SID=minerva2)))', 'user', 'password', 'oracle', 'dpal', 'ISIS', 'Y', systimestamp) ;
+insert into DP_MODULE_LOOKUP values (2, 'null', 'user', 'password', 'oracle', 'dpal', 'EMAT', 'Y', systimestamp) ;
 
-insert into DP_EVENT values (1,'LOG_OFF','User logging off event',systimestamp);
-insert into DP_EVENT values (2,'LOG_ON','User logging on event',systimestamp);
-insert into DP_EVENT values (3,'BASIC_SEARCH','User basic searching event',systimestamp);
-insert into DP_EVENT values (4,'ADVANCED_SEARCH','User advanced searching event',systimestamp);
-insert into DP_EVENT values (5,'TRANSFER','User transfering event',systimestamp);
+insert into DP_EVENT values (1,'LOG_OFF',systimestamp);
+insert into DP_EVENT values (2,'LOG_ON',systimestamp);
+insert into DP_EVENT values (3,'BASIC_SEARCH',systimestamp);
+insert into DP_EVENT values (4,'ADVANCED_SEARCH',systimestamp);
+insert into DP_EVENT values (5,'DOWNLOAD',systimestamp);
 
 insert into DP_CREDENTIAL_TYPE values (1,'PROXY','Normal proxy',systimestamp);
 insert into DP_CREDENTIAL_TYPE values (2,'CERTIFICATE','Certificate only, no private key',systimestamp);
 
 commit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
