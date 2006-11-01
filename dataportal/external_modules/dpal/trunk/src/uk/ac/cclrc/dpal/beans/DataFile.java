@@ -35,6 +35,11 @@ public class DataFile extends Common implements Serializable
              " [facility]:"+getFacility()+
              " [dataset id]:"+dataSetId ;
    }
+  
+   
+   public String getDpId(){
+       return getFacility()+"-"+getId();
+   }
 
 }
   
