@@ -37,6 +37,7 @@ import uk.ac.dl.dp.coreutil.util.Util;
 @NamedQueries( {
     @NamedQuery(name = "Url.findById", query = "SELECT u FROM Url u WHERE u.id = :id"),
     @NamedQuery(name = "Url.findByUrl", query = "SELECT u FROM Url u WHERE u.url = :url"),
+      @NamedQuery(name = "Url.findByName", query = "SELECT u FROM Url u WHERE u.name = :name"),     
     @NamedQuery(name = "Url.findByModTime", query = "SELECT u FROM Url u WHERE u.modTime = :modTime")}
 )
 public class Url implements Serializable {
@@ -50,6 +51,9 @@ public class Url implements Serializable {
     @Column(name = "URL", nullable = false)
     private String url;
     
+    @Column(name = "NAME")
+    private String name;
+     
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
@@ -57,12 +61,12 @@ public class Url implements Serializable {
     @JoinColumn(name = "DATA_REF_ID", referencedColumnName = "ID")
     @ManyToOne
     private DataReference dataRefId;
-    
+       
     @Transient
-    private String name;
-    
-     @Transient
     private boolean download;
+     
+    @Transient
+    private String dpId;
     
     @PrePersist
     @PreUpdate
@@ -139,13 +143,18 @@ public class Url implements Serializable {
         return "" + this.id;
     }
     
+   /**
+     * Gets the name of this Url.
+     * @return the name
+     */
     public String getName() {
-        int i = this.url.lastIndexOf("/");
-        if(i == -1) i = this.url.lastIndexOf("\\");
-       return this.url.substring(i+1,url.length());
-       
+        return this.name;
     }
-    
+
+    /**
+     * Sets the name of this Url to the specified value.
+     * @param name the new name
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -160,6 +169,10 @@ public class Url implements Serializable {
 
     public void setDownload(boolean download) {
         this.download = download;
+    }
+    
+     public String getDpId(){
+        return getDataRefId().getFacility()+"-"+getDataRefId().getId()+"-"+getId();
     }
     
 }

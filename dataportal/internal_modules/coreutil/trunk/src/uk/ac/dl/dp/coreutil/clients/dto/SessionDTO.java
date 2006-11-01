@@ -35,6 +35,8 @@ public class SessionDTO implements Serializable{
     
     private String DN;
     
+    private String name;
+    
     private UserPreferencesDTO userPrefs;
     
     private Collection<FacilityDTO> facilities;
@@ -50,6 +52,8 @@ public class SessionDTO implements Serializable{
            roles.add(role.getName());
         }
         this.DN = session.getUserId().getDn();
+        int index = this.DN.lastIndexOf("CN=");
+        this.setName(DN.substring(index+3,this.DN.length()));
     }
     
     public String getUserSessionId() {
@@ -106,5 +110,13 @@ public class SessionDTO implements Serializable{
 
     public void setFacilities(Collection<FacilityDTO> facilities) {
         this.facilities = facilities;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

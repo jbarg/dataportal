@@ -16,6 +16,7 @@ package uk.ac.dl.dp.coreutil.util;
 public enum DPUrlRefType {
     
     FILE("FILE"),
+    DATA_SET_FOLDER("DATA_SET_FOLDER"),
     DATA_SET("DATA_SET");
     
     DPUrlRefType(String value) {

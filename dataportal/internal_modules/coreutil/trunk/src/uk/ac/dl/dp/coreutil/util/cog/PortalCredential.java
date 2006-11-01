@@ -6,6 +6,9 @@
 
 package uk.ac.dl.dp.coreutil.util.cog;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
 import org.ietf.jgss.*;
 import org.globus.gsi.*;
 import org.globus.gsi.bc.*;
@@ -57,7 +60,11 @@ public class PortalCredential {
             
             if (key.isEncrypted()) {
                 //decrypt
-                key.decrypt("k4te31t4");
+                Properties prop = new Properties();
+                prop.load(new FileInputStream(System.getProperty("user.home")+File.separator+".globus"+File.separator+"pass"));
+                //log.trace("password : "+prop.getProperty("pass"));
+                String password = prop.getProperty("pass");
+                key.decrypt(password);
             }
             portalPrivateKey = key.getPrivateKey();
             

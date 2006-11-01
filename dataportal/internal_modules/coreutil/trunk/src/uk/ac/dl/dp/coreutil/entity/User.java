@@ -41,6 +41,7 @@ import javax.persistence.TemporalType;
 @NamedQueries( {
     @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
     @NamedQuery(name = "User.findByDn", query = "SELECT u FROM User u WHERE u.dn = :dn"),
+     @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId"),     
     @NamedQuery(name = "User.findByDnLike", query = "SELECT u FROM User u WHERE u.dn LIKE :dn"),
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findByModTime", query = "SELECT u FROM User u WHERE u.modTime = :modTime")}
@@ -56,6 +57,9 @@ public class User implements Serializable {
     @Column(name = "DN", nullable = false)
     private String dn;
     
+     @Column(name = "USER_ID")
+    private String userId;
+     
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
@@ -124,6 +128,23 @@ public class User implements Serializable {
     public void setDn(String dn) {
         this.dn = dn;
     }
+    
+     /**
+     * Gets the userId of this User.
+     * @return the userId
+     */
+    public String getUserId() {
+        return this.userId;
+    }
+
+    /**
+     * Sets the userId of this User to the specified value.
+     * @param userId the new userId
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    
     
     public Date getModTime() {
         return this.modTime;

@@ -10,8 +10,10 @@
 package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,6 +23,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,7 +38,7 @@ import uk.ac.dl.dp.coreutil.util.DPEvent;
 @NamedQueries( {
     @NamedQuery(name = "Event.findById", query = "SELECT e FROM Event e WHERE e.id = :id"), 
     @NamedQuery(name = "Event.findByEventName", query = "SELECT e FROM Event e WHERE e.eventName = :eventName"), 
-    @NamedQuery(name = "Event.findByEventDetails", query = "SELECT e FROM Event e WHERE e.eventDetails = :eventDetails"), 
+      @NamedQuery(name = "Event.findByEventDetails", query = "SELECT e FROM Event e WHERE e.eventDetails = :eventDetails"),      
     @NamedQuery(name = "Event.findByModTime", query = "SELECT e FROM Event e WHERE e.modTime = :modTime")}
 )
 public class Event implements Serializable {
@@ -48,10 +51,10 @@ public class Event implements Serializable {
     @Column(name = "EVENT_NAME")
     @Enumerated(EnumType.STRING)
     private DPEvent eventName;
-
-    @Column(name = "EVENT_DETAILS")
-    private String eventDetails;
-
+    
+    @Column(name = "DP_EVENT_DETAILS")
+    private String eventDetails;    
+    
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
@@ -85,14 +88,21 @@ public class Event implements Serializable {
         this.eventName = eventName;
     }
 
+    /**
+     * Gets the dpEventDetails of this Event.
+     * @return the dpEventDetails
+     */
     public String getEventDetails() {
         return this.eventDetails;
     }
 
+    /**
+     * Sets the dpEventDetails of this Event to the specified value.
+     * @param dpEventDetails the new dpEventDetails
+     */
     public void setEventDetails(String eventDetails) {
         this.eventDetails = eventDetails;
     }
-
     public Date getModTime() {
         return this.modTime;
     }
