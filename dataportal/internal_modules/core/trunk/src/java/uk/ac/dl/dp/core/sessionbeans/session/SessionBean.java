@@ -102,10 +102,10 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.warn("Unexpected error from myproxy: "+e.getMessage(),e);
             throw new LoginMyProxyException(e);
         }
-        return insertSessionImpl(myproxy_proxy);
+        return insertSessionImpl(username, myproxy_proxy);
     }
     
-    private String insertSessionImpl(GSSCredential credential) throws LoginMyProxyException, CannotCreateNewUserException {
+    private String insertSessionImpl(String username, GSSCredential credential) throws LoginMyProxyException, CannotCreateNewUserException {
         
         log.info("Starting insertSessionImpl");
         Certificate certificate =  null;
@@ -168,7 +168,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             } catch(UserNotFoundException enfe){
                 //no entity found, so create one
                 log.info("No user found, creating new user.");
-                user = UserUtil.createDefaultUser(DN);
+                user = UserUtil.createDefaultUser(username, DN);
                 userutil = new UserUtil(user);
                 
                 //add new user to session

@@ -100,6 +100,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
                         em.persist(dto);
+                        em.flush();
                         continue ;
                     }
                     
@@ -119,7 +120,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         
         User user = new UserUtil(sid).getUser();
         Collection<Bookmark> bookmarks  = user.getBookmark();
-        
+                     
         log.debug("User "+user.getDn()+" has "+bookmarks.size()+" number of bookmarks");
         
         return bookmarks;

@@ -143,7 +143,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     }
     
     public void downloadKeywords() throws Exception{
-        log.info("downloadKeywords");       
+        log.info("downloadKeywords");
         
         boolean addFac = false;
         Collection<ModuleLookup> facilities = lookup.getFacilityInfo(DPFacilityType.WRAPPER);
@@ -164,10 +164,15 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
                 for(Keyword k : r_k_l) {
                     // System.out.println("\t"+k.toString()) ;
                     boolean word = true;
-                    for(int j = 0 ; j < k.getName().length(); j++){
-                        if(!Character.isLetter(k.getName().charAt(j))){
-                            word = false;
-                            break;
+                    
+                    //if not EMAT (ie allowed none words) then remove all none words
+                    if(!mod.isDataInFolders()){
+                        //log.trace(mod.getFacility()+" has not got data in folders so taking out none words");
+                        for(int j = 0 ; j < k.getName().length(); j++){
+                            if(!Character.isLetter(k.getName().charAt(j))){
+                                word = false;
+                                break;
+                            }
                         }
                     }
                     if(word){

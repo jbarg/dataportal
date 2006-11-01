@@ -11,6 +11,7 @@ package uk.ac.dl.dp.core.clients.session;
 
 import java.io.File;
 import javax.ejb.EJB;
+import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.entity.Facility;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.Session;
@@ -47,6 +48,9 @@ public class LoginClient {
             
             String session =  sless.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
             System.out.println("Got session : "+session);
+            SessionDTO s = sless.getSession(session);
+            
+             System.out.println("Got session : "+s.getName());
             //
         }catch(Exception e){
             
