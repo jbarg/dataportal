@@ -190,9 +190,17 @@
                     <%--  <td> <h:commandLink value="Expand All" styleClass="nodeFolder" action="#{datasetTree.expandAll}"/></td>--%>
                 </table>
                 <a4j:region selfRendered="true"> 
-                    <t:tree2  rendered="#{datasetTree.clientSide}" id="tree" value="#{datasetTree.data}" var="node" varNodeToggler="t" showRootNode="false" clientSideToggle="true">
+                   <%--  //TODO  maybe later for this, for now, allow dow nload only from bookmarns
+                   <a4j:poll id="poll" actionListener="#{datasetTree.checkReadAccess}" interval="1000" reRender="checkbox, poll,tree" ajaxSingle="true"  enabled="#{!datasetTree.accessDone}" />
+                   --%>
+                   
+                    <%-- <h:commandLink rendered="true" value="Expand All" action="#{datasetTree.expandAll}"/>&nbsp;&nbsp;
+                    <h:commandLink rendered="true" value="Collapse All" action="#{datasetTree.collapseAll}"/>--%>
+                    <br />
+                    <br />
+                    <t:tree2 binding="#{datasetTree.tree}" rendered="#{datasetTree.clientSide}" id="tree" value="#{datasetTree.data}" var="node" varNodeToggler="t" showRootNode="false" clientSideToggle="true">
                 
-                        <f:facet name="foo-folder">
+                        <f:facet name="dataset-folder">
                             <h:panelGroup>
                                 <f:facet name="expand">
                                     <t:graphicImage id="gr99" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
@@ -208,12 +216,33 @@
                                 </h:commandLink>
                            
                                 <h:outputText id="text891" value=" (#{node.childCount-3})" styleClass="childCount" rendered="#{!empty node.children}"/>
-                                &nbsp;
+                                <h:outputText value="    " />
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="datasets" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>
                             </h:panelGroup>
                         </f:facet>
+                        
+                         <f:facet name="dataset-inFolder-folder">
+                            <h:panelGroup>
+                                
+                                    <t:graphicImage id="gr-1" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                                                          
+                                    <t:graphicImage id="gr-12" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                             
+                                <h:commandLink onclick="download('#{node.identifier}','DATA_SET','DATA_SETS'); return false;" style="color:black" id="downloadname-10" actionListener="#{datacenterBean.download}">
+                                    <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
+                                    <h:outputText id="text-10" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
+                  
+                                    <f:param name="id" value="#{node.identifier}"/>               
+                                </h:commandLink>
+                            <h:outputText value="    " />
+                                <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">
+                                    <f:param name="datasets" value="#{node.identifier}"/>
+                                </h:selectBooleanCheckbox>
+                            </h:panelGroup>
+                        </f:facet>
+                        
                         <f:facet name="invest">
                             <h:panelGroup>
                        
@@ -222,7 +251,7 @@
                                 <t:graphicImage id="gr9f18" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                      
                                 <h:outputText id="text9f10" value="#{node.description}" styleClass="nodeFolder"/>
-                                &nbsp;
+                                <h:outputText value="    " />
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="investigations" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>
@@ -284,15 +313,27 @@
                             </h:panelGroup>
                         </f:facet>
                 
+                        <f:facet name="imageJ">
+                            <h:panelGroup>
+                            
+                                <h:commandLink  onclick="download('#{node.identifier}','FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
+                                    <h:outputText value="Launch via ImageJ" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
+                                                            
+                                </h:commandLink>                           
+                                
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
                         <f:facet name="file-folder">
                             <h:panelGroup>
-                                <f:facet name="expand163">
-                                    <t:graphicImage id="gr163" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                <f:facet name="expand6">
+                                    <t:graphicImage id="gr60" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
                                 </f:facet>
-                                <f:facet name="collapse163">
-                                    <t:graphicImage id="gr1613" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                <f:facet name="collapse6">
+                                    <t:graphicImage id="gr60u" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 </f:facet>
-                                &nbsp;  
+                                <h:outputText value="         " />
                                 <%-- <h:commandLink immediate="true" styleClass="#{t.nodeSelected ? 'documentSelected':'document'}" actionListener="#{datasetTree.setNodeSelected}">
                                 <t:graphicImage value="../images/document.png" border="0"/>
                                 <h:outputText value="#{node.description}" styleClass="file" />
@@ -301,28 +342,56 @@
                              
                                 <%--  <t:graphicImage value="../../images/document.png" border="0"/>  --%>     
                    
-                                <t:graphicImage rendered="#{!node.leaf}" value="../../images/document2.PNG" border="0"/>                                   
+                                <t:graphicImage value="../../images/document.png" border="0"/>                                   
                    
-                                <h:commandLink rendered="#{node.leaf}" onclick="download('#{node.identifier}','FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
-                                    <t:graphicImage value="../../images/document.png" border="0"/>                                   
-                                </h:commandLink>
+                                <%--<h:commandLink rendered="#{node.leaf}" onclick="download('#{node.identifier}','FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
+                                <t:graphicImage value="../../images/document.png" border="0"/>                                   
+                                </h:commandLink>--%>
                         
-                                <h:commandLink onclick="download('#{node.identifier}','FILE','DATA_SETS'); return false;" style="color:black" id="downloadname1">
+                                <h:commandLink onclick="download('#{node.identifier}','FILE','DATA_SETS'); return false;" style="color:black" id="downloadname12">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
                                     <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
-                                    <f:param name="id1" value="#{node.identifier}"/>              
+                                    <f:param name="id16" value="#{node.identifier}"/>              
                                 </h:commandLink>
-                                &nbsp;
+                                <h:outputText value="         " />
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="datafiles" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>
                                
-                                <h:selectBooleanCheckbox id="d" style="background-color:#D1E4E4" title="Add to download" valueChangeListener="#{datasetTree.setDataFileDownload}">
+                               <%--
+                               //TOTO for now allow single download only from bookmarks etc
+                               <h:selectBooleanCheckbox  id="checkbox" style="background-color:#D1E4E4" title="Add to download" valueChangeListener="#{datasetTree.setDataFileDownload}">
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                 <%--   <a4j:support  immediate="true" event="onclick" ajaxSingle="true"  actionListener="#{datasetTree.setDataFileDownloadAction}">
-                                        <a4j:actionparam name="datafiles" value="#{node.identifier}" />
+                                    <%--   <a4j:support  immediate="true" event="onclick" ajaxSingle="true"  actionListener="#{datasetTree.setDataFileDownloadAction}">
+                                    <a4j:actionparam name="datafiles" value="#{node.identifier}" />
                                     </a4j:support>--%>
+                                    
+                                <%--</h:selectBooleanCheckbox>--%>
+                                
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <f:facet name="file-noread-folder">
+                            <h:panelGroup>                   
+                                <t:graphicImage value="../../images/document.png" border="0"/>                                   
+                                <h:outputText value="         " />
+                                                        
+                                <h:commandLink disabled="true"  style="color:black" id="downloadname1">
+                                    <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
+                                    <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
+                                    <f:param name="id1" value="#{node.identifier}"/>              
+                                </h:commandLink>
+                                <h:outputText value="         " />
+                                <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
+                                    <f:param name="datafiles" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>
+                                                               
+                              <%--  <h:selectBooleanCheckbox  disabled="true" id="checkbox1" style="background-color:#D1E4E4" title="No access to data" >
+                                    
+                                </h:selectBooleanCheckbox>--%>
+                               
+                              
                             </h:panelGroup>
                         </f:facet>
                 
@@ -358,8 +427,8 @@
     
     
                     </t:tree2>
-            
-                    <t:tree2  rendered="#{!datasetTree.clientSide}" id="tree2" value="#{datasetTree.data}" var="node" varNodeToggler="t" showRootNode="false" clientSideToggle="false">
+                    
+                    <t:tree2 rendered="#{!datasetTree.clientSide}" id="tree2" value="#{datasetTree.data}" var="node" varNodeToggler="t" showRootNode="false" clientSideToggle="false">
                 
                         <f:facet name="foo-folder">
                             <h:panelGroup>
@@ -404,9 +473,11 @@
                      
                                 <h:outputText id="text9f10" value="#{node.description}" styleClass="nodeFolder"/>
                                 &nbsp;
+                                
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="investigations" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>
+                               
                             </h:panelGroup>
                         </f:facet>
 
@@ -454,9 +525,27 @@
                             </h:panelGroup>
                         </f:facet>
                 
+                       <f:facet name="imageJ">
+                            <h:panelGroup>
+                            
+                                <h:commandLink  onclick="download('#{node.identifier}','FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="viewy">
+                                    <h:outputText value="Launch via ImageJ" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
+                                                            
+                                </h:commandLink>                           
+                                
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
                         <f:facet name="file-folder">
-                            <h:panelGroup>                         
-                                &nbsp;  
+                            <h:panelGroup>
+                                <f:facet name="expandm6k">
+                                    <t:graphicImage id="grym650" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collapsek6">
+                                    <t:graphicImage id="gry605u" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText value="         " />
                                 <%-- <h:commandLink immediate="true" styleClass="#{t.nodeSelected ? 'documentSelected':'document'}" actionListener="#{datasetTree.setNodeSelected}">
                                 <t:graphicImage value="../images/document.png" border="0"/>
                                 <h:outputText value="#{node.description}" styleClass="file" />
@@ -465,31 +554,56 @@
                              
                                 <%--  <t:graphicImage value="../../images/document.png" border="0"/>  --%>     
                    
-                                <t:graphicImage rendered="#{!node.leaf}" value="../../images/document2.PNG" border="0"/>                                   
+                                <t:graphicImage value="../../images/document.png" border="0"/>                                   
                    
-                                <h:commandLink rendered="#{node.leaf}" onclick="download('#{node.identifier}','FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
-                                    <t:graphicImage value="../../images/document.png" border="0"/>                                   
-                                </h:commandLink>
+                                <%--<h:commandLink rendered="#{node.leaf}" onclick="download('#{node.identifier}','FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
+                                <t:graphicImage value="../../images/document.png" border="0"/>                                   
+                                </h:commandLink>--%>
                         
-                                <h:commandLink onclick="download('#{node.identifier}','FILE','DATA_SETS'); return false;" style="color:black" id="downloadname1">
+                                <h:commandLink onclick="download('#{node.identifier}','FILE','DATA_SETS'); return false;" style="color:black" id="downloadnmame125">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
                                     <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
-                                    <f:param name="id1" value="#{node.identifier}"/>              
+                                    <f:param name="id1vj6" value="#{node.identifier}"/>              
                                 </h:commandLink>
-                                &nbsp;
+                                <h:outputText value="         " />
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="datafiles" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>
                                
-                                <h:selectBooleanCheckbox id="d" style="background-color:#D1E4E4" title="Add to download" >
+                                <h:selectBooleanCheckbox  id="checkbox5" style="background-color:#D1E4E4" title="Add to download" valueChangeListener="#{datasetTree.setDataFileDownload}">
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support event="onclick" ajaxSingle="true"  actionListener="#{datasetTree.setDataFileDownloadAction}">
-                                        <a4j:actionparam name="datafiles" value="#{node.identifier}" />
-                                    </a4j:support>
+                                    <%--   <a4j:support  immediate="true" event="onclick" ajaxSingle="true"  actionListener="#{datasetTree.setDataFileDownloadAction}">
+                                    <a4j:actionparam name="datafiles" value="#{node.identifier}" />
+                                    </a4j:support>--%>
+                                    
                                 </h:selectBooleanCheckbox>
+                                
+                                
                             </h:panelGroup>
                         </f:facet>
-                
+                        
+                        <f:facet name="file-noread-folder">
+                            <h:panelGroup>                   
+                                <t:graphicImage value="../../images/document.png" border="0"/>                                   
+                                <h:outputText value="         " />
+                                                        
+                                <h:commandLink disabled="true"  style="color:black" id="downloadname15">
+                                    <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
+                                    <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
+                                    <f:param name="id15" value="#{node.identifier}"/>              
+                                </h:commandLink>
+                                <h:outputText value="         " />
+                                <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
+                                    <f:param name="datafiles" value="#{node.identifier}"/>
+                                </h:selectBooleanCheckbox>
+                                                               
+                                <h:selectBooleanCheckbox  disabled="true" id="checkbox1m5" style="background-color:#D1E4E4" title="No access to data" >
+                                    
+                                </h:selectBooleanCheckbox>
+                               
+                              
+                            </h:panelGroup>
+                        </f:facet>
                         <f:facet name="fac-folder">
                             <h:panelGroup>
                                 <f:facet name="expand1f3">
@@ -536,15 +650,15 @@
                                
                                 </h:selectBooleanCheckbox>
                             </td>
-                            <td align="left">
+                           <%-- <td align="left">
                                 <a4j:commandButton oncomplete="download('#{node.identifier}','DOWNLOAD','DATA_SETS'); return false;" action="#{datasetTree.setValueChangeListeners}" title="Download selections" value="Download selections"/>
                                
-                               <%-- <h:commandButton onclick="download('#{node.identifier}','DOWNLOAD','DATA_SETS'); return false;" action="#{datasetTree.select}" title="Download selections" value="Download selections"/>--%>
-                                &nbsp;
+                                <%-- <h:commandButton onclick="download('#{node.identifier}','DOWNLOAD','DATA_SETS'); return false;" action="#{datasetTree.select}" title="Download selections" value="Download selections"/>--%>
+                               <%-- &nbsp;
                                 <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
                                
                                 </h:selectBooleanCheckbox>
-                            </td>
+                            </td>--%>
                             <%--<td align="right">
                             Select:&nbsp; <h:commandButton action="#{datasetTree.selectall}" title="All" value=" All "/>
                             &nbsp; 

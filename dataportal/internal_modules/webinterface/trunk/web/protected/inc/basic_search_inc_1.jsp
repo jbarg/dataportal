@@ -162,10 +162,20 @@
            
             <h:panelGroup/>
             <h:panelGroup/>
-            <h:commandButton action="#{searchBean.searchByKeyword}" title="search" value="Search"/>
+            <h:commandButton action="#{searchBean.searchByKeyword}" onclick="busyBox.Show();" title="search" value="Search"/>
           
             <h:panelGroup/>
         </h:panelGrid>
       
     </h:form>
 </a4j:region>
+
+  <iframe id="BusyBoxIFrame" name="BusyBoxIFrame" frameBorder="0" scrolling="no" ondrop="return false;">
+        </iframe>
+        <SCRIPT>
+		// Instantiate our BusyBox object
+		var busyBox = new BusyBox("BusyBoxIFrame", "busyBox", 4, "../../images/gears_ani_", ".gif", 125, 147, 207);
+                                
+                               
+                               
+        </SCRIPT>
