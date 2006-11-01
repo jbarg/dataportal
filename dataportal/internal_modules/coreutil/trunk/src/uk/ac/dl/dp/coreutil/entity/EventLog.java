@@ -11,7 +11,9 @@ package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,12 +23,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import uk.ac.dl.dp.coreutil.entity.EventLogDetails;
 
 /**
  *
@@ -62,6 +66,9 @@ public class EventLog implements Serializable {
     @ManyToOne
     private uk.ac.dl.dp.coreutil.entity.User userId;
     
+  //   @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventLogId")
+  // private Collection<EventLogDetails> eventLogDetails;
+     
     @PrePersist
     @PreUpdate
     public void prePersist(){
@@ -120,6 +127,22 @@ public class EventLog implements Serializable {
     public void setUserId(uk.ac.dl.dp.coreutil.entity.User userId) {
         this.userId = userId;
     }
+    
+     /**
+     * Gets the eventLogDetailsCollection of this EventLog.
+     * @return the eventLogDetailsCollection
+     */
+   /* public Collection<EventLogDetails> getEventLogDetails() {
+        return this.eventLogDetails;
+    }
+
+    /**
+     * Sets the eventLogDetailsCollection of this EventLog to the specified value.
+     * @param eventLogDetailsCollection the new eventLogDetailsCollection
+     */
+    /*public void setEventLogDetailsCollection(Collection<EventLogDetails> eventLogDetails) {
+        this.eventLogDetails = eventLogDetails;
+    }*/
     
     public int hashCode() {
         int hash = 0;

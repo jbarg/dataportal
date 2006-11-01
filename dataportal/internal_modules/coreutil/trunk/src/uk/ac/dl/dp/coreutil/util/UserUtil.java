@@ -143,7 +143,7 @@ public class UserUtil {
     }
          
     
-    public static User createDefaultUser(String DN) throws CannotCreateNewUserException {
+    public static User createDefaultUser(String username, String DN) throws CannotCreateNewUserException {
         User user;
         EntityManager em = CachingServiceLocator.getInstance().getEntityManager();
        
@@ -151,6 +151,7 @@ public class UserUtil {
             user = new User();
             
             user.setDn(DN);
+            user.setUserId(username);
              
             //set up default role
             Collection<Role> roles = (Collection<Role>) em.createNamedQuery("Role.findByName").setParameter("name",DPRole.USER).getResultList();

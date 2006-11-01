@@ -66,6 +66,9 @@ public class ModuleLookup implements Serializable {
     //@Enumerated(EnumType.STRING)
     private String moduleType;
 
+     @Column(name = "DATA_IN_FOLDERS")
+    private String dataInFolders;
+     
     @Column(name = "FACILITY", nullable = false)   
     private String facility;
 
@@ -143,6 +146,29 @@ public class ModuleLookup implements Serializable {
 
     public void setModuleType(String moduleType) {
         this.moduleType = moduleType;
+    }
+    
+     /**
+     * Gets the dataInFolders of this Facility.
+     * @return the dataInFolders
+     */
+    public String getDataInFolders() {
+        return this.dataInFolders;
+    }
+
+    /**
+     *  Boolean function to wrap oracle boolean Y/N null etc
+     */
+    public boolean isDataInFolders(){
+        if(getDataInFolders() != null && getDataInFolders().equalsIgnoreCase("Y")) return true;
+        else return false;
+    }
+    /**
+     * Sets the dataInFolders of this Facility to the specified value.
+     * @param dataInFolders the new dataInFolders
+     */
+    public void setDataInFolders(String dataInFolders) {
+        this.dataInFolders = dataInFolders;
     }
 
     public String getFacility() {

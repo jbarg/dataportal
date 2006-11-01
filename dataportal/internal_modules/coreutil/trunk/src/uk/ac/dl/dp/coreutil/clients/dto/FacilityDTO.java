@@ -30,6 +30,8 @@ public class FacilityDTO implements Serializable {
     
     private String active;
     
+    private boolean isDataSetInFolders;
+    
     /** Creates a new instance of FacilityDTO */
     public FacilityDTO() {
     }
@@ -39,46 +41,55 @@ public class FacilityDTO implements Serializable {
         this.setFacility(mlo.getFacility());
         this.setModuleType(mlo.getModuleType());
         this.setActive(mlo.getActive());
+        this.setIsDataSetInFolders(mlo.isDataInFolders());
     }
-
+    
    /* public String getConnection() {
         return connection;
     }
-
+    
     public void setConnection(String connection) {
         this.connection = connection;
     }*/
-
+    
     public String getPlatform() {
         return platform;
     }
-
+    
     public void setPlatform(String platform) {
         this.platform = platform;
     }
-
+    
     public String getModuleType() {
         return moduleType;
     }
-
+    
     public void setModuleType(String moduleType) {
         this.moduleType = moduleType;
     }
-
+    
     public String getFacility() {
         return facility;
     }
-
+    
     public void setFacility(String facility) {
         this.facility = facility;
     }
-
+    
     public String getActive() {
         return active;
     }
-
+    
     public void setActive(String active) {
         this.active = active;
+    }
+    
+    public boolean isIsDataSetInFolders() {
+        return isDataSetInFolders;
+    }
+    
+    public void setIsDataSetInFolders(boolean isDataSetInFolders) {
+        this.isDataSetInFolders = isDataSetInFolders;
     }
     
 }

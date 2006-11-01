@@ -106,12 +106,15 @@ public class DataReference implements Serializable {
     @Transient
     private String printURLS;
     
-       @Transient
+    @Transient
     private boolean hasNote;
-       
-        @Transient
+    
+    @Transient
     private boolean download;
-       
+    
+    @Transient
+    private String dpId;
+    
     @PrePersist
     @PreUpdate
     public void prePersist(){
@@ -219,7 +222,7 @@ public class DataReference implements Serializable {
         this.userId = userId;
     }
     
-   
+    
     
     public int hashCode() {
         int hash = 0;
@@ -239,8 +242,8 @@ public class DataReference implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
-    }   
-   
+    }
+    
     
     public boolean isSelected() {
         return selected;
@@ -254,14 +257,12 @@ public class DataReference implements Serializable {
         StringBuilder builder = new StringBuilder();
         builder.append("<table>");
         int j = 0;
-        for(Url url : urls){
-            int i = url.getUrl().lastIndexOf("/");
-            if(i == -1) i = url.getUrl().lastIndexOf("\\");
-            builder.append("<tr><td>"+url.getUrl().substring(i+1,url.getUrl().length())+"</td></tr>");
+        for(Url url : urls){           
+            builder.append("<tr><td>"+url.getName()+"</td></tr>");
             j++;
             if(j == 20 ) {
                 builder.append("<tr><td>more ...</td></tr>");
-           
+                
                 break;
             }
             
@@ -272,26 +273,32 @@ public class DataReference implements Serializable {
     
     public boolean isDataset() {
         if(getTypeOfReference().equals(DPUrlRefType.DATA_SET.toString())) return true;
+        else if(getTypeOfReference().equals(DPUrlRefType.DATA_SET_FOLDER.toString())) return true;
+        else return false;
+    }
+    
+    public boolean isDatasetInFolder(){
+        if(getTypeOfReference().equals(DPUrlRefType.DATA_SET_FOLDER.toString())) return true;
         else return false;
     }
     
     public void setDataset(boolean dataset) {
         this.dataset = dataset;
     }
-
+    
     public java.util.Collection<Url> getUrls() {
         return urls;
     }
-
+    
     public void setUrls(java.util.Collection<Url> urls) {
         this.urls = urls;
     }
     
-      public boolean isHasNote() {
+    public boolean isHasNote() {
         if(getNote() == null || getNote().equals("")) return false;
         else return true;
     }
-
+    
     public void setHasNote(boolean hasNote) {
         this.hasNote = hasNote;
     }
@@ -299,16 +306,18 @@ public class DataReference implements Serializable {
     public int getNumberOfFiles(){
         return urls.size();
     }
-
+    
     public boolean isDownload() {
         return download;
     }
-
+    
     public void setDownload(boolean download) {
         this.download = download;
     }
     
-    
+    public String getDpId(){
+        return getFacility()+"-"+getId();
+    }
     
     
 }
