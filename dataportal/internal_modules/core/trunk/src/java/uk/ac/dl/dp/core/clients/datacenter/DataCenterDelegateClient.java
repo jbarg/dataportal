@@ -62,7 +62,7 @@ public class DataCenterDelegateClient {
             dto.setStudyId((int)(Math.random()*10000L));
             dto.setFacility("ISIS");
             dto.setName(""+(int)(Math.random()*10000L)+" Random name");
-            dto.setNote("bookmark ");
+            dto.setNote("note bookmark ");
             dto.setQuery("sql select ");
             
             dd.addBookmark(sid,dto);
@@ -75,11 +75,17 @@ public class DataCenterDelegateClient {
             duto.setTypeOfReference(DPUrlRefType.DATA_SET.toString());
             duto.setTypeOfObject("txt");
             duto.setFacility("ISIS");
-            duto.setName("Bookmark");
+            duto.setName("DataReference");
             duto.setNote("Silly");
             duto.setQuery("query");
+            duto.setReferenceId(4);
+            duto.setInvestigationId(new Integer("2"));
             Collection<Url> cs = new ArrayList<Url>();
-            cs.add(new Url("srb://www.data.com"+(int)(Math.random()*10000L)));
+            Url re = new Url("srb://www.data.com"+(int)(Math.random()*10000L));
+            re.setName("Name");
+            re.setDataRefId(duto);
+            cs.add(re);
+            
             duto.setUrls(cs);
             
             dd.addDataReference(sid,duto);

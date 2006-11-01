@@ -91,6 +91,7 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
         
         Session session = new SessionUtil(sid).getSession();
         user = session.getUserId();
+      
         log.trace("starting download for user: "+user.getDn());
         GSSCredential creds = new Certificate(session.getCredential()).getCredential();
         
@@ -101,7 +102,7 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
     public boolean isFinished(){
         if(th.isFinished()){
             //send event log
-            new UserUtil(user).sendEventLog(DPEvent.TRANSFER,this.srbUrl.iterator().next()+" ...");
+            new UserUtil(user).sendEventLog(DPEvent.DOWNLOAD,this.srbUrl.iterator().next()+" ...");
             return true;
         }
         return false;

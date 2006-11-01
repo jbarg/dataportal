@@ -7,6 +7,7 @@ import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
+
 /*
  * BookmarkClient.java
  *
@@ -39,6 +40,7 @@ public class GetBookmarksClient {
             
             
             Collection<Bookmark> dto =  sless.getBookmarks(sid);
+            System.out.println("Got "+dto.size() +" bookmarks");
             int idremove = 0;
             for(Bookmark dtos : dto){
                 System.out.println("-----------------");

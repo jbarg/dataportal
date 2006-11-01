@@ -38,6 +38,8 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         
         ArrayList list = new ArrayList<FacilityDTO>();
         for(ModuleLookup fac : facilities){
+             log.debug("is datain folders "+fac.getDataInFolders());
+       
             if(fac.getActive() != null  && fac.getActive().toLowerCase().equalsIgnoreCase("Y")){
                 list.add(new FacilityDTO(fac));
             }
@@ -58,15 +60,15 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         return (Collection<ProxyServers>) em.createNamedQuery("ProxyServers.findAll").getResultList();
     }
     
-     public ProxyServers getDefaultProxyServer(){
+    public ProxyServers getDefaultProxyServer(){
         log.debug("Lookup.getProxyServer()");
         return (ProxyServers) em.createNamedQuery("ProxyServers.findById").setParameter("id", 1).getSingleResult();
     }
-     
-      public SrbServer getSRBServer(){
+    
+    public SrbServer getSRBServer(){
         log.debug("Lookup.getSRBServer()");
         return (SrbServer) em.createNamedQuery("SrbServer.findById").setParameter("id", 1).getSingleResult();
     }
-     
+    
     
 }

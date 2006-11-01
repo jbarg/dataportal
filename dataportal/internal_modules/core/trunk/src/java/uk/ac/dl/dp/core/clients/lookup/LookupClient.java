@@ -13,6 +13,7 @@ import javax.ejb.EJB;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.entity.Facility;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 import uk.ac.dl.dp.coreutil.interfaces.LookupRemote;
 
 
@@ -47,7 +48,7 @@ public class LookupClient {
             
             //LookupBean  remote = (LookupBean)ctx.lookup("LookupBeanStateless");
             //System.setProperty("org.omg.CORBA.ORBInitialHost","volga.dl.ac.uk");
-           
+            
             InitialContext ic = new InitialContext();
             //   LookupRemote sless = (LookupRemote) ic.lookup("uk.ac.dl.dp5.sessionbeans.lookup.LookupRemote");
             
@@ -56,11 +57,14 @@ public class LookupClient {
             
             System.out.println("Looking for facilities type: "+DPFacilityType.WRAPPER);
             Collection<FacilityDTO> facs = (Collection<FacilityDTO>)sless.getFacilities(DPFacilityType.WRAPPER);
-                        
+            
             for(FacilityDTO f : facs){
-                System.out.println(f.getFacility()+" has connection "+f.getModuleType());
+                System.out.println(f.getFacility()+" has connection "+f.getModuleType()+" "+f.isIsDataSetInFolders());
             }
-           
+            
+            ProxyServers p = sless.getDefaultProxyServer();
+            System.out.println(p.getProxyServerAddress());
+            //   Collection<ProxyServers> pd = sless.getProxyServers();
             
         }catch(Exception e){
             
