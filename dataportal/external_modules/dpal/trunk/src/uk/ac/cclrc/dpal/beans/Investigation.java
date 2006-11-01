@@ -71,5 +71,9 @@ public class Investigation extends Common implements Serializable {
     public boolean isAbstractNull(){
         return (investigationAbstract == null || investigationAbstract.equals("")) ? true : false;
     }
+    
+    public String getDpId(){
+       return getFacility()+"-"+getId();
+   }
 }
 

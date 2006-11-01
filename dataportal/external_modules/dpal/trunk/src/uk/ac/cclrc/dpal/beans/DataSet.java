@@ -55,5 +55,8 @@ public class DataSet extends Common implements Serializable
              " [investigation id]:"+investigationId ;
    }
 
+   public String getDpId(){
+       return getFacility()+"-"+getId();
+   }
 }
   
