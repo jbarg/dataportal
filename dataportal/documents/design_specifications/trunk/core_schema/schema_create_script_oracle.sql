@@ -29,7 +29,7 @@ NOTE VARCHAR2(4000),
 FACILITY VARCHAR2(4000),
 QUERY VARCHAR2(4000),
 INVESTIGATION_ID NUMBER,
-TYPE_OF_REFERENCE VARCHAR2(4000),
+TYPE_OF_REFERENCE VARCHAR2(10),
 REFERENCE_ID NUMBER NOT NULL,
 TYPE_OF_OBJECT VARCHAR2(4000),
 MOD_TIME TIMESTAMP(1)
@@ -96,6 +96,7 @@ PLATFORM VARCHAR2(4000),
 MODULE_TYPE VARCHAR2(256) NOT NULL,
 FACILITY VARCHAR2(256) NOT NULL,
 ACTIVE VARCHAR2(1),
+DATA_IN_FOLDERS VARCHAR2(1),
 MOD_TIME TIMESTAMP(1) NOT NULL
 )
 ;
@@ -656,7 +657,7 @@ COMMENT ON COLUMN DP_BOOKMARK.STUDY_ID IS 'The study_id in the facility catalog 
 COMMENT ON COLUMN DP_DATA_REFERENCE.TYPE_OF_REFERENCE IS 'is this a DC or DO'
 ;
 
-COMMENT ON COLUMN DP_DATA_REFERENCE.REFERENCE_ID IS 'this is the reference of the dataobject or datafile in the facility catalog. to find out which type_of_reference needs to be checked'
+COMMENT ON COLUMN DP_DATA_REFERENCE.REFERENCE_ID IS 'this is the reference of the dataset or datafile in the facility catalog. to find out which type_of_reference needs to be checked'
 ;
 
 COMMENT ON COLUMN DP_DATA_REFERENCE.TYPE_OF_OBJECT IS 'e.g. filetype'
@@ -671,7 +672,7 @@ COMMENT ON COLUMN DP_DATA_REF_AUTHORISATION.AUTHORISED_USER_ID IS 'the one recei
 COMMENT ON COLUMN DP_DATA_REF_AUTHORISATION.AUTH_TYPE IS 'perhaps data references, bookmarks, both, other'
 ;
 
-COMMENT ON COLUMN DP_FACILITY.DATA_IN_FOLDERS IS 'if this is set to ''Y'' or ''y'' then the datafile location is actually a directory which holds all the data for the parent dataset. e.g. as used in e-materials with srb locations holding all the data for the datasets.'
+COMMENT ON COLUMN DP_FACILITY.DATA_IN_FOLDERS IS 'if this is set to ''Y'' or ''y'' then the datafile location is actually a directory which holds all the data for the parent dataset. e.g. as used in e-materials with srb locations holding all the data for the datasets. - this is scheduled to be removed as it has now been moved to it''s proper place - i.e. in dp_module_lookup.'
 ;
 
 COMMENT ON COLUMN DP_MODULE_LOOKUP.CONNECTION IS 'e.g. for DPAL this would be a Database Connect String and for ACM this might be a Web Services End Point'
@@ -681,6 +682,9 @@ COMMENT ON COLUMN DP_MODULE_LOOKUP.MODULE_TYPE IS 'e.g. ACM/DPAL'
 ;
 
 COMMENT ON COLUMN DP_MODULE_LOOKUP.ACTIVE IS 'e.g. if set to null, Y or y  then service is active else it is not'
+;
+
+COMMENT ON COLUMN DP_MODULE_LOOKUP.DATA_IN_FOLDERS IS 'if this is set to ''Y'' or ''y'' then the datafile location is actually a directory which holds all the data for the parent dataset. e.g. as used in e-materials with srb locations holding all the data for the datasets.'
 ;
 
 COMMENT ON COLUMN DP_SESSION.CREDENTIAL_TYPE IS 'e.g. common use is delegated proxy'
