@@ -51,11 +51,15 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             .bpui_progressbar_percentageText {
             text-align: center;
             }
+            body {
+            background: #E8E8E8 !important;
+            }
 
         </style>        
     </head>
     <body>
         <br />
+        <br >
         <p align="center"><font size="2">Error downloading:</font>   <%= request.getParameter("name") %></p>               
       
       

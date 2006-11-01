@@ -119,9 +119,11 @@
                                                     <h:panelGroup>
                                                         <h:panelGrid columns="1" >
                                                             <table width="150" >
-                                                                <td nowrap="false" width="150">
-                                                                    <h:outputText value="#{data.note}" />
-                                                                </td>
+                                                                <tr>
+                                                                    <td nowrap="false" width="150">
+                                                                        <h:outputText value="#{data.note}" />
+                                                                    </td>
+                                                                </tr>
                                                             </table>
                                                         </h:panelGrid>
                                                     </h:panelGroup>

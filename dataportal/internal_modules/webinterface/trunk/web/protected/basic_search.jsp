@@ -6,13 +6,14 @@
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
-
-   
+    
+    
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
         <title>CCLRC Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
-      
+        <script language="javascript" src="../css/CastleBusyBox.js"></script>
+        
     </head>
     <body>
         <f:view>
@@ -21,7 +22,7 @@
                  <tbody>
                     <tr>
                         <td width="100%">
-                        
+                            
                             <table  border="0" width="100%" >
                                  <tbody>
                                     <tr>
@@ -31,7 +32,7 @@
                                                 <c:import url="inc/header.jsp" />
                                             </f:subview>
                                         </td>
-                                     
+                                        
                                         <td width="100%" align="right">
                                             <f:subview id="header_2">
                                                 <c:import url="inc/header_2.jsp" />
@@ -39,9 +40,9 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                    
+                                
                             </table>
-            
+                            
                             <table style="margin-top:-30px" border="0" width="100%">
                                  <tbody>
                                     <tr>
@@ -56,7 +57,7 @@
                                             <t:div id="subnavigation_outer">
                                                 <t:div id="subnavigation">
                                                     <t:panelNavigation2 id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
-                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
+                                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
                                                         <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
                                                     </t:panelNavigation2>
                                                 </t:div>
@@ -71,7 +72,7 @@
                                                         </td>
                                                         <td align="left" >
                                                             <h:outputText styleClass="header_top" value="Basic Search"/> 
-                               
+                                                            
                                                         </td>
                                                         <td align="right">
                                                             <f:subview id="title">
@@ -90,7 +91,7 @@
                                                             <f:subview id="body">
                                                                 <c:import url="inc/basic_search_inc_1.jsp" />
                                                             </f:subview>
-                         
+                                                            
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -98,12 +99,12 @@
                                             <br />
                                             <br />
                                             <hr size="-1" width="100%"  />
-                    
+                                            
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                           
+                            
                             <table border="0" width="100%" align="right">
                                  <tbody>
                                     <tr>
@@ -118,7 +119,9 @@
                 </tbody>
             </table>
         </f:view>
-       
+        
+      
+        
     </body>
-
+    
 </html>
