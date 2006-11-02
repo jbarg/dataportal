@@ -309,40 +309,29 @@ public class DPAccessLayer {
 
     }
 
-    //the sql needs to be built on the fly so there is no need to make it a pl/sql call as the sql needs parsing each time anyway
-    public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
-       log.debug("getInvestigationsAnd()");
+    // removed the dynamic building of sql in java and moved to pl/sql layer
+     public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
+        log.debug("getInvestigationsOr()");
 
-        //convert arraylist to array
+        //convert keyword_list to array
         String[] keyword_array = new String[keyword_list.size()] ;
         ListIterator li = keyword_list.listIterator() ;
-        int j = 0 ;
+        int i = 0 ;
         while(li.hasNext()) {
-            keyword_array[j++] = (String)li.next() ;
+            keyword_array[i++] = ((String)li.next()).toLowerCase() ;
         }
 
-        StringBuffer sb = new StringBuffer("select * from (select i.title as title,i.id as id,i.inv_type as investigation_type," +
-                                                                  "i.inv_abstract as inv_abstract " +
-                                           "from investigation i where i.title is not null and id in (") ;
-
-        for (int i = 0 ; i < keyword_array.length; i ++) {
-           sb.append("select  k.investigation_id " +
-                     "from keyword k " +
-                     "where " +
-                     "lower(k.name) = '" + keyword_array[i].toLowerCase() +"' " );
-           if( (i + 1) < keyword_array.length) {
-              sb.append ("\nINTERSECT\n") ;
-           }
-           else {
-              sb.append ("\n)) where rownum < 501") ;
-           }
-         }
-
-         log.debug ("query: " + sb.toString()) ;
-         //System.out.println("query: " + sb.toString()) ;
-
-         r = s.executeQuery(sb.toString());
-
+        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
+        ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
+        //getInvestigationsAnd potentially more scaleable but can lead to false
+        //positives if the same investigation has links to the same keyword in different cases
+        //ideally these should be removed by some constraint.
+        String query = "begin ? := dpaccess.getInvestigationsAnd1(?,'"+DN+"'); end;";
+        OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
+        cs.registerOutParameter(1, OracleTypes.CURSOR);
+        cs.setARRAY( 2, array_to_pass );
+        cs.execute();
+        r=(ResultSet)cs.getObject(1) ;
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
             Investigation st = new Investigation() ;
@@ -354,8 +343,11 @@ public class DPAccessLayer {
             inv_array.add(st) ;
         }
         r.close() ;
+        cs.close() ;
         return MergeDuplicateInvestigations(inv_array) ;
+
     }
+
 
     //////////////////////////////////////////////////////////////
 
