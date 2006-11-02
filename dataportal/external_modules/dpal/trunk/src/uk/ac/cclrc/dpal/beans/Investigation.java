@@ -34,7 +34,7 @@ public class Investigation extends Common implements Serializable {
     
     
     //setters
-    public void setKeyword(String keyword) {
+    public void addKeyword(String keyword) {
         this.keyword.add(keyword) ;
     }
     
