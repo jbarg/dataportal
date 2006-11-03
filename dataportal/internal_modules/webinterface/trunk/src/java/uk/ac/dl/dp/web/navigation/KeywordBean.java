@@ -11,6 +11,11 @@ package uk.ac.dl.dp.web.navigation;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.TreeMap;
 import uk.ac.cclrc.dpal.DPAccessLayer;
@@ -42,29 +47,33 @@ public class KeywordBean extends AbstractApplicationBean {
     public void completeCity(FacesContext context, String prefix, CompletionResult result) {
         String defaultFacility= getVisit().getUserPreferences().getDefaultFacility();
         log.trace("Completing City - " + prefix +" for default: "+defaultFacility);
-        ArrayList<String> words2 = new ArrayList<String>();
-        
+        LinkedHashSet<String> words2 = new LinkedHashSet<String>();
+                
         for(String item : getVisitData().getCurrentSelectedFacilities()){
             log.trace("ApplicationBean.getKeywords: "+item);
             String[] keywords2 = ApplicationBean.getKeywords(item);
             for(String j : keywords2){
                 words2.add(j);
+                if(item.equals("EMAT")) log.trace(j);
             }
+           
         }
         
+        String[] sorted = words2.toArray(new String[words2.size()]);
+        //try and sort words
+        Arrays.sort(sorted);
+        
         if(prefix.indexOf(" ") != -1 ){
+            log.trace("Splitting by space");
             String[] words = prefix.split(" ");
-            AutoCompleteUtilities.addMatchingItems(words2.toArray(new String[words2.size()]), words[words.length-1], result);
-            
-            
+            AutoCompleteUtilities.addMatchingItems(sorted, words[words.length-1], result);
         } else if(prefix.indexOf("%20") != -1 ){
+            log.trace("splitting by %20");
             String[] words = prefix.split("%20");
-            AutoCompleteUtilities.addMatchingItems(words2.toArray(new String[words2.size()]), words[words.length-1], result);
-            
+            AutoCompleteUtilities.addMatchingItems(sorted, words[words.length-1], result);
         } else{
-            AutoCompleteUtilities.addMatchingItems(words2.toArray(new String[words2.size()]), prefix, result);
-            
-            
+            log.trace("nothing split0");
+            AutoCompleteUtilities.addMatchingItems(sorted, prefix, result);
         }
     }
     

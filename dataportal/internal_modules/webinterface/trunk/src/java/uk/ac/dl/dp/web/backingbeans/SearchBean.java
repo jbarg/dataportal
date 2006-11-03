@@ -15,6 +15,7 @@ import java.util.*;
 import javax.faces.context.FacesContext;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
+import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
@@ -32,12 +33,29 @@ public class SearchBean extends AbstractRequestBean {
     
     //componets on basic search page
     private String keyword;
-    private String keywords[];    
+    private String keywords[];
     private List<String> facilities ;
     
     //default it to AND
-    private String logicalExpression  ="AND";
+    private String  logicalExpression ="AND";
+            
+    private List<SelectItem> logicalExpressions;
     
+    public List<SelectItem> getLogicalExpressions() {
+        List<SelectItem> items = new ArrayList<SelectItem>();
+        
+        if(getVisit().isCurrentFacilitysDataInFolder()){
+            items.add(new SelectItem("AND","One Keyword Only"));
+        } else{
+            items.add(new SelectItem("AND","AND"));
+            items.add(new SelectItem("OR","OR"));
+        }
+        return items;
+    }
+    
+    public void setLogicalExpressions(List<SelectItem> searchedUsers) {
+        this.logicalExpressions = logicalExpressions;        
+    }
     
     /** Creates a new instance of SearchBean */
     public SearchBean() {
@@ -48,13 +66,21 @@ public class SearchBean extends AbstractRequestBean {
      * Splits it into an array of keywords by ' ' and trims
      */
     public void setKeyword(String keyword){
-        String[] keys = keyword.split(" ");
-        ArrayList<String> keys2 = new ArrayList<String>();
-        for(String k : keys){
-            if(!k.trim().equals("")) keys2.add(k.trim());
+        
+        
+        if(!getVisit().isCurrentFacilitysDataInFolder()){
+            String[] keys = keyword.split(" ");
+            ArrayList<String> keys2 = new ArrayList<String>();
+            for(String k : keys){
+                if(!k.trim().equals("")) keys2.add(k.trim());
+            }
+            this.setKeywords(keys2.toArray(new String[keys2.size()]));
+            this.keyword = keyword;
+        } else{
+            keyword = keyword.trim();
+            this.setKeywords(new String[]{keyword});
+            this.keyword = keyword;
         }
-        this.setKeywords(keys2.toArray(new String[keys2.size()]));
-        this.keyword = keyword;
     }
     
     public String getKeyword(){
@@ -109,7 +135,13 @@ public class SearchBean extends AbstractRequestBean {
                 for(String fac : facs2){
                     log.trace("Completed: "+fac);
                 }
-                Thread.sleep(250);
+                
+                //when one returend then display
+              /*  if(facs2 != null && facs2.size() != 0){
+                    //got some results
+                    break;
+                }*/
+                
                 //TODO put max wait in DB
                 //if more than max wait and not finished
                 if(((new Date().getTime() - time)/1000) > WebConstants.MAXIMIUM_SEARCH_TIME) {
@@ -120,6 +152,7 @@ public class SearchBean extends AbstractRequestBean {
                     } else break;
                     
                 }
+                Thread.sleep(250);
             } catch (InterruptedException ex) {}
         }
         
@@ -130,10 +163,12 @@ public class SearchBean extends AbstractRequestBean {
         for(Investigation invest: investigations){
             log.trace(invest);
             //TODO REMOVE
-            log.trace("Setting dummy abstracts");
-            if((j % 2) == 0) invest.setInvestigationAbstract("This is a dummy abstract added by the Data Portal.   In the future there should be a large absrtact here. The project aims to provide easy, transparent access to experimental, observational, simulation and visualisation data kept on a multitude of systems and sites. Further more it will provide links to other web/grid services, which will allow the scientists to further use the selected data, e.g. via data mining, simulations or visualisation. The Data Portal will aim to work as a broker between the scientists, the facilities, the data and other services. The problem addressed is that currently the scientific data is stored distributed across a multitude of sites and systems. Scientists have only very limited support in accessing, managing and transferring their data or indeed in identifying new data resources. In a true Grid environment it is essential to ease many of these processes and the aim of the Data Portal is to help with automating many of these tasks. The Data Portal originally used Suns Java 2 Enterprise Edition (J2EE) but was replaced using a component based web service model. ");
-            else invest.setInvestigationAbstract("This is a short one added");
-            j++;
+            if( invest.getInvestigationAbstract() == null || invest.getInvestigationAbstract().equals("")){
+                log.trace("Setting dummy abstracts");
+                if((j % 2) == 0) invest.setInvestigationAbstract("This is a dummy abstract added by the Data Portal.   In the future there should be a large absrtact here. The project aims to provide easy, transparent access to experimental, observational, simulation and visualisation data kept on a multitude of systems and sites. Further more it will provide links to other web/grid services, which will allow the scientists to further use the selected data, e.g. via data mining, simulations or visualisation. The Data Portal will aim to work as a broker between the scientists, the facilities, the data and other services. The problem addressed is that currently the scientific data is stored distributed across a multitude of sites and systems. Scientists have only very limited support in accessing, managing and transferring their data or indeed in identifying new data resources. In a true Grid environment it is essential to ease many of these processes and the aim of the Data Portal is to help with automating many of these tasks. The Data Portal originally used Suns Java 2 Enterprise Edition (J2EE) but was replaced using a component based web service model. ");
+                else invest.setInvestigationAbstract("This is a short one added");
+                j++;
+            }
         }
         //if not results infom user
         if(investigations.size() == 0){
@@ -161,8 +196,8 @@ public class SearchBean extends AbstractRequestBean {
         //set investigations
         log.debug("Adding found investigations to session, size: "+investigations.size());
         getVisitData().setSearchedInvestigations(investigations);
-       
-         return NavigationConstants.SEARCH_SUCCESS;     
+        
+        return NavigationConstants.SEARCH_SUCCESS;
         
     }
     
@@ -173,8 +208,8 @@ public class SearchBean extends AbstractRequestBean {
     
     public void setKeywords(String[] keywords) {
         this.keywords = keywords;
-    }    
-   
+    }
+    
     public List<String> getFacilities() {
         return facilities;
     }
@@ -184,12 +219,16 @@ public class SearchBean extends AbstractRequestBean {
     }
     
     public String getLogicalExpression() {
-        
-        return logicalExpression;
+        log.trace("LogicalExpression: "+logicalExpression);
+        if(logicalExpression == null) return "AND";
+        else return logicalExpression;
     }
     
     public void setLogicalExpression(String logicalExpression) {
+        log.trace("Setting loca expression: "+logicalExpression);
         this.logicalExpression = logicalExpression;
-    }    
+    }
+    
+  
     
 }

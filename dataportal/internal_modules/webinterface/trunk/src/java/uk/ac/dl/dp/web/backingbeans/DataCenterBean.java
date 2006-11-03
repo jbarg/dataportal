@@ -163,7 +163,7 @@ public class DataCenterBean extends SortableList {
                     
                     String param = current.getValue().toString();
                     log.trace("Param value: "+param);
-                    Url df = getDataUrl(param);
+                    Url df = getVisitData().getDataUrlFromCart(param);
                     if(df == null) break;
                     log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
                     df.setDownload(!df.isDownload());
@@ -175,7 +175,7 @@ public class DataCenterBean extends SortableList {
                     
                     String param = current.getValue().toString();
                     log.trace("Param value: "+param);
-                    DataReference df = getDataRef(param);
+                    DataReference df = getVisitData().getDataReferenceFromCart(param);
                     
                     if(df == null) break;
                     log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
@@ -186,7 +186,7 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-    private DataReference getDataRef(String param) {
+   /* private DataReference getDataRef(String param) {
         String fac = param.split("-")[0];
         String id = param.split("-")[1];
         log.trace("looking for:"+ fac+"-"+id);
@@ -199,9 +199,9 @@ public class DataCenterBean extends SortableList {
             }
         }
         return null;
-    }
+    }*/
     
-    private Url getDataUrl(String param) {
+   /*private Url getDataUrl(String param) {
         String fac = param.split("-")[0];
         String data_ref_id = param.split("-")[1];
         String url_id = param.split("-")[2];
@@ -219,7 +219,8 @@ public class DataCenterBean extends SortableList {
         }
         log.trace("Nothing found with param: "+param);
         return null;
-    }
+    }*/
+    
     //This listens to changes in the users isSelected.  This is because the list could be
     //larger than one page so have to do it this way
     public void listen(ValueChangeEvent e){

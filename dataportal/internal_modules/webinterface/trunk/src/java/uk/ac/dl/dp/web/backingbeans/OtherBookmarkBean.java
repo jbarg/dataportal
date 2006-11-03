@@ -163,7 +163,7 @@ public class OtherBookmarkBean extends SortableList {
         log.trace("viewing studyId: "+qrdto.getStudyId());
         Collection<Investigation> investigations = null;
         try {
-            investigations = QueryDelegate.getInstance().getInvestigationByStudyId(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
+            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
             error("Error:  Unable to search for "+qrdto.getName());

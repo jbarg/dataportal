@@ -22,6 +22,9 @@ import uk.ac.dl.dp.coreutil.entity.DataReference;
 import org.apache.log4j.*;
 import javax.faces.model.SelectItem;
 import org.apache.myfaces.custom.tree2.*;
+import uk.ac.dl.dp.coreutil.entity.Url;
+import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
+import uk.ac.dl.srbapi.util.AccessInfo;
 /**
  *
  * @author gjd37
@@ -61,12 +64,14 @@ public class VisitData implements Serializable {
     
     private Collection<DataReference> currentDataReferences;
     
-     private TreeNode dataSetTree;
-     
+    private TreeNode dataSetTree;
+    
+    private Collection<AccessInfo> accessInfo = null;
+    
     /** Creates a new instance of VisitData */
     public VisitData() {
     }
-      
+    
     //current investigations that the user has picked from the investigations page
     public Collection<Investigation> getCurrentInvestigations() {
         return currentInvestigations;
@@ -77,19 +82,19 @@ public class VisitData implements Serializable {
         
         //construct tree data
     }
-    //check weather user has picked investigations, used in the nav bar 
+    //check weather user has picked investigations, used in the nav bar
     public boolean isInvestigations(){
         if(searchedInvestigations == null) return false;
         else return true;
     }
     
     //same with data sets
-     public boolean isDatasets(){
+    public boolean isDatasets(){
         if(currentInvestigations == null) return false;
         else return true;
     }
     
-      //current datasets that the user has picked from the investigations page , used in data sets page  
+    //current datasets that the user has picked from the investigations page , used in data sets page
     public Collection<DataSet> getCurrentDatasets() {
         return currentDatasets;
     }
@@ -98,8 +103,8 @@ public class VisitData implements Serializable {
         this.currentDatasets = currentDatasets;
     }
     
-      //current datafiles that the user has picked from the investigations page , used in data sets page
-    public Collection<DataFile> getCurrentDatafiles() {        
+    //current datafiles that the user has picked from the investigations page , used in data sets page
+    public Collection<DataFile> getCurrentDatafiles() {
         return currentDatafiles;
     }
     
@@ -114,6 +119,8 @@ public class VisitData implements Serializable {
     
     public void setSearchedInvestigations(Collection<Investigation> searchedInvestigations) {
         this.searchedInvestigations = searchedInvestigations;
+        this.setInvestigationExpanded(false);
+        this.setInvestigationsSelected(false);
     }
     
     //current bookmarks from db
@@ -121,18 +128,18 @@ public class VisitData implements Serializable {
         return currentBookmarks;
     }
     
-    public void setCurrentBookmarks(Collection<Bookmark> currentBookmarks) {        
-        this.currentBookmarks = currentBookmarks;     
+    public void setCurrentBookmarks(Collection<Bookmark> currentBookmarks) {
+        this.currentBookmarks = currentBookmarks;
     }
-     //current DataReference from db
+    //current DataReference from db
     public Collection<DataReference> getCurrentDataReferences() {
         return currentDataReferences;
     }
     
     public void setCurrentDataReferences(Collection<DataReference> currentDataReferences) {
         this.currentDataReferences = currentDataReferences;
-    }  
-   
+    }
+    
     //list of autherised people user given to the see user's data
     public Collection<DataRefAuthorisation> getCurrentGivenAuthorisations() {
         return currentGivenAuthorisations;
@@ -142,7 +149,7 @@ public class VisitData implements Serializable {
         this.currentGivenAuthorisations = currentGivenAuthorisations;
     }
     
-     //list of autherised people who have given user to see thier data   
+    //list of autherised people who have given user to see thier data
     public Collection<DataRefAuthorisation> getCurrentReceivedAuthorisations() {
         return currentRecievedAuthorisations;
     }
@@ -173,7 +180,7 @@ public class VisitData implements Serializable {
     public void setBookmarkEnabled(boolean bookmarkEnabled) {
         this.bookmarkEnabled = bookmarkEnabled;
     }
-     //is datacenter enabled from the authoirsation   
+    //is datacenter enabled from the authoirsation
     public boolean isDatacenterEnabled() {
         return datacenterEnabled;
     }
@@ -201,35 +208,158 @@ public class VisitData implements Serializable {
     public void setSearchedUsers(List<SelectItem> searchedUsers) {
         this.searchedUsers = searchedUsers;
     }
+    
     //is searched been done
     public boolean isSearched(){
         if(this.searchedUsers == null) return false;
         else return true;
-    }        
-
+    }
+    
     public boolean isInvestigationExpanded() {
         return investigationExpanded;
     }
-
+    
     public void setInvestigationExpanded(boolean investigationExpanded) {
         this.investigationExpanded = investigationExpanded;
     }
-
-
+    
+    
     public TreeNode getDataSetTree() {
         return dataSetTree;
     }
-
+    
     public void setDataSetTree(TreeNode dataSetTree) {
         this.dataSetTree = dataSetTree;
     }
-
+    
     public boolean isInvestigationsSelected() {
         return investigationsSelected;
     }
-
+    
     public void setInvestigationsSelected(boolean investigationsSelected) {
         this.investigationsSelected = investigationsSelected;
     }
     
+    public Collection<AccessInfo> getAccessInfo() {
+        return accessInfo;
+    }
+    
+    public void setAccessInfo(Collection<AccessInfo> accessInfo) {
+        this.accessInfo = accessInfo;
+    }
+    
+    //access methods to search and access Data Sets and file by their unique ID
+    public Investigation getInvestigationFromSearchedData(String ID) {
+        String fac = ID.split("-")[0];
+        String id = ID.split("-")[1];
+        
+        for(Investigation file : getCurrentInvestigations()){
+            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+                log.debug("Found invest: "+file);
+                return file;
+            }
+        }
+        return null;
+    }
+    
+    //access methods to search and access Data Sets and file by their unique ID
+    public DataSet getDataSetFromSearchedData(String ID){
+        String fac = ID.split("-")[0];
+        String id = ID.split("-")[1];
+        
+        for(DataSet file : getCurrentDatasets()){
+            log.trace(file.getDpId());
+            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+                log.debug("Found dataset: "+file);
+                return file;
+            }
+        }
+        return null;
+    }
+    
+    //access methods to search and access Data Sets and file by their unique ID
+    public DataFile getDataFileFromSearchedData(String ID){
+        String fac = ID.split("-")[0];
+        String id = ID.split("-")[1];
+        
+        for(DataFile file : getCurrentDatafiles()){
+            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+                log.debug("Found datafile: "+file);
+                return file;
+            }
+        }
+        return null;
+    }
+    
+    //access methods to search and access Data Sets and file by their unique ID
+    public DataReference getDataReferenceFromCart(String ID){
+        String fac = ID.split("-")[0];
+        String id = ID.split("-")[1];
+        
+        for(DataReference file :getCurrentDataReferences()){
+            log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
+            if(file.getId().toString().equals(id) && file.getFacility().equals(fac) ){
+                log.debug("Found dataref: "+file);
+                return file;
+            }
+        }
+        return null;
+    }
+    
+    //access methods to search and access Data Sets and file by their unique ID
+    public Url getDataUrlFromCart(String ID){
+        String fac = ID.split("-")[0];
+        String data_ref_id = ID.split("-")[1];
+        String url_id = ID.split("-")[2];
+        
+        for(DataReference file : getCurrentDataReferences()){
+            if(file.getId().toString().equals(data_ref_id) && file.getFacility().equals(fac) ){
+                log.debug("Found dataref: "+file);
+                Collection<Url> urls = file.getUrls();
+                for(Url url : urls){
+                    if(url.getId().toString().equals(url_id)){
+                        return url;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    public synchronized String[] getSearchedSRBURLs() {
+        Collection<String> urls = new ArrayList<String>();
+        for(DataFile file : getCurrentDatafiles()){
+            if(file.isDownload()){
+                log.debug("Found datafile to download: "+file);
+                urls.add(file.getUri());
+                //now set to false
+                // file.setDownload(false);
+            }
+        }
+        
+        return urls.toArray(new String[urls.size()]);
+    }
+    
+    public synchronized String[] getCartSRBURLs() {
+        Collection<String> urls = new ArrayList<String>();
+        for(DataReference file : getCurrentDataReferences()){
+            if(file.isDownload() && file.getTypeOfReference().equals(DPUrlRefType.FILE.toString())){
+                for(Url url : file.getUrls()){
+                    log.debug("Found dataref to download: "+file);
+                    urls.add(url.getUrl());
+                }
+            } else{
+                for(Url url : file.getUrls()){
+                    if(url.isDownload()){
+                        log.debug("Found datafile to download: "+url);
+                        urls.add(url.getUrl());
+                        //now set to false
+                        // file.setDownload(false);
+                    }
+                }
+            }
+        }
+        
+        return urls.toArray(new String[urls.size()]);
+    }
 }
