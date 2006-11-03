@@ -316,7 +316,7 @@
                         <f:facet name="imageJ">
                             <h:panelGroup>
                             
-                                <h:commandLink  onclick="download('#{node.identifier}','FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
+                                <h:commandLink  onclick="download('#{node.identifier}','DATA_FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
                                     <h:outputText value="Launch via ImageJ" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                                             
                                 </h:commandLink>                           
@@ -348,7 +348,7 @@
                                 <t:graphicImage value="../../images/document.png" border="0"/>                                   
                                 </h:commandLink>--%>
                         
-                                <h:commandLink onclick="download('#{node.identifier}','FILE','DATA_SETS'); return false;" style="color:black" id="downloadname12">
+                                <h:commandLink onclick="download('#{node.identifier}','DATA_FILE','DATA_SETS'); return false;" style="color:black" id="downloadname12">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
                                     <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     <f:param name="id16" value="#{node.identifier}"/>              

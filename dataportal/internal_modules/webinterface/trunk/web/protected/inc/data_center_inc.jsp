@@ -60,15 +60,15 @@
                                                     
                                                 </a4j:commandLink> 
                                                 
-                                              <%--   <h:panelGrid columns="4" rendered="#{data.dataset && data.datasetInFolder}"> --%>
+                                                <%--   <h:panelGrid columns="4" rendered="#{data.dataset && data.datasetInFolder}"> --%>
                                                 <h:commandLink  rendered="#{data.dataset && data.datasetInFolder}" disabled="true" style="color:black" id="view-1">
                                                     
                                                     <%--<h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">--%>
-                                                    <t:graphicImage id="down-1" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                                                    <t:graphicImage id="down-f-1" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                                    <%-- <t:graphicImage id="down-1" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                                    <t:graphicImage id="down-f-1" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>--%>
                                                     
-                                                    <t:graphicImage id="up-1" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                                                    <t:graphicImage id="up-f-1" value="../../images/blue-folder-open.png" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                                                    <t:graphicImage id="up-1" value="../../images/button_minus1.gif"  border="0"/>
+                                                    <t:graphicImage id="up-f-1" value="../../images/blue-folder-open.png"  border="0"/>
                                                     
                                                 </h:commandLink>
                                                 
@@ -78,8 +78,7 @@
                                                     <h:outputText value="                  " />
                                                     <h:outputText value="                  " />
                                                     
-                                                    <h:commandLink  rendered="#{!data.dataset}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
-                                                        
+                                                    <h:commandLink  rendered="#{!data.dataset}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
                                                         <t:graphicImage value="../../images/document.png" border="0"/>                                   
                                                     </h:commandLink>
                                                     
@@ -280,12 +279,12 @@
                                                         
                                                         <t:graphicImage rendered="#{!url.imageJ}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>
                                                         
-                                                        <h:commandLink rendered="#{url.imageJ}" onclick="download('#{url.dpId}','DATA_CENTER_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
+                                                        <h:commandLink rendered="#{url.imageJ}" onclick="download('#{url.dpId}','DATA_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
                                                             <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
                                                             
                                                         </h:commandLink>
                                                         
-                                                        <h:commandLink onclick="download('#{url.dpId}','DATA_CENTER_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
+                                                        <h:commandLink onclick="download('#{url.dpId}','DATA_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
                                                             <h:outputText  value="#{url.name}" style="font-size: 10px"/>                         
                                                         </h:commandLink>
                                                         <h:outputText escape="false" value=" &nbsp;&nbsp;&nbsp;" />
@@ -345,7 +344,7 @@
                                         <br />
                                         <h:panelGrid  rendered="#{datacenterBean.populated}" width="95%" columns="8">
                                             
-                                            <h:commandButton onclick="download('#{node.identifier}','DOWNLOAD','DATA_CENTER_DOWNLOAD'); return false;" action="#{datasetTree.select}" title="Download selections" value="Download selections"/>
+                                            <h:commandButton onclick="download('#{node.identifier}','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;" action="#{datasetTree.select}" title="Download selections" value="Download selections"/>
                                             &nbsp;
                                             <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
                                                 
