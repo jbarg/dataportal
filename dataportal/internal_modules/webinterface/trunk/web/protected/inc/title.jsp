@@ -5,7 +5,7 @@
     <br />
     <i><font size="-2">
     <b>User:</b>
-    <h:outputText value="#{visit.dn}"/> 
+    <h:outputText value="#{visit.name}"/> 
     <br />
     <b>Expire time: </b>
      

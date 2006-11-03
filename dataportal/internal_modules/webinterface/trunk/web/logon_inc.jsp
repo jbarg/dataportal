@@ -44,7 +44,7 @@
     <br />
     <br />
     <h:outputText  styleClass="nodeFolder" value="Goto "/> 
-    <h:commandLink  onclick="window.open('http://tiber.dl.ac.uk:8080/myproxy')" target="_blank">
+    <h:commandLink  onclick="window.open('http://tiber.dl.ac.uk:8080/myproxy'); return false;" target="_blank">
         <h:outputText style="color:blue" styleClass="nodeFolder" value="MyProxy Upload Home"/>
     </h:commandLink> 
     <h:outputText  styleClass="nodeFolder" value=" to upload credentials" />

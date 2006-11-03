@@ -79,14 +79,12 @@
             </s:selectManyPicklist>--%>
            
             <%-- <h:selectManyListbox id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >--%>
-            <h:selectManyListbox id="facilities" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >
-      
-                <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplay" />
+            <h:selectManyListbox id="facilities" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >      
+                <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplay,radio" />
                 <f:selectItems value="#{visit.facilities}"/>
                 <f:validateLength minimum="1" />
             </h:selectManyListbox>
-                      
-              
+                               
                
             <h:outputText id="facilityDisplay" value="#{visit.visitData.currentSelectedFacilities}" style="font-size:14px"/>
             
@@ -122,7 +120,8 @@
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
-            </t:popup>       
+            </t:popup> 
+            
             <%--<s:inputSuggest id="keyword" value="#{searchBean.keyword}" required="true">
             <f:selectItems value="#{keyword.keywords}"/>
             </s:inputSuggest>--%>
@@ -135,11 +134,8 @@
 
             <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
             <h:selectOneRadio style="font-size:14px" id="radio" value="#{searchBean.logicalExpression}" >
-                <f:selectItem itemLabel="AND" itemValue="AND" />
-                <f:selectItem itemLabel="OR" itemValue="OR" />
-            </h:selectOneRadio>
-            
-           
+                 <f:selectItems value="#{searchBean.logicalExpressions}"/>              
+            </h:selectOneRadio>           
                 
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                 closePopupOnExitingPopup="true"
