@@ -14,7 +14,7 @@ import java.io.Serializable;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
@@ -43,15 +43,15 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     private Collection<DPRole> roles;
     private String sid;
     private boolean isAdmin = false;
-
+    
     private UserPreferencesDTO userPreferences;
     
-    private SessionDTO session;        
+    private SessionDTO session;
     
     private String investigationSort;
     
     private String width ;
-        
+    
     private HashMap<String, SRBFileManagerThread> srbManager = new HashMap<String, SRBFileManagerThread>();
     
     private List<SelectItem> facilities;
@@ -87,7 +87,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
                 isAdmin = true;
                 break;
             }
-        }       
+        }
         
         //set session facility list
         Collection<FacilityDTO> facs = this.session.getFacilities();
@@ -111,9 +111,13 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     public Collection<DPRole> getRoles(){
         return this.roles;
     }
-        
+    
     public String getDn() {
         return dn;
+    }
+    
+    public String getName(){
+        return session.getName();
     }
     
     public String getSid() {
@@ -122,8 +126,8 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public boolean isIsAdmin() {
         return isAdmin;
-    }  
-      
+    }
+    
     public UserPreferencesDTO getUserPreferences() {
         return userPreferences;
     }
@@ -158,7 +162,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         
         this.width = String.valueOf(width_int);
     }
-            
+    
     
     public SRBFileManagerThread getSrbManager(String param) {
         return srbManager.get(param);
@@ -169,7 +173,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.srbManager.put(param, srbManager);
         //}
     }
-        
+    
     public void removeSrbManager(String param) {
         if(this.srbManager.containsKey(param)){
             log.trace("removing "+param+" from cache");
@@ -179,7 +183,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public boolean contains(String param){
         return this.srbManager.containsKey(param);
-    }    
+    }
     
     
     public VisitData getVisitData() {
@@ -196,15 +200,31 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public void setSearchData(SearchData searchData) {
         this.searchData = searchData;
-    }       
-
+    }
+    
     public List<SelectItem> getFacilities() {
         return facilities;
     }
-
+    
     public void setFacilities(List<SelectItem> facilities) {
         this.facilities = facilities;
     }
     
+    public boolean isCurrentFacilitysDataInFolder(){
+        //check if EMAT is selected as a keyword
+        Collection<String> facilities = getVisitData().getCurrentSelectedFacilities();
+        Collection<FacilityDTO> facs = getVisit().getSession().getFacilities();
+        
+        //TODO move to usit methd
+        boolean isFolderData = false;
+        for(FacilityDTO fac: facs){
+            for(String fac_name : facilities){
+                if(fac.isIsDataSetInFolders() && fac.getFacility().equals(fac_name)){
+                    isFolderData = true;
+                }
+            }
+        }
+        return isFolderData;
+    }
     
 }

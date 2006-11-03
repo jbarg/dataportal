@@ -21,7 +21,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import uk.ac.dl.srbapi.srb.*;
-
+import uk.ac.dl.dp.web.util.Util;
 
 /**
  *
@@ -66,96 +66,113 @@ public class DownloadServlet extends HttpServlet {
             return ;
         }
         
-        String id = req.getParameter("url");
-        String type = req.getParameter("type");
-        String from = req.getParameter("from");
+        String ID = req.getParameter("url");
+        String TYPE = req.getParameter("type");
+        String FROM  = req.getParameter("from");
+        
         String[] srbUrl = null;
         String name = null;
         File srbDownload = null;
         
-        if(from.equals("DATA_CENTER")){
-            if(type.startsWith("DATA_CENTER_FILE")){
-                Url file = getDataUrl(id,visit);
+        
+        if(FROM.equals(DownloadConstants.DATA_CENTER)){
+            //request from Data Center
+            if(TYPE.startsWith(DownloadConstants.DATA_FILE)){
+                Url file = visit.getVisitData().getDataUrlFromCart(ID);
                 name = file.getName();
-                srbUrl = new String[]{file.getName()};
-            } else{
-                DataReference file = getDataRef(id,visit);
-                name = file.getName();
-                srbUrl = new String[]{file.getName()};
-            }
-        } else if(type.equals("DOWNLOAD")){
-            if(from.equals("DATA_SETS")){
-                //from data ref or data sets
-                srbUrl =  getDownloadSRBFiles(visit);
-                name = "Multiple_DataPortal_Download";
-            } else {
-                //from data center
-                srbUrl =  getDownloadSRBFilesRef(visit);
-                name = "Multiple_DataPortal_Download";
+                srbUrl = new String[]{file.getUrl()};
                 
+                //this will get DATASETS and DATASETINFOLDER types
+            } else if(TYPE.startsWith(DownloadConstants.DATA_SET)){
+                DataReference file = visit.getVisitData().getDataReferenceFromCart(ID);
+                name = file.getName();
+                //iterate through reference and get all URLS out of it
+                ArrayList<String> urls = new ArrayList<String>();
+                for(Url url : file.getUrls()){
+                    urls.add(url.getUrl());
+                }
+                srbUrl = urls.toArray(new String[urls.size()]);
+            } else if(TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE)){
+                //multiple file download
+                srbUrl = visit.getVisitData().getCartSRBURLs();
+                name = "Multiple_DataPortal_Download";
             }
-        }  else if(type.startsWith(DPUrlRefType.FILE.toString())){
             
-            DataFile file = getDataFile(id,visit);
-            name = file.getName();
-            srbUrl = new String[]{file.getName()};
-        } else{
-            DataSet file = getDataSet(id,visit);
-            name = file.getName();
-            srbUrl = new String[]{file.getName()};
+            //do other types from DATASETS
+        } else if(FROM.equals(DownloadConstants.DATA_SETS)){
+            log.debug("Download from datasets.");
+            //request from Data Sets
+            if(TYPE.startsWith(DownloadConstants.DATA_FILE)){
+                DataFile file = visit.getVisitData().getDataFileFromSearchedData(ID);
+                name = file.getName();
+                srbUrl = new String[]{file.getUri()};
+                //this will get DATASETS and DATASETINFOLDER types
+            } else if(TYPE.startsWith(DownloadConstants.DATA_SET)){
+                log.trace("Type Data Set");
+                DataSet file = visit.getVisitData().getDataSetFromSearchedData(ID);
+                name = file.getName();
+                //iterate through set and get all URLS out of it
+                ArrayList<String> urls = new ArrayList<String>();
+                for(DataFile datafile :visit.getVisitData().getCurrentDatafiles()){
+                    if(datafile.getDataSetId().equals(file.getId())){
+                        urls.add(datafile.getUri());
+                    }
+                }
+                srbUrl = urls.toArray(new String[urls.size()]);
+            } else if(TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE)){
+                //multiple file download
+                srbUrl =  visit.getVisitData().getSearchedSRBURLs();
+                name = "Multiple_DataPortal_Download";
+            }
         }
         
-        log.info("Id for download is "+id+" type "+type+" name ");
         
-        if(!visit.contains(id)){
+        log.info("Id for download is "+ID+" type "+TYPE+" from "+FROM);
+        printURLS(srbUrl);
+        //check if already started a downlaod for this ID
+        if(!visit.contains(ID)){
             
             log.debug("file for download: "+srbUrl);
             
             try{
+                //not download started so start one
                 SRBFileManagerThread man = new SRBFileManagerThread();
                 Certificate cert = new Certificate(visit.getSession().getCredential());
                 GSSCredential cred = cert.getCredential();
                 
                 log.info("Credential information "+cred.getName());
-                
-                man.setCredentials("srb1.ngs.rl.ac.uk",5544,cred);
-                //man.setCredentials("glen-drinkwater",cred);
-                
-                if(type.equals(DPUrlRefType.DATA_SET.toString())) {
-                    man.setZipeFile(true);
-                    man.setSRBFile(new String[]{"srb://dfdfd:676/ngs/home/glen-drinkwater.ngs"});
-                } else if(type.equals("DOWNLOAD")){
+                try {
                     
-                    //test
-                    Collection<String> urls = new ArrayList<String>();
-                    String[] files  = { "SSHTermApplet-signed.jar","extract.png", "hourglass-a.gif","view.jsp","FluorescentCells.jpg","webui.jar"};
-                    for(int i = 0; i < files.length;i++){
-                        if(i >= 5) break;
-                        else if(i == srbUrl.length) break;
-                        else urls.add("srb://dfdfd:676/ngs/home/glen-drinkwater.ngs/"+files[i]);
-                    }
-                    
-                    man.setSRBFile(urls.toArray(new String[urls.size()]));
-                    man.setZipeFile(true);
-                }else {
-                    
-                    man.setSRBFile(new String[]{"srb://dfdfd:676/ngs/home/glen-drinkwater.ngs/FluorescentCells.jpg"});
-                    man.setZipeFile(false);
+                    man.setCredentials(Util.getSRBHost(srbUrl),Util.getSRBPort(srbUrl),cred);
+                } catch (Exception ex) {
+                    RequestDispatcher dispatcher =
+                            req.getRequestDispatcher("/protected/downloaderror.jsp?message=Invalid SRB URL Found&name="+name);
+                    if (dispatcher != null) dispatcher.forward(req, response);
+                    return ;
                 }
                 
+                man.setSRBFile(srbUrl);
+                
+                if(TYPE.equals(DPUrlRefType.FILE.toString())) {
+                    man.setZipeFile(false);
+                } else {
+                    man.setZipeFile(true);
+                }
+                
+                man.setFolderFilesOnly(true);
                 man.start();
-                visit.putSrbManager(id, man);
+                visit.putSrbManager(ID, man);
                 //
                 
                 log.debug("started download: "+name);
                 //removeOld();
                 
                 RequestDispatcher dispatcher =
-                        req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&name="+name+"&type="+type);
+                        req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&name="+name+"&type="+TYPE);
                 if (dispatcher != null) dispatcher.forward(req, response);
             } catch(Exception e){
                 log.warn(e);
-                visit.removeSrbManager(id);
+                visit.removeSrbManager(ID);
                 RequestDispatcher dispatcher =
                         req.getRequestDispatcher("/protected/downloaderror.jsp");
                 if (dispatcher != null) dispatcher.forward(req, response);
@@ -164,22 +181,22 @@ public class DownloadServlet extends HttpServlet {
         
         else {
             log.trace("SrbManager not null");
-            SRBFileManagerThread man = visit.getSrbManager(id);
+            SRBFileManagerThread man = visit.getSrbManager(ID);
             if(man.isFinished()){
                 if(man.getException() == null){
                     log.trace("Download complete");
                     
-                    if(type.endsWith("IMAGEJ")){
+                    if(TYPE.endsWith("IMAGEJ")){
                         //want to veiw data not download it
                         srbDownload = man.getFile();
                         log.info("Viewing data: "+srbDownload.getAbsolutePath());
                         log.info("Copying to: "+workingDir);
-                        String date = createDate();
+                        String date = Util.createDate();
                         String webStartFile = "";
                         File newFile = new File(workingDir+File.separator+"web-start"+File.separator+date+File.separator+srbDownload.getName());
                         try {
-                            copyFile(srbDownload,newFile);
-                            webStartFile = createWebStartFile(req,srbDownload.getName());
+                            Util.copyFile(srbDownload,newFile);
+                            webStartFile = Util.createWebStartFile(req,srbDownload.getName(),workingDir,context);
                         } catch (Exception ex) {
                             log.warn(ex);
                             String message = "Unable to launch requested appliacation.";
@@ -198,7 +215,7 @@ public class DownloadServlet extends HttpServlet {
                         //downloadedFiles.add(srbDownload.getAbsolutePath());
                         log.trace("Downloading: "+srbDownload.getAbsolutePath());
                         log.trace("setting srbman to null");
-                        visit.removeSrbManager(id);
+                        visit.removeSrbManager(ID);
                         
                         ServletOutputStream out = response.getOutputStream();
                         
@@ -207,10 +224,10 @@ public class DownloadServlet extends HttpServlet {
                         String contenttype = getContentType(srbDownload.getAbsolutePath());
                         response.setContentType(contenttype);
                         response.setBufferSize(65536);
-                        if(type.equals(DPUrlRefType.DATA_SET.toString()) || type.equals("DOWNLOAD")) {
+                        if(TYPE.startsWith(DPUrlRefType.DATA_SET.toString()) || TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE)) {
                             response.setHeader("Content-disposition","attachment; filename="+name+".zip"+" ");
                         } else {
-                            response.setHeader("Content-disposition","attachment; filename=FluorescentCells.jpg");
+                            response.setHeader("Content-disposition","attachment; filename="+name);
                         }
                         
                         //my downlaod way
@@ -233,7 +250,7 @@ public class DownloadServlet extends HttpServlet {
                         myFileInputStream = null;
                         
                         log.trace("deleting "+srbDownload.getAbsolutePath()+"?:"+srbDownload.delete());
-                        if(type.equals(DPUrlRefType.FILE.toString())) log.trace("deleting "+srbDownload.getParentFile().getAbsolutePath()+"?:"+srbDownload.getParentFile().delete());
+                        if(TYPE.equals(DPUrlRefType.FILE.toString())) log.trace("deleting "+srbDownload.getParentFile().getAbsolutePath()+"?:"+srbDownload.getParentFile().delete());
                         
                         out.close();
                     }
@@ -253,7 +270,7 @@ public class DownloadServlet extends HttpServlet {
             } else{
                 log.trace("Download : "+man.getPercentageComplete());
                 RequestDispatcher dispatcher =
-                        req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&percentage="+man.getPercentageComplete()+"&name="+name+"&type="+type);
+                        req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&percentage="+man.getPercentageComplete()+"&name="+name+"&type="+TYPE);
                 if (dispatcher != null) dispatcher.forward(req, response);
             }
         }
@@ -326,262 +343,12 @@ public class DownloadServlet extends HttpServlet {
         
         return new String("application/octet-stream");
     }
-    
-    private DataFile getDataFile(String param, Visit visit) {
-        String fac = param.split("-")[0];
-        String id = param.split("-")[1];
-        
-        for(DataFile file : visit.getVisitData().getCurrentDatafiles()){
-            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.debug("Found datafile: "+file);
-                return file;
-            }
-        }
-        return null;
-    }
-    
-    private DataSet getDataSet(String param, Visit visit) {
-        String fac = param.split("-")[0];
-        String id = param.split("-")[1];
-        
-        for(DataSet file : visit.getVisitData().getCurrentDatasets()){
-            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.debug("Found dataset: "+file);
-                return file;
-            }
-        }
-        return null;
-    }
-    //TODO add into VistData
-    private DataReference getDataRef(String param, Visit visit) {
-        String fac = param.split("-")[0];
-        String id = param.split("-")[1];
-        log.trace("looking for:"+ fac+"-"+id);
-        
-        for(DataReference file : visit.getVisitData().getCurrentDataReferences()){
-            log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
-            if(file.getId().toString().equals(id) && file.getFacility().equals(fac) ){
-                log.debug("Found dataref: "+file);
-                return file;
-            }
-        }
-        return null;
-    }
-    
-    private Url getDataUrl(String param, Visit visit) {
-        String fac = param.split("-")[0];
-        String data_ref_id = param.split("-")[1];
-        String url_id = param.split("-")[2];
-        
-        for(DataReference file : visit.getVisitData().getCurrentDataReferences()){
-            if(file.getId().toString().equals(data_ref_id) && file.getFacility().equals(fac) ){
-                log.debug("Found dataref: "+file);
-                Collection<Url> urls = file.getUrls();
-                for(Url url : urls){
-                    if(url.getId().toString().equals(url_id)){
-                        return url;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-    
-    private void copyFile(File source, File dest) throws Exception {
-        
-        //NB:  NIO did not work on gen 2.  1.4.2_06 jre from sun.  Called a
-        // java.io.Exception:  Illegal arguement exception.  Arguments were fine.
-        //Error with NIO on gen 2??????
-        
-        log.warn("File names are "+source.toString() +"   and "+dest.toString());
-        if(!dest.getParentFile().exists()) dest.getParentFile().mkdir();
-        
-        FileChannel sourceChannel = new   FileInputStream(source).getChannel();
-        FileChannel destinationChannel = new   FileOutputStream(dest).getChannel();
-        sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
-        // or
-        //  destinationChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-        sourceChannel.close();
-        destinationChannel.close();
-        
-        /*log.trace("Copying "+source+" to "+dest);
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(source));
-            BufferedWriter bw = new BufferedWriter(new FileWriter(dest));
-         
-            int read = 0;
-            while((read = br.read()) != -1) {
-         
-                bw.write(read);
-            }
-         
-            br.close();
-            bw.close();
-        } catch (FileNotFoundException fnfe) {
-            throw fnfe;
-         
-        } catch (IOException e) {
-            throw e;
-        }*/
-        
-    }
-    
-    private void removeOld(){
-        for(String file: downloadedFiles){
-            if(new File(file).exists()){
-                File fileF = new File(file);
-                boolean delete = fileF.delete();
-                log.info("deleting old file?: "+fileF.getAbsolutePath()+" " +delete);
-                if(delete) downloadedFiles.remove(file);
-            }
-            
+
+    private void printURLS(String[] srbUrl) {
+        log.trace("URLS for download:");
+        for(String url : srbUrl){
+            log.trace(url);
         }
     }
-    
-    private String createDate() {
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int month = Calendar.getInstance().get(Calendar.MONTH);
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        return day+"-"+month+"-"+year;
-    }
-    
-    private String createWebStartFile(HttpServletRequest req, String SRBFilename) throws UnknownHostException  {
-        ServletRequest sreq = (ServletRequest)req;
-        File file = new File(workingDir+File.separator+"web-start"+File.separator+"webstart_template.jnlp");
-        File webStartDir = new File(workingDir+File.separator+"web-start"+File.separator+createDate());
-        if(!webStartDir.exists()) webStartDir.mkdir();
-        
-        String filename = ""+Math.random()+".jnlp";
-        File webStartFile = new File(webStartDir,filename);
-        
-        BufferedReader in = null;
-        BufferedWriter out = null;
-        InetAddress host = InetAddress.getLocalHost();
-        String hostURL = "http://"+host.getHostAddress()+":"+sreq.getServerPort()+context+"/web-start/"+createDate();
-        try {
-            in = new BufferedReader(new FileReader(file));
-            out = new BufferedWriter(new FileWriter(webStartFile));
-            
-            String str;
-            while ((str = in.readLine()) != null) {
-                if(str.trim().startsWith("codebase")){
-                    out.write("codebase=\""+hostURL+"\"\n");
-                    
-                } else if(str.trim().startsWith("href")){
-                    out.write("href=\""+filename+"\">\n");
-                    
-                } else  if(str.trim().startsWith("<application-desc")){
-                    out.write(str);
-                    out.write("\n<argument>"+hostURL+"/"+SRBFilename+"</argument>\n");
-                    out.write("</application-desc>\n");
-                    out.write("</jnlp>");
-                    break;
-                    
-                } else out.write(str+"\n");
-            }
-            
-        } catch (IOException e) {
-            System.out.println(e);
-        } finally {
-            try {
-                in.close();
-                out.close();
-                
-                //deelte old date files
-                File dir = new File(workingDir+File.separator+"web-start");
-                File[] webStartDatefiles = dir.listFiles();
-                for(File Sfile : webStartDatefiles){
-                    log.trace("File: "+Sfile.getAbsolutePath());
-                    if(Sfile.isDirectory()){
-                        if(!Sfile.getName().equals(createDate())) {
-                            log.trace("Deleting");
-                            deleteDirectory(Sfile);
-                        } else log.trace("Not deleting");
-                    }
-                }
-            } catch (IOException ex) {
-                log.warn("Error closing buffers",ex);
-            }
-        }
-        return filename;
-    }
-    
-    /**
-     * Recursively deletes a directory, dangerous!
-     * @param directory the directory to delete
-     */
-    public  boolean deleteDirectory(File directory) {
-        return  deleteDirectory(directory, directory.getPath().length()); }
-    
-    private  boolean deleteDirectory(File directory, int pathSize) {
-        if (directory != null && directory.isDirectory()) {
-            // get all the files in the directory
-            File[] files = directory.listFiles();
-            
-            for (int i = 0; i < files.length; i++) {
-                File file = files[i];
-                
-                // do a simple check to ensure that the pathname isn't getting
-                // smaller - this might save wiping an entire HDD if a hard
-                // link has been setup somewhere
-                if (file.getPath().length() > pathSize) {
-                    // if the file is a directory, recurse
-                    if (file.isDirectory()){
-                        boolean success =  deleteDirectory(file, file.getPath().length());
-                        if (!success) {
-                            return false;
-                        }
-                    } else {
-                        boolean success = file.delete();
-                        log.trace("Trying to delete: "+file.getName()+"?: "+success);
-                        if (!success) {
-                            return false;
-                        }
-                    }
-                } else log.warn("Stopped deleting "+directory.getAbsolutePath()+", detected a link to smaller path size: "+file.getPath());
-            }
-            
-            // finally delete the parent directory
-            return  directory.delete();
-        }
-        return directory.delete();
-    }
-    
-    private synchronized String[] getDownloadSRBFiles(Visit visit) {
-        Collection<String> urls = new ArrayList<String>();
-        for(DataFile file : visit.getVisitData().getCurrentDatafiles()){
-            if(file.isDownload()){
-                log.debug("Found datafile to download: "+file);
-                urls.add(file.getUri());
-                //now set to false
-                // file.setDownload(false);
-            }
-        }
-        
-        return urls.toArray(new String[urls.size()]);
-    }
-    
-    private synchronized String[] getDownloadSRBFilesRef(Visit visit) {
-        Collection<String> urls = new ArrayList<String>();
-        for(DataReference file : visit.getVisitData().getCurrentDataReferences()){
-            if(file.isDownload() && file.getTypeOfReference().equals(DPUrlRefType.FILE.toString())){
-                for(Url url : file.getUrls()){
-                    log.debug("Found dataref to download: "+file);                    
-                    urls.add(url.getUrl());
-                }
-            } else{
-                for(Url url : file.getUrls()){
-                    if(url.isDownload()){
-                        log.debug("Found datafile to download: "+url);
-                        urls.add(url.getUrl());
-                        //now set to false
-                        // file.setDownload(false);
-                    }
-                }
-            }
-        }       
-        
-        return urls.toArray(new String[urls.size()]);
-    }
-    
+
 }

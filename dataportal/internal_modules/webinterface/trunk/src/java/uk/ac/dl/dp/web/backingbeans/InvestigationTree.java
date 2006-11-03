@@ -116,6 +116,36 @@ public class InvestigationTree extends AbstractRequestBean {
                 //add  facility node to the top level node
                 data.getChildren().add(node);
             }
+            
+            //now add the facs that have not returned yet
+            Collection<String> searched = getSearchData().getQueryRequest().getFacilities();
+            for(String searchedFac : searched){
+                boolean isCompleted = false;
+                for(String completedFac : facs){
+                    if(completedFac.equals(searchedFac)){
+                        //searched fac completed
+                        log.trace(completedFac+ " finished");
+                        isCompleted = true;
+                        
+                    }
+                }
+                //check now if searched is completed
+                if(!isCompleted){
+                    log.trace("Not finished,timed out");
+                    node = new TreeNodeBase("foo-folder", searchedFac, "Timed out",true);
+                    data.getChildren().add(node);
+                }else if(isCompleted){
+                    //count how many from this fac
+                    int i = 0;
+                    for(Investigation invest: invests){
+                        if(invest.getFacility().equals(searchedFac)) i++;
+                    }
+                    if(i == 0){
+                        node = new TreeNodeBase("foo-folder", searchedFac, "0",true);
+                        data.getChildren().add(node);
+                    }
+                }
+            }            
         }
         
         return data;
@@ -234,7 +264,7 @@ public class InvestigationTree extends AbstractRequestBean {
     public void setData(TreeNode data) {
         this.data = data;
     }
-        
+    
     //helper class that splits the param sent in to identify the current investigation
     private Investigation getInvestigation(String param) {
         String fac = param.split("-")[0];

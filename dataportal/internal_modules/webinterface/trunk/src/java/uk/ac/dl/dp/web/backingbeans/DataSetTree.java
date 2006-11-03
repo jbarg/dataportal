@@ -30,6 +30,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
+import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
@@ -44,7 +45,7 @@ import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.util.WebConstants;
 import javax.faces.component.*;
-
+import uk.ac.dl.srbapi.util.*;
 /**
  *
  * @author gjd37
@@ -54,13 +55,14 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
     private static Logger log = Logger.getLogger(DataSetTree.class);
     
     private TreeModelBase _treeModel;
-    private HtmlTree  _tree;
+    private HtmlTree  tree;
     
     private TreeNode data;
     
     private Collection<Investigation> invests = new ArrayList<Investigation>();
     private Collection<DataFile> datafiles = new ArrayList<DataFile>();
     private Collection<DataSet> datasets = new ArrayList<DataSet>();
+    
     
     private boolean clientSide;
     
@@ -78,11 +80,11 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
     }
     
     public HtmlTree getTree() {
-        return _tree;
+        return tree;
     }
     
     public void setTree(HtmlTree tree) {
-        this._tree = tree;
+        this.tree = tree;
     }
     
     
@@ -106,7 +108,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
     
     public TreeNode getData() {
         log.trace("Getting data");
-                
+        
         Collection<Investigation> investigations = getVisitData().getCurrentInvestigations();
         Collection<DataSet> datasets = getVisitData().getCurrentDatasets();
         Collection<DataFile> datafiles = getVisitData().getCurrentDatafiles();
@@ -120,6 +122,16 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         
         TreeNodeBase node = null;
         for(Investigation invest : investigations){
+            //TODO
+            //check if using EMAT and then no leaf is needed
+            boolean isDataInFolders = false;
+            for(FacilityDTO facs : getVisit().getSession().getFacilities()){
+                //if data in folders then show no leaf in datatree
+                if(facs.getFacility().equals(invest.getFacility()) && facs.isIsDataSetInFolders()){
+                    isDataInFolders = true;
+                }
+            }
+            
             // log.debug("Adding investigations: "+invest.getName());
             node = new TreeNodeBase("invest", invest.getName(), invest.getFacility()+"-"+invest.getId(),false);
             
@@ -136,20 +148,45 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 
                 if(dataset.getInvestigationId().equals(invest.getId()) && dataset.getFacility().equals(invest.getFacility()) ){
                     // log.trace("Adding datasets : "+dataset.getName());
-                    datasetNode = new TreeNodeBase("foo-folder", dataset.getName(),dataset.getFacility()+"-"+dataset.getId() ,false);
+                    if(isDataInFolders){
+                        datasetNode = new TreeNodeBase("dataset-inFolder-folder", dataset.getName(),dataset.getDpId() ,false);
+                    } else {
+                        datasetNode = new TreeNodeBase("dataset-folder", dataset.getName(),dataset.getDpId() ,false);
+                    }
+                    
                     datasetNode.getChildren().add(new TreeNodeBase("status-folder",dataset.getDataSetStatus(),true));
                     datasetNode.getChildren().add(new TreeNodeBase("type-folder",dataset.getDataSetType(),true));
                     datasetNode.getChildren().add(new TreeNodeBase("desc-folder", dataset.getDescription(),true));
                     
-                    
-                    for(DataFile datafile : datafiles){
-                        //log.trace(datafile);
-                        if(datafile.getDataSetId().equals(dataset.getId()) && datafile.getFacility().equals(dataset.getFacility())){
-                            boolean isImageJ = Util.isImageJ(datafile.getName());
-                            log.trace(datafile.getName()+" is imageJ "+isImageJ);
-                            //set isLeaf is imageJ so can use it on the web page
-                            datasetNode.getChildren().add(new TreeNodeBase("file-folder", datafile.getName(),datafile.getFacility()+"-"+datafile.getId(),isImageJ));
-                            
+                    if(!isDataInFolders){
+                        for(DataFile datafile : datafiles){
+                            //log.trace(datafile);
+                            if(datafile.getDataSetId().equals(dataset.getId()) && datafile.getFacility().equals(dataset.getFacility())){
+                                boolean isImageJ = Util.isImageJ(datafile.getName());
+                                log.trace(datafile.getName()+" is imageJ "+isImageJ);
+                                //set isLeaf is imageJ so can use it on the web page
+                                //use isLeaf for asscess info
+                                if(getVisitData().getAccessInfo() == null){
+                                    datasetNode.getChildren().add(new TreeNodeBase("file-noread-folder", datafile.getName(),datafile.getDpId(),true));
+                                } else {
+                                    log.debug("Setting access rights with data files");
+                                    for(AccessInfo info : getVisitData().getAccessInfo()){
+                                        if(info.getId().toString().equals(datafile.getId())){
+                                            log.trace("Setting isRead "+info.isRead());
+                                            if(info.isRead()){
+                                                TreeNodeBase base = new TreeNodeBase("file-folder", datafile.getName(),datafile.getDpId(),false);
+                                                if(isImageJ){
+                                                    base.getChildren().add(new TreeNodeBase("imageJ", "Launch ImageJ",datafile.getDpId(),false));
+                                                }
+                                                datasetNode.getChildren().add(base);
+                                            } else   datasetNode.getChildren().add(new TreeNodeBase("file-noread-folder", datafile.getName(),datafile.getDpId(),false));
+                                            
+                                            
+                                        }
+                                    }
+                                }
+                                
+                            }
                         }
                     }
                     datasetsNode.getChildren().add(datasetNode);
@@ -173,6 +210,45 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         return data;
     }
     
+    public void checkReadAccess(ActionEvent event){
+        if(getVisitData().getAccessInfo() == null){
+            try {
+                //set dummy Accessinfo
+                Thread.sleep(3000);
+                log.trace("Access sleeping");
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            Collection<AccessInfo> accessInfo = new ArrayList<AccessInfo>();
+            int i = 0;
+            for(DataFile file : getVisitData().getCurrentDatafiles()){
+                AccessInfo info = new AccessInfo();
+                info.setId(Long.parseLong(file.getId()));
+                info.setSrbUrl("dummy");
+                info.setRead(true);
+                if((i %2) == 0){
+                    info.setRead(false);
+                }
+                accessInfo.add(info);
+                i++;
+                
+            }
+            getVisitData().setAccessInfo(accessInfo);
+            log.trace("Access Done");
+        }
+        
+    }
+    public boolean isAccessDone(){
+        
+        if(getVisitData().getAccessInfo() == null){
+            log.trace("Is access done: false");
+            return false;
+        } else {
+            log.trace("Is access done: true");
+            return true;
+        }
+    }
+    
     public void setDataFileDownloadAction(ActionEvent event){
         log.trace("Onchange action event: ");
         List children = event.getComponent().getChildren();
@@ -185,7 +261,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 
                 String param = current.getValue().toString();
                 log.trace("Param value: "+param);
-                DataFile df = getDataFile(param);
+                DataFile df = getVisitData().getDataFileFromSearchedData(param);
                 log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
                 df.setDownload(!df.isDownload());
                 break;
@@ -193,7 +269,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         }
     }
     public String setValueChangeListeners(){
-        //this is a dummy method so that all the valuechangelisteners are called and then the 
+        //this is a dummy method so that all the valuechangelisteners are called and then the
         //ajax4jsf calls a javascript function
         log.trace("Finished setting all valuelisteners.  No more action needed");
         return null;
@@ -211,7 +287,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 
                 String param = current.getValue().toString();
                 log.trace("Param value: "+param+"  "+event.getNewValue()+" "+event.getNewValue());
-                DataFile df = getDataFile(param);
+                DataFile df = getVisitData().getDataFileFromSearchedData(param);
                 if(event.getNewValue().equals(new Boolean(true)) ){
                     df.setDownload(true);
                     log.trace("setting to true");
@@ -237,17 +313,18 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 if(current.getName().equals("datafiles") && current.getValue() != null){
                     String param = current.getValue().toString();
                     log.trace("selected: "+param+" for "+event.getNewValue());
-                    DataFile df = getDataFile(param);
+                    DataFile df = getVisitData().getDataFileFromSearchedData(param);
                     if(event.getNewValue().equals(new Boolean(true)) ){
+                        log.trace("New value is true");
                         df.setSelected(true);
-                        log.trace("setting to true");
+                        log.trace("setting to true for "+df.getDpId());
                     } else df.setSelected(false);
                     break;
                 }
                 if(current.getName().equals("datasets") && current.getValue() != null){
                     String param = current.getValue().toString();
                     log.trace("selected: "+param+" for "+event.getNewValue());
-                    DataSet ds = getDataSet(param);
+                    DataSet ds = getVisitData().getDataSetFromSearchedData(param);
                     if(event.getNewValue().equals(new Boolean(true)) ){
                         ds.setSelected(true);
                         log.trace("setting to true");
@@ -257,7 +334,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 if(current.getName().equals("investigations") && current.getValue() != null){
                     String param = current.getValue().toString();
                     log.trace("selected: "+param+" for "+event.getNewValue());
-                    Investigation in =  getInvestigation(param);
+                    Investigation in =  getVisitData().getInvestigationFromSearchedData(param);
                     if(event.getNewValue().equals(new Boolean(true)) ){
                         in.setSelected(true);
                         log.trace("setting to true");
@@ -278,10 +355,13 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         }*/
         log.trace("Selected file for addition :");
         
+        
+        //TODO move this to methods
         Collection<DataReference> toAddDataReference = new ArrayList<DataReference>();
         for(DataFile file : getVisitData().getCurrentDatafiles()){
             
             if(file.isSelected()){
+                log.trace("Adding file: "+file.getDpId());
                 DataReference ref = new DataReference();
                 
                 ref.setFacility(file.getFacility());
@@ -308,28 +388,42 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             }
         }
         log.trace("Selected sets for addition :");
-        
-        for(DataSet file : getVisitData().getCurrentDatasets()){
+         //TODO move this to methods
+        for(DataSet dataset : getVisitData().getCurrentDatasets()){
             
-            if(file.isSelected()){
-                log.trace(file);
+            if(dataset.isSelected()){
+                log.trace(dataset);
                 DataReference ref = new DataReference();
                 
-                ref.setFacility(file.getFacility());
-                ref.setName(file.getName());
+                ref.setFacility(dataset.getFacility());
+                ref.setName(dataset.getName());
                 ref.setNote("");
                 ref.setQuery("N/A");
-                ref.setTypeOfReference(DPUrlRefType.DATA_SET.toString());
-                ref.setTypeOfObject(file.getDataSetType());
-                ref.setReferenceId(Integer.valueOf(file.getId()));
-                ref.setInvestigationId(Integer.valueOf(file.getInvestigationId()));
+                
+                //what type of dataset reference is this
+                boolean isDataInFolders = false;
+                for(FacilityDTO facs : getVisit().getSession().getFacilities()){
+                    //if data in folders then show no leaf in datatree
+                    if(facs.getFacility().equals(dataset.getFacility()) && facs.isIsDataSetInFolders()){
+                        isDataInFolders = true;
+                    }
+                }
+                if(isDataInFolders){
+                    ref.setTypeOfReference(DPUrlRefType.DATA_SET_FOLDER.toString());
+                } else {
+                    ref.setTypeOfReference(DPUrlRefType.DATA_SET.toString());                    
+                }
+                ref.setTypeOfObject(dataset.getDataSetType());
+                ref.setReferenceId(Integer.valueOf(dataset.getId()));
+                ref.setInvestigationId(Integer.valueOf(dataset.getInvestigationId()));
                 
                 Collection<Url> cs = new ArrayList<Url>();
                 
                 for(DataFile df : getVisitData().getCurrentDatafiles()){
-                    if(df.getFacility().equals(file.getFacility()) && df.getDataSetId().equals(file.getId())){
+                    if(df.getFacility().equals(dataset.getFacility()) && df.getDataSetId().equals(dataset.getId())){
                         Url url = new Url();
                         url.setDataRefId(ref);
+                        url.setName(df.getName());
                         //TODO remove line, URL should neve be null
                         if(df.getUri() == null) df.setUri("dummy.raw");
                         url.setUrl(df.getUri());
@@ -339,10 +433,10 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 }
                 ref.setUrls(cs);
                 toAddDataReference.add(ref);
-                log.trace(file);
+                log.trace(dataset);
             }
         }
-        
+         //TODO move this to methods
         log.trace("Selected invest for addition :");
         Collection<Bookmark> toAddBookmarks = new ArrayList<Bookmark>();
         for(Investigation file : getVisitData().getCurrentInvestigations()){
@@ -399,44 +493,17 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         } else return NavigationConstants.ADD_DATA_REFERENCE_SUCCESS;
     }
     
-    private DataFile getDataFile(String param) {
-        String fac = param.split("-")[0];
-        String id = param.split("-")[1];
-        
-        for(DataFile file : getVisitData().getCurrentDatafiles()){
-            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.debug("Found datafile: "+file);
-                return file;
-            }
+    public String expandAll(){
+        if(tree != null){
+            log.trace("Expanding tree");
+            tree.expandAll();
         }
         return null;
     }
     
-    private DataSet getDataSet(String param) {
-        String fac = param.split("-")[0];
-        String id = param.split("-")[1];
-        
-        for(DataSet file : getVisitData().getCurrentDatasets()){
-            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.debug("Found dataset: "+file);
-                return file;
-            }
-        }
+    public String collapseAll(){
+        if(tree != null) tree.collapseAll();
         return null;
     }
-    
-    private Investigation getInvestigation(String param) {
-        String fac = param.split("-")[0];
-        String id = param.split("-")[1];
-        
-        for(Investigation file : getVisitData().getCurrentInvestigations()){
-            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.debug("Found invest: "+file);
-                return file;
-            }
-        }
-        return null;
-    }
-    
     
 }

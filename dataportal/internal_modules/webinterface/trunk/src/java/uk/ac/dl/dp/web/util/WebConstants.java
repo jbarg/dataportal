@@ -28,5 +28,7 @@ public class WebConstants {
      
     public final static int MAXIMIUM_SEARCH_TIME = 15; //seconds
     
+   
+    
     
 }

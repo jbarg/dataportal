@@ -90,24 +90,6 @@ public class ApplicationBean extends AbstractApplicationBean {
     public static String[] getKeywords(String facility){
         return keywordsStatic.get(facility);
     }
-        
-    public void completeCity(FacesContext context, String prefix, CompletionResult result) {
-        log.trace("Completing City - " + prefix);
-        if(prefix.indexOf(" ") != -1 ){
-            String[] words = prefix.split(" ");
-            AutoCompleteUtilities.addMatchingItems(keywords.get("ISIS"), words[words.length-1], result);
-            
-        } else if(prefix.indexOf("%20") != -1 ){
-            String[] words = prefix.split("%20");
-            AutoCompleteUtilities.addMatchingItems(keywords.get("ISIS"), words[words.length-1], result);
-            
-        } else{
-            AutoCompleteUtilities.addMatchingItems(keywords.get("ISIS"), prefix, result);
-        }
-        
-    }   
-    
-   
     
     
 }

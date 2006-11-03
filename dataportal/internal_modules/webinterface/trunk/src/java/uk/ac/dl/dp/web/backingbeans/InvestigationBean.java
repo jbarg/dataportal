@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.context.FacesContext;
@@ -45,6 +46,7 @@ public class InvestigationBean extends SortableList {
     private  HtmlDataTable table;
     private List<Investigation> investigations;
     private boolean expanded = false;
+    private boolean finished;
     
     public InvestigationBean(){
         super("name");
@@ -110,10 +112,10 @@ public class InvestigationBean extends SortableList {
     
     //This listens to changes in the users isSelected.  This is because the list could be
     //larger than one page so have to do it this way
-    public void listen(ValueChangeEvent e){
+   /* public void listen(ValueChangeEvent e){
         log.debug("value change event");
         Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
-        
+    
         Investigation d = (Investigation)table.getRowData();
         if(e.getNewValue().equals(new Boolean(true)) ){
             log.trace("true selected boolean");
@@ -121,7 +123,7 @@ public class InvestigationBean extends SortableList {
                 if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
                     invest.setSelected(true);
                     log.trace(invest.isSelected()+" for "+invest.getId());
-                    
+    
                 }
             }
         }
@@ -135,7 +137,7 @@ public class InvestigationBean extends SortableList {
                 }
             }
         }
-    }
+    }*/
     
     //This listens to changes in the users isSelected using Ajax.  This is because the list could be
     //larger than one page so have to do it this way
@@ -178,7 +180,49 @@ public class InvestigationBean extends SortableList {
         getTable().collapseAllDetails();
     }
     
-    //method to select all data
+    //method is polled to check if all results found
+    public void checkSearchComplete(ActionEvent event){
+        
+        Collection<String> facs2 = QueryDelegate.getInstance().getCompleted(getSearchData().getQueryRequest());
+        for(String fac : facs2){
+            log.trace("Completed: "+fac);
+        }
+        
+        //TODO put max wait in DB
+        //if more than max wait and not finished
+        if(((getSearchData().getStartQueryTime().getTime() -  new Date().getTime())/1000) > WebConstants.MAXIMIUM_SEARCH_TIME) {
+            //if nothing returned display message to user, otherwise show results (break loop)
+            //TODO tell user timeout occured
+            info("Timed out sesrch after "+WebConstants.MAXIMIUM_SEARCH_TIME+" seconds.");
+        }
+        
+        Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults(getSearchData().getQueryRequest());
+        //remember selection from user
+        for(Investigation currentInvest : getVisitData().getSearchedInvestigations()){
+            if(currentInvest.isSelected()){
+                for(Investigation invest : investigations){
+                    if(invest.getId().equals(currentInvest.getId())){
+                        invest.setSelected(true);
+                    }
+                }
+            }
+        }
+        
+        getVisitData().setSearchedInvestigations(investigations);
+        if(getSearchData().isFinished()){
+            finished = true;
+        }
+        
+        
+    }
+    
+    public boolean isFinished(){
+        //
+        return finished;
+    }
+    
+    
+//method to select all data
     public String selectall(){
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             invest.setSelected(true);
@@ -194,7 +238,7 @@ public class InvestigationBean extends SortableList {
         return null;
     }
     
-    //exapnds all the abstracts
+//exapnds all the abstracts
     public void expandAll(ActionEvent event){
         
         log.debug("Expanding");
@@ -203,7 +247,7 @@ public class InvestigationBean extends SortableList {
         
     }
     
-    // collapses all the abstracts
+// collapses all the abstracts
     public void collapseAll(ActionEvent event){
         log.debug("Collapsing");
         getTable().collapseAllDetails();
@@ -211,14 +255,14 @@ public class InvestigationBean extends SortableList {
         
     }
     
-    //select none the investigations
+//select none the investigations
     public void selectNone(ActionEvent event){
         selectnone();
         getVisitData().setInvestigationsSelected(false);
         log.trace("Setect selected false");
     }
     
-    //select all the investigations
+//select all the investigations
     public void selectAll(ActionEvent event){
         selectall();
         getVisitData().setInvestigationsSelected(true);
@@ -227,7 +271,7 @@ public class InvestigationBean extends SortableList {
         
     }
     
-    //view selected datasets
+//view selected datasets
     public String datasets(){
         //check which ones are checked, add to arraylist and then send to EJBS
         Collection<Investigation> investigations = new ArrayList<Investigation>();
@@ -269,6 +313,7 @@ public class InvestigationBean extends SortableList {
             getVisitData().setCurrentInvestigations(investigations);
             getVisitData().setCurrentDatasets(datasets);
             getVisitData().setCurrentDatafiles(datafiles);
+            getVisitData().setAccessInfo(null);
             //reset tree so it loads it again
             getVisitData().setDataSetTree(null);
             
@@ -290,6 +335,65 @@ public class InvestigationBean extends SortableList {
     
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+    
+    //for sorting columns
+    private boolean is(String column){
+        if(getSort().equals(column) && isAscending()) return true;
+        else return false;
+    }
+    
+    private boolean isNot(String column){
+        if(getSort().equals(column) && !isAscending()) return true;
+        else return false;
+    }
+    
+    public boolean isName(){
+        return is("name");
+    }
+    
+    public boolean isNotName(){
+        return isNot("name");
+    }
+    
+    public boolean isAbstract(){
+        return is("abstract");
+    }
+    
+    public boolean isNotAbstract(){
+        return isNot("abstract");
+    }
+    
+    public boolean isType(){
+        return is("type");
+    }
+    
+    public boolean isNotType(){
+        return isNot("type");
+    }
+    
+    public boolean isFacility(){
+        return is("facility");
+    }
+    
+    public boolean isNotFacility(){
+        return isNot("facility");
+    }
+    
+    public boolean isNotes(){
+        return is("notes");
+    }
+    
+    public boolean isNotNotes(){
+        return isNot("notes");
+    }
+    
+    public boolean isTime(){
+        return is("time");
+    }
+    
+    public boolean isNotTime(){
+        return isNot("time");
     }
     
 }
