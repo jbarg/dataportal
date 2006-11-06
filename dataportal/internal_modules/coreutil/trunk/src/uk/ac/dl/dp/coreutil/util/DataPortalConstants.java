@@ -53,5 +53,5 @@ public class DataPortalConstants {
     //location of the keyword files
     public final static String KEYWORD_LOCATION= System.getProperty("java.io.tmpdir")+File.separator;
     
-    
+    public final static boolean LOCAL_EJB_REFS = false;
 }
