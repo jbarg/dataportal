@@ -9,11 +9,13 @@ package uk.ac.dl.dp.coreutil.delegates;
  */
 
 import java.util.Collection;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.interfaces.DataCenterLocal;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 
@@ -29,23 +31,25 @@ public class DataCenterDelegate {
     
     private static DataCenterDelegate dcd;
     private static DataCenterRemote dcr ;
-    
+   
     public static DataCenterDelegate getInstance(){
-        synchronized(DataCenterDelegate.class){
-            if(dcd == null){
-                try {
-                    dcd = new DataCenterDelegate();
-                } catch(Exception se) {
-                    throw new RuntimeException(se);
+            synchronized(DataCenterDelegate.class){
+                if(dcd == null){
+                    try {
+                        dcd = new DataCenterDelegate();
+                    } catch(Exception se) {
+                        throw new RuntimeException(se);
+                    }
                 }
+                return dcd;
             }
-            return dcd;
-        }
+       
     }
     
     
     /** Creates a new instance of SessionDelegate */
     private  DataCenterDelegate() throws NamingException {
+        
         CachingServiceLocator csl =  CachingServiceLocator.getInstance();
         dcr  = (DataCenterRemote)csl.lookup(DataPortalConstants.DATA_CENTER);
     }
