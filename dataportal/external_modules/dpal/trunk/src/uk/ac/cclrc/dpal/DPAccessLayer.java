@@ -217,10 +217,10 @@ public class DPAccessLayer {
         
         for(Investigation os : ial) {
             for(Investigation ns : result) {
-                //System.out.println("outer study:\t"+os.getName() + "\ninner study:\t" + ns.getName()) ;
+                //System.out.println("outer investigation:\t"+os.getName() + "\ninner investigation:\t" + ns.getName()) ;
                 if(os.getName().compareTo(ns.getName())==0){
-                    //we have a match - i.e. same study different keyword
-                    ns.setKeyword(os.getFirstKeyword()) ;
+                    //we have a match - i.e. same investigation different keyword
+                    ns.addKeyword(os.getFirstKeyword()) ;
                     exists = true ;
                 }
             }
@@ -299,7 +299,7 @@ public class DPAccessLayer {
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
             st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
-            st.setKeyword(r.getString("KEYWORD")) ;
+            st.addKeyword(r.getString("KEYWORD")) ;
             st.setFacility(this.facility);
             inv_array.add(st) ;
         }
