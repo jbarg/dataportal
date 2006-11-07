@@ -29,7 +29,7 @@ public interface SessionLocal {
             
     public Boolean isValid(String sid) throws SessionNotFoundException,SessionTimedOutException  ;
     
-    public boolean logout(String sid) throws SessionNotFoundException,SessionTimedOutException;
+    public boolean logout(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException;
     
     public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException;
     

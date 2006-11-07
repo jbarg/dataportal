@@ -60,7 +60,7 @@ public class SessionDelegate {
         return  sb.login(username, password,lifetime);
     }
     
-    public boolean logout(String sid) throws SessionNotFoundException, SessionTimedOutException{
+    public boolean logout(String sid) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException{
         return  sb.logout(sid);
     }
     

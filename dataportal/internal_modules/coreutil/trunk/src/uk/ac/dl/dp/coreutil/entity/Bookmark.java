@@ -76,10 +76,10 @@ public class Bookmark implements Serializable {
     @JoinColumn(name = "USER_ID")
     @ManyToOne
     private User userId;
-        
+    
     @Transient
     private boolean selected;
-     
+    
     @Transient
     private boolean hasNote;
     
@@ -166,7 +166,7 @@ public class Bookmark implements Serializable {
     }
     
     public void setUserId(User userId) {
-        this.userId = userId;
+        this.userId = userId;        
     }
     
     public int hashCode() {
@@ -188,20 +188,20 @@ public class Bookmark implements Serializable {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
     }
-
+    
     public boolean isSelected() {
         return selected;
     }
-
+    
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
-
+    
     public boolean isHasNote() {
         if(getNote() == null || getNote().equals("")) return false;
         else return true;
     }
-
+    
     public void setHasNote(boolean hasNote) {
         this.hasNote = hasNote;
     }

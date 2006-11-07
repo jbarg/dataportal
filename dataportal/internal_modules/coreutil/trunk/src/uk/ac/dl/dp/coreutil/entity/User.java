@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,7 +42,7 @@ import javax.persistence.TemporalType;
 @NamedQueries( {
     @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
     @NamedQuery(name = "User.findByDn", query = "SELECT u FROM User u WHERE u.dn = :dn"),
-     @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId"),     
+    @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId"),
     @NamedQuery(name = "User.findByDnLike", query = "SELECT u FROM User u WHERE u.dn LIKE :dn"),
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findByModTime", query = "SELECT u FROM User u WHERE u.modTime = :modTime")}
@@ -57,9 +58,9 @@ public class User implements Serializable {
     @Column(name = "DN", nullable = false)
     private String dn;
     
-     @Column(name = "USER_ID")
+    @Column(name = "USER_ID")
     private String userId;
-     
+    
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
@@ -129,14 +130,14 @@ public class User implements Serializable {
         this.dn = dn;
     }
     
-     /**
+    /**
      * Gets the userId of this User.
      * @return the userId
      */
     public String getUserId() {
         return this.userId;
     }
-
+    
     /**
      * Sets the userId of this User to the specified value.
      * @param userId the new userId
@@ -169,6 +170,17 @@ public class User implements Serializable {
     public void setBookmark(java.util.Collection <uk.ac.dl.dp.coreutil.entity.Bookmark> bookmark) {
         this.bookmark = bookmark;
     }
+    /**
+     * Need to set two way relationship between bookamrk and user, otherwise DB
+     * will be correct but the JPA will be out of sync and will need a em.refresh
+     * to sync with DB
+     */
+    public void addBookmark(uk.ac.dl.dp.coreutil.entity.Bookmark bookmark){
+        bookmark.setUserId(this);
+        Collection<Bookmark> bookmarks = this.getBookmark();
+        bookmarks.add(bookmark);
+        this.setBookmark(bookmarks);
+    }
     
     public java.util.Collection <uk.ac.dl.dp.coreutil.entity.Session> getSession() {
         return this.session;
@@ -178,12 +190,26 @@ public class User implements Serializable {
         this.session = session;
     }
     
+    public void addSession(uk.ac.dl.dp.coreutil.entity.Session session){
+        session.setUserId(this);
+        Collection<Session> sessions = this.getSession();
+        sessions.add(session);
+        this.setSession(sessions);
+    }
+    
     public java.util.Collection <uk.ac.dl.dp.coreutil.entity.DataReference> getDataReference() {
         return this.dataReference;
     }
     
     public void setDataReference(java.util.Collection <uk.ac.dl.dp.coreutil.entity.DataReference> dataReference) {
         this.dataReference = dataReference;
+    }
+    
+    public void addDataReference(uk.ac.dl.dp.coreutil.entity.DataReference dataReference){
+        dataReference.setUserId(this);
+        Collection<DataReference> dataReferences = this.getDataReference();
+        dataReferences.add(dataReference);
+        this.setDataReference(dataReferences);
     }
     
     public uk.ac.dl.dp.coreutil.entity.DpUserPreference getDpUserPreference() {
