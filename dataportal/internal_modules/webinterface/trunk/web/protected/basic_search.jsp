@@ -54,10 +54,10 @@
                                             <img align="center" src="../../images/cclrc.jpg" width=170" height="60" />
                                             <br />
                                             <br />
-                                            <t:div id="subnavigation_outer">
+                                             <t:div id="subnavigation_outer">
                                                 <t:div id="subnavigation">
-                                                    <t:panelNavigation2 id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
-                                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
+                                                    <t:panelNavigation2 renderAll="false" id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
+                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
                                                         <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
                                                     </t:panelNavigation2>
                                                 </t:div>
@@ -120,7 +120,7 @@
             </table>
         </f:view>
         
-      
+        
         
     </body>
     

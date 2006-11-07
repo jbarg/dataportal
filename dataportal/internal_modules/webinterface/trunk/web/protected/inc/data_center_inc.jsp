@@ -52,25 +52,26 @@
                                                 <f:facet name="header"></f:facet>  
                                                 <a4j:commandLink  reRender="datatable" rendered="#{data.dataset && !data.datasetInFolder}" action="#{detailToggler.toggleDetail}">
                                                     <%--<h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">--%>
-                                                    <t:graphicImage id="down" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                                                    <t:graphicImage id="down-f" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                                                    
-                                                    <t:graphicImage id="up" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                                                    <t:graphicImage id="up-f" value="../../images/blue-folder-open.png" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                                                    
+                                                    <h:panelGroup>
+                                                        <t:graphicImage id="down" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                                        <t:graphicImage id="down-f" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                                        
+                                                        <t:graphicImage id="up" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                                                        <t:graphicImage id="up-f" value="../../images/blue-folder-open.png" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                                                    </h:panelGroup>
                                                 </a4j:commandLink> 
                                                 
-                                                <%--   <h:panelGrid columns="4" rendered="#{data.dataset && data.datasetInFolder}"> --%>
+                                                <%--   <h:panelGrid columns="4" rendered="#{data.dataset && data.datasetInFolder}"> 
                                                 <h:commandLink  rendered="#{data.dataset && data.datasetInFolder}" disabled="true" style="color:black" id="view-1">
-                                                    
+                                                    --%>
                                                     <%--<h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">--%>
                                                     <%-- <t:graphicImage id="down-1" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
                                                     <t:graphicImage id="down-f-1" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>--%>
-                                                    
-                                                    <t:graphicImage id="up-1" value="../../images/button_minus1.gif"  border="0"/>
-                                                    <t:graphicImage id="up-f-1" value="../../images/blue-folder-open.png"  border="0"/>
-                                                    
-                                                </h:commandLink>
+                                                    <h:panelGroup rendered="#{data.dataset && data.datasetInFolder}">
+                                                        <t:graphicImage id="up-1" value="../../images/button_minus1.gif"  border="0"/>
+                                                        <t:graphicImage id="up-f-1" value="../../images/blue-folder-open.png"  border="0"/>
+                                                    </h:panelGroup>
+                                              <%--  </h:commandLink>--%>
                                                 
                                                 <h:panelGrid columns="4" rendered="#{!data.dataset}">
                                                     
