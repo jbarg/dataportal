@@ -34,10 +34,10 @@ public class GetUrlsClient {
                 System.out.println(sid);
             }
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
-            
+            DataReference  remove = null;
             
             Collection<DataReference> dto =  sless.getDataReferences(sid);
-            
+            System.out.println(dto.size());
             for(DataReference dtos : dto){
                 System.out.println("-----------------");
                 System.out.println(dtos.getFacility());
@@ -46,6 +46,7 @@ public class GetUrlsClient {
                 System.out.println(dtos.getQuery());
                 System.out.println(dtos.getUrls().size());
                 System.out.println("-----------------\n");
+                remove =dtos;
             }
             //
             if(dto.size() != 0){
@@ -56,7 +57,10 @@ public class GetUrlsClient {
                 Collection<Url> urls = dr.getUrls();
                 
                 Url op = new Url("http://nefgfgfgfw");
+                op.setName("added");
+                op.setDataRefId(dr);
                 urls.add(op);
+                
                 
                 dr.setUrls(urls);
                 
@@ -65,6 +69,14 @@ public class GetUrlsClient {
                 sless.addDataReference(sid,dr);
             }
             
+            System.out.println(dto.size());
+            
+            
+            System.out.println("removing URL");
+            sless.removeDataReference(sid,remove);
+            System.out.println("Counting again");
+            dto =  sless.getDataReferences(sid);
+            System.out.println(dto.size());
             
         }catch(Exception e){
             

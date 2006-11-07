@@ -164,7 +164,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
                 userutil = new UserUtil(certificate);
                 user = userutil.getUser();
                 
-                session.setUserId(user);
+                //user is owner so set it there
+                user.addSession(session);
+                //session.setUserId(user);
             } catch(UserNotFoundException enfe){
                 //no entity found, so create one
                 log.info("No user found, creating new user.");
@@ -172,7 +174,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
                 userutil = new UserUtil(user);
                 
                 //add new user to session
-                session.setUserId(user);
+                //user is owner so set it there
+                user.addSession(session);
+                //session.setUserId(user);
             } catch (CertificateException ex) {
                 log.warn("Unable to load certificate",ex);
                 throw new LoginMyProxyException("Unable to load certificate",LoginError.UNKNOWN,ex);
@@ -214,9 +218,14 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
       * Ends a session
       * - deletes session and user authorisation details from database
       */
-    public boolean logout(String sid) throws SessionNotFoundException ,SessionTimedOutException{
+    public boolean logout(String sid) throws SessionNotFoundException ,SessionTimedOutException, UserNotFoundException{
         log.debug("logout()");
         Session session = new SessionUtil(sid).getSession();
+        //remove from object model
+        User user = new UserUtil(sid).getUser();
+        user.getSession().remove(session);
+        
+        //remove from DB
         em.remove(session);
         
         //clear query cache

@@ -3,6 +3,7 @@ import java.util.Collection;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -42,7 +43,7 @@ public class GetBookmarksClient {
             Collection<Bookmark> dto =  sless.getBookmarks(sid);
             System.out.println("Got "+dto.size() +" bookmarks");
             int idremove = 0;
-            for(Bookmark dtos : dto){
+           /* for(Bookmark dtos : dto){
                 System.out.println("-----------------");
                 System.out.println(dtos.getId());
                 System.out.println(dtos.getFacility());
@@ -52,7 +53,7 @@ public class GetBookmarksClient {
                 System.out.println(dtos.getQuery());
                 System.out.println("-----------------\n");
                 idremove = dtos.getId();
-            }
+            }*/
            /* if(dto.size() != 0){
                 System.out.println("Updating a bookmark");
                 Bookmark mod = dto.iterator().next();
@@ -81,6 +82,9 @@ public class GetBookmarksClient {
                 ex.printStackTrace();
             } catch (SessionTimedOutException ex) {
                 ex.printStackTrace();
+            }catch (UserNotFoundException ex) {
+                ex.printStackTrace();
+                
             }
             
         }

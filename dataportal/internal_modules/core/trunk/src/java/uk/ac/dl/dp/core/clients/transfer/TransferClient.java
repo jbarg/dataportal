@@ -21,6 +21,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 
 import javax.naming.*;
 import java.util.*;
+import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.interfaces.TransferRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -119,7 +120,10 @@ public class TransferClient {
                     ex.printStackTrace();
                 } catch (SessionNotFoundException ex) {
                     ex.printStackTrace();
-                }
+                }catch (UserNotFoundException ex) {
+                ex.printStackTrace();
+                
+            }
         } finally {
             if(tr != null) tr.remove();
             printTime("removed");

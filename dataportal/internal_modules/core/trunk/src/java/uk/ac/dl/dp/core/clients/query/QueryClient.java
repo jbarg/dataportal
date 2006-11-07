@@ -8,11 +8,12 @@ import org.apache.log4j.PropertyConfigurator;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Study;
+
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -160,7 +161,10 @@ public class QueryClient {
                     ex.printStackTrace();
                 } catch (SessionNotFoundException ex) {
                     ex.printStackTrace();
-                }
+                }catch (UserNotFoundException ex) {
+                ex.printStackTrace();
+                
+            }
         }finally{
             qsmr.remove();
         }

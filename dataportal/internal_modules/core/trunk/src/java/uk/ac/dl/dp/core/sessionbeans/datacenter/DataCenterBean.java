@@ -59,7 +59,11 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
             if(dto.getId() != null && (int)user.getId() != (int)dto.getUserId().getId()){
                 throw new NoAccessToDataCenterException("Access to add bookmark, Id: "+dto.getId()+", user id: "+dto.getUserId().getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
             } else {
-                dto.setUserId(user);
+              //  dto.setUserId(user);
+                //Collection<Bookmark> bookmarks = user.getBookmark();
+                //bookmarks.add(dto);
+                //user.setBookmark(bookmarks);
+                
                 //no bookmark id, new bookmark or they are equal
                 boolean contains  = (dto.getId() == null ) ? false : true;
                 log.trace("Does this bookmark exist in DB: dto name: "+dto.getName()+": ? "+contains);
@@ -94,11 +98,15 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                     } catch(EntityNotFoundException enfe){
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
+                        user.addBookmark(dto);
+                        
                         em.persist(dto);
                         continue;
                     } catch(NoResultException nre){
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
+                        user.addBookmark(dto);
+                        
                         em.persist(dto);
                         em.flush();
                         continue ;
@@ -119,8 +127,9 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         User user = new UserUtil(sid).getUser();
+        
         Collection<Bookmark> bookmarks  = user.getBookmark();
-                     
+        
         log.debug("User "+user.getDn()+" has "+bookmarks.size()+" number of bookmarks");
         
         return bookmarks;
@@ -139,16 +148,18 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 log.warn("trying to remove bookmark with no id");
                 continue;
             }
-            //security, check if users bookmark            
+            //security, check if users bookmark
             if(bm.getUserId().getId().intValue() == user.getId().intValue()) {
                 //TODO trouble with detatched entities
                 //could do it this way
                 //Bookmark bookmark = em.find(Bookmark.class,bm.getId());
                 Bookmark bookmark = em.merge(bm);
                 log.trace("Removing bookmark with id: "+bm.getId());
+                //remove from model
+                user.getBookmark().remove(bookmark);
+                //remove from DB
                 em.remove(bookmark);
-            }
-            else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+bm.getId()+" denied for user "+user.getDn());
+            } else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+bm.getId()+" denied for user "+user.getDn());
         }
     }
     
@@ -182,7 +193,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 
             } else{
                 //set the user to sid user
-                dto.setUserId(user);
+                //dto.setUserId(user);
                 //no bookmark id, new bookmark or they are equal
                 boolean contains  = (dto.getId() == null ) ? false : true;
                 log.trace("Does this DataReference exist in DB: dto name: "+dto.getName()+": ? "+contains);
@@ -218,11 +229,14 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                     } catch(EntityNotFoundException enfe){
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
+                        user.addDataReference(dto);
                         em.persist(dto);
                         continue;
                     } catch(NoResultException nre){
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
+                         user.addDataReference(dto);
+                      
                         em.persist(dto);
                         continue ;
                     }
@@ -232,7 +246,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                     unique.setName(dto.getName());
                     unique.setQuery(dto.getQuery());
                     em.merge(unique);
-                   
+                    
                 }
             }
         }
@@ -256,15 +270,16 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 log.trace("trying to remove "+url.getId());
                 DataReference dataReference = em.merge(url);
                 
-               //need to remove all urls first cos cannot cascade through a mapping table
+                //need to remove all urls first cos cannot cascade through a mapping table
                 /*Collection<Url> urls = dataReference.getUrls();
                 for(Url dr_url : urls){
                     em.remove(dr_url);
                 }*/
-                
+                //remove from model
+                user.getDataReference().remove(dataReference);
+                //remove from DB
                 em.remove(dataReference);
-            }
-            else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+url.getId()+" denied for user "+user.getDn()+"with id: "+user.getId());
+            } else throw new NoAccessToDataCenterException("Access to remove bookmark, Id: "+url.getId()+" denied for user "+user.getDn()+"with id: "+user.getId());
         }
     }
     
