@@ -8,9 +8,12 @@
 <br />
 <t:div id="subnavigation_outer">
     <t:div id="subnavigation">
-        <t:panelNavigation2 id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
+        <t:panelNavigation2 id="nav1" layout="table" itemClass="mypage" activeItemClass="selected"
             disabledStyle="color:red;padding: 2px 20px 2px 25px">
-            <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
+                  <t:navigationMenuItem id="navitems" value="Hello" />
+        
+           <%-- <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />--%>
+           
         </t:panelNavigation2>
     </t:div>
 </t:div>

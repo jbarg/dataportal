@@ -265,31 +265,32 @@ a.navitem:hover,active {
 	white-space : nowrap;
 	text-decoration: none;
 	font-weight : bold;
+ background-color: red;
 }
 
 a.navitem_open:hover,active {
 	white-space : nowrap;
 	text-decoration: none;
 	font-weight : bold;
-    color: #6392C6;
+        color: #6392C6;
 }
 
 .navitem_active {
 	white-space : nowrap;
 	text-decoration: none;
 	font-weight : bold;
-    background-color: #6392C6;
+        background-color: #6392C6;
 	width: 100%;
-    color: #FFFFFF;
+        color: #FFFFFF;
 }
 
 a.navitem_active:hover,active {
 	white-space : nowrap;
 	text-decoration: none;
 	font-weight : bold;
-    background-color: #6392C6;
+        background-color: #6392C6;
 	width: 100%;
-    color: #FFFFFF;
+        color: #FFFFFF;
 }
 
 
