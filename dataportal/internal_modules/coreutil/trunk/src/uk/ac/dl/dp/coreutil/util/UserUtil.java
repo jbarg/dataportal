@@ -122,6 +122,11 @@ public class UserUtil {
     }
     
     public User getUser(){
+          //refresh manager
+        //problem, this was not needed with b48 v1 but needed with UV1
+        //http://forums.java.net/jive/thread.jspa?threadID=15188&tstart=0
+      //  CachingServiceLocator.getInstance().getEntityManager().refresh(user);
+        
         return user;
     }
     
@@ -166,6 +171,7 @@ public class UserUtil {
             //save prefs
             DpUserPreference dpup = getDefaultUserPreferences();
             dpup.setUserId(user);
+            user.setDpUserPreference(dpup);
             em.persist(dpup);
             
         } catch(Exception e) {
