@@ -5,6 +5,7 @@ import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -40,12 +41,12 @@ public class AddUrlClient {
                 
                 sid =  sless1.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
                 System.out.println(sid);
-               
+                
             }
             
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
             DataReference dto = new DataReference();
-             
+            
             
             dto.setTypeOfReference(DPUrlRefType.DATA_SET.toString());
             dto.setTypeOfObject("exe");
@@ -53,10 +54,13 @@ public class AddUrlClient {
             dto.setName("New Data Set no DTO");
             dto.setNote("note");
             dto.setQuery("sql select");
-            dto.setInvestigationId(3);
-            dto.setReferenceId(5);
+            dto.setInvestigationId(13);
+            dto.setReferenceId(534);
             Collection<Url> cs = new ArrayList<Url>();
-            cs.add(new Url("srb://www.test.com/moredata"+(int)(Math.random()*10000L)));
+            Url url = new Url("srb://www.test.com/moredata"+(int)(Math.random()*10000L));
+            url.setName("glen");
+            url.setDataRefId(dto);
+            cs.add(url);
             dto.setUrls(cs);
             
             sless.addDataReference(sid,dto);
@@ -76,6 +80,9 @@ public class AddUrlClient {
                     ex.printStackTrace();
                 } catch (SessionNotFoundException ex) {
                     ex.printStackTrace();
+                }catch (UserNotFoundException ex) {
+                    ex.printStackTrace();
+                    
                 }
         }
     }

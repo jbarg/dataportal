@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence">
   <persistence-unit name="dataportal" transaction-type="JTA">
-    <provider>oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider</provider>
     <jta-data-source>jdbc/oracle</jta-data-source>
     <class>uk.ac.dl.dp.coreutil.entity.Session</class>
     <class>uk.ac.dl.dp.coreutil.entity.User</class>
@@ -36,7 +35,7 @@
     <class>uk.ac.dl.dp.coreutil.entity.Url</class>
     <class>uk.ac.dl.dp.coreutil.entity.Tokens</class>
     <class>uk.ac.dl.dp.coreutil.entity.SrbServer</class>
-     <class>uk.ac.dl.dp.coreutil.entity.EventLogDetails</class>  
+    <class>uk.ac.dl.dp.coreutil.entity.EventLogDetails</class>
     <class>uk.ac.dl.dp.coreutil.entity.EventLog</class>
     <class>uk.ac.dl.dp.coreutil.entity.Event</class>
     <class>uk.ac.dl.dp.coreutil.entity.DataReference</class>
@@ -44,7 +43,7 @@
     <class>uk.ac.dl.dp.coreutil.entity.DataRefAuthorisation</class>
     <class>uk.ac.dl.dp.coreutil.entity.DataRefAuthorisationPK</class>
     <class>uk.ac.dl.dp.coreutil.entity.DpUserPreference</class>
-     <properties>
+    <properties>
       <property name="toplink.jdbc.driver" value="oracle.jdbc.xa.client.OracleXADataSource"/>
       <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@volga.dl.ac.uk:1521:XE"/>
       <property name="toplink.jdbc.user" value="dp5user"/>

@@ -2,6 +2,7 @@ package uk.ac.dl.dp.core.clients.datacenter;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -41,7 +42,7 @@ public class AddBookmarkClient {
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
             Bookmark dto = new Bookmark();
             //dto.setId(759);
-            dto.setStudyId(11);
+            dto.setStudyId(2557);
             dto.setFacility("ISIS");
             dto.setName("no DTO");
             dto.setNote("SS");
@@ -61,6 +62,9 @@ public class AddBookmarkClient {
             } catch (SessionTimedOutException ex) {
                 ex.printStackTrace();
             } catch (SessionNotFoundException ex) {
+                ex.printStackTrace();
+                
+            }catch (UserNotFoundException ex) {
                 ex.printStackTrace();
                 
             }
