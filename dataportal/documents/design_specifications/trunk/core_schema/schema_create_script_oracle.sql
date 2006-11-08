@@ -743,17 +743,17 @@ insert into DP_ROLE values (2, 'ADMIN',systimestamp);
 insert into DP_PROXY_SERVERS values (1,'myproxy.grid-support.ac.uk', 7512, '/C=UK/O=eScience/OU=CLRC/L=DL/CN=host/myproxy.grid-support.ac.uk/E=a.j.richards@dl.ac.uk',systimestamp);
 insert into DP_PROXY_SERVERS values (2,'myproxy-sso.grid-support.ac.uk', 7512, '/C=UK/O=eScience/OU=CLRC/L=RAL/CN=host/myproxy-ss0.grid-support.ac.uk/E=support@grid-support.ac.uk',systimestamp);
 
-insert into DP_FACILITY values (1,'ISIS', 'ISIS Pulsed Neutron \& Muon Source','N','http://www.isis.rl.ac.uk/', systimestamp); 
-insert into DP_FACILITY values (2,'EMAT', 'E-Materials Project','Y','http://www.emat.rl.ac.uk/', systimestamp);
+insert into DP_FACILITY values (1,'ISIS', 'ISIS Pulsed Neutron \& Muon Source','http://www.isis.rl.ac.uk/', systimestamp); 
+insert into DP_FACILITY values (2,'EMAT', 'E-Materials Project','http://www.emat.rl.ac.uk/', systimestamp);
 
-insert into DP_MODULE_LOOKUP values (1,'(DESCRIPTION=(ADDRESS=(HOST=elektra.dl.ac.uk)(PROTOCOL=tcp)(PORT=1521))(CONNECT_DATA=(SID=minerva2)))', 'user', 'password', 'oracle', 'dpal', 'ISIS', 'Y', systimestamp) ;
-insert into DP_MODULE_LOOKUP values (2, 'null', 'user', 'password', 'oracle', 'dpal', 'EMAT', 'Y', systimestamp) ;
+insert into DP_MODULE_LOOKUP values (1,'(DESCRIPTION=(ADDRESS=(HOST=elektra.dl.ac.uk)(PROTOCOL=tcp)(PORT=1521))(CONNECT_DATA=(SID=minerva2)))', 'user', 'password', 'oracle', 'dpal', 'ISIS', 'Y','N', systimestamp) ;
+insert into DP_MODULE_LOOKUP values (2, 'null', 'user', 'password', 'oracle', 'dpal', 'EMAT', 'Y','Y', systimestamp) ;
 
-insert into DP_EVENT values (1,'LOG_OFF',systimestamp);
-insert into DP_EVENT values (2,'LOG_ON',systimestamp);
-insert into DP_EVENT values (3,'BASIC_SEARCH',systimestamp);
-insert into DP_EVENT values (4,'ADVANCED_SEARCH',systimestamp);
-insert into DP_EVENT values (5,'DOWNLOAD',systimestamp);
+insert into DP_EVENT values (1,'LOG_OFF','',systimestamp);
+insert into DP_EVENT values (2,'LOG_ON','',systimestamp);
+insert into DP_EVENT values (3,'BASIC_SEARCH','',systimestamp);
+insert into DP_EVENT values (4,'ADVANCED_SEARCH','',systimestamp);
+insert into DP_EVENT values (5,'DOWNLOAD','',systimestamp);
 
 insert into DP_CREDENTIAL_TYPE values (1,'PROXY','Normal proxy',systimestamp);
 insert into DP_CREDENTIAL_TYPE values (2,'CERTIFICATE','Certificate only, no private key',systimestamp);
