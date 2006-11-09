@@ -61,7 +61,7 @@ public class QueryDelegateHistoryClient {
             
             Collection<String> facs = new ArrayList<String>();
             facs.add("ISIS");
-            facs.add("DIAMOND");
+         //   facs.add("DIAMOND");
             String[] keywords = {"raw"};
             
             dd = QueryDelegate.getInstance();

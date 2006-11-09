@@ -60,9 +60,9 @@ public class QueryDelegateClient {
             srb.add("srb://dfdfd:676/ngs/home/glen-drinkwater.ngs/test");
             
             Collection<String> facs = new ArrayList<String>();
-            facs.add("ISIS");
+            facs.add("EMAT");
             
-            String[] keywords = {"raw"};
+            String[] keywords = {"aspirin"};
             
             dd = QueryDelegateStateFul.getInstance(sid);
             printTime("lookup again");

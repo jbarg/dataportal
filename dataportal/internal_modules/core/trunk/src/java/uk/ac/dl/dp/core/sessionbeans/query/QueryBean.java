@@ -12,21 +12,13 @@ package uk.ac.dl.dp.core.sessionbeans.query;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
-import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
-import javax.ejb.PrePassivate;
-import javax.ejb.Remove;
 import javax.ejb.SessionContext;
 import javax.ejb.*;
 import javax.jms.Connection;
@@ -36,26 +28,20 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
-import javax.naming.NamingException;
 import org.apache.log4j.Logger;
-import org.globus.ftp.exception.NotImplementedException;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Keyword;
 
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
+import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
-import uk.ac.dl.dp.coreutil.delegates.LookupDelegate;
 import uk.ac.dl.dp.coreutil.interfaces.QueryRemote;
-import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterLocal;
-import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceLocal;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
@@ -63,10 +49,8 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.core.message.query.QueryManager;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
-import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
-import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 
 /**
@@ -81,8 +65,11 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     @Resource
     SessionContext sc;
     
-    @EJB()    
+    @EJB()
     TimerServiceLocal timerService;
+    
+    @EJB
+    EventLocal eventLocal;
     
     @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
     private  ConnectionFactory connectionFactory;
@@ -120,6 +107,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             throw new QueryException("Unexpected error, JSMException with connecting to message queue",ex);
         }
         
+             
         //TODO real query
         for(String fac : facilities){
             try {
@@ -172,10 +160,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         } catch (JMSException ex) {}
         
         log.trace("sent off querys to MDBs");
-        //send off basic search event
+          //send off basic search event
         //TODO sort out facility, keyword strings properly
-        userUtil.sendEventLog(DPEvent.BASIC_SEARCH,"Basic Search: "+DPQueryType.KEYWORD+". Keyword(s): "+keyword+". Facility(s): "+facilities);
-        log.trace("sent search event log");
+        eventLocal.sendKeywordEvent(sid,facilities, keyword);
+        log.trace("sent search event log , sid: "+sid );
         return q_request;
         
     }
@@ -243,31 +231,31 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
   /*  public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
-        
+   
         UserUtil userUtil =  new UserUtil(sid);
         User user = userUtil.getUser();
         Collection<String> facilities = new ArrayList<String>();
-        
+   
         for(Study st : studies){
             if(!facilities.contains(st.getFacility())) facilities.add(st.getFacility());
         }
-        
+   
         Collection<Investigation> investigations = new ArrayList<Investigation>();
-        
+   
         for(String fac : facilities){
             ArrayList<String> study_id = new ArrayList<String>();
-            
+   
             for(Study st : studies){
                 if(st.getFacility().equalsIgnoreCase(fac)) study_id.add(st.getId());
             }
-            
+   
             if(study_id.size() == 0) continue ;
-            
+   
             DPAccessLayer dpal = null;
             try {
                 dpal = new DPAccessLayer(fac);
                 investigations.addAll(dpal.getInvestigations(study_id, user.getDn()));
-                
+   
             } catch (Exception ex) {
                 log.error("Unable to search Investigations ids: ",ex);
                 throw new QueryException("Unable to search Investigations ids: ",ex);
@@ -275,9 +263,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
                 dpal.disconnectFromDB();
             }
         }
-        
+   
         return investigations;
-        
+   
     }*/
     
 //TODO delete this
@@ -454,7 +442,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         User user =  new UserUtil(sid).getUser();
-        
+   
         DPAccessLayer dpal = null;
         Collection<Study> r_s_l = new ArrayList<Study>() ;
         Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
@@ -462,9 +450,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
        studyIds.add(studyId);
         try {
             dpal = new DPAccessLayer(fac);
-            
+   
             r_s_l = dpal.getStudiesById(studyIds, user.getDn());
-            
+   
             ArrayList<String> studies = new ArrayList<String>();
             for(Study study : r_s_l){
                 studies.add(study.getId());
@@ -514,7 +502,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         }
         
         FileInputStream f_in = new  FileInputStream(keywordFile);
-                   
+        
         // Read object using ObjectInputStream.
         ObjectInputStream obj_in = new ObjectInputStream(f_in);
         

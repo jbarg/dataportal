@@ -34,15 +34,16 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         //change this to a DTO??  maybe later
         log.info("Looking for facilities type: "+type);
         Collection<ModuleLookup> facilities;
-        facilities = (Collection<ModuleLookup>) em.createNamedQuery("ModuleLookup.findByModuleType").setParameter("moduleType", type.toString()).getResultList();
+        facilities = (Collection<ModuleLookup>) em.createNamedQuery("ModuleLookup.findByModuleTypeActive").setParameter("moduleType", type.toString()).getResultList();
         
         ArrayList list = new ArrayList<FacilityDTO>();
         for(ModuleLookup fac : facilities){
-             log.debug("is datain folders "+fac.getDataInFolders());
-       
-            if(fac.getActive() != null  && fac.getActive().toLowerCase().equalsIgnoreCase("Y")){
-                list.add(new FacilityDTO(fac));
-            }
+            log.debug("is datain folders "+fac.getDataInFolders());
+            
+            // if(fac.getActive() != null  && fac.getActive().toLowerCase().equalsIgnoreCase("Y")){
+            list.add(new FacilityDTO(fac));
+            log.trace("Returning: "+fac.getFacility());
+            //}
             
         }
         return list;
@@ -51,7 +52,7 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
     public Collection<ModuleLookup> getFacilityInfo(DPFacilityType type){
         //change this to a DTO??  maybe later
         log.info("Looking for facilities type: "+type);
-        return (Collection<ModuleLookup>) em.createNamedQuery("ModuleLookup.findByModuleType").setParameter("moduleType", type.toString()).getResultList();
+        return (Collection<ModuleLookup>) em.createNamedQuery("ModuleLookup.findByModuleTypeActive").setParameter("moduleType", type.toString()).getResultList();
         
     }
     
@@ -62,7 +63,11 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
     
     public ProxyServers getDefaultProxyServer(){
         log.debug("Lookup.getProxyServer()");
-        return (ProxyServers) em.createNamedQuery("ProxyServers.findById").setParameter("id", 1).getSingleResult();
+        ProxyServers proxyserver =  (ProxyServers) em.createNamedQuery("ProxyServers.findById").setParameter("id", 1).getSingleResult();
+        
+        //refresh incase the DB is changed in background
+        em.refresh(proxyserver);
+        return proxyserver;        
     }
     
     public SrbServer getSRBServer(){
