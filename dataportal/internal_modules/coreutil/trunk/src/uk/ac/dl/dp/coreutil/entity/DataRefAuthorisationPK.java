@@ -9,33 +9,33 @@ public class DataRefAuthorisationPK implements Serializable {
 
     @Id
     @Column(name = "SOURCE_USER_ID", nullable = false)
-    private Integer sourceUserId;
+    private Long sourceUserId;
 
     @Id
     @Column(name = "AUTHORISED_USER_ID", nullable = false)
-    private Integer authorisedUserId;
+    private Long authorisedUserId;
 
     public DataRefAuthorisationPK() {
     }
 
-    public DataRefAuthorisationPK(Integer authorisedUserId, Integer sourceUserId) {
+    public DataRefAuthorisationPK(Long authorisedUserId, Long sourceUserId) {
         this.authorisedUserId = authorisedUserId;
         this.sourceUserId = sourceUserId;
     }
 
-    public Integer getSourceUserId() {
+    public Long getSourceUserId() {
         return this.sourceUserId;
     }
 
-    public void setSourceUserId(Integer sourceUserId) {
+    public void setSourceUserId(Long sourceUserId) {
         this.sourceUserId = sourceUserId;
     }
 
-    public Integer getAuthorisedUserId() {
+    public Long getAuthorisedUserId() {
         return this.authorisedUserId;
     }
 
-    public void setAuthorisedUserId(Integer authorisedUserId) {
+    public void setAuthorisedUserId(Long authorisedUserId) {
         this.authorisedUserId = authorisedUserId;
     }
 

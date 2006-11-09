@@ -45,7 +45,7 @@ public class SrbServer implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
     
     @Column(name = "HOSTNAME", nullable = false)
     private String hostname;
@@ -68,11 +68,11 @@ public class SrbServer implements Serializable {
     public SrbServer() {
     }
     
-    public SrbServer(Integer id) {
+    public SrbServer(Long id) {
         this.id = id;
     }
     
-    public SrbServer(Integer id, String hostname, Integer portNumber, Date modTime) {
+    public SrbServer(Long id, String hostname, Integer portNumber, Date modTime) {
         this.id = id;
         this.hostname = hostname;
         this.portNumber = portNumber;
@@ -85,7 +85,7 @@ public class SrbServer implements Serializable {
         modTime = new Date();
     }
     
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
     

@@ -51,7 +51,7 @@ public class Session implements Serializable {
     @TableGenerator(name="SESSION", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="SESSION",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="SESSION")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
     
     @Column(name = "USER_SESSION_ID", nullable = false)
     private String userSessionId;
@@ -84,22 +84,22 @@ public class Session implements Serializable {
     public Session() {
     }
     
-    public Session(Integer id) {
+    public Session(Long id) {
         this.id = id;
     }
     
-    public Session(Integer id, String userSessionId, String credential, Date modTime) {
+    public Session(Long id, String userSessionId, String credential, Date modTime) {
         this.id = id;
         this.userSessionId = userSessionId;
         this.credential = credential;
         this.modTime = modTime;
     }
     
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
     
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
     

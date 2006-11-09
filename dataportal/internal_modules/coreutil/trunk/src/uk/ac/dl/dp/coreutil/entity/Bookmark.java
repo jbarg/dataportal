@@ -52,7 +52,7 @@ public class Bookmark implements Serializable {
     @TableGenerator(name="DATA_BOOKMARK", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="DATA_BOOKMARK",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="DATA_BOOKMARK")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
     
     @Column(name = "STUDY_ID", nullable = false)
     private Integer studyId;
@@ -105,7 +105,7 @@ public class Bookmark implements Serializable {
         this.facility = facility;
     }
     
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
     

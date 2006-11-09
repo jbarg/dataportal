@@ -41,7 +41,7 @@ public class ProxyServers implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "PROXY_SERVER_ADDRESS", nullable = false)
     private String proxyServerAddress;
@@ -63,21 +63,21 @@ public class ProxyServers implements Serializable {
     public ProxyServers() {
     }
 
-    public ProxyServers(Integer id) {
+    public ProxyServers(Long id) {
         this.setId(id);
     }
 
-    public ProxyServers(Integer id, String proxyServerAddress, String caRootCertificate) {
+    public ProxyServers(Long id, String proxyServerAddress, String caRootCertificate) {
         this.setId(id);
         this.setProxyServerAddress(proxyServerAddress);
         this.setCaRootCertificate(caRootCertificate);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -46,7 +46,7 @@ public class Event implements Serializable {
     @Id    
       @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "EVENT_NAME")
     @Enumerated(EnumType.STRING)
@@ -63,20 +63,20 @@ public class Event implements Serializable {
     public Event() {
     }
 
-    public Event(Integer id) {
+    public Event(Long id) {
         this.id = id;
     }
 
-    public Event(Integer id, Date modTime) {
+    public Event(Long id, Date modTime) {
         this.id = id;
         this.modTime = modTime;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -41,7 +41,7 @@ public class Tokens implements Serializable {
     @Id
      @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "TOKEN")
     private String token;
@@ -61,20 +61,20 @@ public class Tokens implements Serializable {
     public Tokens() {
     }
 
-    public Tokens(Integer id) {
+    public Tokens(Long id) {
         this.id = id;
     }
 
-    public Tokens(Integer id, Date modTime) {
+    public Tokens(Long id, Date modTime) {
         this.id = id;
         this.modTime = modTime;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
