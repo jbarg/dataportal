@@ -53,7 +53,7 @@ public class User implements Serializable {
     @TableGenerator(name="USER", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="USER",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="USER")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
     
     @Column(name = "DN", nullable = false)
     private String dn;
@@ -105,20 +105,20 @@ public class User implements Serializable {
     public User() {
     }
     
-    public User(Integer id) {
+    public User(Long id) {
         this.setId(id);
     }
     
-    public User(Integer id, String dn) {
+    public User(Long id, String dn) {
         this.setId(id);
         this.setDn(dn);
     }
     
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
     
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
     

@@ -41,7 +41,7 @@ public class CredentialType implements Serializable {
     @TableGenerator(name="SEQ_GEN", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="SEQ_GEN",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -57,21 +57,21 @@ public class CredentialType implements Serializable {
     public CredentialType() {
     }
 
-    public CredentialType(Integer id) {
+    public CredentialType(Long id) {
         this.id = id;
     }
 
-    public CredentialType(Integer id, String name, Date modTime) {
+    public CredentialType(Long id, String name, Date modTime) {
         this.id = id;
         this.name = name;
         this.modTime = modTime;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

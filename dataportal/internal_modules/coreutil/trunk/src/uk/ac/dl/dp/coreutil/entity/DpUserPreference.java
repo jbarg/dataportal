@@ -47,7 +47,7 @@ public class DpUserPreference implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "RESULTS_PER_PAGE")
     private Integer resultsPerPage;
@@ -81,15 +81,15 @@ public class DpUserPreference implements Serializable {
     public DpUserPreference() {
     }
 
-    public DpUserPreference(Integer id) {
+    public DpUserPreference(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

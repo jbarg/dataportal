@@ -46,7 +46,7 @@ public class Url implements Serializable {
     @TableGenerator(name="DATA_URL", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="DATA_URL",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="DATA_URL")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
     
     @Column(name = "URL", nullable = false)
     private String url;
@@ -91,7 +91,7 @@ public class Url implements Serializable {
         this.modTime = modTime;
     }*/
     
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
     

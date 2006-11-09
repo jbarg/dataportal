@@ -10,7 +10,6 @@
 package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +20,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
@@ -45,7 +46,7 @@ public class EventLogDetails implements Serializable {
     @GeneratedValue(strategy=GenerationType.TABLE,generator="ID")
     @Column(name = "ID", nullable = false)
     //Changed to idColumn cos of bug in glassfish b48 with StringOutOfBounds https://glassfish.dev.java.net/issues/show_bug.cgi?id=557 
-    private Integer id;
+    private Long id;
 
     @Column(name = "DETAILS")
     private String details;
@@ -66,7 +67,7 @@ public class EventLogDetails implements Serializable {
      * Creates a new instance of EventLogDetails with the specified values.
      * @param id the id of the EventLogDetails
      */
-    public EventLogDetails(Integer id2) {
+    public EventLogDetails(Long id2) {
         this.id = id2;
     }
 
@@ -75,7 +76,7 @@ public class EventLogDetails implements Serializable {
      * @param id the id of the EventLogDetails
      * @param modTime the modTime of the EventLogDetails
      */
-    public EventLogDetails(Integer id2, Date modTime) {
+    public EventLogDetails(Long id2, Date modTime) {
         this.id = id2;
         this.modTime = modTime;
     }
@@ -84,7 +85,7 @@ public class EventLogDetails implements Serializable {
      * Gets the id of this EventLogDetails.
      * @return the id
      */
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -92,7 +93,7 @@ public class EventLogDetails implements Serializable {
      * Sets the id of this EventLogDetails to the specified value.
      * @param id the new id
      */
-    public void setId(Integer id2) {
+    public void setId(Long id2) {
         this.id = id2;
     }
 
@@ -124,8 +125,13 @@ public class EventLogDetails implements Serializable {
      * Sets the modTime of this EventLogDetails to the specified value.
      * @param modTime the new modTime
      */
-    public void setModTime(Date modTime) {
-        this.modTime = modTime;
+   // public void setModTime(Date modTime) {
+     //   this.modTime = modTime;
+    //}
+      @PrePersist
+    @PreUpdate
+    public void prePersist(){
+        modTime = new Date();
     }
 
     /**

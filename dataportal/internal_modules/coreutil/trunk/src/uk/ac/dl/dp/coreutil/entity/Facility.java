@@ -34,7 +34,6 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Facility.findById", query = "SELECT f FROM Facility f WHERE f.id = :id"), 
     @NamedQuery(name = "Facility.findByShortName", query = "SELECT f FROM Facility f WHERE f.shortName = :shortName"), 
     @NamedQuery(name = "Facility.findByLongName", query = "SELECT f FROM Facility f WHERE f.longName = :longName"), 
-    @NamedQuery(name = "Facility.findByDataInFolders", query = "SELECT f FROM Facility f WHERE f.dataInFolders = :dataInFolders"),    
     @NamedQuery(name = "Facility.findByInfoUrl", query = "SELECT f FROM Facility f WHERE f.infoUrl = :infoUrl"), 
     @NamedQuery(name = "Facility.findByModTime", query = "SELECT f FROM Facility f WHERE f.modTime = :modTime"),
     @NamedQuery(name = "Facility.findAll", query = "SELECT f FROM Facility f")}
@@ -44,16 +43,14 @@ public class Facility implements Serializable {
     @Id
      @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "SHORT_NAME", nullable = false)
     private String shortName;
 
     @Column(name = "LONG_NAME")
     private String longName;
-
-    @Column(name = "DATA_IN_FOLDERS")
-    private String dataInFolders;
+  
      
     @Column(name = "INFO_URL", nullable = false)
     private String infoUrl;
@@ -80,7 +77,7 @@ public class Facility implements Serializable {
         this.modTime = modTime;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -112,28 +109,7 @@ public class Facility implements Serializable {
         this.infoUrl = infoUrl;
     }
     
-     /**
-     * Gets the dataInFolders of this Facility.
-     * @return the dataInFolders
-     */
-    public String getDataInFolders() {
-        return this.dataInFolders;
-    }
-
-    /**
-     *  Boolean function to wrap oracle boolean Y/N null etc
-     */
-    public boolean isDataInFolders(){
-        if(getDataInFolders().equalsIgnoreCase("Y")) return true;
-        else return false;
-    }
-    /**
-     * Sets the dataInFolders of this Facility to the specified value.
-     * @param dataInFolders the new dataInFolders
-     */
-    public void setDataInFolders(String dataInFolders) {
-        this.dataInFolders = dataInFolders;
-    }
+     
 
     public Date getModTime() {
         return this.modTime;

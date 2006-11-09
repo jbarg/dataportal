@@ -44,6 +44,7 @@ public class DataPortalConstants {
     public final static String DATA_AUTHORISATION = "DataAuthorisationEJB";
     public final static String LOOKUP = "LookupEJB";
     public final static String TIMER = "TimerEJB";
+    public final static String EVENT = "EventEJB";
     
     //EJB MDB names
     public final static String QUERY_MDB = "jms/QueryMDBQueue";

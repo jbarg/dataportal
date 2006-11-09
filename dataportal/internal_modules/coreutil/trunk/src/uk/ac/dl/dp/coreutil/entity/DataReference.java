@@ -59,7 +59,7 @@ public class DataReference implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
     
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -134,7 +134,7 @@ public class DataReference implements Serializable {
         this.name = name;
     }*/
     
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
     

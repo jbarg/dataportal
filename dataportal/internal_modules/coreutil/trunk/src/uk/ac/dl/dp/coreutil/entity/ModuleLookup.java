@@ -38,6 +38,7 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
     @NamedQuery(name = "ModuleLookup.findByUsername", query = "SELECT m FROM ModuleLookup m WHERE m.username = :username"), 
     @NamedQuery(name = "ModuleLookup.findByPassword", query = "SELECT m FROM ModuleLookup m WHERE m.password = :password"), 
     @NamedQuery(name = "ModuleLookup.findByPlatform", query = "SELECT m FROM ModuleLookup m WHERE m.platform = :platform"), 
+     @NamedQuery(name = "ModuleLookup.findByModuleTypeActive", query = "SELECT m FROM ModuleLookup m WHERE m.moduleType = :moduleType AND m.active = 'Y'"),    
     @NamedQuery(name = "ModuleLookup.findByModuleType", query = "SELECT m FROM ModuleLookup m WHERE m.moduleType = :moduleType"), 
     @NamedQuery(name = "ModuleLookup.findByFacility", query = "SELECT m FROM ModuleLookup m WHERE m.facility = :facility"), 
     @NamedQuery(name = "ModuleLookup.findByActive", query = "SELECT m FROM ModuleLookup m WHERE m.active = :active"), 
@@ -48,7 +49,7 @@ public class ModuleLookup implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "CONNECTION", nullable = false)
     private String connection;
@@ -100,7 +101,7 @@ public class ModuleLookup implements Serializable {
         this.modTime = modTime;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 

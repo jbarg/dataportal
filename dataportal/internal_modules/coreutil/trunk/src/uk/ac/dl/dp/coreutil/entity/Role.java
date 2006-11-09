@@ -41,7 +41,7 @@ public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     //@Column(name = "NAME", nullable = false)
     //private String name;
@@ -58,21 +58,21 @@ public class Role implements Serializable {
     public Role() {
     }
 
-    public Role(Integer id) {
+    public Role(Long id) {
         this.id = id;
     }
 
-    public Role(Integer id, DPRole name, Date modTime) {
+    public Role(Long id, DPRole name, Date modTime) {
         this.id = id;
         this.name = name;
         this.modTime = modTime;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

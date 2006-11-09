@@ -10,20 +10,24 @@
 package uk.ac.dl.dp.coreutil.util;
 
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
+import uk.ac.dl.dp.coreutil.entity.EventLog;
+import uk.ac.dl.dp.coreutil.entity.EventLogDetails;
 import uk.ac.dl.dp.coreutil.entity.Facility;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 import uk.ac.dl.dp.coreutil.entity.Role;
@@ -33,7 +37,6 @@ import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
-import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
 /**
  *
@@ -44,9 +47,7 @@ public class UserUtil {
     private User user;
     static Logger log = Logger.getLogger(UserUtil.class);
     
-    private  QueueConnectionFactory queueCF;
-    private  Queue mdbQueue;
-    
+   
     
     @PersistenceContext(unitName="dataportal")
     protected EntityManager em;
@@ -86,7 +87,7 @@ public class UserUtil {
     /** Creates a new instance of UserUtil */
     public UserUtil(String DN,String defaultS) throws UserNotFoundException {
         this.em = CachingServiceLocator.getInstance().getEntityManager();
-        if(DN == null) throw new IllegalArgumentException("DN cannot be null.");        
+        if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         log.debug("Loading user with DN "+DN);
         try {
             loadUser(DN);
@@ -108,8 +109,8 @@ public class UserUtil {
     
     /** Creates a new instance of SessionUtil */
     public UserUtil(User user) {
-         this.em = CachingServiceLocator.getInstance().getEntityManager();
-       
+        this.em = CachingServiceLocator.getInstance().getEntityManager();
+        
         if(user == null) throw new IllegalArgumentException("User cannot be null.");
         this.user = user;
     }
@@ -117,15 +118,15 @@ public class UserUtil {
     
     private void loadUser(String DN){
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
-        user = (User)em.createNamedQuery("User.findByDn").setParameter("dn",DN).getSingleResult();      
+        user = (User)em.createNamedQuery("User.findByDn").setParameter("dn",DN).getSingleResult();
         log.debug("Loaded user with user id "+user.getId());
     }
     
     public User getUser(){
-          //refresh manager
+        //refresh manager
         //problem, this was not needed with b48 v1 but needed with UV1
         //http://forums.java.net/jive/thread.jspa?threadID=15188&tstart=0
-      //  CachingServiceLocator.getInstance().getEntityManager().refresh(user);
+        //  CachingServiceLocator.getInstance().getEntityManager().refresh(user);
         
         return user;
     }
@@ -142,22 +143,22 @@ public class UserUtil {
                 return  (DpUserPreference) em.createNamedQuery("DpUserPreference.findByUserId").setParameter("userId", user).getSingleResult();
             } catch(Exception e){
                 log.warn("Unable to get user prefs",e);
-                throw new EntityNotFoundException("Entity Not Found: "+e.getMessage());       
+                throw new EntityNotFoundException("Entity Not Found: "+e.getMessage());
             }
         } else return dpup;
     }
-         
+    
     
     public static User createDefaultUser(String username, String DN) throws CannotCreateNewUserException {
         User user;
         EntityManager em = CachingServiceLocator.getInstance().getEntityManager();
-       
+        
         try {
             user = new User();
             
             user.setDn(DN);
             user.setUserId(username);
-             
+            
             //set up default role
             Collection<Role> roles = (Collection<Role>) em.createNamedQuery("Role.findByName").setParameter("name",DPRole.USER).getResultList();
             Role role = roles.iterator().next();
@@ -185,7 +186,7 @@ public class UserUtil {
         return user;
     }
     
-     private static DpUserPreference getDefaultUserPreferences() {
+    private static DpUserPreference getDefaultUserPreferences() {
         DpUserPreference prefs = new DpUserPreference();
         EntityManager em  = CachingServiceLocator.getInstance().getEntityManager();
         
@@ -201,60 +202,8 @@ public class UserUtil {
         prefs.setProxyServerId(proxyservers.iterator().next());
         
         log.debug("User proxyserver is "+proxyservers.iterator().next().getId()+" with address: "+proxyservers.iterator().next().getProxyServerAddress());
-                
+        
         return prefs;
     }
-    
-    
-    public void sendEventLog(DPEvent event, String description){
-        
-        QueueConnection queueCon = null;
-        QueueSender queueSender = null;
-        QueueSession queueSession = null;
-        
-        
-        try {
-            CachingServiceLocator csl =  CachingServiceLocator.getInstance();
-            mdbQueue  = csl.lookupQueue(DataPortalConstants.EVENT_MDB);
-            QueueConnectionFactory queueCF =
-                    (QueueConnectionFactory) csl.lookup(DataPortalConstants.CONNECTION_FACTORY);
-            
-            queueCon = queueCF.createQueueConnection();
-            queueSession = queueCon.createQueueSession
-                    (false, Session.AUTO_ACKNOWLEDGE);
-            queueSender = queueSession.createSender(null);
-            
-        } catch (Exception e) {
-            log.error("Unable to locate EventBean",e);
-        }
-        try {
-            
-            TextMessage msg = queueSession.createTextMessage(
-                    this.user.getId().toString() + "," +
-                    event.toString()+","+description );
-            
-            // The sent timestamp acts as the message's ID
-            long sent = System.currentTimeMillis();
-            msg.setLongProperty("sent", sent);
-            
-            queueSender = queueSession.createSender(mdbQueue);
-            queueSender.send(msg);
-            // sess.commit ();
-            
-            
-        } catch (JMSException ex) {
-            log.error("Unable send event: "+event+" by userId: "+this.user.getId(),ex);
-        }
-        finally{
-            try {
-                queueSession.close();
-                queueCon.close();
-            } catch (JMSException ex) {
-                
-            }
-        }
-        
-    }
-    
     
 }

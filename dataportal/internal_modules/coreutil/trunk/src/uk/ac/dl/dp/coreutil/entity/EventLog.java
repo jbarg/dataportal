@@ -46,11 +46,14 @@ import uk.ac.dl.dp.coreutil.entity.EventLogDetails;
 )
 public class EventLog implements Serializable {
     
+    static final long serialVersionUID = 7110175216435025451L;
+
+    
     @Id
     @TableGenerator(name="ID", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="EVENT_LOG",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="ID")
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
     
     @Column(name = "EVENT", nullable = false)
     private String event;
@@ -66,8 +69,8 @@ public class EventLog implements Serializable {
     @ManyToOne
     private uk.ac.dl.dp.coreutil.entity.User userId;
     
-  //   @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventLogId")
-  // private Collection<EventLogDetails> eventLogDetails;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventLogId")
+   private Collection<EventLogDetails> eventLogDetails;
      
     @PrePersist
     @PreUpdate
@@ -79,20 +82,20 @@ public class EventLog implements Serializable {
     public EventLog() {
     }
     
-    public EventLog(Integer id) {
+    public EventLog(Long id) {
         this.id = id;
     }
     
-    public EventLog(Integer id, String event) {
+    public EventLog(Long id, String event) {
         this.id = id;
         this.event = event;
     }
     
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
     
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
     
@@ -132,7 +135,7 @@ public class EventLog implements Serializable {
      * Gets the eventLogDetailsCollection of this EventLog.
      * @return the eventLogDetailsCollection
      */
-   /* public Collection<EventLogDetails> getEventLogDetails() {
+    public Collection<EventLogDetails> getEventLogDetails() {
         return this.eventLogDetails;
     }
 
@@ -140,9 +143,9 @@ public class EventLog implements Serializable {
      * Sets the eventLogDetailsCollection of this EventLog to the specified value.
      * @param eventLogDetailsCollection the new eventLogDetailsCollection
      */
-    /*public void setEventLogDetailsCollection(Collection<EventLogDetails> eventLogDetails) {
+    public void setEventLogDetails(Collection<EventLogDetails> eventLogDetails) {
         this.eventLogDetails = eventLogDetails;
-    }*/
+    }
     
     public int hashCode() {
         int hash = 0;
