@@ -24,7 +24,8 @@
                                     <h:outputText rendered="#{!bookmarkBean.populated}" value="There are no items in bookmarks" styleClass="info" />
                                     <h:outputText rendered="#{!bookmarkBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
                                     
-                                    <a4j:region   selfRendered="true" > 
+                                    <a4j:region   selfRendered="true" >
+                                        
                                         <t:dataTable rendered="#{bookmarkBean.populated}" id="datatable" width="100%"
                                                      styleClass="scrollerTable"
                                                      headerClass="standardTable_Header"
@@ -217,8 +218,9 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             
+                                            <h:commandButton action="#{bookmarkBean.removeBookmarks}" title="Delete selections" value="Delete selections"/>
                                             
-                                            <a4j:commandButton action="#{bookmarkBean.removeBookmarks}" reRender="datatable" title="Delete selections" value="Delete selections"/>
+                                            <%-- <a4j:commandButton action="#{bookmarkBean.removeBookmarks}" reRender="datatable" title="Delete selections" value="Delete selections"/>--%>
                                             &nbsp;
                                             
                                             <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>    

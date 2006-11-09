@@ -21,53 +21,58 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <title>Downloading... </title>
           
         <script>
-            function remove(){
+           function remove(){
             var close = <%= request.getParameter("close")%>;
                
+            window.location.href="downloadsrb_close.jsp";
+           
             if(BrowserDetect.browser == "Explorer"){
-            //windows does not shut it, retry and it works???
-            //setTimeout("nothing()", 100);
-            self.close();
-            setTimeout("remove()", 150);
+                //windows does not shut it, retry and it works???
+                //setTimeout("nothing()", 100);
+                self.close();
+                setTimeout("remove()", 150);
+                
             }
             else if(BrowserDetect.browser == "Netscape" && BrowserDetect.version == "Moziila"){
-            //netscape 4      
-            parent.window.close();
+                //netscape 4      
+                parent.window.close();
             }  
             else if(BrowserDetect.browser == "Firefox"){
             //firefox
-            if(BrowserDetect.OS == "Windows"){
-            //windows shuts the save/download diolog box aswell
-             
-            document.getElementById('button').value = "Close";
-            document.getElementById('progressBar_percentageText').style.display = "none";             
-            document.getElementById('progressBar_FinishedText').style.display = "block";
-              
-            document.getElementById('downloading').style.display = "none";
-            document.getElementById('downloaded').style.display = "block";
-              
-            document.getElementById('progressBar_portionComplete').style.background = "#00FF00";
-            document.getElementById('progressBar_portionRemaining').style.background = "#00FF00";
-              
-            }
-            else  parent.window.close();
-            }
-            
-            else {
-            //other
-            parent.window.close();
-            }
+                if(BrowserDetect.OS == "Windows"){
+                    //windows shuts the save/download diolog box aswell
+
+                    document.getElementById('button').value = "Close";
+                    document.getElementById('progressBar_percentageText').style.display = "none";             
+                    document.getElementById('progressBar_FinishedText').style.display = "block";
+
+                    document.getElementById('downloading').style.display = "none";
+                    document.getElementById('downloaded').style.display = "block";
+
+                    document.getElementById('progressBar_portionComplete').style.background = "#00FF00";
+                    document.getElementById('progressBar_portionRemaining').style.background = "#00FF00";
+
+                }
+                else {
+                    parent.window.close();
+                }
+
+                else {
+                    //other
+                    parent.window.close();
+                }
                 
             }
             
             function nothing(){
-            //do nothing
+               //do nothing
             }
             
             function Func1Delay()
             {
-            //sleep two seconds
-            setTimeout("remove()", 1500);
+           
+                //sleep two seconds
+                setTimeout("remove()", 1500);
             }
             
         </script>

@@ -6,7 +6,7 @@
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
       function extractCity(citystatezip) {
       var index = citystatezip.indexOf(',');
       var nextcity = citystatezip.substring(0, index+4);
@@ -18,7 +18,7 @@
       
 
       function chooseCity(city) {
-      var oldvalue = document.getElementById('body:autofillform:keywordField').value;
+      var oldvalue = document.getElementById('body:autofillform:keywordFieldj_id_1').value;
       // alert("--"+oldvalue+"--");
       var index = oldvalue.lastIndexOf(' ');
           
@@ -39,11 +39,11 @@
       
       if(old == ""){
       // alert("no old");
-      document.getElementById('body:autofillform:keywordField').value = city+" ";
+      document.getElementById('body:autofillform:keywordFieldj_id_1').value = city+" ";
       }
       else {
       // alert("is old");
-      document.getElementById('body:autofillform:keywordField').value = old+" "+city+" ";
+      document.getElementById('body:autofillform:keywordFieldj_id_1').value = old+" "+city+" ";
       }
       var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
       // alert(oldvalue);
@@ -56,59 +56,60 @@
          
       
        
-  </script>
+</script>
 <br />
 
 <a4j:region  selfRendered="true"> 
     <h:form id="autofillform">
         <h:panelGrid border="0" columns="2"> 
             <h:messages globalOnly="true" errorClass="error" infoClass="info" />
-            	
+            
         </h:panelGrid>
-                 
+        
         <h:panelGrid  border="0" columns="4">      
-                 
-            <h:outputLabel for="facilities">
+            
+            <h:outputLabel for="facilitiesj_id_1">
                 <h:outputText value="Search: " style="font-size:14px"/>
             </h:outputLabel  >
-          
+            
             <%--  <s:selectManyPicklist id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{searchBean.facilities}" size="5" required="true" >
          
             <f:selectItems value="#{searchBean.facilityList}"/>
             <f:validateLength minimum="1" />
             </s:selectManyPicklist>--%>
-           
-            <%-- <h:selectManyListbox id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >--%>
-            <h:selectManyListbox id="facilities" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >      
+            
+                
+            <%--    <h:selectManyListbox id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >--%>
+            <h:selectManyListbox id="facilitiesj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >      
                 <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplay,radio" />
                 <f:selectItems value="#{visit.facilities}"/>
                 <f:validateLength minimum="1" />
             </h:selectManyListbox>
-                               
-               
+            
+            
             <h:outputText id="facilityDisplay" value="#{visit.visitData.currentSelectedFacilities}" style="font-size:14px"/>
             
-            <h:message for="facilities" styleClass="error"/>
-               
-            <h:outputLabel for="keyword">
+            <h:message for="facilitiesj_id_1" styleClass="error"/>
+            
+            <h:outputLabel for="keywordFieldj_id_1">
                 <h:outputText value="Keyword(s): " style="font-size:14px"/>
             </h:outputLabel  >                      
-           
+            
             <%--   <s:inputSuggestAjax required="true" suggestedItemsMethod="#{keyword.getSuggest}"
             id="keywordField" value="#{searchBean.keyword}" charset="utf-8"/>--%>
            
-            <ui:autoComplete size="40" maxlength="60" id="keywordField" 
-            completionMethod="#{keyword.completeCity}" 
-            value="#{searchBean.keyword}" required="true"
-            ondisplay="function(item) { return extractCity(item); }"
-            onchoose="function(item) { return chooseCity(item); }" />
-                        
+            <ui:autoComplete  size="40" maxlength="60" id="keywordFieldj_id_1" 
+                              completionMethod="#{keyword.completeCity}" 
+                              value="#{searchBean.keyword}" required="true"
+                              ondisplay="function(item) { return extractCity(item); }"
+                              onchoose="function(item) { return chooseCity(item); }" />
+            
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                closePopupOnExitingPopup="true"
-                displayAtDistanceX="5"
-                displayAtDistanceY="-40">
-
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40">
+                
                 <t:graphicImage url="../../images/help.gif" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
@@ -116,7 +117,7 @@
                             <h:outputText value="Exact keyword match only. Case insensititve."/>                                 
                             <h:outputText value="Auto Complete enabled."/>                                 
                             <h:outputText value="This list is not a full list of all the possible keywords."/>                                 
-                         
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -126,22 +127,22 @@
             <f:selectItems value="#{keyword.keywords}"/>
             </s:inputSuggest>--%>
                    
-            <h:message for="keywordField" styleClass="error"/>
-               
+            <h:message for="keywordFieldj_id_1" styleClass="error"/>
+            
             <h:outputLabel>            
                 <h:outputText value="Type:" style="font-size: 14px" />                   
             </h:outputLabel>
-
+            
             <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
             <h:selectOneRadio style="font-size:14px" id="radio" value="#{searchBean.logicalExpression}" >
-                 <f:selectItems value="#{searchBean.logicalExpressions}"/>              
+                <f:selectItems value="#{searchBean.logicalExpressions}"/>              
             </h:selectOneRadio>           
-                
+            
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                closePopupOnExitingPopup="true"
-                displayAtDistanceX="5"
-                displayAtDistanceY="-40" >
-
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
                 <t:graphicImage url="../../images/help.gif" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
@@ -154,24 +155,24 @@
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-
-           
+            
+            
             <h:panelGroup/>
             <h:panelGroup/>
             <h:commandButton action="#{searchBean.searchByKeyword}" onclick="busyBox.Show();" title="search" value="Search"/>
-          
+            
             <h:panelGroup/>
         </h:panelGrid>
-      
+        
     </h:form>
 </a4j:region>
 
-  <iframe id="BusyBoxIFrame" name="BusyBoxIFrame" frameBorder="0" scrolling="no" ondrop="return false;">
-        </iframe>
-        <SCRIPT>
+<iframe id="BusyBoxIFrame" name="BusyBoxIFrame" frameBorder="0" scrolling="no" ondrop="return false;">
+</iframe>
+<SCRIPT>
 		// Instantiate our BusyBox object
 		var busyBox = new BusyBox("BusyBoxIFrame", "busyBox", 4, "../../images/gears_ani_", ".gif", 125, 147, 207);
                                 
                                
                                
-        </SCRIPT>
+</SCRIPT>

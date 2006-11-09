@@ -42,7 +42,7 @@
                     
                             </table>
             
-                            <table style="margin-top:-30px" border="0" width="100%">
+                            <table id="nav_bar2" border="0" width="100%">
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">

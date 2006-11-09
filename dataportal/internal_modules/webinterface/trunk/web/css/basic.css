@@ -1,9 +1,11 @@
 //hack to allow difference heights for IE and firefox
-//IE cannot understand the second one
-.nav_bar {height: 45;}
-html>body .nav_bar {height: 55;} 
-#nav_bar {height: 45;}
-html>body #nav_bar {height: 55;} 
+//IE cannot undersand the second one
+
+#nav_bar {height: -100;}
+html>body #nav_bar {height: 60;} 
+
+#nav_bar2 {margin-top: -30px;}
+html>body #nav_bar2 {margin-top: -50px;} 
 
 .dojoHtmlFisheyeListBar {
 margin: 0 auto;

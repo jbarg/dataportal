@@ -24,7 +24,7 @@
     </context-param>    
     <context-param>        
         <param-name>org.apache.myfaces.AUTO_SCROLL</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
     
     <!-- performance increases with server saving atate-->

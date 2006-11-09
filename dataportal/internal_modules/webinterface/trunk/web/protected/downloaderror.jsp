@@ -73,7 +73,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             out.print(error);
 
         %></p>
-        <br />
+       
         <table align="center">
             <td align="right"> <input type="button"  value="Close" onclick="window.close()"/>
             </td>

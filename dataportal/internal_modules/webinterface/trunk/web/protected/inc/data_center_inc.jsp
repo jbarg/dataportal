@@ -19,13 +19,14 @@
                             </tr>   
                             <tr>   
                                 <td>
-                                    
-                                    <h:outputText rendered="#{!bookmarkBean.populated}" escape="false "value="<br />"  styleClass="info" />            
-                                    <h:outputText rendered="#{!bookmarkBean.populated}" value="There are no items in data center" styleClass="info" />
-                                    <h:outputText rendered="#{!bookmarkBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
-                                    
-                                    <a4j:region   selfRendered="true" > 
-                                        <t:dataTable rendered="#{bookmarkBean.populated}" id="datatable" width="100%"
+                                        
+                                    <h:outputText rendered="#{!datacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
+                                    <h:outputText rendered="#{!datacenterBean.populated}" value="There are no items in data center" styleClass="info" />
+                                    <h:outputText rendered="#{!datacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
+                                
+                                        <a4j:region   selfRendered="true" > 
+                                        
+                                        <t:dataTable rendered="#{datacenterBean.populated}" id="datatable" width="100%"
                                                      styleClass="scrollerTable"
                                                      headerClass="standardTable_Header"
                                                      footerClass="standardTable_Header"
@@ -64,14 +65,14 @@
                                                 <%--   <h:panelGrid columns="4" rendered="#{data.dataset && data.datasetInFolder}"> 
                                                 <h:commandLink  rendered="#{data.dataset && data.datasetInFolder}" disabled="true" style="color:black" id="view-1">
                                                     --%>
-                                                    <%--<h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">--%>
-                                                    <%-- <t:graphicImage id="down-1" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                                <%--<h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">--%>
+                                                <%-- <t:graphicImage id="down-1" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
                                                     <t:graphicImage id="down-f-1" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>--%>
-                                                    <h:panelGroup rendered="#{data.dataset && data.datasetInFolder}">
-                                                        <t:graphicImage id="up-1" value="../../images/button_minus1.gif"  border="0"/>
-                                                        <t:graphicImage id="up-f-1" value="../../images/blue-folder-open.png"  border="0"/>
-                                                    </h:panelGroup>
-                                              <%--  </h:commandLink>--%>
+                                                <h:panelGroup rendered="#{data.dataset && data.datasetInFolder}">
+                                                    <t:graphicImage id="up-1" value="../../images/button_minus1.gif"  border="0"/>
+                                                    <t:graphicImage id="up-f-1" value="../../images/blue-folder-open.png"  border="0"/>
+                                                </h:panelGroup>
+                                                <%--  </h:commandLink>--%>
                                                 
                                                 <h:panelGrid columns="4" rendered="#{!data.dataset}">
                                                     
@@ -355,7 +356,10 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <a4j:commandButton action="#{datacenterBean.removeDatasets}" reRender="datatable" title="Delete selections" value="Delete selections"/>
+                                            
+                                            <h:commandButton action="#{datacenterBean.removeDatasets}" title="Delete selections" value="Delete selections"/>
+                                            
+                                         <%--   <a4j:commandButton action="#{datacenterBean.removeDatasets}" reRender="datatable" title="Delete selections" value="Delete selections"/>--%>
                                             &nbsp;
                                             
                                             <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>                                                                            

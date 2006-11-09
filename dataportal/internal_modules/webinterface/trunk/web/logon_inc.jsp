@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib prefix="tiles" uri="http://struts.apache.org/tags-tiles"%>
 
-<h:form>
+<h:form id="userform">
  
     <br />
     <br />
@@ -17,23 +17,23 @@
     </h:panelGrid>  
     <h:panelGrid columns="3">
                                               
-        <h:outputLabel for="usernameinput">
+        <h:outputLabel for="Usernamej_id_1">
             <h:outputText styleClass="body" value="Username: "/>
         </h:outputLabel  >
                                                                                            
-        <h:inputText id="Username" size="20" required="true" value="#{authorisationBean.username}">
+        <h:inputText id="Usernamej_id_1" size="20" required="true" value="#{authorisationBean.username}">
             <f:validateLength minimum="1" maximum="10"/>
         </h:inputText> 
-        <h:message for="Username" styleClass="error" showSummary="false" showDetail="true" />
+        <h:message for="Usernamej_id_1" styleClass="error" showSummary="false" showDetail="true" />
 
-        <h:outputLabel for="passwordinput">
+        <h:outputLabel for="Passwordj_id_1">
             <h:outputText styleClass="body" value="Password: "/>
         </h:outputLabel  >
 
-        <h:inputSecret id="Password"  size="20" required="true" value="#{authorisationBean.password}">
+        <h:inputSecret id="Passwordj_id_1"  size="20" required="true" value="#{authorisationBean.password}">
             <f:validateLength minimum="0" maximum="10"/>
         </h:inputSecret> 
-        <h:message for="Password" styleClass="error"/>
+        <h:message for="Passwordj_id_1" styleClass="error"/>
         <h:panelGroup/>
 
         <h:commandButton action="#{authorisationBean.login}" title="Login" value="Logon"/>
