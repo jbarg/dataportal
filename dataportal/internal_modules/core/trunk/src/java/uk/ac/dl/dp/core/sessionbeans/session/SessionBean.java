@@ -9,20 +9,18 @@ import java.util.GregorianCalendar;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.annotation.security.RolesAllowed;
 
 import javax.ejb.*;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
-import uk.ac.dl.dp.coreutil.entity.Role;
 
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
@@ -71,6 +69,8 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     @EJB
     private LookupLocal lookup;
     
+    @EJB
+    private EventLocal eventLocal;
     
     public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException, UserNotFoundException{
         log.debug("getSession()");
@@ -91,7 +91,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
         GSSCredential myproxy_proxy;
         try {
-            //lookup proxy and contact for users credential
+            //lookup proxy and contact for users credential             
             ProxyServers proxyserver = lookup.getDefaultProxyServer();
             myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy(),
                     proxyserver.getProxyServerAddress(),proxyserver.getPortNumber(),proxyserver.getCaRootCertificate());
@@ -189,7 +189,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.info("New session created for user: "+DN+" sid: "+sid);
             
             //add login event
-            userutil.sendEventLog(DPEvent.LOG_ON,"Logged on at "+new Date());
+            eventLocal.sendEvent(sid,DPEvent.LOG_ON,"Logged on");
             
             return sid;
             
@@ -220,6 +220,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
       */
     public boolean logout(String sid) throws SessionNotFoundException ,SessionTimedOutException, UserNotFoundException{
         log.debug("logout()");
+         //send logout event
+        eventLocal.sendEvent(sid,DPEvent.LOG_OPF,"Logged off");
+        
         Session session = new SessionUtil(sid).getSession();
         //remove from object model
         User user = new UserUtil(sid).getUser();
@@ -231,8 +234,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         //clear query cache
         //ts.removeSessionFromQueryCache(sid);
         
-        //send logout event
-        new UserUtil(session.getUserId()).sendEventLog(DPEvent.LOG_OPF,"Logged off at "+new Date());
+       
         
         log.info("Ended session: "+sid);
         return true;

@@ -9,20 +9,20 @@
 
 package uk.ac.dl.dp.core.message.event;
 
-import java.sql.Timestamp;
-import java.util.StringTokenizer;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.TextMessage;
+import javax.jms.ObjectMessage;
 import org.apache.log4j.Logger;
-import uk.ac.dl.dp.coreutil.entity.EventLog;
 import uk.ac.dl.dp.coreutil.entity.User;
+import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
+import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.util.EventMessage;
 
 
 /**
@@ -33,54 +33,28 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 public class EventMessageBean extends MessageEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(EventMessageBean.class);
-          
+    
     
     public void onMessage(Message message) {
         
         log.debug("onMessage();  Event message received");
-        TextMessage tmsg = (TextMessage) message;
+        ObjectMessage msg = null;
         
-        Timestamp sent = null;
-        int userId = 0;
-        String eventType = null;
-        User user = null;
-        String description = null;
-        
-        try {
-            sent = new Timestamp(tmsg.getLongProperty("sent"));
-            StringTokenizer st =
-                    new StringTokenizer(tmsg.getText(), ",");
+        if (message instanceof ObjectMessage) {
+            msg = (ObjectMessage) message;
+            EventMessage e = null;
             
-            userId = Integer.parseInt(st.nextToken());
-            eventType = st.nextToken();
-            description = st.nextToken();
+            try {
+                e = (EventMessage) msg.getObject();
+            } catch (JMSException jmsex) {
+                log.debug("Object not correct",jmsex);
+                return;
+            }            
+            log.debug("Saving event log: "+e.getEventLog().getEvent());
+            em.persist(e.getEventLog());
             
-               user =  new UserUtil(userId).getUser();
-        } catch (NumberFormatException ex) {
-            log.error("Unable to parse int sent in message",ex);
-            return ;
-            
-        } catch (JMSException ex) {
-            log.error("Unable to get info out of message sent",ex);
-            return ;
+            log.debug("Message saved");
         }
-        catch (UserNotFoundException ex) {
-            log.error("No user with user id "+userId+" in the system",ex);
-            return ;
-        }
-      
         
-        //get the event type
-        //Event event = (Event) em.createNamedQuery("Event.findByEventName").setParameter(":eventName",eventType).getSingleResult();
-        
-        EventLog eventlog = new EventLog();
-        eventlog.setUserId(user);
-        eventlog.setEvent(eventType);
-        eventlog.setDetails(description);
-        
-        em.persist(eventlog);
-        
-       System.out.println("Message receieved");
     }
-    
 }

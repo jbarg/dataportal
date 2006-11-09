@@ -45,7 +45,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
     public void onMessage(Message message) {
         
         
-        log.debug("onMessage();  Event message received");
+        log.debug("onMessage();  Query message received");
         ObjectMessage msg = null;
         
         Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
@@ -65,8 +65,10 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             DPAccessLayer dpal = null;
             log.debug("Query : Keyword "+e.getKeyword()+" on fac: "+e.getFacility()+" sent at "+e.getSent());
             try {
-                log.debug("Querying: "+e.getDN()+" with facilities: "+e.getFacility());
-                log.debug("keyword is "+e.getKeyword());
+                log.debug("Querying: "+e.getDN()+" with facilities: "+e.getFacility()+" Keywords:");
+                for(String key : e.getKeyword()){
+                    log.debug(key);
+                }
                 
                 //TODO
                 ////////this can go when access layer can look up connection
@@ -102,7 +104,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 ex  = exception;
                 
             } finally{
-                 dpal.disconnectFromDB();
+                dpal.disconnectFromDB();
             }
             
             log.debug("Query finished for "+e.getFacility()+"  with id: "+e.getId());

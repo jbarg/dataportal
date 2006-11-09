@@ -102,7 +102,7 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
     public boolean isFinished(){
         if(th.isFinished()){
             //send event log
-            new UserUtil(user).sendEventLog(DPEvent.DOWNLOAD,this.srbUrl.iterator().next()+" ...");
+          //  new UserUtil(user).sendEventLog(DPEvent.DOWNLOAD,this.srbUrl.iterator().next()+" ...");
             return true;
         }
         return false;

@@ -56,7 +56,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
             
             //users the same
             //if dto id is null then new entry, if not, check users same
-            if(dto.getId() != null && (int)user.getId() != (int)dto.getUserId().getId()){
+            if(dto.getId() != null && (long)user.getId() != (long)dto.getUserId().getId()){
                 throw new NoAccessToDataCenterException("Access to add bookmark, Id: "+dto.getId()+", user id: "+dto.getUserId().getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
             } else {
               //  dto.setUserId(user);
@@ -99,7 +99,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
                         user.addBookmark(dto);
-                        
+                                                
                         em.persist(dto);
                         continue;
                     } catch(NoResultException nre){
@@ -153,7 +153,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 //TODO trouble with detatched entities
                 //could do it this way
                 //Bookmark bookmark = em.find(Bookmark.class,bm.getId());
-                Bookmark bookmark = em.merge(bm);
+                Bookmark bookmark = em.find(Bookmark.class,bm.getId());
                 log.trace("Removing bookmark with id: "+bm.getId());
                 //remove from model
                 user.getBookmark().remove(bookmark);
@@ -188,7 +188,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         
         for(DataReference dto: dtos){
             //users the same
-            if(dto.getUserId() != null && (int)user.getId() != (int)dto.getUserId().getId()){
+            if(dto.getUserId() != null && (long)user.getId() != (long)dto.getUserId().getId()){
                 throw new NoAccessToDataCenterException("Access to add DataReference, Id: "+dto.getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
                 
             } else{
@@ -268,13 +268,15 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
             if(url.getUserId().getId().intValue() == user.getId().intValue()) {
                 //TODO trouble with detatched entities
                 log.trace("trying to remove "+url.getId());
-                DataReference dataReference = em.merge(url);
+                DataReference dataReference = em.find(DataReference.class,url.getId());
                 
-                //need to remove all urls first cos cannot cascade through a mapping table
-                /*Collection<Url> urls = dataReference.getUrls();
-                for(Url dr_url : urls){
+                //TODO need to remove all urls first cos cannot cascade through a mapping table
+              //  Collection<Url> urls = dataReference.getUrls();
+               /* for(Url dr_url : urls){
+                    log.trace("Removing url "+dr_url.getId());
                     em.remove(dr_url);
                 }*/
+                //dataReference.setUrls(null);
                 //remove from model
                 user.getDataReference().remove(dataReference);
                 //remove from DB

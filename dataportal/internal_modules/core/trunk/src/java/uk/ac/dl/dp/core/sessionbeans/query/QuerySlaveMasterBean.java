@@ -9,18 +9,13 @@
 
 package uk.ac.dl.dp.core.sessionbeans.query;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.PrePassivate;
 import javax.ejb.Remove;
@@ -34,7 +29,6 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
 import org.apache.log4j.Logger;
-import org.globus.ftp.exception.NotImplementedException;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
@@ -46,7 +40,6 @@ import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterRemote;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
@@ -54,10 +47,8 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.core.message.query.QueryManager;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
-import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
-import uk.ac.dl.dp.coreutil.util.DPEvent;
-import uk.ac.dl.dp.coreutil.util.DPFacilityType;
+import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 
 /**
@@ -72,6 +63,9 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
     @Resource
     SessionContext sc;
     
+     @EJB
+    EventLocal eventLocal;
+     
     @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
     private  ConnectionFactory connectionFactory;
     
@@ -186,7 +180,7 @@ public class QuerySlaveMasterBean extends SessionEJBObject implements QuerySlave
         log.trace("sent off querys to MDBs");
         //send off basic search event
         //TODO sort out facility, keyword strings properly
-        this.userutil.sendEventLog(DPEvent.BASIC_SEARCH,"Basic Search: "+DPQueryType.KEYWORD+". Keyword(s): "+keyword+". Facility(s): "+facilities);
+        eventLocal.sendKeywordEvent(sid,facilities, keyword);
         log.trace("sent search event log");
         return search_id;
         
