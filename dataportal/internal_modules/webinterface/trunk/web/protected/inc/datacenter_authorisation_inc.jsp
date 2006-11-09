@@ -29,7 +29,7 @@
                                     <h:outputText styleClass="body" value="Search DNs:"/>
                                 </h:outputLabel  >
                                                                                            
-                                <h:inputText id="dn" size="30" required="true" value="#{dataAuthorisationBean.searchString}">
+                                <h:inputText id="dnj_id_1" size="30" required="true" value="#{dataAuthorisationBean.searchString}">
                                     <f:validateLength minimum="1" maximum="60"/>
                                 </h:inputText> 
                                 <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -52,7 +52,7 @@
                                         </h:panelGroup>
                                     </f:facet>
                                 </t:popup>
-                                <h:message for="dn" styleClass="error" showSummary="false" showDetail="true" />
+                                <h:message for="dnj_id_1" styleClass="error" showSummary="false" showDetail="true" />
 
                                 <h:panelGroup/>
                                <%-- Does not work with rendering renerdre=false sections" <a4j:commandButton reRender="searchResults" actionListener="#{dataAuthorisationBean.search}" value="Search"/>--%>
@@ -69,12 +69,12 @@
                                     <h:outputText styleClass="body" value="Grant User: "/>&nbsp;
                                 </h:outputLabel  >
                                                                                            
-                                <h:selectOneMenu id="usernameselect" required="true" value="#{dataAuthorisationBean.searchUser}" >
+                                <h:selectOneMenu id="usernameselectj_id_1" required="true" value="#{dataAuthorisationBean.searchUser}" >
                                     <f:selectItems value="#{visit.visitData.searchedUsers}"/>
                                     <f:validateLength minimum="1" />
                                 </h:selectOneMenu>
                      
-                                <h:message for="usernameselect" styleClass="error" showSummary="false" showDetail="true" />
+                                <h:message for="usernameselectj_id_1" styleClass="error" showSummary="false" showDetail="true" />
 
                             </h:panelGrid> 
                             <br />
@@ -91,7 +91,7 @@
                                 popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
                                 helpText="DD/MM/YYYY" />
  
-                                <h:message for="thirdOne" styleClass="error" showSummary="false" showDetail="true" />
+                                <h:message for="thirdOnej_id_1" styleClass="error" showSummary="false" showDetail="true" />
 
 
                                 <h:outputLabel>
@@ -99,13 +99,13 @@
                                 </h:outputLabel  >
                                                                                            
                    
-                                <t:inputCalendar binding="#{dataAuthorisationBean.calendarSecond}" id="forthOne" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                <t:inputCalendar binding="#{dataAuthorisationBean.calendarSecond}" id="forthOnej_id_1" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                 currentDayCellClass="currentDayCell" value="#{dataAuthorisationBean.secondDate}" renderAsPopup="true"
                                 popupTodayString="Today is:"
                                 popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
                                 helpText="DD/MM/YYYY" validator="#{dataAuthorisationBean.validateDate}"/>
                     
-                                <h:message for="forthOne" styleClass="error" showSummary="false" showDetail="true" />
+                                <h:message for="forthOnej_id_1" styleClass="error" showSummary="false" showDetail="true" />
 
                                 <h:panelGroup><br /></h:panelGroup>
                                 <h:panelGroup/>
@@ -116,7 +116,7 @@
                                     <h:outputText styleClass="body" value="To your: "/>
                                 </h:outputLabel  >
                                                                                            
-                                <h:selectOneMenu id="typeAccess" validator="#{dataAuthorisationBean.validateType}" required="true" value="#{dataAuthorisationBean.type}" >
+                                <h:selectOneMenu id="typeAccessj_id_1" validator="#{dataAuthorisationBean.validateType}" required="true" value="#{dataAuthorisationBean.type}" >
                                     <f:selectItem itemValue="ONE" itemLabel="Select One" itemDisabled="true"/>
                                     <f:selectItem itemValue="ALL" itemLabel="All"/>
                                     <f:selectItem itemValue="BOOKMARK" itemLabel="Bookmarks"/>
@@ -124,7 +124,7 @@
                         
                        
                                 </h:selectOneMenu>
-                                <h:message for="typeAccess" styleClass="error" showSummary="false" showDetail="true" />
+                                <h:message for="typeAccessj_id_1" styleClass="error" showSummary="false" showDetail="true" />
 
                                 <h:panelGroup><br /></h:panelGroup>
                                 <h:panelGroup/>

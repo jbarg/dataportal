@@ -33,7 +33,7 @@
                                             </f:subview>
                                         </td>
                                         
-                                        <td width="100%" align="right">
+                                        <td width="100%" align="right" >
                                             <f:subview id="header_2">
                                                 <c:import url="inc/header_2.jsp" />
                                             </f:subview>
@@ -43,7 +43,7 @@
                                 
                             </table>
                             
-                            <table style="margin-top:-30px" border="0" width="100%">
+                            <table id="nav_bar2"  border="0" width="100%">
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">

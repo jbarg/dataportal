@@ -6,9 +6,7 @@
         <locale-config>
             <default-locale>en</default-locale>
         </locale-config>
-      <!--  <view-handler>
-            com.sun.facelets.FaceletViewHandler
-        </view-handler>   -->
+        
     </application>
     
     
@@ -142,7 +140,7 @@
             <to-view-id>/protected/basic_search.jsp</to-view-id>
             <redirect />            
         </navigation-case>    
-         <navigation-case>
+        <navigation-case>
             <from-outcome>LOGIN_FAILURE</from-outcome>
             <to-view-id>/logon.jsp</to-view-id>
             <redirect />            
@@ -618,6 +616,7 @@
     <render-kit>
         <render-kit-id>HTML_BASIC</render-kit-id>
         <!-- extended standard renderers -->
+       
         <renderer>
             <component-family>javax.faces.Command</component-family>
             <renderer-type>org.apache.myfaces.Button</renderer-type>
@@ -628,6 +627,17 @@
             <renderer-type>org.apache.myfaces.Link</renderer-type>
             <renderer-class>org.apache.myfaces.renderkit.html.ext.HtmlLinkRenderer</renderer-class>
         </renderer>
+      <!--  <renderer>
+            <component-family>javax.faces.Command</component-family>
+            <renderer-type>javax.faces.Button</renderer-type>
+            <renderer-class>org.apache.myfaces.renderkit.html.jsf.ExtendedHtmlButtonRenderer</renderer-class>
+        </renderer>
+        <renderer>
+            <component-family>javax.faces.Command</component-family>
+            <renderer-type>javax.faces.Link</renderer-type>
+            <renderer-class>org.apache.myfaces.renderkit.html.jsf.ExtendedHtmlLinkRenderer</renderer-class>
+        </renderer>-->
+        
         <renderer>
             <component-family>javax.faces.Data</component-family>
             <renderer-type>org.apache.myfaces.Table</renderer-type>
