@@ -9,6 +9,7 @@ import uk.ac.dl.dp.coreutil.interfaces.DataAuthorisationRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DPAuthType;
+import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 /*
  * BookmarkClient.java
@@ -30,13 +31,13 @@ public class AddAuthUserClient {
         try{
             
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
-           // String name = "LouisePrice";
-             String name = "glen";
+            // String name = "LouisePrice";
+            String name = "glen";
             
             if(sid == null || sid.equals("")){
                 SessionRemote sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
-                 sid = sless1.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
-     
+                sid = sless1.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
+                
                 //sid =  sless1.login(name,"llllll",2);
                 System.out.println(sid);
             }
@@ -66,12 +67,28 @@ public class AddAuthUserClient {
             System.out.println("");
             Collection<String> res = sless.searchUserDns(sid, "sufi");
             for(String re : res){
-               System.out.println(re);
+                System.out.println(re);
             }
             
-            sless.removeAuthorisedUser(sid , res.iterator().next());
+            // sless.removeAuthorisedUser(sid , res.iterator().next());
             
+            System.out.println("");
+            System.out.println("");
+            System.out.println("Adding access");
+            sless.addAuthorisedUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi",new Date(2003,10,10),new Date(2007,10,10), DPAuthType.BOOKMARK);
+            Collection<DataRefAuthorisation> e2 = sless.getGivenAuthorisedList(sid, DPAuthType.NONE);
+            System.out.println(name +" has given access to:");
+            for(DataRefAuthorisation g: e2){
+                System.out.println(g.getUser().getDn());
+            }
             
+            System.out.println("remove access");
+            sless.removeAuthorisedUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi");
+            Collection<DataRefAuthorisation> e3 = sless.getGivenAuthorisedList(sid, DPAuthType.NONE);
+            System.out.println(name +" has given access to:");
+            for(DataRefAuthorisation g: e3){
+                System.out.println(g.getUser().getDn());
+            }
             //
         }catch(Exception e){
             System.out.println(e.getMessage());
