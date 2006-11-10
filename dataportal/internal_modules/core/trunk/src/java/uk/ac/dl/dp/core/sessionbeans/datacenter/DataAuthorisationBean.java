@@ -61,6 +61,11 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         if(pk1 == null){
             log.warn("No authorisation for user: "+userSource.getDn()+" to "+givenSource.getDn()+" to remove");
         } else{
+            //TODO put into entity
+            //remove given
+            //userSource.getDataRefAuthorisationSource().remove(pk1);
+            //remove recieved
+            //givenSource.getDataRefAuthorisation().remove(pk1);
             em.remove(pk1);
         }
     }
@@ -94,6 +99,11 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         DataRefAuthorisation pk1 = em.find(DataRefAuthorisation.class,pk);
         
         if(pk1 == null){
+            //TODO put into entity
+            //add given
+            // userSource.getDataRefAuthorisationSource().add(pk1);
+            //add recieved
+            //givenSource.getDataRefAuthorisation().add(pk1);
             em.persist(dpr);
         } else{
             em.merge(dpr);
@@ -111,7 +121,8 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         User user = new UserUtil(sid).getUser();
         
         log.debug("Finding user auth given by : "+user.getDn()+" type: "+type);
-        Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisationSource();
+        //Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisationSource();
+        Collection<DataRefAuthorisation> dra = (Collection<DataRefAuthorisation>)em.createNamedQuery("DataRefAuthorisation.findBySourceUserId").setParameter("sourceUserId",user.getId()).getResultList();
         log.trace("Number given: "+dra.size());
         Collection<DataRefAuthorisation> sc = new ArrayList<DataRefAuthorisation>();
         for(DataRefAuthorisation df : dra){
@@ -137,6 +148,11 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
                 }
             } else if(now.after(expire)){
                 log.debug("Removing auth for user: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
+                //remove given
+                //TODO put into entity
+                // user.getDataRefAuthorisationSource().remove(df);
+                //remove recieved
+                // givenUser.getDataRefAuthorisation().remove(df);
                 em.remove(df);
             } else if(now.before(start)){
                 log.debug("User: "+user.getDn()+" has given user "+givenUser.getDn()+" access type "+df.getAuthType()+" is not valid yet but going to show for given");
@@ -157,7 +173,8 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         User user = new UserUtil(sid).getUser();
         
         log.debug("Finding user auth given to: "+user.getDn()+" tyoe: "+type );
-        Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisation();
+        Collection<DataRefAuthorisation> dra = (Collection<DataRefAuthorisation>)em.createNamedQuery("DataRefAuthorisation.findByAuthorisedUserId").setParameter("authorisedUserId",user.getId()).getResultList();
+        //Collection<DataRefAuthorisation> dra = user.getDataRefAuthorisation();
         log.trace("Number given: "+dra.size());
         Collection<DataRefAuthorisation> sc = new ArrayList<DataRefAuthorisation>();
         for(DataRefAuthorisation df : dra){
@@ -184,6 +201,11 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
                 
             } else if(now.after(expire)){
                 log.debug("Removing auth for user: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType()+", expired: "+df.getAuthEndDate());
+                //remove given
+                //TODO put into entity
+                user.getDataRefAuthorisationSource().remove(df);
+                //remove recieved
+                recievedUser.getDataRefAuthorisation().remove(df);
                 em.remove(df);
             } else if(now.before(start)){
                 log.debug("User: "+user.getDn()+" has given user "+recievedUser.getDn()+" access type "+df.getAuthType()+" is not valid yet");
