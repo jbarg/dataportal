@@ -29,7 +29,7 @@ NOTE VARCHAR2(4000),
 FACILITY VARCHAR2(4000),
 QUERY VARCHAR2(4000),
 INVESTIGATION_ID NUMBER,
-TYPE_OF_REFERENCE VARCHAR2(10),
+TYPE_OF_REFERENCE VARCHAR2(30),
 REFERENCE_ID NUMBER NOT NULL,
 TYPE_OF_OBJECT VARCHAR2(4000),
 MOD_TIME TIMESTAMP(1)
@@ -80,7 +80,6 @@ CREATE TABLE DP_FACILITY
 ID NUMBER NOT NULL,
 SHORT_NAME VARCHAR2(256) NOT NULL,
 LONG_NAME VARCHAR2(512),
-DATA_IN_FOLDERS VARCHAR2(1),
 INFO_URL VARCHAR2(256) NOT NULL,
 MOD_TIME TIMESTAMP(1) NOT NULL
 )
@@ -672,9 +671,6 @@ COMMENT ON COLUMN DP_DATA_REF_AUTHORISATION.AUTHORISED_USER_ID IS 'the one recei
 COMMENT ON COLUMN DP_DATA_REF_AUTHORISATION.AUTH_TYPE IS 'perhaps data references, bookmarks, both, other'
 ;
 
-COMMENT ON COLUMN DP_FACILITY.DATA_IN_FOLDERS IS 'if this is set to ''Y'' or ''y'' then the datafile location is actually a directory which holds all the data for the parent dataset. e.g. as used in e-materials with srb locations holding all the data for the datasets. - this is scheduled to be removed as it has now been moved to it''s proper place - i.e. in dp_module_lookup.'
-;
-
 COMMENT ON COLUMN DP_MODULE_LOOKUP.CONNECTION IS 'e.g. for DPAL this would be a Database Connect String and for ACM this might be a Web Services End Point'
 ;
 
@@ -710,6 +706,7 @@ COMMENT ON COLUMN DP_USER_PREFERENCE.PROXY_SERVER_ID IS 'in hours'
 
 COMMENT ON COLUMN DP_USER_ROLE.USER_ID IS 'weak entity, many to many mapping table'
 ;
+
 
 
 
