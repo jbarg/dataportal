@@ -12,6 +12,10 @@ import uk.ac.cclrc.dpal.beans.* ;
  
 //for the enums
 import uk.ac.cclrc.dpal.enums.* ;
+
+//for the dpaccesslayer code
+import uk.ac.cclrc.dpal.* ;
+
  
 public class TestDPAccessLayerEmat
 {

@@ -12,8 +12,11 @@ import uk.ac.cclrc.dpal.beans.* ;
  
 //for the enums
 import uk.ac.cclrc.dpal.enums.* ;
+
+//for the dpaccesslayer code
+import uk.ac.cclrc.dpal.* ;
  
-public class TestDPAccessLayerIsis
+public class TestDPAccessLayerDls
 {
 
    public static void main(String []args)
@@ -32,13 +35,13 @@ public class TestDPAccessLayerIsis
      String db_host = "elektra.dl.ac.uk";
      String db_port = "1521";
      String db_sid = "minerva2" ;
-     String db_user = "icatisis" ;
+     String db_user = "icatdls" ;
      String db_pass = "ihave4name" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
                              "(CONNECT_DATA=(SID="+db_sid+")))";
 
-     DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
+     DPAccessLayer dpal = new DPAccessLayer("dls", dbConnectString, db_user, db_pass) ;
 System.out.println(dbConnectString);
      //use command line for keywords if supplied
      if (args.length == 0)
