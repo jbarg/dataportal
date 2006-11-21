@@ -49,7 +49,7 @@ public class DPAccessLayer {
     
     ////////////////////////////////////////////////////////////
     // single param constructor for using a connection pool
-    public DPAccessLayer(String facility)throws NamingException {
+    public DPAccessLayer(String facility)throws NamingException, java.sql.SQLException {
         this.facility = facility ;
         using_pool = true ;
         lookupInitialContext();
@@ -64,52 +64,32 @@ public class DPAccessLayer {
     }
     
     /////////////////////////////////////////////////////////////
-    public void connectToDB() throws javax.naming.NamingException {
-        
-        boolean connected = false ;
-        boolean reconnection_attempt = false ;
-        
-        while (connected == false) {
-            try {
-                if(r != null) {
-                    r.close() ;
-                }
-                if(s != null) {
-                    s.close() ;
-                }
-                if(conn != null) {
-                    conn.close() ;
-                }
-                log.debug("getting connection from pool:" + "jdbc/" + this.facility);
-                
-                DataSource normal_ds =  lookup("jdbc/" + this.facility);
-                
-                com.sun.appserv.jdbc.DataSource ds = (com.sun.appserv.jdbc.DataSource) normal_ds;
-                
-                //need reference to normal conn as this is the connection we close back to pool
-                normal_conn = normal_ds.getConnection();
-                conn = (OracleConnection)ds.getConnection(normal_conn);
-                                                
-                log.debug("received a pooled connection");
-                
-                s = conn.createStatement() ;
-                connected = true ;
-                if(reconnection_attempt == true) {
-                    log.info("Now reconnected to Relational Database") ;
-                }
-            } catch (SQLException sqle) {
-                log.error("Unable to get connection" ,sqle);
-            }
-            if(connected == false) {
-                log.debug("Attempting reconnection in 30 seconds...") ;
-                try {
-                    Thread.sleep(30000) ;
-                } catch(InterruptedException ie) {
-                    
-                }
-            }
-        } // end of while - i.e. if exceptions thrown should re-try the connection
-        return ;
+    public void connectToDB() throws javax.naming.NamingException, java.sql.SQLException {
+       
+        if(r != null) {
+            r.close() ;
+        }
+        if(s != null) {
+            s.close() ;
+        }
+        if(conn != null) {
+            conn.close() ;
+        }
+        log.debug("getting connection from pool:" + "jdbc/" + this.facility);
+          
+        DataSource normal_ds =  lookup("jdbc/" + this.facility);
+          
+        com.sun.appserv.jdbc.DataSource ds = (com.sun.appserv.jdbc.DataSource) normal_ds;
+          
+        //need reference to normal conn as this is the connection we close back to pool
+        normal_conn = normal_ds.getConnection();
+        conn = (OracleConnection)ds.getConnection(normal_conn);
+                                          
+        log.debug("received a pooled connection");
+           
+        s = conn.createStatement() ;
+      
+     return ;
     }
     
     
