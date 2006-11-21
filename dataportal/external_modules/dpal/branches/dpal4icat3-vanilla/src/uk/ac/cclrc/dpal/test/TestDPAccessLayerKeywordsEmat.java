@@ -9,6 +9,10 @@ import java.sql.SQLException;
 
 //for processing the beans
 import uk.ac.cclrc.dpal.beans.* ;
+
+//for the dpaccesslayer code
+import uk.ac.cclrc.dpal.* ;
+
  
 public class TestDPAccessLayerKeywordsEmat
 {

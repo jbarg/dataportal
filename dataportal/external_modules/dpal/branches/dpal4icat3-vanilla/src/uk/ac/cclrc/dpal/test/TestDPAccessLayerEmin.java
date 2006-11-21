@@ -12,8 +12,12 @@ import uk.ac.cclrc.dpal.beans.* ;
  
 //for the enums
 import uk.ac.cclrc.dpal.enums.* ;
+
+//for the dpaccesslayer code
+import uk.ac.cclrc.dpal.* ;
+
  
-public class TestDPAccessLayerEmat
+public class TestDPAccessLayerEmin
 {
 
    public static void main(String []args)
@@ -29,16 +33,16 @@ public class TestDPAccessLayerEmat
      ArrayList<DataFile> r_f_l = null ;
 
      //init the dp access layer
-     String db_host = "elektra.dl.ac.uk";
+     String db_host = "honey-vip.esc.rl.ac.uk";
      String db_port = "1521";
-     String db_sid = "minerva2" ;
-     String db_user = "metaematview" ;
-     String db_pass = "viewb4rk1ng" ;
+     String db_sid = "emin1" ;
+     String db_user = "metaemin_view" ;
+     String db_pass = "ghj86fjkl" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
                              "(CONNECT_DATA=(SID="+db_sid+")))";
 
-     DPAccessLayer dpal = new DPAccessLayer("emat", dbConnectString, db_user, db_pass) ;
+     DPAccessLayer dpal = new DPAccessLayer("emin", dbConnectString, db_user, db_pass) ;
 System.out.println(dbConnectString);
      //use command line for keywords if supplied
      if (args.length == 0)
