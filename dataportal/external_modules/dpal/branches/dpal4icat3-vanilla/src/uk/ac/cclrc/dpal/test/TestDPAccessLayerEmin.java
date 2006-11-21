@@ -33,14 +33,15 @@ public class TestDPAccessLayerEmin
      ArrayList<DataFile> r_f_l = null ;
 
      //init the dp access layer
-     String db_host = "honey-vip.esc.rl.ac.uk";
+     String db_host = "honey.esc.rl.ac.uk";
      String db_port = "1521";
-     String db_sid = "emin1" ;
+     String db_sid = "EMIN.ESC.RL.AC.UK" ;
      String db_user = "metaemin_view" ;
      String db_pass = "ghj86fjkl" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
-                             "(CONNECT_DATA=(SID="+db_sid+")))";
+                             "(CONNECT_DATA=(SERVICE_NAME="+db_sid+")))";
+
 
      DPAccessLayer dpal = new DPAccessLayer("emin", dbConnectString, db_user, db_pass) ;
 System.out.println(dbConnectString);
