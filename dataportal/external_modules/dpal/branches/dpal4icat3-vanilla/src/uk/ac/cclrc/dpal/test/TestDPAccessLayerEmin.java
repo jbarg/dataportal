@@ -50,7 +50,7 @@ System.out.println(dbConnectString);
      {
         //funny case to test the automatic case insensitivety of the searches
      //   keyword_list.add("BirMingHam") ;
-        keyword_list.add("5-substituted uracils") ;
+        keyword_list.add("Sulphides") ;
      }
      else
      {
@@ -66,7 +66,7 @@ System.out.println(dbConnectString);
          System.out.println("-") ;
          //////
          System.out.println("The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
-         r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.AND ) ;
+         r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.OR ) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;  //note beans.toString methods are overridden
             inv_id_list.add(i.getId()) ;
@@ -97,8 +97,9 @@ System.out.println(dbConnectString);
          r_i_l = null ;
          //////
          ArrayList<String> k_l = new ArrayList<String>() ;
-         k_l.add("Edinburgh") ;
-         System.out.println("The list of Investigations linked to Edinburgh"+k_l.toString()+":") ;
+         k_l.add("Weathering") ;
+         k_l.add("Silicates") ;
+         System.out.println("The list of Investigations linked to Silicates and Weathering"+k_l.toString()+":") ;
          r_i_l = dpal.getInvestigations(k_l, "DN", LogicalOperator.AND) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden

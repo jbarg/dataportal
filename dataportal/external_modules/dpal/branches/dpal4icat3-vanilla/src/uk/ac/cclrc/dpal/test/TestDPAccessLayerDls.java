@@ -48,7 +48,7 @@ System.out.println(dbConnectString);
      {
         //funny case to test the automatic case insensitivety of the searches
      //   keyword_list.add("BirMingHam") ;
-        keyword_list.add("raW") ;
+        keyword_list.add("15299") ;
      }
      else
      {
@@ -95,8 +95,8 @@ System.out.println(dbConnectString);
          r_i_l = null ;
          //////
          ArrayList<String> k_l = new ArrayList<String>() ;
-         k_l.add("Edinburgh") ;
-         System.out.println("The list of Investigations linked to Edinburgh"+k_l.toString()+":") ;
+         k_l.add("15299") ;
+         System.out.println("The list of Investigations linked to 15299"+k_l.toString()+":") ;
          r_i_l = dpal.getInvestigations(k_l, "DN", LogicalOperator.AND) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden
