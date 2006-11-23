@@ -96,6 +96,8 @@ MODULE_TYPE VARCHAR2(256) NOT NULL,
 FACILITY VARCHAR2(256) NOT NULL,
 ACTIVE VARCHAR2(1),
 DATA_IN_FOLDERS VARCHAR2(1),
+SPACES_IN_KEYWORDS VARCHAR2(1),
+ALL_KEYWORDS VARCHAR2(1),
 MOD_TIME TIMESTAMP(1) NOT NULL
 )
 ;
@@ -683,6 +685,12 @@ COMMENT ON COLUMN DP_MODULE_LOOKUP.ACTIVE IS 'e.g. if set to null, Y or y  then 
 COMMENT ON COLUMN DP_MODULE_LOOKUP.DATA_IN_FOLDERS IS 'if this is set to ''Y'' or ''y'' then the datafile location is actually a directory which holds all the data for the parent dataset. e.g. as used in e-materials with srb locations holding all the data for the datasets.'
 ;
 
+COMMENT ON COLUMN DP_MODULE_LOOKUP.SPACES_IN_KEYWORDS IS 'if ''Y'' or ''y'' this allows spaces to be present in keywords e.g. in the case of e-minerals and e-materials where spaces are present as keywords are not really keywords but leaf nodes in topic taxanomic structures. This could be used to allow keyphrases also in actual key''words'''
+;
+
+COMMENT ON COLUMN DP_MODULE_LOOKUP.ALL_KEYWORDS IS 'if set to ''Y'' or ''y'' this will allow keywords with non-alphanumeric characters to be allowed in the presented keyword list and not suppressed. '
+;
+
 COMMENT ON COLUMN DP_SESSION.CREDENTIAL_TYPE IS 'e.g. common use is delegated proxy'
 ;
 
@@ -706,7 +714,6 @@ COMMENT ON COLUMN DP_USER_PREFERENCE.PROXY_SERVER_ID IS 'in hours'
 
 COMMENT ON COLUMN DP_USER_ROLE.USER_ID IS 'weak entity, many to many mapping table'
 ;
-
 
 
 
