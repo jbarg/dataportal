@@ -50,8 +50,8 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.core.message.query.QueryManager;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
-import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
+
 
 /**
  *
@@ -81,9 +81,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     public QueryRequest queryByKeyword(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         log.debug("queryByKeyword()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        
+               
         String search_id =  UUID.randomUUID().toString();
-        UserUtil userUtil =  new UserUtil(sid);
+        UserUtil userUtil =  new UserUtil(sid,em);
         User user = userUtil.getUser();
         QueryRequest q_request = null;
         
@@ -314,9 +314,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         log.debug("getDataSets(String sid, Collection<Investigation> investigations)");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        
-        
-        UserUtil userUtil =  new UserUtil(sid);
+                      
+        UserUtil userUtil =  new UserUtil(sid,em);
         User user = userUtil.getUser();
         Collection<String> facilities = new ArrayList<String>();
         
@@ -363,7 +362,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
-        UserUtil userUtil =  new UserUtil(sid);
+                               UserUtil userUtil =  new UserUtil(sid,em);
         User user = userUtil.getUser();
         Collection<String> facilities = new ArrayList<String>();
         
@@ -403,11 +402,11 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     
     public Collection<QueryRecordDTO> getCurrentResults(String sid){
         log.debug("getCurrentResults(String sid)");
-        Collection<Collection<QueryRecord>> ccqr = QueryManager.getUserAll(sid);
+        Collection<Collection<QueryRecord>> ccqr = QueryManager.getUserAll(sid,em);
         log.trace("Getting all results, size: "+ccqr.size());
         
         //no duplicates
-        Collection<String> queryIds = QueryManager.getUserQueryIds(sid);
+        Collection<String> queryIds = QueryManager.getUserQueryIds(sid,em);
         log.trace("Getting all results queryIds, size: "+queryIds.size());
         Collection<QueryRecordDTO> dto  = new ArrayList<QueryRecordDTO>();
         
@@ -470,8 +469,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     public Collection<Investigation> getInvestigationById(String sid, String fac, String investigastionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
         log.debug("getInvestigationId(String sid)");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        //TODO check for nulls
-        User user =  new UserUtil(sid).getUser();
+        //TODO check for nulls        
+                  
+        User user =  new UserUtil(sid,em).getUser();
         
         DPAccessLayer dpal = null;
         Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;

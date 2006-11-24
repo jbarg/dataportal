@@ -35,6 +35,11 @@ public abstract class EJBObject {
     @PersistenceContext(unitName="dataportal")
     protected EntityManager em;
     
+    // For testing only
+    public void setEntityManager(EntityManager em){
+        this.em = em;
+    }
+    
     public Object mergeEntity(Object entity) {
         return em.merge(entity);
     }
@@ -60,9 +65,9 @@ public abstract class EJBObject {
         //PropertyConfigurator.configure(ClassLoader.getSystemResource("log4j.properties"));
         
         log.debug("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+"log4j.properties");
-        if(CachingServiceLocator.getInstance().getEntityManager() == null){
+      /*  if(CachingServiceLocator.getInstance().getEntityManager() == null){
             CachingServiceLocator.getInstance().put(em);
-        }
+        }*/
     }
     
     @AroundInvoke

@@ -17,13 +17,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
+import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.beans.Investigation;
-
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
@@ -81,10 +77,10 @@ public class QueryManager {
         return ccqr_user;
     }
     
-    public static Collection<Collection<QueryRecord>> getUserAll(String sid){
+    public static Collection<Collection<QueryRecord>> getUserAll(String sid, EntityManager em){
         UserUtil user = null;
         try {
-            user = new UserUtil(sid);
+            user = new UserUtil(sid,em);
         } catch (Exception ex) {
             log.error("Unable to find users DN");
             return new ArrayList<Collection<QueryRecord>>();
@@ -106,10 +102,10 @@ public class QueryManager {
         return ccqr_user_all;
     }
     
-    public static Collection<String> getUserQueryIds(String sid){
+    public static Collection<String> getUserQueryIds(String sid, EntityManager em){
         UserUtil user = null;
         try {
-            user = new UserUtil(sid);
+            user = new UserUtil(sid,em);
         } catch (Exception ex) {
             log.error("Unable to find users DN");
             return new ArrayList<String>();

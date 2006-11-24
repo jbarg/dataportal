@@ -32,13 +32,14 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
     //@RolesAllowed("ANYONE")
     public Collection<FacilityDTO> getFacilities(DPFacilityType type){
         //change this to a DTO??  maybe later
-        log.info("Looking for facilities type: "+type);
+        log.info("Looking for facilities type: "+type);        
+              
         Collection<ModuleLookup> facilities;
         facilities = (Collection<ModuleLookup>) em.createNamedQuery("ModuleLookup.findByModuleTypeActive").setParameter("moduleType", type.toString()).getResultList();
         
         ArrayList list = new ArrayList<FacilityDTO>();
         for(ModuleLookup fac : facilities){
-            log.debug("is datain folders "+fac.getDataInFolders());
+            log.debug("is data in folders "+fac.getDataInFolders());
             
             // if(fac.getActive() != null  && fac.getActive().toLowerCase().equalsIgnoreCase("Y")){
             list.add(new FacilityDTO(fac));

@@ -9,7 +9,6 @@
 
 package uk.ac.dl.dp.core.sessionbeans.session;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -30,8 +29,6 @@ import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.Session;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceLocal;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceRemote;
@@ -134,7 +131,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
             String queryId = qr.getQueryid();
             try {
                 
-                new SessionUtil(sid);
+                new SessionUtil(sid,em);
             } catch (DataPortalException ex) {
                 log.info("Remove old query from cache: "+queryId);
                 QueryManager.removeRecord(queryId);
@@ -166,14 +163,14 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
                     boolean word = true;
                     
                     //if not EMAT (ie allowed none words) then remove all none words
-                    if(!mod.isDataInFolders()){
+                    if(!mod.isAllKeywords()){
                         //log.trace(mod.getFacility()+" has not got data in folders so taking out none words");
                         for(int j = 0 ; j < k.getName().length(); j++){
-                            if(!Character.isLetter(k.getName().charAt(j))){
+                            if(!Character.isLetterOrDigit(k.getName().charAt(j))){
                                 word = false;
                                 break;
                             }
-                        }
+                        }                       
                     }
                     if(word){
                         if(addFac){
@@ -216,7 +213,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     
     
     public void removeSessionFromQueryCache(String sid){
-        Collection<String> qr_ids = QueryManager.getUserQueryIds(sid);
+        Collection<String> qr_ids = QueryManager.getUserQueryIds(sid,em);
         
         for(String ids : qr_ids){
             

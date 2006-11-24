@@ -83,7 +83,7 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
         log.debug("Destroying..");
     }
     
-    public void startDownloadSRBFile(String sid, Collection<String> srbUrl) throws CertificateException, SessionNotFoundException, SessionTimedOutException{
+ /*   public void startDownloadSRBFile(String sid, Collection<String> srbUrl) throws CertificateException, SessionNotFoundException, SessionTimedOutException{
         log.debug("downloadSRBFile()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         if(srbUrl == null || srbUrl.size() == 0) throw new IllegalArgumentException("SRB URLs need to be valid, ie. not null or size 0.");
@@ -97,9 +97,9 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
         
         //start the download
         download(creds,srbUrl);
-    }
+    }*/
     
-    public boolean isFinished(){
+  /*  public boolean isFinished(){
         if(th.isFinished()){
             //send event log
           //  new UserUtil(user).sendEventLog(DPEvent.DOWNLOAD,this.srbUrl.iterator().next()+" ...");
@@ -136,7 +136,7 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
          if(CachingServiceLocator.getInstance().getEntityManager() == null){
             CachingServiceLocator.getInstance().put(em);
         }
-    }
+    }*/
     
    /* @Init()
     public void lookupSRBServer(){
@@ -144,7 +144,7 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
        // log.trace("Looking up SRBServer");        
     }*/
     
-    private void download(GSSCredential credential, Collection<String> srbUrl) {
+  /*  private void download(GSSCredential credential, Collection<String> srbUrl) {
         //use default configuration location ~/.srb
         th = new SRBFileManagerThread();
         
@@ -198,5 +198,5 @@ public class TransferBean extends SessionEJBObject implements TransferRemote, Tr
             log.error("Exception downloading SRB files: "+th.getException());
             exception = th.getException();
         }*/
-    }
+    /*}*/
 }
