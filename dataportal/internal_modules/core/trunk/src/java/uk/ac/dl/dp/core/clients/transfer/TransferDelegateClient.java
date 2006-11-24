@@ -23,18 +23,18 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
  */
 public class TransferDelegateClient {
     
-    static  double time ;
+  /*  static  double time ;
     
     private  static Logger log = Logger.getLogger(TransferDelegateClient.class);
     
     /** Creates a new instance of NewMain */
-    public TransferDelegateClient() {
+   /* public TransferDelegateClient() {
     }
     
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         PropertyConfigurator.configure("c:/log4j.properties");
         time =  new Date().getTime();
         try{
@@ -104,6 +104,6 @@ public class TransferDelegateClient {
     private static void printTime(String message){
         log.debug(message+": "+(new Date().getTime()-time)/1000+" secs\n");
         
-    }
+    }*/
     
 }

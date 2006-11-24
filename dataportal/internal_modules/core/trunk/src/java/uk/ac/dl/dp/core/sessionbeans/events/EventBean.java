@@ -34,6 +34,7 @@ import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.interfaces.EventRemote;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
+
 import uk.ac.dl.dp.coreutil.util.EventMessage;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 
@@ -52,12 +53,14 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
     @Resource(mappedName=DataPortalConstants.EVENT_MDB)
     private  Queue queue;
     
+    
     /** Creates a new instance of EventBean */
     public EventBean() {
     }
     
     public void sendEvent(String sid, EventMessage eventMessage){
-        QueueConnection connection = null;
+        
+                        QueueConnection connection = null;
         QueueSession session = null;
         MessageProducer messageProducer = null;
         User user = null;
@@ -79,7 +82,7 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
         try {
             ObjectMessage message = session.createObjectMessage();
             
-            user =  new UserUtil(sid).getUser();
+            user =  new UserUtil(sid,em).getUser();
             
             eventMessage.getEventLog().setUserId(user);
             eventMessage.setUserId(user.getId());

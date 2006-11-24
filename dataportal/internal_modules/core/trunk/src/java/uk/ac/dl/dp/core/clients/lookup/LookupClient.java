@@ -59,7 +59,7 @@ public class LookupClient {
             Collection<FacilityDTO> facs = (Collection<FacilityDTO>)sless.getFacilities(DPFacilityType.WRAPPER);
             
             for(FacilityDTO f : facs){
-                System.out.println(f.getFacility()+" has connection "+f.getModuleType()+" "+f.isIsDataSetInFolders());
+                System.out.println(f.getFacility()+" has connection "+f.getModuleType()+" "+f.isDataSetInFolders());
             }
             
             ProxyServers p = sless.getDefaultProxyServer();

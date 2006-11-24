@@ -35,7 +35,7 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 public class TransferClient {
     
     /** Creates a new instance of NewMain */
-    public TransferClient() {
+  /*  public TransferClient() {
     }
     
     static  double time ;
@@ -44,7 +44,7 @@ public class TransferClient {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+  /* public static void main(String[] args) {
        // PropertyConfigurator.configure("c:/log4j.properties");
         
         String sid ="";
@@ -133,7 +133,7 @@ public class TransferClient {
     private static void printTime(String message){
         log.debug(message+": "+(new Date().getTime()-time)/1000+" secs\n");
         
-    }
+    }*/
     
     
 }

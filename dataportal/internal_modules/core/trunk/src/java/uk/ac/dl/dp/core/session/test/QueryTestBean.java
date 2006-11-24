@@ -79,7 +79,7 @@ public class QueryTestBean extends SessionEJBObject implements QueryTestRemote {
     
     public User getUser(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         
-        User user =  new UserUtil(sid).getUser();
+        User user =  new UserUtil(sid,em).getUser();
         user.getBookmark().size();
         user.getEventLog().size();
         
