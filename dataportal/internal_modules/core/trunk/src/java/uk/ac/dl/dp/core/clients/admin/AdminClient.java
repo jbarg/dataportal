@@ -11,13 +11,12 @@ package uk.ac.dl.dp.core.clients.admin;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TemporalType;
 import org.apache.log4j.Logger;
-import org.apache.log4j.varia.NullAppender;
 import uk.ac.dl.dp.core.sessionbeans.admin.AdminBean;
 import uk.ac.dl.dp.coreutil.entity.EventLog;
 import uk.ac.dl.dp.coreutil.entity.EventLogCount;
@@ -50,8 +49,9 @@ public class AdminClient {
         
         //  getUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater"
         // countVisits(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater");
-        getEventLogDetails(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",null,null);
-        
+     //   getEventLogDetails(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",null,null);
+      //  getBookmarkCount(sid);
+        getUsersEventStats(sid);
         closeEnitiyManager();
     }
     
@@ -84,19 +84,34 @@ public class AdminClient {
     public void getEventLogDetails(String sid, String DN, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
-        Collection<EventLog> result =  bean.getUserStats(sid,DN, min,max);
-        log.trace(result.size());
-        
+        Collection<EventLog> result =  bean.getUsersEventStats(sid,DN, min,max);
+        log.trace(result.size());       
         
     }
     
-    
-    private EventLogCount getEventLogCount(String DN,Collection<EventLogCount> statsCollection){
-        for(EventLogCount elc : statsCollection){
-            if(elc.getDN().equals(DN)) return elc;
+    public void getBookmarkCount(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        List result = (List)em.createNamedQuery("Bookmark.findByBookmarkCount").getResultList();
+        int count = 0;
+        for(Iterator i = result.iterator(); i.hasNext();){
+            Object[] values = (Object[])i.next();
+            log.trace(++count+" : "+values[0]+ ", "+values[1] );
         }
-        return null;
+      
     }
+    
+     public void getUsersEventStats(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+         bean =  new AdminBean();
+        bean.setEntityManager(em);
+        
+        Collection<EventLogCount> logcount = bean.getUserStats(sid);
+        for(EventLogCount elc : logcount){
+           log.trace(elc.getDN()+" "+elc.getVisits()+" "+elc.getBookmarks()+" "+elc.getDataReferences());
+        }
+        
+     }
+   
+    
+  
     
     public void getUser(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
         bean =  new AdminBean();
