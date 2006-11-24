@@ -16,7 +16,7 @@ package uk.ac.dl.dp.coreutil.util;
 public enum DPEvent {
     
     LOG_ON("LOG_ON"),
-    LOG_OPF("LOG_OFF"),
+    LOG_OFF("LOG_OFF"),
     DOWNLOAD("DOWNLOAD"),
     ADVANCED_SEARCH("ADVANCED_SEARCH"),
     BASIC_SEARCH("BASIC_SEARCH");

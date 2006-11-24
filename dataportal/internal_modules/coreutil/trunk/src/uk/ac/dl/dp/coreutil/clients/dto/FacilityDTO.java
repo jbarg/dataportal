@@ -32,6 +32,10 @@ public class FacilityDTO implements Serializable {
     
     private boolean isDataSetInFolders;
     
+    private boolean isAllKeywords;
+    
+    private boolean isTopics;
+    
     /** Creates a new instance of FacilityDTO */
     public FacilityDTO() {
     }
@@ -41,7 +45,9 @@ public class FacilityDTO implements Serializable {
         this.setFacility(mlo.getFacility());
         this.setModuleType(mlo.getModuleType());
         this.setActive(mlo.getActive());
-        this.setIsDataSetInFolders(mlo.isDataInFolders());
+        this.isDataSetInFolders = mlo.isDataInFolders();
+        this.isAllKeywords = mlo.isAllKeywords();
+        this.isTopics = mlo.isTopics();
     }
     
    /* public String getConnection() {
@@ -84,12 +90,17 @@ public class FacilityDTO implements Serializable {
         this.active = active;
     }
     
-    public boolean isIsDataSetInFolders() {
+    public boolean isDataSetInFolders() {
         return isDataSetInFolders;
     }
     
-    public void setIsDataSetInFolders(boolean isDataSetInFolders) {
-        this.isDataSetInFolders = isDataSetInFolders;
+    public boolean isAllKeywords() {
+        return isAllKeywords;
     }
+    
+    public boolean isTopics() {
+        return isTopics;
+    }
+     
     
 }

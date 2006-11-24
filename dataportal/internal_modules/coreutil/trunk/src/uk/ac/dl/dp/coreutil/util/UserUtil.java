@@ -9,6 +9,7 @@
 
 package uk.ac.dl.dp.coreutil.util;
 
+import com.sun.enterprise.deployment.types.EntityManagerReference;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,17 +47,14 @@ public class UserUtil {
     
     private User user;
     static Logger log = Logger.getLogger(UserUtil.class);
-    
-   
-    
-    @PersistenceContext(unitName="dataportal")
+     
     protected EntityManager em;
     
     /** Creates a new instance of SessionUtil */
-    public UserUtil(String sid) throws SessionNotFoundException ,UserNotFoundException,SessionTimedOutException {
-        this.em = CachingServiceLocator.getInstance().getEntityManager();
+    public UserUtil(String sid, EntityManager em) throws SessionNotFoundException ,UserNotFoundException,SessionTimedOutException {
+        this.em = em;
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        user =  new SessionUtil(sid).getSession().getUserId();
+        user =  new SessionUtil(sid,em).getSession().getUserId();
         
         /*try {
             String DN = new SessionUtil(sid,em).getCertificate().getDName();
@@ -70,13 +68,13 @@ public class UserUtil {
     }
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(Certificate certificate) throws UserNotFoundException, CertificateException {
-        this.em = CachingServiceLocator.getInstance().getEntityManager();
+    public UserUtil(Certificate certificate, EntityManager em) throws UserNotFoundException, CertificateException {
+         this.em = em;
         if(certificate == null) throw new IllegalArgumentException("Certificate cannot be null.");
         String DN = certificate.getDn();
         log.debug("Loading user with DN "+DN);
         try {
-            loadUser(DN);
+            loadUser(DN,em);
         } catch(javax.persistence.NoResultException nre){
             throw new UserNotFoundException("No user associated with DN: "+DN);
         } catch(EntityNotFoundException enfe){
@@ -85,12 +83,12 @@ public class UserUtil {
     }
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(String DN,String defaultS) throws UserNotFoundException {
-        this.em = CachingServiceLocator.getInstance().getEntityManager();
+    public UserUtil(String DN,String defaultS, EntityManager em) throws UserNotFoundException {
+        this.em = em;
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         log.debug("Loading user with DN "+DN);
         try {
-            loadUser(DN);
+              loadUser(DN,em);
         } catch(javax.persistence.NoResultException nre){
             throw new UserNotFoundException("No user associated with DN: "+DN);
         } catch(EntityNotFoundException enfe){
@@ -100,23 +98,23 @@ public class UserUtil {
     
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(int userId) throws UserNotFoundException {
-        this.em = CachingServiceLocator.getInstance().getEntityManager();
+    public UserUtil(int userId, EntityManager em) throws UserNotFoundException {
+         this.em = em;
         if(userId == 0) throw new IllegalArgumentException("User ID cannot be 0.");
         user = (User)em.createNamedQuery("User.findById").setParameter("id",userId).getSingleResult();
         
     }
     
     /** Creates a new instance of SessionUtil */
-    public UserUtil(User user) {
-        this.em = CachingServiceLocator.getInstance().getEntityManager();
-        
+    public UserUtil(User user, EntityManager em) {
+         this.em = em;
         if(user == null) throw new IllegalArgumentException("User cannot be null.");
         this.user = user;
     }
     
     
-    private void loadUser(String DN){
+    private void loadUser(String DN, EntityManager em){
+         this.em = em;
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         user = (User)em.createNamedQuery("User.findByDn").setParameter("dn",DN).getSingleResult();
         log.debug("Loaded user with user id "+user.getId());
@@ -149,9 +147,8 @@ public class UserUtil {
     }
     
     
-    public static User createDefaultUser(String username, String DN) throws CannotCreateNewUserException {
+    public static User createDefaultUser(String username, String DN,EntityManager em) throws CannotCreateNewUserException {
         User user;
-        EntityManager em = CachingServiceLocator.getInstance().getEntityManager();
         
         try {
             user = new User();
@@ -170,7 +167,7 @@ public class UserUtil {
             em.persist(user);
             
             //save prefs
-            DpUserPreference dpup = getDefaultUserPreferences();
+            DpUserPreference dpup = getDefaultUserPreferences(em);
             dpup.setUserId(user);
             user.setDpUserPreference(dpup);
             em.persist(dpup);
@@ -186,10 +183,9 @@ public class UserUtil {
         return user;
     }
     
-    private static DpUserPreference getDefaultUserPreferences() {
+    private static DpUserPreference getDefaultUserPreferences(EntityManager em) {
         DpUserPreference prefs = new DpUserPreference();
-        EntityManager em  = CachingServiceLocator.getInstance().getEntityManager();
-        
+               
         Collection<Facility> facilities =  (Collection<Facility>)  em.createNamedQuery("Facility.findAll").getResultList();
         prefs.setDefaultFacility(facilities.iterator().next().getShortName());
         
@@ -204,6 +200,16 @@ public class UserUtil {
         log.debug("User proxyserver is "+proxyservers.iterator().next().getId()+" with address: "+proxyservers.iterator().next().getProxyServerAddress());
         
         return prefs;
+    }
+    
+    public boolean isAdmin(){
+        Collection<Role> roles = this.user.getRoles();
+        for(Role role : roles){
+            if(role.getName().equals(DPRole.ADMIN)){
+                return true;
+            }
+        }
+        return false;
     }
     
 }
