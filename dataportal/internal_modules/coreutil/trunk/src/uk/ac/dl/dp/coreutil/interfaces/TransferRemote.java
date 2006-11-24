@@ -15,7 +15,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
  */
 @Remote
 public interface TransferRemote {
-    public void startDownloadSRBFile(String sid, Collection<String> srbUrl) throws  CertificateException, SessionNotFoundException, SessionTimedOutException;
+  /*  public void startDownloadSRBFile(String sid, Collection<String> srbUrl) throws  CertificateException, SessionNotFoundException, SessionTimedOutException;
     
     public boolean isFinished();
     
@@ -27,5 +27,5 @@ public interface TransferRemote {
 
     public File getFile();
     
-    public String getStats();
+    public String getStats();*/
 }

@@ -22,7 +22,7 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
  */
 public class TransferDelegate {
     
-    private TransferRemote tr ;
+  /*  private TransferRemote tr ;
     
     private  static Logger log = Logger.getLogger(TransferDelegate.class);
     
@@ -34,7 +34,7 @@ public class TransferDelegate {
     private boolean isFinished = false;
     
     /** Creates a new instance of SessionDelegate */
-    public  TransferDelegate(String sid, Collection<String> srbUrl) throws NamingException {
+ /*   public  TransferDelegate(String sid, Collection<String> srbUrl) throws NamingException {
         Context ic = new InitialContext();
         tr  = (TransferRemote)ic.lookup(DataPortalConstants.TRANSFER);
         this.sid = sid;
@@ -52,7 +52,7 @@ public class TransferDelegate {
     }
     
     /*All TransferBean methods here*/
-    public void startDownloadSRBFile(String sid, Collection<String> srbUrl) throws  CertificateException, SessionNotFoundException, SessionTimedOutException{
+/*    public void startDownloadSRBFile(String sid, Collection<String> srbUrl) throws  CertificateException, SessionNotFoundException, SessionTimedOutException{
         tr.startDownloadSRBFile(sid,srbUrl);
     }
     
@@ -106,6 +106,6 @@ public class TransferDelegate {
         super.finalize();        
         remove();
         
-    }
+    }*/
     
 }

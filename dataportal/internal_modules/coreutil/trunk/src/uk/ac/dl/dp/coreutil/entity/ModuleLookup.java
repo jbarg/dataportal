@@ -75,6 +75,12 @@ public class ModuleLookup implements Serializable {
 
     @Column(name = "ACTIVE")
     private String active;
+    
+    @Column(name = "SPACES_IN_KEYWORDS")
+    private String topics;
+    
+    @Column(name = "ALL_KEYWORDS")
+    private String allKeywords;
 
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -214,6 +220,38 @@ public class ModuleLookup implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
+    }
+
+    public String getTopics() {
+        return topics;
+    }
+
+    public void setTopics(String topics) {
+        this.topics = topics;
+    }
+
+    /**
+     *  Boolean function to wrap oracle boolean Y/N null etc
+     */
+    public boolean isTopics(){
+        if(getTopics() != null && getTopics().equalsIgnoreCase("Y")) return true;
+        else return false;
+    }
+    
+    public String getAllKeywords() {
+        return allKeywords;
+    }
+
+    public void setAllKeywords(String allKeywords) {
+        this.allKeywords = allKeywords;
+    }
+    
+    /**
+     *  Boolean function to wrap oracle boolean Y/N null etc
+     */
+    public boolean isAllKeywords(){
+        if(getAllKeywords() != null && getAllKeywords().equalsIgnoreCase("Y")) return true;
+        else return false;
     }
     
 }

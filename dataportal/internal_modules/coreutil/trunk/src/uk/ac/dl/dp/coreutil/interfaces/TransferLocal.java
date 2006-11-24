@@ -16,7 +16,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
  */
 @Local
 public interface TransferLocal {
-    public void startDownloadSRBFile(String sid, Collection<String> srbUrl) throws  CertificateException, SessionNotFoundException, SessionTimedOutException;
+/*    public void startDownloadSRBFile(String sid, Collection<String> srbUrl) throws  CertificateException, SessionNotFoundException, SessionTimedOutException;
     
     public boolean isFinished();
     
@@ -28,5 +28,5 @@ public interface TransferLocal {
 
     public File getFile();
     
-    public String getStats();
+    public String getStats();*/
 }

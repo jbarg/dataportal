@@ -10,27 +10,31 @@
 package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import uk.ac.dl.dp.coreutil.entity.EventLogDetails;
 
 /**
  *
@@ -42,13 +46,29 @@ import uk.ac.dl.dp.coreutil.entity.EventLogDetails;
     @NamedQuery(name = "EventLog.findById", query = "SELECT e FROM EventLog e WHERE e.id = :id"),
     @NamedQuery(name = "EventLog.findByEvent", query = "SELECT e FROM EventLog e WHERE e.event = :event"),
     @NamedQuery(name = "EventLog.findByDetails", query = "SELECT e FROM EventLog e WHERE e.details = :details"),
-    @NamedQuery(name = "EventLog.findByModTime", query = "SELECT e FROM EventLog e WHERE e.modTime = :modTime")}
-)
+    @NamedQuery(name = "EventLog.findByModTime", query = "SELECT e FROM EventLog e WHERE e.modTime = :modTime"),
+    
+    //
+    @NamedQuery(name = "EventLog.findByUserEvent", query = "SELECT e FROM EventLog e WHERE e.userId.dn = :dn AND e.modTime > :mindate AND e.modTime < :maxdate"),
+    @NamedQuery(name = "EventLog.countByEvent", query = "SELECT e.userId.dn ,e.event FROM EventLog e WHERE e.event = :event")
+    
+})
+
+@NamedNativeQueries( {
+    //
+    @NamedNativeQuery(name = "EventLog.countByEventNative", query = "SELECT dn, COUNT(*) FROM (select u.id,u.dn,el.event FROM DP_USER u, DP_EVENT_LOG el WHERE u.id=el.user_id AND event = ?1) GROUP BY dn")
+    
+})
+
+@SqlResultSetMappings({
+    @SqlResultSetMapping(name="VisitCount",columns={@ColumnResult(name="DN"),@ColumnResult(name="Visits")})
+})
+
+
 public class EventLog implements Serializable {
     
     static final long serialVersionUID = 7110175216435025451L;
-
-    
+        
     @Id
     @TableGenerator(name="ID", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="EVENT_LOG",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="ID")
@@ -69,9 +89,9 @@ public class EventLog implements Serializable {
     @ManyToOne
     private uk.ac.dl.dp.coreutil.entity.User userId;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventLogId")
-   private Collection<EventLogDetails> eventLogDetails;
-     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventLogId",fetch=FetchType.EAGER)
+    private Collection<EventLogDetails> eventLogDetails;
+    
     @PrePersist
     @PreUpdate
     public void prePersist(){
@@ -131,14 +151,14 @@ public class EventLog implements Serializable {
         this.userId = userId;
     }
     
-     /**
+    /**
      * Gets the eventLogDetailsCollection of this EventLog.
      * @return the eventLogDetailsCollection
      */
     public Collection<EventLogDetails> getEventLogDetails() {
         return this.eventLogDetails;
     }
-
+    
     /**
      * Sets the eventLogDetailsCollection of this EventLog to the specified value.
      * @param eventLogDetailsCollection the new eventLogDetailsCollection
