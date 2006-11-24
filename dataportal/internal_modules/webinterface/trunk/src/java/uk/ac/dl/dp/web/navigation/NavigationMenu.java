@@ -63,16 +63,17 @@ public class NavigationMenu {
         item.setSplit(true);
         item.setTarget("_blank");*
         products.add(item);*/
-         data.add(getMenuNaviagtionItem("Grant Authorisation", "GIVE_DATA_AUTH"));
-         data.add(getMenuNaviagtionItem("View Authorisations", "GOTO_DATA_AUTH"));
-       
-         NavigationMenuItem nullm1 = getMenuNaviagtionItem("", null);
+        data.add(getMenuNaviagtionItem("Grant Authorisation", "GIVE_DATA_AUTH"));
+        data.add(getMenuNaviagtionItem("View Authorisations", "GOTO_DATA_AUTH"));
+        
+        NavigationMenuItem nullm1 = getMenuNaviagtionItem("", null);
         menu.add(nullm1);
         
         
         //User
         NavigationMenuItem user = getMenuNaviagtionItem("User", null);
         menu.add(user);
+        
         user.add(getMenuNaviagtionItem("User Preferences", "GOTO_USER_PREFS"));
         
         user.add(getMenuNaviagtionItem("History", "GOTO_HISTORY"));
@@ -130,7 +131,7 @@ public class NavigationMenu {
             log.info("ActionListener: " + outcome);
             return outcome;
         }
-    }    
+    }
     
     public boolean getDisabled() {
         return true;

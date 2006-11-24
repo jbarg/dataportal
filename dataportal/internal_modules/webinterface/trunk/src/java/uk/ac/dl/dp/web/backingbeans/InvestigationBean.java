@@ -309,6 +309,11 @@ public class InvestigationBean extends SortableList {
             datafiles = qd.getDataFiles(getVisit().getSid(), datasets);
             log.debug("Got data files, size: "+datafiles.size());
             
+            //TODO remove, print out all datafiles
+            for(DataFile file : datafiles){
+                log.trace(file.getName()+" "+file.getId());
+            }
+            
             //add all the data to the visit
             getVisitData().setCurrentInvestigations(investigations);
             getVisitData().setCurrentDatasets(datasets);

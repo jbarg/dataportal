@@ -44,7 +44,7 @@ public class SearchBean extends AbstractRequestBean {
     public List<SelectItem> getLogicalExpressions() {
         List<SelectItem> items = new ArrayList<SelectItem>();
         
-        if(getVisit().isCurrentFacilitysDataInFolder()){
+        if(getVisit().isCurrentFacilitysTopics()){
             items.add(new SelectItem("AND","One Keyword Only"));
         } else{
             items.add(new SelectItem("AND","AND"));
@@ -68,7 +68,7 @@ public class SearchBean extends AbstractRequestBean {
     public void setKeyword(String keyword){
         
         
-        if(!getVisit().isCurrentFacilitysDataInFolder()){
+        if(!getVisit().isCurrentFacilitysTopics()){
             String[] keys = keyword.split(" ");
             ArrayList<String> keys2 = new ArrayList<String>();
             for(String k : keys){
@@ -163,12 +163,12 @@ public class SearchBean extends AbstractRequestBean {
         for(Investigation invest: investigations){
             log.trace(invest);
             //TODO REMOVE
-            if( invest.getInvestigationAbstract() == null || invest.getInvestigationAbstract().equals("")){
+           /* if( invest.getInvestigationAbstract() == null || invest.getInvestigationAbstract().equals("")){
                 log.trace("Setting dummy abstracts");
                 if((j % 2) == 0) invest.setInvestigationAbstract("This is a dummy abstract added by the Data Portal.   In the future there should be a large absrtact here. The project aims to provide easy, transparent access to experimental, observational, simulation and visualisation data kept on a multitude of systems and sites. Further more it will provide links to other web/grid services, which will allow the scientists to further use the selected data, e.g. via data mining, simulations or visualisation. The Data Portal will aim to work as a broker between the scientists, the facilities, the data and other services. The problem addressed is that currently the scientific data is stored distributed across a multitude of sites and systems. Scientists have only very limited support in accessing, managing and transferring their data or indeed in identifying new data resources. In a true Grid environment it is essential to ease many of these processes and the aim of the Data Portal is to help with automating many of these tasks. The Data Portal originally used Suns Java 2 Enterprise Edition (J2EE) but was replaced using a component based web service model. ");
                 else invest.setInvestigationAbstract("This is a short one added");
                 j++;
-            }
+            }*/
         }
         //if not results infom user
         if(investigations.size() == 0){

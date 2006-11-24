@@ -31,6 +31,7 @@ import java.util.*;
 import javax.faces.model.SelectItem;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
 import uk.ac.dl.dp.web.util.AbstractSessionBean;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
 /**
@@ -60,6 +61,8 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     private SearchData searchData;
     
+    private AdminData adminData;
+    
     private static Logger log = Logger.getLogger(Visit.class);
     
     public Visit(){
@@ -85,6 +88,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         for(DPRole role : roles){
             if(role.ADMIN == DPRole.ADMIN) {
                 isAdmin = true;
+                setAdminData(new AdminData());
                 break;
             }
         }
@@ -98,7 +102,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.setFacilities(items);
         
         //set the current default as the sleected fac in basic search
-        ArrayList<String> fac = new ArrayList<String>();
+        List<String> fac = new ArrayList<String>();
         fac.add(this.userPreferences.getDefaultFacility());
         
         getVisitData().setCurrentSelectedFacilities(fac);
@@ -194,6 +198,14 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.visitData = visitData;
     }
     
+    public AdminData getAdminData() {
+        return adminData;
+    }
+    
+    public void setAdminData(AdminData adminData ) {
+        this.adminData = adminData;
+    }
+    
     public SearchData getSearchData() {
         return searchData;
     }
@@ -210,21 +222,21 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.facilities = facilities;
     }
     
-    public boolean isCurrentFacilitysDataInFolder(){
+    public boolean isCurrentFacilitysTopics(){
         //check if EMAT is selected as a keyword
         Collection<String> facilities = getVisitData().getCurrentSelectedFacilities();
         Collection<FacilityDTO> facs = getVisit().getSession().getFacilities();
         
         //TODO move to usit methd
-        boolean isFolderData = false;
+        boolean isTopic = false;
         for(FacilityDTO fac: facs){
             for(String fac_name : facilities){
-                if(fac.isIsDataSetInFolders() && fac.getFacility().equals(fac_name)){
-                    isFolderData = true;
+                if(fac.isTopics() && fac.getFacility().equals(fac_name)){
+                    isTopic = true;
                 }
             }
         }
-        return isFolderData;
+        return isTopic;
     }
     
 }

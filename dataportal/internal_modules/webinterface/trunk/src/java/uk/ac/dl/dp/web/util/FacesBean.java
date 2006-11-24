@@ -15,7 +15,6 @@ package uk.ac.dl.dp.web.util;
  */
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.faces.FactoryFinder;
@@ -31,6 +30,7 @@ import javax.faces.lifecycle.LifecycleFactory;
 import uk.ac.dl.dp.web.backingbeans.SearchData;
 import uk.ac.dl.dp.web.backingbeans.Visit;
 import uk.ac.dl.dp.web.backingbeans.VisitData;
+import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
 
 
 /**
@@ -195,6 +195,10 @@ public abstract class FacesBean {
     
     protected VisitData getVisitData(){
         return ((Visit)getBean("visit")).getVisitData();
+    }
+    
+    protected AdminData getAdminData(){
+        return ((Visit)getBean("visit")).getAdminData();
     }
     
     protected Visit getVisit(){
