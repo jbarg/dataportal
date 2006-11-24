@@ -21,7 +21,7 @@
                             <tr>   
                                 <td>
                                     <h:outputText rendered="#{!otherbookmarkBean.populated}" escape="false "value="<br />"  styleClass="info" />            
-                                    <h:outputText rendered="#{!otherbookmarkBean.populated}" value="There are no items in #{visit.currentUserAuthDN}'s bookmarks" styleClass="info" />
+                                    <h:outputText rendered="#{!otherbookmarkBean.populated}" value="There are no items in #{visit.visitData.currentUserAuthDN}'s bookmarks" styleClass="info" />
                                     <h:outputText rendered="#{!otherbookmarkBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
                                     
                                     <a4j:region   selfRendered="true" >
