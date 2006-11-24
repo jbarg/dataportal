@@ -22,6 +22,8 @@ import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import javax.faces.context.FacesContext;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
@@ -67,7 +69,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
     
     public void setLifetime(int lifetime) {
         this.lifetime = lifetime;
-    }    
+    }
     
     //methods action
     public String login(){
@@ -88,7 +90,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             log.info("Logged in with sid "+sid);
             
             //get session info once logged in to DP
-            session  = sd.getSession(sid);            
+            session  = sd.getSession(sid);
             log.info("Expire time: "+session.getExpireTime());
             log.trace("User prefs: "+session.getUserPrefs().getResultsPerPage());
             
@@ -99,16 +101,16 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             return NavigationConstants.LOGIN_ERROR;
         } catch (LoginMyProxyException ex) {
             //problem with either myproxy or user inserted wrong details.
-            //LoginMyEx has be done so the the standard message returns a helpful message about the problem, 
-            //display this to the user         
+            //LoginMyEx has be done so the the standard message returns a helpful message about the problem,
+            //display this to the user
             error(ex.getStandardMessage());
             log.error("Login error for: "+username+", type: "+ex.getType(),ex);
-            return NavigationConstants.LOGIN_FAILURE;            
+            return NavigationConstants.LOGIN_FAILURE;
         } catch (SessionException ex) {
             //some sort of session error, this should not be thrown normally
             error(ex.getMessage());
             log.error("Session exception for sid "+sid,ex);
-            return NavigationConstants.LOGIN_ERROR;            
+            return NavigationConstants.LOGIN_ERROR;
         } catch (UserNotFoundException ex) {
             error(ex.getMessage());
             log.fatal("Session exception for sid "+sid,ex);
@@ -124,27 +126,34 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             return NavigationConstants.LOGIN_FAILURE;
             
         }
-        ////End of:  remove this////        
+        ////End of:  remove this////
         
         //logged in ok, get session visit bean, if not there this methoid creates one and sets the returned session
-        Visit visit = (Visit) getBean(WebConstants.SESSION_KEY);  
-        visit.setSession(session);        
-      
-        //logged in, return ok          
+        Visit visit = (Visit) getBean(WebConstants.SESSION_KEY);
+        visit.setSession(session);
+        
+        //logged in, return ok
         return NavigationConstants.LOGIN_SUCCESS;
     }
     
     public String logout(){
         log.info("Logging out of session");
         
-        //remove all traces of session so auth filter can check for people entering        
+        try {            
+            //send logout message
+            SessionDelegate.getInstance().logout(getVisit().getSid());
+        }  catch (Exception ex) {
+            log.error("Unable to send event log for "+getVisit().getSid()+", "+getVisit().getDn());            
+        }
+        
+        //remove all traces of session so auth filter can check for people entering
         FacesContext facesContext = getFacesContext();
         HttpSession http_session  = (HttpSession)facesContext.getExternalContext().getSession(false);
         http_session.removeAttribute(WebConstants.SESSION_SCOPE_KEY+WebConstants.SESSION_KEY);
         http_session.removeAttribute(WebConstants.SESSION_KEY);
         
         http_session.invalidate();
-        
+                
         //add logout message
         info("Thank you for using the Data Portal.");
         return NavigationConstants.LOGOUT_SUCCESS;
