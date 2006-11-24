@@ -95,7 +95,7 @@
                                                     <f:facet name="popup">
                                                         <h:panelGroup>
                                                             <h:panelGrid columns="1" >
-                                                                <h:inputTextarea value="#{data.note}" valueChangeListener="#{bookmarkBean.note}" id="note" rows="10" cols="15">
+                                                                <h:inputTextarea value="#{data.note}" valueChangeListener="#{bookmarkBean.note}" id="note" rows="5" cols="15">
                                                                     <f:param name="note" value="#{data.id}"/>
                                                                 </h:inputTextarea>
                                                                 
@@ -111,7 +111,7 @@
                                                          closePopupOnExitingPopup="true"
                                                          displayAtDistanceX="5"
                                                          displayAtDistanceY="-40" rendered="#{data.hasNote}">
-                                                    <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif"  border="0"/>
+                                                    <t:graphicImage id="view_button" rendered="#{data.hasNote}" value="../../images/toggle_view_s.gif" style="cursor: default" border="0"/>
                                                     
                                                     <f:facet name="popup">
                                                         <h:panelGroup>

@@ -20,7 +20,7 @@
                             <tr>   
                                 <td>
                                     <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
-                                    <h:outputText rendered="#{!otherdatacenterBean.populated}" value="There are no items in #{visit.currentUserAuthDN}'s data references" styleClass="info" />
+                                    <h:outputText rendered="#{!otherdatacenterBean.populated}" value="There are no items in #{visit.visitData.currentUserAuthDN}'s data references" styleClass="info" />
                                     <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
                                     
                                     <a4j:region   selfRendered="true" > 

@@ -35,7 +35,7 @@
                                 <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                                     closePopupOnExitingPopup="true"
                                     displayAtDistanceX="5"
-                                    displayAtDistanceY="-40" rendered="#{data.hasNote}">
+                                    displayAtDistanceY="-40" >
 
                                     <t:graphicImage url="../../images/help.gif" border="0" />
                                     <f:facet name="popup">
@@ -85,7 +85,7 @@
                                 </h:outputLabel  >
                                                                                            
                    
-                                <t:inputCalendar  binding="#{dataAuthorisationBean.calendarFirst}" id="thirdOne" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                <t:inputCalendar  binding="#{dataAuthorisationBean.calendarFirst}" id="thirdOnej_id_1" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                 currentDayCellClass="currentDayCell" value="#{dataAuthorisationBean.firstDate}" renderAsPopup="true"
                                 popupTodayString="Today is:"
                                 popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"

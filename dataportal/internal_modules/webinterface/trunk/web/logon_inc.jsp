@@ -13,7 +13,7 @@
         //  session.invalidate();
     %>
     <h:panelGrid columns="1" >
-        <h:messages globalOnly="true" styleClass="error" style="color : red" />
+        <h:messages globalOnly="true" errorClass="error" infoClass="info" />
     </h:panelGrid>  
     <h:panelGrid columns="3">
                                               

@@ -7,49 +7,50 @@
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
-
-   
+    
+    
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
         <title>CCLRC Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
         <script language="javascript" src="../css/download.js"></script>
-   
-          
+        
+        
     </head>
     <body>
         <f:view>
             
-           
+            
             <table width="${sessionScope.visit.width}"  >  
                  <tbody>
                     <tr>
                         <td width="100%">
-           
+                            
                             <table  border="0" width="100%" >
                                  <tbody>
                                     <tr>
-                                        <td id="nav_bar" width="100%"  >       <f:subview id="header">
-                                            <c:import url="inc/header.jsp" />
-                                        </f:subview>
+                                        <td id="nav_bar" width="100%"  > 
+                                            <f:subview id="header">
+                                                <c:import url="inc/header.jsp" />
+                                            </f:subview>
                                         </td>
-                
-    
+                                        
+                                        
                                         <td width="100%" align="right">
                                             <f:subview id="header_2">
                                                 <c:import url="inc/header_2.jsp" />
                                             </f:subview>
                                         </td>
-                    
+                                        
                                     </tr>
                                 </tbody>
                             </table>
-            
+                            
                             <table id="nav_bar2" border="0" width="100%">
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">
-                    
+                                            
                                             <!-- does not work inside subview??? -->
                                             <%--  <f:subview id="navigation">
                                             <c:import url="/inc/header2.jsp" />
@@ -60,7 +61,7 @@
                                             <t:div id="subnavigation_outer">
                                                 <t:div id="subnavigation">
                                                     <t:panelNavigation2 id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
-                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
+                                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
                                                         <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
                                                     </t:panelNavigation2>
                                                 </t:div>
@@ -75,7 +76,7 @@
                                                         </td>
                                                         <td align="left" >
                                                             <h:outputText styleClass="header_top" value="Data References"/> 
-                               
+                                                            
                                                         </td>
                                                         <td align="right">
                                                             <f:subview id="title">
@@ -94,20 +95,20 @@
                                                             <f:subview id="body">
                                                                 <c:import url="inc/data_center_inc.jsp" />
                                                             </f:subview>
-                         
+                                                            
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             <br />
-                   
+                                            
                                             <hr size="-1" width="100%"  />
-                    
+                                            
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>                           
-
+                            
                             <table border="0" align="right">
                                  <tbody>
                                     <tr>
@@ -122,7 +123,7 @@
                 </tbody>
             </table>
         </f:view>
-       
+        
     </body>
-
+    
 </html>

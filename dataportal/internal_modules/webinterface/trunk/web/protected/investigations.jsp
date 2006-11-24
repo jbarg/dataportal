@@ -4,6 +4,10 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
+
+
+
+
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>

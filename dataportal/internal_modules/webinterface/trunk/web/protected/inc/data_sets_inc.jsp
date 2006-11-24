@@ -119,7 +119,7 @@
                                                                             </f:facet>
                                                                             <h:outputText id="text778" styleClass="nodeFolder" value="Type: " />
                                                                             
-                                                                            <h:outputText id="text7728" styleClass="document" value="#{node.description}" />
+                                                                            <h:outputText id="text7728" styleClass="document" value="#{fn:toLowerCase(node.description)}" />
                                                                             
                                                                         </h:panelGroup>
                                                                     </f:facet>
@@ -310,20 +310,16 @@
                                 </f:facet>
                                 <h:outputText id="text778" styleClass="nodeFolder" value="Type: " />
                                 
-                                <h:outputText id="text7728" styleClass="document" value="#{node.description}" />
+                                <h:outputText id="text7728" styleClass="document" value="#{fn:toLowerCase(node.description)}" />
                                 
                             </h:panelGroup>
                         </f:facet>
                         
                         <f:facet name="imageJ">
-                            <h:panelGroup>
-                                
+                            <h:panelGroup>                                
                                 <h:commandLink  onclick="download('#{node.identifier}','DATA_FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
-                                    <h:outputText value="Launch via ImageJ" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
-                                    
-                                </h:commandLink>                           
-                                
-                                
+                                    <h:outputText value="Launch via ImageJ" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />                                    
+                                </h:commandLink>      
                             </h:panelGroup>
                         </f:facet>
                         
@@ -350,7 +346,7 @@
                                 <t:graphicImage value="../../images/document.png" border="0"/>                                   
                                 </h:commandLink>--%>
                         
-                                <h:commandLink onclick="download('#{node.identifier}','DATA_FILE','DATA_SETS'); return false;" style="color:black" id="downloadname12">
+                                <h:commandLink onclick="download('#{node.identifier}','DATA_FILE','DATA_SETS'); return false;" style="color:black" id="downloadname112">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
                                     <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     <f:param name="id16" value="#{node.identifier}"/>              
@@ -373,6 +369,25 @@
                                 
                             </h:panelGroup>
                         </f:facet>
+                        <f:facet name="file-inFolder-folder">
+                            <h:panelGroup>
+                                
+                                <t:graphicImage id="gr60u1" value="../../images/yellow-folder-closed.png" border="0"/>
+                                
+                                <h:outputText value="         " />                                         
+                                
+                                <h:commandLink onclick="download('#{node.identifier}','DATA_FILE_IN_FOLDERS','DATA_SETS'); return false;" style="color:black" id="downloadname1182">
+                                    <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
+                                    <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
+                                    <f:param name="id16" value="#{node.identifier}"/>              
+                                </h:commandLink>
+                                <h:outputText value="         " />
+                                <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
+                                    <f:param name="datafiles" value="#{node.identifier}"/>
+                                </h:selectBooleanCheckbox>                                                                                         
+                                
+                            </h:panelGroup>
+                        </f:facet>
                         
                         <f:facet name="file-noread-folder">
                             <h:panelGroup>                   
@@ -391,9 +406,7 @@
                                 
                                 <%--  <h:selectBooleanCheckbox  disabled="true" id="checkbox1" style="background-color:#D1E4E4" title="No access to data" >
                                     
-                                </h:selectBooleanCheckbox>--%>
-                               
-                              
+                                </h:selectBooleanCheckbox>--%>                              
                             </h:panelGroup>
                         </f:facet>
                         
@@ -435,12 +448,11 @@
                         
                         <f:facet name="dataset-folder">
                             <h:panelGroup>
-                                <f:facet name="expand">
-                                    <t:graphicImage id="gr99" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
-                                </f:facet>
-                                <f:facet name="collapse">
-                                    <t:graphicImage id="gr98" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                                </f:facet>
+                                
+                                <t:graphicImage id="gr99" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                                
+                                <t:graphicImage id="gr98" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                
                                 <h:commandLink onclick="download('#{node.identifier}','DATA_SET','DATA_SETS'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="text90" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
@@ -581,7 +593,7 @@
                                 <t:graphicImage value="../../images/document.png" border="0"/>                                   
                                 </h:commandLink>--%>
                         
-                                <h:commandLink onclick="download('#{node.identifier}','DATA_FILE','DATA_SETS'); return false;" style="color:black" id="downloadname12">
+                                <h:commandLink onclick="download('#{node.identifier}','DATA_FILE','DATA_SETS'); return false;" style="color:black" id="downloadname1312">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
                                     <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     <f:param name="id16" value="#{node.identifier}"/>              
@@ -610,7 +622,7 @@
                                 <t:graphicImage value="../../images/document.png" border="0"/>                                   
                                 <h:outputText value="         " />
                                 
-                                <h:commandLink disabled="true"  style="color:black" id="downloadname1">
+                                <h:commandLink disabled="true"  style="color:black" id="downloadname481">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
                                     <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     <f:param name="id1" value="#{node.identifier}"/>              

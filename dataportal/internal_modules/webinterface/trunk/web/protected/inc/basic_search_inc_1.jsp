@@ -4,7 +4,7 @@
 <%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
 <%@ taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <script type="text/javascript">
       function extractCity(citystatezip) {
@@ -80,7 +80,7 @@
             
                 
             <%--    <h:selectManyListbox id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >--%>
-            <h:selectManyListbox id="facilitiesj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >      
+            <h:selectManyListbox id="facilitiesj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="#{fn:length(visit.facilities)}" required="true" >      
                 <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplay,radio" />
                 <f:selectItems value="#{visit.facilities}"/>
                 <f:validateLength minimum="1" />

@@ -13,7 +13,19 @@
     <managed-bean>
         <managed-bean-name>navigationMenu</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.navigation.NavigationMenu</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>adminBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.AdminBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+     <managed-bean>
+        <managed-bean-name>viewUserAdmin</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.ViewUserAdminBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     
     <managed-bean>
@@ -262,6 +274,21 @@
         </navigation-case>
     </navigation-rule>
     
+    
+    <!-- 
+      Admin functions      
+    -->
+    <navigation-rule>
+        <description>
+            From admin toi search user.
+        </description>
+        <from-view-id>/admin/admin.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>SEARCH_SUCCESS</from-outcome>
+            <to-view-id>/admin/view_user.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
     <navigation-rule>
         <description>   
             This is for all of the navigation bars actions
@@ -277,6 +304,12 @@
         <navigation-case>
             <from-outcome>GOTO_BASIC_SEARCH</from-outcome>
             <to-view-id>/protected/basic_search.jsp</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>GOTO_ADMIN</from-outcome>
+            <to-view-id>/admin/admin.jsp</to-view-id>
+            <redirect />      
         </navigation-case>
         
         <navigation-case>
@@ -627,7 +660,7 @@
             <renderer-type>org.apache.myfaces.Link</renderer-type>
             <renderer-class>org.apache.myfaces.renderkit.html.ext.HtmlLinkRenderer</renderer-class>
         </renderer>
-      <!--  <renderer>
+        <!--  <renderer>
             <component-family>javax.faces.Command</component-family>
             <renderer-type>javax.faces.Button</renderer-type>
             <renderer-class>org.apache.myfaces.renderkit.html.jsf.ExtendedHtmlButtonRenderer</renderer-class>
