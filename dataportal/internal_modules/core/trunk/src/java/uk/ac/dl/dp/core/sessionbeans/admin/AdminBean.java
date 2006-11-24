@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import javax.ejb.Stateless;
@@ -82,8 +83,16 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         checkPermissions(sid);
         
         //get list of LOG_ONs
-        List result = (List)em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"LOG_ON").getResultList();
+        List result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"LOG_ON").getResultList();
         Collection<EventLogCount> statsCollection = new ArrayList<EventLogCount>();
+        
+        /*for(Iterator i = result.iterator(); i.hasNext();){
+            EventLogCount elc = new EventLogCount();
+            Object[] values = (Object[])i.next();
+            elc.setDN(""+values[0]);
+            elc.setVisits(((BigDecimal)values[1]).intValue());
+            statsCollection.add(elc);
+        }*/
         for(Object ob : result){
             EventLogCount elc = new EventLogCount();
             Vector t = (Vector)ob;
@@ -99,6 +108,13 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         }
         
         result = (List)em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"BASIC_SEARCH").getResultList();
+       /* for(Iterator i = result.iterator(); i.hasNext();){
+        
+            Object[] values = (Object[])i.next();
+            EventLogCount elc = getEventLogCount(""+values[0],statsCollection);
+            elc.setVisits(((BigDecimal)values[1]).intValue());
+        
+        }*/
         for(Object ob : result){
             EventLogCount elc = null;
             Vector t = (Vector)ob;
@@ -114,6 +130,13 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
             
         }
         result = (List)em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"DOWNLOAD").getResultList();
+      /*   for(Iterator i = result.iterator(); i.hasNext();){
+       
+            Object[] values = (Object[])i.next();
+            EventLogCount elc = getEventLogCount(""+values[0],statsCollection);
+            elc.setDownloads(((BigDecimal)values[1]).intValue());
+       
+        }*/
         for(Object ob : result){
             EventLogCount elc = null;
             Vector t = (Vector)ob;
@@ -129,11 +152,18 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
             
         }
         
+        //add bookmarks , datareferences here too
+        for(EventLogCount count : statsCollection){
+            User user = new UserUtil(count.getDN(), null,em).getUser();
+            count.setDataReferences(user.getDataReference().size());
+            count.setBookmarks(user.getBookmark().size());
+        }
+        
         return statsCollection;
         
     }
     
-    public Collection<EventLog> getUserStats(String sid, String DN, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public Collection<EventLog> getUsersEventStats(String sid, String DN, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
         if(min == null) min = new Date(1,1,1); //1901.1.1
         if(max == null)  max = new Date(System.currentTimeMillis()+10000); //today plus day
         Collection<EventLog> result = em.createNamedQuery("EventLog.findByUserEvent").setParameter("dn",DN).setParameter("mindate",min, TemporalType.TIMESTAMP).setParameter("maxdate",max, TemporalType.TIMESTAMP).getResultList();
