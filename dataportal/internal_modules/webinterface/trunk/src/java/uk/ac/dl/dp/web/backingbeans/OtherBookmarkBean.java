@@ -152,7 +152,7 @@ public class OtherBookmarkBean extends SortableList {
             }
             i++;
         }
-        //collaspe all the details 
+        //collaspe all the details
         getTable().collapseAllDetails();
     }
     //Gets the current bookmark and then gets the investigation and searches for the investigation
@@ -175,6 +175,8 @@ public class OtherBookmarkBean extends SortableList {
         }
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
+        //remove request info
+        getSearchData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         
     }
@@ -198,6 +200,49 @@ public class OtherBookmarkBean extends SortableList {
     
     public void setLength(boolean length) {
         this.length = length;
+    }
+    
+    //these are added because cannot find which column is sorted form the page
+    //crappy way of doing it
+    public boolean isName(){
+        return is("name");
+    }
+    
+    public boolean isNotName(){
+        return isNot("name");
+    }
+    
+    public boolean isFacility(){
+        return is("facility");
+    }
+    
+    public boolean isNotFacility(){
+        return isNot("facility");
+    }
+    public boolean isNotes(){
+        return is("notes");
+    }
+    
+    public boolean isNotNotes(){
+        return isNot("notes");
+    }
+    
+    public boolean isTime(){
+        return is("time");
+    }
+    
+    public boolean isNotTime(){
+        return isNot("time");
+    }
+    
+    private boolean is(String column){
+        if(getSort().equals(column) && isAscending()) return true;
+        else return false;
+    }
+    
+    private boolean isNot(String column){
+        if(getSort().equals(column) && !isAscending()) return true;
+        else return false;
     }
     ////////////////////////////////////////////////////////////////////
     

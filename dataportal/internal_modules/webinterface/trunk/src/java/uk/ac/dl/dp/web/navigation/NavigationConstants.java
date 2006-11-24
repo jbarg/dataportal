@@ -43,4 +43,8 @@ public class NavigationConstants {
     public final static String GOTO_BASIC_SEARCH = "GOTO_BASIC_SEARCH";
     public final static String GOTO_DATA_AUTH = "GOTO_DATA_AUTH";
     public final static String GIVE_DATA_AUTH = "GIVE_DATA_AUTH";
+    
+    //admin
+    
+    
 }

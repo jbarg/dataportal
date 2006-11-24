@@ -12,6 +12,7 @@ package uk.ac.dl.dp.web.backingbeans;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
@@ -30,7 +31,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author gjd37
  */
-public class AuthorisationBean extends AbstractRequestBean {
+public class AuthorisationBean extends AbstractRequestBean implements Serializable{
     
     
     private static Logger log = Logger.getLogger(AuthorisationBean.class);
@@ -144,6 +145,8 @@ public class AuthorisationBean extends AbstractRequestBean {
         
         http_session.invalidate();
         
+        //add logout message
+        info("Thank you for using the Data Portal.");
         return NavigationConstants.LOGOUT_SUCCESS;
     }
     

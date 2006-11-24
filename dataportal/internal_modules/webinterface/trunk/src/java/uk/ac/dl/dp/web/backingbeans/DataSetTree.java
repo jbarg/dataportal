@@ -127,7 +127,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             boolean isDataInFolders = false;
             for(FacilityDTO facs : getVisit().getSession().getFacilities()){
                 //if data in folders then show no leaf in datatree
-                if(facs.getFacility().equals(invest.getFacility()) && facs.isIsDataSetInFolders()){
+                if(facs.getFacility().equals(invest.getFacility()) && facs.isDataSetInFolders()){
                     isDataInFolders = true;
                 }
             }
@@ -149,7 +149,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 if(dataset.getInvestigationId().equals(invest.getId()) && dataset.getFacility().equals(invest.getFacility()) ){
                     // log.trace("Adding datasets : "+dataset.getName());
                     if(isDataInFolders){
-                        datasetNode = new TreeNodeBase("dataset-inFolder-folder", dataset.getName(),dataset.getDpId() ,false);
+                        datasetNode = new TreeNodeBase("dataset-folder", dataset.getName(),dataset.getDpId() ,false);
                     } else {
                         datasetNode = new TreeNodeBase("dataset-folder", dataset.getName(),dataset.getDpId() ,false);
                     }
@@ -158,37 +158,44 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     datasetNode.getChildren().add(new TreeNodeBase("type-folder",dataset.getDataSetType(),true));
                     datasetNode.getChildren().add(new TreeNodeBase("desc-folder", dataset.getDescription(),true));
                     
-                    if(!isDataInFolders){
-                        for(DataFile datafile : datafiles){
-                            //log.trace(datafile);
-                            if(datafile.getDataSetId().equals(dataset.getId()) && datafile.getFacility().equals(dataset.getFacility())){
-                                boolean isImageJ = Util.isImageJ(datafile.getName());
-                                log.trace(datafile.getName()+" is imageJ "+isImageJ);
-                                //set isLeaf is imageJ so can use it on the web page
-                                //use isLeaf for asscess info
-                                if(getVisitData().getAccessInfo() == null){
-                                    datasetNode.getChildren().add(new TreeNodeBase("file-noread-folder", datafile.getName(),datafile.getDpId(),true));
-                                } else {
-                                    log.debug("Setting access rights with data files");
-                                    for(AccessInfo info : getVisitData().getAccessInfo()){
-                                        if(info.getId().toString().equals(datafile.getId())){
-                                            log.trace("Setting isRead "+info.isRead());
-                                            if(info.isRead()){
-                                                TreeNodeBase base = new TreeNodeBase("file-folder", datafile.getName(),datafile.getDpId(),false);
-                                                if(isImageJ){
-                                                    base.getChildren().add(new TreeNodeBase("imageJ", "Launch ImageJ",datafile.getDpId(),false));
-                                                }
-                                                datasetNode.getChildren().add(base);
-                                            } else   datasetNode.getChildren().add(new TreeNodeBase("file-noread-folder", datafile.getName(),datafile.getDpId(),false));
-                                            
-                                            
-                                        }
+                    
+                    for(DataFile datafile : datafiles){
+                        //log.trace(datafile);
+                        if(datafile.getDataSetId().equals(dataset.getId()) && datafile.getFacility().equals(dataset.getFacility())){
+                            boolean isImageJ = Util.isImageJ(datafile.getName());
+                            log.trace(datafile.getName()+" is imageJ "+isImageJ);
+                            //set isLeaf is imageJ so can use it on the web page
+                            //use isLeaf for asscess info
+                            //TODO should be == null and the TODO below should be in , by taken this out for now
+                            if(getVisitData().getAccessInfo() != null){
+                                datasetNode.getChildren().add(new TreeNodeBase("file-noread-folder", datafile.getName(),datafile.getDpId(),true));
+                            } else {
+                                log.debug("Setting access rights with data files");
+                                //TODO  above and below again
+                                //for(AccessInfo info : getVisitData().getAccessInfo()){
+                                //  if(info.getId().toString().equals(datafile.getId())){
+                                //    log.trace("Setting isRead "+info.isRead());
+                                //TODO access right turn off so let the users try and download the data
+                                //if(info.isRead()){
+                                if(true){
+                                    TreeNodeBase base = null;
+                                    if(!isDataInFolders){
+                                         base = new TreeNodeBase("file-folder", datafile.getName(),datafile.getDpId(),false);
+                                    } else{
+                                         base = new TreeNodeBase("file-inFolder-folder", datafile.getName(),datafile.getDpId(),false);
                                     }
-                                }
+                                    if(isImageJ){
+                                        base.getChildren().add(new TreeNodeBase("imageJ", "Launch ImageJ",datafile.getDpId(),false));
+                                    }
+                                    datasetNode.getChildren().add(base);
+                                } else datasetNode.getChildren().add(new TreeNodeBase("file-noread-folder", datafile.getName(),datafile.getDpId(),false));
                                 
+                                //   }
+                                // }
                             }
                         }
                     }
+                    
                     datasetsNode.getChildren().add(datasetNode);
                 }
             }
@@ -388,7 +395,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             }
         }
         log.trace("Selected sets for addition :");
-         //TODO move this to methods
+        //TODO move this to methods
         for(DataSet dataset : getVisitData().getCurrentDatasets()){
             
             if(dataset.isSelected()){
@@ -404,14 +411,14 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 boolean isDataInFolders = false;
                 for(FacilityDTO facs : getVisit().getSession().getFacilities()){
                     //if data in folders then show no leaf in datatree
-                    if(facs.getFacility().equals(dataset.getFacility()) && facs.isIsDataSetInFolders()){
+                    if(facs.getFacility().equals(dataset.getFacility()) && facs.isDataSetInFolders()){
                         isDataInFolders = true;
                     }
                 }
                 if(isDataInFolders){
                     ref.setTypeOfReference(DPUrlRefType.DATA_SET_FOLDER.toString());
                 } else {
-                    ref.setTypeOfReference(DPUrlRefType.DATA_SET.toString());                    
+                    ref.setTypeOfReference(DPUrlRefType.DATA_SET.toString());
                 }
                 ref.setTypeOfObject(dataset.getDataSetType());
                 ref.setReferenceId(Integer.valueOf(dataset.getId()));
@@ -436,7 +443,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 log.trace(dataset);
             }
         }
-         //TODO move this to methods
+        //TODO move this to methods
         log.trace("Selected invest for addition :");
         Collection<Bookmark> toAddBookmarks = new ArrayList<Bookmark>();
         for(Investigation file : getVisitData().getCurrentInvestigations()){

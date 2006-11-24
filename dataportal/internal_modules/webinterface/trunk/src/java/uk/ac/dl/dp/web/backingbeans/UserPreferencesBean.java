@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
@@ -34,7 +35,7 @@ public class UserPreferencesBean extends AbstractRequestBean {
     private static Logger log = Logger.getLogger(UserPreferencesBean.class);
     
     //uicomponets on page
-    private List<SelectItem> facilities;
+    private Collection<SelectItem> facilities;
     private String defaultFacility;
     
     private List<SelectItem> resolution;
@@ -47,11 +48,11 @@ public class UserPreferencesBean extends AbstractRequestBean {
     public UserPreferencesBean() {
     }
     //get list of facilities form the session
-    public List<SelectItem> getFacilities() {
+    public Collection<SelectItem> getFacilities() {
         return getVisit().getFacilities();
     }
     
-    public void setFacilities(List<SelectItem> facilities) {
+    public void setFacilities(Collection<SelectItem> facilities) {
         this.facilities = facilities;
     }
     

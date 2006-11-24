@@ -204,6 +204,8 @@ public class BookmarkBean extends SortableList {
         }
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
+          //remove request info 
+        getSearchData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         
     }

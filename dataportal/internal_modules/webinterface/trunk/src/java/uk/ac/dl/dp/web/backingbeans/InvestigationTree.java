@@ -117,35 +117,38 @@ public class InvestigationTree extends AbstractRequestBean {
                 data.getChildren().add(node);
             }
             
-            //now add the facs that have not returned yet
-            Collection<String> searched = getSearchData().getQueryRequest().getFacilities();
-            for(String searchedFac : searched){
-                boolean isCompleted = false;
-                for(String completedFac : facs){
-                    if(completedFac.equals(searchedFac)){
-                        //searched fac completed
-                        log.trace(completedFac+ " finished");
-                        isCompleted = true;
-                        
+            //now add the facs that have not returned yet.
+            //maybe no search yet, coming from Data Center
+            if(getSearchData() !=null && getSearchData().getQueryRequest() != null){
+                Collection<String> searched = getSearchData().getQueryRequest().getFacilities();
+                for(String searchedFac : searched){
+                    boolean isCompleted = false;
+                    for(String completedFac : facs){
+                        if(completedFac.equals(searchedFac)){
+                            //searched fac completed
+                            log.trace(completedFac+ " finished");
+                            isCompleted = true;
+                            
+                        }
                     }
-                }
-                //check now if searched is completed
-                if(!isCompleted){
-                    log.trace("Not finished,timed out");
-                    node = new TreeNodeBase("foo-folder", searchedFac, "Timed out",true);
-                    data.getChildren().add(node);
-                }else if(isCompleted){
-                    //count how many from this fac
-                    int i = 0;
-                    for(Investigation invest: invests){
-                        if(invest.getFacility().equals(searchedFac)) i++;
-                    }
-                    if(i == 0){
-                        node = new TreeNodeBase("foo-folder", searchedFac, "0",true);
+                    //check now if searched is completed
+                    if(!isCompleted){
+                        log.trace("Not finished,timed out");
+                        node = new TreeNodeBase("foo-folder", searchedFac, "Timed out",true);
                         data.getChildren().add(node);
+                    }else if(isCompleted){
+                        //count how many from this fac
+                        int i = 0;
+                        for(Investigation invest: invests){
+                            if(invest.getFacility().equals(searchedFac)) i++;
+                        }
+                        if(i == 0){
+                            node = new TreeNodeBase("foo-folder", searchedFac, "0",true);
+                            data.getChildren().add(node);
+                        }
                     }
                 }
-            }            
+            }
         }
         
         return data;

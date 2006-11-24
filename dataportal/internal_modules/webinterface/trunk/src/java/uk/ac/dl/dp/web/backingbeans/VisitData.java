@@ -34,7 +34,7 @@ public class VisitData implements Serializable {
     
     private static Logger log = Logger.getLogger(VisitData.class);
     
-    private ArrayList<String> currentSelectedFacilities;
+    private List<String> currentSelectedFacilities;
     
     //private Collection<Study> currentStudies;
     
@@ -190,14 +190,17 @@ public class VisitData implements Serializable {
     }
     
     //current selected fac on the basic search page
-    public ArrayList<String> getCurrentSelectedFacilities() {
+    public List<String> getCurrentSelectedFacilities() {
+        for(String sd :currentSelectedFacilities ){
+            log.trace("Fac: "+sd);
+        }
         return currentSelectedFacilities;
     }
     
-    public void setCurrentSelectedFacilities(ArrayList<String> currentSelectedFacilities) {
+    public void setCurrentSelectedFacilities(List<String> currentSelectedFacilities) {
         this.currentSelectedFacilities = currentSelectedFacilities;
     }
-    
+        
     //list of returned searched users from the
     private List<SelectItem> searchedUsers;
     
@@ -255,7 +258,7 @@ public class VisitData implements Serializable {
         
         for(Investigation file : getCurrentInvestigations()){
             if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.debug("Found invest: "+file);
+                log.trace("Found invest: "+file);
                 return file;
             }
         }
@@ -268,9 +271,9 @@ public class VisitData implements Serializable {
         String id = ID.split("-")[1];
         
         for(DataSet file : getCurrentDatasets()){
-            log.trace(file.getDpId());
+            //log.trace(file.getDpId());
             if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.debug("Found dataset: "+file);
+                log.trace("Found dataset: "+file);
                 return file;
             }
         }
@@ -284,7 +287,7 @@ public class VisitData implements Serializable {
         
         for(DataFile file : getCurrentDatafiles()){
             if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.debug("Found datafile: "+file);
+                log.trace("Found datafile: "+file);
                 return file;
             }
         }
@@ -297,9 +300,9 @@ public class VisitData implements Serializable {
         String id = ID.split("-")[1];
         
         for(DataReference file :getCurrentDataReferences()){
-            log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
+           // log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
             if(file.getId().toString().equals(id) && file.getFacility().equals(fac) ){
-                log.debug("Found dataref: "+file);
+                log.trace("Found dataref: "+file);
                 return file;
             }
         }
@@ -314,7 +317,7 @@ public class VisitData implements Serializable {
         
         for(DataReference file : getCurrentDataReferences()){
             if(file.getId().toString().equals(data_ref_id) && file.getFacility().equals(fac) ){
-                log.debug("Found dataref: "+file);
+                log.trace("Found dataref: "+file);
                 Collection<Url> urls = file.getUrls();
                 for(Url url : urls){
                     if(url.getId().toString().equals(url_id)){
@@ -330,7 +333,7 @@ public class VisitData implements Serializable {
         Collection<String> urls = new ArrayList<String>();
         for(DataFile file : getCurrentDatafiles()){
             if(file.isDownload()){
-                log.debug("Found datafile to download: "+file);
+                log.trace("Found datafile to download: "+file);
                 urls.add(file.getUri());
                 //now set to false
                 // file.setDownload(false);
@@ -345,13 +348,13 @@ public class VisitData implements Serializable {
         for(DataReference file : getCurrentDataReferences()){
             if(file.isDownload() && file.getTypeOfReference().equals(DPUrlRefType.FILE.toString())){
                 for(Url url : file.getUrls()){
-                    log.debug("Found dataref to download: "+file);
+                    log.trace("Found dataref to download: "+file);
                     urls.add(url.getUrl());
                 }
             } else{
                 for(Url url : file.getUrls()){
                     if(url.isDownload()){
-                        log.debug("Found datafile to download: "+url);
+                        log.trace("Found datafile to download: "+url);
                         urls.add(url.getUrl());
                         //now set to false
                         // file.setDownload(false);

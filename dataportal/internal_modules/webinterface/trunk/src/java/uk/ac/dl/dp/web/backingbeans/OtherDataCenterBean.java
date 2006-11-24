@@ -165,6 +165,8 @@ public class OtherDataCenterBean extends SortableList {
         }
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
+          //remove request info 
+        getSearchData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         
     }
@@ -211,6 +213,55 @@ public class OtherDataCenterBean extends SortableList {
     
     public void setLength(boolean length) {
         this.length = length;
+    }
+    
+    public boolean isName(){
+        return is("name");
+    }
+    
+    public boolean isNotName(){
+        return isNot("name");
+    }
+    
+    public boolean isType(){
+        return is("type");
+    }
+    
+    public boolean isNotType(){
+        return isNot("type");
+    }
+    
+    public boolean isFacility(){
+        return is("facility");
+    }
+    
+    public boolean isNotFacility(){
+        return isNot("facility");
+    }
+    public boolean isNotes(){
+        return is("notes");
+    }
+    
+    public boolean isNotNotes(){
+        return isNot("notes");
+    }
+    
+    public boolean isTime(){
+        return is("time");
+    }
+    
+    public boolean isNotTime(){
+        return isNot("time");
+    }
+    
+    private boolean is(String column){
+        if(getSort().equals(column) && isAscending()) return true;
+        else return false;
+    }
+    
+    private boolean isNot(String column){
+        if(getSort().equals(column) && !isAscending()) return true;
+        else return false;
     }
     ////////////////////////////////////////////////////////////////////
     
