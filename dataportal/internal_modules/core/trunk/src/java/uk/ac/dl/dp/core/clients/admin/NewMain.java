@@ -9,6 +9,7 @@
 
 package uk.ac.dl.dp.core.clients.admin;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -26,7 +27,9 @@ public class NewMain {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println(new Date(2000,5,5));
+        System.out.println(new Timestamp(new Date().getTime()));
+        System.out.println(new  Date(2000,5,5));
+        System.out.println("1901-02-01 00:00:00.0");
     }
     
 }

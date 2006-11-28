@@ -21,11 +21,15 @@ import uk.ac.dl.dp.core.sessionbeans.admin.AdminBean;
 import uk.ac.dl.dp.coreutil.entity.EventLog;
 import uk.ac.dl.dp.coreutil.entity.EventLogCount;
 import uk.ac.dl.dp.coreutil.entity.EventLogDetails;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.InSufficientPermissonsException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.util.DPEvent;
+import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 
 /**
  *
@@ -38,7 +42,7 @@ public class AdminClient {
     
     static EntityManagerFactory emf;
     static EntityManager em;
-    static String sid = "231407d0-4b84-4336-841b-f071efd75f79";
+    static String sid = "70526d52-4e9c-471e-8fff-4bacfbba9e8c";
     
     AdminBean bean ;
     
@@ -47,11 +51,26 @@ public class AdminClient {
     public AdminClient() throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
         setUp();
         
+        
+        //viewing users
         //  getUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater"
         // countVisits(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater");
-     //   getEventLogDetails(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater",null,null);
-      //  getBookmarkCount(sid);
-        getUsersEventStats(sid);
+         getEventLogDetails(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi",null,null, DPEvent.BASIC_SEARCH);
+        //  getBookmarkCount(sid);
+        // getUsersEventStats(sid,"CN");
+        
+        //proxysewrver
+        //   addProxyserver(sid,"test","testcs",1999);
+        //   removeProxyserver(sid,501);
+        // setDefault(sid, 1);
+        
+        //facilitys
+        // addFacility(sid);
+        // removeFacility(sid , 602);
+        
+        //user
+        //addAdmin(sid,51);
+       // removeAdmin(sid,1);
         closeEnitiyManager();
     }
     
@@ -60,10 +79,15 @@ public class AdminClient {
             emf = Persistence.createEntityManagerFactory("dataportal_unit_test");
             // Create new EntityManager
             em = emf.createEntityManager();
+            // Begin transaction
+            em.getTransaction().begin();
         }
     }
     
     protected void closeEnitiyManager(){
+        // Commit the transaction
+        em.getTransaction().commit();
+        
         if(em != null){
             // Close this EntityManager
             System.out.println("Closing entity manager");
@@ -77,15 +101,18 @@ public class AdminClient {
         
         Collection<EventLogCount>  statsCollection = bean.getUserStats(sid);
         for(EventLogCount elc : statsCollection){
-            log.trace(elc.getDN()+" "+elc.getVisits()+" "+elc.getSearches()+" "+elc.getDownloads());
+            log.trace(""+elc.getId()+" "+elc.getDn()+" "+elc.getVisits()+" "+elc.getSearches()+" "+elc.getDownloads()+" "+elc.isAdmin());
         }
     }
     
-    public void getEventLogDetails(String sid, String DN, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+    public void getEventLogDetails(String sid, String DN, Date min, Date max, DPEvent event) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
-        Collection<EventLog> result =  bean.getUsersEventStats(sid,DN, min,max);
-        log.trace(result.size());       
+        Collection<EventLog> result =  bean.getUsersEventStats(sid, DN, min, max, event);
+        for(EventLog elc : result){
+            log.trace(""+elc.getId()+" "+elc.getEvent()+" "+elc.getEventLogDetails().iterator().next().getDetails());
+        }
+        log.trace(result.size());
         
     }
     
@@ -96,22 +123,85 @@ public class AdminClient {
             Object[] values = (Object[])i.next();
             log.trace(++count+" : "+values[0]+ ", "+values[1] );
         }
-      
+        
     }
     
-     public void getUsersEventStats(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
-         bean =  new AdminBean();
+    public void getUsersEventStats(String sid, String searchString) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        bean =  new AdminBean();
         bean.setEntityManager(em);
         
-        Collection<EventLogCount> logcount = bean.getUserStats(sid);
+        Collection<EventLogCount> logcount = bean.getUserStats(sid, searchString);
         for(EventLogCount elc : logcount){
-           log.trace(elc.getDN()+" "+elc.getVisits()+" "+elc.getBookmarks()+" "+elc.getDataReferences());
+            log.trace(elc.getDn()+" "+elc.getVisits()+" "+elc.getSearches()+" "+elc.getBookmarks()+" "+elc.getDataReferences()+" "+elc.isAdmin());
         }
         
-     }
-   
+    }
     
-  
+    public void addProxyserver( String sid, String address, String ca, int port)throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        bean =  new AdminBean();
+        bean.setEntityManager(em);
+        
+        ProxyServers ps = new ProxyServers();
+        ps.setActive("N");
+        ps.setCaRootCertificate(ca);
+        ps.setPortNumber(port);
+        ps.setProxyServerAddress(address);
+        
+        bean.addUpdateProxyServer(sid, ps);
+        
+    }
+    public void removeProxyserver( String sid,  long psId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        bean =  new AdminBean();
+        bean.setEntityManager(em);
+        
+        boolean removed = bean.deleteProxyServer(sid,psId);
+        log.trace("Removed: "+removed);
+    }
+    
+    public void setDefault( String sid,  long psId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        bean =  new AdminBean();
+        bean.setEntityManager(em);
+        
+        bean.setDefaultProxyServer(sid,psId);
+        log.trace("set default: "+psId);
+    }
+    
+    public void addFacility( String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        bean =  new AdminBean();
+        bean.setEntityManager(em);
+        
+        ModuleLookup mlu = new ModuleLookup();
+        mlu.setActive("N");
+        mlu.setModuleType(DPFacilityType.WRAPPER.toString());
+        mlu.setConnection("Not Needed");
+        mlu.setFacility("TEST");
+        
+        bean.addFacility(sid,mlu);
+        
+    }
+    
+    public void removeFacility( String sid, long mluId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        bean =  new AdminBean();
+        bean.setEntityManager(em);
+        
+        bean.deleteFacility(sid, mluId);
+    }
+    
+    
+    public void addAdmin(String sid, long userId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        bean =  new AdminBean();
+        bean.setEntityManager(em);
+        
+        bean.addAdmin(sid, userId);
+    }
+    
+     public void removeAdmin(String sid, long userId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+        bean =  new AdminBean();
+        bean.setEntityManager(em);
+        
+        bean.removeAdmin(sid, userId);
+    }
+    
     
     public void getUser(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
         bean =  new AdminBean();
