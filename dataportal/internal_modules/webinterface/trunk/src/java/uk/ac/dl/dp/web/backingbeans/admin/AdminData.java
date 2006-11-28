@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.log4j.*;
 import javax.faces.model.SelectItem;
 import uk.ac.dl.dp.coreutil.entity.EventLog;
+import uk.ac.dl.dp.coreutil.entity.EventLogCount;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
 /**
@@ -28,15 +29,20 @@ public class AdminData implements Serializable {
     
     private String searchUser;
     
-    private User viewedUser;
+    private boolean searched;
+    
+    private Collection<EventLog> eventLogs ;
+    
+    private Collection<EventLogCount> eventLogCount;
+   /*private User viewedUser;
     
     private int downloads;
     
     private int searches;
-    private int visits;  
+    private int visits;  */
           
     //list of returned searched users from the
-    private List<SelectItem> searchedUsers;
+   /* private List<SelectItem> searchedUsers;
     
     public List<SelectItem> getSearchedUsers() {
         return searchedUsers;
@@ -44,12 +50,27 @@ public class AdminData implements Serializable {
     
     public void setSearchedUsers(List<SelectItem> searchedUsers) {
         this.searchedUsers = searchedUsers;
+    }*/
+    
+     //  All page components
+    private String searchString = "ALL";
+    
+     //string that the user wants to search the DNs for
+    public String getSearchString() {
+        return searchString;
+    }
+    
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
     
     //is searched been done
     public boolean isSearched(){
-        if(this.searchedUsers == null) return false;
-        else return true;
+       return searched;
+    }
+    
+     public void setSearched(boolean searched){
+       this.searched = searched;
     }
     
     public String getSearchUser() {
@@ -60,7 +81,7 @@ public class AdminData implements Serializable {
         this.searchUser = searchUser;
     }
     
-    public User getViewedUser() {
+  /*  public User getViewedUser() {
         return viewedUser;
     }
     
@@ -89,7 +110,23 @@ public class AdminData implements Serializable {
        
     public int getVisits() {
         return visits;
-    }     
+    }  */   
+
+    public Collection<EventLog> getEventLogs() {
+        return eventLogs;
+    }
+
+    public void setEventLogs(Collection<EventLog> eventLogs) {
+        this.eventLogs = eventLogs;
+    }
+
+    public Collection<EventLogCount> getEventLogCount() {
+        return eventLogCount;
+    }
+
+    public void setEventLogCount(Collection<EventLogCount> eventLogCount) {
+        this.eventLogCount = eventLogCount;
+    }
     
     
 }

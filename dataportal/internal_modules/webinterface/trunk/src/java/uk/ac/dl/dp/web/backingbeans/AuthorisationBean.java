@@ -139,11 +139,11 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
     public String logout(){
         log.info("Logging out of session");
         
-        try {            
+        try {
             //send logout message
             SessionDelegate.getInstance().logout(getVisit().getSid());
         }  catch (Exception ex) {
-            log.error("Unable to send event log for "+getVisit().getSid()+", "+getVisit().getDn());            
+            log.error("Unable to send event log for "+getVisit().getSid()+", "+getVisit().getDn());
         }
         
         //remove all traces of session so auth filter can check for people entering
@@ -153,7 +153,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         http_session.removeAttribute(WebConstants.SESSION_KEY);
         
         http_session.invalidate();
-                
+        
         //add logout message
         info("Thank you for using the Data Portal.");
         return NavigationConstants.LOGOUT_SUCCESS;
@@ -161,11 +161,15 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
     
     private boolean checkUser(SessionDTO session) {
         Properties prop = new Properties();
-        try {
-            prop.load(new FileInputStream(System.getProperty("user.home")+File.separator+"users.properties"));
-        } catch (IOException ex) {
-            log.error(ex);
-            return false;
+        File user_file = new File(System.getProperty("user.home")+File.separator+"users.properties");
+        if(!user_file.exists()) return true;
+        else{
+            try {
+                prop.load(new FileInputStream(user_file));
+            } catch (IOException ex) {
+                log.error(ex);
+                return false;
+            }
         }
         
         if(!prop.containsValue(session.getDN())){
