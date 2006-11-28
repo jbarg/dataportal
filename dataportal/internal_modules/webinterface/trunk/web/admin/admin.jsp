@@ -75,7 +75,7 @@
                                                             &nbsp;
                                                         </td>
                                                         <td align="left" >
-                                                            <h:outputText styleClass="header_top" value="Administration"/> 
+                                                            <h:outputText styleClass="header_top" value="Administration: Users"/> 
                                                             
                                                         </td>
                                                         <td align="right">

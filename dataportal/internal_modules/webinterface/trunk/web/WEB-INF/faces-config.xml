@@ -9,6 +9,17 @@
         
     </application>
     
+     <managed-bean>
+        <managed-bean-name>keyword</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.navigation.KeywordBean</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>        
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>visit</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.Visit</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
     
     <managed-bean>
         <managed-bean-name>navigationMenu</managed-bean-name>
@@ -19,31 +30,25 @@
     <managed-bean>
         <managed-bean-name>adminBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.AdminBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
+        <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     
      <managed-bean>
         <managed-bean-name>viewUserAdmin</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.ViewUserAdminBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>viewAllUserStatsAdmin</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.ViewAllUserStatsAdminBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     
     <managed-bean>
         <managed-bean-name>ApplicationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ApplicationBean</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>       
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>keyword</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.navigation.KeywordBean</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>        
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>visit</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.Visit</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     
     <managed-bean>
