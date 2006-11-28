@@ -42,6 +42,7 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
     @NamedQuery(name = "ModuleLookup.findByModuleType", query = "SELECT m FROM ModuleLookup m WHERE m.moduleType = :moduleType"), 
     @NamedQuery(name = "ModuleLookup.findByFacility", query = "SELECT m FROM ModuleLookup m WHERE m.facility = :facility"), 
     @NamedQuery(name = "ModuleLookup.findByActive", query = "SELECT m FROM ModuleLookup m WHERE m.active = :active"), 
+    @NamedQuery(name = "ModuleLookup.findAll", query = "SELECT m FROM ModuleLookup m"), 
     @NamedQuery(name = "ModuleLookup.findByModTime", query = "SELECT m FROM ModuleLookup m WHERE m.modTime = :modTime")}
 )
 public class ModuleLookup implements Serializable {

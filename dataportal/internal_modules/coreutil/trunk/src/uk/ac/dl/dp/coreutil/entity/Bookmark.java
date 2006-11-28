@@ -44,8 +44,12 @@ import javax.persistence.Transient;
     @NamedQuery(name = "Bookmark.findByFacility", query = "SELECT b FROM Bookmark b WHERE b.facility = :facility"),
     @NamedQuery(name = "Bookmark.findByNote", query = "SELECT b FROM Bookmark b WHERE b.note = :note"),
     @NamedQuery(name = "Bookmark.findByModTime", query = "SELECT b FROM Bookmark b WHERE b.modTime = :modTime"),
-    @NamedQuery(name = "Bookmark.findByUniqueKey", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId AND b.facility = :facility AND b.userId = :userId")}
-)
+    @NamedQuery(name = "Bookmark.findByUniqueKey", query = "SELECT b FROM Bookmark b WHERE b.studyId = :studyId AND b.facility = :facility AND b.userId = :userId"),
+    
+    //added calls
+    @NamedQuery(name = "Bookmark.findByBookmarkCount", query = "SELECT b.userId,  COUNT(b) FROM Bookmark b GROUP BY b.userId")
+
+})
 public class Bookmark implements Serializable {
     
     @Id
