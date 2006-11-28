@@ -9,47 +9,85 @@
 
 package uk.ac.dl.dp.coreutil.entity;
 
+import java.io.Serializable;
+
 /**
  *
  * @author gjd37
  */
-public class EventLogCount {
+public class EventLogCount implements Serializable{
     
-    private String DN;
-    private int visits;
-    private int searches;
-    private int downloads;
+    private String dn;
+    private Integer visits = 0;
+    private Integer searches= 0;
+    private Integer downloads =0;
+    private Integer bookmarks =0;
+    private Integer dataReferences=0;
+    private Integer id;
+    private boolean admin;
 
-    public String getDN() {
-        return DN;
+    public String getDn() {
+        return dn;
     }
 
-    public void setDN(String DN) {
-        this.DN = DN;
+    public void setDn(String dn) {
+        this.dn = dn;
     }
 
-    public int getVisits() {
+    public Integer getVisits() {
         return visits;
     }
 
-    public void setVisits(int visits) {
+    public void setVisits(Integer visits) {
         this.visits = visits;
     }
 
-    public int getSearches() {
+    public Integer getSearches() {
         return searches;
     }
 
-    public void setSearches(int searches) {
+    public void setSearches(Integer searches) {
         this.searches = searches;
     }
 
-    public int getDownloads() {
+    public Integer getDownloads() {
         return downloads;
     }
 
-    public void setDownloads(int downloads) {
+    public void setDownloads(Integer downloads) {
         this.downloads = downloads;
+    }
+
+    public Integer getBookmarks() {
+        return bookmarks;
+    }
+
+    public void setBookmarks(Integer bookmarks) {
+        this.bookmarks = bookmarks;
+    }
+
+    public Integer getDataReferences() {
+        return dataReferences;
+    }
+
+    public void setDataReferences(Integer dataReferences) {
+        this.dataReferences = dataReferences;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
     
 }

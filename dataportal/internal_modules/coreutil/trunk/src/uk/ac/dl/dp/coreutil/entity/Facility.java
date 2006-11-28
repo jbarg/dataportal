@@ -10,7 +10,6 @@
 package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +19,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -75,6 +76,12 @@ public class Facility implements Serializable {
         this.shortName = shortName;
         this.infoUrl = infoUrl;
         this.modTime = modTime;
+    }
+    
+     @PrePersist
+    @PreUpdate
+    public void prePersist(){
+        modTime = new Date();
     }
 
     public Long getId() {

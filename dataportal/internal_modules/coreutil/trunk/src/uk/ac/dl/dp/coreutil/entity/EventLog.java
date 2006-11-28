@@ -49,6 +49,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "EventLog.findByModTime", query = "SELECT e FROM EventLog e WHERE e.modTime = :modTime"),
     
     //
+    @NamedQuery(name = "EventLog.findByUserEventByType", query = "SELECT e FROM EventLog e WHERE e.userId.dn = :dn AND e.event = :event AND e.modTime > :mindate AND e.modTime < :maxdate"),   
     @NamedQuery(name = "EventLog.findByUserEvent", query = "SELECT e FROM EventLog e WHERE e.userId.dn = :dn AND e.modTime > :mindate AND e.modTime < :maxdate"),
     @NamedQuery(name = "EventLog.countByEvent", query = "SELECT e.userId.dn ,e.event FROM EventLog e WHERE e.event = :event")
     
@@ -56,8 +57,8 @@ import javax.persistence.TemporalType;
 
 @NamedNativeQueries( {
     //
-    @NamedNativeQuery(name = "EventLog.countByEventNative", query = "SELECT dn, COUNT(*) FROM (select u.id,u.dn,el.event FROM DP_USER u, DP_EVENT_LOG el WHERE u.id=el.user_id AND event = ?1) GROUP BY dn")
-    
+    @NamedNativeQuery(name = "EventLog.countByEventNative", query = "SELECT dn, COUNT(*), id FROM (select u.id,u.dn,el.event FROM DP_USER u, DP_EVENT_LOG el WHERE u.id=el.user_id AND event = ?1 AND (el.modTime > ?2) AND (el.modTime < ?3 ) ) GROUP BY dn,id"),
+    @NamedNativeQuery(name = "EventLog.countByEventNativeLike", query = "SELECT dn, COUNT(*), id FROM (select u.id,u.dn,el.event FROM DP_USER u, DP_EVENT_LOG el WHERE u.id=el.user_id AND event = ?1 AND (el.modTime > ?2) AND (el.modTime < ?3 ) AND u.dn LIKE ?4) GROUP BY dn, id")
 })
 
 @SqlResultSetMappings({
@@ -68,7 +69,7 @@ import javax.persistence.TemporalType;
 public class EventLog implements Serializable {
     
     static final long serialVersionUID = 7110175216435025451L;
-        
+    
     @Id
     @TableGenerator(name="ID", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="EVENT_LOG",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="ID")

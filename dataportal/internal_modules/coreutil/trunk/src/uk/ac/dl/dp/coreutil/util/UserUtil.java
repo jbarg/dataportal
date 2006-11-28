@@ -47,7 +47,7 @@ public class UserUtil {
     
     private User user;
     static Logger log = Logger.getLogger(UserUtil.class);
-     
+    
     protected EntityManager em;
     
     /** Creates a new instance of SessionUtil */
@@ -69,7 +69,7 @@ public class UserUtil {
     
     /** Creates a new instance of UserUtil */
     public UserUtil(Certificate certificate, EntityManager em) throws UserNotFoundException, CertificateException {
-         this.em = em;
+        this.em = em;
         if(certificate == null) throw new IllegalArgumentException("Certificate cannot be null.");
         String DN = certificate.getDn();
         log.debug("Loading user with DN "+DN);
@@ -88,7 +88,7 @@ public class UserUtil {
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         log.debug("Loading user with DN "+DN);
         try {
-              loadUser(DN,em);
+            loadUser(DN,em);
         } catch(javax.persistence.NoResultException nre){
             throw new UserNotFoundException("No user associated with DN: "+DN);
         } catch(EntityNotFoundException enfe){
@@ -99,7 +99,7 @@ public class UserUtil {
     
     /** Creates a new instance of UserUtil */
     public UserUtil(int userId, EntityManager em) throws UserNotFoundException {
-         this.em = em;
+        this.em = em;
         if(userId == 0) throw new IllegalArgumentException("User ID cannot be 0.");
         user = (User)em.createNamedQuery("User.findById").setParameter("id",userId).getSingleResult();
         
@@ -107,14 +107,14 @@ public class UserUtil {
     
     /** Creates a new instance of SessionUtil */
     public UserUtil(User user, EntityManager em) {
-         this.em = em;
+        this.em = em;
         if(user == null) throw new IllegalArgumentException("User cannot be null.");
         this.user = user;
     }
     
     
     private void loadUser(String DN, EntityManager em){
-         this.em = em;
+        this.em = em;
         if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
         user = (User)em.createNamedQuery("User.findByDn").setParameter("dn",DN).getSingleResult();
         log.debug("Loaded user with user id "+user.getId());
@@ -185,7 +185,7 @@ public class UserUtil {
     
     private static DpUserPreference getDefaultUserPreferences(EntityManager em) {
         DpUserPreference prefs = new DpUserPreference();
-               
+        
         Collection<Facility> facilities =  (Collection<Facility>)  em.createNamedQuery("Facility.findAll").getResultList();
         prefs.setDefaultFacility(facilities.iterator().next().getShortName());
         
@@ -194,10 +194,12 @@ public class UserUtil {
         prefs.setResolution(DPResolution.res_1024x768.toString());
         
         //get the myproxy
-        Collection<ProxyServers> proxyservers =  (Collection<ProxyServers>)  em.createNamedQuery("ProxyServers.findAll").getResultList();
-        prefs.setProxyServerId(proxyservers.iterator().next());
+        // Collection<ProxyServers> proxyservers =  (Collection<ProxyServers>)  em.createNamedQuery("ProxyServers.findAll").getResultList();
+        //prefs.setProxyServerId(proxyservers.iterator().next());
+        //  log.debug("User proxyserver is "+proxyservers.iterator().next().getId()+" with address: "+proxyservers.iterator().next().getProxyServerAddress());
         
-        log.debug("User proxyserver is "+proxyservers.iterator().next().getId()+" with address: "+proxyservers.iterator().next().getProxyServerAddress());
+        prefs.setProxyServerId(null);
+        
         
         return prefs;
     }
