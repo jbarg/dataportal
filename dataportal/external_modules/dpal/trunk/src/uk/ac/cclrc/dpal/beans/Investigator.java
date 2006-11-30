@@ -77,7 +77,7 @@ public class Investigator extends Common implements Serializable {
                 " [initialed name]:"+getInitials()+" "+getLastName()+
                 " [role]:"+getRole()+
                 " [user_id]:"+getUserId()+
-                " [facility]:"+getFacility()"
+                " [facility]:"+getFacility() ;
         
         
     }

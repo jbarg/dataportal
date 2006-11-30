@@ -1,4 +1,4 @@
-package uk.ac.cclrc.dpal;
+package uk.ac.cclrc.dpal.test;
 
 //for utility
 import java.io.*;
@@ -9,8 +9,12 @@ import java.sql.SQLException;
 
 //for processing the beans
 import uk.ac.cclrc.dpal.beans.* ;
+
+//for the dpaccesslayer code
+import uk.ac.cclrc.dpal.* ;
+
  
-public class TestDPAccessLayerKeywordsEmat
+public class TestDPAccessLayerKeywordsIsis
 {
 
    public static void main(String []args)
@@ -23,18 +27,18 @@ public class TestDPAccessLayerKeywordsEmat
      String db_host = "elektra.dl.ac.uk";
      String db_port = "1521";
      String db_sid = "minerva2" ;
-     String db_user = "metaematview" ;
-     String db_pass = "viewb4rk1ng" ;
+     String db_user = "icatisis" ;
+     String db_pass = "ihave4name" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
                              "(CONNECT_DATA=(SID="+db_sid+")))";
 
-     DPAccessLayer dpal = new DPAccessLayer("emat", dbConnectString, db_user, db_pass) ;
+     DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
 
      try
      {
          System.out.println("---") ;
-         System.out.println("The list of Keywords in E-Materials:") ;
+         System.out.println("The list of Keywords in ISIS:") ;
          //////
          r_k_l = dpal.getKeywords("DN") ;
          for(Keyword k : r_k_l) {
