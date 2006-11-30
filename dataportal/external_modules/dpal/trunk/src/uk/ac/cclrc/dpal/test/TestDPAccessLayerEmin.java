@@ -1,4 +1,4 @@
-package uk.ac.cclrc.dpal;
+package uk.ac.cclrc.dpal.test;
 
 //for utility
 import java.io.*;
@@ -12,8 +12,12 @@ import uk.ac.cclrc.dpal.beans.* ;
  
 //for the enums
 import uk.ac.cclrc.dpal.enums.* ;
+
+//for the dpaccesslayer code
+import uk.ac.cclrc.dpal.* ;
+
  
-public class TestDPAccessLayer
+public class TestDPAccessLayerEmin
 {
 
    public static void main(String []args)
@@ -29,23 +33,24 @@ public class TestDPAccessLayer
      ArrayList<DataFile> r_f_l = null ;
 
      //init the dp access layer
-     String db_host = "elektra.dl.ac.uk";
+     String db_host = "honey.esc.rl.ac.uk";
      String db_port = "1521";
-     String db_sid = "minerva2" ;
-     String db_user = "icatisis" ;
-     String db_pass = "ihave4name" ;
+     String db_sid = "EMIN.ESC.RL.AC.UK" ;
+     String db_user = "metaemin_view" ;
+     String db_pass = "ghj86fjkl" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
-                             "(CONNECT_DATA=(SID="+db_sid+")))";
+                             "(CONNECT_DATA=(SERVICE_NAME="+db_sid+")))";
 
-     DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
+
+     DPAccessLayer dpal = new DPAccessLayer("emin", dbConnectString, db_user, db_pass) ;
 System.out.println(dbConnectString);
      //use command line for keywords if supplied
      if (args.length == 0)
      {
         //funny case to test the automatic case insensitivety of the searches
      //   keyword_list.add("BirMingHam") ;
-        keyword_list.add("raW") ;
+        keyword_list.add("Sulphides") ;
      }
      else
      {
@@ -86,14 +91,15 @@ System.out.println(dbConnectString);
          //////
          System.out.println("---MISC Tests---") ;
          //////setup
-         inv_id_list.add("20") ; 
-         inv_id_list.add("21") ; 
-         inv_id_list.add("22") ; 
+         inv_id_list.add("103") ; 
+         inv_id_list.add("105") ; 
+         inv_id_list.add("154") ; 
          r_i_l = null ;
          //////
          ArrayList<String> k_l = new ArrayList<String>() ;
-         k_l.add("Edinburgh") ;
-         System.out.println("The list of Investigations linked to Edinburgh"+k_l.toString()+":") ;
+         k_l.add("Weathering") ;
+         k_l.add("Silicates") ;
+         System.out.println("The list of Investigations linked to Silicates and Weathering"+k_l.toString()+":") ;
          r_i_l = dpal.getInvestigations(k_l, "DN", LogicalOperator.AND) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden

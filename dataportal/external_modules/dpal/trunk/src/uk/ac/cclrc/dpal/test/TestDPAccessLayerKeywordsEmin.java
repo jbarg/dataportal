@@ -1,4 +1,4 @@
-package uk.ac.cclrc.dpal;
+package uk.ac.cclrc.dpal.test;
 
 //for utility
 import java.io.*;
@@ -9,8 +9,12 @@ import java.sql.SQLException;
 
 //for processing the beans
 import uk.ac.cclrc.dpal.beans.* ;
+
+//for the dpaccesslayer code
+import uk.ac.cclrc.dpal.* ;
+
  
-public class TestDPAccessLayerKeywords
+public class TestDPAccessLayerKeywordsEmin
 {
 
    public static void main(String []args)
@@ -20,21 +24,21 @@ public class TestDPAccessLayerKeywords
      ArrayList<Keyword> r_k_l = null ;
 
      //init the dp access layer
-     String db_host = "elektra.dl.ac.uk";
+     String db_host = "honey.esc.rl.ac.uk";
      String db_port = "1521";
-     String db_sid = "minerva2" ;
-     String db_user = "icatisis" ;
-     String db_pass = "ihave4name" ;
+     String db_sid = "EMIN.ESC.RL.AC.UK" ;
+     String db_user = "metaemin_view" ;
+     String db_pass = "ghj86fjkl" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
-                             "(CONNECT_DATA=(SID="+db_sid+")))";
+                             "(CONNECT_DATA=(SERVICE_NAME="+db_sid+")))";
 
-     DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
+     DPAccessLayer dpal = new DPAccessLayer("emin", dbConnectString, db_user, db_pass) ;
 
      try
      {
          System.out.println("---") ;
-         System.out.println("The list of Keywords in ISIS:") ;
+         System.out.println("The list of Keywords in E-Minerals:") ;
          //////
          r_k_l = dpal.getKeywords("DN") ;
          for(Keyword k : r_k_l) {
