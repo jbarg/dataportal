@@ -43,16 +43,15 @@ create or replace package body dpaccess as
        c_inv types.ref_cursor;
     begin
        OPEN c_inv FOR
-          select * from (select i.title as title,i.id as id,i.inv_type as investigation_type, i.inv_abstract as inv_abstract, k.name as keyword
-                            from investigation i, keyword k, investigator ir
-                            where
-			         lower(k.name) in (select * from TABLE(cast(keyword_array as VC_ARRAY)))
-                            and
-                    	         i.id = k.investigation_id ) 
-                            and 
-                                 i.id = ir.investigation_id
-                            and
-                                 i.id in (select distinct i.id, i.title from investigation i where i.title is not null and rownum < 501) ;
+            select * from (select i.title as title,i.id as id,i.inv_type as investigation_type, i.inv_abstract as inv_abstract, k.name as keyword,
+                                  g.first_name||' '||g.last_name as user_name, g.user_id as user_number,
+                                  Dense_Rank() over (ORDER BY i.id) as dr
+                              from investigation i, keyword k, investigator g
+                              where i.id = k.investigation_id
+                                 and lower(k.name) in (select * from TABLE(cast(keyword_array as VC_ARRAY)))
+                                 and i.id = g.investigation_id(+)
+             )where dr < 501;
+
        RETURN c_inv;
     end;
 
