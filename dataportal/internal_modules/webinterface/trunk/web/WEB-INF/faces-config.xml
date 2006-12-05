@@ -46,6 +46,18 @@
     </managed-bean>
     
     <managed-bean>
+        <managed-bean-name>myProxyServerAdminBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.MyProxyServersAdminBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>facilityAdminBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.FacilitiesAdminBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
         <managed-bean-name>ApplicationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ApplicationBean</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>       
@@ -290,6 +302,27 @@
         <from-view-id>/admin/admin.jsp</from-view-id>
         <navigation-case>
             <from-outcome>SEARCH_SUCCESS</from-outcome>
+            <to-view-id>/admin/view_user.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
+        <description>
+            From admin to search user.
+        </description>
+        <from-view-id>/*</from-view-id>
+        <navigation-case>
+            <from-outcome>GOTO_ADMIN_MYPROXY</from-outcome>
+            <to-view-id>/admin/myproxy_servers.jsp</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>GOTO_ADMIN_FACILITIES</from-outcome>
+            <to-view-id>/admin/facilities.jsp</to-view-id>
+        </navigation-case>
+        
+          <navigation-case>
+            <from-outcome>GOTO_VIEW_USER</from-outcome>
             <to-view-id>/admin/view_user.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>

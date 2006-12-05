@@ -27,6 +27,7 @@
                             
                             <h:selectOneMenu id="typeAccessj_id_1" validator="#{viewUserAdmin.validateType}" required="true" value="#{viewUserAdmin.type}" >
                                 <f:selectItem itemValue="ONE" itemLabel="Select One" itemDisabled="true"/>
+                                <f:selectItem itemValue="ALL" itemLabel="ALL"/>
                                 <f:selectItem itemValue="LOG_ON" itemLabel="LOG ON"/>
                                 <f:selectItem itemValue="LOG_OFF" itemLabel="LOG OFF"/>
                                 <f:selectItem itemValue="BASIC_SEARCH" itemLabel="BASIC SEARCH"/>
