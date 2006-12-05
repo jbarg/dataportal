@@ -42,7 +42,7 @@ public class AdminClient {
     
     static EntityManagerFactory emf;
     static EntityManager em;
-    static String sid = "70526d52-4e9c-471e-8fff-4bacfbba9e8c";
+    static String sid = "5b202deb-a757-413d-ba35-650823d4f9e9";
     
     AdminBean bean ;
     
@@ -55,9 +55,9 @@ public class AdminClient {
         //viewing users
         //  getUser(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater"
         // countVisits(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater");
-         getEventLogDetails(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi",null,null, DPEvent.BASIC_SEARCH);
+        //getEventLogDetails(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi",null,null, DPEvent.BASIC_SEARCH);
         //  getBookmarkCount(sid);
-        // getUsersEventStats(sid,"CN");
+         getUsersEventStats(sid,"CN", null, null);
         
         //proxysewrver
         //   addProxyserver(sid,"test","testcs",1999);
@@ -95,7 +95,7 @@ public class AdminClient {
         }
     }
     
-    public void countVisits(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+   /* public void countVisits(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
         
@@ -103,7 +103,7 @@ public class AdminClient {
         for(EventLogCount elc : statsCollection){
             log.trace(""+elc.getId()+" "+elc.getDn()+" "+elc.getVisits()+" "+elc.getSearches()+" "+elc.getDownloads()+" "+elc.isAdmin());
         }
-    }
+    }*/
     
     public void getEventLogDetails(String sid, String DN, Date min, Date max, DPEvent event) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
         bean =  new AdminBean();
@@ -126,11 +126,11 @@ public class AdminClient {
         
     }
     
-    public void getUsersEventStats(String sid, String searchString) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+    public void getUsersEventStats(String sid, String searchString, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
         
-        Collection<EventLogCount> logcount = bean.getUserStats(sid, searchString);
+        Collection<EventLogCount> logcount = bean.getUserStats(sid, searchString,min, max);
         for(EventLogCount elc : logcount){
             log.trace(elc.getDn()+" "+elc.getVisits()+" "+elc.getSearches()+" "+elc.getBookmarks()+" "+elc.getDataReferences()+" "+elc.isAdmin());
         }
