@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.naming.NamingException;
 import uk.ac.dl.dp.coreutil.entity.EventLog;
 import uk.ac.dl.dp.coreutil.entity.EventLogCount;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.InSufficientPermissonsException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
@@ -42,6 +44,42 @@ public class AdminDelegate {
         CachingServiceLocator csl =  CachingServiceLocator.getInstance();
         ar  = (AdminRemote)csl.lookup(DataPortalConstants.ADMIN);
     }
+    
+    public void setDefaultProxyServer(String sid, long proxyServerId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+        
+        ar.setDefaultProxyServer(sid, proxyServerId);
+    }
+    
+    
+    public ProxyServers addUpdateProxyServer(String sid, ProxyServers proxyServer) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+        return  ar.addUpdateProxyServer(sid,proxyServer);
+    }
+    
+    public boolean deleteProxyServer(String sid, long proxyServerId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+        return ar.deleteProxyServer(sid,proxyServerId);
+    }
+    
+    public void updateFacility(String sid, ModuleLookup mlu) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+        ar.updateFacility(sid, mlu);
+    }
+    
+    public void addFacility(String sid, ModuleLookup mlu) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+        ar.addFacility(sid,mlu);
+    }
+    
+    public boolean deleteFacility(String sid, ModuleLookup mlu) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+        return ar.deleteFacility(sid,mlu);
+    }
+    
+    public Collection<ProxyServers> listProxyServers(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+        
+        return ar.listProxyServers(sid);
+    }
+    
+    public Collection<ModuleLookup> listFacilities(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+        return ar.listFacilities(sid);
+    }
+    
     
     public void removeAdmin(String sid, long userId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
         ar.removeAdmin(sid,userId);

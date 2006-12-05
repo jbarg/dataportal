@@ -31,7 +31,7 @@ public interface AdminRemote {
     
     public Collection<EventLog> getUsersEventStats(String sid, String DN, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException;
     
-    public void addUpdateProxyServer(String sid, ProxyServers proxyServer) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException;
+    public ProxyServers addUpdateProxyServer(String sid, ProxyServers proxyServer) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException;
     
     public boolean deleteProxyServer(String sid, long proxyServerId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException;
     
@@ -49,4 +49,6 @@ public interface AdminRemote {
     
     public void addAdmin(String sid, long userId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException;
     
+     public void setDefaultProxyServer(String sid, long proxyServerId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException;
+   
 }
