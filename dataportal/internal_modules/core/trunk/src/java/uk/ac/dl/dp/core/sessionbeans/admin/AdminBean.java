@@ -96,7 +96,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         //get list of LOG_ONs
         List result = null;
         if(searchString == null){
-            result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"LOG_ON").getResultList();
+            result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"LOG_ON").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).getResultList();
         } else result = em.createNamedQuery("EventLog.countByEventNativeLike").setParameter(1,"LOG_ON").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).setParameter(4,searchString).getResultList();
         
         Collection<EventLogCount> statsCollection = new ArrayList<EventLogCount>();
@@ -124,7 +124,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         }
         
         if(searchString == null){
-            result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"BASIC_SEARCH").getResultList();
+            result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"BASIC_SEARCH").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).getResultList();
         } else result = em.createNamedQuery("EventLog.countByEventNativeLike").setParameter(1,"BASIC_SEARCH").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).setParameter(4,searchString).getResultList();
         
          /* for(Iterator i = result.iterator(); i.hasNext();){
@@ -149,7 +149,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         }
         
         if(searchString == null){
-            result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"DOWNLOAD").getResultList();
+            result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"DOWNLOAD").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).getResultList();
         } else result = em.createNamedQuery("EventLog.countByEventNativeLike").setParameter(1,"DOWNLOAD").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).setParameter(4,searchString).getResultList();
         
        /*   for(Iterator i = result.iterator(); i.hasNext();){
@@ -227,14 +227,15 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         return getUsersEventStats(sid,DN,min,max,null);
     }
     
-    public void addUpdateProxyServer(String sid, ProxyServers proxyServer) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public ProxyServers addUpdateProxyServer(String sid, ProxyServers proxyServer) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
         //add proxy
-        log.trace("Updating/adding proxyserver: "+proxyServer.getProxyServerAddress());
-        em.persist(proxyServer);
-        log.trace("Added/Updated ProxyServers with id: "+proxyServer.getId());
+        log.trace("Updating/adding proxyserver: "+proxyServer.getProxyServerAddress());        
+       ProxyServers ps =  em.merge(proxyServer);
+        log.trace("Added/Updated ProxyServers with id: "+ps.getId());
+        return ps;
     }
     
     public boolean deleteProxyServer(String sid, long proxyServerId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
@@ -285,7 +286,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
-        return  em.createNamedQuery(" ModuleLookup.findAll").getResultList();
+        return  em.createNamedQuery("ModuleLookup.findAll").getResultList();
     }
     
     public void addFacility(String sid, ModuleLookup mlu)throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
