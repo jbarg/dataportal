@@ -54,25 +54,8 @@
                                 </f:facet>
                             </t:popup>
                             <h:message for="dnj_id_1" styleClass="error" showSummary="false" showDetail="true" />
-                           
-                            
-                           <h:outputLabel>
-                                <h:outputText styleClass="body" value="Search events:"/>
-                            </h:outputLabel  >
-                            
-                            <h:selectOneMenu id="typeAccessj_id_1" validator="#{viewAllUserStatsAdmin.validateType}" required="true" value="#{viewUserAdmin.type}" >
-                                <f:selectItem itemValue="ONE" itemLabel="Select One" itemDisabled="true"/>
-                                <f:selectItem itemValue="LOG_ON" itemLabel="LOG ON"/>
-                                <f:selectItem itemValue="LOG_OFF" itemLabel="LOG OFF"/>
-                                <f:selectItem itemValue="BASIC_SEARCH" itemLabel="BASIC SEARCH"/>
-                                <f:selectItem itemValue="DOWNLOAD" itemLabel="DOWNLOAD"/>
-                                
-                                
-                            </h:selectOneMenu>
-                            
-                            
-                            <h:message for="typeAccessj_id_1" styleClass="error" showSummary="false" showDetail="true" />
-                            
+                                                      
+                                                       
                             <h:outputLabel>
                                 <h:outputText styleClass="body" value="Search from:"/>
                             </h:outputLabel  >
@@ -112,7 +95,7 @@
                     <br />
                     <h:form>
                         <h:panelGrid id="searchResults" rendered="#{visit.adminData.searched}" columns="3">
-                            <a4j:region   selfRendered="true" > 
+                         
                                 
                                 <t:dataTable rendered="#{viewAllUserStatsAdmin.populated}" id="datatable" width="100%"
                                              styleClass="scrollerTable"
@@ -317,7 +300,7 @@
                                 
                                 
                                 
-                            </a4j:region>
+                         
                         </h:panelGrid> 
                         
                     </h:form>    
