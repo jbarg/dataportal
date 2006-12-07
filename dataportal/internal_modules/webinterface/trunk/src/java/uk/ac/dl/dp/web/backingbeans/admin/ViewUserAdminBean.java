@@ -80,10 +80,10 @@ public class ViewUserAdminBean extends SortableList {
     }
     
     public void setDataRefs(List<EventLog> dataRefs) {
-        
+            
     }
     
-   
+    
     
     //listens for sort column action events, and gets the column by thge param name passed in
     // then calls sort on the column
@@ -200,7 +200,12 @@ public class ViewUserAdminBean extends SortableList {
         
         log.trace("Trying to view users details of type: "+getType() +" for user "+getAdminData().getSearchUser());
         try {
-            Collection<EventLog> logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),getAdminData().getSearchUser(),getFirstDate(),getSecondDate(),DPEvent.valueOf(getType()));
+            Collection<EventLog> logs = null;
+            if(getType().equals("ALL")) {
+                logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),getAdminData().getSearchUser(),getFirstDate(),getSecondDate(),null);                
+            } else {
+                logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),getAdminData().getSearchUser(),getFirstDate(),getSecondDate(),DPEvent.valueOf(getType()));
+            }
             getAdminData().setEventLogs(logs);
             
             return NavigationConstants.SEARCH_SUCCESS;

@@ -14,9 +14,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.validator.ValidatorException;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.delegates.AdminDelegate;
@@ -70,11 +74,11 @@ public class ViewAllUserStatsAdminBean extends SortableList {
         
     }
     
-    public void setDataRefs(List<EventLog> dataRefs) {
-        
+    public void setDataRefs(List<EventLogCount> dataRefs) {
+        getAdminData().setEventLogCount((Collection<EventLogCount>)dataRefs);
     }
     
-      //search for the search string
+    //search for the search string
     public void search(ActionEvent event){
         log.trace("Searching for users: "+getAdminData().getSearchString());
         Collection<EventLogCount> results = null;
@@ -85,10 +89,10 @@ public class ViewAllUserStatsAdminBean extends SortableList {
             //no users found
             if(results.size() == 0){
                 //make sure bottom section of page is not displayed
-                getAdminData().setSearched(false);               
+                getAdminData().setSearched(false);
                 info("No users found with: "+getAdminData().getSearchString());
                 return ;
-            } else {               
+            } else {
                 log.trace("Setting searched results");
                 getAdminData().setSearched(true);
                 getAdminData().setEventLogCount(results);
@@ -137,6 +141,20 @@ public class ViewAllUserStatsAdminBean extends SortableList {
         };
         Collections.sort( (List<EventLogCount>)getAdminData().getEventLogCount(), comparator);
         
+    }
+    
+    //way to validate two components.  Put val on last one and then check the local value (in this class)
+    // of the other one abobve it in the page
+    // before cannot be after after !!
+    public void validateDate(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
+        log.debug("validateDate: ");
+        if (value != null) {
+            Date first = (Date)getCalendarFirst().getLocalValue();
+            if(first.after((Date)value)){
+                log.trace("Invalid");
+                throw new ValidatorException(new FacesMessage("Validation Error", "Search To Date cannot be before Search From Date."));
+            }
+        }
     }
     
     //listens for sort column action events, and gets the column by thge param name passed in
@@ -212,9 +230,11 @@ public class ViewAllUserStatsAdminBean extends SortableList {
             
             AdminDelegate.getInstance().addAdmin(getVisit().getSid(),elc.getId().longValue());
             //update the table so user is admin
-            String search = getAdminData().getSearchString();
-            if(getAdminData().getSearchString().equals("ALL") || getAdminData().getSearchString().equals("*")) search = null;
-            getAdminData().setEventLogCount(AdminDelegate.getInstance().getUserStats(getVisit().getSid(),search));
+            for(EventLogCount elcs : getAdminData().getEventLogCount()){
+                if(elcs.getId().equals(elc.getId())){
+                    elcs.setAdmin(true);
+                }
+            }
         } catch (Exception ex) {
             log.error("Cannot add admin to user: "+elc.getDn(),ex);
             error("Error:  Cannot add admin role to user "+elc.getDn());
@@ -227,11 +247,13 @@ public class ViewAllUserStatsAdminBean extends SortableList {
         try {
             
             AdminDelegate.getInstance().removeAdmin(getVisit().getSid(),elc.getId().longValue());
+            
             //update the table so user is admin
-            String search = getAdminData().getSearchString();
-            if(getAdminData().getSearchString().equals("ALL") || getAdminData().getSearchString().equals("*")) search = null;
-            AdminDelegate.getInstance().getUserStats(getVisit().getSid(),search);
-            getAdminData().setEventLogCount(AdminDelegate.getInstance().getUserStats(getVisit().getSid(),search));
+            for(EventLogCount elcs : getAdminData().getEventLogCount()){
+                if(elcs.getId().equals(elc.getId())){
+                    elcs.setAdmin(false);
+                }
+            }
             
         } catch (Exception ex) {
             log.error("Cannot remove admin to user: "+elc.getDn(),ex);

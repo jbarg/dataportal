@@ -13,11 +13,10 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.*;
-import javax.faces.model.SelectItem;
 import uk.ac.dl.dp.coreutil.entity.EventLog;
 import uk.ac.dl.dp.coreutil.entity.EventLogCount;
-import uk.ac.dl.dp.coreutil.entity.User;
-import uk.ac.dl.dp.coreutil.util.DPEvent;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 /**
  *
  * @author gjd37
@@ -34,24 +33,11 @@ public class AdminData implements Serializable {
     private Collection<EventLog> eventLogs ;
     
     private Collection<EventLogCount> eventLogCount;
-   /*private User viewedUser;
     
-    private int downloads;
+    private Collection<ProxyServers> proxyServers;
     
-    private int searches;
-    private int visits;  */
-          
-    //list of returned searched users from the
-   /* private List<SelectItem> searchedUsers;
-    
-    public List<SelectItem> getSearchedUsers() {
-        return searchedUsers;
-    }
-    
-    public void setSearchedUsers(List<SelectItem> searchedUsers) {
-        this.searchedUsers = searchedUsers;
-    }*/
-    
+      private Collection<ModuleLookup> facilities;
+       
      //  All page components
     private String searchString = "ALL";
     
@@ -81,37 +67,7 @@ public class AdminData implements Serializable {
         this.searchUser = searchUser;
     }
     
-  /*  public User getViewedUser() {
-        return viewedUser;
-    }
-    
-    public void setViewedUser(User viewedUser) {
-        //set user info
-        Collection<EventLog> elogs = viewedUser.getEventLog();
-        searches = 0;
-        downloads = 0;
-        visits = 0;
-        for(EventLog elog : elogs){
-            if(elog.getEvent().equals(DPEvent.BASIC_SEARCH.toString())) searches++;
-            if(elog.getEvent().equals(DPEvent.DOWNLOAD.toString())) downloads++;
-            if(elog.getEvent().equals(DPEvent.LOG_ON.toString())) visits++;
-        }        
-        
-        this.viewedUser = viewedUser;
-    }
-    
-    public int getDownloads() {
-        return downloads;
-    }
-       
-    public int getSearches() {
-        return searches;
-    }
-       
-    public int getVisits() {
-        return visits;
-    }  */   
-
+  
     public Collection<EventLog> getEventLogs() {
         return eventLogs;
     }
@@ -127,6 +83,23 @@ public class AdminData implements Serializable {
     public void setEventLogCount(Collection<EventLogCount> eventLogCount) {
         this.eventLogCount = eventLogCount;
     }
-    
+
+    public Collection<ProxyServers> getProxyServers() {
+        return proxyServers;
+    }
+
+    public void setProxyServers(Collection<ProxyServers> proxyServers) {
+        this.proxyServers = proxyServers;
+    }
+
+    public Collection<ModuleLookup> getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(Collection<ModuleLookup> facilities) {
+        this.facilities = facilities;
+    }
+
+      
     
 }
