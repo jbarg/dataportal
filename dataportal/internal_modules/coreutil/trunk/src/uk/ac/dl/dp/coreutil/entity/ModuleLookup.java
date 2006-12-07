@@ -167,7 +167,7 @@ public class ModuleLookup implements Serializable {
     /**
      *  Boolean function to wrap oracle boolean Y/N null etc
      */
-    public boolean isDataInFolders(){
+    public boolean is_DataInFolders(){
         if(getDataInFolders() != null && getDataInFolders().equalsIgnoreCase("Y")) return true;
         else return false;
     }
@@ -234,7 +234,7 @@ public class ModuleLookup implements Serializable {
     /**
      *  Boolean function to wrap oracle boolean Y/N null etc
      */
-    public boolean isTopics(){
+    public boolean is_Topics(){
         if(getTopics() != null && getTopics().equalsIgnoreCase("Y")) return true;
         else return false;
     }
@@ -250,7 +250,7 @@ public class ModuleLookup implements Serializable {
     /**
      *  Boolean function to wrap oracle boolean Y/N null etc
      */
-    public boolean isAllKeywords(){
+    public boolean is_AllKeywords(){
         if(getAllKeywords() != null && getAllKeywords().equalsIgnoreCase("Y")) return true;
         else return false;
     }

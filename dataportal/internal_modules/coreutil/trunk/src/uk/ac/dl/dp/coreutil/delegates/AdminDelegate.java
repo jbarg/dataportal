@@ -63,8 +63,8 @@ public class AdminDelegate {
         ar.updateFacility(sid, mlu);
     }
     
-    public void addFacility(String sid, ModuleLookup mlu) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
-        ar.addFacility(sid,mlu);
+    public ModuleLookup addFacility(String sid, ModuleLookup mlu) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+       return  ar.addFacility(sid,mlu);
     }
     
     public boolean deleteFacility(String sid, ModuleLookup mlu) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{

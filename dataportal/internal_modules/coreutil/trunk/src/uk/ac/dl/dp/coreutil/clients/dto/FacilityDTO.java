@@ -45,9 +45,9 @@ public class FacilityDTO implements Serializable {
         this.setFacility(mlo.getFacility());
         this.setModuleType(mlo.getModuleType());
         this.setActive(mlo.getActive());
-        this.isDataSetInFolders = mlo.isDataInFolders();
-        this.isAllKeywords = mlo.isAllKeywords();
-        this.isTopics = mlo.isTopics();
+        this.isDataSetInFolders = mlo.is_DataInFolders();
+        this.isAllKeywords = mlo.is_AllKeywords();
+        this.isTopics = mlo.is_Topics();
     }
     
    /* public String getConnection() {
