@@ -17,7 +17,7 @@
                 <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"                          />
                 <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"                            />
                 <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
-                <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.isAdmin}" itemLabel="Admin"                            />
+                <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
             </s:fishEyeNavigationMenu>           
         </t:div>
@@ -36,7 +36,7 @@
                 <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"                          />
                 <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"                            />
                 <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
-                <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.isAdmin}" itemLabel="Admin"                            />
+                <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
         </s:fishEyeNavigationMenu>                    </t:div>
         
@@ -55,7 +55,7 @@
                 <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"                          />
                 <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"                            />
                 <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
-                <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.isAdmin}" itemLabel="Admin"                            />
+                <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
         </s:fishEyeNavigationMenu>                    </t:div>
         
