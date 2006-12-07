@@ -45,6 +45,8 @@ public class NavigationConstants {
     public final static String GIVE_DATA_AUTH = "GIVE_DATA_AUTH";
     
     //admin
-    
-    
+    public final static String GOTO_ADMIN = "GOTO_ADMIN";
+    public final static String GOTO_ADMIN_MYPROXY = "GOTO_ADMIN_MYPROXY";
+    public final static String GOTO_ADMIN_FACILITIES = "GOTO_ADMIN_FACILITIES";
+    public final static String GOTO_VIEW_USER = "GOTO_VIEW_USER";
 }
