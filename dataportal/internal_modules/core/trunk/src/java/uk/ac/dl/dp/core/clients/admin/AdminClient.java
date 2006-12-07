@@ -42,7 +42,7 @@ public class AdminClient {
     
     static EntityManagerFactory emf;
     static EntityManager em;
-    static String sid = "5b202deb-a757-413d-ba35-650823d4f9e9";
+    static String sid = "5c75d2f6-b01f-431f-9727-2afb367b187a";
     
     AdminBean bean ;
     
@@ -57,7 +57,7 @@ public class AdminClient {
         // countVisits(sid,"/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater");
         //getEventLogDetails(sid, "/C=UK/O=eScience/OU=CLRC/L=DL/CN=shoaib sufi",null,null, DPEvent.BASIC_SEARCH);
         //  getBookmarkCount(sid);
-         getUsersEventStats(sid,"CN", null, null);
+    //     getUsersEventStats(sid,"CN", null, null);
         
         //proxysewrver
         //   addProxyserver(sid,"test","testcs",1999);
@@ -69,8 +69,8 @@ public class AdminClient {
         // removeFacility(sid , 602);
         
         //user
-        //addAdmin(sid,51);
-       // removeAdmin(sid,1);
+        addAdmin(sid,101);
+        //removeAdmin(sid,101);
         closeEnitiyManager();
     }
     

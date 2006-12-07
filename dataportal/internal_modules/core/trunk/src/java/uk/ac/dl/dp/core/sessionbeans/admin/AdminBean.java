@@ -270,7 +270,8 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     public void updateFacility(String sid, ModuleLookup mlu)throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
-        
+                 
+        //What if name changed
         em.merge(mlu);
     }
     
@@ -289,7 +290,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         return  em.createNamedQuery("ModuleLookup.findAll").getResultList();
     }
     
-    public void addFacility(String sid, ModuleLookup mlu)throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public ModuleLookup addFacility(String sid, ModuleLookup mlu)throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -323,20 +324,25 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
             //need a record in here first
             log.info("Adding new facility: "+fac.getShortName());
             em.persist(fac);
-            
+           
         }
         
         em.persist(mlu);
+        return mlu;
         
     }
     
     public boolean deleteFacility(String sid, ModuleLookup mlu) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
-        Facility found_fac = (Facility)em.createNamedQuery("Facility.findByShortName").setParameter("shortName",mlu.getFacility()).getSingleResult();
-        em.remove(found_fac);
-        em.remove(mlu);
-        log.info("Removed facility and module lookup: "+mlu.getFacility());
+      
+        //should not delete this as  uses have links to this in the bookmarks etc
+        //Facility found_fac = (Facility)em.createNamedQuery("Facility.findByShortName").setParameter("shortName",mlu.getFacility()).getSingleResult();
+        //em.remove(found_fac);
+        
+        ModuleLookup found = em.merge(mlu);
+        em.remove(found);
+        log.info("Removed facility and module lookup: "+found.getFacility());
         return true;
     }
     

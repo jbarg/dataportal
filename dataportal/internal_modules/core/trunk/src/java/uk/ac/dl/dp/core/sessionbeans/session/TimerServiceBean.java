@@ -163,7 +163,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
                     boolean word = true;
                     
                     //if not EMAT (ie allowed none words) then remove all none words
-                    if(!mod.isAllKeywords()){
+                    if(!mod.is_AllKeywords()){
                         //log.trace(mod.getFacility()+" has not got data in folders so taking out none words");
                         for(int j = 0 ; j < k.getName().length(); j++){
                             if(!Character.isLetterOrDigit(k.getName().charAt(j))){
