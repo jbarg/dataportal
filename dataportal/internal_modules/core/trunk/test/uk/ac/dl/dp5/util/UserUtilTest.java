@@ -176,7 +176,7 @@ public class UserUtilTest extends TestCase {
         String DN = "test deafult user "+Math.random();
         
         User expResult = null;
-        User result = UserUtil.createDefaultUser(DN);
+        User result = UserUtil.createDefaultUser("glen",DN);
         
         // Commit the transaction before checking them
         em.getTransaction().commit();
@@ -192,7 +192,7 @@ public class UserUtilTest extends TestCase {
         assertEquals("number of roles should be the same",1, result.getRoles().size());
         
         assertEquals("proxy server id should be 1 should be the same",1, user_prefs.getProxyServerId().getId().intValue());
-        assertEquals("default results per pages should be 20",20, user_prefs.getResultsPerPage().intValue());
+        assertEquals("default results per pages should be 15",15, user_prefs.getResultsPerPage().intValue());
         assertEquals("default resoultion should be 1024x768",DPResolution.res_1024x768.toString(), user_prefs.getResolution());
         
         // Commit the transaction

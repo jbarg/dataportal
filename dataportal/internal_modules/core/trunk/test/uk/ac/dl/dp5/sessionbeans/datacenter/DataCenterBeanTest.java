@@ -10,6 +10,7 @@ package uk.ac.dl.dp5.sessionbeans.datacenter;
 import junit.framework.*;
 import java.util.Collection;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
+import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
@@ -57,9 +58,9 @@ public class DataCenterBeanTest extends TestCase {
         dto.setName("Unit Test "+Math.random());
         dto.setNote("unit test note");
         dto.setQuery("unit test query!!!!");
-        dto.setStudyId(1);
+        dto.setStudyId(new Integer(Math.round((float)Math.random()*100F)));
         
-        System.out.println("adding bookmark");
+        System.out.println("adding bookmark "+dto.getName());
         
         dcd.addBookmark(sid, dto);
         
@@ -90,9 +91,10 @@ public class DataCenterBeanTest extends TestCase {
             System.out.println("setting iterator;");
             
         } else {
-            System.out.println("More than one bookmark returned");
+            System.out.println("More than one bookmark returned "+result.size());
             boolean found = false;
             for(Bookmark bk : result){
+                System.out.println(bk.getName());
                 if(bk.getName().equals(dto.getName())) {
                     found = true;
                     System.out.println("Found bookmark with name: "+dto.getName());
