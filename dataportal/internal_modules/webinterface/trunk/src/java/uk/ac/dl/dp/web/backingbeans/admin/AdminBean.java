@@ -9,14 +9,11 @@
 
 package uk.ac.dl.dp.web.backingbeans.admin;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import javax.faces.event.ActionEvent;
-import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.delegates.AdminDelegate;
-import uk.ac.dl.dp.coreutil.entity.EventLogCount;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
@@ -29,38 +26,36 @@ public class AdminBean extends AbstractRequestBean{
     
     private static Logger log = Logger.getLogger(AdminBean.class);
     
-   
+    
     
     
     /** Creates a new instance of AdminBean */
     public AdminBean() {
     }
-   
     
-    //search for the search string
-    public void search(ActionEvent event){
-        log.trace("Searching for users: "+getAdminData().getSearchString());
-        Collection<EventLogCount> results = null;
-        String search = getAdminData().getSearchString();
-        if(getAdminData().getSearchString().equals("ALL") || getAdminData().getSearchString().equals("*")) search = null;
+    public String listMyProxyServers(){
+        log.trace("Listing myproxy servers");
         try {
-            results = AdminDelegate.getInstance().getUserStats(getVisit().getSid(), search);
-            //no users found
-            if(results.size() == 0){
-                //make sure bottom section of page is not displayed
-                getAdminData().setSearched(false);               
-                info("No users found with: "+getAdminData().getSearchString());
-                return ;
-            } else {               
-                log.trace("Setting searched results");
-                getAdminData().setSearched(true);
-                getAdminData().setEventLogCount(results);
-                return ;
-            }
+            Collection<ProxyServers> myproxyServers  = AdminDelegate.getInstance().listProxyServers(getVisit().getSid());
+            getAdminData().setProxyServers(myproxyServers);
+            return NavigationConstants.GOTO_ADMIN_MYPROXY;
         } catch (Exception ex) {
-            log.error("Unable to search users DNs",ex);
-            error("Unable to search user's DNs");
-            return ;
+            log.error("Unable to list MyProxyservers",ex);
+            error("Unable to list MyProxyServers.");
+            return null;
+        }
+    }
+    
+    public String listFacilities(){
+        log.trace("Listing facilities");
+        try {
+            Collection<ModuleLookup> facilities  = AdminDelegate.getInstance().listFacilities(getVisit().getSid());
+            getAdminData().setFacilities(facilities);
+            return NavigationConstants.GOTO_ADMIN_FACILITIES;
+        } catch (Exception ex) {
+            log.error("Unable to list facilities",ex);
+            error("Unable to list facilities.");
+            return null;
         }
     }
     
