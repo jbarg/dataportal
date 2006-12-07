@@ -20,7 +20,7 @@ import uk.ac.dl.dp.web.backingbeans.Visit;
  */
 public class AuthorisationFilterAdmin implements Filter{
     
-    private static Logger log = Logger.getLogger(AuthorisationFilter.class);
+    private static Logger log = Logger.getLogger(AuthorisationFilterAdmin.class);
     
     
     FilterConfig config = null;
@@ -50,8 +50,13 @@ public class AuthorisationFilterAdmin implements Filter{
                 httpResponse.sendRedirect(httpRequest.getContextPath()+"/index.jsp");
                 log.trace("sending to logon, no visit");
                 
+            } else if(visit != null && visit.isAdmin() == false){
+                //got session but not admin, send to BasicSearch
+                httpResponse.sendRedirect(httpRequest.getContextPath()+"/faces/protected/basic_search.jsp");
+                log.trace("sending to logon, no visit");
+                
             } else{
-                log.trace("Everything ok: "+visit.getDn());
+                log.trace("Everything ok for admin for: "+visit.getDn());
                 chain.doFilter(request,response);
             }
         }

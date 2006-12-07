@@ -86,12 +86,14 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         log.trace("Width set to: "+width);
         
         for(DPRole role : roles){
-            if(role.ADMIN == DPRole.ADMIN) {
+            if(role.toString().equals(DPRole.ADMIN.toString())) {
                 isAdmin = true;
                 setAdminData(new AdminData());
                 break;
             }
         }
+        log.trace("User is admin: "+isAdmin);
+                
         
         //set session facility list
         Collection<FacilityDTO> facs = this.session.getFacilities();
@@ -109,7 +111,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     }
     
     public boolean isAdmin(){
-        return isIsAdmin();
+        return isAdmin;
     }
     
     public Collection<DPRole> getRoles(){
@@ -126,12 +128,8 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public String getSid() {
         return sid;
-    }
-    
-    public boolean isIsAdmin() {
-        return isAdmin;
-    }
-    
+    }    
+       
     public UserPreferencesDTO getUserPreferences() {
         return userPreferences;
     }
