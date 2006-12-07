@@ -38,10 +38,10 @@ import uk.ac.dl.dp.coreutil.util.DPResolution;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp5.util.PortalCredential;
+
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
-import uk.ac.dl.dp5.util.TestConstants;
+
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
@@ -65,7 +65,8 @@ public class SessionBeanTest extends TestCase {
     
     protected void setUp() throws Exception {
         //login
-        sid = sd.login(TestConstants.MYPROXY_USERNAME,TestConstants.MYPROXY_PASSWORD,3);
+        System.out.println("logging in");
+        sid = sd.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
         System.out.println("logged in with sid: "+sid);
     }
     
@@ -195,10 +196,10 @@ public class SessionBeanTest extends TestCase {
     public void testLogin() throws Exception {
         System.out.println("testLogin");
         
-        int MAX = 500;
+        int MAX = 2;
         for(int i =0 ; i < MAX ; i++){
             setUp();
-            if(i !=MAX){
+            if(i !=MAX-1){
                 tearDown();
             }
             try {
