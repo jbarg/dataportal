@@ -4,43 +4,47 @@
 <%@ taglib prefix="tiles" uri="http://struts.apache.org/tags-tiles"%>
 
 <h:form id="userform">
- 
+    
     <br />
-    <br />
-    <br />
+    
+    
     <%
-        //invalidate session
-        //  session.invalidate();
+    //invalidate session
+    //  session.invalidate();
     %>
+    <h:panelGrid columns="1" >
+        <h:outputText styleClass="info" style="font-size : 16px" value="Log onto the Data Portal:"/>
+    </h:panelGrid>  
+    <br />
     <h:panelGrid columns="1" >
         <h:messages globalOnly="true" errorClass="error" infoClass="info" />
     </h:panelGrid>  
     <h:panelGrid columns="3">
-                                              
+        
         <h:outputLabel for="Usernamej_id_1">
             <h:outputText styleClass="body" value="Username: "/>
         </h:outputLabel  >
-                                                                                           
+        
         <h:inputText id="Usernamej_id_1" size="20" required="true" value="#{authorisationBean.username}">
             <f:validateLength minimum="1" maximum="10"/>
         </h:inputText> 
         <h:message for="Usernamej_id_1" styleClass="error" showSummary="false" showDetail="true" />
-
+        
         <h:outputLabel for="Passwordj_id_1">
             <h:outputText styleClass="body" value="Password: "/>
         </h:outputLabel  >
-
+        
         <h:inputSecret id="Passwordj_id_1"  size="20" required="true" value="#{authorisationBean.password}">
             <f:validateLength minimum="0" maximum="10"/>
         </h:inputSecret> 
         <h:message for="Passwordj_id_1" styleClass="error"/>
         <h:panelGroup/>
-
+        
         <h:commandButton action="#{authorisationBean.login}" title="Login" value="Logon"/>
         <h:panelGroup/>
-                  
+        
     </h:panelGrid>
-
+    
     <br />
     <br />
     <h:outputText  styleClass="nodeFolder" value="Goto "/> 
@@ -48,8 +52,8 @@
         <h:outputText style="color:blue" styleClass="nodeFolder" value="MyProxy Upload Home"/>
     </h:commandLink> 
     <h:outputText  styleClass="nodeFolder" value=" to upload credentials" />
-   
-             
-
-
+    
+    
+    
+    
 </h:form>

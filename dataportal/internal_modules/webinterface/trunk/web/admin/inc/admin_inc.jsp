@@ -96,7 +96,7 @@
                     <h:form>
                         <h:panelGrid id="searchResults" rendered="#{visit.adminData.searched}" columns="3">
                          
-                                
+                                 
                                 <t:dataTable rendered="#{viewAllUserStatsAdmin.populated}" id="datatable" width="100%"
                                              styleClass="scrollerTable"
                                              headerClass="standardTable_Header"
