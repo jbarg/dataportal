@@ -188,7 +188,9 @@ public class ViewAllUserStatsAdminBean extends SortableList {
             Collection<EventLog> logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),DN,min,max,event);
             getAdminData().setEventLogs(logs);
             getAdminData().setSearchUser(DN);
-            
+           
+             
+               
             /*for(EventLog count : logs){
                 log.trace(count.getEventLogDetails().size());
             }*/
