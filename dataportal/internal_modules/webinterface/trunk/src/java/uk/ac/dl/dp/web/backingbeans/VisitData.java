@@ -68,6 +68,8 @@ public class VisitData implements Serializable {
     
     private Collection<AccessInfo> accessInfo = null;
     
+    private boolean downloadable;
+           
     /** Creates a new instance of VisitData */
     public VisitData() {
     }
@@ -200,7 +202,7 @@ public class VisitData implements Serializable {
     public void setCurrentSelectedFacilities(List<String> currentSelectedFacilities) {
         this.currentSelectedFacilities = currentSelectedFacilities;
     }
-        
+    
     //list of returned searched users from the
     private List<SelectItem> searchedUsers;
     
@@ -300,7 +302,7 @@ public class VisitData implements Serializable {
         String id = ID.split("-")[1];
         
         for(DataReference file :getCurrentDataReferences()){
-           // log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
+            // log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
             if(file.getId().toString().equals(id) && file.getFacility().equals(fac) ){
                 log.trace("Found dataref: "+file);
                 return file;
@@ -346,7 +348,10 @@ public class VisitData implements Serializable {
     public synchronized String[] getCartSRBURLs() {
         Collection<String> urls = new ArrayList<String>();
         for(DataReference file : getCurrentDataReferences()){
-            if(file.isDownload() && file.getTypeOfReference().equals(DPUrlRefType.FILE.toString())){
+            //  if(file.isDownload() && file.getTypeOfReference().equals(DPUrlRefType.FILE.toString())){
+            //if dataset for downlaod, then all the files in it will be added.  this will work for
+            //emat and facilities.
+            if(file.isDownload()){
                 for(Url url : file.getUrls()){
                     log.trace("Found dataref to download: "+file);
                     urls.add(url.getUrl());
@@ -365,4 +370,47 @@ public class VisitData implements Serializable {
         
         return urls.toArray(new String[urls.size()]);
     }
+    
+    public boolean isDownloadable() {
+        return downloadable;
+    }
+    
+    public void setDownloadable(boolean downloadable) {
+        this.downloadable = downloadable;
+    }
+    
+    public boolean isEmptyCart(){
+        if(getCartSRBURLs().length == 0) return true;
+        else return false;
+    }
+    
+    public boolean isExpandable() {
+        if(getSearchedInvestigations() == null) return false;
+        for(Investigation invest : getSearchedInvestigations()){
+            if(invest.isSelected()){
+                return true;
+            }            
+        }
+        return false;
+    }
+             
+    public boolean isAddSelectionable(){
+        Collection<Investigation> invests = getCurrentInvestigations();
+        Collection<DataSet> datasets = getCurrentDatasets();
+        Collection<DataFile> datafiles = getCurrentDatafiles();
+        
+        for(Investigation invest: invests){
+            if(invest.isSelected()) return true;
+        }
+        for(DataSet dataset: datasets){
+            if(dataset.isSelected()) return true;
+        }
+        for(DataFile datafile : datafiles){
+            if(datafile.isSelected()) return true;
+        }
+        return false;
+        
+    }
+    
+    
 }

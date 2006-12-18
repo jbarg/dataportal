@@ -85,10 +85,23 @@ public class ApplicationBean extends AbstractApplicationBean {
             }
             
         }
-    }  
-   
+    }
+    
     public static String[] getKeywords(String facility){
-        return keywordsStatic.get(facility);
+        String[] keywords = keywordsStatic.get(facility);
+        if(keywords == null || keywords.length == 0){
+            log.trace("Checking if "+facility+" data there yet");
+            String[] fac;
+            try {
+                fac = QueryDelegate.getInstance().getKeywords(facility, false);
+                 keywordsStatic.put(facility,fac);
+            } catch (Exception ex) {
+               log.error("Unable to get keywords for: "+facility);
+               return keywords;
+            }
+            return fac;
+        }
+        return keywords;
     }
     
     

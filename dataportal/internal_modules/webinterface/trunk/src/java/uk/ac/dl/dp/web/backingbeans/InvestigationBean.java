@@ -152,9 +152,8 @@ public class InvestigationBean extends SortableList {
             if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
                 invest.setSelected(!invest.isSelected());
                 log.trace("setting " +invest.isSelected()+" for "+invest.getId());
-                
             }
-        }
+        }       
     }
     
     //listens for sort column action events, and gets the column by thge param name passed in
@@ -277,6 +276,7 @@ public class InvestigationBean extends SortableList {
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             if(invest.isSelected()){
+                invest.setSelected(false);
                 investigations.add(invest);
                 log.trace(invest.getId()+" is selected");
             }

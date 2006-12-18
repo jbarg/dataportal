@@ -33,8 +33,8 @@ public class DataAuthorisationBean extends AbstractRequestBean {
     
     
     private static Logger log = Logger.getLogger(DataAuthorisationBean.class);
-   
-    //  All page components 
+    
+    //  All page components
     private String searchString;
     private Date firstDate;
     private Date secondDate;
@@ -129,10 +129,13 @@ public class DataAuthorisationBean extends AbstractRequestBean {
     public void validateDate(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
         log.debug("validateDate: ");
         if (value != null) {
-            Date first = (Date)getCalendarFirst().getLocalValue();
-            if(first.after((Date)value)){
-                log.trace("Invalid");
-                throw new ValidatorException(new FacesMessage("Validation Error", "Access To Date cannot be before Access From Date."));
+            if(getCalendarFirst() != null && getCalendarFirst().getLocalValue() != null){
+                
+                Date first = (Date)getCalendarFirst().getLocalValue();
+                if(first.after((Date)value)){
+                    log.trace("Invalid");
+                    throw new ValidatorException(new FacesMessage("Validation Error", "Access To Date cannot be before Access From Date."));
+                }
             }
         }
     }
@@ -195,7 +198,7 @@ public class DataAuthorisationBean extends AbstractRequestBean {
         this.calendarSecond = calendarSecond;
     }
     ///////////////////// End all page components //////////////////////////////////
-   
+    
     
 }
 

@@ -44,6 +44,9 @@ public class UserPreferencesBean extends AbstractRequestBean {
     private List<SelectItem> results;
     private String defaultresults;
     
+    private String email;
+    
+    
     /** Creates a new instance of AuthorisationBean */
     public UserPreferencesBean() {
     }
@@ -115,11 +118,13 @@ public class UserPreferencesBean extends AbstractRequestBean {
     
     //save the new prefs
     public String save(){
-        log.trace("Setting user prefs to: Facility: "+defaultFacility+", Resolution: "+defaultResolution+", Number Results: "+defaultresults );
+        log.trace("Setting user prefs to: Facility: "+defaultFacility+", Resolution: "+defaultResolution+", Number Results: "+defaultresults +" email: "+email);
         UserPreferencesDTO userPrefs= new UserPreferencesDTO();
         userPrefs.setDefaultFacility(defaultFacility);
         userPrefs.setResolution(DPResolution.valueOf(defaultResolution));
         userPrefs.setResultsPerPage(Integer.parseInt(defaultresults));
+        userPrefs.setEmail(email);
+        
         try {
             SessionDelegate.getInstance().setUserPrefs(getVisit().getSid(),userPrefs);
             getVisit().setUserPreferences(userPrefs);
@@ -132,6 +137,26 @@ public class UserPreferencesBean extends AbstractRequestBean {
         
         return null;
         
+    }
+    
+    //this is own validation so that if user chooses "Select One" error displayed
+    public void validateEmail(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
+        log.debug("validateEmail: "+value);
+        String val = (String)value;
+        if (val != null) {
+            if (val.indexOf('@') == -1) {
+                log.trace("Invalid email "+val);
+                throw new ValidatorException(new FacesMessage("Validation Error", "Validation Error: Enter valid email address."));
+            }
+        }
+    }
+    
+    public String getEmail() {
+        return ""+getVisit().getSession().getUserPrefs().getEmail();
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
 
