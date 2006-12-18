@@ -102,7 +102,7 @@
                               completionMethod="#{keyword.completeCity}" 
                               value="#{searchBean.keyword}" required="true"
                               ondisplay="function(item) { return extractCity(item); }"
-                              onchoose="function(item) { return chooseCity(item); }" />
+                              onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
             
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"

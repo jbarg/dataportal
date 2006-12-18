@@ -271,7 +271,7 @@
                 </f:facet>
                 <h:selectBooleanCheckbox title="select_investigation" value="#{invest.selected}" >
                     <f:param name="id" value="#{invest.id}"/>
-                    <a4j:support event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{investigationBean.listenAjax}">
+                    <a4j:support reRender="expand" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{investigationBean.listenAjax}">
                         <a4j:actionparam name="id" value="#{invest.id}"/>   
                     </a4j:support>
                 </h:selectBooleanCheckbox>
@@ -352,7 +352,7 @@
              <tbody>
                 <tr>
                     <td align="right">
-                        <h:commandButton action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
+                        <h:commandButton id="expand" disabled="#{!visit.visitData.expandable}" action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
                         
                     </td>
                     <%--<td align="right">

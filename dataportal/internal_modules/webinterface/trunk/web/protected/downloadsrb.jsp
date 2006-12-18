@@ -24,7 +24,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
            function remove(){
             var close = <%= request.getParameter("close")%>;
                
-            window.location.href="downloadsrb_close.jsp";
+           // window.location.href="close.html";
            
             if(BrowserDetect.browser == "Explorer"){
                 //windows does not shut it, retry and it works???
@@ -64,6 +64,10 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                 
             }
             
+            function close(){
+               window.location.href-"close.html";
+            }
+            
             function nothing(){
                //do nothing
             }
@@ -73,6 +77,13 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
            
                 //sleep two seconds
                 setTimeout("remove()", 1500);
+            }
+            
+            function Func1DelayClose()
+            {
+           
+                //sleep two seconds
+                setTimeout(window.close(), 500);
             }
             
         </script>
@@ -122,7 +133,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
      
             <tr>
                 <td align="center">
-                    <div id="downloading"> <font size="2">Downloading:</font>   <%= request.getParameter("name") %></div>
+                    <div id="downloading"> <font size="2">Downloading:</font> <%= request.getParameter("name") %></div>
                     <div id="downloaded" style="display:none"> <font size="2">Downloaded:</font>   <%= request.getParameter("name") %></div>
                 </td>  
             </tr>
@@ -131,6 +142,8 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <br />
         <%
             String percent = request.getParameter("percentage") ;
+            String ID = request.getParameter("url") ;
+            
             if(percent == null){
                 percent = "0";
             }
@@ -147,7 +160,10 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <br />
         <table align="center">
             <tr>
-            <td align="right"> <input id="button" type="button"  value="Cancel" onclick="window.close()"/>
+            <td align="right"> 
+                <form method="post" action="../servlet/DownloadRemoveServlet?ID=<%=ID %>">
+                    <input id="button" type="Submit"  value="Cancel" onclick="submit();  "/>
+                </form>
             </td>
             </tr>
         </table>
