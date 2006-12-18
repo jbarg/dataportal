@@ -123,4 +123,9 @@ public class QueryDelegate {
         return qsmr.getKeywords(facility);
         
     }
+    
+     public String[] getKeywords(String facility, boolean redownload) throws Exception{
+        return qsmr.getKeywords(facility,redownload);
+        
+    }
 }

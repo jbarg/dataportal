@@ -58,6 +58,8 @@ public class User implements Serializable {
     @Column(name = "DN", nullable = false)
     private String dn;
     
+   
+    
     @Column(name = "USER_ID")
     private String userId;
     
@@ -262,6 +264,6 @@ public class User implements Serializable {
     
     public void setDataRefAuthorisationSource(java.util.Collection<DataRefAuthorisation> DataRefAuthorisationSource) {
         this.DataRefAuthorisationSource = DataRefAuthorisationSource;
-    }
+    }      
     
 }

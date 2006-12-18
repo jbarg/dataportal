@@ -16,6 +16,7 @@ import uk.ac.dl.dp.coreutil.entity.Session;
 import uk.ac.dl.dp.coreutil.util.DPCredentialType;
 import uk.ac.dl.dp.coreutil.util.DPRole;
 import java.util.*;
+import uk.ac.dl.dp.coreutil.entity.SrbServer;
 
 /**
  *
@@ -36,10 +37,12 @@ public class SessionDTO implements Serializable{
     private String DN;
     
     private String name;
-    
+        
     private UserPreferencesDTO userPrefs;
     
     private Collection<FacilityDTO> facilities;
+    
+     private Collection<SrbServer> srbServers;
     // private User userId;
     
     /** Creates a new instance of SessionDTO */
@@ -54,6 +57,7 @@ public class SessionDTO implements Serializable{
         this.DN = session.getUserId().getDn();
         int index = this.DN.lastIndexOf("CN=");
         this.setName(DN.substring(index+3,this.DN.length()));
+        
     }
     
     public String getUserSessionId() {
@@ -118,5 +122,13 @@ public class SessionDTO implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }  
+
+    public Collection<SrbServer> getSrbServers() {
+        return srbServers;
+    }
+
+    public void setSrbServers(Collection<SrbServer> srbServers) {
+        this.srbServers = srbServers;
     }
 }

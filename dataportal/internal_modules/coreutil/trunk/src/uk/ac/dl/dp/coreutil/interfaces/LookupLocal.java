@@ -5,6 +5,7 @@ import javax.ejb.Local;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
+import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 
 /**
@@ -20,4 +21,6 @@ public interface LookupLocal {
     public Collection<ProxyServers> getProxyServers();
     
     public ProxyServers getDefaultProxyServer();
+    
+     public Collection<SrbServer> getSrbServers();
 }
