@@ -80,7 +80,7 @@ public class ViewUserAdminBean extends SortableList {
     }
     
     public void setDataRefs(List<EventLog> dataRefs) {
-            
+        
     }
     
     
@@ -154,10 +154,12 @@ public class ViewUserAdminBean extends SortableList {
     public void validateDate(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
         log.debug("validateDate: ");
         if (value != null) {
-            Date first = (Date)getCalendarFirst().getLocalValue();
-            if(first.after((Date)value)){
-                log.trace("Invalid");
-                throw new ValidatorException(new FacesMessage("Validation Error", "Search To Date cannot be before Search From Date."));
+            if(getCalendarFirst() != null && getCalendarFirst().getLocalValue() != null){                
+                Date first = (Date)getCalendarFirst().getLocalValue();
+                if(first.after((Date)value)){
+                    log.trace("Invalid");
+                    throw new ValidatorException(new FacesMessage("Validation Error", "Search To Date cannot be before Search From Date."));
+                }
             }
         }
     }
@@ -202,7 +204,7 @@ public class ViewUserAdminBean extends SortableList {
         try {
             Collection<EventLog> logs = null;
             if(getType().equals("ALL")) {
-                logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),getAdminData().getSearchUser(),getFirstDate(),getSecondDate(),null);                
+                logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),getAdminData().getSearchUser(),getFirstDate(),getSecondDate(),null);
             } else {
                 logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),getAdminData().getSearchUser(),getFirstDate(),getSecondDate(),DPEvent.valueOf(getType()));
             }

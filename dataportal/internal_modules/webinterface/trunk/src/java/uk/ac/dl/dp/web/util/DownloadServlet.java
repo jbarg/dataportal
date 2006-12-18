@@ -1,30 +1,23 @@
 package uk.ac.dl.dp.web.util;
-/*
- * DownloadServlet.java
- *
- * Created on 16 March 2005, 10:54
- */
-import java.nio.channels.FileChannel;
-import javax.print.attribute.standard.Sides;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
+import uk.ac.dl.dp.coreutil.delegates.DownloadDelegate;
 import uk.ac.dl.dp.coreutil.delegates.EventDelegate;
+import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.util.Certificate;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
-import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.web.backingbeans.Visit;
-import uk.ac.dl.dp.web.util.WebConstants;
 import org.apache.log4j.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.srbapi.srb.*;
-import uk.ac.dl.dp.web.util.Util;
 
 /**
  *
@@ -47,6 +40,26 @@ public class DownloadServlet extends HttpServlet {
         ServletContext sc = config.getServletContext();
         workingDir = sc.getRealPath("");
         context = sc.getContextPath();
+        
+        try {
+            
+            boolean isSet = DownloadDelegate.getInstance().isSet();
+            if(!isSet){
+                //set the DB to vales for download
+                InetAddress host = InetAddress.getLocalHost();
+                
+                DPConstants dpConst = new DPConstants();
+                dpConst.setLoggingLevel("DEBUG");
+                dpConst.setDownloadLocation(workingDir);
+                dpConst.setPortNumber(8181);
+                dpConst.setContextRoot(context);
+                
+                dpConst.setServiceName(host.getHostAddress());
+                DownloadDelegate.getInstance().setConstants(dpConst);
+            }
+        } catch (Exception ex) {
+            
+        }
     }
     
     /** Destroys the servlet.
@@ -132,7 +145,7 @@ public class DownloadServlet extends HttpServlet {
             } else if(TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE)){
                 //multiple file download
                 srbUrl =  visit.getVisitData().getSearchedSRBURLs();
-                  name = DownloadConstants.DOWNLOAD_MULTIPLE;
+                name = DownloadConstants.DOWNLOAD_MULTIPLE;
                 DpId = DownloadConstants.DOWNLOAD_MULTIPLE;
             }
         }
@@ -154,12 +167,30 @@ public class DownloadServlet extends HttpServlet {
                 
                 log.info("Credential information "+cred.getName());
                 try {
-                    
                     man.setCredentials(Util.getSRBHost(srbUrl),Util.getSRBPort(srbUrl),cred);
-                    man.setDefaultUser("gjd37");
-                    man.setDefaultPass("blackjack");
-                    man.setDefaultDomain("eminerals");
+                    
+                    String host = Util.getSRBHost(srbUrl);
+                    log.trace("Looking for SRB Server with host: "+host);
+                    Collection<SrbServer> srbServers = visit.getSession().getSrbServers();
+                    if(srbServers != null){
+                        for(SrbServer srbServer : srbServers){
+                            log.trace("Found: "+srbServer.getHostname());
+                            if(srbServer.getHostname().equalsIgnoreCase(host)){
+                                if(srbServer.isDefaultSet()){
+                                    log.debug("Default SRB user for : "+Util.getSRBHost(srbUrl)+" is: "+srbServer.getDefaultUser());
+                                    man.setDefaultUser(srbServer.getDefaultUser());
+                                    man.setDefaultPass(srbServer.getDefaultPassword());
+                                    man.setDefaultDomain(srbServer.getDefaultDomain());
+                                } else {
+                                    log.trace("SRB Server info not set: ");
+                                }
+                            }
+                        }
+                    }
+                    
+                    
                 } catch (Exception ex) {
+                    log.warn("Error getting SRB host info",ex);
                     RequestDispatcher dispatcher =
                             req.getRequestDispatcher("/protected/downloaderror.jsp?message=Invalid SRB URL Found&name="+name);
                     if (dispatcher != null) dispatcher.forward(req, response);
@@ -189,14 +220,13 @@ public class DownloadServlet extends HttpServlet {
                 String detail = null;
                 if(name.equals(DownloadConstants.DOWNLOAD_MULTIPLE)){
                     detail = name;
-                }
-                else detail = DpId+" "+name;
+                } else detail = DpId+" "+name;
                 
                 EventDelegate.getInstance().sendDownloadEvent(visit.getSid(),detail,urls);
                 
                 
                 RequestDispatcher dispatcher =
-                        req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&name="+name+"&type="+TYPE);
+                        req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&name="+name+"&type="+TYPE+"&url="+ID);
                 if (dispatcher != null) dispatcher.forward(req, response);
             } catch(Exception e){
                 log.warn(e);
@@ -229,7 +259,7 @@ public class DownloadServlet extends HttpServlet {
                             log.warn(ex);
                             String message = "Unable to launch requested appliacation.";
                             RequestDispatcher dispatcher =
-                                    req.getRequestDispatcher("/protected/downloaderror.jsp?message="+message+"&name="+name);
+                                    req.getRequestDispatcher("/protected/downloaderror.jsp?message="+message+"&name="+name+"&url="+ID);
                             if (dispatcher != null) dispatcher.forward(req, response);
                         }
                         
@@ -293,13 +323,13 @@ public class DownloadServlet extends HttpServlet {
                         message = "Insufficient access rights to the data.";
                     }
                     RequestDispatcher dispatcher =
-                            req.getRequestDispatcher("/protected/downloaderror.jsp?message="+message+"&name="+name);
+                            req.getRequestDispatcher("/protected/downloaderror.jsp?message="+message+"&name="+name+"&url="+ID);
                     if (dispatcher != null) dispatcher.forward(req, response);
                 }
             } else{
-                // log.trace("Download : "+man.getPercentageComplete());
+                // log.trace("/protected/downloadsrb.jsp?close=0&percentage="+man.getPercentageComplete()+"&name="+name+"&type="+TYPE+"&url="+ID);
                 RequestDispatcher dispatcher =
-                        req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&percentage="+man.getPercentageComplete()+"&name="+name+"&type="+TYPE);
+                        req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&percentage="+man.getPercentageComplete()+"&name="+name+"&type="+TYPE+"&url="+ID);
                 if (dispatcher != null) dispatcher.forward(req, response);
             }
         }

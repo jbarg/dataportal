@@ -16,27 +16,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
+import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
+import uk.ac.dl.dp.coreutil.delegates.DownloadDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
+import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.util.SRBInfo;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
 
 /**
  *
@@ -92,7 +88,7 @@ public class DataCenterBean extends SortableList {
             sort(getSort(), isAscending());
             return (List<DataReference>)getVisitData().getCurrentDataReferences();
         } else{
-            log.debug("Already got refs: "+getVisitData().getCurrentDataReferences().size());
+            //  log.debug("Already got refs: "+getVisitData().getCurrentDataReferences().size());
             return (List<DataReference>)getVisitData().getCurrentDataReferences();
         }
         
@@ -165,8 +161,12 @@ public class DataCenterBean extends SortableList {
                     log.trace("Param value: "+param);
                     Url df = getVisitData().getDataUrlFromCart(param);
                     if(df == null) break;
+                    
                     log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
                     df.setDownload(!df.isDownload());
+                    
+                     checkSingleFacilityChoosen(df.getDataRefId().getFacility());
+                     
                     break;
                 } else{
                     //ref
@@ -176,21 +176,98 @@ public class DataCenterBean extends SortableList {
                     String param = current.getValue().toString();
                     log.trace("Param value: "+param);
                     DataReference df = getVisitData().getDataReferenceFromCart(param);
-                    
                     if(df == null) break;
+                    
                     log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
                     df.setDownload(!df.isDownload());
+                    //need to set all individual files to download
+                    //for(Url url :df.getUrls()){
+                    //  url.setDownload(df.isDownload());
+                    //}
+                    checkSingleFacilityChoosen(df.getFacility());
+                    
                     break;
                 }
             }
         }
+        if(getVisitData().isEmptyCart()) {
+            log.trace("Empty cart, setting to not downloadable");
+            getVisitData().setDownloadable(false);
+        }
+    }
+    
+    private void checkSingleFacilityChoosen(String facilityAdded){
+        //need to check if this addition is from other facility
+        Collection<DataReference> dataRefs = getVisitData().getCurrentDataReferences();
+        
+        Collection<String> facsChoosen = new ArrayList<String>();
+        for(DataReference df : dataRefs){
+            if(df.isDownload()){
+                if(facsChoosen.isEmpty()){
+                    facsChoosen.add(df.getFacility());
+                } else if(!facsChoosen.contains(df.getFacility())){
+                    error("Unable to download from multiple facilities.");
+                    log.info("Unable to download from multiple facilites. Trying to add: "+facilityAdded+" already have: " +df.getFacility());
+                    getVisitData().setDownloadable(false);
+                    return ;
+                }
+            }
+            for(Url url : df.getUrls()){
+                if(url.isDownload()){
+                    if(facsChoosen.isEmpty()){
+                        facsChoosen.add(df.getFacility());
+                    } else if(!facsChoosen.contains(df.getFacility())){
+                        error("Unable to download from multiple facilities.");
+                        log.info("Unable to download from multiple facilities. Trying to add: "+facilityAdded+" already have: " +df.getFacility());
+                        getVisitData().setDownloadable(false);
+                        return ;
+                    }
+                }
+            }            
+        }
+        log.info("Same facility added with: "+facilityAdded);
+        getVisitData().setDownloadable(true);
+        return ;
+        
+    }
+    
+    public String addEmail(){
+        log.trace("adding email");
+        UserPreferencesDTO userPrefs =  getVisit().getUserPreferences();
+        log.trace("trying to set email as "+userPrefs.getEmail());
+        try {            
+            SessionDelegate.getInstance().setUserPrefs(getVisit().getSid(),userPrefs);
+            
+        } catch (Exception ex) {
+            log.warn("Unable to update user: "+getVisit().getDn()+"'s user preferences",ex);
+            error("Error updating user preferences.");
+            return null;
+        }
+        info("Email sucessfully updated.");
+        return null;
+    }
+    
+    public void emailDownload(ActionEvent event){
+        log.trace("emailDownload: ");
+        String[] srbFilesDownload = getVisitData().getCartSRBURLs();
+        try{
+            SRBInfo info = new SRBInfo();
+            info.setSid(getVisit().getSid());
+            info.setSrbFiles(srbFilesDownload);
+            DownloadDelegate.getInstance().downloadSRBFiles(getVisit().getSid(), info);
+            info("Request sent for download");
+        } catch(Exception ex){
+            log.error("Cannot download data via email",ex);
+            //error("Cannot download data via email");
+        }
+        
     }
     
    /* private DataReference getDataRef(String param) {
         String fac = param.split("-")[0];
         String id = param.split("-")[1];
         log.trace("looking for:"+ fac+"-"+id);
-        
+    
         for(DataReference file : getVisitData().getCurrentDataReferences()){
             log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
             if(file.getId().toString().equals(id) && file.getFacility().equals(fac) ){
@@ -205,7 +282,7 @@ public class DataCenterBean extends SortableList {
         String fac = param.split("-")[0];
         String data_ref_id = param.split("-")[1];
         String url_id = param.split("-")[2];
-        
+    
         for(DataReference file : getVisitData().getCurrentDataReferences()){
             if(file.getId().toString().equals(data_ref_id) && file.getFacility().equals(fac) ){
                 log.debug("Found dataurlref: "+file);
@@ -271,7 +348,7 @@ public class DataCenterBean extends SortableList {
         
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
-        //remove request info 
+        //remove request info
         getSearchData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         

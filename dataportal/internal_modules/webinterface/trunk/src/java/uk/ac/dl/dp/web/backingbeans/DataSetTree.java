@@ -115,8 +115,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         ///remove all download selections
         log.trace("Setting all datafile download to false");
         for(DataFile file : datafiles){
-            file.setDownload(false);
-        }
+            file.setDownload(false);                  
+        }       
         
         data = new TreeNodeBase("foo-folder", "Investigations ("+investigations.size()+")", false);
         
@@ -180,9 +180,9 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                                 if(true){
                                     TreeNodeBase base = null;
                                     if(!isDataInFolders){
-                                         base = new TreeNodeBase("file-folder", datafile.getName(),datafile.getDpId(),false);
+                                        base = new TreeNodeBase("file-folder", datafile.getName(),datafile.getDpId(),false);
                                     } else{
-                                         base = new TreeNodeBase("file-inFolder-folder", datafile.getName(),datafile.getDpId(),false);
+                                        base = new TreeNodeBase("file-inFolder-folder", datafile.getName(),datafile.getDpId(),false);
                                     }
                                     if(isImageJ){
                                         base.getChildren().add(new TreeNodeBase("imageJ", "Launch ImageJ",datafile.getDpId(),false));
@@ -351,6 +351,46 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             }
             i++;
         }
+        
+        log.trace("");
+    }
+    
+    public void setSelectedAjax(ActionEvent event){
+        
+        List children  = event.getComponent().getChildren();
+        int i = 0;
+        
+        log.trace("selected checkbox ajax");
+        for(Object ob : children){
+            if(ob instanceof UIParameter){
+                UIParameter current = (UIParameter)children.get(i);
+                log.trace("Param name "+current.getName());
+                if(current.getName().equals("datafiles") && current.getValue() != null){
+                    String param = current.getValue().toString();
+                    // log.trace("selected: "+param+" for "+event.getNewValue());
+                    DataFile df = getVisitData().getDataFileFromSearchedData(param);
+                    df.setSelected(!df.isSelected());
+                    log.trace("setting "+df.isSelected()+"  for "+df.getDpId());
+                    break;
+                }
+                if(current.getName().equals("datasets") && current.getValue() != null){
+                    String param = current.getValue().toString();
+                    DataSet ds = getVisitData().getDataSetFromSearchedData(param);
+                    ds.setSelected(!ds.isSelected());
+                    log.trace("setting "+ds.isSelected()+"  for "+ds.getDpId());
+                    break;
+                }
+                if(current.getName().equals("investigations") && current.getValue() != null){
+                    String param = current.getValue().toString();
+                    Investigation in =  getVisitData().getInvestigationFromSearchedData(param);
+                    in.setSelected(!in.isSelected());
+                    log.trace("setting "+in.isSelected()+"  for "+in.getDpId());
+                    break;
+                }
+            }
+            i++;
+        }
+        
         log.trace("");
     }
     
@@ -494,6 +534,16 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             return null;
         }
         
+        //remove all true selections
+        for(DataFile file : getVisitData().getCurrentDatafiles()){           
+            file.setSelected(false);            
+        }
+        for(DataSet dataSet : getVisitData().getCurrentDatasets()){
+            dataSet.setSelected(false);
+        }
+        for(Investigation investigation : getVisitData().getCurrentInvestigations()){
+            investigation.setSelected(false);
+        }
         if(toAddBookmarks.size() != 0 &&  toAddDataReference.size() == 0){
             //add all stuff to datacenter
             return NavigationConstants.ADD_BOOKMARK_SUCCESS;

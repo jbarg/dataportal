@@ -63,6 +63,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     private AdminData adminData;
     
+
     private static Logger log = Logger.getLogger(Visit.class);
     
     public Visit(){
@@ -179,6 +180,12 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     public void removeSrbManager(String param) {
         if(this.srbManager.containsKey(param)){
             log.trace("removing "+param+" from cache");
+            SRBFileManagerThread man = srbManager.get(param);
+            try {
+                
+                man.stopDownload();
+            } finally {
+            }
             this.srbManager.remove(param);
         }
     }
@@ -236,5 +243,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         }
         return isTopic;
     }
+
+   
     
 }

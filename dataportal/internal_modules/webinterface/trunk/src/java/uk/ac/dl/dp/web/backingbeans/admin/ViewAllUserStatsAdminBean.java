@@ -53,6 +53,7 @@ public class ViewAllUserStatsAdminBean extends SortableList {
     private Date firstDate;
     private Date secondDate;
     
+    
     public ViewAllUserStatsAdminBean(){
         super("dn");
     }
@@ -96,6 +97,7 @@ public class ViewAllUserStatsAdminBean extends SortableList {
                 log.trace("Setting searched results");
                 getAdminData().setSearched(true);
                 getAdminData().setEventLogCount(results);
+                
                 return ;
             }
         } catch (Exception ex) {
@@ -104,6 +106,8 @@ public class ViewAllUserStatsAdminBean extends SortableList {
             return ;
         }
     }
+    
+    
     
     //listens for sort column action events, and gets the column by thge param name passed in
     // then calls sort on the column
@@ -149,10 +153,12 @@ public class ViewAllUserStatsAdminBean extends SortableList {
     public void validateDate(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
         log.debug("validateDate: ");
         if (value != null) {
-            Date first = (Date)getCalendarFirst().getLocalValue();
-            if(first.after((Date)value)){
-                log.trace("Invalid");
-                throw new ValidatorException(new FacesMessage("Validation Error", "Search To Date cannot be before Search From Date."));
+            if(getCalendarFirst() != null && getCalendarFirst().getLocalValue() != null){
+                Date first = (Date)getCalendarFirst().getLocalValue();
+                if(first.after((Date)value)){
+                    log.trace("Invalid");
+                    throw new ValidatorException(new FacesMessage("Validation Error", "Search To Date cannot be before Search From Date."));
+                }
             }
         }
     }
@@ -188,9 +194,9 @@ public class ViewAllUserStatsAdminBean extends SortableList {
             Collection<EventLog> logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),DN,min,max,event);
             getAdminData().setEventLogs(logs);
             getAdminData().setSearchUser(DN);
-           
-             
-               
+            
+            
+            
             /*for(EventLog count : logs){
                 log.trace(count.getEventLogDetails().size());
             }*/
@@ -384,4 +390,6 @@ public class ViewAllUserStatsAdminBean extends SortableList {
         this.calendarSecond = calendarSecond;
     }
     ///////////////////// End all page components //////////////////////////////////
+    
+    
 }

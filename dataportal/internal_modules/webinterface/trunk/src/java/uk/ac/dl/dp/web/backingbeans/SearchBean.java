@@ -12,13 +12,15 @@ package uk.ac.dl.dp.web.backingbeans;
 import java.util.Collection;
 import org.apache.log4j.*;
 import java.util.*;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
-import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
+import javax.faces.validator.ValidatorException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
@@ -200,6 +202,18 @@ public class SearchBean extends AbstractRequestBean {
         return NavigationConstants.SEARCH_SUCCESS;
         
     }
+    
+    public void validateKeyword(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
+        log.debug("validateKeyword: "+value);
+        String val = (String)value;
+        if (val != null) {
+            if (val.length() == 0) {
+                log.trace("Invalid keyword "+val);
+                throw new ValidatorException(new FacesMessage("Validation Error", "Validation Error: Enter keyword."));
+            }
+        }
+    }
+    
     
     //getters setters of page info
     public String[] getKeywords() {

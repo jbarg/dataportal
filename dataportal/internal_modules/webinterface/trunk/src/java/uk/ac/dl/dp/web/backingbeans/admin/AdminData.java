@@ -38,6 +38,14 @@ public class AdminData implements Serializable {
     
       private Collection<ModuleLookup> facilities;
        
+       //list of all the stats
+    private int totalVisits;
+    private int totalSearches;
+    private int totalBookmarks;
+    private int totalDataRefs;
+    private int totalDownloads;
+    private int totalUsers;
+    
      //  All page components
     private String searchString = "ALL";
     
@@ -82,6 +90,7 @@ public class AdminData implements Serializable {
 
     public void setEventLogCount(Collection<EventLogCount> eventLogCount) {
         this.eventLogCount = eventLogCount;
+        workOutTotal(this.eventLogCount);
     }
 
     public Collection<ProxyServers> getProxyServers() {
@@ -100,6 +109,70 @@ public class AdminData implements Serializable {
         this.facilities = facilities;
     }
 
-      
+      public int getTotalVisits() {
+        return totalVisits;
+    }
     
+    public void setTotalVisits(int totalVisits) {
+        this.totalVisits = totalVisits;
+    }
+    
+    public int getTotalSearches() {
+        return totalSearches;
+    }
+    
+    public void setTotalSearches(int totalSearches) {
+        this.totalSearches = totalSearches;
+    }
+    
+    public int getTotalBookmarks() {
+        return totalBookmarks;
+    }
+    
+    public void setTotalBookmarks(int totalBookmarks) {
+        this.totalBookmarks = totalBookmarks;
+    }
+    
+    public int getTotalDataRefs() {
+        return totalDataRefs;
+    }
+    
+    public void setTotalDataRefs(int totalDataRefs) {
+        this.totalDataRefs = totalDataRefs;
+    }
+
+    public int getTotalUsers() {
+        return totalUsers;
+    }
+
+    public void setTotalUsers(int totalUsers) {
+        this.totalUsers = totalUsers;
+    }
+
+    public int getTotalDownloads() {
+        return totalDownloads;
+    }
+
+    public void setTotalDownloads(int totalDownloads) {
+        this.totalDownloads = totalDownloads;
+    }
+      
+     private  void workOutTotal(Collection<EventLogCount> count){
+        log.trace("Working out total stats");
+        totalVisits = 0;
+        totalSearches = 0;
+        totalBookmarks = 0;
+        totalDataRefs = 0;
+        setTotalDownloads(0);
+        setTotalUsers(0);
+        for(EventLogCount elc  :count){
+            totalUsers++;
+            totalVisits += elc.getVisits();
+            totalSearches += elc.getSearches();
+            totalDataRefs += elc.getDataReferences();
+            totalBookmarks += elc.getBookmarks();
+            totalDownloads += elc.getDownloads();
+            log.trace("Total visits: "+totalVisits);
+        }
+    }
 }
