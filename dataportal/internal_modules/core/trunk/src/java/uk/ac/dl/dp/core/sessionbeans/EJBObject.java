@@ -35,11 +35,12 @@ public abstract class EJBObject {
     @PersistenceContext(unitName="dataportal")
     protected EntityManager em;
     
+    
     // For testing only
     public void setEntityManager(EntityManager em){
         this.em = em;
     }
-    
+           
     public Object mergeEntity(Object entity) {
         return em.merge(entity);
     }

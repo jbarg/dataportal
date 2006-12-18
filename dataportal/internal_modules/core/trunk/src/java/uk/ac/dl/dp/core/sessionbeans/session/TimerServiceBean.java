@@ -9,30 +9,38 @@
 
 package uk.ac.dl.dp.core.sessionbeans.session;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.ejb.EJB;
 import javax.ejb.TimerService;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import org.apache.log4j.*;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
-import uk.ac.cclrc.dpal.DPAccessLayer;
-import uk.ac.cclrc.dpal.beans.Keyword;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
+
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
-import uk.ac.dl.dp.coreutil.entity.Session;
+
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceLocal;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceRemote;
 import uk.ac.dl.dp.core.message.query.QueryManager;
+import uk.ac.dl.dp.coreutil.entity.Session;
+import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
@@ -40,6 +48,7 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
 
 @Stateless(mappedName=DataPortalConstants.TIMER)
+//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TimerServiceBean extends SessionEJBObject implements TimerServiceLocal ,TimerServiceRemote {
     
     @Resource
@@ -47,6 +56,15 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     
     @EJB()
     LookupLocal lookup;
+    
+    @PersistenceUnit(unitName="dataportal")
+    EntityManagerFactory emf;
+    
+    @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
+    private  ConnectionFactory connectionFactory;
+    
+    @Resource(mappedName=DataPortalConstants.KEYWORD_MDB)
+    private  Queue queue;
     
     static Logger log = Logger.getLogger(TimerServiceBean.class);
     
@@ -139,70 +157,52 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
         }
     }
     
+    //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public void downloadKeywords() throws Exception{
         log.info("downloadKeywords");
         
-        boolean addFac = false;
         Collection<ModuleLookup> facilities = lookup.getFacilityInfo(DPFacilityType.WRAPPER);
-        //    addFac = true;
-        // }
         
-        DPAccessLayer dpal = null ;
+        Connection connection = null;
+        javax.jms.Session session = null;
+        MessageProducer messageProducer = null;
+        
+        try {
+            
+            connection = connectionFactory.createConnection();
+            session = connection.createSession(false, javax.jms.Session.AUTO_ACKNOWLEDGE);
+            messageProducer = session.createProducer(queue);
+            log.debug("Created connections to MDBs OK");
+        } catch (JMSException ex) {
+            log.error("JMSExcption on connection to meesage: ",ex);
+            try {
+                //close connections
+                if(session != null) session.close();
+                if(connection != null)   connection.close();
+            } catch (JMSException e) {}
+            throw new QueryException("Unexpected error, JSMException with connecting to message queue",ex);
+        }
+        
         
         for(ModuleLookup mod : facilities){
-            ArrayList<String> suggest  = new ArrayList<String>();
-            ArrayList<Keyword> r_k_l = null;
             try {
-                dpal = new DPAccessLayer(mod.getFacility()) ;
+                ObjectMessage message = session.createObjectMessage();
                 
-                //////
-                r_k_l = dpal.getKeywords("DN") ;
-                int i = 0;
-                for(Keyword k : r_k_l) {
-                    // System.out.println("\t"+k.toString()) ;
-                    boolean word = true;
-                    
-                    //if not EMAT (ie allowed none words) then remove all none words
-                    if(!mod.is_AllKeywords()){
-                        //log.trace(mod.getFacility()+" has not got data in folders so taking out none words");
-                        for(int j = 0 ; j < k.getName().length(); j++){
-                            if(!Character.isLetterOrDigit(k.getName().charAt(j))){
-                                word = false;
-                                break;
-                            }
-                        }                       
-                    }
-                    if(word){
-                        if(addFac){
-                            suggest.add(k.getName() +"    -"+mod.getFacility()+"-");
-                        } else  suggest.add(k.getName());
-                        //log.trace(k.getName());
-                        i++;
-                    }
-                }
+                message.setObject(mod.getFacility());
                 
-                log.trace("Facility: "+mod.getFacility()+" has: "+suggest.size()+" keywords");
-                String[] facKeyWords =  suggest.toArray(new String[suggest.size()]);
+                messageProducer.send(message);
+                log.debug("sent download keyword message for facility: "+mod.getFacility());
                 
-                //save to file
-                FileOutputStream f_out = new FileOutputStream(DataPortalConstants.KEYWORD_LOCATION+mod.getFacility()+".keyworddata");
-                
-                // Use an ObjectOutputStream to send object data to the
-                // FileOutputStream for writing to disk.
-                ObjectOutputStream obj_out = new  ObjectOutputStream(f_out);
-                
-                // Pass our object to the ObjectOutputStream's
-                // writeObject() method to cause it to be written out
-                // to disk.
-                obj_out.writeObject(facKeyWords);
-                
-                
-            } catch (Exception sqle) {
-                log.error("Unable to initialize keywords for "+mod.getFacility(),sqle);
-                throw sqle;
-            } finally{
-                dpal.disconnectFromDB() ;
+            } catch (Exception e) {
+                log.error("Unable to send download keyword message to fac "+mod.getFacility(),e);
             }
+        }
+        //close the connections to the queue        
+        try {
+            if(session != null) session.close();
+            if(connection != null)   connection.close();
+        } catch (JMSException ex) {
+            
         }
         
     }

@@ -232,7 +232,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         }
         if(accessAllowed){
             //get users bookmarks
-            User user = new UserUtil(DN,null).getUser();
+            User user = new UserUtil(DN,null,em).getUser();
             Collection<DataReference> dataReferences  = user.getDataReference();
             
             //initialize urls for detatchment
@@ -266,7 +266,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         }
         if(accessAllowed){
             //get users bookmarks
-            User user = new UserUtil(DN,null).getUser();
+            User user = new UserUtil(DN,null,em).getUser();
             Collection<Bookmark> bookmarks  = user.getBookmark();
             
             log.debug("User had "+bookmarks.size()+" number of bookmarks");

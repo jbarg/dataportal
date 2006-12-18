@@ -9,19 +9,15 @@
 
 package uk.ac.dl.dp.core.message.event;
 
+import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import org.apache.log4j.Logger;
-import uk.ac.dl.dp.coreutil.entity.User;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
-import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.EventMessage;
 
 
@@ -30,6 +26,13 @@ import uk.ac.dl.dp.coreutil.util.EventMessage;
  * @author gjd37
  */
 @MessageDriven(mappedName=DataPortalConstants.EVENT_MDB)
+/*, activationConfig =
+{
+  @ActivationConfigProperty(propertyName="destinationType",
+    propertyValue="javax.jms.Queue"),
+  @ActivationConfigProperty(propertyName="destination",
+    propertyValue=DataPortalConstants.EVENT_MDB)
+})*/
 public class EventMessageBean extends MessageEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(EventMessageBean.class);

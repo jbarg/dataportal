@@ -60,7 +60,7 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
     
     public void sendEvent(String sid, EventMessage eventMessage){
         
-                        QueueConnection connection = null;
+        QueueConnection connection = null;
         QueueSession session = null;
         MessageProducer messageProducer = null;
         User user = null;
