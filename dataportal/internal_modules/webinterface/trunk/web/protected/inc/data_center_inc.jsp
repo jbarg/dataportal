@@ -9,22 +9,23 @@
          <tbody>
             <tr>            
                 <td>
-                    <table style="margin-top:-20px" width="100%" border="0">
-                         <tbody>
-                            <tr>   
-                                <td>    <h:messages globalOnly="true" errorClass="error" infoClass="info" /></td>
-                            </tr>                                
-                            <tr>   
-                                <td>&nbsp;</td>
-                            </tr>   
-                            <tr>   
-                                <td>
-                                    
-                                    <h:outputText rendered="#{!datacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
-                                    <h:outputText rendered="#{!datacenterBean.populated}" value="There are no items in data center" styleClass="info" />
-                                    <h:outputText rendered="#{!datacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
-                                    
-                                    <a4j:region   selfRendered="true" > 
+                    <a4j:region   selfRendered="true" > 
+                        <table style="margin-top:-20px" width="100%" border="0">
+                             <tbody>
+                                <tr>   
+                                    <td>    <h:messages id="message" globalOnly="true" warnClass="info" errorClass="error" infoClass="info" /></td>
+                                </tr>                                
+                                <tr>   
+                                    <td>&nbsp;</td>
+                                </tr>   
+                                <tr>   
+                                    <td>
+                                        
+                                        <h:outputText rendered="#{!datacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
+                                        <h:outputText rendered="#{!datacenterBean.populated}" value="There are no items in data center" styleClass="info" />
+                                        <h:outputText rendered="#{!datacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
+                                        
+                                        
                                         
                                         <t:dataTable rendered="#{datacenterBean.populated}" id="datatable" width="100%"
                                                      styleClass="scrollerTable"
@@ -113,14 +114,29 @@
                                                     <h:outputText escape="true" value="   " />
                                                     
                                                     
-                                                    <h:selectBooleanCheckbox rendered="#{!data.dataset}"  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >                                                    
-                                                        <a4j:support event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
+                                                    <%--<h:selectBooleanCheckbox rendered="#{!data.dataset}"  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >                                                    
+                                                        <a4j:support reRender="message, datatable" event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
                                                             <a4j:actionparam name="datafiles" value="#{data.dpId}" />
                                                             <a4j:actionparam name="DATA_FILE"  />
                                                         </a4j:support>
-                                                    </h:selectBooleanCheckbox>
+                                                    </h:selectBooleanCheckbox>--%>
                                                 </h:panelGrid>
                                             </h:column>
+                                            
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <t:graphicImage id="adownload1" value="../../images/download.gif"  border="0"/>
+                                                    
+                                                    
+                                                </f:facet>
+                                                <h:selectBooleanCheckbox  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >                                                    
+                                                    <a4j:support reRender="message,downloademail,downloadnow" event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
+                                                        <a4j:actionparam name="datafiles" value="#{data.dpId}" />
+                                                        <a4j:actionparam name="DATA_FILE"  />
+                                                    </a4j:support>
+                                                </h:selectBooleanCheckbox>
+                                            </h:column>
+                                            
                                             <h:column>
                                                 <f:facet name="header">
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="type" actionListener="#{datacenterBean.sortColumn}">
@@ -280,15 +296,15 @@
                                                     <h:column>                                                        
                                                         <t:graphicImage rendered="#{!url.imageJ && !data.datasetInFolder}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>
                                                         <t:graphicImage id="doc_button2" rendered="#{data.datasetInFolder}" value="../../images/blue-folder-closed.png"  border="0"/>
-                                                       
-                                                       
+                                                        
+                                                        
                                                         
                                                         <h:commandLink rendered="#{url.imageJ}" onclick="download('#{url.dpId}','DATA_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
                                                             <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
                                                         </h:commandLink>
                                                         
-                                                         <h:outputText escape="false" value=" &nbsp;" />
-                                                         
+                                                        <h:outputText escape="false" value=" &nbsp;" />
+                                                        
                                                         <h:commandLink rendered="#{data.datasetInFolder}" onclick="download('#{url.dpId}','DATA_FILE_IN_FOLDERS','DATA_CENTER'); return false;" style="color:black" id="downloadname12" actionListener="#{datacenterBean.download}">
                                                             <h:outputText  value="#{url.name}" style="font-size: 10px"/>                         
                                                         </h:commandLink>
@@ -301,7 +317,7 @@
                                                         
                                                         <h:selectBooleanCheckbox style="background-color:#D1E4E4" title="Add to download" value="#{url.download}" immediate="true" >
                                                             <f:param name="datafiles" value="#{url.dpId}"/>
-                                                            <a4j:support event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
+                                                            <a4j:support reRender="message, datatable,downloademail,downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
                                                                 <a4j:actionparam name="datafiles"  value="#{url.dpId}" />                                                                
                                                                 
                                                             </a4j:support>
@@ -353,14 +369,37 @@
                                         
                                         
                                         <br />
-                                        <h:panelGrid  rendered="#{datacenterBean.populated}" width="95%" columns="8">
+                                        <h:panelGrid border="0" rendered="#{datacenterBean.populated}" width="95%" columns="9">
                                             
-                                            <h:commandButton onclick="download('#{node.identifier}','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;" action="#{datasetTree.select}" title="Download selections" value="Download selections"/>
+                                            <h:commandButton id="downloadnow" disabled="#{!visit.visitData.downloadable}" onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;"  title="Download selections now" value="Download now"/>
                                             &nbsp;
-                                            <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
+                                            <%-- <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
                                                 
-                                            </h:selectBooleanCheckbox> 
-                                            <h:panelGroup/>
+                                            </h:selectBooleanCheckbox> --%>
+                                            <t:graphicImage id="downlaodac1" value="../../images/download.gif" border="0"/>
+                                            
+                                            &nbsp;
+                                            <t:popup rendered="#{!visit.userPreferences.emailSet}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
+                                                     closePopupOnExitingPopup="true"
+                                                     displayAtDistanceX="20"
+                                                     displayAtDistanceY="-40" >
+                                                <t:graphicImage url="../../images/help.gif" border="0" /> 
+                                                <f:facet name="popup">
+                                                    <h:panelGroup>
+                                                        <h:panelGrid columns="1" >
+                                                            <h:outputText value="If you specify and email address, you can have the data downloaded link emailed to you."/>    
+                                                            <h:inputText value="#{visit.userPreferences.email}"  id="email">
+                                                                
+                                                            </h:inputText>
+                                                            
+                                                            <h:commandButton  action="#{datacenterBean.addEmail}" title="Add Email" value="Add Email"/>
+                                                            
+                                                        </h:panelGrid>
+                                                    </h:panelGroup>
+                                                </f:facet>
+                                            </t:popup>
+                                            
+                                            <h:panelGroup rendered="#{visit.userPreferences.emailSet}" />
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -384,9 +423,17 @@
                                             &nbsp; 
                                             <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
                                             --%>
+                                            
+                                            <h:commandButton id="downloademail" disabled="#{!visit.visitData.downloadable}" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datacenterBean.emailDownload}" title="Download via email" value="Email download"/>
+                                            &nbsp;
+                                            <%-- <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
+                                                
+                                            </h:selectBooleanCheckbox> --%>
+                                            <t:graphicImage rendered="#{visit.userPreferences.emailSet}" id="downlaodac3" value="../../images/download.gif" border="0"/>
+                                            
                                         </h:panelGrid>
-                                    </a4j:region>
-                                    <%-- <f:verbatim rendered="#{bookmarkBean.populated}">
+                                        
+                                        <%-- <f:verbatim rendered="#{bookmarkBean.populated}">
                                     <table width="95%" border="0">
                                     <td>
                                     <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
@@ -399,10 +446,11 @@
                                     </td>
                                     </table>
                                     </f:verbatim>--%>
-                                </td>
-                            </tr>
-                        </tbody>     
-                    </table>
+                                    </td>
+                                </tr>
+                            </tbody>     
+                        </table>
+                    </a4j:region>
                 </td>
             </tr>
         </tbody>   

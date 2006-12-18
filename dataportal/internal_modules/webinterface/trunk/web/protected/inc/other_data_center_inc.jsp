@@ -9,10 +9,11 @@
          <tbody>
             <tr>            
                 <td>
+                    <a4j:region   selfRendered="true" > 
                     <table style="margin-top:-20px" width="100%" border="0">
                          <tbody>
                             <tr>   
-                                <td>    <h:messages globalOnly="true" errorClass="error" infoClass="info" /></td>
+                                <td>    <h:messages globalOnly="true" warnClass="info" errorClass="error" infoClass="info" /></td>
                             </tr>                                
                             <tr>   
                                 <td>&nbsp;</td>
@@ -23,7 +24,7 @@
                                     <h:outputText rendered="#{!otherdatacenterBean.populated}" value="There are no items in #{visit.visitData.currentUserAuthDN}'s data references" styleClass="info" />
                                     <h:outputText rendered="#{!otherdatacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
                                     
-                                    <a4j:region   selfRendered="true" > 
+                                    
                                         
                                         <t:dataTable rendered="#{otherdatacenterBean.populated}" id="datatable" width="100%"
                                                      styleClass="scrollerTable"
