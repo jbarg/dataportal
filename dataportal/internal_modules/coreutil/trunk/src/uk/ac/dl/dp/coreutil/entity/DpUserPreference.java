@@ -59,6 +59,9 @@ public class DpUserPreference implements Serializable {
     //@Enumerated(EnumType.STRING)
     private String resolution;
 
+     @Column(name = "EMAIL", nullable = true)
+    private String email;
+     
     @Column(name = "MOD_TIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
@@ -159,6 +162,14 @@ public class DpUserPreference implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
+    }
+    
+     public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
     }
    
     

@@ -39,6 +39,7 @@ public class DataPortalConstants {
     //EJB Session names
     public final static String SESSION = "SessionEJB";
     public final static String TRANSFER = "TransferEJB";
+    public final static String DOWNLOAD = "DownloadEJB";
     public final static String QUERY = "QueryEJB";
     public final static String DATA_CENTER = "DataCenterEJB";
     public final static String DATA_AUTHORISATION = "DataAuthorisationEJB";
@@ -50,10 +51,12 @@ public class DataPortalConstants {
     //EJB MDB names
     public final static String QUERY_MDB = "jms/QueryMDBQueue";
     public final static String EVENT_MDB = "jms/EventMDBQueue";
+    public final static String KEYWORD_MDB = "jms/KeywordMDBQueue";
+    public final static String DOWNLOAD_MDB = "jms/DownloadMDBQueue";
     public final static String CONNECTION_FACTORY = "MDBQueueConnectionFactory";
     
     //location of the keyword files
     public final static String KEYWORD_LOCATION= System.getProperty("java.io.tmpdir")+File.separator;
-    
+     public final static String FILE_DOWNLOAD_LOCATION = System.getProperty("java.io.tmpdir")+File.separator+"downloads";
     public final static boolean LOCAL_EJB_REFS = false;
 }

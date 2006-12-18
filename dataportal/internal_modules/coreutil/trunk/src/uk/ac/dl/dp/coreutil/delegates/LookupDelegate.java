@@ -4,6 +4,7 @@ import java.util.Collection;
 import javax.naming.NamingException;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
+import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.dp.coreutil.interfaces.LookupRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
@@ -40,6 +41,10 @@ public class LookupDelegate {
     public Collection<ProxyServers> getProxyServers() {
         return lur.getProxyServers();
     }
+    
+     public Collection<SrbServer> getSrbServers(){
+         return lur.getSrbServers();
+     }
     
     public ProxyServers getDefaultProxyServer() {
         return lur.getDefaultProxyServer();

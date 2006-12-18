@@ -38,6 +38,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "SrbServer.findByHostname", query = "SELECT s FROM SrbServer s WHERE s.hostname = :hostname"),
     @NamedQuery(name = "SrbServer.findByPortNumber", query = "SELECT s FROM SrbServer s WHERE s.portNumber = :portNumber"),
     @NamedQuery(name = "SrbServer.findByServiceName", query = "SELECT s FROM SrbServer s WHERE s.serviceName = :serviceName"),
+    @NamedQuery(name = "SrbServer.findAll", query = "SELECT s FROM SrbServer s"),
     @NamedQuery(name = "SrbServer.findByModTime", query = "SELECT s FROM SrbServer s WHERE s.modTime = :modTime")}
 )
 public class SrbServer implements Serializable {
@@ -63,6 +64,15 @@ public class SrbServer implements Serializable {
     @JoinColumn(name = "FACILITY_ID", referencedColumnName = "ID")
     @ManyToOne
     private Facility facilityId;
+    
+    @Column(name = "DEFAULT_USER")
+    private String defaultUser;
+        
+    @Column(name = "DEFAULT_PASSWORD")
+    private String defaultPassword;
+    
+    @Column(name = "DEFAULT_DOMAIN")
+    private String defaultDomain;
     
     /** Creates a new instance of SrbServer */
     public SrbServer() {
@@ -152,5 +162,33 @@ public class SrbServer implements Serializable {
     public String toString() {
         return "i.SrbServer[id=" + id + "]";
     }
+
+    public String getDefaultUser() {
+        return defaultUser;
+    }
+
+    public void setDefaultUser(String defaultUser) {
+        this.defaultUser = defaultUser;
+    }
+
+    public String getDefaultPassword() {
+        return defaultPassword;
+    }
+
+    public void setDefaultPassword(String defaultPassword) {
+        this.defaultPassword = defaultPassword;
+    }
+
+    public String getDefaultDomain() {
+        return defaultDomain;
+    }
+
+    public void setDefaultDomain(String defaultDomain) {
+        this.defaultDomain = defaultDomain;
+    }
     
+    public boolean isDefaultSet(){
+        if(getDefaultUser() == null || getDefaultUser().equals("") || getDefaultPassword() == null ||  getDefaultDomain() == null || getDefaultDomain().equals("")) return false;
+        else return true;
+    }
 }

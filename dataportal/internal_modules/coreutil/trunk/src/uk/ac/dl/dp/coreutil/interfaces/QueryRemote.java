@@ -53,5 +53,6 @@ public interface QueryRemote {
     
     public String[] getKeywords(String facility) throws Exception;
     
+    public String[] getKeywords(String facility, boolean redownload) throws Exception;
     
 }

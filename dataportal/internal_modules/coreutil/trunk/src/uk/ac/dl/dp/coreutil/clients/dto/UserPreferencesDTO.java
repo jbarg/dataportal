@@ -26,6 +26,10 @@ public class UserPreferencesDTO implements Serializable {
     
     private DPResolution resolution;
     
+    private String email;
+    
+    private boolean emailSet;
+    
      public UserPreferencesDTO(){    
          //set defaults
           this.setResolution(DPResolution.res_1024x768);
@@ -46,6 +50,7 @@ public class UserPreferencesDTO implements Serializable {
         
         this.setResolution(DPResolution.valueOf(prefs.getResolution()));
         this.setResultsPerPage(prefs.getResultsPerPage().intValue());
+        this.setEmail(prefs.getEmail());
     }
     
     public int getResultsPerPage() {
@@ -70,6 +75,20 @@ public class UserPreferencesDTO implements Serializable {
     
     public void setResolution(DPResolution resolution) {
         this.resolution = resolution;
+    }
+
+    public String getEmail() {
+        if(email == null ) return "";
+        else return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isEmailSet() {
+       if(getEmail().equals("") || getEmail() == null) return false;
+       else return true;
     }
     
 }
