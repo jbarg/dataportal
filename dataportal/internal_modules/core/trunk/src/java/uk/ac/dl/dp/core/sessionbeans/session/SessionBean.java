@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
@@ -81,6 +82,10 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
         Collection<FacilityDTO> facilities = lookup.getFacilities(DPFacilityType.WRAPPER);
         sessionDTO.setFacilities(facilities);
+        
+        Collection<SrbServer> srbServers = lookup.getSrbServers();
+        log.trace("Add list of "+srbServers.size()+" to SessionDTO");
+        sessionDTO.setSrbServers(srbServers);
         return sessionDTO;
     }
     
@@ -260,6 +265,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             prefs.setResolution(userprefs.getResolution().toString());
             prefs.setResultsPerPage(userprefs.getResultsPerPage());
             prefs.setDefaultFacility(userprefs.getDefaultFacility());
+            prefs.setEmail(userprefs.getEmail());
             em.merge(prefs);
         }
     }

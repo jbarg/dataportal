@@ -81,7 +81,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     public QueryRequest queryByKeyword(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         log.debug("queryByKeyword()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-               
+        
         String search_id =  UUID.randomUUID().toString();
         UserUtil userUtil =  new UserUtil(sid,em);
         User user = userUtil.getUser();
@@ -107,7 +107,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             throw new QueryException("Unexpected error, JSMException with connecting to message queue",ex);
         }
         
-             
+        
         //TODO real query
         for(String fac : facilities){
             try {
@@ -160,7 +160,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         } catch (JMSException ex) {}
         
         log.trace("sent off querys to MDBs");
-          //send off basic search event
+        //send off basic search event
         //TODO sort out facility, keyword strings properly
         eventLocal.sendKeywordEvent(sid,facilities, keyword);
         log.trace("sent search event log , sid: "+sid );
@@ -311,10 +311,11 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         return datasets;
     }*/
     
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         log.debug("getDataSets(String sid, Collection<Investigation> investigations)");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-                      
+        
         UserUtil userUtil =  new UserUtil(sid,em);
         User user = userUtil.getUser();
         Collection<String> facilities = new ArrayList<String>();
@@ -357,12 +358,12 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         return datasets;
     }
     
-    
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
-                               UserUtil userUtil =  new UserUtil(sid,em);
+        UserUtil userUtil =  new UserUtil(sid,em);
         User user = userUtil.getUser();
         Collection<String> facilities = new ArrayList<String>();
         
@@ -469,8 +470,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     public Collection<Investigation> getInvestigationById(String sid, String fac, String investigastionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
         log.debug("getInvestigationId(String sid)");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        //TODO check for nulls        
-                  
+        //TODO check for nulls
+        
         User user =  new UserUtil(sid,em).getUser();
         
         DPAccessLayer dpal = null;
@@ -491,14 +492,15 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         return r_i_l;
     }
     
-    
-    public String[] getKeywords(String facility) throws Exception{
-        //load stuff from file
+    public String[] getKeywords(String facility, boolean redownload) throws Exception {
+         //load stuff from file
         File keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+facility+".keyworddata");
         
         if(!keywordFile.exists()){
-            log.info("Keyword data not found, redownloading to: "+DataPortalConstants.KEYWORD_LOCATION);
-            timerService.downloadKeywords();
+            log.info("Keyword data not found, redownloading to: "+DataPortalConstants.KEYWORD_LOCATION+" returning empty set");
+            if(redownload) timerService.downloadKeywords();
+            
+            return new String[0];
         }
         
         FileInputStream f_in = new  FileInputStream(keywordFile);
@@ -509,6 +511,11 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         // Read an object.
         String[] obj = (String[])obj_in.readObject();
         return obj;
+    }
+    
+    
+    public String[] getKeywords(String facility) throws Exception{
+       return getKeywords(facility,true);
         
     }
 }

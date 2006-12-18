@@ -76,5 +76,10 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         return (SrbServer) em.createNamedQuery("SrbServer.findById").setParameter("id", 1).getSingleResult();
     }
     
+    public Collection<SrbServer> getSrbServers(){
+       return  (Collection<SrbServer>)em.createNamedQuery("SrbServer.findAll").getResultList();
+       
+    } 
+    
     
 }

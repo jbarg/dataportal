@@ -11,6 +11,7 @@ package uk.ac.dl.dp.core.message.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
@@ -24,17 +25,21 @@ import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
-import uk.ac.dl.dp.coreutil.util.DPFacilityType;
-
 
 /**
  *
  * @author gjd37
  */
 @MessageDriven(mappedName=DataPortalConstants.QUERY_MDB)
+/*, activationConfig =
+{
+  @ActivationConfigProperty(propertyName="destinationType",
+    propertyValue="javax.jms.Queue"),
+  @ActivationConfigProperty(propertyName="destination",
+    propertyValue=DataPortalConstants.QUERY_MDB)
+})*/
 public class QueryMessageBean extends MessageEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(QueryMessageBean.class);
