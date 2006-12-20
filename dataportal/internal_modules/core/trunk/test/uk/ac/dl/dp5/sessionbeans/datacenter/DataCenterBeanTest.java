@@ -7,13 +7,13 @@
 
 package uk.ac.dl.dp5.sessionbeans.datacenter;
 
+import java.io.File;
 import junit.framework.*;
 import java.util.Collection;
+import org.apache.log4j.PropertyConfigurator;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
-import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.util.Certificate;
 import uk.ac.dl.dp5.util.TestConstants;
 
@@ -30,7 +30,10 @@ public class DataCenterBeanTest extends TestCase {
     private static  Bookmark retrieved;
     
     public DataCenterBeanTest(String testName) {
+       
         super(testName);
+          PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
+      
     }
     
     protected void setUp() throws Exception {
