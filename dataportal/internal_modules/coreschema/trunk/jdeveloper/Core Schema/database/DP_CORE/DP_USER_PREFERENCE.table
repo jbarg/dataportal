@@ -6,8 +6,8 @@
       <type>TABLE</type>
    </ID>
    <columns>
-      <Item id="3">
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="4">
             <ID>f3736f57-0109-1000-8023-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
@@ -26,7 +26,7 @@
          <properties class="java.util.HashMap">
             <Item>
                <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
-               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID">
+               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID" id="5">
                   <ID/>
                   <name>ID</name>
                   <parent class="oracle.jdeveloper.offlinedb.marshal.OracleDBReferenceID">
@@ -44,8 +44,8 @@
             </Item>
          </properties>
       </Item>
-      <Item id="4">
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="6">
             <ID>f3736f57-0109-1000-8024-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
@@ -60,7 +60,7 @@
          <properties class="java.util.HashMap">
             <Item>
                <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
-               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID">
+               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID" id="7">
                   <ID/>
                   <name>USER_ID</name>
                   <parent class="oracle.jdeveloper.offlinedb.marshal.OracleDBReferenceID">
@@ -112,8 +112,8 @@
             </Item>
          </properties>
       </Item>
-      <Item id="6">
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="11">
             <ID>f3736f57-0109-1000-8026-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
@@ -137,7 +137,7 @@
          <properties class="java.util.HashMap">
             <Item>
                <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
-               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID">
+               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID" id="12">
                   <ID/>
                   <name>DEFAULT_FACILITY</name>
                   <parent class="oracle.jdeveloper.offlinedb.marshal.OracleDBReferenceID">
@@ -155,8 +155,37 @@
             </Item>
          </properties>
       </Item>
-      <Item id="5">
+      <Item>
          <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+            <ID>9fb1b3d9-010f-1000-800f-c13e7105de3d</ID>
+            <parent idref="0"/>
+            <type>COLUMN</type>
+         </ID>
+         <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+            <attributeValues class="java.util.HashMap">
+               <Item>
+                  <Key>size</Key>
+                  <Value class="java.lang.Long">4000</Value>
+               </Item>
+            </attributeValues>
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="3">
+               <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+               <schemaName/>
+               <typeName>VARCHAR2</typeName>
+            </dataTypeID>
+         </dataTypeUsage>
+         <default/>
+         <name>DEFAULT_LOCATION</name>
+         <notNull>false</notNull>
+         <properties class="java.util.HashMap">
+            <Item>
+               <Key>Comment</Key>
+               <Value>show the default result page when user logs in for example all data hierarchy for the investigations that the user has been involved with </Value>
+            </Item>
+         </properties>
+      </Item>
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="9">
             <ID>f3736f57-0109-1000-8027-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
@@ -171,11 +200,11 @@
          <properties class="java.util.HashMap">
             <Item>
                <Key>Comment</Key>
-               <Value>in hours</Value>
+               <Value> </Value>
             </Item>
             <Item>
                <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
-               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID">
+               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID" id="10">
                   <ID/>
                   <name>PROXY_SERVER_ID</name>
                   <parent class="oracle.jdeveloper.offlinedb.marshal.OracleDBReferenceID">
@@ -234,6 +263,31 @@
       </Item>
       <Item>
          <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+            <ID>9fa7cd26-010f-1000-8005-c13e7105de3d</ID>
+            <parent idref="0"/>
+            <type>COLUMN</type>
+         </ID>
+         <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+            <attributeValues class="java.util.HashMap">
+               <Item>
+                  <Key>size</Key>
+                  <Value class="java.lang.Long">4000</Value>
+               </Item>
+            </attributeValues>
+            <dataTypeID idref="3"/>
+         </dataTypeUsage>
+         <default/>
+         <name>EMAIL</name>
+         <notNull>false</notNull>
+         <properties class="java.util.HashMap">
+            <Item>
+               <Key>Comment</Key>
+               <Value>e-mail address of the user</Value>
+            </Item>
+         </properties>
+      </Item>
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
             <ID>f3736f57-0109-1000-8029-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
@@ -284,7 +338,22 @@
             <type>CONSTRAINT</type>
          </ID>
          <columns>
-            <Item idref="3"/>
+            <Item>
+               <ID idref="4"/>
+               <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+                  <attributeValues class="java.util.HashMap"/>
+                  <dataTypeID idref="1"/>
+               </dataTypeUsage>
+               <default/>
+               <name>ID</name>
+               <notNull>true</notNull>
+               <properties class="java.util.HashMap">
+                  <Item>
+                     <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
+                     <Value idref="5"/>
+                  </Item>
+               </properties>
+            </Item>
          </columns>
          <enabled>true</enabled>
          <name>DP_USER_PREFERENCE_PK</name>
@@ -297,7 +366,22 @@
             <type>CONSTRAINT</type>
          </ID>
          <columns>
-            <Item idref="4"/>
+            <Item id="8">
+               <ID idref="6"/>
+               <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+                  <attributeValues class="java.util.HashMap"/>
+                  <dataTypeID idref="1"/>
+               </dataTypeUsage>
+               <default/>
+               <name>USER_ID</name>
+               <notNull>false</notNull>
+               <properties class="java.util.HashMap">
+                  <Item>
+                     <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
+                     <Value idref="7"/>
+                  </Item>
+               </properties>
+            </Item>
          </columns>
          <enabled>true</enabled>
          <name>DP_USER_PREFERENCE_UK1</name>
@@ -310,7 +394,7 @@
             <type>CONSTRAINT</type>
          </ID>
          <columns>
-            <Item idref="4"/>
+            <Item idref="8"/>
          </columns>
          <deleteMode>0</deleteMode>
          <enabled>true</enabled>
@@ -333,7 +417,26 @@
             <type>CONSTRAINT</type>
          </ID>
          <columns>
-            <Item idref="5"/>
+            <Item>
+               <ID idref="9"/>
+               <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+                  <attributeValues class="java.util.HashMap"/>
+                  <dataTypeID idref="1"/>
+               </dataTypeUsage>
+               <default/>
+               <name>PROXY_SERVER_ID</name>
+               <notNull>false</notNull>
+               <properties class="java.util.HashMap">
+                  <Item>
+                     <Key>Comment</Key>
+                     <Value>in hours</Value>
+                  </Item>
+                  <Item>
+                     <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
+                     <Value idref="10"/>
+                  </Item>
+               </properties>
+            </Item>
          </columns>
          <deleteMode>0</deleteMode>
          <enabled>true</enabled>
@@ -356,7 +459,27 @@
             <type>CONSTRAINT</type>
          </ID>
          <columns>
-            <Item idref="6"/>
+            <Item>
+               <ID idref="11"/>
+               <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+                  <attributeValues class="java.util.HashMap">
+                     <Item>
+                        <Key>size</Key>
+                        <Value class="java.lang.Long">4000</Value>
+                     </Item>
+                  </attributeValues>
+                  <dataTypeID idref="2"/>
+               </dataTypeUsage>
+               <default/>
+               <name>DEFAULT_FACILITY</name>
+               <notNull>false</notNull>
+               <properties class="java.util.HashMap">
+                  <Item>
+                     <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
+                     <Value idref="12"/>
+                  </Item>
+               </properties>
+            </Item>
          </columns>
          <deleteMode>0</deleteMode>
          <enabled>true</enabled>
