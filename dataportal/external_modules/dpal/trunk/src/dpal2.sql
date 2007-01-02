@@ -37,6 +37,8 @@ create or replace package body dpaccess as
        RETURN c_key;
     end;
 
+--
+
     function getInvestigationsOr (keyword_array in vc_array, dn in varchar2)
        RETURN types.ref_cursor
     is
@@ -54,6 +56,7 @@ create or replace package body dpaccess as
 
        RETURN c_inv;
     end;
+--
 
    function getInvestigationsAnd (keyword_array in vc_array, dn in varchar2)
       RETURN types.ref_cursor
@@ -77,6 +80,8 @@ create or replace package body dpaccess as
 
        RETURN c_inv;
    end getInvestigationsAnd;
+
+--
 
    -- this function is another version of the getInvestigationsAnd function.
    -- it is marginally faster but may not be as scalable.
@@ -115,6 +120,8 @@ create or replace package body dpaccess as
          Raise_Application_Error('-20001','Too many keywords');
    end getInvestigationsAnd1;
 
+--
+
    function getInvestigationsById (inv_id_array in num_array, dn in varchar2)
        RETURN types.ref_cursor
     is
@@ -127,6 +134,8 @@ create or replace package body dpaccess as
                  i.id in (select * from TABLE(cast(inv_id_array as NUM_ARRAY))) ;
        RETURN c_inv;
     end;
+
+--
 
     function  getDataSets (inv_id_array in num_array, dn in varchar2)
        RETURN types.ref_cursor
@@ -142,6 +151,8 @@ create or replace package body dpaccess as
        RETURN c_ds;
     end;
 
+--
+
     function getDataFiles (ds_id_array in num_array, dn in varchar2)
        RETURN types.ref_cursor
     is
@@ -154,6 +165,7 @@ create or replace package body dpaccess as
                 d.dataset_id in (select * from TABLE(cast(ds_id_array as NUM_ARRAY))) ;
        RETURN c_df;
     end;
+--
 
 end dpaccess;
 /
