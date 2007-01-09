@@ -242,18 +242,22 @@ public class DPAccessLayer {
     /////////////////////////////////////////////////////////////
 
      public ArrayList<Investigation> getInvestigations(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg) throws SQLException {
+        return getInvestigations(keyword_list, DN, aggreg, false) ;
+     }
+
+     public ArrayList<Investigation> getInvestigations(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg, boolean fuzzy) throws SQLException {
        if (aggreg == LogicalOperator.OR)
        {
-          return getInvestigationsOr(keyword_list, DN) ;
+          return getInvestigationsOr(keyword_list, DN, fuzzy) ;
        }
        else
        {
-          return getInvestigationsAnd(keyword_list, DN) ;
+          return getInvestigationsAnd(keyword_list, DN, fuzzy) ;
        }
     }
 
     
-    public ArrayList<Investigation> getInvestigationsOr(ArrayList<String> keyword_list, String DN) throws SQLException {
+    public ArrayList<Investigation> getInvestigationsOr(ArrayList<String> keyword_list, String DN, boolean fuzzy) throws SQLException {
         log.debug("getInvestigationsOr()");
         
         //convert keyword_list to array
@@ -266,7 +270,12 @@ public class DPAccessLayer {
 
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
-        String query = "begin ? := dpaccess.getInvestigationsOr(?,'"+DN+"'); end;";
+        String query = "" ;
+        if (fuzzy == false) {
+           query = "begin ? := dpaccess.getInvestigationsOr(?,'"+DN+"'); end;";
+        } else {
+           query = "begin ? := dpaccess.getInvestigationsOrFuz(?,'"+DN+"'); end;";
+        }
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.setARRAY( 2, array_to_pass );
@@ -290,8 +299,8 @@ public class DPAccessLayer {
     }
 
     // removed the dynamic building of sql in java and moved to pl/sql layer
-     public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String DN) throws SQLException {
-        log.debug("getInvestigationsOr()");
+     public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String DN, boolean fuzzy) throws SQLException {
+        log.debug("getInvestigationsAnd()");
 
         //convert keyword_list to array
         String[] keyword_array = new String[keyword_list.size()] ;
@@ -303,10 +312,12 @@ public class DPAccessLayer {
 
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "VC_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
-        //getInvestigationsAnd potentially more scaleable but can lead to false
-        //positives if the same investigation has links to the same keyword in different cases
-        //ideally these should be removed by some constraint.
-        String query = "begin ? := dpaccess.getInvestigationsAnd1(?,'"+DN+"'); end;";
+        String query = "" ;
+        if (fuzzy == false) {
+           query = "begin ? := dpaccess.getInvestigationsAnd(?,'"+DN+"'); end;";
+        } else {
+           query = "begin ? := dpaccess.getInvestigationsAndFuz(?,'"+DN+"'); end;";
+        }
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.setARRAY( 2, array_to_pass );

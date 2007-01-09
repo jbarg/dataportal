@@ -1,3 +1,4 @@
+
 create or replace type NUM_ARRAY as table of number;
 /
 create or replace type VC_ARRAY as table of varchar2(4000);
@@ -9,6 +10,7 @@ AS
     TYPE ref_cursor IS REF CURSOR;
 END;
 /
+
 
 
 -- package spec:
@@ -23,6 +25,7 @@ create or replace package dpaccess as
     function getInvestigationsOrFuz (keyword_array in vc_array, fed_id in varchar2, limit_num IN INTEGER DEFAULT 500) RETURN types.ref_cursor;
     function getInvestigationsAndFuz (keyword_array in vc_array, fed_id in varchar2, limit_num IN INTEGER DEFAULT 500) RETURN types.ref_cursor;
     function getInvestigations (fed_id in varchar2, limit_num IN INTEGER DEFAULT 500) RETURN types.ref_cursor;
+    function getKeywordsById (inv_id in investigation.id%type) RETURN types.ref_cursor;
 end dpaccess;
 /
 
@@ -43,39 +46,70 @@ create or replace package body dpaccess as
 --
 
     function getInvestigationsOr (keyword_array in vc_array,
-                                  fed_id in VARCHAR2,
-                                  limit_num IN INTEGER DEFAULT 500)
+                                  fed_id in varchar2,
+                                  limit_num in integer default 500)
        RETURN types.ref_cursor
     is
        c_inv types.ref_cursor;
     begin
        OPEN c_inv FOR
-            with
-             fed_inv AS(
-                select g.investigation_id,
-                       f.first_name||' '||f.last_name as user_name,
-                       f.facility_user_id as user_number
-                from investigator g, facility_user f
-                where f.facility_user_id = g.facility_user_id
-                and f.federal_id = fed_id
-                union
-                select id, null, null
-                from investigation
-                where id not in (select investigation_id from investigator)
-              ),
-             keyword_lower AS(
-                select distinct investigation_id, lower(name) name from keyword
-              )
-            select * from (select i.title as title,i.id as id,i.inv_type as investigation_type,
-                                  i.inv_abstract as inv_abstract, k.name as keyword,
-                                  g.user_name, g.user_number,
-                                  Dense_Rank() over (ORDER BY i.id) as dr
-                              from investigation i, fed_inv g, keyword_lower k
-                              where i.id = k.investigation_id
-                              and k.name in (
-                                select Lower(column_value) from TABLE(cast(keyword_array as VC_ARRAY)))
-                              and i.id = g.investigation_id
-             )where dr <= limit_num;
+          with
+            fed_inv AS(
+              -- all the user's investigations and the public investigations
+              select g.investigation_id
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+              and f.federal_id = fed_id
+              union
+              select id
+              from investigation
+              where id not in (select investigation_id from investigator)
+            ),
+            keyword_lower AS(
+              -- the keywords for all investigations
+              select distinct investigation_id, lower(name) name from keyword
+            ),
+            wordlist AS(
+              -- the keywords entered as the search criteria
+              select /*+ CARDINALITY (t 3) */ Lower(column_value) word
+              from TABLE(cast(keyword_array as VC_ARRAY)) t
+            ),
+            inv_users AS(
+              -- all the investigators for each investigation (there may be no
+              -- investigators on some investigations - outer join)
+              select g.investigation_id,
+                     f.federal_id as user_fed_id,
+                     f.first_name||' '||f.last_name as facility_user,
+                     f.role as user_role
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+            )
+          select id, title, visit_id, investigation_type, inv_abstract,
+                 user_fed_id, facility_user, user_role
+          from (
+            select i.id as id,
+                   i.title as title,
+                   i.visit_id as visit_id,
+                   i.inv_type as investigation_type,
+                   i.inv_abstract as inv_abstract,
+                   iu.user_fed_id,
+                   iu.facility_user,
+                   iu.user_role,
+                   Dense_Rank() over (ORDER BY i.id) as dr
+            from investigation i, fed_inv g, keyword_lower k,
+                 inv_users iu, wordlist w
+            where i.id = g.investigation_id
+            and iu.investigation_id(+) = i.id
+            and k.investigation_id = i.id
+-->  this line is the only difference between
+-->  getInvestigationsOrFuz and getInvestigationsOr
+            and k.name = w.word
+--<
+            )
+          --
+          -- limit to the first n investigations (may still be many times more
+          -- rows than investigations)
+          where dr <= limit_num;
 
        RETURN c_inv;
     end getInvestigationsOr;
@@ -86,37 +120,80 @@ create or replace package body dpaccess as
                                   fed_id in VARCHAR2,
                                   limit_num IN INTEGER DEFAULT 500)
       RETURN types.ref_cursor
-   is
+    is
        c_inv types.ref_cursor;
        num_keywords integer := keyword_array.count;
-   begin
+    begin
        OPEN c_inv FOR
-          select * from (
-             with
-              fed_inv AS(
-                select g.investigation_id
-                from investigator g, facility_user f
-                where f.facility_user_id = g.facility_user_id
-                and f.federal_id = fed_id
-                union
-                select id from investigation
-                where id not in (select investigation_id from investigator)
-               ),
-              keyword_lower AS(
-                select distinct investigation_id, lower(name) name from keyword
-              )
-             select i.title as title, i.id as id,
-                    i.inv_type as investigation_type,
-                    i.inv_abstract as inv_abstract
-             from investigation i, fed_inv g, keyword_lower k
-             where k.name in (
-               select /*+ CARDINALITY (t, 3) */
-                  Lower(column_value) from TABLE(cast(keyword_array as VC_ARRAY)) t)
-             and i.id = k.investigation_id
-             and i.id = g.investigation_id
-             group by i.title, i.id, i.inv_type, i.inv_abstract
-             having count(*) = num_keywords)
-          where rownum <= limit_num ;
+          with
+            fed_inv AS(
+              -- all the user's investigations and the public investigations
+              select g.investigation_id
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+              and f.federal_id = fed_id
+              union
+              select id
+              from investigation
+              where id not in (select investigation_id from investigator)
+            ),
+            keyword_lower AS(
+              -- the keywords for all investigations
+              select distinct investigation_id, lower(name) name from keyword
+            ),
+            wordlist AS(
+              -- the keywords entered as the search criteria
+              select /*+ CARDINALITY (t 3) */ Lower(column_value) word
+              from TABLE(cast(keyword_array as VC_ARRAY)) t
+              /*testing...
+              SELECT 'york' word FROM dual
+              --*/
+            ),
+            inv_users AS(
+              -- all the investigators for each investigation (there may be no
+              -- investigators on some investigations - outer join)
+              select g.investigation_id,
+                     f.federal_id as user_fed_id,
+                     f.first_name||' '||f.last_name as facility_user,
+                     f.role as user_role
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+            )
+          select id, title, visit_id, investigation_type, inv_abstract,
+                user_fed_id, facility_user, user_role
+          from(
+            select prelim.*,
+                   Dense_Rank() over (ORDER BY id) as dr
+            from (
+              select distinct
+                     i.id as id,
+                     i.title as title,
+                     i.visit_id as visit_id,
+                     i.inv_type as investigation_type,
+                     i.inv_abstract as inv_abstract,
+                     iu.user_fed_id,
+                     iu.facility_user,
+                     iu.user_role,
+                     count(DISTINCT w.word) over (PARTITION BY i.id, iu.user_fed_id) as cnt
+              from investigation i, fed_inv g, keyword_lower k,
+                  inv_users iu, wordlist w
+              where i.id = g.investigation_id
+              and iu.investigation_id(+) = i.id
+              and k.investigation_id = i.id
+-->  this line is the only difference between
+-->  getInvestigationsAndFuz and getInvestigationsAnd
+              and k.name = w.word
+--<
+              ) prelim
+            --
+            -- where each search criterion has matched a keyword (for fuzzy
+            -- searches they may each mach one or more keywords)
+            where cnt = num_keywords
+            )
+          --
+          -- limit to the first n investigations (may still be many times more
+          -- rows than investigations)
+          where dr <= limit_num;
 
        RETURN c_inv;
    end getInvestigationsAnd;
@@ -139,20 +216,41 @@ create or replace package body dpaccess as
        c_inv types.ref_cursor;
     begin
        OPEN c_inv FOR
-          select i.title as title,i.id as id,i.inv_type as investigation_type,
-                 i.inv_abstract as inv_abstract
-             from investigation i
+          with
+            fed_inv AS(
+              -- all the user's investigations and the public investigations
+              select g.investigation_id
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+              and f.federal_id = fed_id
+              union
+              select id
+              from investigation
+              where id not in (select investigation_id from investigator)
+            ),
+            inv_users AS(
+              -- all the investigators for each investigation (there may be no
+              -- investigators on some investigations - outer join)
+              select g.investigation_id,
+                     f.federal_id as user_fed_id,
+                     f.first_name||' '||f.last_name as facility_user,
+                     f.role as user_role
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+            )
+          select i.id as id,
+                 i.title as title,
+                 i.visit_id as visit_id,
+                 i.inv_type as investigation_type,
+                 i.inv_abstract as inv_abstract,
+                 iu.user_fed_id,
+                 iu.facility_user,
+                 iu.user_role
+             from investigation i, fed_inv g, inv_users iu
              where
                  i.id in (select * from TABLE(cast(inv_id_array as NUM_ARRAY)))
-             and (
-               id in(
-                select g.investigation_id
-                  from investigator g, facility_user f
-                  where f.facility_user_id = g.facility_user_id
-                  and f.federal_id = fed_id)
-               or id not in (
-                select investigation_id from investigator)
-               );
+             and i.id = g.investigation_id
+             and iu.investigation_id (+)= i.id;
        RETURN c_inv;
     end getInvestigationsById;
 
@@ -218,36 +316,63 @@ create or replace package body dpaccess as
        c_inv types.ref_cursor;
     begin
        OPEN c_inv FOR
-            WITH
-             fed_inv AS(
-                select g.investigation_id,
-                       f.first_name||' '||f.last_name as user_name,
-                      f.facility_user_id as user_number
-                from investigator g, facility_user f
-                where f.facility_user_id = g.facility_user_id
-                and f.federal_id = fed_id
-                union
-                select id, null, null
-                from investigation
-                where id not in (select investigation_id from investigator)
-              ),
-             keyword_lower AS(
-                select distinct investigation_id, lower(name) name from keyword
-              ),
-             wordlist AS(
-                select Lower(column_value) word from TABLE(cast(keyword_array as VC_ARRAY))
-              )
-            select DISTINCT * FROM
-              (select i.title as title,i.id as id,i.inv_type as investigation_type,
-                      i.inv_abstract as inv_abstract, k.name as keyword,
-                      g.user_name, g.user_number,
-                      Dense_Rank() over (ORDER BY i.id) as dr
-               from investigation i, fed_inv g, keyword_lower k, wordlist w
-               where i.id = k.investigation_id
-               and k.name LIKE '%'||w.word||'%'
-               and i.id = g.investigation_id
-             )
-           where dr <= limit_num;
+          with
+            fed_inv AS(
+              -- all the user's investigations and the public investigations
+              select g.investigation_id
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+              and f.federal_id = fed_id
+              union
+              select id
+              from investigation
+              where id not in (select investigation_id from investigator)
+            ),
+            keyword_lower AS(
+              -- the keywords for all investigations
+              select distinct investigation_id, lower(name) name from keyword
+            ),
+            wordlist AS(
+              -- the keywords entered as the search criteria
+              select /*+ CARDINALITY (t 3) */ Lower(column_value) word
+              from TABLE(cast(keyword_array as VC_ARRAY)) t
+            ),
+            inv_users AS(
+              -- all the investigators for each investigation (there may be no
+              -- investigators on some investigations - outer join)
+              select g.investigation_id,
+                     f.federal_id as user_fed_id,
+                     f.first_name||' '||f.last_name as facility_user,
+                     f.role as user_role
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+            )
+          select id, title, visit_id, investigation_type, inv_abstract,
+                 user_fed_id, facility_user, user_role
+          from (
+            select i.id as id,
+                   i.title as title,
+                   i.visit_id as visit_id,
+                   i.inv_type as investigation_type,
+                   i.inv_abstract as inv_abstract,
+                   iu.user_fed_id,
+                   iu.facility_user,
+                   iu.user_role,
+                   Dense_Rank() over (ORDER BY i.id) as dr
+            from investigation i, fed_inv g, keyword_lower k,
+                 inv_users iu, wordlist w
+            where i.id = g.investigation_id
+            and iu.investigation_id(+) = i.id
+            and k.investigation_id = i.id
+-->  this line is the only difference between
+-->  getInvestigationsOrFuz and getInvestigationsOr
+            and k.name like '%'||w.word||'%'
+--<
+            )
+          --
+          -- limit to the first n investigations (may still be many times more
+          -- rows than investigations)
+          where dr <= limit_num;
 
        RETURN c_inv;
     end getInvestigationsOrFuz;
@@ -258,46 +383,80 @@ create or replace package body dpaccess as
                                      fed_id in VARCHAR2,
                                      limit_num IN INTEGER DEFAULT 500)
       RETURN types.ref_cursor
-   is
+    is
        c_inv types.ref_cursor;
        num_keywords integer := keyword_array.count;
-   begin
+    begin
        OPEN c_inv FOR
-          select * from (
-             WITH
-              fed_inv AS(
-                select g.investigation_id
-                from investigator g, facility_user f
-                where f.facility_user_id = g.facility_user_id
-                and f.federal_id = fed_id
-                union
-                select id from investigation
-                where id not in (select investigation_id from investigator)
-               ),
-              keyword_lower AS(
-                select distinct investigation_id, lower(name) name
-                from keyword
-              ),
-             wordlist AS(
-                select /*+ CARDINALITY (t, 3) */ Lower(column_value) word
-                from TABLE(cast(keyword_array as VC_ARRAY))
-              )
-              select title, id, investigation_type, inv_abstract
-              from(
-                select i.title as title,
-                        i.id as id,
-                        i.inv_type as investigation_type,
-                        i.inv_abstract as inv_abstract,
-                        Row_Number() over(PARTITION BY i.id, w.word ORDER BY 1) rn
-                from investigation i, fed_inv g, keyword_lower k, wordlist w
-                where i.id = k.investigation_id
-                and k.name LIKE '%'||w.word||'%'
-                and i.id = g.investigation_id
-               )
-             where rn = 1
-             group by title, id, investigation_type, inv_abstract
-             having count(*) = num_keywords)
-          where rownum <= limit_num ;
+          with
+            fed_inv AS(
+              -- all the user's investigations and the public investigations
+              select g.investigation_id
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+              and f.federal_id = fed_id
+              union
+              select id
+              from investigation
+              where id not in (select investigation_id from investigator)
+            ),
+            keyword_lower AS(
+              -- the keywords for all investigations
+              select distinct investigation_id, lower(name) name from keyword
+            ),
+            wordlist AS(
+              -- the keywords entered as the search criteria
+              select /*+ CARDINALITY (t 3) */ Lower(column_value) word
+              from TABLE(cast(keyword_array as VC_ARRAY)) t
+              /*testing...
+              SELECT 'york' word FROM dual
+              --*/
+            ),
+            inv_users AS(
+              -- all the investigators for each investigation (there may be no
+              -- investigators on some investigations - outer join)
+              select g.investigation_id,
+                     f.federal_id as user_fed_id,
+                     f.first_name||' '||f.last_name as facility_user,
+                     f.role as user_role
+              from investigator g, facility_user f
+              where f.facility_user_id = g.facility_user_id
+            )
+          select id, title, visit_id, investigation_type, inv_abstract,
+                user_fed_id, facility_user, user_role
+          from(
+            select prelim.*,
+                   Dense_Rank() over (ORDER BY id) as dr
+            from (
+              select distinct
+                     i.id as id,
+                     i.title as title,
+                     i.visit_id as visit_id,
+                     i.inv_type as investigation_type,
+                     i.inv_abstract as inv_abstract,
+                     iu.user_fed_id,
+                     iu.facility_user,
+                     iu.user_role,
+                     count(DISTINCT w.word) over (PARTITION BY i.id, iu.user_fed_id) as cnt
+              from investigation i, fed_inv g, keyword_lower k,
+                  inv_users iu, wordlist w
+              where i.id = g.investigation_id
+              and iu.investigation_id(+) = i.id
+              and k.investigation_id = i.id
+-->  this line is the only difference between
+-->  getInvestigationsAndFuz and getInvestigationsAnd
+              and k.name like '%'||w.word||'%'
+--<
+              ) prelim
+            --
+            -- where each search criterion has matched a keyword (for fuzzy
+            -- searches they may each mach one or more keywords)
+            where cnt = num_keywords
+            )
+          --
+          -- limit to the first n investigations (may still be many times more
+          -- rows than investigations)
+          where dr <= limit_num;
 
        RETURN c_inv;
    end getInvestigationsAndFuz;
@@ -310,18 +469,54 @@ create or replace package body dpaccess as
       c_inv types.ref_cursor;
     begin
       OPEN c_inv FOR
-        select i.title as title, i.id as id, i.inv_type as investigation_type,
-               i.inv_abstract as inv_abstract,
-               f.first_name||' '||f.last_name as user_name,
-               f.facility_user_id as user_number
-        from investigation i, investigator g, facility_user f
-        where f.facility_user_id = g.facility_user_id
-        and f.federal_id = fed_id
-        and i.id = g.investigation_id
-        and rownum <= limit_num;
+        with
+          fed_inv AS(
+            -- all the user's investigations
+            select g.investigation_id
+            from investigator g, facility_user f
+            where f.facility_user_id = g.facility_user_id
+            and f.federal_id = fed_id
+          )
+        select id, title, visit_id, investigation_type, inv_abstract,
+              user_fed_id, facility_user, user_role
+        from(
+          select i.id as id,
+                 i.title as title,
+                 i.visit_id as visit_id,
+                 i.inv_type as investigation_type,
+                 i.inv_abstract as inv_abstract,
+                 f.federal_id as user_fed_id,
+                 f.first_name||' '||f.last_name as facility_user,
+                 f.role as user_role,
+                 dense_rank() over(ORDER BY i.id) dr
+          from investigation i, fed_inv g, investigator ir, facility_user f
+          where i.id = g.investigation_id
+          and ir.investigation_id = i.id
+          and f.facility_user_id = ir.facility_user_id
+          )
+        --
+        -- limit to the first n investigations (may still be many times more
+        -- rows than investigations)
+        where dr <= limit_num;
+      RETURN c_inv;
+    end getInvestigations;
+
+--
+
+    function getKeywordsById (inv_id in investigation.id%type)
+      RETURN types.ref_cursor
+    is
+      c_inv types.ref_cursor;
+    begin
+      OPEN c_inv FOR
+        select distinct lower(name) name
+        from keyword
+        where investigation_id = inv_id
+        order by 1;
 
        RETURN c_inv;
-    end getInvestigations;
+    end getKeywordsById;
+
 --
 
 end dpaccess;
