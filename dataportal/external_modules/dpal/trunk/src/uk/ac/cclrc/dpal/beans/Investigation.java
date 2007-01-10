@@ -8,7 +8,7 @@ public class Investigation extends Common implements Serializable {
     private String investigationType = null ;
     private String investigationAbstract = null ;
     //using the following as it supresses duplicates(just in case)
-    private LinkedHashSet<String> keyword = new LinkedHashSet<String>() ;
+    private LinkedHashSet<Investigator> investigators = new LinkedHashSet<Investigator>() ;
     
     
     
@@ -21,24 +21,24 @@ public class Investigation extends Common implements Serializable {
         return this.investigationAbstract ;
     }
     
-    public LinkedHashSet getKeyword() {
-        return this.keyword ;
+    public LinkedHashSet getInvestigators() {
+        return this.investigators ;
     }
     
-    public String getFirstKeyword() {
-        for (String s : keyword){
-            return s;
+    public String getFirstInvestigator() {
+        for (Investigator i : investigators){
+            return i;
         }
         return null ;
     }
     
     
-    //setters
-    public void addKeyword(String keyword) {
-        this.keyword.add(keyword) ;
+    //adders - none bean but neeeded
+    public void addInvestigator(Investigator investigator) {
+        this.investigators.add(investigator) ;
     }
     
-    
+    //setters
     public void setInvestigationType(String investigationType) {
         this.investigationType=investigationType ;
     }
@@ -54,9 +54,9 @@ public class Investigation extends Common implements Serializable {
         
         StringBuffer sb = new StringBuffer() ;
         
-        for(String k : keyword){
-            sb.append(k);
-            sb.append(" ") ;
+        for(Investigator i : investigators){
+            sb.append("\n\t");
+            sb.append(i.toString());
         }
         
         return "[name]:"+getName()+

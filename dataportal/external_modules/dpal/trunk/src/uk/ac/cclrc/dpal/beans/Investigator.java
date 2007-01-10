@@ -5,61 +5,9 @@ import java.io.Serializable;
 
 public class Investigator extends Common implements Serializable {
     //bean begins
-    private String userId = null ;
-    private String title = null ;
-    private String initials = null ;
-    private String firstName = null ;
-    private String middleName = null ;
-    private String lastName = null ;
+    //note id in Common will be federal_id
+    //name in Common will be the name of the investigator
     private String role = null ;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getInitials() {
-        return initials;
-    }
-
-    public void setInitials(String initials) {
-        this.initials = initials;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getRole() {
         return role;
@@ -73,10 +21,9 @@ public class Investigator extends Common implements Serializable {
     public String toString() {
         //can't use variable names of superclass as there are not inherited
         
-        return "[full name]:"+getFirstName()+" "+getMiddleName() +" "+getLastName() +
-                " [initialed name]:"+getInitials()+" "+getLastName()+
+        return "[full name]:"+getName() +
                 " [role]:"+getRole()+
-                " [user_id]:"+getUserId()+
+                " [federal-id]:"+getId()+
                 " [facility]:"+getFacility() ;
         
         

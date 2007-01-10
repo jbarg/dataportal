@@ -217,10 +217,10 @@ public class DPAccessLayer {
     
     /////////////////////////////////////////////////////////////
 
-     public ArrayList<Keyword> getKeywords(String DN) throws SQLException {
+     public ArrayList<Keyword> getKeywords(String fed_id) throws SQLException {
         log.debug("getKeywords()");
 
-        String query = "begin ? := dpaccess.getKeywords('"+DN+"'); end;";
+        String query = "begin ? := dpaccess.getKeywords('"+fed_id+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.execute();
@@ -257,7 +257,7 @@ public class DPAccessLayer {
     }
 
     
-    public ArrayList<Investigation> getInvestigationsOr(ArrayList<String> keyword_list, String DN, boolean fuzzy) throws SQLException {
+    public ArrayList<Investigation> getInvestigationsOr(ArrayList<String> keyword_list, String fed_id, boolean fuzzy) throws SQLException {
         log.debug("getInvestigationsOr()");
         
         //convert keyword_list to array
@@ -272,9 +272,9 @@ public class DPAccessLayer {
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
         String query = "" ;
         if (fuzzy == false) {
-           query = "begin ? := dpaccess.getInvestigationsOr(?,'"+DN+"'); end;";
+           query = "begin ? := dpaccess.getInvestigationsOr(?,'"+fed_id+"'); end;";
         } else {
-           query = "begin ? := dpaccess.getInvestigationsOrFuz(?,'"+DN+"'); end;";
+           query = "begin ? := dpaccess.getInvestigationsOrFuz(?,'"+fed_id+"'); end;";
         }
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
@@ -284,11 +284,17 @@ public class DPAccessLayer {
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
             Investigation st = new Investigation() ;
+            Investogator itor = new Investigator() ; //each investigation may have multiple investigators.
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
+            st.setVisitId(r.getString("VISIT_ID")) ;
             st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
             st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
-            st.addKeyword(r.getString("KEYWORD")) ;
+            itor.setId(r.getString("USER_FED_ID"))  ;
+            itor.setName(r.getString("FACILITY_USER")) ;
+            itor.setRole(r.getString("USER_ROLE")) ;
+            itor.setFacility(this.facility) ;
+            st.addInvestigator(itor) ;
             st.setFacility(this.facility);
             inv_array.add(st) ;
         }
@@ -299,7 +305,7 @@ public class DPAccessLayer {
     }
 
     // removed the dynamic building of sql in java and moved to pl/sql layer
-     public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String DN, boolean fuzzy) throws SQLException {
+     public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String fed_id, boolean fuzzy) throws SQLException {
         log.debug("getInvestigationsAnd()");
 
         //convert keyword_list to array
@@ -314,9 +320,9 @@ public class DPAccessLayer {
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
         String query = "" ;
         if (fuzzy == false) {
-           query = "begin ? := dpaccess.getInvestigationsAnd(?,'"+DN+"'); end;";
+           query = "begin ? := dpaccess.getInvestigationsAnd(?,'"+fed_id+"'); end;";
         } else {
-           query = "begin ? := dpaccess.getInvestigationsAndFuz(?,'"+DN+"'); end;";
+           query = "begin ? := dpaccess.getInvestigationsAndFuz(?,'"+fed_id+"'); end;";
         }
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
@@ -326,10 +332,17 @@ public class DPAccessLayer {
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
             Investigation st = new Investigation() ;
+            Investogator itor = new Investigator() ; //each investigation may have multiple investigators.
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
+            st.setVisitId(r.getString("VISIT_ID")) ;
             st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
             st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
+            itor.setId(r.getString("USER_FED_ID"))  ;
+            itor.setName(r.getString("FACILITY_USER")) ;
+            itor.setRole(r.getString("USER_ROLE")) ;
+            itor.setFacility(this.facility) ;
+            st.addInvestigator(itor) ;
             st.setFacility(this.facility);
             inv_array.add(st) ;
         }
@@ -342,7 +355,7 @@ public class DPAccessLayer {
 
     //////////////////////////////////////////////////////////////
 
-    public ArrayList<Investigation> getInvestigationsById(ArrayList<String> inv_id_list, String DN) throws SQLException {
+    public ArrayList<Investigation> getInvestigationsById(ArrayList<String> inv_id_list, String fed_id) throws SQLException {
         log.debug("getInvestigationsById()");
 
         //convert array_list to int array
@@ -355,7 +368,7 @@ public class DPAccessLayer {
 
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
-        String query = "begin ? := dpaccess.getInvestigationsById(?,'"+DN+"'); end;";
+        String query = "begin ? := dpaccess.getInvestigationsById(?,'"+fed_id+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.setARRAY( 2, array_to_pass );
@@ -363,19 +376,58 @@ public class DPAccessLayer {
         r=(ResultSet)cs.getObject(1) ;
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
-            Investigation in = new Investigation() ;
-            in.setId(r.getString("ID")) ;
-            in.setName(r.getString("TITLE")) ; //note title in db and name in beans
-            in.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
-            in.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
-            //note StudyId not set in bean as we don't have that information
-            in.setFacility(this.facility);
-            inv_array.add(in);
+            Investigation st = new Investigation() ;
+            Investogator itor = new Investigator() ; //each investigation may have multiple investigators.
+            st.setId(r.getString("ID")) ;
+            st.setName(r.getString("TITLE")) ; //note title in db and name in beans
+            st.setVisitId(r.getString("VISIT_ID")) ;
+            st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
+            st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
+            itor.setId(r.getString("USER_FED_ID"))  ;
+            itor.setName(r.getString("FACILITY_USER")) ;
+            itor.setRole(r.getString("USER_ROLE")) ;
+            itor.setFacility(this.facility) ;
+            st.addInvestigator(itor) ;
+            st.setFacility(this.facility);
+            inv_array.add(st) ;
         }
         r.close() ;
         cs.close() ;
-        return inv_array ;
+        return MergeDuplicateInvestigations(inv_array) ;
     }
+   
+    //////////////////////////////////////////////////////////////
+
+    public ArrayList<Investigation> getMyInvestigations(String fed_id) throws SQLException {
+        log.debug("getMyInvestigations()");
+
+        String query = "begin ? := dpaccess.getInvestigationsById('"+fed_id+"'); end;";
+        OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
+        cs.registerOutParameter(1, OracleTypes.CURSOR);
+        cs.execute();
+        r=(ResultSet)cs.getObject(1) ;
+        ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
+        while(r.next()) {
+            Investigation st = new Investigation() ;
+            Investogator itor = new Investigator() ; //each investigation may have multiple investigators.
+            st.setId(r.getString("ID")) ;
+            st.setName(r.getString("TITLE")) ; //note title in db and name in beans
+            st.setVisitId(r.getString("VISIT_ID")) ;
+            st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
+            st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
+            itor.setId(r.getString("USER_FED_ID"))  ;
+            itor.setName(r.getString("FACILITY_USER")) ;
+            itor.setRole(r.getString("USER_ROLE")) ;
+            itor.setFacility(this.facility) ;
+            st.addInvestigator(itor) ;
+            st.setFacility(this.facility);
+            inv_array.add(st) ;
+        }
+        r.close() ;
+        cs.close() ;
+        return MergeDuplicateInvestigations(inv_array) ;
+    }
+
     
     //////////////////////////////////////////////////////////////
     public ArrayList<DataSet> getDataSets(ArrayList<String> inv_id_list, String DN) throws SQLException {
