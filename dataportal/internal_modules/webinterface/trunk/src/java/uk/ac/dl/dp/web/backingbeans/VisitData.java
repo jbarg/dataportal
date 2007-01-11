@@ -69,6 +69,8 @@ public class VisitData implements Serializable {
     private Collection<AccessInfo> accessInfo = null;
     
     private boolean downloadable;
+    
+    private String searchedTitle = "Search Results";
            
     /** Creates a new instance of VisitData */
     public VisitData() {
@@ -410,6 +412,14 @@ public class VisitData implements Serializable {
         }
         return false;
         
+    }
+
+    public String getSearchedTitle() {
+        return searchedTitle;
+    }
+
+    public void setSearchedTitle(String searchedTitle) {
+        this.searchedTitle = searchedTitle;
     }
     
     

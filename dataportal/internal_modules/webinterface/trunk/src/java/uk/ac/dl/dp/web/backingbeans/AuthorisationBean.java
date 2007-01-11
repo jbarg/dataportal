@@ -25,6 +25,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.util.DPDefaultLocation;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.WebConstants;
@@ -132,8 +133,25 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         Visit visit = (Visit) getBean(WebConstants.SESSION_KEY);
         visit.setSession(session);
         
-        //logged in, return ok
-        return NavigationConstants.LOGIN_SUCCESS;
+        //logged in, return ok, return to default location
+        DPDefaultLocation defaultLocation = session.getUserPrefs().getDefaultLocation();
+        
+        
+        if(defaultLocation.toString().equals(DPDefaultLocation.BASIC_SEARCH.toString())){
+            return NavigationConstants.LOGIN_SUCCESS;
+        } else if(defaultLocation.toString().equals(DPDefaultLocation.BOOKMARKS.toString())){
+            return NavigationConstants.LOGIN_SUCCESS_BOOKMARKS;
+        } else if(defaultLocation.toString().equals(DPDefaultLocation.DATA_REFERENCES.toString())){
+            return NavigationConstants.LOGIN_SUCCESS_DATA_REFS;
+        } else if(defaultLocation.toString().equals(DPDefaultLocation.MY_DATA.toString())){
+            
+            //need to search the date and then return to mydata
+            //TODO should not be in this bean
+            SearchBean searchBean = (SearchBean)getBean("searchBean");
+            searchBean.searchOwnDataAll();
+            
+            return NavigationConstants.LOGIN_SUCCESS_MYDATA;
+        } else return NavigationConstants.LOGIN_SUCCESS;
     }
     
     public String logout(){
@@ -175,6 +193,11 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         if(!prop.containsValue(session.getDN())){
             return false;
         } else return true;
+    }
+    
+    private String searchMyData() {
+        SearchBean searchBean = (SearchBean)getBean("searchBean");
+        return    searchBean.searchOwnDataAll();
     }
 }
 

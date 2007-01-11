@@ -17,6 +17,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
+import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
@@ -40,7 +41,7 @@ public class SearchBean extends AbstractRequestBean {
     
     //default it to AND
     private String  logicalExpression ="AND";
-            
+    
     private List<SelectItem> logicalExpressions;
     
     public List<SelectItem> getLogicalExpressions() {
@@ -56,7 +57,7 @@ public class SearchBean extends AbstractRequestBean {
     }
     
     public void setLogicalExpressions(List<SelectItem> searchedUsers) {
-        this.logicalExpressions = logicalExpressions;        
+        this.logicalExpressions = logicalExpressions;
     }
     
     /** Creates a new instance of SearchBean */
@@ -88,6 +89,81 @@ public class SearchBean extends AbstractRequestBean {
     public String getKeyword(){
         return keyword;
     }
+    
+    /**
+     * Action method to do basic search
+     */
+    public String searchOwnData(){
+        //sets up initial values
+        String sid = null;
+        QueryRequest query_request = null;
+        
+        log.trace("searching for users own data:");
+        
+        log.trace("searching for facilities :"+getVisitData().getCurrentSelectedFacilities());
+        
+        //send off initail query
+        QueryDelegate qd = QueryDelegate.getInstance();
+        try {
+            query_request = qd.queryByKeyword(getVisit().getSid(), new String[2] ,getVisitData().getCurrentSelectedFacilities(), LogicalOperator.AND);
+            getSearchData().setQueryRequest(query_request);
+            log.info("Query Id is "+query_request.getQueryid());
+        } catch (DataPortalException ex) {
+            error("Unable to perform query");
+            log.fatal("Unable to create query user for: "+sid,ex);
+            return null;
+        }catch (Exception ex) {
+            error("Unable to perform query");
+            log.fatal("Unable to create query user for: "+sid,ex);
+            return null;
+        }
+        
+        //set the title from the seach
+        getVisitData().setSearchedTitle("My Data Search");
+        
+        return getQueryResults(query_request, true);
+    }
+    
+    /**
+     * Action method to do basic search
+     */
+    public String searchOwnDataAll(){
+        //sets up initial values
+        String sid = null;
+        QueryRequest query_request = null;
+        
+        log.trace("searching for users own data:");
+        
+        log.trace("searching all facilities :"+getVisit().getSession().getFacilities().size());
+        
+        List<String> facilities = new ArrayList<String>();
+        for(FacilityDTO fac : getVisit().getSession().getFacilities()){
+            facilities.add(fac.getFacility());
+            log.trace(fac.getFacility());
+        }
+        
+        //send off initail query
+        QueryDelegate qd = QueryDelegate.getInstance();
+        try {
+            query_request = qd.queryByKeyword(getVisit().getSid(), new String[]{"hrpd"} , facilities , LogicalOperator.AND);
+            getSearchData().setQueryRequest(query_request);
+            log.info("Query Id is "+query_request.getQueryid());
+        } catch (DataPortalException ex) {
+            error("Unable to perform query");
+            log.fatal("Unable to create query user for: "+sid,ex);
+            return null;
+        }catch (Exception ex) {
+            error("Unable to perform query");
+            log.fatal("Unable to create query user for: "+sid,ex);
+            return null;
+        }
+        
+        //set the title from the seach
+        getVisitData().setSearchedTitle("My Data");
+        
+        return getQueryResults(query_request, true);
+    }
+    
     /**
      * Action method to do basic search
      */
@@ -123,6 +199,17 @@ public class SearchBean extends AbstractRequestBean {
             log.fatal("Unable to create query user for: "+sid,ex);
             return null;
         }
+        
+        //set the title from the seach
+        getVisitData().setSearchedTitle("Search Results");
+        
+        return getQueryResults(query_request, false);
+    }
+    
+    
+    private String getQueryResults(QueryRequest query_request, boolean  myData){
+        
+        QueryDelegate qd = QueryDelegate.getInstance();
         
         //if initial query sent ok, now wait for return, only wait MAXIMIUM_SEARCH_TIME secs
         long time = new Date().getTime();
@@ -174,7 +261,11 @@ public class SearchBean extends AbstractRequestBean {
         }
         //if not results infom user
         if(investigations.size() == 0){
-            info("No results found. Please refine your query.");
+            if(myData){
+                info("No data associated with you.");
+            } else {
+                info("No results found. Please refine your query.");
+            }
             return null;
         }
         //check if result size is too big
@@ -243,6 +334,6 @@ public class SearchBean extends AbstractRequestBean {
         this.logicalExpression = logicalExpression;
     }
     
-  
+    
     
 }
