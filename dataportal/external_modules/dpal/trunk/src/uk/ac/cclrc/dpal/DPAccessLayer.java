@@ -237,6 +237,43 @@ public class DPAccessLayer {
         cs.close() ;
         return keyword_array ;
     }
+
+    /////////////////////////////////////////////////////////////
+
+    //placeholder really a more robust function which takes in arrays should be written. --hmm may have to do more here than I wanted to
+    public ArrayList<Keyword> getKeywordsByInvestigationId(ArrayList<String> inv_id_list, String fed_id) throws SQLException {
+    
+        log.debug("getKeywordsByInvestigationId()");
+
+        //convert array_list to int array
+        int[] intArray = new int [inv_id_list.size()] ;
+        ListIterator li = inv_id_list.listIterator() ;
+        int i = 0 ;
+        while(li.hasNext()) {
+            intArray[i++] = Integer.parseInt((String)li.next()) ;
+        }
+
+        ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
+        ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
+        String query = "begin ? := dpaccess.getKeywordsByInvestigationId(?,'"+fed_id+"'); end;";
+        OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
+        cs.registerOutParameter(1, OracleTypes.CURSOR);
+        cs.setARRAY( 2, array_to_pass );
+        cs.execute();
+        r=(ResultSet)cs.getObject(1) ;
+        ArrayList<Keyword> keyword_array = new ArrayList<Keyword>() ;
+        while(r.next()) {
+            Keyword kw = new Keyword() ;
+            kw.setId(r.getString("ID")) ;
+            kw.setName(r.getString("NAME")) ;
+            kw.setFacility(this.facility);
+            keyword_array.add(kw) ;
+        }
+        r.close() ;
+        cs.close() ;
+        return keyword_array ;
+    }
+ 
  
     
     /////////////////////////////////////////////////////////////
