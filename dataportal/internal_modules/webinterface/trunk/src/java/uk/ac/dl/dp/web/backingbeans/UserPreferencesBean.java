@@ -22,6 +22,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import uk.ac.dl.dp.coreutil.util.DPDefaultLocation;
 import uk.ac.dl.dp.coreutil.util.DPResolution;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 
@@ -43,6 +44,9 @@ public class UserPreferencesBean extends AbstractRequestBean {
     
     private List<SelectItem> results;
     private String defaultresults;
+    
+    private List<SelectItem> location;
+    private String defaultLocation;
     
     private String email;
     
@@ -115,7 +119,6 @@ public class UserPreferencesBean extends AbstractRequestBean {
         this.defaultresults = defaultresults;
     }
     
-    
     //save the new prefs
     public String save(){
         log.trace("Setting user prefs to: Facility: "+defaultFacility+", Resolution: "+defaultResolution+", Number Results: "+defaultresults +" email: "+email);
@@ -124,6 +127,7 @@ public class UserPreferencesBean extends AbstractRequestBean {
         userPrefs.setResolution(DPResolution.valueOf(defaultResolution));
         userPrefs.setResultsPerPage(Integer.parseInt(defaultresults));
         userPrefs.setEmail(email);
+        userPrefs.setDefaultLocation(DPDefaultLocation.valueOf(defaultLocation));
         
         try {
             SessionDelegate.getInstance().setUserPrefs(getVisit().getSid(),userPrefs);
@@ -136,7 +140,6 @@ public class UserPreferencesBean extends AbstractRequestBean {
         info("Preferences sucessfully updated.");
         
         return null;
-        
     }
     
     //this is own validation so that if user chooses "Select One" error displayed
@@ -157,6 +160,31 @@ public class UserPreferencesBean extends AbstractRequestBean {
     
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public List<SelectItem> getLocation(){
+        List<SelectItem> location = new ArrayList<SelectItem>();
+        location.add(new SelectItem(DPDefaultLocation.MY_DATA.toString(),"My Data Search"));
+        location.add(new SelectItem(DPDefaultLocation.BASIC_SEARCH.toString(),"Basic Search"));
+        location.add(new SelectItem(DPDefaultLocation.BOOKMARKS.toString(),"Bookmarks"));
+        location.add(new SelectItem(DPDefaultLocation.DATA_REFERENCES.toString(),"Data References"));
+        
+        //TODO add advanced
+        //  location.add(new SelectItem(DPDefaultLocation.ADVANCED_SEARCH.toString,"Advanced Search"));
+        
+        return location;
+    }
+    
+    public void setLocation(List<SelectItem> location){
+        this.location = location;
+    }
+    
+    public String getDefaultLocation(){
+        return ""+getVisit().getSession().getUserPrefs().getDefaultLocation().toString();
+    }
+    
+    public void setDefaultLocation(String defaultLocation){
+        this.defaultLocation = defaultLocation;
     }
 }
 

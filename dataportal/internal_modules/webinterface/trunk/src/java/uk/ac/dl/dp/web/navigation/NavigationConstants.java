@@ -20,6 +20,9 @@ public class NavigationConstants {
     public final static String LOGIN_FAILURE = "LOGIN_FAILURE";
     public final static String LOGIN_ERROR = "LOGIN_ERROR";
     public final static String LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+    public final static String LOGIN_SUCCESS_MYDATA = "LOGIN_SUCCESS_MYDATA";
+    public final static String LOGIN_SUCCESS_BOOKMARKS = "LOGIN_SUCCESS_BOOKMARKS";
+    public final static String LOGIN_SUCCESS_DATA_REFS = "LOGIN_SUCCESS_DATA_REFS";
     
     //searching navs
     public final static String SEARCH_SUCCESS = "SEARCH_SUCCESS";
