@@ -74,7 +74,7 @@
                                                             &nbsp;
                                                         </td>
                                                         <td align="left" >
-                                                            <h:outputText styleClass="header_top" value="Search Results"/> 
+                                                            <h:outputText styleClass="header_top" value="#{visit.visitData.searchedTitle}"/> 
                                
                                                         </td>
                                                         <td align="right">

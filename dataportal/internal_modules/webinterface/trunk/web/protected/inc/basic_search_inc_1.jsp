@@ -68,6 +68,7 @@
         
         <h:panelGrid  border="0" columns="4">      
             
+            
             <h:outputLabel for="facilitiesj_id_1">
                 <h:outputText value="Search: " style="font-size:14px"/>
             </h:outputLabel  >
@@ -158,12 +159,27 @@
             
             
             <h:panelGroup/>
-            <h:panelGroup/>
-            <h:commandButton action="#{searchBean.searchByKeyword}" onclick="busyBox.Show();" title="search" value="Search"/>
             
             <h:panelGroup/>
+            <h:panelGrid columns="3">
+                <h:commandButton id="f" action="#{searchBean.searchByKeyword}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                <h:panelGroup>&nbsp;</h:panelGroup>
+                <h:commandButton id="own" action="#{searchBean.searchOwnData}" immediate="true" onclick="busyBox.Show();" title="View own" value="View own data"/>
+                
+            </h:panelGrid>
+              <h:panelGroup/>
+                <h:panelGroup/>
         </h:panelGrid>
         
+        <%--  <h:panelGrid  border="0" columns="2">   
+            
+            <h:panelGroup/> 
+            <h:panelGroup><br /></h:panelGroup>
+            
+            
+            <h:outputText value="To view your own data " style="font-size:14px"/>  <h:commandLink action="#{searchBean.searchOwnData}" onclick="busyBox.Show();" title="View Own Data" value="click here"/>
+            
+        </h:panelGrid>--%>
     </h:form>
 </a4j:region>
 
