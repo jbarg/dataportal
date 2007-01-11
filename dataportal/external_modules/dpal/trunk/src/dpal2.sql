@@ -53,7 +53,7 @@ create or replace package body dpaccess as
        c_inv types.ref_cursor;
     begin
        OPEN c_inv FOR
-          with
+          select distinct * from (with
             fed_inv AS(
               -- all the user's investigations and the public investigations
               select g.investigation_id
@@ -109,7 +109,7 @@ create or replace package body dpaccess as
           --
           -- limit to the first n investigations (may still be many times more
           -- rows than investigations)
-          where dr <= limit_num;
+          where dr <= limit_num);
 
        RETURN c_inv;
     end getInvestigationsOr;
