@@ -1,5 +1,8 @@
 package uk.ac.dl.dp.core.sessionbeans.session;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.util.Calendar;
@@ -11,7 +14,9 @@ import javax.annotation.Resource;
 
 import javax.ejb.*;
 import org.apache.log4j.Logger;
+import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
+import org.globus.myproxy.SASLParams;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
@@ -89,6 +94,90 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return sessionDTO;
     }
     
+    public String login(String kerberosLocation) throws LoginMyProxyException, CannotCreateNewUserException{
+        // Run klist to find out the username from the credential
+        long time = System.currentTimeMillis();
+        try{
+            Process p = (Runtime.getRuntime()).exec("env KRB5CCNAME="+kerberosLocation+" /usr/kerberos/bin/klist -c");
+            p.waitFor();
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader ebr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            
+            // Display output and search for principal name
+            String pname = null;
+            String line=br.readLine();
+            
+            while(line!=null) {
+                if(line.startsWith("Default principal:")) {
+                    pname = line.substring(19,line.indexOf("@"));
+                }
+                
+                line = br.readLine();
+            }
+            line=ebr.readLine();
+            
+            while(line!=null) {
+                
+                line = ebr.readLine();
+            }
+            
+            
+            log.trace("Klist returned "+line);
+            log.trace("Time taken (klist): "+(System.currentTimeMillis()-time)/1000+" seconds");
+            
+            if(pname==null) {
+                log.warn("Unable to find out users principal name");
+                throw new LoginMyProxyException("Unable to find out users principal name");
+            } else {
+                log.info("Principal name is: "+pname);
+            }
+            
+            // Download the proxy
+            GSSCredential cred = saslProxy( pname, kerberosLocation);
+            log.trace("Time taken (get proxy): "+(System.currentTimeMillis()-time)/1000+" seconds");
+            
+            if(cred==null) {
+                log.trace("Could not get credential from myproxy");
+                throw new Exception("Could not get credential from myproxy");
+            } else {
+                log.trace("Got a GSSCredential");
+                log.trace("Name: "+cred.getName());
+                String sid = insertSessionImpl(pname, cred);
+                log.trace("Time taken (insert): "+(System.currentTimeMillis()-time)/1000+" seconds");
+                
+                //add login event
+                eventLocal.sendEvent(sid,DPEvent.LOG_ON_KERBEROS,"Logged on via kerberos");
+                
+                return sid;
+            }
+        } catch(Exception e){
+            log.warn("Error with kerberos login",e);
+            throw new LoginMyProxyException("Error with kerberos login",e);
+        }
+    }
+    
+    private static GSSCredential saslProxy(String username, String keytab) throws  Exception {
+        
+        log.trace("Getting proxy now");
+        //TODO make configurable
+        String hostname="myproxy-sso.grid-support.ac.uk";
+        String realm = "FED.CCLRC.AC.UK";
+        String kdc = "FED.CCLRC.AC.UK";
+        int port=7513;
+        GSSCredential gsscredential = null;
+        //  CertUtil.init();
+        MyProxy myproxy = new MyProxy(hostname, port);
+        SASLParams params = new SASLParams(username);
+        params.setRealm(realm);
+        params.setLifetime(12*3600);
+        params.setKDC(kdc);
+        params.setKeytab(keytab);
+        log.trace("About to download proxy");
+        gsscredential = myproxy.getSASL(null, params);
+        log.trace("Got proxy");
+        return gsscredential;
+    }
+    
     public String login(String username,String password, int lifetime) throws LoginMyProxyException, CannotCreateNewUserException{
         log.debug("login(): " +sc.getCallerPrincipal() );
         // log.debug("login()" +sc.isCallerInRole("ANYONE") );
@@ -101,6 +190,14 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             ProxyServers proxyserver = lookup.getDefaultProxyServer();
             myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy(),
                     proxyserver.getProxyServerAddress(),proxyserver.getPortNumber(),proxyserver.getCaRootCertificate());
+            
+            String sid = insertSessionImpl(username, myproxy_proxy);
+            
+            //add login event
+            eventLocal.sendEvent(sid,DPEvent.LOG_ON,"Logged on");
+            
+            return sid;
+            
         } catch (MyProxyException mex) {
             log.warn("Error from myproxy server: "+mex.getMessage(),mex);
             throw new LoginMyProxyException(mex);
@@ -108,7 +205,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.warn("Unexpected error from myproxy: "+e.getMessage(),e);
             throw new LoginMyProxyException(e);
         }
-        return insertSessionImpl(username, myproxy_proxy);
+        
     }
     
     private String insertSessionImpl(String username, GSSCredential credential) throws LoginMyProxyException, CannotCreateNewUserException {
@@ -195,9 +292,6 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             em.persist(session);
             log.info("New session created for user: "+DN+" sid: "+sid);
             
-            //add login event
-            eventLocal.sendEvent(sid,DPEvent.LOG_ON,"Logged on");
-            
             return sid;
             
         } else {
@@ -265,6 +359,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             prefs.setResolution(userprefs.getResolution().toString());
             prefs.setResultsPerPage(userprefs.getResultsPerPage());
             prefs.setDefaultFacility(userprefs.getDefaultFacility());
+            prefs.setDefaultLocation(userprefs.getDefaultLocation().toString());
             prefs.setEmail(userprefs.getEmail());
             em.merge(prefs);
         }
@@ -288,7 +383,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         log.debug("Starting timer service");
         //in 30mins every 30 mins
         ts.createTimer(1000*60*30,1000*60*30);
-        
+        // ts.createTimer(1000*60*2,1000*60*2);
         //lookup default myproxy server
         
     }
