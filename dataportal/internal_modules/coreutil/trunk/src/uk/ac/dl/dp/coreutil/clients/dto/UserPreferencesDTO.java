@@ -11,6 +11,7 @@ package uk.ac.dl.dp.coreutil.clients.dto;
 
 import java.io.Serializable;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
+import uk.ac.dl.dp.coreutil.util.DPDefaultLocation;
 import uk.ac.dl.dp.coreutil.util.DPResolution;
 
 /**
@@ -20,22 +21,25 @@ import uk.ac.dl.dp.coreutil.util.DPResolution;
 public class UserPreferencesDTO implements Serializable {
     
     
-    private int resultsPerPage;    
+    private int resultsPerPage;
     
-    private String defaultFacility;    
+    private String defaultFacility;
     
     private DPResolution resolution;
     
     private String email;
     
+    private DPDefaultLocation defaultLocation;
+    
     private boolean emailSet;
     
-     public UserPreferencesDTO(){    
-         //set defaults
-          this.setResolution(DPResolution.res_1024x768);
-          this.setResultsPerPage(20);
-     }
-     
+    public UserPreferencesDTO(){
+        //set defaults
+        this.setResolution(DPResolution.res_1024x768);
+        this.setResultsPerPage(20);
+        this.setDefaultLocation(DPDefaultLocation.BASIC_SEARCH);
+    }
+    
     
     /** Creates a new instance of UserPreferencesSDTO */
     public UserPreferencesDTO(DpUserPreference prefs) {
@@ -45,11 +49,12 @@ public class UserPreferencesDTO implements Serializable {
         else  if(res.equals(DPResolution.res_1280x1024.toString())) resolution = DPResolution.res_1280x1024;
         else  if(res.equals(DPResolution.res_1280x768.toString())) resolution = DPResolution.res_1280x768;
         else  if(res.equals(DPResolution.res_1600x1200.toString())) resolution = DPResolution.res_1600x1200;
-        else resolution = DPResolution.res_1024x768;        
+        else resolution = DPResolution.res_1024x768;
         this.setResolution(resolution);*/
         
         this.setResolution(DPResolution.valueOf(prefs.getResolution()));
         this.setResultsPerPage(prefs.getResultsPerPage().intValue());
+        this.setDefaultLocation(DPDefaultLocation.valueOf(prefs.getDefaultLocation()));
         this.setEmail(prefs.getEmail());
     }
     
@@ -76,19 +81,27 @@ public class UserPreferencesDTO implements Serializable {
     public void setResolution(DPResolution resolution) {
         this.resolution = resolution;
     }
-
+    
     public String getEmail() {
         if(email == null ) return "";
         else return email;
     }
-
+    
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
     public boolean isEmailSet() {
-       if(getEmail().equals("") || getEmail() == null) return false;
-       else return true;
+        if(getEmail().equals("") || getEmail() == null) return false;
+        else return true;
+    }
+    
+    public DPDefaultLocation getDefaultLocation() {
+        return defaultLocation;
+    }
+    
+    public void setDefaultLocation(DPDefaultLocation defaultLocation) {
+        this.defaultLocation = defaultLocation;
     }
     
 }

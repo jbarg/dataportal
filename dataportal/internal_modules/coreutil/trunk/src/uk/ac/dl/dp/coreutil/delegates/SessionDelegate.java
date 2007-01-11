@@ -60,6 +60,10 @@ public class SessionDelegate {
         return  sb.login(username, password,lifetime);
     }
     
+    public String login(String kerberosLocation) throws   CannotCreateNewUserException, LoginMyProxyException{
+        return  sb.login(kerberosLocation);
+    }
+    
     public boolean logout(String sid) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException{
         return  sb.logout(sid);
     }

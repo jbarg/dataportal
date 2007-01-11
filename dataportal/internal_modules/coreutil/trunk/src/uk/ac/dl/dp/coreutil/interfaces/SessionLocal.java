@@ -35,5 +35,6 @@ public interface SessionLocal {
     
     public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException;
     
+    public String login(String kerberosLocation) throws LoginMyProxyException, CannotCreateNewUserException;
     
 }

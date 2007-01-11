@@ -32,9 +32,9 @@ public class DataPortalConstants {
     public static String MYPROXY_USERNAME = "glen";
     public static String MYPROXY_PASSWORD = "kkkkkk";
     
-        //allowd imageJ file types
+    //allowd imageJ file types
     public final static String[] IMAGEJ_TYPES = {"RAW","TIFF","JPEG","JPG","GIF","BMP","DICOM","FITS","PGM","ZIP","LUT","ROI","TEXT","TXT"};
-
+    
     
     //EJB Session names
     public final static String SESSION = "SessionEJB";
@@ -57,6 +57,6 @@ public class DataPortalConstants {
     
     //location of the keyword files
     public final static String KEYWORD_LOCATION= System.getProperty("java.io.tmpdir")+File.separator;
-     public final static String FILE_DOWNLOAD_LOCATION = System.getProperty("java.io.tmpdir")+File.separator+"downloads";
+    public final static String FILE_DOWNLOAD_LOCATION = System.getProperty("java.io.tmpdir")+File.separator+"downloads";
     public final static boolean LOCAL_EJB_REFS = false;
 }
