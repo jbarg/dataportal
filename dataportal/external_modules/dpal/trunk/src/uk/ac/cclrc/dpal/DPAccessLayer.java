@@ -198,9 +198,9 @@ public class DPAccessLayer {
         for(Investigation os : ial) {
             for(Investigation ns : result) {
                 //System.out.println("outer investigation:\t"+os.getName() + "\ninner investigation:\t" + ns.getName()) ;
-                if(os.getName().compareTo(ns.getName())==0){
-                    //we have a match - i.e. same investigation different keyword
-                    ns.addKeyword(os.getFirstKeyword()) ;
+                if(os.getId().equals(ns.getId())){
+                    //we have a match - i.e. same investigation different investigator
+                    ns.addInvestigator(os.getFirstInvestigator()) ;
                     exists = true ;
                 }
             }
@@ -322,7 +322,7 @@ public class DPAccessLayer {
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
             Investigation st = new Investigation() ;
-            Investogator itor = new Investigator() ; //each investigation may have multiple investigators.
+            Investigator itor = new Investigator() ; //each investigation may have multiple investigators.
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setVisitId(r.getString("VISIT_ID")) ;
@@ -370,7 +370,7 @@ public class DPAccessLayer {
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
             Investigation st = new Investigation() ;
-            Investogator itor = new Investigator() ; //each investigation may have multiple investigators.
+            Investigator itor = new Investigator() ; //each investigation may have multiple investigators.
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setVisitId(r.getString("VISIT_ID")) ;
@@ -415,7 +415,7 @@ public class DPAccessLayer {
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
             Investigation st = new Investigation() ;
-            Investogator itor = new Investigator() ; //each investigation may have multiple investigators.
+            Investigator itor = new Investigator() ; //each investigation may have multiple investigators.
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setVisitId(r.getString("VISIT_ID")) ;
@@ -447,7 +447,7 @@ public class DPAccessLayer {
         ArrayList<Investigation> inv_array = new ArrayList<Investigation>() ;
         while(r.next()) {
             Investigation st = new Investigation() ;
-            Investogator itor = new Investigator() ; //each investigation may have multiple investigators.
+            Investigator itor = new Investigator() ; //each investigation may have multiple investigators.
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setVisitId(r.getString("VISIT_ID")) ;

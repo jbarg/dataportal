@@ -25,7 +25,7 @@ public class Investigation extends Common implements Serializable {
         return this.investigators ;
     }
     
-    public String getFirstInvestigator() {
+    public Investigator getFirstInvestigator() {
         for (Investigator i : investigators){
             return i;
         }
