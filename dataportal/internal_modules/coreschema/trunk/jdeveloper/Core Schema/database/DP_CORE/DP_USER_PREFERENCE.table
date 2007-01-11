@@ -176,7 +176,7 @@
          </dataTypeUsage>
          <default/>
          <name>DEFAULT_LOCATION</name>
-         <notNull>false</notNull>
+         <notNull>true</notNull>
          <properties class="java.util.HashMap">
             <Item>
                <Key>Comment</Key>
@@ -200,7 +200,7 @@
          <properties class="java.util.HashMap">
             <Item>
                <Key>Comment</Key>
-               <Value> </Value>
+               <Value/>
             </Item>
             <Item>
                <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
