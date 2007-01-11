@@ -16,9 +16,11 @@ package uk.ac.dl.dp.coreutil.util;
 public enum DPEvent {
     
     LOG_ON("LOG_ON"),
+    LOG_ON_KERBEROS("LOG_ON_KERBEROS"),
     LOG_OFF("LOG_OFF"),
     DOWNLOAD("DOWNLOAD"),
     ADVANCED_SEARCH("ADVANCED_SEARCH"),
+    MYDATA_SEARCH("MYDATA_SEARCH"),
     BASIC_SEARCH("BASIC_SEARCH");
     
     DPEvent(String value) {

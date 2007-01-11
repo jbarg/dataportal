@@ -26,10 +26,10 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 public interface SessionRemote {
     
     
-   public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException;    
+    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException;
     
     public String login(String username,String password, int lifetime) throws CannotCreateNewUserException, LoginMyProxyException ;
-            
+    
     public Boolean isValid(String sid) throws SessionNotFoundException,SessionTimedOutException  ;
     
     public boolean logout(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException;
@@ -38,7 +38,7 @@ public interface SessionRemote {
     
     public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException;
     
+    public String login(String kerberosLocation) throws LoginMyProxyException, CannotCreateNewUserException;
     
-   
     
 }
