@@ -503,17 +503,17 @@ create or replace package body dpaccess as
 
 --
 
-    function getKeywordsById (inv_id in investigation.id%type)
+    function getKeywordsByInvestigationId (inv_id_array in num_array, fed_id in varchar2)
       RETURN types.ref_cursor
     is
       c_inv types.ref_cursor;
     begin
       OPEN c_inv FOR
-        select distinct lower(name) name
+        select distinct lower(name)as name, investigation_id 
         from keyword
-        where investigation_id = inv_id
+        where investigation_id in (select * from TABLE(cast(inv_id_array as NUM_ARRAY)))
         order by 1;
-
+        -- need the fed_id check
        RETURN c_inv;
     end getKeywordsById;
 
