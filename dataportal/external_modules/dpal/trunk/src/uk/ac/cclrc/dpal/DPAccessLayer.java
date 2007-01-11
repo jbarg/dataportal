@@ -266,6 +266,7 @@ public class DPAccessLayer {
             Keyword kw = new Keyword() ;
             kw.setId(r.getString("ID")) ;
             kw.setName(r.getString("NAME")) ;
+            kw.setInvestigationId(r.getString("INVESTIGATION_ID")) ;
             kw.setFacility(this.facility);
             keyword_array.add(kw) ;
         }
