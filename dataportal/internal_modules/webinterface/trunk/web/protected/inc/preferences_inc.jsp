@@ -62,6 +62,19 @@
                         <h:message for="resj_id_1" styleClass="error" showSummary="false" showDetail="true" />
                         
                         <h:outputLabel>
+                            <h:outputText styleClass="body" value="Default Location"/>
+                        </h:outputLabel>
+                        
+                        <h:selectOneMenu id="locationj_id_1" required="true" value="#{userPreferencesBean.defaultLocation}" >
+                            
+                            <f:selectItems value="#{userPreferencesBean.location}" />
+                            <f:validateLength minimum="1" />
+                            
+                        </h:selectOneMenu>
+                        
+                        <h:message for="locationj_id_1" styleClass="error" showSummary="false" showDetail="true" />
+                        
+                        <h:outputLabel>
                             <h:outputText styleClass="body" value="Email Address"/>
                         </h:outputLabel>
                         

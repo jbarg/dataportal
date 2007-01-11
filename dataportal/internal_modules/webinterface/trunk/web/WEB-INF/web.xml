@@ -3,7 +3,7 @@
     <description>debug web.xml</description>
     
     
-     
+    
     
     <!-- Use Documents Saved as *.xhtml -->	
     <!-- <context-param>
@@ -63,7 +63,7 @@
         <filter-class>uk.ac.dl.dp.web.util.AuthorisationFilter</filter-class>
     </filter>
     
-     <filter>
+    <filter>
         <filter-name>AuthorisationFilterAdmin</filter-name>
         <filter-class>uk.ac.dl.dp.web.util.AuthorisationFilterAdmin</filter-class>
     </filter>
@@ -89,7 +89,7 @@
         
     </filter-mapping>
     
-      <filter-mapping>
+    <filter-mapping>
         <filter-name>AuthorisationFilterAdmin</filter-name>
         <url-pattern>/admin/*</url-pattern>
         <url-pattern>/faces/admin/*</url-pattern>
@@ -119,30 +119,43 @@
         <servlet-class>uk.ac.dl.dp.web.util.DownloadServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-     <servlet>
-        <servlet-name>DownloadRemoveServlet</servlet-name>
-        <servlet-class>uk.ac.dl.dp.web.util.DownloadRemoveServlet</servlet-class>
+    <servlet>
+        <servlet-name>LogonKerberosServlet</servlet-name>
+        <servlet-class>uk.ac.dl.dp.web.util.LogonKerberosServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>DownloadRemoveServlet</servlet-name>
+        <servlet-class>uk.ac.dl.dp.web.util.DownloadRemoveServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+      
+    
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.faces</url-pattern>
     </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
-        <url-pattern>/servlet/DownloadServlet</url-pattern>
-        
+        <url-pattern>/servlet/DownloadServlet</url-pattern>        
     </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>DownloadRemoveServlet</servlet-name>
-        <url-pattern>/servlet/DownloadRemoveServlet</url-pattern>
-        
+        <url-pattern>/servlet/DownloadRemoveServlet</url-pattern>        
     </servlet-mapping>
-       
+    
+    <servlet-mapping>
+        <servlet-name>LogonKerberosServlet</servlet-name>
+        <url-pattern>/servlet/LogonKerberosServlet</url-pattern>        
+    </servlet-mapping>
+    
     
     <session-config>
         <session-timeout>
@@ -155,7 +168,7 @@
         </welcome-file>
     </welcome-file-list>
     
-  
+    
     
     
 </web-app>

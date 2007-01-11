@@ -99,6 +99,12 @@
         <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
     
+     <managed-bean>
+        <managed-bean-name>investigationMyDataBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationMyDataBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>        
+    </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>investigationTree</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationTree</managed-bean-class>
@@ -173,7 +179,27 @@
             <from-outcome>LOGIN_FAILURE</from-outcome>
             <to-view-id>/logon.jsp</to-view-id>
             <redirect />            
-        </navigation-case>    
+        </navigation-case>  
+        
+          <navigation-case>
+            <from-outcome>LOGIN_SUCCESS_DATA_REFS</from-outcome>
+            <to-view-id>/protected/data_center.jsp</to-view-id>
+            <redirect />            
+        </navigation-case>  
+        
+          <navigation-case>
+            <from-outcome>LOGIN_SUCCESS_BOOKMARKS</from-outcome>
+            <to-view-id>/protected/bookmark.jsp</to-view-id>
+            <redirect />            
+        </navigation-case>  
+        
+          <navigation-case>
+            <from-outcome>LOGIN_SUCCESS_MYDATA</from-outcome>
+            <to-view-id>/protected/investigations.jsp</to-view-id>
+            <redirect />            
+        </navigation-case>  
+        
+         
     </navigation-rule>
     
     <navigation-rule>
