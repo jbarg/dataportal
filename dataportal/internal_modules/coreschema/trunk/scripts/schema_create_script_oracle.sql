@@ -194,7 +194,7 @@ ID NUMBER NOT NULL,
 USER_ID NUMBER,
 RESULTS_PER_PAGE NUMBER,
 DEFAULT_FACILITY VARCHAR2(4000),
-DEFAULT_LOCATION VARCHAR2(4000),
+DEFAULT_LOCATION VARCHAR2(4000) NOT NULL,
 PROXY_SERVER_ID NUMBER,
 RESOLUTION VARCHAR2(256),
 EMAIL VARCHAR2(4000),
@@ -741,15 +741,11 @@ COMMENT ON COLUMN DP_USER.USER_ID IS 'e.g. can store the fed-id of the user or t
 COMMENT ON COLUMN DP_USER_PREFERENCE.DEFAULT_LOCATION IS 'show the default result page when user logs in for example all data hierarchy for the investigations that the user has been involved with '
 ;
 
-COMMENT ON COLUMN DP_USER_PREFERENCE.PROXY_SERVER_ID IS ' '
-;
-
 COMMENT ON COLUMN DP_USER_PREFERENCE.EMAIL IS 'e-mail address of the user'
 ;
 
 COMMENT ON COLUMN DP_USER_ROLE.USER_ID IS 'weak entity, many to many mapping table'
 ;
-
 
 
 
