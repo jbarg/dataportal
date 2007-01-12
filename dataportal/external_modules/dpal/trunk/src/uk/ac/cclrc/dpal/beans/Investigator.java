@@ -28,10 +28,6 @@ public class Investigator extends Common implements Serializable {
         
         
     }
-
-    public boolean isInitialsNull(){
-        return (initials == null || initials.equals("")) ? true : false;
-    }
     
 }
 

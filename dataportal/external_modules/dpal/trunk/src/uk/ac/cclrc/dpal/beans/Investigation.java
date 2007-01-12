@@ -7,6 +7,7 @@ public class Investigation extends Common implements Serializable {
     //bean begins
     private String investigationType = null ;
     private String investigationAbstract = null ;
+    private String visitId = null ;
     //using the following as it supresses duplicates(just in case)
     private LinkedHashSet<Investigator> investigators = new LinkedHashSet<Investigator>() ;
     
@@ -31,6 +32,10 @@ public class Investigation extends Common implements Serializable {
         }
         return null ;
     }
+
+    public String getVisitId() {
+       return this.visitId ;
+    }
     
     
     //adders - none bean but neeeded
@@ -45,6 +50,10 @@ public class Investigation extends Common implements Serializable {
     
     public void setInvestigationAbstract(String investigationAbstract) {
         this.investigationAbstract=investigationAbstract ;
+    }
+
+    public void setVisitId(String visit_id) {
+       this.visitId=visit_id ;
     }
     
     
@@ -61,6 +70,7 @@ public class Investigation extends Common implements Serializable {
         
         return "[name]:"+getName()+
                 " [id]:"+getId()+
+                " [visit id]:"+visitId+
                 " [type]:"+investigationType+
                 " [abstract]:"+investigationAbstract+
                 " [facility]:"+getFacility()+

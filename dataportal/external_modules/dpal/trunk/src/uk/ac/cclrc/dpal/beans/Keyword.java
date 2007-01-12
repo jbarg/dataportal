@@ -14,7 +14,7 @@ public class Keyword extends Common implements Serializable
     }
 
     public void setInvestigationId(String inv_id) {
-        this.investigation_id = inv_id;
+        this.investigationId = inv_id;
     }
 
 
