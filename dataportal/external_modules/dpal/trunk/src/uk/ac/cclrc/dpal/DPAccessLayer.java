@@ -188,8 +188,8 @@ public class DPAccessLayer {
     }
     
     ////////////////////////////////////////////////////////////
-    //special method for GetStudies to supress duplicates where multiple studies might be attached
-    //to specific keywords - we only really want one and the keyword being put in the beans list
+    //special method for getInvestigations* to supress duplicates where multiple investigations might be attached
+    //with specific investigators - we only really want one investigation and the investigators being put in the beans list
     public ArrayList<Investigation> MergeDuplicateInvestigations(ArrayList<Investigation> ial) {
         ArrayList<Investigation> result = new ArrayList<Investigation>() ;
         
