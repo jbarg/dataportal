@@ -95,5 +95,9 @@ public class Investigation extends Common implements Serializable {
     public String getDpId(){
        return getFacility()+"-"+getId();
    }
+    
+    public boolean isInvestigatorsNull(){
+          return (investigators == null || investigators.size() == 0) ? true : false; 
+    }
 }
 
