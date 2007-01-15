@@ -15,7 +15,6 @@ import uk.ac.cclrc.dpal.enums.* ;
 
 //for the dpaccesslayer code
 import uk.ac.cclrc.dpal.* ;
-
  
 public class TestDPAccessLayerIsis
 {
@@ -26,30 +25,32 @@ public class TestDPAccessLayerIsis
      ArrayList<String> keyword_list  = new ArrayList<String>() ;
      ArrayList<String> inv_id_list   = new ArrayList<String>() ;
      ArrayList<String> ds_id_list    = new ArrayList<String>() ;
+     ArrayList<String> key_list      = new ArrayList<String>() ;
 
      //for results
      ArrayList<Investigation> r_i_l = null ;
      ArrayList<DataSet> r_d_l = null ;
      ArrayList<DataFile> r_f_l = null ;
+     ArrayList<Keyword> r_k_l = null ;
 
      //init the dp access layer
      String db_host = "elektra.dl.ac.uk";
      String db_port = "1521";
      String db_sid = "minerva2" ;
-     String db_user = "icatisis_dev" ;
+     String db_user = "icatisis" ;
      String db_pass = "ihave4name" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
                              "(CONNECT_DATA=(SID="+db_sid+")))";
 
      DPAccessLayer dpal = new DPAccessLayer("isis", dbConnectString, db_user, db_pass) ;
-System.out.println(dbConnectString);
+     System.out.println(dbConnectString);
      //use command line for keywords if supplied
      if (args.length == 0)
      {
         //funny case to test the automatic case insensitivety of the searches
-     //   keyword_list.add("BirMingHam") ;
-        keyword_list.add("raW") ;
+        keyword_list.add("raw") ;
+        keyword_list.add("edinb") ;
      }
      else
      {
@@ -58,20 +59,59 @@ System.out.println(dbConnectString);
            keyword_list.add(args[i]) ;
         }
      }
+     //other vairables needed
+     String fed_id="20340-20340" ;
+
+     //extra setup for investigation functions
+     inv_id_list.add("761") ; 
+     inv_id_list.add("762") ; 
+     inv_id_list.add("763") ; 
     
      try
      {
          System.out.println("---") ;
-         System.out.println("-") ;
+         System.out.println("-Testing Investigation Functions-") ;
          //////
-         System.out.println("The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
-         r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.OR ) ;
+
+         System.out.println("The list of Investigations for the federal id "+fed_id+":") ;
+         r_i_l = dpal.getMyInvestigations(fed_id) ;
+         for(Investigation i : r_i_l) {
+            System.out.println("\t"+i.toString()) ;
+         }
+
+         System.out.println("The list of Investigations for the investigation_ids "+inv_id_list.toString()+":") ;
+         r_i_l = dpal.getInvestigationsById(inv_id_list, "DN") ;
+         for(Investigation i : r_i_l) {
+            System.out.println("\t"+i.toString()) ;
+         }
+
+         System.out.println("AND FUZZY - The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
+         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.AND, true ) ;
+         for(Investigation i : r_i_l) System.out.println("\t"+i) ;
+         System.out.println("-") ;
+
+         System.out.println("AND NOT-FUZZY - The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
+         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.AND, false ) ;
+         for(Investigation i : r_i_l) System.out.println("\t"+i) ;
+         System.out.println("-") ;
+
+         System.out.println("OR FUZZY - The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
+         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.OR, true ) ;
+         for(Investigation i : r_i_l) System.out.println("\t"+i) ;
+         System.out.println("-") ;
+         
+         //remove testing id's
+         inv_id_list.clear() ;
+         System.out.println("OR NOT-FUZZY - The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
+         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.OR, false ) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;  //note beans.toString methods are overridden
             inv_id_list.add(i.getId()) ;
          }
          System.out.println("-") ;
          //////
+         System.out.println("-Testing Dataset Functions-") ;
+
          System.out.println("The list of DATASETS for the investigation_ids"+inv_id_list.toString()+":") ;
         // inv_id_list.remove(0);
          r_d_l = dpal.getDataSets(inv_id_list, "DN") ;
@@ -81,39 +121,28 @@ System.out.println(dbConnectString);
          }
          System.out.println("-") ;
          //////
+         System.out.println("-Testing Datafile Functions-") ;
+
          System.out.println("The list of DATAFILES for the dataset_ids"+ds_id_list.toString()+":") ;
          r_f_l = dpal.getDataFiles(ds_id_list, "DN") ;
          for(DataFile df : r_f_l) {
             System.out.println("\t"+df.toString()) ;
          }
-         System.out.println("---") ;
+        
+         System.out.println("-Testing Misc Functions-") ;
+
+         inv_id_list.clear() ;
+         inv_id_list.add("761") ; 
+         inv_id_list.add("762") ; 
+         inv_id_list.add("763") ; 
+         System.out.println("The list of keywords for the investigation_ids"+inv_id_list.toString()+":") ;
+         r_k_l = dpal.getKeywordsByInvestigationId(inv_id_list, fed_id) ; //does not check fed-id yet
+         for(Keyword kw : r_k_l) System.out.println("\t"+kw) ;
+         
+
+
+         System.out.println("---End of Tests---") ;
          //////
-         System.out.println("---MISC Tests---") ;
-         //////setup
-         inv_id_list.add("20") ; 
-         inv_id_list.add("21") ; 
-         inv_id_list.add("22") ; 
-         r_i_l = null ;
-         //////
-         ArrayList<String> k_l = new ArrayList<String>() ;
-         k_l.add("Edinburgh") ;
-         System.out.println("The list of Investigations linked to Edinburgh"+k_l.toString()+":") ;
-         r_i_l = dpal.getInvestigations(k_l, "DN", LogicalOperator.AND) ;
-         for(Investigation i : r_i_l) {
-            System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden
-         }
-         //////
-         System.out.println("The list of Investigations for the investigation_ids "+inv_id_list.toString()+":") ;
-         r_i_l = dpal.getInvestigationsById(inv_id_list, "DN") ;
-         for(Investigation i : r_i_l) {
-            System.out.println("\t"+i.toString()) ;
-         }
-         //////
-         System.out.println("The list of Investigations linked to all the keywords"+keyword_list.toString()+":") ;
-         r_i_l = dpal.getInvestigations(keyword_list, "DN", LogicalOperator.AND) ;
-         for(Investigation i : r_i_l) {
-            System.out.println("\t"+i.toString()) ; //note beans.toString methods are overridden
-         }
 
          //test disconnection code
          dpal.disconnectFromDB() ;
