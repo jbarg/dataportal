@@ -332,7 +332,9 @@ public class DPAccessLayer {
             itor.setName(r.getString("FACILITY_USER")) ;
             itor.setRole(r.getString("USER_ROLE")) ;
             itor.setFacility(this.facility) ;
-            st.addInvestigator(itor) ;
+            if(itor.getName() != null) {
+               st.addInvestigator(itor) ;
+            }
             st.setFacility(this.facility);
             inv_array.add(st) ;
         }
@@ -380,7 +382,9 @@ public class DPAccessLayer {
             itor.setName(r.getString("FACILITY_USER")) ;
             itor.setRole(r.getString("USER_ROLE")) ;
             itor.setFacility(this.facility) ;
-            st.addInvestigator(itor) ;
+            if(itor.getName() != null) {
+               st.addInvestigator(itor) ;
+            }
             st.setFacility(this.facility);
             inv_array.add(st) ;
         }
@@ -425,7 +429,9 @@ public class DPAccessLayer {
             itor.setName(r.getString("FACILITY_USER")) ;
             itor.setRole(r.getString("USER_ROLE")) ;
             itor.setFacility(this.facility) ;
-            st.addInvestigator(itor) ;
+            if(itor.getName() != null) {
+               st.addInvestigator(itor) ;
+            }
             st.setFacility(this.facility);
             inv_array.add(st) ;
         }
@@ -457,7 +463,9 @@ public class DPAccessLayer {
             itor.setName(r.getString("FACILITY_USER")) ;
             itor.setRole(r.getString("USER_ROLE")) ;
             itor.setFacility(this.facility) ;
-            st.addInvestigator(itor) ;
+            if(itor.getName() != null) {
+               st.addInvestigator(itor) ;
+            }
             st.setFacility(this.facility);
             inv_array.add(st) ;
         }
