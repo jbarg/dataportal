@@ -439,7 +439,7 @@ public class DPAccessLayer {
     public ArrayList<Investigation> getMyInvestigations(String fed_id) throws SQLException {
         log.debug("getMyInvestigations()");
 
-        String query = "begin ? := dpaccess.getInvestigationsById('"+fed_id+"'); end;";
+        String query = "begin ? := dpaccess.getInvestigations('"+fed_id+"'); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.execute();
