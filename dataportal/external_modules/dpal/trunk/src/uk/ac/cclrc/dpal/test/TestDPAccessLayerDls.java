@@ -73,7 +73,7 @@ public class TestDPAccessLayerDls
          System.out.println("-Testing Investigation Functions-") ;
          //////
 
-         System.out.println("The list of Investigations for the federal id "+fed_id":") ;
+         System.out.println("The list of Investigations for the federal id "+fed_id+":") ;
          r_i_l = dpal.getMyInvestigations(fed_id) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;
