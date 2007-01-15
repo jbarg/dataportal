@@ -5,6 +5,10 @@ calling test function
 java uk.ac.cclrc.dpal.TestDPAccessLayer
 time java -Xms256m -Xmx512m uk.ac.cclrc.dpal.TestDPAccessLayerKeywords > output.txt
 
+ java uk.ac.cclrc.dpal.test.TestDPAccessLayerDls
+ java uk.ac.cclrc.dpal.test.TestDPAccessLayerIsis
+ java uk.ac.cclrc.dpal.test.TestDPAccessLayerEmin
+ java uk.ac.cclrc.dpal.test.TestDPAccessLayerEmat
 
 
 --------------------------------
