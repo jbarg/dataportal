@@ -2,6 +2,8 @@ package uk.ac.cclrc.dpal.beans;
 
 import java.util.LinkedHashSet;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Investigation extends Common implements Serializable {
     //bean begins
@@ -20,6 +22,14 @@ public class Investigation extends Common implements Serializable {
     
     public String getInvestigationAbstract() {
         return this.investigationAbstract ;
+    }
+    
+    public Collection<Investigator> getListOfInvestigators() {
+        Collection<Investigator> investigatorsCollection = new ArrayList<Investigator>();
+        for (Investigator i : investigators){
+            investigatorsCollection.add(i);
+        }
+        return investigatorsCollection ;
     }
     
     public LinkedHashSet getInvestigators() {
