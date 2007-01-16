@@ -1,18 +1,19 @@
 
 package uk.ac.dl.dp.coreutil.interfaces;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import javax.ejb.Remote;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
+import uk.ac.cclrc.dpal.beans.Keyword;
 
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
 
@@ -21,7 +22,7 @@ import uk.ac.cclrc.dpal.enums.LogicalOperator;
  */
 @Remote
 public interface QueryRemote {
-    public QueryRequest queryByKeyword(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalOperator) throws QueryException,SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
+    public QueryRequest query(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalOperator, boolean fuzzy, DPQueryType queryType) throws QueryException,SessionNotFoundException, UserNotFoundException, SessionTimedOutException;
     
     public boolean isFinished(QueryRequest request);
     
@@ -31,11 +32,14 @@ public interface QueryRemote {
     
     public Collection<String> getCompleted(QueryRequest request);
     
- //   public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException;
+    //   public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException;
     
     public Collection<Investigation> getInvestigationById(String sid, String fac, String investigationId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException;
     
-  //  public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
+      public Collection<Keyword> getKeywordsByInvestigationId(String sid,  Collection<Investigation> investigastionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException;
+  
+         
+    //  public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
     
     // public Collection<DataSet> getDataSets(String sid, String[][] investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException;
     
