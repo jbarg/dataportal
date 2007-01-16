@@ -10,6 +10,8 @@
 <a4j:region   selfRendered="true" > 
     <h:form>
         
+          <a4j:poll id="poll" actionListener="#{investigationBean.getKeywordsForInvestigations}" interval="1000" reRender="data, poll" ajaxSingle="true"  enabled="#{!investigationBean.keywordDone}" />
+                
         <%--   <a4j:poll id="poll" actionListener="#{investigationBean.checkSearchComplete}" interval="1000" reRender="poll,scroll_1,process,searchedTree,data" ajaxSingle="true" enabled="#{!investigationBean.finished}" />
 --%>
         <table style="margin-top:-90px" width="90%" border="0">
@@ -185,6 +187,8 @@
                 </f:facet>
                 <h:outputText  value="#{invest.name}" />
                 
+                
+                
             </h:column>
             <h:column>
                 <f:facet name="header">
@@ -198,13 +202,13 @@
                         <%--  </c:if>--%>
                     </a4j:commandLink>
                 </f:facet>
-                          
-                  <h:outputText  value="#{fn:toLowerCase(invest.investigationType)}" />               
+                
+                <h:outputText  value="#{fn:toLowerCase(invest.investigationType)}" />               
             </h:column>
             <h:column>
                 <f:facet name="header">
-                   <h:panelGrid columns="2" >
-                       
+                    <h:panelGrid columns="2" >
+                        
                         <a4j:commandLink reRender="data"  id="abstract" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
                             <h:outputText style="font-weight:bold; " value="Abstract" />
                             <f:param name="column" value="abstract"/>
@@ -225,7 +229,7 @@
                             <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
                         </a4j:commandLink> 
                         
-                  </h:panelGrid>        
+                    </h:panelGrid>        
                 </f:facet>
                 
                 
@@ -256,6 +260,76 @@
             
             <h:column>
                 
+                <f:facet name="header" />
+                
+                <t:popup  styleClass="popup"   closePopupOnExitingElement="true"
+                          closePopupOnExitingPopup="true"
+                          displayAtDistanceX="15"
+                          displayAtDistanceY="-40" >
+                    <t:graphicImage rendered="#{!invest.investigatorsNull}" url="../../images/person.png" border="0" />
+                    
+                    <f:facet name="popup">
+                        
+                        <t:dataTable  id="investigationPIs" styleClass="standardTable_ColumnCenter, standardTable_ColumnCenter,standardTable_ColumnCenter" var="investigatorspis" value="#{invest.listOfInvestigators}">
+                            
+                            <h:column>                    
+                                <f:facet name="header">
+                                    <h:outputText style="font-size: 10px" value="Investigators" />
+                                </f:facet>
+                                
+                                <h:outputText style="font-size: 10px" value="#{investigatorspis.name}" />
+                            </h:column>     
+                            
+                            <h:column>   
+                                <f:facet name="header">
+                                    <h:outputText style="font-size: 10px; " value="Federal ID" />
+                                </f:facet>
+                                <h:outputText style="font-size: 10px" value="#{investigatorspis.id}" />
+                            </h:column>     
+                            
+                            <h:column>    
+                                <f:facet name="header">
+                                    <h:outputText style="font-size: 10px" value="Role" />
+                                </f:facet>
+                                <h:outputText style="font-size: 10px" value="#{investigatorspis.role}" />
+                            </h:column>     
+                            
+                        </t:dataTable> 
+                        
+                    </f:facet>
+                </t:popup>
+            </h:column>
+            
+             <h:column>
+                
+                <f:facet name="header" />
+                
+                <t:popup  styleClass="popup"   closePopupOnExitingElement="true"
+                          closePopupOnExitingPopup="true"
+                          displayAtDistanceX="15"
+                          displayAtDistanceY="-40" >
+                    <t:graphicImage  url="../../images/Key.jpg" border="0" />
+                    
+                    <f:facet name="popup">
+                        
+                        <t:dataTable  id="investigationKeywords" styleClass="standardTable_ColumnCenter, standardTable_ColumnCenter,standardTable_ColumnCenter" var="investkeywords" value="#{invest.keywords}">
+                            
+                            <h:column>                    
+                                <f:facet name="header">
+                                    <h:outputText style="font-size: 10px" value="Keywords" />
+                                </f:facet>
+                                
+                                <h:outputText style="font-size: 10px" value="#{investkeywords}" />
+                            </h:column>   
+                            
+                        </t:dataTable> 
+                        
+                    </f:facet>
+                </t:popup>
+            </h:column>
+            
+            <h:column>
+                
                 <f:facet name="header">
                     <h:panelGrid columns="2" >
                         <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="selectAll" rendered="#{visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectNone}">           
@@ -277,14 +351,43 @@
                 </h:selectBooleanCheckbox>
             </h:column>
             
+            
             <f:facet name="detailStamp">                
                 <t:dataTable preserveSort="true" width="95%" id="investigationAbstract" styleClass="standardTable_Column" var="abstract" value="#{invest.investigationAbstract}">
                     
                     <h:column>
                         <h:outputText style="font-size:12px;" value="#{invest.investigationAbstract}" />
-                    </h:column>   
+                    </h:column> 
+                    <h:column>
+                        <%--   <t:popup styleClass="popup"   closePopupOnExitingElement="true"
+                                 closePopupOnExitingPopup="true"
+                                 displayAtDistanceX="5"
+                                 displayAtDistanceY="-40" >
+                            <t:graphicImage url="../../images/help.gif" border="0" />
+                            &nbsp;&nbsp;&nbsp;
+                            <f:facet name="popup">
+                                fgdfgdfgdfgd
+                                 <t:dataTable preserveSort="true" width="95%" id="investigationPIs" styleClass="standardTable_Column" var="investigatorspis" value="#{invest.listOfInvestigators}">
+                            <h:column>                    
+                                
+                                
+                                <h:outputText style="font-size: 10px" value="#{investigatorspis.name}" />
+                            </h:column>     
+                            <h:column>                
+                                <h:outputText style="font-size: 10px" value="#{investigatorspis.role}" />
+                            </h:column>     
+                            <h:column>                
+                                <h:outputText style="font-size: 10px" value="#{investigatorspis.id}" />
+                            </h:column>     
+                        </t:dataTable> 
+                        
+                            </f:facet>
+                        </t:popup>--%>
+                    </h:column> 
                     
-                </t:dataTable>                
+                </t:dataTable>   
+                
+                
             </f:facet>            
         </t:dataTable>
         

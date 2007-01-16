@@ -115,7 +115,7 @@
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Exact keyword match only. Case insensititve."/>                                 
+                            <%-- <h:outputText value="Exact keyword match only. Case insensititve."/>   --%>
                             <h:outputText value="Auto Complete enabled."/>                                 
                             <h:outputText value="This list is not a full list of all the possible keywords."/>                                 
                             
@@ -134,10 +134,10 @@
                 <h:outputText value="Type:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-            <h:selectOneRadio style="font-size:14px" id="radio" value="#{searchBean.logicalExpression}" >
+       <%--    <h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
+           <h:selectOneRadio style="font-size:14px" id="radio" value="#{searchBean.logicalExpression}" >
                 <f:selectItems value="#{searchBean.logicalExpressions}"/>              
-            </h:selectOneRadio>           
+            </h:selectOneRadio>         
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
@@ -149,7 +149,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="'AND' type searches returns all results"/>                                 
-                            <h:outputText escape="true" value=" that contain all the keywords, i.e. google."/> 
+                            <h:outputText escape="true" value=" that contain all the keywords, i.e. default Google behaviour."/> 
                             <h:outputText value="'OR' type searches returns all results"/>                             
                             <h:outputText  escape="true" value="that contain atleast one of the keywords."/>  
                         </h:panelGrid>
@@ -161,14 +161,45 @@
             <h:panelGroup/>
             
             <h:panelGroup/>
+            
+            <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
+           <h:selectOneRadio style="font-size:14px" id="like" value="#{searchBean.likeExpression}" >
+                <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
+                <f:selectItem itemLabel="Like"  itemValue="LIKE" />
+            </h:selectOneRadio>       
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="'Exact' type searches returns all results"/>                                 
+                            <h:outputText escape="true" value=" that exactly match the keyword."/> 
+                            <h:outputText value="'Like' type searches returns all results"/>                             
+                            <h:outputText  escape="true" value="that contain party matches keywords."/>  
+                            <h:outputText  escape="true" value="I.e. oxygen would return results with oxygens as a keyword."/>              
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            
+            <h:panelGroup/>
+            
+            
+            <h:panelGroup/>
             <h:panelGrid columns="3">
                 <h:commandButton id="f" action="#{searchBean.searchByKeyword}" onclick="busyBox.Show();" title="Search" value="Search"/>
                 <h:panelGroup>&nbsp;</h:panelGroup>
                 <h:commandButton id="own" action="#{searchBean.searchOwnData}" immediate="true" onclick="busyBox.Show();" title="View own" value="View own data"/>
                 
             </h:panelGrid>
-              <h:panelGroup/>
-                <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
         </h:panelGrid>
         
         <%--  <h:panelGrid  border="0" columns="2">   
