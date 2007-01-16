@@ -19,15 +19,13 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
 import javax.faces.component.*;
-import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.*;
+import uk.ac.cclrc.dpal.beans.Keyword;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
@@ -47,6 +45,7 @@ public class InvestigationBean extends SortableList {
     private List<Investigation> investigations;
     private boolean expanded = false;
     private boolean finished;
+    private boolean keywordDone = false;
     
     public InvestigationBean(){
         super("name");
@@ -153,7 +152,7 @@ public class InvestigationBean extends SortableList {
                 invest.setSelected(!invest.isSelected());
                 log.trace("setting " +invest.isSelected()+" for "+invest.getId());
             }
-        }       
+        }
     }
     
     //listens for sort column action events, and gets the column by thge param name passed in
@@ -334,6 +333,69 @@ public class InvestigationBean extends SortableList {
         return NavigationConstants.GET_DATASETS_SUCCESS;
     }
     
+    public void getKeywordsForInvestigations(ActionEvent event){
+        if(isKeywordDone()){
+            log.trace("Already done keyword investigation search");
+            return ;
+        }
+        
+        //check if already done search  on vist data
+        Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
+        
+        outerLoop: for(Investigation investigation : investigations){
+            Collection<String> keywords = investigation.getKeywords();
+            if(keywords != null ){
+                for(String keyword : keywords){
+                    if(keyword.equals("Initialising keywords")){
+                        break outerLoop;
+                    }                   
+                    else {
+                        log.trace("These investigations have already got keywords");
+                        return ;
+                    }
+                }
+            }
+        }
+        
+        log.debug("getKeywordsForInvestigations()");
+        //set keyword done
+        setKeywordDone(true);
+        
+       
+        Collection<Keyword> keywords = null;
+        try{
+            keywords = QueryDelegate.getInstance().getKeywordsByInvestigationId(getVisit().getSid(),investigations);
+            
+            for(Investigation investigation : investigations){
+                for(Keyword keyword : keywords){
+                    if(investigation.getId().equals(keyword.getInvestigationId())){
+                        log.trace("Adding keyword "+keyword+" to investigation "+investigation.getId());
+                        if(investigation.getKeywords().contains("Initialising keywords")){
+                            log.trace("Resetting keywords for "+investigation.getId());
+                            investigation.reset();
+                        }
+                        investigation.addKeyword(keyword.getName());
+                    }
+                }
+            }
+            
+        } catch (DataPortalException ex) {
+            for(Investigation investigation : investigations){
+                investigation.addKeyword("Unable to initialise keywords.");
+            }
+            // error("Error: Unable to gets Data Sets.");
+            log.error("Unable to search for investigation keywords",ex);
+        } catch (Exception ex) {
+            for(Investigation investigation : investigations){
+                investigation.addKeyword("Unable to initialise keywords.");
+            }
+            //error("Error: Unexpected error getting Data Sets.");
+            log.error("Unable to search for investigation keywords",ex);
+        }
+        
+        
+    }
+    
     public boolean isExpanded() {
         return expanded;
     }
@@ -342,7 +404,7 @@ public class InvestigationBean extends SortableList {
         this.expanded = expanded;
     }
     
-    //for sorting columns
+//for sorting columns
     private boolean is(String column){
         if(getSort().equals(column) && isAscending()) return true;
         else return false;
@@ -399,6 +461,14 @@ public class InvestigationBean extends SortableList {
     
     public boolean isNotTime(){
         return isNot("time");
+    }
+    
+    public boolean isKeywordDone() {
+        return keywordDone;
+    }
+    
+    public void setKeywordDone(boolean keywordDone) {
+        this.keywordDone = keywordDone;
     }
     
 }
