@@ -12,7 +12,12 @@ public class Investigation extends Common implements Serializable {
     private String visitId = null ;
     //using the following as it supresses duplicates(just in case)
     private LinkedHashSet<Investigator> investigators = new LinkedHashSet<Investigator>() ;
-    private Collection<String> keywords;      
+    private Collection<String> keywords = new ArrayList<String>();
+    
+    {
+        //initialise
+        keywords.add("Initialising keywords");
+    }
     
     //getters
     public String getInvestigationType() {
@@ -100,11 +105,20 @@ public class Investigation extends Common implements Serializable {
     }
 
     public Collection<String> getKeywords() {
+        if(keywords == null) keywords = new ArrayList<String>();
         return keywords;
     }
 
     public void setKeywords(Collection<String> keywords) {
         this.keywords = keywords;
+    }
+    
+    public void addKeyword(String keyword){
+        getKeywords().add(keyword);
+    }    
+    
+    public void reset(){
+        setKeywords(new ArrayList<String>());
     }
 }
 
