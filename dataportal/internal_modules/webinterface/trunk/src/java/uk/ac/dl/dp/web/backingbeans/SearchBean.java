@@ -22,6 +22,7 @@ import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
+import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
@@ -40,7 +41,10 @@ public class SearchBean extends AbstractRequestBean {
     private List<String> facilities ;
     
     //default it to AND
-    private String  logicalExpression ="AND";
+    private String logicalExpression ="AND";
+    
+    //default to EXACT
+    private String likeExpression = "EXACT";
     
     private List<SelectItem> logicalExpressions;
     
@@ -105,7 +109,7 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.queryByKeyword(getVisit().getSid(), new String[2] ,getVisitData().getCurrentSelectedFacilities(), LogicalOperator.AND);
+            query_request = qd.query(getVisit().getSid(), new String[2], getVisitData().getCurrentSelectedFacilities(), LogicalOperator.AND, false, DPQueryType.MYDATA);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -136,7 +140,7 @@ public class SearchBean extends AbstractRequestBean {
         
         log.trace("searching all facilities :"+getVisit().getSession().getFacilities().size());
         
-        List<String> facilities = new ArrayList<String>();
+        Collection<String> facilities = new ArrayList<String>();
         for(FacilityDTO fac : getVisit().getSession().getFacilities()){
             facilities.add(fac.getFacility());
             log.trace(fac.getFacility());
@@ -145,7 +149,7 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.queryByKeyword(getVisit().getSid(), new String[]{"hrpd"} , facilities , LogicalOperator.AND);
+            query_request = qd.query(getVisit().getSid(), new String[2], facilities, LogicalOperator.AND, false, DPQueryType.MYDATA);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -184,10 +188,13 @@ public class SearchBean extends AbstractRequestBean {
         LogicalOperator type = LogicalOperator.AND;
         if(getLogicalExpression().equals("OR") ) type = LogicalOperator.OR;
         
+        boolean fuzzy = false;
+        if(getLikeExpression().equals("LIKE")) fuzzy = true;
+        
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.queryByKeyword(getVisit().getSid(), getKeywords(),getVisitData().getCurrentSelectedFacilities(), type);
+            query_request = qd.query(getVisit().getSid(), getKeywords(),getVisitData().getCurrentSelectedFacilities(), type, fuzzy, DPQueryType.KEYWORD);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -332,6 +339,14 @@ public class SearchBean extends AbstractRequestBean {
     public void setLogicalExpression(String logicalExpression) {
         log.trace("Setting loca expression: "+logicalExpression);
         this.logicalExpression = logicalExpression;
+    }
+    
+    public String getLikeExpression() {
+        return likeExpression;
+    }
+    
+    public void setLikeExpression(String likeExpression) {
+        this.likeExpression = likeExpression;
     }
     
     

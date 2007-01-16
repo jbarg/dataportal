@@ -335,7 +335,7 @@ public class DataCenterBean extends SortableList {
         log.trace("viewing studyId: "+qrdto.getInvestigationId());
         Collection<Investigation> investigations = null;
         try {
-            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
+            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));                      
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
             error("Error:  Unable to search for "+qrdto.getName());
@@ -346,6 +346,10 @@ public class DataCenterBean extends SortableList {
             return null;
         }
         
+        if(investigations == null){
+            log.warn("Insufficent funds to view investigation.");
+            return null;
+        }        
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
         //remove request info
