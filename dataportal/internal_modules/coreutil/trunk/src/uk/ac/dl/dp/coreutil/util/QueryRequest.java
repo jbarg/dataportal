@@ -32,6 +32,8 @@ public class QueryRequest implements Serializable{
     private String DN;
     private DPQueryType qt;
     private LogicalOperator logicalOperator;
+    private boolean fuzzy;   
+    private String federalID;
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
@@ -125,6 +127,20 @@ public class QueryRequest implements Serializable{
         this.logicalOperator = logicalOperator;
     }
 
- 
+    public boolean isFuzzy() {
+        return fuzzy;
+    }
+
+    public void setFuzzy(boolean fuzzy) {
+        this.fuzzy = fuzzy;
+    }
+  
+    public String getFederalID() {
+        return federalID;
+    }
+
+    public void setFederalID(String federalID) {
+        this.federalID = federalID;
+    }
     
 }
