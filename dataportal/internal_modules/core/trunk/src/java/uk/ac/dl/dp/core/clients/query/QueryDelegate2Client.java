@@ -20,6 +20,7 @@ import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.delegates.TransferDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
+import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
@@ -69,7 +70,7 @@ public class QueryDelegate2Client {
             printTime("lookup again");
             try {
                 //start download
-                queryRequest = dd.queryByKeyword(sid,keywords,facs, LogicalOperator.AND);
+                queryRequest = dd.query(sid,keywords,facs, LogicalOperator.AND,false,DPQueryType.KEYWORD);
                 printTime("quering ...");
             } catch (Exception ex) {
                 log.fatal("Download error ",ex);

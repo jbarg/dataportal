@@ -140,7 +140,37 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
     public void timeoutQueryManager(Timer timer) {
         log.info("Timeout occurred: timeoutQueryManager()");
         Collection<Collection<QueryRecord>> ccqr = QueryManager.getAll();
+        // TODO need to remove and change this
         
+      /*  TRACE: 15-01-07 14:12 QueryManager.java:132 - Removing 322ade6e-840f-4bf4-b634-251c40d425b5
+EJB5018: An exception was thrown during an ejb invocation on [TimerServiceBean]
+javax.ejb.EJBException
+        at com.sun.ejb.containers.BaseContainer.processSystemException(BaseContainer.java:3730)
+        at com.sun.ejb.containers.BaseContainer.completeNewTx(BaseContainer.java:3630)
+        at com.sun.ejb.containers.BaseContainer.postInvokeTx(BaseContainer.java:3431)
+        at com.sun.ejb.containers.BaseContainer.postInvoke(BaseContainer.java:1247)
+        at com.sun.ejb.containers.BaseContainer.callEJBTimeout(BaseContainer.java:2729)
+        at com.sun.ejb.containers.EJBTimerService.deliverTimeout(EJBTimerService.java:1387)
+        at com.sun.ejb.containers.EJBTimerService.access$100(EJBTimerService.java:86)
+        at com.sun.ejb.containers.EJBTimerService$TaskExpiredWork.run(EJBTimerService.java:1938)
+        at com.sun.ejb.containers.EJBTimerService$TaskExpiredWork.service(EJBTimerService.java:1934)
+        at com.sun.ejb.containers.util.WorkAdapter.doWork(WorkAdapter.java:62)
+        at com.sun.corba.ee.impl.orbutil.threadpool.ThreadPoolImpl$WorkerThread.run(ThreadPoolImpl.java:479)
+Caused by: java.util.ConcurrentModificationException
+        at java.util.LinkedHashMap$LinkedHashIterator.nextEntry(LinkedHashMap.java:373)
+        at java.util.LinkedHashMap$ValueIterator.next(LinkedHashMap.java:388)
+        at uk.ac.dl.dp.core.sessionbeans.session.TimerServiceBean.timeoutQueryManager(TimerServiceBean.java:144)
+        at uk.ac.dl.dp.core.sessionbeans.session.TimerServiceBean.startTimeouts(TimerServiceBean.java:100)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+        at java.lang.reflect.Method.invoke(Method.java:597)
+        at com.sun.enterprise.security.application.EJBSecurityManager.runMethod(EJBSecurityManager.java:1050)
+        at com.sun.enterprise.security.SecurityUtil.invoke(SecurityUtil.java:165)
+        at com.sun.ejb.containers.BaseContainer.invokeTargetBeanMethod(BaseContainer.java:2766)
+        at com.sun.ejb.containers.BaseContainer.callEJBTimeout(BaseContainer.java:2698)
+        ... 6 more
+       */
         for(Collection<QueryRecord> cqr : ccqr){
             QueryRecord qr = cqr.iterator().next();
             //get Sid
@@ -197,7 +227,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
                 log.error("Unable to send download keyword message to fac "+mod.getFacility(),e);
             }
         }
-        //close the connections to the queue        
+        //close the connections to the queue
         try {
             if(session != null) session.close();
             if(connection != null)   connection.close();

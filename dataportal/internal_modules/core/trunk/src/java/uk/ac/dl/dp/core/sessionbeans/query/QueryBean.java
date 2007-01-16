@@ -33,12 +33,16 @@ import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
+import uk.ac.cclrc.dpal.beans.Keyword;
 
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
+import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.coreutil.interfaces.QueryRemote;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceLocal;
+import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
@@ -71,6 +75,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     @EJB
     EventLocal eventLocal;
     
+    @EJB
+    LookupLocal lookupLocal;
+    
     @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
     private  ConnectionFactory connectionFactory;
     
@@ -78,7 +85,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     private  Queue queue;
     
     @PermitAll
-    public QueryRequest queryByKeyword(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+    public QueryRequest query(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy, DPQueryType queryType) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
         log.debug("queryByKeyword()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
@@ -116,6 +123,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
                 
                 // here we create NewsEntity, that will be sent in JMS message
                 q_request = new QueryRequest();
+                q_request.setFuzzy(fuzzy);
+                
                 q_request.setId(search_id);
                 q_request.setFacility(fac);
                 q_request.setFacilities(facilities);
@@ -124,7 +133,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
                 q_request.setDN(user.getDn());
                 q_request.setKeyword(keyword);
                 q_request.setSent(new Timestamp(System.currentTimeMillis()));
-                q_request.setQt(DPQueryType.KEYWORD);
+                q_request.setQt(queryType);
+                q_request.setFederalID(user.getUserId());
                 if(logicalex == null) {
                     q_request.setLogicalOperator(LogicalOperator.AND);
                 } else {
@@ -340,7 +350,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             try {
                 log.trace("new DPAccessLayer(fac): "+fac);
                 dpal = new DPAccessLayer(fac);
-                returneddatasets = dpal.getDataSets(investigation_id, user.getDn());
+                returneddatasets = dpal.getDataSets(investigation_id, user.getUserId());
                 log.debug("Returned size: "+returneddatasets.size());
                 datasets.addAll(returneddatasets);
             } catch (Exception ex) {
@@ -481,7 +491,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         try {
             dpal = new DPAccessLayer(fac);
             
-            r_i_l = dpal.getInvestigationsById(investigations, user.getDn());
+            r_i_l = dpal.getInvestigationsById(investigations, user.getUserId());
             
         } catch (Exception ex) {
             log.error("Unable to search Investigations ids: ",ex);
@@ -492,8 +502,64 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         return r_i_l;
     }
     
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Collection<Keyword> getKeywordsByInvestigationId(String sid, Collection<Investigation> investigastions) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
+        log.debug("getKeywordsByInvestigationId(String sid)");
+        Collection<Keyword> r_i_l = new ArrayList<Keyword>() ;
+        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        //TODO check for nulls
+        
+        User user =  new UserUtil(sid,em).getUser();
+        
+        DPAccessLayer dpal = null;
+        Collection<Keyword> keywords = new ArrayList<Keyword>() ;
+        
+        //get a list of facilites
+        Collection<ModuleLookup> facilities = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+        
+        for(ModuleLookup facs : facilities){
+            ArrayList<String> investigationIds = new ArrayList<String>();
+            try {
+                
+                //get from the list the list from this facility
+                
+                for(Investigation invest : investigastions){
+                    if(invest.getFacility().equals(facs.getFacility())){
+                        investigationIds.add(invest.getId());
+                    }
+                }
+                
+                if(!investigationIds.isEmpty()){
+                    log.debug("searching "+facs.getFacility()+" for investigations keywords");
+                    
+                    dpal = new DPAccessLayer(facs.getFacility());
+                    Collection<Keyword> returnedKeywords = dpal.getKeywordsByInvestigationId(investigationIds, user.getUserId());
+                    keywords.addAll(returnedKeywords);
+                }
+                
+                
+            } catch (Exception ex) {
+                log.error("Unable to search Investigations for keywords from facility: "+facs.getFacility(),ex);
+                //throw new QueryException("Unable to search Investigations for keywords from facility: "+facs.getFacility() ",ex);
+                //add erro message to investigation
+                
+                for(String id : investigationIds){
+                    Keyword keyword = new Keyword();
+                    keyword.setId(id);
+                    keyword.setName("Unable to initialise keywords.");                    
+                    keywords.add(keyword);
+                    
+                    keywords.add(keyword);
+                }
+            } finally{
+                if(dpal != null) dpal.disconnectFromDB();
+            }
+        }
+        return keywords;
+    }
+    
     public String[] getKeywords(String facility, boolean redownload) throws Exception {
-         //load stuff from file
+        //load stuff from file
         File keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+facility+".keyworddata");
         
         if(!keywordFile.exists()){
@@ -515,7 +581,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
     
     
     public String[] getKeywords(String facility) throws Exception{
-       return getKeywords(facility,true);
+        return getKeywords(facility,true);
         
     }
 }
