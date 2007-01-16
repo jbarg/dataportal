@@ -97,7 +97,7 @@ public class Investigation extends Common implements Serializable {
     }
     
     public boolean isInvestigatorsNull(){
-        if(getFirstInvestigator().getName() == null) return false;
+        if(getFirstInvestigator() != null && getFirstInvestigator().getName() == null) return true;
         return (investigators == null || investigators.size() == 0) ? true : false;
     }
 }

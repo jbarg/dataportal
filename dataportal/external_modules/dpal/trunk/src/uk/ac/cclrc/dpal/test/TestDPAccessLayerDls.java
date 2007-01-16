@@ -60,12 +60,12 @@ public class TestDPAccessLayerDls
         }
      }
      //other vairables needed
-     String fed_id="20340-20340" ;
+     String fed_id="glen" ;
 
      //extra setup for investigation functions
-     inv_id_list.add("761") ; 
-     inv_id_list.add("762") ; 
-     inv_id_list.add("763") ; 
+     inv_id_list.add("948") ; 
+    // inv_id_list.add("762") ; 
+     //inv_id_list.add("763") ; 
     
      try
      {
