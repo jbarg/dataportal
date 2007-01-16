@@ -21,6 +21,7 @@ import javax.jms.ObjectMessage;
 import org.apache.log4j.Logger;
 import uk.ac.cclrc.dpal.DPAccessLayer;
 import uk.ac.cclrc.dpal.beans.Investigation;
+import uk.ac.cclrc.dpal.enums.LogicalOperator;
 
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -99,7 +100,20 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                     for(String keyword : e.getKeywords()){
                         keywords.add(keyword);
                     }
-                    r_i_l =  dpal.getInvestigations(keywords,e.getDN(),e.getLogicalLogicalOperator());
+                    if(e.getLogicalLogicalOperator().toString().equals(LogicalOperator.AND.toString())){
+                        log.trace("Searching type: AND, fuzzy: "+e.isFuzzy());
+                        r_i_l =  dpal.getInvestigationsAnd(keywords,e.getFederalID(),e.isFuzzy());
+                    } else if(e.getLogicalLogicalOperator().toString().equals(LogicalOperator.OR.toString())){
+                        log.trace("Searching type: OR, fuzzy: "+e.isFuzzy());
+                        r_i_l =  dpal.getInvestigationsOr(keywords,e.getFederalID(),e.isFuzzy());
+                    }
+                    
+                    log.trace("Finished searching for investigations");
+                }
+                
+                else if(e.getQt() == DPQueryType.MYDATA){
+                    log.trace("Searching type: MyData");
+                    r_i_l =  dpal.getMyInvestigations(e.getFederalID());
                     log.trace("Finished searching for investigations");
                 }
                 
