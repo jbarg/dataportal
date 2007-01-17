@@ -37,7 +37,7 @@ public class TestDPAccessLayerDls
      String db_host = "elektra.dl.ac.uk";
      String db_port = "1521";
      String db_sid = "minerva2" ;
-     String db_user = "icatdls_dev" ;
+     String db_user = "icatdls" ;
      String db_pass = "ihave4name" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
@@ -60,12 +60,12 @@ public class TestDPAccessLayerDls
         }
      }
      //other vairables needed
-     String fed_id="glen" ;
+     String fed_id="20340-20340" ;
 
      //extra setup for investigation functions
-     inv_id_list.add("948") ; 
-    // inv_id_list.add("762") ; 
-     //inv_id_list.add("763") ; 
+     inv_id_list.add("761") ; 
+     inv_id_list.add("762") ; 
+     inv_id_list.add("763") ; 
     
      try
      {
@@ -132,9 +132,9 @@ public class TestDPAccessLayerDls
          System.out.println("-Testing Misc Functions-") ;
 
          inv_id_list.clear() ;
-         inv_id_list.add("761") ; 
-         inv_id_list.add("762") ; 
-         inv_id_list.add("763") ; 
+         inv_id_list.add("114080") ; 
+         inv_id_list.add("114079") ; 
+         inv_id_list.add("114078") ; 
          System.out.println("The list of keywords for the investigation_ids"+inv_id_list.toString()+":") ;
          r_k_l = dpal.getKeywordsByInvestigationId(inv_id_list, fed_id) ; //does not check fed-id yet
          for(Keyword kw : r_k_l) System.out.println("\t"+kw) ;
