@@ -22,6 +22,7 @@ public class DownloadConstants {
     public final static String DATASET_IN_FOLDERS = "DATA_SET_IN_FOLDERS";
     public final static String IMAGEJ = "IMAGEJ";
     public final static String DATA_FILE = "DATA_FILE";
+     public final static String DATA_FILE_AS_REF = "FILE";
     public final static String DATA_FILE_FOLDER = "DATA_FILE_IN_FOLDERS";
     
     //from
