@@ -10,7 +10,7 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
 --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
+"http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
     <head>
@@ -19,50 +19,9 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
         <script language="javascript" src="../css/download.js"></script>
         <title>Downloading... </title>
-          
+        
         <script>
-           function remove(){
-            var close = <%= request.getParameter("close")%>;
-               
-           // window.location.href="close.html";
-           
-            if(BrowserDetect.browser == "Explorer"){
-                //windows does not shut it, retry and it works???
-                //setTimeout("nothing()", 100);
-                self.close();
-                setTimeout("remove()", 150);
-                
-            }
-            else if(BrowserDetect.browser == "Netscape" && BrowserDetect.version == "Moziila"){
-                //netscape 4      
-                parent.window.close();
-            }  
-            else if(BrowserDetect.browser == "Firefox"){
-            //firefox
-                if(BrowserDetect.OS == "Windows"){
-                    //windows shuts the save/download diolog box aswell
-
-                    document.getElementById('button').value = "Close";
-                    document.getElementById('progressBar_percentageText').style.display = "none";             
-                    document.getElementById('progressBar_FinishedText').style.display = "block";
-
-                    document.getElementById('downloading').style.display = "none";
-                    document.getElementById('downloaded').style.display = "block";
-
-                    document.getElementById('progressBar_portionComplete').style.background = "#00FF00";
-                    document.getElementById('progressBar_portionRemaining').style.background = "#00FF00";
-
-                }
-                else {
-                    parent.window.close();
-                }
-
-                else {
-                    //other
-                    parent.window.close();
-                }
-                
-            }
+     
             
             function close(){
                window.location.href-"close.html";
@@ -70,11 +29,12 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             
             function nothing(){
                //do nothing
+               //alert("nothing");
             }
             
             function Func1Delay()
             {
-           
+          // alert("setTimeout");
                 //sleep two seconds
                 setTimeout("remove()", 1500);
             }
@@ -86,36 +46,68 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
                 setTimeout(window.close(), 500);
             }
             
+            function remove(){
+           
+                if(BrowserDetect.browser == "Firefox"){
+                //firefox
+                    if(BrowserDetect.OS == "Windows"){
+                        //windows shuts the save/download diolog box aswell
+
+                        document.getElementById('button').value = "Close";
+                        document.getElementById('progressBar_percentageText').style.display = "none";             
+                        document.getElementById('progressBar_FinishedText').style.display = "block";
+
+                        document.getElementById('downloading').style.display = "none";
+                        document.getElementById('downloaded').style.display = "block";
+
+                        document.getElementById('progressBar_portionComplete').style.background = "#00FF00";                        
+                        document.getElementById('progressBar_portionRemaining').style.background = "#00FF00";
+                        
+                        document.getElementById('progressBar_portionComplete').width = "100";
+                        document.getElementById('progressBar_portionRemaining').width = "0";
+
+                    }
+
+                    else {
+                         window.location.href="../protected/close.html";
+                    }
+                }
+
+                else {    
+                    window.location.href="../protected/close.html";
+                }        
+            }
+            
         </script>
-      
+        
         <style>
             .bpui_progressbar_barAreaContainer {
             border-style: groove !important;
             border-width: medium !important;
             }
-    
+            
             .bpui_progressbar_portionComplete {
             background: #FF0000 !important;
             }
-
+            
             .bpui_progressbar_portionRemaining {
             background: #C8C8C8 !important;
             }    
             .bpui_progressbar_barAreaContainer {
             }
-
+            
             .bpui_progressbar_barArea {
             height: 18px;
             }
-
+            
             .bpui_progressbar_portionComplete {
             background: #00FF00;
             }
-
+            
             .bpui_progressbar_portionRemaining {
             background: #D9E6EC;
             }
-
+            
             .bpui_progressbar_percentageText {
             text-align: center;
             }
@@ -123,30 +115,30 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
             body {
             background: #E8E8E8 !important;
             }
-
+            
         </style>        
     </head>
-    <body  onload="Func1Delay();">
+    <body onload="Func1Delay()" >
         <br />  
-
+      
         <table align="center" id="progressBar_barAreaContainer" width="90%"><tbody>
-     
-            <tr>
-                <td align="center">
-                    <div id="downloading"> <font size="2">Downloading:</font> <%= request.getParameter("name") %></div>
-                    <div id="downloaded" style="display:none"> <font size="2">Downloaded:</font>   <%= request.getParameter("name") %></div>
-                </td>  
-            </tr>
-        </tbody>     
+                
+                <tr>
+                    <td align="center">
+                        <div id="downloading"> <font size="2">Downloading:</font> <%= request.getParameter("name") %></div>
+                        <div id="downloaded" style="display:none"> <font size="2">Downloaded:</font>   <%= request.getParameter("name") %></div>
+                    </td>  
+                </tr>
+            </tbody>     
         </table>
         <br />
         <%
-            String percent = request.getParameter("percentage") ;
-            String ID = request.getParameter("url") ;
-            
-            if(percent == null){
-                percent = "0";
-            }
+        String percent = request.getParameter("percentage") ;
+        String ID = request.getParameter("url") ;
+        
+        if(percent == null){
+            percent = "0";
+        }
         %>  
         
         
@@ -160,11 +152,11 @@ on Libraries node in Projects view can be used to add the JSTL 1.1 library.
         <br />
         <table align="center">
             <tr>
-            <td align="right"> 
-                <form method="post" action="../servlet/DownloadRemoveServlet?ID=<%=ID %>">
-                    <input id="button" type="Submit"  value="Cancel" onclick="submit();  "/>
-                </form>
-            </td>
+                <td align="right"> 
+                    <form method="post" action="../servlet/DownloadRemoveServlet?ID=<%=ID %>">
+                        <input id="button" type="Submit"  value="Cancel" onclick="submit();  "/>
+                    </form>
+                </td>
             </tr>
         </table>
         <%-- <TABLE border=0 width='<%= percent %>%' bgcolor='red'>

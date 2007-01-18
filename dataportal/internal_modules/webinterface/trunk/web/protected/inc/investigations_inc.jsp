@@ -10,8 +10,9 @@
 <a4j:region   selfRendered="true" > 
     <h:form>
         
-          <a4j:poll id="poll" actionListener="#{investigationBean.getKeywordsForInvestigations}" interval="1000" reRender="data, poll" ajaxSingle="true"  enabled="#{!investigationBean.keywordDone}" />
-                
+        <%--  <h:outputText id="h" value="#{investigationBean.keywordDone}"  />--%>
+        <a4j:poll id="poll" actionListener="#{investigationBean.getKeywordsForInvestigations}" interval="500" reRender="h,data, poll" ajaxSingle="true"  enabled="#{!investigationBean.keywordDone}" />
+        
         <%--   <a4j:poll id="poll" actionListener="#{investigationBean.checkSearchComplete}" interval="1000" reRender="poll,scroll_1,process,searchedTree,data" ajaxSingle="true" enabled="#{!investigationBean.finished}" />
 --%>
         <table style="margin-top:-90px" width="90%" border="0">
@@ -60,6 +61,7 @@
                                                                                     
                                                                                 </h:panelGroup>
                                                                             </f:facet>
+                                                                            
                                                                             <f:facet name="hfoo1-folder">
                                                                                 <h:panelGroup>
                                                                                     <f:facet name="expand22h">
@@ -265,7 +267,7 @@
                 <t:popup  styleClass="popup"   closePopupOnExitingElement="true"
                           closePopupOnExitingPopup="true"
                           displayAtDistanceX="15"
-                          displayAtDistanceY="-40" >
+                          displayAtDistanceY="-60" >
                     <t:graphicImage rendered="#{!invest.investigatorsNull}" url="../../images/person.png" border="0" />
                     
                     <f:facet name="popup">
@@ -300,28 +302,26 @@
                 </t:popup>
             </h:column>
             
-             <h:column>
+            <h:column>
                 
                 <f:facet name="header" />
                 
                 <t:popup  styleClass="popup"   closePopupOnExitingElement="true"
                           closePopupOnExitingPopup="true"
                           displayAtDistanceX="15"
-                          displayAtDistanceY="-40" >
+                          displayAtDistanceY="-60" >
                     <t:graphicImage  url="../../images/Key.jpg" border="0" />
                     
                     <f:facet name="popup">
                         
-                        <t:dataTable  id="investigationKeywords" styleClass="standardTable_ColumnCenter, standardTable_ColumnCenter,standardTable_ColumnCenter" var="investkeywords" value="#{invest.keywords}">
+                        <t:dataTable id="investigationKeywords" styleClass="standardTable_ColumnCenter, standardTable_ColumnCenter,standardTable_ColumnCenter" var="investkeywords" value="#{invest.keywords}">
                             
-                            <h:column>                    
+                            <t:column colspan="4" >                    
                                 <f:facet name="header">
                                     <h:outputText style="font-size: 10px" value="Keywords" />
-                                </f:facet>
-                                
+                                </f:facet>                                
                                 <h:outputText style="font-size: 10px" value="#{investkeywords}" />
-                            </h:column>   
-                            
+                            </t:column>                               
                         </t:dataTable> 
                         
                     </f:facet>
