@@ -215,7 +215,7 @@
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="text90" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     
-                                    <f:param name="id" value="#{node.identifier}"/>               
+                                    <f:param name="id" value="#{node.identifier}"/>             
                                 </h:commandLink>
                                 
                                 <h:outputText id="text891" value=" (#{node.childCount-3})" styleClass="childCount" rendered="#{!empty node.children}"/>
@@ -477,12 +477,11 @@
                         
                         <f:facet name="dataset-folder">
                             <h:panelGroup>
-                                <f:facet name="expand">
+                              
                                     <t:graphicImage id="gr99" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
-                                </f:facet>
-                                <f:facet name="collapse">
+                                
                                     <t:graphicImage id="gr98" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                                </f:facet>
+                              
                                 <h:commandLink onclick="download('#{node.identifier}','DATA_SET','DATA_SETS'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="text90" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />

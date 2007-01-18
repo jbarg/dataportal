@@ -84,8 +84,8 @@
                                                     <h:outputText value="                  " />
                                                     <h:outputText value="                  " />
                                                     
-                                                    <h:commandLink  rendered="#{!data.dataset}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
-                                                        <t:graphicImage value="../../images/document.png" border="0"/>                                   
+                                                    <h:commandLink title="Download via ImageJ" rendered="#{!data.dataset}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
+                                                        <t:graphicImage title="Download via ImageJ" value="../../images/document.png" border="0"/>                                   
                                                     </h:commandLink>
                                                     
                                                 </h:panelGrid>
@@ -288,7 +288,7 @@
                                             
                                             <f:facet name="detailStamp">
                                                 
-                                                <t:dataTable preserveSort="true" rendered="#{data.dataset}" width="55%" id="cities" columnClasses="standardTable_Column,standardTable_Column"
+                                                  <t:dataTable preserveSort="true" rendered="#{data.dataset}" width="55%" id="cities" columnClasses="standardTable_Column,standardTable_Column"
                                                              styleClass="standardTable_Column" var="url" value="#{data.urls}">
                                                     <h:column>
                                                         &nbsp;&nbsp; &nbsp;&nbsp;
@@ -325,9 +325,7 @@
                                                     </h:column>   
                                                     
                                                 </t:dataTable>
-                                                
-                                            </f:facet>
-                                            
+                                            </f:facet>                                           
                                             
                                         </t:dataTable>
                                         
