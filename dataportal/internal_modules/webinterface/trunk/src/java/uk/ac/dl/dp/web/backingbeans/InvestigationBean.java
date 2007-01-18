@@ -334,10 +334,15 @@ public class InvestigationBean extends SortableList {
     }
     
     public void getKeywordsForInvestigations(ActionEvent event){
+        
+        
         if(isKeywordDone()){
             log.trace("Already done keyword investigation search");
             return ;
         }
+        
+        //set keyword done
+        setKeywordDone(true);
         
         //check if already done search  on vist data
         Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
@@ -348,9 +353,9 @@ public class InvestigationBean extends SortableList {
                 for(String keyword : keywords){
                     if(keyword.equals("Initialising keywords")){
                         break outerLoop;
-                    }                   
-                    else {
-                        log.trace("These investigations have already got keywords");
+                    } else {
+                        setKeywordDone(true);
+                        // log.trace("These investigations have already got keywords");
                         return ;
                     }
                 }
@@ -358,10 +363,8 @@ public class InvestigationBean extends SortableList {
         }
         
         log.debug("getKeywordsForInvestigations()");
-        //set keyword done
-        setKeywordDone(true);
         
-       
+        
         Collection<Keyword> keywords = null;
         try{
             keywords = QueryDelegate.getInstance().getKeywordsByInvestigationId(getVisit().getSid(),investigations);
@@ -375,18 +378,32 @@ public class InvestigationBean extends SortableList {
                             investigation.reset();
                         }
                         investigation.addKeyword(keyword.getName());
+                        
+                        //check if more than 25 keywords returned
+                        //if so add more.. tag and stop.
+                        //TODO fine a way of displaying all keywords, ISIS, some have more than 3000
+                        //diamond about 12
+                        if(investigation.getKeywords().size() > 24){
+                            log.trace("More than 24 keywords");
+                            investigation.addKeyword("more ...");
+                            break;
+                        }
                     }
+                    
+                    
                 }
             }
             
         } catch (DataPortalException ex) {
             for(Investigation investigation : investigations){
+                investigation.reset();
                 investigation.addKeyword("Unable to initialise keywords.");
             }
             // error("Error: Unable to gets Data Sets.");
             log.error("Unable to search for investigation keywords",ex);
         } catch (Exception ex) {
             for(Investigation investigation : investigations){
+                investigation.reset();
                 investigation.addKeyword("Unable to initialise keywords.");
             }
             //error("Error: Unexpected error getting Data Sets.");

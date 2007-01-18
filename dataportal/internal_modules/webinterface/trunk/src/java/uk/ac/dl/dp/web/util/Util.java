@@ -100,7 +100,7 @@ public class Util {
         BufferedReader in = null;
         BufferedWriter out = null;
         InetAddress host = InetAddress.getLocalHost();
-        String hostURL = "http://"+host.getHostAddress()+":"+sreq.getServerPort()+contextPath+"/web-start/"+createDate();
+        String hostURL = sreq.getScheme()+"://"+host.getHostAddress()+":"+sreq.getServerPort()+contextPath+"/web-start/"+createDate();
         try {
             in = new BufferedReader(new FileReader(file));
             out = new BufferedWriter(new FileWriter(webStartFile));
@@ -191,13 +191,13 @@ public class Util {
     }
     
     public static String getSRBHost(String[] urls) throws MalformedURLException{
-        String host1 = urls[0].toLowerCase().replace("srb","http");
+        String host1 = urls[0].toLowerCase().replace("srb://","http://");
         return new URL(host1).getHost();
     }
     
     public static int getSRBPort(String[] urls){
         try {
-            String host1 = urls[0].toLowerCase().replace("srb","http");
+            String host1 = urls[0].toLowerCase().replace("srb://","http://");
             int port = new URL(host1).getPort();
             if(port == -1){
                 log.info("Port set to nothing in "+urls[0]+" setting to default: " +DownloadConstants.DEFAULT_SRB_PORT);

@@ -100,6 +100,16 @@ public class DownloadServlet extends HttpServlet {
                 name = file.getName();
                 srbUrl = new String[]{file.getUrl()};
                 
+               //this is when a file is a data ref
+            } else if(TYPE.startsWith(DownloadConstants.DATA_FILE_AS_REF)){
+                DataReference file = visit.getVisitData().getDataReferenceFromCart(ID);
+                DpId = file.getDpId();
+                name = file.getName();
+                for(Url url : file.getUrls()){
+                    srbUrl = new String[]{url.getUrl()};
+                    break;
+                }                
+                
                 //this will get DATASETS and DATASETINFOLDER types
             } else if(TYPE.startsWith(DownloadConstants.DATA_SET)){
                 DataReference file = visit.getVisitData().getDataReferenceFromCart(ID);
@@ -199,7 +209,7 @@ public class DownloadServlet extends HttpServlet {
                 
                 man.setSRBFile(srbUrl);
                 
-                if(TYPE.startsWith(DPUrlRefType.FILE.toString())) {
+                if(TYPE.startsWith(DownloadConstants.DATA_FILE.toString()) || TYPE.startsWith(DownloadConstants.DATA_FILE_AS_REF.toString())) {
                     man.setZipeFile(false);
                 } else {
                     man.setZipeFile(true);
