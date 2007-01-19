@@ -16,13 +16,13 @@ END;
 -- package spec:
 create or replace package dpaccess as
     function getKeywords (dn in varchar2) RETURN types.ref_cursor;
-    function getKeywordsByInvestigationId (inv_id_array in num_array, fed_id in VARCHAR2) RETURN types.ref_cursor;
+    function getKeywordsByInvestigationId (inv_id_array in num_array, fed_id in VARCHAR2, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
     function getInvestigationsOr (keyword_array in vc_array, fed_id in varchar2, limit_num IN INTEGER DEFAULT 500, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
     function getInvestigationsAnd (keyword_array in vc_array, fed_id in varchar2, limit_num IN INTEGER DEFAULT 500, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
     function getInvestigationsAnd1 (keyword_array in vc_array, fed_id in varchar2) RETURN types.ref_cursor;
     function getInvestigationsById (inv_id_array in num_array, fed_id in varchar2, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
-    function getDataSets (inv_id_array in num_array, fed_id in varchar2) RETURN types.ref_cursor;
-    function getDataFiles (ds_id_array in num_array, fed_id in varchar2) RETURN types.ref_cursor;
+    function getDataSets (inv_id_array in num_array, fed_id in varchar2, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
+    function getDataFiles (ds_id_array in num_array, fed_id in varchar2, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
     function getInvestigationsOrFuz (keyword_array in vc_array, fed_id in varchar2, limit_num IN INTEGER DEFAULT 500, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
     function getInvestigationsAndFuz (keyword_array in vc_array, fed_id in varchar2, limit_num IN INTEGER DEFAULT 500, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
     function getInvestigations (fed_id in varchar2, limit_num IN INTEGER DEFAULT 500, use_fed_security IN BOOLEAN DEFAULT TRUE) RETURN types.ref_cursor;
@@ -271,10 +271,14 @@ create or replace package body dpaccess as
 
 --
 
-    function  getDataSets (inv_id_array in num_array, fed_id in varchar2)
+    function  getDataSets (inv_id_array in num_array,
+                           fed_id in varchar2,
+                           use_fed_security IN BOOLEAN DEFAULT TRUE)
        RETURN types.ref_cursor
     is
        c_ds types.ref_cursor;
+       l_fed_id facility_user.federal_id%type
+        := case when use_fed_security then fed_id else '%' end;
     begin
        OPEN c_ds FOR
              select d.name as name,d.id as id, d.dataset_status as dataset_status,d.description as description,
@@ -287,7 +291,7 @@ create or replace package body dpaccess as
                 select g.investigation_id
                   from investigator g, facility_user f
                   where f.facility_user_id = g.facility_user_id
-                  and f.federal_id = fed_id)
+                  and f.federal_id like l_fed_id)
                or investigation_id not in (
                 select investigation_id from investigator)
                );
@@ -297,10 +301,14 @@ create or replace package body dpaccess as
 
 --
 
-    function getDataFiles (ds_id_array in num_array, fed_id in varchar2)
+    function getDataFiles (ds_id_array in num_array,
+                           fed_id in varchar2,
+                           use_fed_security IN BOOLEAN DEFAULT TRUE)
        RETURN types.ref_cursor
     is
        c_df types.ref_cursor;
+       l_fed_id facility_user.federal_id%type
+        := case when use_fed_security then fed_id else '%' end;
     begin
        OPEN c_df FOR
         select d.name as name, d.id as id, d.location as uri, d.dataset_id as dataset_id
@@ -314,7 +322,7 @@ create or replace package body dpaccess as
                 select g.investigation_id
                   from investigator g, facility_user f
                   where f.facility_user_id = g.facility_user_id
-                  and f.federal_id = fed_id)
+                  and f.federal_id like l_fed_id)
                or investigation_id not in (
                 select investigation_id from investigator)
           );
@@ -524,7 +532,9 @@ create or replace package body dpaccess as
 
 --
 
- function getKeywordsByInvestigationId (inv_id_array in num_array, fed_id in varchar2)
+ function getKeywordsByInvestigationId (inv_id_array in num_array,
+                                        fed_id in varchar2,
+                                        use_fed_security IN BOOLEAN DEFAULT TRUE)
       RETURN types.ref_cursor
     is
       c_inv types.ref_cursor;

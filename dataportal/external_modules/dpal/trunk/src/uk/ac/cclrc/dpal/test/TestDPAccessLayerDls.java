@@ -80,30 +80,30 @@ public class TestDPAccessLayerDls
          }
 
          System.out.println("The list of Investigations for the investigation_ids "+inv_id_list.toString()+":") ;
-         r_i_l = dpal.getInvestigationsById(inv_id_list, "DN") ;
+         r_i_l = dpal.getInvestigationsById(inv_id_list, fed_id, true) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;
          }
 
          System.out.println("AND FUZZY - The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
-         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.AND, true ) ;
+         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.AND, true, 500, true ) ;
          for(Investigation i : r_i_l) System.out.println("\t"+i) ;
          System.out.println("-") ;
 
          System.out.println("AND NOT-FUZZY - The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
-         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.AND, false ) ;
+         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.AND, false, 500, true ) ;
          for(Investigation i : r_i_l) System.out.println("\t"+i) ;
          System.out.println("-") ;
 
          System.out.println("OR FUZZY - The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
-         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.OR, true ) ;
+         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.OR, true, 500, true ) ;
          for(Investigation i : r_i_l) System.out.println("\t"+i) ;
          System.out.println("-") ;
          
          //remove testing id's
          inv_id_list.clear() ;
          System.out.println("OR NOT-FUZZY - The list of INVESTIGATIONS for the keywords"+keyword_list.toString()+":") ;
-         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.OR, false ) ;
+         r_i_l = dpal.getInvestigations(keyword_list, fed_id, LogicalOperator.OR, false, 500, true ) ;
          for(Investigation i : r_i_l) {
             System.out.println("\t"+i.toString()) ;  //note beans.toString methods are overridden
             inv_id_list.add(i.getId()) ;
@@ -114,7 +114,7 @@ public class TestDPAccessLayerDls
 
          System.out.println("The list of DATASETS for the investigation_ids"+inv_id_list.toString()+":") ;
         // inv_id_list.remove(0);
-         r_d_l = dpal.getDataSets(inv_id_list, "DN") ;
+         r_d_l = dpal.getDataSets(inv_id_list, fed_id, true) ;
          for(DataSet ds : r_d_l) {
             System.out.println("\t"+ds.toString()) ;
             ds_id_list.add(ds.getId()) ;
@@ -124,7 +124,7 @@ public class TestDPAccessLayerDls
          System.out.println("-Testing Datafile Functions-") ;
 
          System.out.println("The list of DATAFILES for the dataset_ids"+ds_id_list.toString()+":") ;
-         r_f_l = dpal.getDataFiles(ds_id_list, "DN") ;
+         r_f_l = dpal.getDataFiles(ds_id_list, fed_id, true) ;
          for(DataFile df : r_f_l) {
             System.out.println("\t"+df.toString()) ;
          }

@@ -279,23 +279,26 @@ public class DPAccessLayer {
     
     /////////////////////////////////////////////////////////////
 
-     public ArrayList<Investigation> getInvestigations(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg) throws SQLException {
-        return getInvestigations(keyword_list, DN, aggreg, false) ;
+     public ArrayList<Investigation> getInvestigations(ArrayList<String> keyword_list, String fed_id, LogicalOperator aggreg) throws SQLException {
+        return getInvestigations(keyword_list, fed_id, aggreg, false, 500, true) ;
      }
 
-     public ArrayList<Investigation> getInvestigations(ArrayList<String> keyword_list, String DN, LogicalOperator aggreg, boolean fuzzy) throws SQLException {
+     public ArrayList<Investigation> getInvestigations(ArrayList<String> keyword_list, String fed_id, 
+                                                       LogicalOperator aggreg, boolean fuzzy, int num_records, boolean use_dpal_security ) 
+                                                      throws SQLException {
        if (aggreg == LogicalOperator.OR)
        {
-          return getInvestigationsOr(keyword_list, DN, fuzzy) ;
+          return getInvestigationsOr(keyword_list, fed_id, fuzzy, num_records, use_dpal_security) ;
        }
        else
        {
-          return getInvestigationsAnd(keyword_list, DN, fuzzy) ;
+          return getInvestigationsAnd(keyword_list, fed_id, fuzzy, num_records, use_dpal_security) ;
        }
     }
 
     
-    public ArrayList<Investigation> getInvestigationsOr(ArrayList<String> keyword_list, String fed_id, boolean fuzzy) throws SQLException {
+    public ArrayList<Investigation> getInvestigationsOr(ArrayList<String> keyword_list, String fed_id, boolean fuzzy,
+                                                        int num_records, boolean use_dpal_security) throws SQLException {
         log.debug("getInvestigationsOr()");
         
         //convert keyword_list to array
@@ -310,9 +313,9 @@ public class DPAccessLayer {
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
         String query = "" ;
         if (fuzzy == false) {
-           query = "begin ? := dpaccess.getInvestigationsOr(?,'"+fed_id+"'); end;";
+           query = "begin ? := dpaccess.getInvestigationsOr(?,'"+fed_id+"',"+num_records+", "+use_dpal_security+"); end;";
         } else {
-           query = "begin ? := dpaccess.getInvestigationsOrFuz(?,'"+fed_id+"'); end;";
+           query = "begin ? := dpaccess.getInvestigationsOrFuz(?,'"+fed_id+"',"+num_records+", "+use_dpal_security+"); end;";
         }
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
@@ -345,7 +348,8 @@ public class DPAccessLayer {
     }
 
     // removed the dynamic building of sql in java and moved to pl/sql layer
-     public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String fed_id, boolean fuzzy) throws SQLException {
+     public ArrayList<Investigation> getInvestigationsAnd(ArrayList<String> keyword_list, String fed_id, boolean fuzzy,
+                                                        int num_records, boolean use_dpal_security) throws SQLException {
         log.debug("getInvestigationsAnd()");
 
         //convert keyword_list to array
@@ -360,9 +364,9 @@ public class DPAccessLayer {
         ARRAY array_to_pass = new ARRAY( descriptor, conn, keyword_array );
         String query = "" ;
         if (fuzzy == false) {
-           query = "begin ? := dpaccess.getInvestigationsAnd(?,'"+fed_id+"'); end;";
+           query = "begin ? := dpaccess.getInvestigationsAnd(?,'"+fed_id+"',"+num_records+", "+use_dpal_security+"); end;";
         } else {
-           query = "begin ? := dpaccess.getInvestigationsAndFuz(?,'"+fed_id+"'); end;";
+           query = "begin ? := dpaccess.getInvestigationsAndFuz(?,'"+fed_id+"',"+num_records+", "+use_dpal_security+"); end;";
         }
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
@@ -397,7 +401,7 @@ public class DPAccessLayer {
 
     //////////////////////////////////////////////////////////////
 
-    public ArrayList<Investigation> getInvestigationsById(ArrayList<String> inv_id_list, String fed_id) throws SQLException {
+    public ArrayList<Investigation> getInvestigationsById(ArrayList<String> inv_id_list, String fed_id, boolean use_dpal_security) throws SQLException {
         log.debug("getInvestigationsById()");
 
         //convert array_list to int array
@@ -410,7 +414,7 @@ public class DPAccessLayer {
 
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
-        String query = "begin ? := dpaccess.getInvestigationsById(?,'"+fed_id+"'); end;";
+        String query = "begin ? := dpaccess.getInvestigationsById(?,'"+fed_id+"', "+use_dpal_security+"); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.setARRAY( 2, array_to_pass );
@@ -476,7 +480,7 @@ public class DPAccessLayer {
 
     
     //////////////////////////////////////////////////////////////
-    public ArrayList<DataSet> getDataSets(ArrayList<String> inv_id_list, String DN) throws SQLException {
+    public ArrayList<DataSet> getDataSets(ArrayList<String> inv_id_list, String fed_id, boolean use_dpal_security ) throws SQLException {
         log.debug("getDataSets()");
 
         //convert array_list to int array
@@ -489,7 +493,7 @@ public class DPAccessLayer {
         
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
-        String query = "begin ? := dpaccess.getDataSets(?,'"+DN+"'); end;";
+        String query = "begin ? := dpaccess.getDataSets(?,'"+fed_id+"', "+use_dpal_security+"); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.setARRAY( 2, array_to_pass );
@@ -513,7 +517,7 @@ public class DPAccessLayer {
     }
     
     //////////////////////////////////////////////////////////////
-    public ArrayList<DataFile> getDataFiles(ArrayList<String> ds_id_list, String DN) throws SQLException {
+    public ArrayList<DataFile> getDataFiles(ArrayList<String> ds_id_list, String fed_id, boolean use_dpal_security) throws SQLException {
         log.debug("getDataFiles()");
 
         //convert array_list to int array
@@ -526,7 +530,7 @@ public class DPAccessLayer {
         
         ArrayDescriptor descriptor = ArrayDescriptor.createDescriptor( "NUM_ARRAY", conn );
         ARRAY array_to_pass = new ARRAY( descriptor, conn, intArray );
-        String query = "begin ? := dpaccess.getDataFiles(?,'"+DN+"'); end;";
+        String query = "begin ? := dpaccess.getDataFiles(?,'"+fed_id+"', "+use_dpal_security+"); end;";
         OracleCallableStatement cs = (OracleCallableStatement)conn.prepareCall(query);
         cs.registerOutParameter(1, OracleTypes.CURSOR);
         cs.setARRAY( 2, array_to_pass );
