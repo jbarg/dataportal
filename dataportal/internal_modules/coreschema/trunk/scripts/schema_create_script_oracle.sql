@@ -110,6 +110,7 @@ ACTIVE VARCHAR2(1),
 DATA_IN_FOLDERS VARCHAR2(1),
 SPACES_IN_KEYWORDS VARCHAR2(1),
 ALL_KEYWORDS VARCHAR2(1),
+DPAL_SECURITY VARCHAR2(1) NOT NULL,
 MOD_TIME TIMESTAMP(1) NOT NULL
 )
 ;
@@ -718,6 +719,9 @@ COMMENT ON COLUMN DP_MODULE_LOOKUP.SPACES_IN_KEYWORDS IS 'if ''Y'' or ''y'' this
 ;
 
 COMMENT ON COLUMN DP_MODULE_LOOKUP.ALL_KEYWORDS IS 'if set to ''Y'' or ''y'' this will allow keywords with non-alphanumeric characters to be allowed in the presented keyword list and not suppressed. '
+;
+
+COMMENT ON COLUMN DP_MODULE_LOOKUP.DPAL_SECURITY IS 'If this is set to ''Y'' or ''y'' this means that dpal will check the users identification when querying for metadata if this column is any other value then dpal will not check user identification when doing queries.'
 ;
 
 COMMENT ON COLUMN DP_SESSION.CREDENTIAL_TYPE IS 'e.g. common use is delegated proxy'
