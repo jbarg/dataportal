@@ -208,7 +208,7 @@
             <attributeValues class="java.util.HashMap">
                <Item>
                   <Key>size</Key>
-                  <Value class="java.lang.Long" id="8">256</Value>
+                  <Value class="java.lang.Long">256</Value>
                </Item>
             </attributeValues>
             <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="3">
@@ -350,6 +350,35 @@
       </Item>
       <Item>
          <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+            <ID>4ec12b48-0110-1000-8001-c13e7105ebbd</ID>
+            <parent idref="0"/>
+            <type>COLUMN</type>
+         </ID>
+         <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+            <attributeValues class="java.util.HashMap">
+               <Item>
+                  <Key>size</Key>
+                  <Value class="java.lang.Long">1</Value>
+               </Item>
+            </attributeValues>
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+               <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+               <schemaName/>
+               <typeName>VARCHAR2</typeName>
+            </dataTypeID>
+         </dataTypeUsage>
+         <default/>
+         <name>DPAL_SECURITY</name>
+         <notNull>true</notNull>
+         <properties class="java.util.HashMap">
+            <Item>
+               <Key>Comment</Key>
+               <Value>If this is set to 'Y' or 'y' this means that dpal will check the users identification when querying for metadata if this column is any other value then dpal will not check user identification when doing queries.</Value>
+            </Item>
+         </properties>
+      </Item>
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
             <ID>f3e0f0a7-0109-1000-8059-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
@@ -467,7 +496,7 @@
                   <attributeValues class="java.util.HashMap">
                      <Item>
                         <Key>size</Key>
-                        <Value idref="8"/>
+                        <Value class="java.lang.Long">256</Value>
                      </Item>
                   </attributeValues>
                   <dataTypeID idref="3"/>
