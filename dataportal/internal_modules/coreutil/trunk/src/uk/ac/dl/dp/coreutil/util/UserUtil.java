@@ -167,9 +167,12 @@ public class UserUtil {
             em.persist(user);
             
             //save prefs
+            
             DpUserPreference dpup = getDefaultUserPreferences(em);
             dpup.setUserId(user);
             user.setDpUserPreference(dpup);
+            
+            log.trace("Setting user prefers: "+dpup.getDefaultLocation());
             em.persist(dpup);
             
         } catch(Exception e) {
@@ -192,7 +195,7 @@ public class UserUtil {
         
         prefs.setResultsPerPage(15);
         prefs.setResolution(DPResolution.res_1024x768.toString());
-        
+        prefs.setDefaultLocation(DPDefaultLocation.MY_DATA.toString());
         //get the myproxy
         // Collection<ProxyServers> proxyservers =  (Collection<ProxyServers>)  em.createNamedQuery("ProxyServers.findAll").getResultList();
         //prefs.setProxyServerId(proxyservers.iterator().next());
