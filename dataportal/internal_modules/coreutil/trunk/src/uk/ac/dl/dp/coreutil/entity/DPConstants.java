@@ -36,11 +36,11 @@ import javax.persistence.TemporalType;
 
 public class DPConstants implements Serializable {
     
-     @Id    
-      @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
+    @Id
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
     private Long id;
-       
+    
     @Column(name = "SERVER_CONTEXT_ROOT")
     private String contextRoot;
     
@@ -50,68 +50,84 @@ public class DPConstants implements Serializable {
     @Column(name = "SERVER_NAME")
     private String serviceName;
     
-     @Column(name = "LOGGING_LEVEL")
+    @Column(name = "LOGGING_LEVEL")
     private String loggingLevel;
-     
-      @Column(name = "DOWNLOAD_LOCATION")
+    
+    @Column(name = "DOWNLOAD_LOCATION")
     private String downloadLocation;
-   
-   
+    
+    @Column(name = "MOD_TIME", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modTime;
+    
+    @PrePersist
+    @PreUpdate
+    public void prePersist(){
+        modTime = new Date();
+    }
     
     /** Creates a new instance of SrbServer */
     public DPConstants() {
     }
-
+    
+    public Date getModTime() {
+        return this.modTime;
+    }
+    
+     public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
+    
     public String getContextRoot() {
         return contextRoot;
     }
-
+    
     public void setContextRoot(String contextRoot) {
         this.contextRoot = contextRoot;
     }
-
+    
     public Integer getPortNumber() {
         return portNumber;
     }
-
+    
     public void setPortNumber(Integer portNumber) {
         this.portNumber = portNumber;
     }
-
+    
     public String getServiceName() {
         return serviceName;
     }
-
+    
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
-
+    
     public String getLoggingLevel() {
         return loggingLevel;
     }
-
+    
     public void setLoggingLevel(String loggingLevel) {
         this.loggingLevel = loggingLevel;
     }
-
+    
     public String getDownloadLocation() {
         return downloadLocation;
     }
-
+    
     public void setDownloadLocation(String downloadLocation) {
         this.downloadLocation = downloadLocation;
     }
-
+    
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
     
     
-   
+    
     
     
 }

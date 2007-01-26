@@ -29,6 +29,8 @@ public class DataPortalConstants {
     //query cache limit
     public final static int QUERY_LIMIT = 250;
     
+        public final static int MAX_RESULTS = 500;
+        
     public static String MYPROXY_USERNAME = "glen";
     public static String MYPROXY_PASSWORD = "kkkkkk";
     

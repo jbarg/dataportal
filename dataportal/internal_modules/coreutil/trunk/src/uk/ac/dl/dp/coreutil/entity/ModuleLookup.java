@@ -38,7 +38,7 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
     @NamedQuery(name = "ModuleLookup.findByUsername", query = "SELECT m FROM ModuleLookup m WHERE m.username = :username"), 
     @NamedQuery(name = "ModuleLookup.findByPassword", query = "SELECT m FROM ModuleLookup m WHERE m.password = :password"), 
     @NamedQuery(name = "ModuleLookup.findByPlatform", query = "SELECT m FROM ModuleLookup m WHERE m.platform = :platform"), 
-     @NamedQuery(name = "ModuleLookup.findByModuleTypeActive", query = "SELECT m FROM ModuleLookup m WHERE m.moduleType = :moduleType AND m.active = 'Y'"),    
+    @NamedQuery(name = "ModuleLookup.findByModuleTypeActive", query = "SELECT m FROM ModuleLookup m WHERE m.moduleType = :moduleType AND m.active = 'Y'"),    
     @NamedQuery(name = "ModuleLookup.findByModuleType", query = "SELECT m FROM ModuleLookup m WHERE m.moduleType = :moduleType"), 
     @NamedQuery(name = "ModuleLookup.findByFacility", query = "SELECT m FROM ModuleLookup m WHERE m.facility = :facility"), 
     @NamedQuery(name = "ModuleLookup.findByActive", query = "SELECT m FROM ModuleLookup m WHERE m.active = :active"), 
@@ -82,6 +82,9 @@ public class ModuleLookup implements Serializable {
     
     @Column(name = "ALL_KEYWORDS")
     private String allKeywords;
+    
+     @Column(name = "DPAL_SECURITY")
+    private String dpalSecurity;
 
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -254,5 +257,31 @@ public class ModuleLookup implements Serializable {
         if(getAllKeywords() != null && getAllKeywords().equalsIgnoreCase("Y")) return true;
         else return false;
     }
+
+    public String getDpalSecurity() {
+        return dpalSecurity;
+    }
+
+    public void setDpalSecurity(String dpalSecurity) {
+        this.dpalSecurity = dpalSecurity;
+    }
+    
+    /**
+     *  Boolean function to wrap oracle boolean Y/N null etc
+     */
+    public boolean isSecurity(){
+        if(getDpalSecurity() != null && getDpalSecurity().equalsIgnoreCase("Y")) return true;
+        else return false;
+    }
+    
+    /**
+     *  Boolean function to wrap oracle boolean Y/N null etc
+     */
+    public boolean isActive(){
+        if(getActive() != null && getActive().equalsIgnoreCase("Y")) return true;
+        else return false;
+    }
+    
+    
     
 }
