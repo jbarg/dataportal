@@ -95,6 +95,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     }
     
     public String login(String kerberosLocation) throws LoginMyProxyException, CannotCreateNewUserException{
+        log.debug("login(kerberos): " +sc.getCallerPrincipal() );
         // Run klist to find out the username from the credential
         long time = System.currentTimeMillis();
         try{
@@ -146,6 +147,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
                 log.trace("Time taken (insert): "+(System.currentTimeMillis()-time)/1000+" seconds");
                 
                 //add login event
+                log.trace("Sending loggin message");
                 eventLocal.sendEvent(sid,DPEvent.LOG_ON_KERBEROS,"Logged on via kerberos");
                 
                 return sid;

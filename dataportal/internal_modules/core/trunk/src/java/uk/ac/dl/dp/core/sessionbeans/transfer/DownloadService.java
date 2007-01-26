@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.core.sessionbeans.transfer;
 
 
+import java.util.Date;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
@@ -108,11 +109,18 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
     public boolean setConstants(DPConstants constants){
         log.debug("Setting Constants");
         try {
-            constants.setId(1L);
             
-            em.merge(constants);
-            
-            return true;
+            if(em.find(DPConstants.class,1L) != null){
+                log.trace("Already set");
+                return true;
+            } else {
+                log.trace("Setting ..");
+                constants.setId(1L);
+                constants.setModTime(new Date());
+                em.merge(constants);
+                log.trace("Set constants");
+                return true;
+            }
         } catch(Exception e){
             log.error("Unable to set constants",e);
             return false;
