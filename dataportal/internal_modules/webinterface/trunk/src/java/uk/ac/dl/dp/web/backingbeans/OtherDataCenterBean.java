@@ -145,6 +145,48 @@ public class OtherDataCenterBean extends SortableList {
         
     }
     
+    //Gets the current data reference and then gets the investigation and searches for the investigation
+    // returns back to the dataset page of the investigation
+    public String viewDataSets(){
+        log.trace("view data referenced data");
+        DataReference qrdto =   (DataReference) table.getRowData();
+        log.trace("viewing studyId: "+qrdto.getInvestigationId());
+        Collection<Investigation> investigations = null;
+        try {
+            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
+            //got investigstion
+            
+            //check if null so user not allowed access
+            if(investigations.size() == 0){
+                error("You do not have permission to view the investigation.");
+                return null;
+            }
+            
+            for(Investigation investigation : investigations){
+                investigation.setSelected(true);
+            }
+            
+            //set the title from the seach
+            getVisitData().setSearchedTitle("Search Results");
+            getVisitData().setSearchedInvestigations(investigations);
+            //remove request info
+            getSearchData().setQueryRequest(null);
+            
+            //add the investigation to visit
+            InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");
+            return  investigationBean.datasets();
+            
+        } catch (QueryException ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unable to search for "+qrdto.getName());
+            return null;
+        } catch (Exception ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unexpected error searching for "+qrdto.getName());
+            return null;
+        }
+    }
+    
     //Gets the current data ref and then gets the investigation and searches for the investigation
     // returns back to the investigations page
     public String viewData(){
@@ -154,6 +196,13 @@ public class OtherDataCenterBean extends SortableList {
         Collection<Investigation> investigations = null;
         try {
             investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
+            
+            //check if null so user not allowed access
+            if(investigations.size() == 0){
+                error("You do not have permission to view the investigation.");
+                return null;
+            }
+            
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
             error("Error:  Unable to search for "+qrdto.getName());
@@ -165,7 +214,7 @@ public class OtherDataCenterBean extends SortableList {
         }
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
-          //remove request info 
+        //remove request info
         getSearchData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         

@@ -8,7 +8,6 @@ package uk.ac.dl.dp.web.util;
 
 import java.util.Properties;
 import java.io.*;
-import java.util.Enumeration;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.apache.log4j.Logger;
@@ -16,6 +15,10 @@ import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.SASLParams;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
+import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
+import uk.ac.dl.dp.coreutil.util.DPDefaultLocation;
+import uk.ac.dl.dp.web.backingbeans.MyDataSearchBean;
+import uk.ac.dl.dp.web.backingbeans.Visit;
 
 /**
  *
@@ -34,62 +37,93 @@ public class LogonKerberosServlet extends HttpServlet {
         
         
         // extract attributes from headers.... username
-       /* String KRB5CCNAME = request.getHeader("krb5ccname");
+        String KRB5CCNAME = request.getHeader("krb5ccname");
         String sid = null;
         SessionDTO session = null;
         
         if(KRB5CCNAME == null){
             log.debug("krb5ccname header is null");
+            
+            
+            
             response.sendRedirect("../faces/logon.jsp");
         } else{
             try {
+                
+                
                 SessionDelegate sd = SessionDelegate.getInstance();
-        
+                
                 sid = sd.login(KRB5CCNAME);
-        
+                
                 log.info("Logged in with sid "+sid);
-        
+                
                 //get session info once logged in to DP
                 session  = sd.getSession(sid);
                 log.info("Expire time: "+session.getExpireTime());
                 log.trace("User prefs: "+session.getUserPrefs().getResultsPerPage());
-        
+                
                 //check user
                 boolean loggedIn = checkUser(session);
                 if(!loggedIn){
                     log.warn("User "+session.getDN()+" has no access to Data Portal");
                     response.sendRedirect("../faces/logon.jsp");
-        
+                    
                 }
-        
+                
                 //logged in ok, get session visit bean, if not there this methoid creates one and sets the returned session
                 HttpSession httpSession = request.getSession();
                 Visit visit = new Visit();
+                visit.setLogonType("LOG_ON_KERBEROS");
                 visit.setSession(session);
-        
+                
                 httpSession.setAttribute(WebConstants.SESSION_KEY,visit);
-        
-                //logged in, return ok
-                response.sendRedirect("../faces/protected/basic_search.jsp");
-        
+                
+                //logged in, return ok, return to default location
+                DPDefaultLocation defaultLocation = session.getUserPrefs().getDefaultLocation();
+                
+                
+                if(defaultLocation.toString().equals(DPDefaultLocation.BASIC_SEARCH.toString())){
+                    response.sendRedirect("../faces/protected/basic_search.jsp");
+                } else if(defaultLocation.toString().equals(DPDefaultLocation.BOOKMARKS.toString())){
+                    response.sendRedirect("../faces/protected/bookmark.jsp");
+                } else if(defaultLocation.toString().equals(DPDefaultLocation.DATA_REFERENCES.toString())){
+                    response.sendRedirect("../faces/protected/data_center.jsp");
+                } else if(defaultLocation.toString().equals(DPDefaultLocation.MY_DATA.toString())){
+                    
+                    //need to search the date and then return to mydata
+                    //TODO should not be in this bean
+                   /* MyDataSearchBean myDataSearchBean = new MyDataSearchBean();
+                    httpSession.setAttribute("myDataSearchBean",myDataSearchBean);
+                    myDataSearchBean.myDataSearchForKerberos();
+                    
+                    
+                    //check that have some data
+                    if(((Visit)httpSession.getAttribute("visit")).getVisitData().getSearchedInvestigations() == null || ((Visit)httpSession.getAttribute("visit")).getVisitData().getSearchedInvestigations().size() == 0){
+                        //no data associated
+                        response.sendRedirect("../faces/protected/basic_search.jsp");
+                    } else response.sendRedirect("../faces/protected/investigations.jsp");*/
+                    response.sendRedirect("../faces/protected/basic_search.jsp");
+                } else     response.sendRedirect("../faces/protected/basic_search.jsp");
+                
+                
             } catch(Exception e){
                 log.error("Login kerberos error, sending to normal login" ,e);
                 response.sendRedirect("../faces/logon.jsp");
             }
-        }*/
+        }
         
         // Get the output writer
-        PrintWriter out = response.getWriter();
-        
+        /*PrintWriter out = response.getWriter();
+         
         // extract attributes from headers.... username
         String KRB5CCNAME = request.getHeader("krb5ccname");
-        
+         
         if(KRB5CCNAME == null){
             log.debug("krb5ccname header is null");
             response.sendRedirect("../faces/logon.jsp");
         } else{
             try {
-                
+         
                 log.debug("krb5ccname header is "+KRB5CCNAME);
                 // Send out page header
                 response.setContentType("text/html");
@@ -101,18 +135,18 @@ public class LogonKerberosServlet extends HttpServlet {
                 out.println(".val { font-family:Arial, Verdana, sans-serif; font-size:12px; color:blue; vertical-align:top }");
                 out.println("</style>");
                 out.println("</head>");
-                
+         
                 // start on outputting the body
                 out.println("<body bgcolor=\"#EEEE33\">");
                 out.println("<h1>SSO Test Page</h1>");
-                
+         
                 // output table of attributes
                 out.println("<table width=\"600\" align=\"center\" cellpadding=\"10\" cellspacing=\"0\" border=\"1\" bgcolor=\"#eeeeee\">");
                 out.println("<tr>");
                 out.println("<td colspan=\"2\" class=\"var\" style=\"font-size:16px; text-align:center\">Environment variables</td>");
                 out.println("</tr>");
                 out.println("<tr>");
-                
+         
                 //find out file properties
                 File file = new File(KRB5CCNAME);
                 if(!file.exists())  log.trace(KRB5CCNAME +" does not exist");
@@ -122,10 +156,10 @@ public class LogonKerberosServlet extends HttpServlet {
                     log.info(file.canWrite());
                     log.info(file.canExecute());
                 }
-                
+         
                 // loop through all headers.
                 for (Enumeration e =  request.getHeaderNames(); e.hasMoreElements() ;) {
-                    
+         
                     String var = (String) e.nextElement();
                     log.trace(request.getHeader(var));
                     out.println("<tr>");
@@ -136,16 +170,16 @@ public class LogonKerberosServlet extends HttpServlet {
                 out.println("<tr>");
                 out.println("<td class=\"var\"><em>QueryString</em></td><td class=\"val\">"+t+"</td>");
                 out.println("</tr>");
-                
+         
                 // Run klist to find out the username from the credential
                 Process p = (Runtime.getRuntime()).exec("env KRB5CCNAME="+KRB5CCNAME+" /usr/kerberos/bin/klist -c");
                 p.waitFor();
                 BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 BufferedReader ebr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-                
+         
                 //
-                
-                
+         
+         
                 // Display output and search for principal name
                 String pname = null;
                 String line=br.readLine();
@@ -165,12 +199,12 @@ public class LogonKerberosServlet extends HttpServlet {
                     returned+=line+"<br>";
                     line = ebr.readLine();
                 }
-                
+         
                 out.println("<H3>klist returned:</H3>");
                 out.println(returned);
-                
+         
                 log.trace("Klist returned "+returned);
-                
+         
                 if(pname==null) {
                     out.println("<p>Could not find principal name...</p>");
                     //copy file
@@ -178,7 +212,7 @@ public class LogonKerberosServlet extends HttpServlet {
                 } else {
                     out.println("<p>Principal name is: "+pname+"</p>");
                 }
-                
+         
                 // Download the proxy
                 GSSCredential cred = saslProxy(out, pname, KRB5CCNAME);
                 if(cred==null) {
@@ -196,7 +230,7 @@ public class LogonKerberosServlet extends HttpServlet {
                 out.println("</table></body>");
                 out.println("</html>");
             }
-        }
+        }*/
     }
     
     private static GSSCredential saslProxy(PrintWriter out, String username, String keytab) throws

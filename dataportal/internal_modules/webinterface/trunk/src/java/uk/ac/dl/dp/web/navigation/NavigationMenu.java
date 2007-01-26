@@ -91,13 +91,14 @@ public class NavigationMenu {
         //help.setOpen(true);
         help.setSplit(true);
         help.setTarget("_blank");
-        info.add(help);
+      //  info.add(help);
         
         NavigationMenuItem documentation = getMenuNaviagtionItem("Documentation", null);
         documentation.setActive(true);
         //documentation.setOpen(true);
         documentation.setSplit(true);
         documentation.setTarget("_blank");
+        documentation.setExternalLink("http://tiber.dl.ac.uk:8080/guide/dataportal/dp.htm");
         info.add(documentation);
         
         NavigationMenuItem dp = getMenuNaviagtionItem("Data Portal", null);
@@ -105,7 +106,7 @@ public class NavigationMenu {
         //dp.setOpen(true);
         dp.setSplit(true);
         dp.setTarget("_blank");
-        dp.setExternalLink("http://www.bbc.co.uk");
+        dp.setExternalLink("http://www.e-science.clrc.ac.uk/web/projects/dataportal");
         info.add(dp);
         
         

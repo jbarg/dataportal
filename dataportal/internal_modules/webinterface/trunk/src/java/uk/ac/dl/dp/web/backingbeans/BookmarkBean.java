@@ -204,10 +204,46 @@ public class BookmarkBean extends SortableList {
         }
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
-          //remove request info 
+        //remove request info
         getSearchData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         
+    }
+    
+    //Gets the current bookmark and then gets the investigation and searches for the investigation
+    // returns back to the dataset page of the investigation
+    public String viewDataSets(){
+        log.trace("view bookmarked data");
+        Bookmark qrdto =   (Bookmark) table.getRowData();
+        log.trace("viewing studyId: "+qrdto.getStudyId());
+        Collection<Investigation> investigations = null;
+        try {
+            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
+            //got investigstion
+            
+            for(Investigation investigation : investigations){
+                investigation.setSelected(true);
+            }
+            
+            //set the title from the seach
+            getVisitData().setSearchedTitle("Search Results");
+            getVisitData().setSearchedInvestigations(investigations);
+            //remove request info
+            getSearchData().setQueryRequest(null);
+            
+            //add the investigation to visit
+            InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");
+            return  investigationBean.datasets();
+            
+        } catch (QueryException ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unable to search for "+qrdto.getName());
+            return null;
+        } catch (Exception ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unexpected error searching for "+qrdto.getName());
+            return null;
+        }
     }
     
     //method to select all bookmarks
@@ -326,16 +362,16 @@ public class BookmarkBean extends SortableList {
     }
     
     
-    //these are added because cannot find which column is sorted form the page 
+    //these are added because cannot find which column is sorted form the page
     //crappy way of doing it
-     public boolean isName(){
+    public boolean isName(){
         return is("name");
     }
     
     public boolean isNotName(){
         return isNot("name");
     }
-       
+    
     public boolean isFacility(){
         return is("facility");
     }
