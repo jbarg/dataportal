@@ -57,6 +57,8 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     private List<SelectItem> facilities;
     
+    private String logonType = "LOG_ON";
+    
     private VisitData visitData;
     
     private SearchData searchData;
@@ -242,6 +244,14 @@ public class Visit  extends AbstractSessionBean implements Serializable{
             }
         }
         return isTopic;
+    }
+
+    public String getLogonType() {
+        return logonType;
+    }
+
+    public void setLogonType(String logonType) {
+        this.logonType = logonType;
     }
 
    

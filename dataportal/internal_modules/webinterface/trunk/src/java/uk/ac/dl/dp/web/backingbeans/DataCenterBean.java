@@ -358,6 +358,42 @@ public class DataCenterBean extends SortableList {
         
     }
     
+     //Gets the current data reference and then gets the investigation and searches for the investigation
+    // returns back to the dataset page of the investigation
+    public String viewDataSets(){
+        log.trace("view data referenced data");
+        DataReference qrdto =   (DataReference) table.getRowData();
+        log.trace("viewing studyId: "+qrdto.getInvestigationId());
+        Collection<Investigation> investigations = null;
+        try {
+            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
+            //got investigstion
+            
+            for(Investigation investigation : investigations){
+                investigation.setSelected(true);
+            }
+            
+            //set the title from the seach
+            getVisitData().setSearchedTitle("Search Results");
+            getVisitData().setSearchedInvestigations(investigations);
+            //remove request info
+            getSearchData().setQueryRequest(null);
+            
+            //add the investigation to visit
+            InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");
+            return  investigationBean.datasets();
+            
+        } catch (QueryException ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unable to search for "+qrdto.getName());
+            return null;
+        } catch (Exception ex) {
+            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
+            error("Error:  Unexpected error searching for "+qrdto.getName());
+            return null;
+        }
+    }
+    
     //listens for sort column action events, and gets the column by thge param name passed in
     // then calls sort on the column
     public void sortColumn(ActionEvent event){

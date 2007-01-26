@@ -152,7 +152,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             
             //check that have some data
             if(getVisitData().getSearchedInvestigations() == null || getVisitData().getSearchedInvestigations().size() == 0){
-                //no data associated                 
+                //no data associated
                 return NavigationConstants.LOGIN_SUCCESS;
             }else return NavigationConstants.LOGIN_SUCCESS_MYDATA;
         } else return NavigationConstants.LOGIN_SUCCESS;
@@ -161,6 +161,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
     public String logout(){
         log.info("Logging out of session");
         
+        String logonType = getVisit().getLogonType();
         try {
             //send logout message
             SessionDelegate.getInstance().logout(getVisit().getSid());
@@ -178,7 +179,11 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         
         //add logout message
         info("Thank you for using the Data Portal.");
-        return NavigationConstants.LOGOUT_SUCCESS;
+        if(logonType.equals("LOG_ON_KERBEROS")){
+            return NavigationConstants.LOGOUT_KERBEROS_SUCCESS;
+        } else {
+            return NavigationConstants.LOGOUT_SUCCESS;
+        }
     }
     
     private boolean checkUser(SessionDTO session) {

@@ -45,6 +45,7 @@ public class DownloadServlet extends HttpServlet {
             
             boolean isSet = DownloadDelegate.getInstance().isSet();
             if(!isSet){
+                log.trace("Constants not set to trying to set");
                 //set the DB to vales for download
                 InetAddress host = InetAddress.getLocalHost();
                 
@@ -58,7 +59,7 @@ public class DownloadServlet extends HttpServlet {
                 DownloadDelegate.getInstance().setConstants(dpConst);
             }
         } catch (Exception ex) {
-            
+            log.warn("Error setting up the constants",ex);
         }
     }
     
