@@ -93,6 +93,12 @@
         <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
     
+     <managed-bean>
+        <managed-bean-name>myDataSearchBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.MyDataSearchBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>        
+    </managed-bean>
+    
     <managed-bean>
         <managed-bean-name>investigationBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationBean</managed-bean-class>
@@ -170,6 +176,7 @@
             User logs into DP successfully, redirect to load images correctly
         </description>
         <from-view-id>/logon.jsp</from-view-id>
+         
         <navigation-case>
             <from-outcome>LOGIN_SUCCESS</from-outcome>
             <to-view-id>/protected/basic_search.jsp</to-view-id>
@@ -202,7 +209,37 @@
          
     </navigation-rule>
     
+     <navigation-rule>
+        <description>
+            User logs out  DP successfully, redirect to load images correctly
+        </description>
+        <from-view-id>/logout.jsp</from-view-id>
+         
+        <navigation-case>
+            <from-outcome>GOTO_LOGON</from-outcome>
+            <to-view-id>/../</to-view-id>
+            <redirect />            
+        </navigation-case>    
+       </navigation-rule>
+       
     <navigation-rule>
+        <description>
+            The search was success for investigations, now show then in the investigations page
+        </description>
+        <from-view-id>/protected/basic_search.jsp</from-view-id>
+        <!--
+        Not used, was going to put a progrss bar on the search, will do if searchs are getting long
+        <navigation-case>
+        <from-outcome>search_sent_success</from-outcome>
+        <to-view-id>/protected/search_wait.jsp</to-view-id>
+        </navigation-case>-->
+        <navigation-case>
+            <from-outcome>SEARCH_SUCCESS</from-outcome>
+            <to-view-id>/protected/investigations.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
         <description>
             The search was success for investigations, now show then in the investigations page
         </description>
@@ -223,7 +260,7 @@
         <description>
             From history list, view results, so send back to invests..
         </description>
-        <from-view-id>/protected/history.jsp</from-view-id>
+        <from-view-id>/*</from-view-id>
         <navigation-case>
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
@@ -282,6 +319,10 @@
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
+         <navigation-case>
+            <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
+            <to-view-id>/protected/data_sets.jsp</to-view-id>
+        </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
@@ -292,6 +333,10 @@
         <navigation-case>
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
+        </navigation-case>
+         <navigation-case>
+            <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
+            <to-view-id>/protected/data_sets.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
@@ -304,6 +349,10 @@
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
+         <navigation-case>
+            <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
+            <to-view-id>/protected/data_sets.jsp</to-view-id>
+        </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
@@ -314,6 +363,10 @@
         <navigation-case>
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
+        </navigation-case>
+         <navigation-case>
+            <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
+            <to-view-id>/protected/data_sets.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     
@@ -362,6 +415,12 @@
         <navigation-case>
             <from-outcome>LOGOUT_SUCCESS</from-outcome>
             <to-view-id>/logon.jsp</to-view-id>
+            <redirect />            
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>LOGOUT_KERBEROS_SUCCESS</from-outcome>
+            <to-view-id>/logout.jsp</to-view-id>
             <redirect />            
         </navigation-case>
         

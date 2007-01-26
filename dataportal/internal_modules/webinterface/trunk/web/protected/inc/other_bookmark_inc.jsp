@@ -131,10 +131,26 @@
                                                     <h:outputText value="Goto" style="table-header; color:blue"/>                                                    
                                                 </f:facet>
                                                 
-                                                <h:commandLink style="table-header" id="goto" action="#{otherbookmarkBean.viewData}">
-                                                    <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                                                <t:popup styleClass="popup"  closePopupOnExitingElement="true"
+                                                         closePopupOnExitingPopup="true"
+                                                         displayAtDistanceX="10"
+                                                         displayAtDistanceY="-30" >
                                                     
-                                                </h:commandLink>
+                                                    <h:commandLink style="table-header" id="goto" action="#{otherbookmarkBean.viewData}">
+                                                        <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                                                        
+                                                    </h:commandLink>
+                                                    
+                                                    <f:facet name="popup">
+                                                        <h:panelGrid columns="1" >
+                                                            <h:commandLink action="#{otherbookmarkBean.viewData}" title="View investigation" value="Investigation"/>
+                                                            <h:commandLink action="#{otherbookmarkBean.viewDataSets}" title="View datasets" value="Datasets"/>                                                            
+                                                        </h:panelGrid>
+                                                    </f:facet>
+                                                </t:popup>
+                                                
+                                                
+                                                
                                             </h:column>                                            
                                             
                                         </t:dataTable>

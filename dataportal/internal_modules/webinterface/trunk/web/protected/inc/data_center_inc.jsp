@@ -51,7 +51,9 @@
                                             </f:facet>--%>
 
                                             <h:column>
-                                                <f:facet name="header"> <h:outputText escape="false" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" /></f:facet>  
+                                                <f:facet name="header"> 
+                                                    <h:outputText escape="false" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+                                                </f:facet>  
                                                 <a4j:commandLink  reRender="datatable" rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">
                                                     <%--<h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">--%>
                                                     <h:panelGroup>
@@ -261,9 +263,26 @@
                                                 </f:facet>          
                                                 <%-- <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               --%>
                   
-                                                <h:commandLink style="table-header" id="view2" action="#{datacenterBean.viewData}" rendered="#{data.dataset}">
-                                                    <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               
-                                                </h:commandLink>           
+                                                
+                                                <t:popup styleClass="popup"  closePopupOnExitingElement="true"
+                                                         closePopupOnExitingPopup="true"
+                                                         displayAtDistanceX="10"
+                                                         displayAtDistanceY="-30" >
+                                                    
+                                                    <h:commandLink style="table-header" id="view2" action="#{datacenterBean.viewData}" rendered="#{data.dataset}">
+                                                        <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               
+                                                    </h:commandLink>    
+                                                    
+                                                    <f:facet name="popup">
+                                                        <h:panelGrid columns="1" >
+                                                            <h:commandLink action="#{datacenterBean.viewData}" title="View investigation" value="Investigation"/>
+                                                            <h:commandLink action="#{datacenterBean.viewDataSets}" title="View datasets" value="Datasets"/>                                                            
+                                                        </h:panelGrid>
+                                                    </f:facet>
+                                                </t:popup>
+                                                
+                                                
+                                                
                                             </h:column>
                                             <h:column>
                                                 <f:facet name="header">
@@ -288,7 +307,7 @@
                                             
                                             <f:facet name="detailStamp">
                                                 
-                                                  <t:dataTable preserveSort="true" rendered="#{data.dataset}" width="55%" id="cities" columnClasses="standardTable_Column,standardTable_Column"
+                                                <t:dataTable preserveSort="true" rendered="#{data.dataset}" width="55%" id="cities" columnClasses="standardTable_Column,standardTable_Column"
                                                              styleClass="standardTable_Column" var="url" value="#{data.urls}">
                                                     <h:column>
                                                         &nbsp;&nbsp; &nbsp;&nbsp;

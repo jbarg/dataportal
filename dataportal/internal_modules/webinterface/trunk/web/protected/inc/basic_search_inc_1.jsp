@@ -107,7 +107,7 @@
             
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
+                        closePopupOnExitingPopup="true"
                      displayAtDistanceX="5"
                      displayAtDistanceY="-40">
                 
@@ -140,7 +140,7 @@
             </h:selectOneRadio>         
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
+                        closePopupOnExitingPopup="true"
                      displayAtDistanceX="5"
                      displayAtDistanceY="-40" >
                 
@@ -168,8 +168,8 @@
                 <f:selectItem itemLabel="Like"  itemValue="LIKE" />
             </h:selectOneRadio>       
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
+           <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                         closePopupOnExitingPopup="true"
                      displayAtDistanceX="5"
                      displayAtDistanceY="-40" >
                 
