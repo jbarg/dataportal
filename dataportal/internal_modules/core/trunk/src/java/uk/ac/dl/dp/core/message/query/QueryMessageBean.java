@@ -11,7 +11,6 @@ package uk.ac.dl.dp.core.message.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
@@ -28,6 +27,8 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 
 /**
  *
@@ -67,6 +68,9 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 log.debug("Object not correct",jmsex);
             }
             
+            //get a list of facilites
+            Collection<ModuleLookup> facilities = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+            
             //TODO do search here
             DPAccessLayer dpal = null;
             log.debug("Query : Keyword "+e.getKeyword()+" on fac: "+e.getFacility()+" sent at "+e.getSent());
@@ -76,19 +80,13 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                     log.debug(key);
                 }
                 
-                //TODO
-                ////////this can go when access layer can look up connection
-              /*  Collection<ModuleLookup>  moduleLookup = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
-               
-                for(ModuleLookup mlu : moduleLookup ){
-                    if(e.getFacility().equals(mlu.getFacility())){
-                        log.debug("Got facility "+e.getFacility());
-                        dpal  = new DPAccessLayer(mlu.getFacility(),mlu.getConnection(),mlu.getUsername(),mlu.getPassword());
-               
+                boolean security = true;
+                for(ModuleLookup fac : facilities){
+                    if(fac.equals(e.getFacility())){
+                        log.trace("Found facility, "+e.getFacility()+" is security "+fac.isSecurity());
+                        security = fac.isSecurity();
                     }
-               
-                }*/
-                ///////////////////////////////////
+                }                
                 
                 dpal = new DPAccessLayer(e.getFacility());
                 
@@ -101,11 +99,11 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                         keywords.add(keyword);
                     }
                     if(e.getLogicalLogicalOperator().toString().equals(LogicalOperator.AND.toString())){
-                        log.trace("Searching type: AND, fuzzy: "+e.isFuzzy());
-                        r_i_l =  dpal.getInvestigationsAnd(keywords,e.getFederalID(),e.isFuzzy());
+                        log.trace("Searching type: AND, fuzzy: "+e.isFuzzy()+", security? "+security);
+                        r_i_l =  dpal.getInvestigationsAnd(keywords,e.getFederalID(),e.isFuzzy(),DataPortalConstants.MAX_RESULTS,security);
                     } else if(e.getLogicalLogicalOperator().toString().equals(LogicalOperator.OR.toString())){
-                        log.trace("Searching type: OR, fuzzy: "+e.isFuzzy());
-                        r_i_l =  dpal.getInvestigationsOr(keywords,e.getFederalID(),e.isFuzzy());
+                        log.trace("Searching type: OR, fuzzy: "+e.isFuzzy()+", security? "+security);
+                        r_i_l =  dpal.getInvestigationsOr(keywords,e.getFederalID(),e.isFuzzy(),DataPortalConstants.MAX_RESULTS,security);
                     }
                     
                     log.trace("Finished searching for investigations");

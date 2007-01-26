@@ -31,6 +31,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
@@ -290,6 +291,8 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
                     man.setDefaultPass(srbServer.getDefaultPassword());
                     man.setDefaultDomain(srbServer.getDefaultDomain());
                 }
+            } catch(NoResultException nre){
+                log.info("No SRBServers found in database, using ticketuser for connection");
             } catch (Exception ex) {
                 //dont use any default settings
                 log.warn("Error searching srbServers",ex);
@@ -311,13 +314,13 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
     }
     
     private  String getSRBHost(String[] urls) throws MalformedURLException{
-        String host1 = urls[0].toLowerCase().replace("srb","http");
+        String host1 = urls[0].toLowerCase().replace("srb://","http://");
         return new URL(host1).getHost();
     }
     
     private  int getSRBPort(String[] urls){
         try {
-            String host = urls[0].toLowerCase().replace("srb","http");
+            String host = urls[0].toLowerCase().replace("srb://","http://");
             int port = new URL(host).getPort();
             if(port == -1){
                 log.info("Port set to nothing in "+urls[0]+" setting to default: " +DataPortalConstants.SRB_PORT);
@@ -339,7 +342,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
             DPConstants constants = getConstants();
             String message = "Data Portal download";
             // String hostURL = "http://"+host.getHostAddress()+":"+sreq.getServerPort()+contextPath+"/download/"+srbZipFile.getName();
-            postMail(serviceInfo.getEmail(),message,"http://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName(),"dataportal_download@dl.ac.uk");
+            postMail(serviceInfo.getEmail(),message,"https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName(),"dataportal_download@dl.ac.uk");
             return true;
         } catch (MessagingException ex) {
             log.error("Not mailed",ex);

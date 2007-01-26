@@ -326,6 +326,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         log.debug("getDataSets(String sid, Collection<Investigation> investigations)");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
+        
+        //get a list of facilites
+        Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+        
         UserUtil userUtil =  new UserUtil(sid,em);
         User user = userUtil.getUser();
         Collection<String> facilities = new ArrayList<String>();
@@ -340,6 +344,15 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         for(String fac : facilities){
             ArrayList<String> investigation_id = new ArrayList<String>();
             
+            boolean security = true;
+            
+            for(ModuleLookup mod : facilitiesList){
+                if(mod.equals(fac)){
+                    log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
+                    security = mod.isSecurity();
+                }
+            }
+            
             for(Investigation invest : investigations){
                 if(invest.getFacility().equalsIgnoreCase(fac)) investigation_id.add(invest.getId());
             }
@@ -350,7 +363,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             try {
                 log.trace("new DPAccessLayer(fac): "+fac);
                 dpal = new DPAccessLayer(fac);
-                returneddatasets = dpal.getDataSets(investigation_id, user.getUserId());
+                returneddatasets = dpal.getDataSets(investigation_id, user.getUserId(), security);
                 log.debug("Returned size: "+returneddatasets.size());
                 datasets.addAll(returneddatasets);
             } catch (Exception ex) {
@@ -381,6 +394,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             if(!facilities.contains(dataset.getFacility())) facilities.add(dataset.getFacility());
         }
         
+        //get a list of facilites
+        Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+        
+        
         Collection<DataFile> datafiles = new ArrayList<DataFile>();
         
         for(String fac : facilities){
@@ -393,12 +410,20 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             
             if(datasets_id.size() == 0) continue ;
             
+            boolean security = true;
+            
+            for(ModuleLookup mod : facilitiesList){
+                if(mod.equals(fac)){
+                    log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
+                    security = mod.isSecurity();
+                }
+            }
             
             DPAccessLayer dpal = null;
             try {
                 dpal = new DPAccessLayer(fac);
                 
-                datafiles.addAll(dpal.getDataFiles(datasets_id, user.getDn()));
+                datafiles.addAll(dpal.getDataFiles(datasets_id, user.getUserId(), security));
             } catch (Exception ex) {
                 log.error("Unable to search Investigations ids: ",ex);
                 throw new QueryException("Unable to search Investigations ids: ",ex);
@@ -482,6 +507,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
+         //get a list of facilites
+        Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+        
+        
         User user =  new UserUtil(sid,em).getUser();
         
         DPAccessLayer dpal = null;
@@ -489,9 +518,19 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         ArrayList<String> investigations = new ArrayList<String>();
         investigations.add(investigastionId);
         try {
+            
+            boolean security = true;
+            
+            for(ModuleLookup mod : facilitiesList){
+                if(mod.equals(fac)){
+                    log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
+                    security = mod.isSecurity();
+                }
+            }
+            
             dpal = new DPAccessLayer(fac);
             
-            r_i_l = dpal.getInvestigationsById(investigations, user.getUserId());
+            r_i_l = dpal.getInvestigationsById(investigations, user.getUserId(),security);
             
         } catch (Exception ex) {
             log.error("Unable to search Investigations ids: ",ex);
@@ -518,7 +557,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         Collection<ModuleLookup> facilities = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
         
         for(ModuleLookup facs : facilities){
+            if(!facs.isActive()) continue;
+            
             ArrayList<String> investigationIds = new ArrayList<String>();
+            
             try {
                 
                 //get from the list the list from this facility
@@ -546,13 +588,17 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
                 for(String id : investigationIds){
                     Keyword keyword = new Keyword();
                     keyword.setId(id);
-                    keyword.setName("Unable to initialise keywords.");                    
+                    keyword.setName("Unable to initialise keywords.");
                     keywords.add(keyword);
                     
                     keywords.add(keyword);
                 }
             } finally{
-                if(dpal != null) dpal.disconnectFromDB();
+                if(dpal != null) {
+                    log.trace("closing: "+facs.getFacility());
+                    dpal.disconnectFromDB();
+                    dpal = null;
+                }
             }
         }
         return keywords;
