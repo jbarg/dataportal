@@ -26,6 +26,8 @@
             //     session.invalidate();
             // }
             %>
+            
+            
             <table width="954" >
                  <tbody>
                     <tr>
@@ -34,15 +36,20 @@
                             <table  border="0" width="100%" >
                                  <tbody>
                                     <tr>
-                                        <td width="950"  height="45" >                    
+                                        <td width="950"  height="45" > 
+                                            
                                             <t:div styleClass="outerbar" style="width:954px">
+                                                
                                                 <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
-                                                    itemMaxHeight="200" orientation="horizontal" effectUnits="2"
-                                                    itemPadding="10" attachEdge="top" labelEdge="bottom">  
+                                                                         itemMaxHeight="200" orientation="horizontal" effectUnits="2"
+                                                                         itemPadding="10" attachEdge="top" labelEdge="bottom">  
                                             </s:fishEyeNavigationMenu>                    </t:div>
                                             
                                         </td>
-                                        
+                                       <%-- <div style="position: absolute; z-index:1; left: 0px; top: 0px; height: 50px; width: 170px;">
+                                            <img align="left" src="../images/diamond.gif" width=170" height="50" />
+                                            
+                                        </div>--%>
                                         
                                         <td width="100%" align="right">
                                             <%--   <f:subview id="header_2">
@@ -63,7 +70,11 @@
                                             <%--  <f:subview id="navigation">
                                             <c:import url="/inc/header2.jsp" />
                                             </f:subview>--%>
+                                           
                                             <img align="center" src="../images/cclrc.jpg" width=170" height="60" />
+                                            <%--<br /><br />
+                                            <img align="center" src="../images/cclrc.jpg" width=170" height="60" />
+                                           --%>
                                             <br />
                                             <br />
                                             <%-- <t:div id="subnavigation_outer">

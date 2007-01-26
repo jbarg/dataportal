@@ -151,10 +151,26 @@
                                                     
                                                 </f:facet>
                                                 
-                                                <h:commandLink style="table-header" id="goto" action="#{bookmarkBean.viewData}">
-                                                    <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                                                
+                                                <t:popup styleClass="popup"  closePopupOnExitingElement="true"
+                                                         closePopupOnExitingPopup="true"
+                                                         displayAtDistanceX="10"
+                                                         displayAtDistanceY="-30" >
                                                     
-                                                </h:commandLink>
+                                                    <h:commandLink style="table-header" id="goto" action="#{bookmarkBean.viewData}">
+                                                        <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>
+                                                        
+                                                    </h:commandLink> 
+                                                    <f:facet name="popup">
+                                                        <h:panelGrid columns="1" >
+                                                            <h:commandLink action="#{bookmarkBean.viewData}" title="View investigation" value="Investigation"/>
+                                                            <h:commandLink action="#{bookmarkBean.viewDataSets}" title="View datasets" value="Datasets"/>                                                            
+                                                        </h:panelGrid>
+                                                    </f:facet>
+                                                </t:popup>
+                                                
+                                                
+                                                
                                             </h:column>
                                             <h:column>
                                                 <f:facet name="header">

@@ -31,14 +31,16 @@
                                             <f:subview id="header">
                                                 <c:import url="inc/header.jsp" />
                                             </f:subview>
+                                          
                                         </td>
-                                        
+                                       
                                         <td width="100%" align="right" >
                                             <f:subview id="header_2">
                                                 <c:import url="inc/header_2.jsp" />
                                             </f:subview>
                                         </td>
                                     </tr>
+                                   
                                 </tbody>
                                 
                             </table>

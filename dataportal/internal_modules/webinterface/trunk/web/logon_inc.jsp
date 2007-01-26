@@ -22,7 +22,8 @@
     <h:panelGrid columns="3">
         
         <h:outputLabel for="Usernamej_id_1">
-            <h:outputText styleClass="body" value="Username: "/>
+            <%--<h:outputText styleClass="body" value="Federal ID: "/>--%>
+             <h:outputText styleClass="body" value="Username: "/>
         </h:outputLabel  >
         
         <h:inputText id="Usernamej_id_1" size="20" required="true" value="#{authorisationBean.username}">
@@ -35,7 +36,7 @@
         </h:outputLabel  >
         
         <h:inputSecret id="Passwordj_id_1"  size="20" required="true" value="#{authorisationBean.password}">
-            <f:validateLength minimum="0" maximum="10"/>
+            <f:validateLength minimum="0" maximum="100"/>
         </h:inputSecret> 
         <h:message for="Passwordj_id_1" styleClass="error"/>
         <h:panelGroup/>
@@ -45,14 +46,13 @@
         
     </h:panelGrid>
     
-    <br />
-    <br />
+   <%--<br />
     <h:outputText  styleClass="nodeFolder" value="Goto "/> 
     <h:commandLink  onclick="window.open('http://tiber.dl.ac.uk:8080/myproxy'); return false;" target="_blank">
         <h:outputText style="color:blue" styleClass="nodeFolder" value="MyProxy Upload Home"/>
     </h:commandLink> 
     <h:outputText  styleClass="nodeFolder" value=" to upload credentials" />
-    
+    --%>
     
     
     
