@@ -799,6 +799,7 @@ insert into DP_EVENT values (6,'LOG_ON_KERBEROS','',systimestamp);
 insert into DP_EVENT values (3,'BASIC_SEARCH','',systimestamp);
 insert into DP_EVENT values (4,'ADVANCED_SEARCH','',systimestamp);
 insert into DP_EVENT values (5,'DOWNLOAD','',systimestamp);
+insert into DP_EVENT values (7,'MYDATA_SEARCH','',systimestamp);
 
 insert into DP_CREDENTIAL_TYPE values (1,'PROXY','Normal proxy',systimestamp);
 insert into DP_CREDENTIAL_TYPE values (2,'CERTIFICATE','Certificate only, no private key',systimestamp);
