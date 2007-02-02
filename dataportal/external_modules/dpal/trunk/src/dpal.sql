@@ -84,7 +84,7 @@ create or replace package body dpaccess as
               select g.investigation_id,
                      f.federal_id as user_fed_id,
                      f.first_name||' '||f.last_name as facility_user,
-                     f.role as user_role
+                     g.role as user_role
               from investigator g, facility_user f
               where f.facility_user_id = g.facility_user_id
             ),
@@ -160,7 +160,7 @@ create or replace package body dpaccess as
               select g.investigation_id,
                      f.federal_id as user_fed_id,
                      f.first_name||' '||f.last_name as facility_user,
-                     f.role as user_role
+                     g.role as user_role
               from investigator g, facility_user f
               where f.facility_user_id = g.facility_user_id
             ),
@@ -249,7 +249,7 @@ create or replace package body dpaccess as
               select g.investigation_id,
                      f.federal_id as user_fed_id,
                      f.first_name||' '||f.last_name as facility_user,
-                     f.role as user_role
+                     g.role as user_role
               from investigator g, facility_user f
               where f.facility_user_id = g.facility_user_id
             )
@@ -369,7 +369,7 @@ create or replace package body dpaccess as
               select g.investigation_id,
                      f.federal_id as user_fed_id,
                      f.first_name||' '||f.last_name as facility_user,
-                     f.role as user_role
+                     g.role as user_role
               from investigator g, facility_user f
               where f.facility_user_id = g.facility_user_id
             ),
@@ -445,7 +445,7 @@ create or replace package body dpaccess as
               select g.investigation_id,
                      f.federal_id as user_fed_id,
                      f.first_name||' '||f.last_name as facility_user,
-                     f.role as user_role
+                     g.role as user_role
               from investigator g, facility_user f
               where f.facility_user_id = g.facility_user_id
             ),
@@ -515,7 +515,7 @@ create or replace package body dpaccess as
                  i.inv_abstract as inv_abstract,
                  f.federal_id as user_fed_id,
                  f.first_name||' '||f.last_name as facility_user,
-                 f.role as user_role,
+                 ir.role as user_role,
                  dense_rank() over(ORDER BY i.id) dr
           from investigation i, fed_inv g, investigator ir, facility_user f
           where i.id = g.investigation_id
@@ -553,5 +553,6 @@ create or replace package body dpaccess as
 
 end dpaccess;
 /
+
 
 
