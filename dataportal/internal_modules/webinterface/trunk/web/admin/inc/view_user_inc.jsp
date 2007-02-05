@@ -29,11 +29,11 @@
                                 <f:selectItem itemValue="ONE" itemLabel="Select One" itemDisabled="true"/>
                                 <f:selectItem itemValue="ALL" itemLabel="ALL"/>
                                 <f:selectItem itemValue="LOG_ON" itemLabel="LOG ON"/>
+                                <f:selectItem itemValue="LOG_ON_KERBEROS" itemLabel="LOG ON VIA KERBEROS"/>                               
                                 <f:selectItem itemValue="LOG_OFF" itemLabel="LOG OFF"/>
                                 <f:selectItem itemValue="BASIC_SEARCH" itemLabel="BASIC SEARCH"/>
+                                <f:selectItem itemValue="MYDATA_SEARCH" itemLabel="MYDATA SEARCH"/>
                                 <f:selectItem itemValue="DOWNLOAD" itemLabel="DOWNLOAD"/>
-                                
-                                
                             </h:selectOneMenu>
                             
                             
@@ -171,13 +171,13 @@
                             </h:column>
                             
                             <f:facet name="detailStamp">
-                                 
+                                
                                 
                                 <t:dataTable preserveSort="true"  width="55%" id="detailsTable" columnClasses="standardTable_Column,standardTable_Column"
                                              styleClass="standardTable_Column" var="detailsList" value="#{data.eventLogDetails}">
-                                   
+                                    
                                     <h:outputText style="font-size: 10px" value="#{detailsList.details}" />v
-                                   
+                                    
                                 </t:dataTable>
                                 
                             </f:facet>

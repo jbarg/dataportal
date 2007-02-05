@@ -332,12 +332,12 @@
                 
                 <f:facet name="header">
                     <h:panelGrid columns="2" >
-                        <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="selectAll" rendered="#{visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectNone}">           
+                        <a4j:commandLink reRender="data,expand"  style="table-header" ajaxSingle="true" id="selectAll" rendered="#{visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectNone}">           
                             <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
                             <t:graphicImage  id="selectNonew" value="../../images/button_minus1.gif"  border="0"/>
                         </a4j:commandLink>   
                         
-                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="selectNone" rendered="#{!visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectAll}">           
+                        <a4j:commandLink reRender="data,expand" style="table-header" ajaxSingle="true" id="selectNone" rendered="#{!visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectAll}">           
                             <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>                       
                             <t:graphicImage  id="selectAllc" value="../../images/button_plus1.gif"  border="0"/>                 
                         </a4j:commandLink> 
