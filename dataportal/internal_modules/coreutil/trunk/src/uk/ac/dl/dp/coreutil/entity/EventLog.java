@@ -57,8 +57,8 @@ import javax.persistence.TemporalType;
 
 @NamedNativeQueries( {
     //
-    @NamedNativeQuery(name = "EventLog.countByEventNative", query = "SELECT dn, COUNT(*), id FROM (select u.id,u.dn,el.event FROM DP_USER u, DP_EVENT_LOG el WHERE u.id=el.user_id AND event = ?1 AND (el.mod_time > ?2) AND (el.mod_time < ?3 ) ) GROUP BY dn,id"),
-    @NamedNativeQuery(name = "EventLog.countByEventNativeLike", query = "SELECT dn, COUNT(*), id FROM (select u.id,u.dn,el.event FROM DP_USER u, DP_EVENT_LOG el WHERE u.id=el.user_id AND event = ?1 AND (el.mod_time > ?2) AND (el.mod_time < ?3 ) AND u.dn LIKE ?4) GROUP BY dn, id")
+    @NamedNativeQuery(name = "EventLog.countByEventNative", query = "SELECT dn, COUNT(*), id FROM (select u.id,u.dn,el.event FROM DP_USER u, DP_EVENT_LOG el WHERE u.id=el.user_id AND event LIKE ?1 AND (el.mod_time > ?2) AND (el.mod_time < ?3 ) ) GROUP BY dn,id"),
+    @NamedNativeQuery(name = "EventLog.countByEventNativeLike", query = "SELECT dn, COUNT(*), id FROM (select u.id,u.dn,el.event FROM DP_USER u, DP_EVENT_LOG el WHERE u.id=el.user_id AND event LIKE ?1 AND (el.mod_time > ?2) AND (el.mod_time < ?3 ) AND u.dn LIKE ?4) GROUP BY dn, id")
 })
 
 @SqlResultSetMappings({
