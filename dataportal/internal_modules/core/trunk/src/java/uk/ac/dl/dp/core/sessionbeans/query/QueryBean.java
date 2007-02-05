@@ -42,6 +42,7 @@ import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.coreutil.interfaces.QueryRemote;
 import uk.ac.dl.dp.coreutil.interfaces.TimerServiceLocal;
+import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
@@ -172,7 +173,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         log.trace("sent off querys to MDBs");
         //send off basic search event
         //TODO sort out facility, keyword strings properly
-        eventLocal.sendKeywordEvent(sid,facilities, keyword);
+        if(queryType.toString().equals(DPQueryType.KEYWORD.toString())){
+            eventLocal.sendKeywordEvent(sid, facilities, keyword, DPEvent.BASIC_SEARCH);
+        } else  eventLocal.sendKeywordEvent(sid, facilities, keyword, DPEvent.MYDATA_SEARCH);
         log.trace("sent search event log , sid: "+sid );
         return q_request;
         
@@ -507,7 +510,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         //TODO check for nulls
         
-         //get a list of facilites
+        //get a list of facilites
         Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
         
         

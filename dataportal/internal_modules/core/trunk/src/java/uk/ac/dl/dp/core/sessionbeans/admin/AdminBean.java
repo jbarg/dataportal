@@ -96,8 +96,8 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         //get list of LOG_ONs
         List result = null;
         if(searchString == null){
-            result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"LOG_ON").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).getResultList();
-        } else result = em.createNamedQuery("EventLog.countByEventNativeLike").setParameter(1,"LOG_ON").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).setParameter(4,searchString).getResultList();
+            result = em.createNamedQuery("EventLog.countByEventNative").setParameter(1,"LOG_ON%").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).getResultList();
+        } else result = em.createNamedQuery("EventLog.countByEventNativeLike").setParameter(1,"LOG_ON%").setParameter(2,new Timestamp(min.getTime())).setParameter(3,new Timestamp(max.getTime())).setParameter(4,searchString).getResultList();
         
         Collection<EventLogCount> statsCollection = new ArrayList<EventLogCount>();
         
@@ -120,6 +120,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
                 log.trace(ob1);
                 i++;
             }
+            log.trace("Adding user "+elc.getDn());
             statsCollection.add(elc);
         }
         
@@ -141,7 +142,9 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
             for(Object ob1 : t){
                 
                 if(i == 0) elc = getEventLogCount(""+ob1,statsCollection);
-                if(i == 1) elc.setSearches(new Integer(((BigDecimal)ob1).intValue()));
+                if(i == 1) {                    
+                    elc.setSearches(new Integer(((BigDecimal)ob1).intValue()));
+                }
                 if(i == 2) elc.setId(new Integer(""+ob1));
                 log.trace(ob1);
                 i++;
@@ -212,7 +215,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         log.trace("iniitalize lasy loads, should already be done by eager loading");
         for(EventLog elog : result){
             Collection<EventLogDetails> details = elog.getEventLogDetails();
-           // log.trace("Size: "+details.size());
+            log.trace("Size: "+details.size());
             for(EventLogDetails detail : details){
                 detail.getDetails();
                 //log.trace(detail.getDetails());
@@ -393,8 +396,10 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     
     private EventLogCount getEventLogCount(String DN, Collection<EventLogCount> statsCollection){
         for(EventLogCount elc : statsCollection){
+            log.trace(DN +" "+elc.getDn());
             if(elc.getDn().equals(DN)) return elc;
         }
+        log.trace("Returning null for EventLogCount");
         return null;
     }
     
