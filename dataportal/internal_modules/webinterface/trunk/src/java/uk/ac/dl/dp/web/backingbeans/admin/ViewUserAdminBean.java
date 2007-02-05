@@ -208,9 +208,11 @@ public class ViewUserAdminBean extends SortableList {
             } else {
                 logs = AdminDelegate.getInstance().getUsersEventStats(getVisit().getSid(),getAdminData().getSearchUser(),getFirstDate(),getSecondDate(),DPEvent.valueOf(getType()));
             }
+            
+            log.trace("Number returned is "+logs.size());
             getAdminData().setEventLogs(logs);
             
-            return NavigationConstants.SEARCH_SUCCESS;
+            return NavigationConstants.ADMIN_SEARCH_SUCCESS;
         }  catch (Exception ex) {
             log.error("Cannot get eventlog for: "+getAdminData().getSearchUser(),ex);
             error("Error:  Unexpected error searching for "+getAdminData().getSearchUser());
