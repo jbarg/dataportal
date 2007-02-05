@@ -200,7 +200,7 @@ public class ViewAllUserStatsAdminBean extends SortableList {
             /*for(EventLog count : logs){
                 log.trace(count.getEventLogDetails().size());
             }*/
-            return NavigationConstants.SEARCH_SUCCESS;
+            return NavigationConstants.ADMIN_SEARCH_SUCCESS;
         }  catch (Exception ex) {
             log.error("Cannot get eventlog for: "+DN,ex);
             error("Error:  Unexpected error searching for "+DN);

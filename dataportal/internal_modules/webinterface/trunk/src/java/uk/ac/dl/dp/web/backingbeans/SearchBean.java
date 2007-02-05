@@ -109,7 +109,7 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.query(getVisit().getSid(), new String[2], getVisitData().getCurrentSelectedFacilities(), LogicalOperator.AND, false, DPQueryType.MYDATA);
+            query_request = qd.query(getVisit().getSid(), null, getVisitData().getCurrentSelectedFacilities(), LogicalOperator.AND, false, DPQueryType.MYDATA);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -149,7 +149,7 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.query(getVisit().getSid(), new String[2], facilities, LogicalOperator.AND, false, DPQueryType.MYDATA);
+            query_request = qd.query(getVisit().getSid(), null, facilities, LogicalOperator.AND, false, DPQueryType.MYDATA);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {

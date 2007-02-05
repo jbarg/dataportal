@@ -27,6 +27,7 @@ public class NavigationConstants {
     
     //searching navs
     public final static String SEARCH_SUCCESS = "SEARCH_SUCCESS";
+    public final static String ADMIN_SEARCH_SUCCESS = "ADMIN_SEARCH_SUCCESS";
     public final static String GOTO_INVESTIGATIONS = "GOTO_INVESTIGATIONS";
     
     //data sets

@@ -10,6 +10,8 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -165,8 +167,9 @@ public class DataCenterBean extends SortableList {
                     log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
                     df.setDownload(!df.isDownload());
                     
-                     checkSingleFacilityChoosen(df.getDataRefId().getFacility());
-                     
+                    checkSingleFacilityChoosen(df.getDataRefId().getFacility());
+                    checkFromSameSRBChoosen(df.getDataRefId().getFacility());
+                    
                     break;
                 } else{
                     //ref
@@ -185,6 +188,7 @@ public class DataCenterBean extends SortableList {
                     //  url.setDownload(df.isDownload());
                     //}
                     checkSingleFacilityChoosen(df.getFacility());
+                    checkFromSameSRBChoosen(df.getFacility());
                     
                     break;
                 }
@@ -223,9 +227,73 @@ public class DataCenterBean extends SortableList {
                         return ;
                     }
                 }
-            }            
+            }
         }
         log.info("Same facility added with: "+facilityAdded);
+        getVisitData().setDownloadable(true);
+        return ;
+        
+    }
+    
+    private void checkFromSameSRBChoosen(String facilityAdded){
+        //need to check if this addition is from other facility
+        Collection<DataReference> dataRefs = getVisitData().getCurrentDataReferences();
+        
+        Collection<String> srbsChoosen = new ArrayList<String>();
+        for(DataReference df : dataRefs){
+            if(df.isDownload()){
+                String urlS = df.getUrls().iterator().next().getUrl();
+                log.trace("trying to add: "+urlS);
+                urlS = urlS.replaceFirst("srb://","http://");
+                String host = null;
+                try {
+                    host = new URL(urlS).getHost();
+                } catch (MalformedURLException ex) {
+                    log.warn("SRB location: "+host+" is not a valid URL.");
+                    error("Unable to download from this file location.");
+                    getVisitData().setDownloadable(false);
+                    return ;
+                }
+                
+                if(srbsChoosen.isEmpty()){
+                    srbsChoosen.add(host);
+                } else if(!srbsChoosen.contains(host)){
+                    error("Unable to download from differenr data storage locations. Please download seperately.");
+                    log.info("Unable to download from data storage locations. Trying to add: "+host+" already have: " +host);
+                    getVisitData().setDownloadable(false);
+                    return ;
+                }
+            }
+            for(Url url : df.getUrls()){
+                if(url.isDownload()){
+                    String urlS = url.getUrl();
+                    log.trace("trying to add: "+urlS);
+                    urlS = urlS.replaceFirst("srb://","http://");
+                    String host = null;
+                    try {
+                        host = new URL(urlS).getHost();
+                    } catch (MalformedURLException ex) {
+                        log.warn("SRB location: "+url.getUrl()+" is not a valid URL.");
+                        error("Unable to download from this file location.");
+                        getVisitData().setDownloadable(false);
+                        return ;
+                    }
+                    
+                    if(srbsChoosen.isEmpty()){
+                        srbsChoosen.add(host);
+                    } else if(!srbsChoosen.contains(host)){
+                        error("Unable to download from differenr data storage locations. Please download seperately.");
+                        log.info("Unable to download from data storage locations. Trying to add: "+url.getUrl()+" already have: " +host);
+                        getVisitData().setDownloadable(false);
+                        return ;
+                    }
+                } else {
+                    String urlS = url.getUrl();
+                    log.trace("not trying to add: "+urlS);
+                }
+            }
+        }
+        log.info("Same srb location added with: "+facilityAdded);
         getVisitData().setDownloadable(true);
         return ;
         
@@ -235,7 +303,7 @@ public class DataCenterBean extends SortableList {
         log.trace("adding email");
         UserPreferencesDTO userPrefs =  getVisit().getUserPreferences();
         log.trace("trying to set email as "+userPrefs.getEmail());
-        try {            
+        try {
             SessionDelegate.getInstance().setUserPrefs(getVisit().getSid(),userPrefs);
             
         } catch (Exception ex) {
@@ -335,7 +403,7 @@ public class DataCenterBean extends SortableList {
         log.trace("viewing studyId: "+qrdto.getInvestigationId());
         Collection<Investigation> investigations = null;
         try {
-            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));                      
+            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
             error("Error:  Unable to search for "+qrdto.getName());
@@ -349,7 +417,7 @@ public class DataCenterBean extends SortableList {
         if(investigations == null){
             log.warn("Insufficent funds to view investigation.");
             return null;
-        }        
+        }
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
         //remove request info
@@ -358,7 +426,7 @@ public class DataCenterBean extends SortableList {
         
     }
     
-     //Gets the current data reference and then gets the investigation and searches for the investigation
+    //Gets the current data reference and then gets the investigation and searches for the investigation
     // returns back to the dataset page of the investigation
     public String viewDataSets(){
         log.trace("view data referenced data");
