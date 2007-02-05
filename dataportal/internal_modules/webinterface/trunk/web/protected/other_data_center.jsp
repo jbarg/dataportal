@@ -51,11 +51,12 @@
                                     <td valign="top" width="200">
                     
                                         <!-- does not work inside subview??? -->
-                                        <%--  <f:subview id="navigation">
-                                        <c:import url="/inc/header2.jsp" />
-                                        </f:subview>--%>
-                                        <img align="center" src="../../images/cclrc.jpg" width=170" height="60" />
-                                        <br />
+                                         <f:subview id="navigation">
+                                            <c:import url="inc/header_img.jsp" />
+                                            </f:subview>
+                                            <%--
+                                            <img align="center" src="../../images/diamond.gif" width=170" height="60" />
+                                            --%>     <br />
                                         <br />
                                         <t:div id="subnavigation_outer">
                                             <t:div id="subnavigation">
@@ -109,7 +110,7 @@
                         </table>
                         <br />
 
-                        <table border="0" align="right">
+                        <table id="footer_bar" border="0" align="right">
                              <tbody>
                                 <tr>
                                     <f:subview id="footer">

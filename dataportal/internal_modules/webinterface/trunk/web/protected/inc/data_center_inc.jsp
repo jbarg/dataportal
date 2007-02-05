@@ -86,7 +86,9 @@
                                                     <h:outputText value="                  " />
                                                     <h:outputText value="                  " />
                                                     
-                                                    <h:commandLink title="Download via ImageJ" rendered="#{!data.dataset}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
+                                                    <t:graphicImage rendered="#{!url.imageJ && !data.datasetInFolder}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>                                                      
+                                                    
+                                                    <h:commandLink title="Download via ImageJ" rendered="#{url.imageJ && !data.dataset}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
                                                         <t:graphicImage title="Download via ImageJ" value="../../images/document.png" border="0"/>                                   
                                                     </h:commandLink>
                                                     
@@ -316,8 +318,6 @@
                                                         <t:graphicImage rendered="#{!url.imageJ && !data.datasetInFolder}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>
                                                         <t:graphicImage id="doc_button2" rendered="#{data.datasetInFolder}" value="../../images/blue-folder-closed.png"  border="0"/>
                                                         
-                                                        
-                                                        
                                                         <h:commandLink rendered="#{url.imageJ}" onclick="download('#{url.dpId}','DATA_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
                                                             <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
                                                         </h:commandLink>
@@ -404,7 +404,7 @@
                                                 <f:facet name="popup">
                                                     <h:panelGroup>
                                                         <h:panelGrid columns="1" >
-                                                            <h:outputText value="If you specify and email address, you can have the data downloaded link emailed to you."/>    
+                                                            <h:outputText value="If you specify an email address, you can have the data downloaded link emailed to you."/>    
                                                             <h:inputText value="#{visit.userPreferences.email}"  id="email">
                                                                 
                                                             </h:inputText>

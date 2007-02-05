@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib prefix="tiles" uri="http://struts.apache.org/tags-tiles"%>
 
-<img align="center" src="../images/cclrc.jpg" width="160" height="40" />
+<img align="center" src="../images/diamond.gif" width="160" height="40" />
 <br />
 <br />
 <t:div id="subnavigation_outer">

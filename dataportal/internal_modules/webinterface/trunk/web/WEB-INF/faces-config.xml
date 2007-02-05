@@ -380,7 +380,7 @@
         </description>
         <from-view-id>/admin/admin.jsp</from-view-id>
         <navigation-case>
-            <from-outcome>SEARCH_SUCCESS</from-outcome>
+            <from-outcome>ADMIN_SEARCH_SUCCESS</from-outcome>
             <to-view-id>/admin/view_user.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
