@@ -14,14 +14,10 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,6 +30,7 @@ import javax.persistence.Transient;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
+import uk.ac.dl.dp.coreutil.util.Util;
 
 /**
  *
@@ -257,7 +254,7 @@ public class DataReference implements Serializable {
         StringBuilder builder = new StringBuilder();
         builder.append("<table>");
         int j = 0;
-        for(Url url : urls){           
+        for(Url url : urls){
             builder.append("<tr><td>"+url.getName()+"</td></tr>");
             j++;
             if(j == 20 ) {
@@ -319,5 +316,8 @@ public class DataReference implements Serializable {
         return getFacility()+"-"+getId();
     }
     
+    public boolean isImageJ(){
+        return  Util.isImageJ(getName());
+    }
     
 }
