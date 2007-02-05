@@ -76,9 +76,11 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             log.debug("Query : Keyword "+e.getKeyword()+" on fac: "+e.getFacility()+" sent at "+e.getSent());
             try {
                 log.debug("Querying: "+e.getDN()+" with facilities: "+e.getFacility()+" Keywords:");
-                for(String key : e.getKeyword()){
-                    log.debug(key);
-                }
+                if(e.getKeyword() != null){
+                    for(String key : e.getKeyword()){
+                        log.debug(key);
+                    }
+                } else log.debug("no keywords");
                 
                 boolean security = true;
                 for(ModuleLookup fac : facilities){
@@ -86,7 +88,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                         log.trace("Found facility, "+e.getFacility()+" is security "+fac.isSecurity());
                         security = fac.isSecurity();
                     }
-                }                
+                }
                 
                 dpal = new DPAccessLayer(e.getFacility());
                 

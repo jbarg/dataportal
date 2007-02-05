@@ -52,13 +52,20 @@
     <class>uk.ac.dl.dp.coreutil.entity.DataRefAuthorisationPK</class>
     <class>uk.ac.dl.dp.coreutil.entity.DpUserPreference</class>
     <class>uk.ac.dl.dp.coreutil.entity.DPConstants</class>
-    <properties>
+  <!--  <properties>
       <property name="toplink.jdbc.driver" value="oracle.jdbc.xa.client.OracleXADataSource"/>
       <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@volga.dl.ac.uk:1521:XE"/>
       <property name="toplink.jdbc.user" value="dp5user"/>
       <property name="toplink.jdbc.password" value="dp5pass"/>
       <property name="toplink.logging.level" value="FINE"/>
     </properties>
+  </persistence-unit>-->
+<properties>
+      <property name="toplink.jdbc.driver" value="oracle.jdbc.xa.client.OracleXADataSource"/>
+      <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@(DESCRIPTION= (LOAD_BALANCE=on) (ADDRESS=(PROTOCOL=TCP)(HOST=honey.esc.rl.ac.uk) (PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=goodnight.esc.rl.ac.uk)(PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=sapphire.esc.rl.ac.uk)(PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=domino.esc.rl.ac.uk)(PORT=1521)) (CONNECT_DATA=(SERVICE_NAME=dpdls.esc.rl.ac.uk)))"/>
+      <property name="toplink.jdbc.user" value="DPDLS"/>
+      <property name="toplink.jdbc.password" value="ajdn1fr"/>
+      <property name="toplink.logging.level" value="FINE"/>
+    </properties>
   </persistence-unit>
-
 </persistence>

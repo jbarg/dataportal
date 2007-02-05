@@ -33,6 +33,7 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.interfaces.EventRemote;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
+import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
 import uk.ac.dl.dp.coreutil.util.EventMessage;
@@ -133,30 +134,44 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
         sendEvent(sid,eventmessage);
     }
     
-    public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords){
+    public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords, DPEvent type){
         EventLog eventlog = new EventLog();
         StringBuilder builder = new StringBuilder();
         for(String  facility : facilities){
             builder.append(" "+facility);
         }
+        
+        
         eventlog.setDetails("Keyword Search:"+builder.toString());
-        eventlog.setEvent(DPEvent.BASIC_SEARCH.toString());
+        eventlog.setEvent(type.toString());
         
         Collection<EventLogDetails> details = new ArrayList<EventLogDetails>();
         
-        for(String keyword : keywords){
+        if(keywords == null || keywords.length == 0){
             EventLogDetails detail = new EventLogDetails();
-            detail.setDetails(keyword);
+            detail.setDetails("all data");
             detail.setEventLogId(eventlog);
             details.add(detail);
+            eventlog.setEventLogDetails(details);
+        } else {
+            for(String keyword : keywords){
+                EventLogDetails detail = new EventLogDetails();
+                detail.setDetails(keyword);
+                detail.setEventLogId(eventlog);
+                details.add(detail);
+            }
+            eventlog.setEventLogDetails(details);
         }
-        
-        eventlog.setEventLogDetails(details);
         
         EventMessage eventmessage = new EventMessage();
         eventmessage.setEventLog(eventlog);
         
         sendEvent(sid,eventmessage);
+        
+    }
+    
+    public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords){
+        sendKeywordEvent(sid, facilities,keywords, DPEvent.BASIC_SEARCH);
     }
     
     public void sendDownloadEvent(String sid, String message, Collection<String> srburls){
