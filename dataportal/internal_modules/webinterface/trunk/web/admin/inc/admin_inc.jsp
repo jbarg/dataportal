@@ -61,7 +61,7 @@
                             </h:outputLabel  >
                             
                             
-                            <t:inputCalendar  binding="#{viewAllUserStatsAdmin.calendarFirst}" id="thirdOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                            <t:inputCalendar styleClass="text" binding="#{viewAllUserStatsAdmin.calendarFirst}" id="thirdOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                               currentDayCellClass="currentDayCell" value="#{viewAllUserStatsAdmin.firstDate}" renderAsPopup="true"
                                               popupTodayString="Today is:"
                                               popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
@@ -75,7 +75,7 @@
                             </h:outputLabel  >
                             
                             
-                            <t:inputCalendar binding="#{viewAllUserStatsAdmin.calendarSecond}" id="forthOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                            <t:inputCalendar styleClass="text" binding="#{viewAllUserStatsAdmin.calendarSecond}" id="forthOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                              currentDayCellClass="currentDayCell" value="#{viewAllUserStatsAdmin.secondDate}" renderAsPopup="true"
                                              popupTodayString="Today is:"
                                              popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
