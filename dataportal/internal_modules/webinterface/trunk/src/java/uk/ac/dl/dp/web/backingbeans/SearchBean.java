@@ -194,7 +194,66 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
+            //set last query data
+            BasicSearchBean bsb = getVisitData().getBasicSearchBean();
+            bsb.setKeyword(getKeyword());
+            bsb.setSelectedFacilities(getFacilities());
+            bsb.setLikeExpression(getLikeExpression());
+            bsb.setLogicalExpression(getLogicalExpression());
+            
             query_request = qd.query(getVisit().getSid(), getKeywords(),getVisitData().getCurrentSelectedFacilities(), type, fuzzy, DPQueryType.KEYWORD);
+            getSearchData().setQueryRequest(query_request);
+            log.info("Query Id is "+query_request.getQueryid());
+        } catch (DataPortalException ex) {
+            error("Unable to perform query");
+            log.fatal("Unable to create query user for: "+sid,ex);
+            return null;
+        }catch (Exception ex) {
+            error("Unable to perform query");
+            log.fatal("Unable to create query user for: "+sid,ex);
+            return null;
+        }
+        
+        //set the title from the seach
+        getVisitData().setSearchedTitle("Search Results");
+        
+        return getQueryResults(query_request, false);
+    }
+    
+     /**
+     * Action method to do basic search
+     */
+    public String searchByKeywordNavigation(){
+        
+        //sets up initial values
+        String sid = null;
+        QueryRequest query_request = null;
+        
+        log.trace("searching for keywords:");
+        setKeyword(getVisitData().getBasicSearchBean().getKeyword());
+        for(String keyword : getKeywords()){
+            log.trace(keyword);
+        }
+        log.trace("searching for facilities :"+getVisitData().getCurrentSelectedFacilities());
+        log.trace("radio box :"+getVisitData().getBasicSearchBean().getLogicalExpression());
+        
+        //gets the vaue of the AND OR
+        LogicalOperator type = LogicalOperator.AND;
+        if(getVisitData().getBasicSearchBean().getLogicalExpression().equals("OR") ) type = LogicalOperator.OR;
+        
+        boolean fuzzy = false;
+        if(getVisitData().getBasicSearchBean().getLikeExpression().equals("LIKE")) fuzzy = true;
+        
+        //send off initail query
+        QueryDelegate qd = QueryDelegate.getInstance();
+        try {
+            //set last query data
+            BasicSearchBean bsb = getVisitData().getBasicSearchBean();
+            bsb.setKeyword(getKeyword());
+            bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
+            
+            
+            query_request = qd.query(getVisit().getSid(), getKeywords(),getVisitData().getBasicSearchBean().getSelectedFacilities(), type, fuzzy, DPQueryType.KEYWORD);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -342,6 +401,7 @@ public class SearchBean extends AbstractRequestBean {
     }
     
     public String getLikeExpression() {
+      //  return getVisitData().getBasicSearchBean().getLikeExpression();
         return likeExpression;
     }
     
