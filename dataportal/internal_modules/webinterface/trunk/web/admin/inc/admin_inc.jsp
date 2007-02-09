@@ -29,7 +29,7 @@
                                 <h:outputText styleClass="body" value="Search DNs:"/>
                             </h:outputLabel  >
                             
-                            <h:inputText id="dnj_id_1" size="30" required="true" value="#{visit.adminData.searchString}">
+                            <h:inputText styleClass="text" id="dnj_id_1" size="30" required="true" value="#{visit.adminData.searchString}">
                                 <f:validateLength minimum="1" maximum="60"/>
                             </h:inputText> 
                             
@@ -87,7 +87,7 @@
                             <h:panelGroup/>
                             <%-- Does not work with rendering renerdre=false sections" <a4j:commandButton reRender="searchResults" actionListener="#{dataAuthorisationBean.search}" value="Search"/>--%>
                             <%-- Old button before ajax button--%>
-                            <h:commandButton actionListener="#{viewAllUserStatsAdmin.search}" title="Search" value="Search"/>
+                            <h:commandButton styleClass="button" actionListener="#{viewAllUserStatsAdmin.search}" title="Search" value="Search"/>
                             <h:panelGroup/>
                             <h:panelGroup/>
                         </h:panelGrid>

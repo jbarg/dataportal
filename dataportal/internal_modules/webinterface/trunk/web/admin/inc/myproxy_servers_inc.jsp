@@ -21,7 +21,7 @@
                                 <h:outputText styleClass="body" value="Address:"/>
                             </h:outputLabel  >
                             
-                            <h:inputText id="addressnewj_id_1" size="30" required="true" value="#{myProxyServerAdminBean.proxyServerAddress}">
+                            <h:inputText styleClass="text" id="addressnewj_id_1" size="30" required="true" value="#{myProxyServerAdminBean.proxyServerAddress}">
                                 <f:validateLength minimum="5" maximum="60"/>
                             </h:inputText> 
                             
@@ -32,7 +32,7 @@
                                 <h:outputText styleClass="body" value="CA DN:"/>
                             </h:outputLabel  >
                             
-                            <h:inputText id="canewj_id_1" size="30" required="true" value="#{myProxyServerAdminBean.caRootCertificate}">
+                            <h:inputText styleClass="text" id="canewj_id_1" size="30" required="true" value="#{myProxyServerAdminBean.caRootCertificate}">
                                 <f:validateLength minimum="5" maximum="160"/>
                             </h:inputText> 
                             
@@ -43,14 +43,14 @@
                                 <h:outputText styleClass="body" value="Port:"/>
                             </h:outputLabel  >
                             
-                            <h:inputText id="portnewj_id_1" size="30" required="true" value="#{myProxyServerAdminBean.portNumber}">
+                            <h:inputText styleClass="text" id="portnewj_id_1" size="30" required="true" value="#{myProxyServerAdminBean.portNumber}">
                                 <f:validateLongRange minimum="1"  />
                             </h:inputText> 
                             
                             
                             <h:message for="portnewj_id_1" styleClass="error" showSummary="false" showDetail="true" />
                             
-                            <h:commandButton actionListener="#{myProxyServerAdminBean.newMyProxyServer}" title="Add" value="Add"/>
+                            <h:commandButton styleClass="button" actionListener="#{myProxyServerAdminBean.newMyProxyServer}" title="Add" value="Add"/>
                             
                             <h:panelGroup/>
                         </h:panelGrid> 
@@ -201,7 +201,7 @@
                                                 <h:outputText styleClass="body" value="Address:"/>
                                             </h:outputLabel  >
                                             
-                                            <h:inputText id="addressj_id_1" size="30" required="true" value="#{upDate.proxyServerAddress}">
+                                            <h:inputText styleClass="text" id="addressj_id_1" size="30" required="true" value="#{upDate.proxyServerAddress}">
                                                 <f:validateLength minimum="5" maximum="60"/>
                                             </h:inputText> 
                                             
@@ -212,7 +212,7 @@
                                                 <h:outputText styleClass="body" value="CA DN:"/>
                                             </h:outputLabel  >
                                             
-                                            <h:inputText id="caj_id_1" size="30" required="true" value="#{upDate.caRootCertificate}">
+                                            <h:inputText styleClass="text" id="caj_id_1" size="30" required="true" value="#{upDate.caRootCertificate}">
                                                 <f:validateLength minimum="5" maximum="160"/>
                                             </h:inputText> 
                                             
@@ -223,15 +223,15 @@
                                                 <h:outputText styleClass="body" value="Port:"/>
                                             </h:outputLabel  >
                                             
-                                            <h:inputText id="portj_id_1" size="30" required="true" value="#{upDate.portNumber}">
+                                            <h:inputText styleClass="text" id="portj_id_1" size="30" required="true" value="#{upDate.portNumber}">
                                                 <f:validateLongRange minimum="1"  />
                                             </h:inputText> 
                                             
                                             
                                             <h:message for="portj_id_1" styleClass="error" showSummary="false" showDetail="true" />
                                             
-                                            <h:commandButton action="#{myProxyServerAdminBean.upDateMyProxyServer}" title="Update" value="Update"/>
-                                            <h:commandButton action="#{myProxyServerAdminBean.refreshPage}" immediate="true" value="Cancel" title="Cancel" />
+                                            <h:commandButton styleClass="button" action="#{myProxyServerAdminBean.upDateMyProxyServer}" title="Update" value="Update"/>
+                                            <h:commandButton styleClass="button" action="#{myProxyServerAdminBean.refreshPage}" immediate="true" value="Cancel" title="Cancel" />
                                             <h:panelGroup/>
                                         </h:panelGrid> 
                                     </h:column>

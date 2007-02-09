@@ -455,7 +455,7 @@
              <tbody>
                 <tr>
                     <td align="right">
-                        <h:commandButton id="expand" disabled="#{!visit.visitData.expandable}" action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
+                        <h:commandButton styleClass="button" id="expand" disabled="#{!visit.visitData.expandable}" action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
                         
                     </td>
                     <%--<td align="right">

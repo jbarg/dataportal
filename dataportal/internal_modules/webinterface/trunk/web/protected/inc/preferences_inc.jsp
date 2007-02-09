@@ -78,7 +78,7 @@
                             <h:outputText styleClass="body" value="Email Address"/>
                         </h:outputLabel>
                         
-                        <h:inputText id="emailj_id_1" size="30" validator="#{userPreferencesBean.validateEmail}" value="#{userPreferencesBean.email}">
+                        <h:inputText styleClass="text" id="emailj_id_1" size="30" validator="#{userPreferencesBean.validateEmail}" value="#{userPreferencesBean.email}">
                             <f:validateLength minimum="5" maximum="160"/>
                         </h:inputText> 
                         
@@ -87,7 +87,7 @@
                         
                         <h:panelGroup/>
                         
-                        <h:commandButton action="#{userPreferencesBean.save}" title="Search" value="Update"/>
+                        <h:commandButton styleClass="button" action="#{userPreferencesBean.save}" title="Search" value="Update"/>
                         <h:panelGroup/>
                         
                     </h:panelGrid>

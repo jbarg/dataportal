@@ -748,7 +748,7 @@
                             <tr>   
                                 <td align="left">
                                     
-                                    <h:commandButton id="addSelection" disabled="#{!visit.visitData.addSelectionable}" action="#{datasetTree.select}" title="Add selections" value="Add selections"/>
+                                    <h:commandButton styleClass="button" id="addSelection" disabled="#{!visit.visitData.addSelectionable}" action="#{datasetTree.select}" title="Add selections" value="Add selections"/>
                                     &nbsp;
                                     <h:selectBooleanCheckbox disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
                                         

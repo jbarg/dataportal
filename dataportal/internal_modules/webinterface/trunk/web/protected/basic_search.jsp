@@ -5,6 +5,10 @@
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
+<%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
+<%@ taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
+<%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
     
     
@@ -31,16 +35,16 @@
                                             <f:subview id="header">
                                                 <c:import url="inc/header.jsp" />
                                             </f:subview>
-                                          
+                                            
                                         </td>
-                                       
+                                        
                                         <td width="100%" align="right" >
                                             <f:subview id="header_2">
                                                 <c:import url="inc/header_2.jsp" />
                                             </f:subview>
                                         </td>
                                     </tr>
-                                   
+                                    
                                 </tbody>
                                 
                             </table>
@@ -51,21 +55,28 @@
                                         <td valign="top" width="200">
                                             <!-- does not work inside subview??? -->
                                             <f:subview id="navigation">
-                                            <c:import url="inc/header_img.jsp" />
+                                                <c:import url="inc/header_img.jsp" />
                                             </f:subview>
                                             <%--
                                             <img align="center" src="../../images/diamond.gif" width=170" height="60" />
                                             --%>
                                             <br />
                                             <br />
-                                             <t:div id="subnavigation_outer">
+                                            <t:div id="subnavigation_outer">
                                                 <t:div id="subnavigation">
                                                     <t:panelNavigation2 renderAll="false" id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
-                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
+                                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
                                                         <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
                                                     </t:panelNavigation2>
                                                 </t:div>
                                             </t:div>
+                                          
+                                            <t:div id="subnavigation_nav">
+                                                <f:subview id="navigation_search">
+                                                    <c:import url="inc/basic_search_inc_2.jsp" />
+                                                </f:subview>
+                                            </t:div>
+                                            
                                         </td>
                                         <td width="*" valign="top" >
                                             <table border="0" width="100%" >  
@@ -103,21 +114,21 @@
                                             <br />
                                             <br />
                                             <hr size="-1" width="100%"  />
-                                            
+                                            <table id="footer_bar" border="0" width="100%" align="right">
+                                                 <tbody>
+                                                    <tr>
+                                                        <f:subview id="footer2">
+                                                            <c:import url="inc/footer.jsp" />
+                                                        </f:subview> 
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                             
-                            <table id="footer_bar" border="0" width="100%" align="right">
-                                 <tbody>
-                                    <tr>
-                                        <f:subview id="footer">
-                                            <c:import url="inc/footer.jsp" />
-                                        </f:subview> 
-                                    </tr>
-                                </tbody>
-                            </table>
+                         
                         </td>
                     </tr>
                 </tbody>

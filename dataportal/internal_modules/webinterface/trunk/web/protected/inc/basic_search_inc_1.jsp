@@ -19,7 +19,7 @@
 
       function chooseCity(city) {
       var oldvalue = document.getElementById('body:autofillform:keywordFieldj_id_1').value;
-      // alert("--"+oldvalue+"--");
+    //  alert("--"+oldvalue+"--");
       var index = oldvalue.lastIndexOf(' ');
           
       var old = oldvalue.substring(0, index);
@@ -99,7 +99,7 @@
             <%--   <s:inputSuggestAjax required="true" suggestedItemsMethod="#{keyword.getSuggest}"
             id="keywordField" value="#{searchBean.keyword}" charset="utf-8"/>--%>
            
-            <ui:autoComplete  size="40" maxlength="60" id="keywordFieldj_id_1" 
+            <ui:autoComplete styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_1" 
                               completionMethod="#{keyword.completeCity}" 
                               value="#{searchBean.keyword}" required="true"
                               ondisplay="function(item) { return extractCity(item); }"
@@ -107,7 +107,7 @@
             
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                        closePopupOnExitingPopup="true"
+                     closePopupOnExitingPopup="true"
                      displayAtDistanceX="5"
                      displayAtDistanceY="-40">
                 
@@ -134,13 +134,13 @@
                 <h:outputText value="Type:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-       <%--    <h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-           <h:selectOneRadio style="font-size:14px" id="radio" value="#{searchBean.logicalExpression}" >
+            <%--    <h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
+            <h:selectOneRadio style="font-size:12px" id="radio" value="#{searchBean.logicalExpression}" >
                 <f:selectItems value="#{searchBean.logicalExpressions}"/>              
             </h:selectOneRadio>         
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                        closePopupOnExitingPopup="true"
+                     closePopupOnExitingPopup="true"
                      displayAtDistanceX="5"
                      displayAtDistanceY="-40" >
                 
@@ -163,13 +163,13 @@
             <h:panelGroup/>
             
             <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-           <h:selectOneRadio style="font-size:14px" id="like" value="#{searchBean.likeExpression}" >
+            <h:selectOneRadio style="font-size:12px" id="like" value="#{searchBean.likeExpression}" >
                 <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
                 <f:selectItem itemLabel="Like"  itemValue="LIKE" />
             </h:selectOneRadio>       
             
-           <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                         closePopupOnExitingPopup="true"
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
                      displayAtDistanceX="5"
                      displayAtDistanceY="-40" >
                 
@@ -193,9 +193,9 @@
             
             <h:panelGroup/>
             <h:panelGrid columns="3">
-                <h:commandButton id="f" action="#{searchBean.searchByKeyword}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                <h:commandButton id="f" styleClass="button" action="#{searchBean.searchByKeyword}" onclick="busyBox.Show();" title="Search" value="Search"/>
                 <h:panelGroup>&nbsp;</h:panelGroup>
-                <h:commandButton id="own" action="#{searchBean.searchOwnData}" immediate="true" onclick="busyBox.Show();" title="View own" value="View own data"/>
+                <h:commandButton id="own" styleClass="button" action="#{searchBean.searchOwnData}" immediate="true" onclick="busyBox.Show();" title="View own" value="View own data"/>
                 
             </h:panelGrid>
             <h:panelGroup/>
@@ -213,13 +213,3 @@
         </h:panelGrid>--%>
     </h:form>
 </a4j:region>
-
-<iframe id="BusyBoxIFrame" name="BusyBoxIFrame" frameBorder="0" scrolling="no" ondrop="return false;">
-</iframe>
-<SCRIPT>
-		// Instantiate our BusyBox object
-		var busyBox = new BusyBox("BusyBoxIFrame", "busyBox", 4, "../../images/gears_ani_", ".gif", 125, 147, 207);
-                                
-                               
-                               
-</SCRIPT>

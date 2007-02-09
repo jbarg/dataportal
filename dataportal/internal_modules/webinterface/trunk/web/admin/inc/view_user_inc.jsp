@@ -68,7 +68,7 @@
                             
                             <%-- Does not work with rendering renerdre=false sections" <a4j:commandButton reRender="searchResults" actionListener="#{dataAuthorisationBean.search}" value="Search"/>--%>
                             <%-- Old button before ajax button--%>
-                            <h:commandButton action="#{viewUserAdmin.search}" title="Search" value="Search"/>
+                            <h:commandButton styleClass="button" action="#{viewUserAdmin.search}" title="Search" value="Search"/>
                             
                         </h:panelGrid>
                     </h:form>

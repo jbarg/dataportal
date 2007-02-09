@@ -26,7 +26,7 @@
              <h:outputText styleClass="body" value="Username: "/>
         </h:outputLabel  >
         
-        <h:inputText id="Usernamej_id_1" size="20" required="true" value="#{authorisationBean.username}">
+        <h:inputText styleClass="text" id="Usernamej_id_1" size="20" required="true" value="#{authorisationBean.username}">
             <f:validateLength minimum="1" maximum="10"/>
         </h:inputText> 
         <h:message for="Usernamej_id_1" styleClass="error" showSummary="false" showDetail="true" />
@@ -35,13 +35,13 @@
             <h:outputText styleClass="body" value="Password: "/>
         </h:outputLabel  >
         
-        <h:inputSecret id="Passwordj_id_1"  size="20" required="true" value="#{authorisationBean.password}">
+        <h:inputSecret styleClass="text" id="Passwordj_id_1"  size="20" required="true" value="#{authorisationBean.password}">
             <f:validateLength minimum="0" maximum="100"/>
         </h:inputSecret> 
         <h:message for="Passwordj_id_1" styleClass="error"/>
         <h:panelGroup/>
         
-        <h:commandButton action="#{authorisationBean.login}" title="Login" value="Logon"/>
+        <h:commandButton styleClass="button" action="#{authorisationBean.login}" title="Login" value="Logon"/>
         <h:panelGroup/>
         
     </h:panelGrid>

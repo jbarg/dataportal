@@ -13,7 +13,7 @@
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
         <title>CCLRC Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
-         
+          <script language="javascript" src="../css/CastleBusyBox.js"></script>
     </head>
     <body>
         <f:view>
@@ -62,6 +62,11 @@
                                                     </t:panelNavigation2>
                                                 </t:div>
                                             </t:div>
+                                                <t:div id="subnavigation_nav">
+                                                <f:subview id="navigation_search">
+                                                    <c:import url="inc/basic_search_inc_2.jsp" />
+                                                </f:subview>
+                                            </t:div>
                                         </td>
                                         <td width="*" valign="top" >
                                             <table border="0" width="100%" > 
@@ -99,21 +104,22 @@
                                             <br />
                     
                                             <hr size="-1" width="100%"  />
-                    
+                      <table id="footer_bar" border="0" width="100%" align="right">
+                                                 <tbody>
+                                                    <tr>
+                                                        <f:subview id="footer2">
+                                                            <c:import url="inc/footer.jsp" />
+                                                        </f:subview> 
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                          
 
-                            <table id="footer_bar" border="0" width="100%" align="right">
-                                 <tbody>
-                                    <tr>
-                                        <f:subview id="footer">
-                                            <c:import url="inc/footer.jsp" />
-                                        </f:subview>   
-                                    </tr>
-                                </tbody>
+                         
                             </table>
                         </td>
                     </tr>
