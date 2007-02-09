@@ -29,7 +29,7 @@
                                     <h:outputText styleClass="body" value="Search DNs:"/>
                                 </h:outputLabel  >
                                                                                            
-                                <h:inputText id="dnj_id_1" size="30" required="true" value="#{dataAuthorisationBean.searchString}">
+                                <h:inputText styleClass="text" id="dnj_id_1" size="30" required="true" value="#{dataAuthorisationBean.searchString}">
                                     <f:validateLength minimum="1" maximum="60"/>
                                 </h:inputText> 
                                 <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -57,7 +57,7 @@
                                 <h:panelGroup/>
                                <%-- Does not work with rendering renerdre=false sections" <a4j:commandButton reRender="searchResults" actionListener="#{dataAuthorisationBean.search}" value="Search"/>--%>
                                 <%-- Old button before ajax button--%>
-                                 <h:commandButton actionListener="#{dataAuthorisationBean.search}" title="Search" value="Search"/>
+                                 <h:commandButton styleClass="button" actionListener="#{dataAuthorisationBean.search}" title="Search" value="Search"/>
                                 <h:panelGroup/>
                                 <h:panelGroup/>
                             </h:panelGrid>
@@ -85,7 +85,7 @@
                                 </h:outputLabel  >
                                                                                            
                    
-                                <t:inputCalendar  binding="#{dataAuthorisationBean.calendarFirst}" id="thirdOnej_id_1" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                <t:inputCalendar styleClass="text" binding="#{dataAuthorisationBean.calendarFirst}" id="thirdOnej_id_1" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                 currentDayCellClass="currentDayCell" value="#{dataAuthorisationBean.firstDate}" renderAsPopup="true"
                                 popupTodayString="Today is:"
                                 popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
@@ -99,7 +99,7 @@
                                 </h:outputLabel  >
                                                                                            
                    
-                                <t:inputCalendar binding="#{dataAuthorisationBean.calendarSecond}" id="forthOnej_id_1" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                <t:inputCalendar styleClass="text" binding="#{dataAuthorisationBean.calendarSecond}" id="forthOnej_id_1" required="true" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                 currentDayCellClass="currentDayCell" value="#{dataAuthorisationBean.secondDate}" renderAsPopup="true"
                                 popupTodayString="Today is:"
                                 popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
@@ -132,7 +132,7 @@
                                 <h:panelGroup/> 
     
                                 <h:panelGroup/>                                                                      
-                                <h:commandButton action="#{dataAuthorisationBean.grant}" title="Search" value="Grant Access"/>     
+                                <h:commandButton styleClass="button" action="#{dataAuthorisationBean.grant}" title="Search" value="Grant Access"/>     
                                 <h:panelGroup/>    
                             </h:panelGrid>
                         </h:form>    

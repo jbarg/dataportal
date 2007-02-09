@@ -88,7 +88,7 @@
                                                 
                                                 <t:popup styleClass="popup" closePopupOnExitingElement="true"
                                                          closePopupOnExitingPopup="true"
-                                                         displayAtDistanceX="-165"
+                                                         displayAtDistanceX="-145"
                                                          displayAtDistanceY="-20" >
                                                     
                                                     <t:graphicImage id="add_button"  value="../../images/addButton.gif"  border="0"/>
@@ -99,7 +99,7 @@
                                                                     <f:param name="note" value="#{data.id}"/>
                                                                 </h:inputTextarea>
                                                                 
-                                                                <h:commandButton action="#{bookmarkBean.addNote}" title="View selections" value="Add Note"/>
+                                                                <h:commandButton styleClass="button" action="#{bookmarkBean.addNote}" title="View selections" value="Add Note"/>
                                                                 
                                                             </h:panelGrid>
                                                         </h:panelGroup>
@@ -234,7 +234,7 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             
-                                            <h:commandButton action="#{bookmarkBean.removeBookmarks}" title="Delete selections" value="Delete selections"/>
+                                            <h:commandButton styleClass="button" action="#{bookmarkBean.removeBookmarks}" title="Delete selections" value="Delete selections"/>
                                             
                                             <%-- <a4j:commandButton action="#{bookmarkBean.removeBookmarks}" reRender="datatable" title="Delete selections" value="Delete selections"/>--%>
                                             &nbsp;

@@ -43,6 +43,29 @@ padding: 60px 20px 20px 20px;
 
 }
 
+input.button ,input.text , select, textarea {
+	BORDER-RIGHT: #666666 1px solid;
+	BORDER-TOP: #666666 1px solid;
+	FONT: 11px Verdana, Arial, Helvetica, sans-serif;
+	BORDER-LEFT: #666666 1px solid;
+	COLOR: #000;
+	BORDER-BOTTOM: #666666 1px solid;
+	background-color: #b0c8ea;
+}
+
+
+
+input[disabled] {
+        BORDER-RIGHT: #666666 0px solid;
+	BORDER-TOP: #666666 0px solid;
+	FONT: 11px Verdana, Arial, Helvetica, sans-serif;
+	BORDER-LEFT: #666666 0px solid;
+	COLOR: grey;
+	BORDER-BOTTOM: #666666 0px solid;
+	background-color: #ECECEC;
+
+ }
+
 .logout {
 color: black; font-size: -2; text-decoration: none;
 }
@@ -541,6 +564,27 @@ margin-right: 20px;
 padding: 0px 0px 20px 0px;
 border: 1px solid #546359;
 background-color: #EAF4F4;
+}
+
+#subnavigation_nav {
+margin-left: 0px;
+margin-right: 20px;
+margin-top: 40px;
+width: 200px;
+height: 200px;
+padding: 0px 0px 0px 0px;
+border: 1px solid #546359;
+background-color: #D1E4E4;
+}
+
+html>body #subnavigation_nav {
+margin-left: 0px;
+margin-right: 20px;
+margin-top: 190px;
+
+padding: 0px 0px 0px 0px;
+border: 1px solid #546359;
+background-color: #D1E4E4;
 }
 
 #subnavigation_outer {

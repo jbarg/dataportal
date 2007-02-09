@@ -21,7 +21,7 @@
                                 <h:outputText styleClass="body" value="Name:"/>
                             </h:outputLabel  >
                             
-                            <h:inputText id="namej_id_1" size="30" required="true" value="#{facilityAdminBean.name}">
+                            <h:inputText styleClass="text" id="namej_id_1" size="30" required="true" value="#{facilityAdminBean.name}">
                                 <f:validateLength minimum="1" maximum="16"/>
                             </h:inputText> 
                             
@@ -84,7 +84,7 @@
                             
                             <h:panelGroup/>  
                             
-                            <h:commandButton actionListener="#{facilityAdminBean.createFacility}" title="Add" value="Add"/>
+                            <h:commandButton styleClass="button" actionListener="#{facilityAdminBean.createFacility}" title="Add" value="Add"/>
                             
                             <h:panelGroup/>
                         </h:panelGrid> 
@@ -302,9 +302,9 @@
                                             
                                             <h:panelGroup/>  
                                             
-                                            <h:commandButton action="#{facilityAdminBean.upDateFacility}" title="Update" value="Update"/>
+                                            <h:commandButton styleClass="button" action="#{facilityAdminBean.upDateFacility}" title="Update" value="Update"/>
                                             
-                                            <h:commandButton action="#{facilityAdminBean.refreshPage}" immediate="true" value="Cancel" title="Cancel" />
+                                            <h:commandButton styleClass="button" action="#{facilityAdminBean.refreshPage}" immediate="true" value="Cancel" title="Cancel" />
                                             
                                             <h:panelGroup/>
                                             

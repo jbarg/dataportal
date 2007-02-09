@@ -199,17 +199,17 @@
                                                 
                                                 <t:popup styleClass="popup" closePopupOnExitingElement="true"
                                                          closePopupOnExitingPopup="true"
-                                                         displayAtDistanceX="-165"
+                                                         displayAtDistanceX="-145"
                                                          displayAtDistanceY="-20" >                                                    
                                                     <t:graphicImage id="add_button"  value="../../images/addButton.gif"  border="0"/>
                                                     <f:facet name="popup">
                                                         <h:panelGroup>
                                                             <h:panelGrid columns="1" >
-                                                                <h:inputTextarea value="#{data.note}" valueChangeListener="#{datacenterBean.note}"  id="note" rows="5" cols="17">
+                                                                <h:inputTextarea styleClass="text" value="#{data.note}" valueChangeListener="#{datacenterBean.note}"  id="note" rows="5" cols="17">
                                                                     <f:param name="note" value="#{data.id}"/>
                                                                 </h:inputTextarea>
                                                                 
-                                                                <h:commandButton  action="#{datacenterBean.addNote}" title="View selections" value="Add Note"/>
+                                                                <h:commandButton  styleClass="button" action="#{datacenterBean.addNote}" title="View selections" value="Add Note"/>
                                                                 
                                                             </h:panelGrid>
                                                         </h:panelGroup>
@@ -388,7 +388,7 @@
                                         <br />
                                         <h:panelGrid border="0" rendered="#{datacenterBean.populated}" width="95%" columns="9">
                                             
-                                            <h:commandButton id="downloadnow" disabled="#{!visit.visitData.downloadable}" onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;"  title="Download selections now" value="Download now"/>
+                                            <h:commandButton styleClass="button" id="downloadnow" disabled="#{!visit.visitData.downloadable}" onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;"  title="Download selections now" value="Download now"/>
                                             &nbsp;
                                             <%-- <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
                                                 
@@ -405,11 +405,11 @@
                                                     <h:panelGroup>
                                                         <h:panelGrid columns="1" >
                                                             <h:outputText value="If you specify an email address, you can have the data downloaded link emailed to you."/>    
-                                                            <h:inputText value="#{visit.userPreferences.email}"  id="email">
+                                                            <h:inputText styleClass="text" value="#{visit.userPreferences.email}"  id="email">
                                                                 
                                                             </h:inputText>
                                                             
-                                                            <h:commandButton  action="#{datacenterBean.addEmail}" title="Add Email" value="Add Email"/>
+                                                            <h:commandButton styleClass="button" action="#{datacenterBean.addEmail}" title="Add Email" value="Add Email"/>
                                                             
                                                         </h:panelGrid>
                                                     </h:panelGroup>
@@ -422,7 +422,7 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             
-                                            <h:commandButton action="#{datacenterBean.removeDatasets}" title="Delete selections" value="Delete selections"/>
+                                            <h:commandButton styleClass="button" action="#{datacenterBean.removeDatasets}" title="Delete selections" value="Delete selections"/>
                                             
                                             <%--   <a4j:commandButton action="#{datacenterBean.removeDatasets}" reRender="datatable" title="Delete selections" value="Delete selections"/>--%>
                                             &nbsp;
@@ -441,7 +441,7 @@
                                             <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
                                             --%>
                                             
-                                            <h:commandButton id="downloademail" disabled="#{!visit.visitData.downloadable}" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datacenterBean.emailDownload}" title="Download via email" value="Email download"/>
+                                            <h:commandButton styleClass="button" id="downloademail" disabled="#{!visit.visitData.downloadable}" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datacenterBean.emailDownload}" title="Download via email" value="Email download"/>
                                             &nbsp;
                                             <%-- <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
                                                 
