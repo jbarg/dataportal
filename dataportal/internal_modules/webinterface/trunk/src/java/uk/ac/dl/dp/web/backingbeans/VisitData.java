@@ -23,7 +23,7 @@ import org.apache.log4j.*;
 import javax.faces.model.SelectItem;
 import org.apache.myfaces.custom.tree2.*;
 import uk.ac.dl.dp.coreutil.entity.Url;
-import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
+import uk.ac.dl.dp.web.backingbeans.BasicSearchBean;
 import uk.ac.dl.srbapi.util.AccessInfo;
 /**
  *
@@ -71,6 +71,8 @@ public class VisitData implements Serializable {
     private boolean downloadable;
     
     private String searchedTitle = "Search Results";
+    
+    private BasicSearchBean basicSearchBean = new BasicSearchBean();
            
     /** Creates a new instance of VisitData */
     public VisitData() {
@@ -420,6 +422,10 @@ public class VisitData implements Serializable {
 
     public void setSearchedTitle(String searchedTitle) {
         this.searchedTitle = searchedTitle;
+    }
+
+    public BasicSearchBean getBasicSearchBean() {
+        return basicSearchBean;
     }
     
     
