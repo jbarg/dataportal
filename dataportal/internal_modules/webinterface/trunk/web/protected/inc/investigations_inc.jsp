@@ -103,7 +103,7 @@
                                     
                                     <%-- <h:outputText id="text" value="#{node.description}" styleClass="nodeFolder"/>--%>
                                     <h:commandLink  immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.minimise}" actionListener="#{investigationTree.setNodeSelected}">
-                                        <h:outputText value="#{node.description}"  />
+                                        <h:outputText escape="false" value="#{node.description}"  />
                                         <f:param name="id" value="#{node.description}"/>
                                     </h:commandLink>      
                                     <h:outputText id="text1" value=" (#{node.identifier})" styleClass="childCount" rendered="#{!empty node.children}"/>
@@ -119,7 +119,7 @@
                                     </f:facet>
                                     <%--  <h:outputText id="text2" value="#{node.description}" styleClass="nodeFolder"/>--%>
                                     <h:commandLink disabled="true" immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.selectone}" actionListener="#{investigationTree.setNodeSelected}">
-                                        <h:outputText value="#{node.description}"  />
+                                        <h:outputText escape="false" value="#{node.description}"  />
                                         <f:param name="id" value="#{node.description}"/>
                                     </h:commandLink>  
                                 </h:panelGroup>
@@ -132,7 +132,7 @@
                                     <f:facet name="collapse3">
                                         <t:graphicImage id="gr1" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                     </f:facet>
-                                    <h:outputText id="text3" styleClass="document" value="#{node.description}" />
+                                    <h:outputText id="text3" escape="false" styleClass="document" value="#{node.description}" />
                                     
                                 </h:panelGroup>
                             </f:facet>

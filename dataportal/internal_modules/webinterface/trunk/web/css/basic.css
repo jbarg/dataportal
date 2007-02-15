@@ -35,7 +35,7 @@ font-size:14px;
 font-family: Arial, Helvetica, sans-serif;
 padding: 0;
 margin: 0;
-font-size:14px;
+font-size: 14px;
 }
 
 .page {
@@ -43,7 +43,7 @@ padding: 60px 20px 20px 20px;
 
 }
 
-input.button ,input.text , select, textarea {
+input.button ,input.text , select,  textarea {
 	BORDER-RIGHT: #666666 1px solid;
 	BORDER-TOP: #666666 1px solid;
 	FONT: 11px Verdana, Arial, Helvetica, sans-serif;
@@ -54,17 +54,18 @@ input.button ,input.text , select, textarea {
 }
 
 
-
 input[disabled] {
+       
         BORDER-RIGHT: #666666 0px solid;
 	BORDER-TOP: #666666 0px solid;
 	FONT: 11px Verdana, Arial, Helvetica, sans-serif;
 	BORDER-LEFT: #666666 0px solid;
 	COLOR: grey;
 	BORDER-BOTTOM: #666666 0px solid;
-	background-color: #ECECEC;
+	 background-color: #ECECEC;
 
  }
+
 
 .logout {
 color: black; font-size: -2; text-decoration: none;
@@ -570,11 +571,30 @@ background-color: #EAF4F4;
 margin-left: 0px;
 margin-right: 20px;
 margin-top: 40px;
-width: 200px;
+width: 195px;
 height: 200px;
 padding: 0px 0px 0px 0px;
-border: 1px solid #546359;
-background-color: #D1E4E4;
+
+}
+
+.tabactive {
+    background-color: #D1E4E4;
+
+}
+
+.tabactive input {
+    background-color: #D1E4E4;
+    font-size: 11px;
+ font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+
+
+.tabinactive input{
+ 
+    font-size: 11px;
+ font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+
 }
 
 html>body #subnavigation_nav {
@@ -583,9 +603,9 @@ margin-right: 20px;
 margin-top: 190px;
 
 padding: 0px 0px 0px 0px;
-border: 1px solid #546359;
-background-color: #D1E4E4;
 }
+
+
 
 #subnavigation_outer {
 float: left;
