@@ -350,7 +350,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             boolean security = true;
             
             for(ModuleLookup mod : facilitiesList){
-                if(mod.equals(fac)){
+                if(mod.getFacility().equals(fac)){
                     log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
                     security = mod.isSecurity();
                 }
@@ -364,7 +364,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             
             DPAccessLayer dpal = null;
             try {
-                log.trace("new DPAccessLayer(fac): "+fac);
+                log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
                 dpal = new DPAccessLayer(fac);
                 returneddatasets = dpal.getDataSets(investigation_id, user.getUserId(), security);
                 log.debug("Returned size: "+returneddatasets.size());
@@ -416,7 +416,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             boolean security = true;
             
             for(ModuleLookup mod : facilitiesList){
-                if(mod.equals(fac)){
+                if(mod.getFacility().equals(fac)){
                     log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
                     security = mod.isSecurity();
                 }
@@ -425,7 +425,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             DPAccessLayer dpal = null;
             try {
                 dpal = new DPAccessLayer(fac);
-                
+                  log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
                 datafiles.addAll(dpal.getDataFiles(datasets_id, user.getUserId(), security));
             } catch (Exception ex) {
                 log.error("Unable to search Investigations ids: ",ex);
@@ -525,14 +525,14 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             boolean security = true;
             
             for(ModuleLookup mod : facilitiesList){
-                if(mod.equals(fac)){
+                if(mod.getFacility().equals(fac)){
                     log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
                     security = mod.isSecurity();
                 }
             }
             
             dpal = new DPAccessLayer(fac);
-            
+              log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
             r_i_l = dpal.getInvestigationsById(investigations, user.getUserId(),security);
             
         } catch (Exception ex) {

@@ -39,18 +39,25 @@ public class LoginClient {
     public static void main(String[] args) {
         
         try{
-            //System.setProperty("org.omg.CORBA.ORBInitialHost","lennon.dl.ac.uk");
-            
+            System.setProperty("org.omg.CORBA.ORBInitialHost","kisumu.esc.rl.ac.uk");
+            System.setProperty("org.omg.CORBA.ORBInitialPort","3700");
             CachingServiceLocator csl = CachingServiceLocator.getInstance();
             
-        //    SessionRemote sless = (SessionRemote) csl.lookup("java:comp/env/uk.ac.dl.dp.core.Session.SessionEJB");
+            //    SessionRemote sless = (SessionRemote) csl.lookup("java:comp/env/uk.ac.dl.dp.core.Session.SessionEJB");
             SessionRemote sless = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
             
-            String session =  sless.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
+            String session =  sless.login("gjd37","",3);
             System.out.println("Got session : "+session);
             SessionDTO s = sless.getSession(session);
             
-             System.out.println("Got session : "+s.getName());
+            System.out.println("Got session : "+s.getName());
+            
+            //stree test
+            for(int i = 0 ; i < 200; i++){
+                session =  sless.login("gjd37","",3);
+                System.out.println("Got session : "+session);
+            }
+            
             //
         }catch(Exception e){
             

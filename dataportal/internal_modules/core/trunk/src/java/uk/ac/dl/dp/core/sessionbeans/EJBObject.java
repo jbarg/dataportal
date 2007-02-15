@@ -40,7 +40,7 @@ public abstract class EJBObject {
     public void setEntityManager(EntityManager em){
         this.em = em;
     }
-           
+    
     public Object mergeEntity(Object entity) {
         return em.merge(entity);
     }
@@ -61,11 +61,16 @@ public abstract class EJBObject {
     
     @PostConstruct
     public void init(){
-        
-        PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
-        //PropertyConfigurator.configure(ClassLoader.getSystemResource("log4j.properties"));
-        
-        log.debug("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+"log4j.properties");
+        if(new File(System.getProperty("user.home")+File.separator+"log4j.xml").exists()){
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.xml");
+            log.debug("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+"log4j.xml");
+            
+        } else {
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
+            log.debug("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+"log4j.properties");
+            
+        }
+     //   log.debug("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+"log4j.properties");
       /*  if(CachingServiceLocator.getInstance().getEntityManager() == null){
             CachingServiceLocator.getInstance().put(em);
         }*/
