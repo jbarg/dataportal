@@ -9,13 +9,11 @@
 
 package uk.ac.dl.dp.web.backingbeans;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.*;
 import javax.faces.event.ActionEvent;
 import org.apache.log4j.Logger;
-import javax.faces.context.FacesContext;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.cclrc.dpal.beans.Investigation;
@@ -23,13 +21,8 @@ import uk.ac.cclrc.dpal.beans.Investigation;
 import org.apache.myfaces.custom.tree2.HtmlTree;
 import org.apache.myfaces.custom.tree2.TreeNode;
 import org.apache.myfaces.custom.tree2.TreeNodeBase;
-import org.apache.myfaces.custom.tree2.TreeModel;
 import org.apache.myfaces.custom.tree2.*;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.validator.ValidatorException;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
@@ -45,7 +38,8 @@ import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.util.WebConstants;
 import javax.faces.component.*;
-import uk.ac.dl.srbapi.util.*;
+import uk.ac.dl.srbapi.util.AccessInfo;
+
 /**
  *
  * @author gjd37
@@ -115,8 +109,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         ///remove all download selections
         log.trace("Setting all datafile download to false");
         for(DataFile file : datafiles){
-            file.setDownload(false);                  
-        }       
+            file.setDownload(false);
+        }
         
         data = new TreeNodeBase("foo-folder", "Investigations ("+investigations.size()+")", false);
         
@@ -156,7 +150,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     
                     datasetNode.getChildren().add(new TreeNodeBase("status-folder",dataset.getDataSetStatus(),true));
                     datasetNode.getChildren().add(new TreeNodeBase("type-folder",dataset.getDataSetType(),true));
-                    datasetNode.getChildren().add(new TreeNodeBase("desc-folder", dataset.getDescription(),true));
+                    datasetNode.getChildren().add(new TreeNodeBase("desc-folder", uk.ac.dl.dp.web.util.Util.escapeInvalidStrings(dataset.getDescription()),true));
                     
                     
                     for(DataFile datafile : datafiles){
@@ -415,7 +409,21 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 ref.setName(file.getName());
                 ref.setNote("");
                 ref.setQuery("N/A");
-                ref.setTypeOfReference(DPUrlRefType.FILE.toString());
+                
+                //what type of dataset reference is this
+                boolean isDataInFolders = false;
+                for(FacilityDTO facs : getVisit().getSession().getFacilities()){
+                    //if data in folders then show no leaf in datatree
+                    if(facs.getFacility().equals(file.getFacility()) && facs.isDataSetInFolders()){
+                        isDataInFolders = true;
+                    }
+                }
+                if(isDataInFolders){
+                    ref.setTypeOfReference(DPUrlRefType.FILE_FOLDER.toString());
+                } else {
+                    ref.setTypeOfReference(DPUrlRefType.FILE.toString());
+                }                
+                
                 ref.setTypeOfObject("N/A");
                 ref.setReferenceId(Integer.valueOf(file.getId()));
                 ref.setInvestigationId(null);
@@ -535,8 +543,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         }
         
         //remove all true selections
-        for(DataFile file : getVisitData().getCurrentDatafiles()){           
-            file.setSelected(false);            
+        for(DataFile file : getVisitData().getCurrentDatafiles()){
+            file.setSelected(false);
         }
         for(DataSet dataSet : getVisitData().getCurrentDatasets()){
             dataSet.setSelected(false);

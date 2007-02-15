@@ -52,7 +52,7 @@ public class SearchBean extends AbstractRequestBean {
         List<SelectItem> items = new ArrayList<SelectItem>();
         
         if(getVisit().isCurrentFacilitysTopics()){
-            items.add(new SelectItem("AND","One Keyword Only"));
+            items.add(new SelectItem("AND","One Keyword"));
         } else{
             items.add(new SelectItem("AND","AND"));
             items.add(new SelectItem("OR","OR"));

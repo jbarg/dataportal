@@ -103,7 +103,7 @@ public class InvestigationTree extends AbstractRequestBean {
                     if(invest.getFacility().equals(fac)){
                         //add node, but add identifer as facility-id for uniqueness
                         //id of invest in ISIS could be same as DIAMOND
-                        node.getChildren().add(new TreeNodeBase("foo1-folder", invest.getName(),invest.getFacility()+"-"+invest.getId(), true));
+                        node.getChildren().add(new TreeNodeBase("foo1-folder", uk.ac.dl.dp.web.util.Util.escapeInvalidStrings(invest.getName()),invest.getFacility()+"-"+invest.getId(), true));
                         
                         //only show 50??  shoule change
                         j++;
