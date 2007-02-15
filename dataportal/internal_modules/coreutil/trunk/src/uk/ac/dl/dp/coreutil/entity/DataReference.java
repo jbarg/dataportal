@@ -279,6 +279,11 @@ public class DataReference implements Serializable {
         else return false;
     }
     
+     public boolean isDatafileInFolder(){
+        if(getTypeOfReference().equals(DPUrlRefType.FILE_FOLDER.toString())) return true;
+        else return false;
+    }
+    
     public void setDataset(boolean dataset) {
         this.dataset = dataset;
     }

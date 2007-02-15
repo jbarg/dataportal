@@ -19,13 +19,13 @@ package uk.ac.dl.dp.coreutil.exceptions;
  */
 public enum LoginError {        
     
-    UNKNOWN("UNKNOWN_CAUSE"),
-    CREDENTIALS_EXPIRED("CREDENTIALS_EXPIRED"),
+    UNKNOWN("Unknown cause"),
+    CREDENTIALS_EXPIRED("Credentials expired"),
     MYPROXY_CREDENTIAL_EXPIRED_EXCEPTION("Credentials have expired on MyProxy server. Upload a new proxy and try again"),
-    MYPROXY_LOGIN_EXCEPTION("MYPROXY_LOGIN_EXCEPTION"),
-    INVALID_PASSPHASE("Invalid Passphrase Please Try Again"),
-    NO_MYPROXY_CREDENTIAL("No credentials on MyProxy server. Upload a proxy and try again");
-        
+    MYPROXY_LOGIN_EXCEPTION("My Proxy Login Exception"),
+    INVALID_PASSPHASE("Invalid Passphrase. Please Try Again"),
+    NO_MYPROXY_CREDENTIAL("No credentials on MyProxy server. Upload a proxy and try again"),
+         INVALID_PASSWORD("Invalid Password. Please Try Again");
     
     LoginError(String value) {
         this.value = value;
