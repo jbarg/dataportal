@@ -84,7 +84,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 
                 boolean security = true;
                 for(ModuleLookup fac : facilities){
-                    if(fac.equals(e.getFacility())){
+                    if(fac.getFacility().equals(e.getFacility())){
                         log.trace("Found facility, "+e.getFacility()+" is security "+fac.isSecurity());
                         security = fac.isSecurity();
                     }

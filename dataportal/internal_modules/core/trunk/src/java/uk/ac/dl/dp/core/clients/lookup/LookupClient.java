@@ -44,12 +44,19 @@ public class LookupClient {
             env.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces" );
            * Context ctx = new InitialContext(env);
            */
-            // InitialContext ctx = new InitialContext();
             
-            //LookupBean  remote = (LookupBean)ctx.lookup("LookupBeanStateless");
-            //System.setProperty("org.omg.CORBA.ORBInitialHost","volga.dl.ac.uk");
+            Properties props = new Properties();
+        
+            // optional.  Defaults to localhost.  Only needed if web server is running
+            // on a different host than the appserver
+            props.setProperty("org.omg.CORBA.ORBInitialHost", "kisumu.esc.rl.ac.uk");
             
-            InitialContext ic = new InitialContext();
+            // optional.  Defaults to 3700.  Only needed if target orb port is not 3700.
+            props.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
+            
+            InitialContext ic = new InitialContext(props);
+            
+            //InitialContext ic = new InitialContext();
             //   LookupRemote sless = (LookupRemote) ic.lookup("uk.ac.dl.dp5.sessionbeans.lookup.LookupRemote");
             
             LookupRemote sless = (LookupRemote) ic.lookup(DataPortalConstants.LOOKUP);
