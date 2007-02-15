@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+    <!--  Normal logging to standard out -->
+    <!-- <appender name="STDOUTCON" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%p\: %d{dd-MM-yyy HH\:mm} %F\:%L - %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="TRACE"/>
+            <param name="LevelMax" value="FATAL"/>
+        </filter>
+    </appender>-->
+    
+    <!--  Normal logging to file -->
+    <appender name="STDOUT"  class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="c:/dp5.log" />
+        <param name="Append" value="false"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%p\: %d{dd-MM-yyy HH\:mm} %F\:%L - %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="TRACE"/>
+            <param name="LevelMax" value="FATAL"/>
+        </filter>
+    </appender>
+    
+    <!--  XML logging to file for chainsaw -->
+    <appender name="STDOUTXML"  class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="c:/dp5.log" />
+        <param name="Append" value="false"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.XMLLayout" />
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="DEBUG"/>
+            <param name="LevelMax" value="FATAL"/>
+        </filter>
+    </appender>
+    
+    <!-- Email output -->  
+    <appender name="EMAIL"  class="org.apache.log4j.net.SMTPAppender">
+        <param name="BufferSize" value="512" />
+        <param name="SMTPHost" value="smtp.foobar.com" />
+        <param name="From" value="dataportal-log4j@kisumu" />
+        <param name="To" value="g.j.drinkwater@dl.ac.uk" />
+        <param name="Subject" value="[SMTPAppender] Application message" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="[%d{ISO8601}]%n%n%-5p%n%n%c%n%n%m%n%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ERROR"/>
+            <param name="LevelMax" value="FATAL"/>
+        </filter>
+    </appender>
+    
+    <!--                           -->
+    <!-- setup log4j's root logger -->
+    <!--                           -->
+    <root>
+        <level value="all" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STDOUTXML"/>
+        <appender-ref ref="EMAIL" />
+    </root>
+    
+    <logger>uk.ac</logger>
+</log4j:configuration>
