@@ -86,9 +86,11 @@
                                                     <h:outputText value="                  " />
                                                     <h:outputText value="                  " />
                                                     
-                                                    <t:graphicImage rendered="#{!url.imageJ && !data.datasetInFolder}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>                                                      
+                                                    <t:graphicImage rendered="#{!data.imageJ && !data.datafileInFolder}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>
+                                                    <t:graphicImage id="doc_button2" rendered="#{data.datafileInFolder}" value="../../images/blue-folder-closed.png"  border="0"/>
+                                                      
                                                     
-                                                    <h:commandLink title="Download via ImageJ" rendered="#{url.imageJ && !data.dataset}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
+                                                    <h:commandLink title="Download via ImageJ" rendered="#{data.imageJ}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
                                                         <t:graphicImage title="Download via ImageJ" value="../../images/document.png" border="0"/>                                   
                                                     </h:commandLink>
                                                     
@@ -398,7 +400,7 @@
                                             &nbsp;
                                             <t:popup rendered="#{!visit.userPreferences.emailSet}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
                                                      closePopupOnExitingPopup="true"
-                                                     displayAtDistanceX="20"
+                                                     displayAtDistanceX="10"
                                                      displayAtDistanceY="-40" >
                                                 <t:graphicImage url="../../images/help.gif" border="0" /> 
                                                 <f:facet name="popup">

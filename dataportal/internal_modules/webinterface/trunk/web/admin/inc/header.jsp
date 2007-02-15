@@ -15,8 +15,8 @@
                 <t:navigationMenuItem icon="../../images/icon_calendar.png"
                                       itemLabel="Calendar"  />
                 <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"                          />
-                <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"                            />
-                <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
+                <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Force Test Fatal"      action="#{adminBean.forceTestFatal}"                       />
+                <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Force Test Error"     action="#{adminBean.forceTestError}"                     />
                 <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
             </s:fishEyeNavigationMenu>           

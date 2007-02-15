@@ -12,7 +12,7 @@
                     <table style="margin-top:-20px" width="100%" border="0">
                          <tbody>
                             <tr>   
-                                <td>    <h:messages globalOnly="true" errorClass="error" infoClass="info" /></td>
+                                <td> <h:messages globalOnly="true" errorClass="error" infoClass="info" /></td>
                             </tr>                               
                             
                         </tbody>   
@@ -44,11 +44,11 @@
                             </h:outputLabel  >
                             
                             
-                            <t:inputCalendar  binding="#{viewUserAdmin.calendarFirst}" id="thirdOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
-                                              currentDayCellClass="currentDayCell" value="#{viewUserAdmin.firstDate}" renderAsPopup="true"
-                                              popupTodayString="Today is:"
-                                              popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
-                                              helpText="DD/MM/YYYY" />
+                            <t:inputCalendar styleClass="text" binding="#{viewUserAdmin.calendarFirst}" id="thirdOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                             currentDayCellClass="currentDayCell" value="#{viewUserAdmin.firstDate}" renderAsPopup="true"
+                                             popupTodayString="Today is:"
+                                             popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
+                                             helpText="DD/MM/YYYY" />
                             
                             <h:message for="thirdOnej_id_1" styleClass="error" showSummary="false" showDetail="true" />
                             
@@ -58,7 +58,7 @@
                             </h:outputLabel  >
                             
                             
-                            <t:inputCalendar binding="#{viewUserAdmin.calendarSecond}" id="forthOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                            <t:inputCalendar styleClass="text" binding="#{viewUserAdmin.calendarSecond}" id="forthOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                              currentDayCellClass="currentDayCell" value="#{viewUserAdmin.secondDate}" renderAsPopup="true"
                                              popupTodayString="Today is:"
                                              popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"

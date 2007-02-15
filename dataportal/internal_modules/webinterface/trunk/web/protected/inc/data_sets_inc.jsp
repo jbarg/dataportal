@@ -169,8 +169,8 @@
                                                                                     <t:graphicImage id="gr1ff13" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                                                                 </f:facet>
                                                                                 <h:outputText id="text7ff38" styleClass="nodeFolder" value="Description: " />
-                                                                                
-                                                                                <h:outputText id="text73ff8" styleClass="document" value="#{node.description}" />
+                                                                              
+                                                                                <h:outputText id="text73ff8" styleClass="document" value="#{fn:replace(node.description, '~', 'approx')}" />
                                                                                 
                                                                             </h:panelGroup>
                                                                         </f:facet>
@@ -402,9 +402,9 @@
                                 </h:commandLink>
                                 <h:outputText value="         " />
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
-                                    <f:param name="datasets" value="#{node.identifier}"/>
+                                    <f:param name="datafiles" value="#{node.identifier}"/>
                                     <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
-                                        <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
+                                        <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>                                                                                      
                                 
@@ -462,8 +462,8 @@
                                 </f:facet>
                                 <h:outputText id="text7ff38" styleClass="nodeFolder" value="Description: " />
                                 
-                                <h:outputText id="text73ff8" styleClass="document" value="#{node.description}" />
-                                
+                                  <h:outputText id="text73ff8" escape="false" styleClass="document" value="#{node.description}" />
+                                                                            
                             </h:panelGroup>
                         </f:facet>
                         

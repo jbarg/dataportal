@@ -62,75 +62,152 @@
 <br />
 
 <a4j:region  selfRendered="true"> 
-    <h:form id="autofillform_nav">
-      
-        <h:panelGrid  border="0" columns="2"  >      
-            
-            
-            <h:outputLabel for="facilities_navj_id_1">
-                <h:outputText value="Basic Search: " style="font-size:12px"/>
-            </h:outputLabel  >
-            
-            <h:selectManyListbox id="facilities_navj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="#{fn:length(visit.facilities)}" required="true" >      
-                <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplayNav,radioNav" />
-                <f:selectItems value="#{visit.facilities}"/>
-                <f:validateLength minimum="1" />
-            </h:selectManyListbox>
-            
-            
-            
-            <h:message  for="facilities_navj_id_1" styleClass="error"/>
-            <h:panelGroup />
-            
-            
-            
-            <h:outputLabel for="keywordField_navj_id_1">
-                <h:outputText value="Keyword(s): " style="font-size:12px"/>
-            </h:outputLabel  >                      
-            
-            <ui:autoComplete  styleClass="text" size="15" maxlength="60" id="keywordField_navj_id_1" 
-                              completionMethod="#{keyword.completeCity}" 
-                              value="#{visit.visitData.basicSearchBean.keyword}" required="true"
-                              ondisplay="function(item) { return extractCityNav(item); }"
-                              onchoose="function(item) { return chooseCityNav(item); }"  validator="#{searchBean.validateKeyword}"/>
-            
-            
-            <h:message for="keywordField_navj_id_1" styleClass="error"/>
-            <h:panelGroup/>
-            
-            
-            
-            <h:outputLabel>            
-                <h:outputText value="Type:" style="font-size: 12px" />                   
-            </h:outputLabel>
-            
-            <h:selectOneRadio style="font-size:10px" id="radioNav" value="#{visit.visitData.basicSearchBean.logicalExpression}" >
-                <f:selectItems value="#{searchBean.logicalExpressions}"/>              
-            </h:selectOneRadio>         
-            
-            
-            <h:panelGroup/>
-            
-            <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-            <h:selectOneRadio style="font-size:10px" id="likeNav" value="#{visit.visitData.basicSearchBean.likeExpression}" >
-                <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
-                <f:selectItem itemLabel="Like"  itemValue="LIKE" />
-            </h:selectOneRadio>       
-            
-            <h:panelGroup/>           
-            <h:panelGroup/>
-            
-            
-            <h:panelGroup/>
-            <h:commandButton id="f2" styleClass="button" action="#{searchBean.searchByKeywordNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
-            
-            
-        </h:panelGrid>
+    
+    
+    
+    <t:panelTabbedPane  width="202px" bgcolor="#D1E4E4" serverSideTabSwitch="false" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
+        <t:panelTab id="basicSearch"  label="Basic Search" >
+            <h:form id="autofillform_nav">
+                
+                <h:panelGrid  border="0" columns="2"  >      
+                    
+                    
+                    <h:outputLabel for="facilities_navj_id_1">
+                        <h:outputText value="Search: " style="font-size:12px"/>
+                    </h:outputLabel  >
+                    
+                    <h:selectManyListbox id="facilities_navj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="#{fn:length(visit.facilities)}" required="true" >      
+                        <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplayNav,radioNav" />
+                        <f:selectItems value="#{visit.facilities}"/>
+                        <f:validateLength minimum="1" />
+                    </h:selectManyListbox>
+                    
+                    
+                    
+                    <h:message  for="facilities_navj_id_1" styleClass="error"/>
+                    <h:panelGroup/>
+                    
+                    
+                    
+                    <h:outputLabel for="keywordField_navj_id_1">
+                        <h:outputText value="Keyword(s): " style="font-size:12px"/>
+                    </h:outputLabel  >                      
+                    
+                    <ui:autoComplete  styleClass="text" size="14" maxlength="60" id="keywordField_navj_id_1" 
+                                      completionMethod="#{keyword.completeCity}" 
+                                      value="#{visit.visitData.basicSearchBean.keyword}" required="true"
+                                      ondisplay="function(item) { return extractCityNav(item); }"
+                                      onchoose="function(item) { return chooseCityNav(item); }"  validator="#{searchBean.validateKeyword}"/>
+                    
+                    
+                     <h:panelGroup/>
+                    <h:message for="keywordField_navj_id_1" styleClass="error"/>
+                   
+                    
+                    
+                    
+                    <h:outputLabel>            
+                        <h:outputText escape="false" value="Type:" style="font-size: 12px" />                   
+                    </h:outputLabel>
+                    
+                    <h:selectOneRadio style="font-size:10px" id="radioNav" value="#{visit.visitData.basicSearchBean.logicalExpression}" >
+                        <f:selectItems value="#{searchBean.logicalExpressions}"/>              
+                    </h:selectOneRadio>         
+                    
+                    
+                    <h:panelGroup/>
+                    
+                    <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
+                    <h:selectOneRadio style="font-size:10px" id="likeNav" value="#{visit.visitData.basicSearchBean.likeExpression}" >
+                        <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
+                        <f:selectItem itemLabel="Like"  itemValue="LIKE" />
+                    </h:selectOneRadio>       
+                    
+                    <h:panelGroup/>           
+                    <h:panelGroup/>
+                    
+                    
+                    <h:panelGroup/>
+                    <h:commandButton id="f2" styleClass="button" action="#{searchBean.searchByKeywordNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                    
+                    
+                </h:panelGrid>
+            </h:form>
+        </t:panelTab>
         
+        <t:panelTab id="Preferences" label="Preferences" >
+            <h:form id="preferencesform">
+                <h:panelGrid columns="2">
+                    
+                    <h:outputLabel>
+                        <h:outputText styleClass="body" style="font-size:10px" value="Results Per Page"/>
+                    </h:outputLabel  >
+                    
+                    <h:selectOneMenu id="results_navj_id_1"  style="font-size:7pt" required="true" value="#{userPreferencesBean.defaultresults}" >
+                        <f:selectItems value="#{userPreferencesBean.results}"/>
+                        <f:validateLength minimum="1" />
+                        
+                        
+                    </h:selectOneMenu>
+                    
+                    <h:outputLabel>
+                        <h:outputText styleClass="body" style="font-size:10px" value="Default Facility"/>
+                    </h:outputLabel  >
+                    
+                    <h:selectOneMenu id="default_navj_id_1" style="font-size:7pt" required="true" value="#{userPreferencesBean.defaultFacility}" >
+                        <f:selectItems value="#{userPreferencesBean.facilities}"/>
+                        <f:validateLength minimum="1" />
+                        
+                        
+                    </h:selectOneMenu>
+                    
+                    <h:outputLabel>
+                        <h:outputText styleClass="body" style="font-size:10px" value="Screen Resolution"/>
+                    </h:outputLabel>
+                    
+                    <h:selectOneMenu id="res_navj_id_1" style="font-size:7pt" required="true" value="#{userPreferencesBean.defaultResolution}" >
+                        
+                        <f:selectItems value="#{userPreferencesBean.resolution}" />
+                        <f:validateLength minimum="1" />
+                        
+                    </h:selectOneMenu>
+                    
+                    
+                    <h:outputLabel>
+                        <h:outputText styleClass="body" style="font-size:10px" value="Default Location"/>
+                    </h:outputLabel>
+                    
+                    <h:selectOneMenu id="location_navj_id_1" style="font-size:7pt" required="true" value="#{userPreferencesBean.defaultLocation}" >
+                        
+                        <f:selectItems  value="#{userPreferencesBean.location}" />
+                        <f:validateLength minimum="1" />
+                        
+                    </h:selectOneMenu>
+                    
+                    
+                    <h:outputLabel>
+                        <h:outputText styleClass="body" style="font-size:10px" value="Email Address"/>
+                    </h:outputLabel>
+                    
+                    <h:inputText styleClass="text" id="email_navj_id_1" size="15" validator="#{userPreferencesBean.validateEmail}" value="#{userPreferencesBean.email}">
+                        <f:validateLength minimum="5" maximum="160"/>
+                    </h:inputText> 
+                    <h:panelGroup/>
+                    
+                    <h:message for="email_navj_id_1" styleClass="error" showSummary="false" showDetail="true" />
+                    
+                    <h:panelGroup/>
+                    
+                    <h:commandButton styleClass="button" action="#{userPreferencesBean.save}" title="Search" value="Update"/>
+                    
+                    
+                </h:panelGrid>
+            </h:form>
+        </t:panelTab>
         
-        
-        
-    </h:form>
+    </t:panelTabbedPane>
+    
+    
 </a4j:region>
 
 <iframe id="BusyBoxIFrame" name="BusyBoxIFrame" frameBorder="0" scrolling="no" ondrop="return false;">
