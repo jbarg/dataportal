@@ -208,4 +208,12 @@ public class Util {
             return DownloadConstants.DEFAULT_SRB_PORT;
         }
     }
+    
+    public static  String escapeInvalidStrings(String invalid){
+        if(invalid == null) return null;
+        invalid = invalid.replaceAll(">","&#62;");
+        // invalid = invalid.replaceAll(">","greater than");
+        invalid = invalid.replaceAll("<","&#60");
+        return invalid.replaceAll("~","approx.");
+    }
 }

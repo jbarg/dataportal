@@ -17,6 +17,7 @@ import java.util.Properties;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
+import uk.ac.dl.dp.coreutil.exceptions.LoginError;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 
 import javax.faces.context.FacesContext;
@@ -75,7 +76,13 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
     //methods action
     public String login(){
         //first section, reload log4j
-        PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
+        if(new File(System.getProperty("user.home")+File.separator+"log4j.xml").exists()){
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.xml");
+            log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.xml");
+        } else {
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
+            log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.properties");
+        }
         
         String sid = null;
         SessionDTO session = null;
@@ -105,7 +112,9 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             //LoginMyEx has be done so the the standard message returns a helpful message about the problem,
             //display this to the user
             error(ex.getStandardMessage());
-            log.error("Login error for: "+username+", type: "+ex.getType(),ex);
+            if(ex.getType().toString().equals(LoginError.UNKNOWN.toString())){
+                log.error("Login error for: "+username+", type: "+ex.getType(),ex);
+            } else log.warn("Login error for: "+username+", type: "+ex.getType(),ex);
             return NavigationConstants.LOGIN_FAILURE;
         } catch (SessionException ex) {
             //some sort of session error, this should not be thrown normally

@@ -75,4 +75,16 @@ public class AdminBean extends AbstractRequestBean{
             return null;
         }
     }
+    
+    public String forceTestError(){
+        log.info("Forcing a error for log4j");
+        log.error("Test Exception, level ERROR thrown by admin", new Exception("Test ERROR"));
+        return null;
+    }
+    
+      public String forceTestFatal(){
+        log.info("Forcing a fatal for log4j");
+        log.error("Test Exception, level FATAL thrown by admin", new Exception("Test FATAL"));
+        return null;
+    }
 }
