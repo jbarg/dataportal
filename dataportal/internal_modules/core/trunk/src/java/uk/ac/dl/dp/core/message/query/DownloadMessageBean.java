@@ -105,7 +105,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
                 downloadSRBFiles(info);
                 
             } catch (Exception exception) {
-                log.debug("Exception downloading srb files", exception);
+                log.error("Exception downloading srb files", exception);
                 return ;
             }
             
@@ -159,7 +159,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
                 srbInfo.setSrbFiles(fileToDownload);
                 srbZipFile = getSrbFiles(srbInfo, userCred);
             } catch (Exception ex2) {
-                log.warn("Error 2 downloading file, send failed email",ex2);
+                log.error("Error no. 2 downloading file, send failed email",ex2);
                 String reason = null;
                 if(ex2 instanceof SRBException){
                     if(ex2.getMessage() == null || ex2.getMessage().equals("")){
