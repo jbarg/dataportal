@@ -20,6 +20,13 @@
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.Visit</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+      
+    
+     <managed-bean>
+        <managed-bean-name>helpCollapsibleBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.navigation.HelpCollapsibleBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
     
     <managed-bean>
         <managed-bean-name>navigationMenu</managed-bean-name>

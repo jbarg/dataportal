@@ -3,12 +3,13 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
-<%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
-<%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
+
 <%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
 <%@ taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
+<%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
     
     
@@ -70,7 +71,7 @@
                                                     </t:panelNavigation2>
                                                 </t:div>
                                             </t:div>
-                                          
+                                            
                                             <t:div id="subnavigation_nav">
                                                 <f:subview id="navigation_search">
                                                     <c:import url="inc/basic_search_inc_2.jsp" />
@@ -103,9 +104,35 @@
                                                     <tr>
                                                         <td width="7%">&nbsp;</td>
                                                         <td valign="top" width="93%" >
+                                                            
+                                                            
+                                                            
                                                             <f:subview id="body">
                                                                 <c:import url="inc/basic_search_inc_1.jsp" />
                                                             </f:subview>
+                                                            
+                                                            <a4j:form id="helpform">
+                                                                
+                                                                <t:collapsiblePanel  id="helpform" value="#{helpCollapsibleBean.collapsed}" title="testTitle" >
+                                                                    <f:facet name="header">
+                                                                        <t:div style="color: black; width:40px;">
+                                                                            <h:panelGrid columns="4" >
+                                                                                <h:outputText rendered="#{!helpCollapsibleBean.collapsed}" value="v " style="color:blue; "/>  <a4j:commandLink reRender="helpform" style="color: black;" styleClass="help" id="helpcj" action="#{helpCollapsibleBean.collapse}" rendered="#{!helpCollapsibleBean.collapsed}" immediate="true"   value="Help"/>
+                                                                                
+                                                                                <h:outputText rendered="#{helpCollapsibleBean.collapsed}" value="> " style="color:blue; "/>  <a4j:commandLink reRender="helpform" style="color: black;" styleClass="help" id="helpc" action="#{helpCollapsibleBean.collapse}" rendered="#{helpCollapsibleBean.collapsed}" immediate="true"   value="Help"/>
+                                                                                
+                                                                            </h:panelGrid>
+                                                                        </t:div>
+                                                                    </f:facet>
+                                                                    
+                                                                    <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
+                                                                        <h:outputText value="Choose the facility(s) you wish to search on by clicking on one or multipe items in the 'Search' box."/>
+                                                                        <h:outputText value="The auto complete form helps you to find a keyword within the facility(s)." />
+                                                                        <h:outputText value="You can type your own words in and click the 'Like' button to find all investigations that contain it as part of a keyword."/>
+                                                                        <h:outputText value="Click 'View own data' to see all the investigations that are associated with you."/>
+                                                                    </h:panelGrid>
+                                                                </t:collapsiblePanel>
+                                                            </a4j:form>
                                                             
                                                         </td>
                                                     </tr>
@@ -128,7 +155,7 @@
                                 </tbody>
                             </table>
                             
-                         
+                            
                         </td>
                     </tr>
                 </tbody>

@@ -1,9 +1,14 @@
 
+
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+
 <%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
+<%@ taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
+<%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
@@ -100,6 +105,31 @@
                                                                 <c:import url="inc/data_sets_inc.jsp" />
                                                             </f:subview>
                                                             
+                                                            <a4j:form id="helpform">
+                                                                
+                                                                <t:collapsiblePanel  id="help" value="#{helpCollapsibleBean.collapsed}" title="testTitle" >
+                                                                    <f:facet name="header">
+                                                                        <t:div style="color: black; width:40px;">
+                                                                            <h:panelGrid columns="4" >
+                                                                                <h:outputText rendered="#{!helpCollapsibleBean.collapsed}" value="v " style="color:blue; "/>  <a4j:commandLink reRender="helpform" style="color: black;" styleClass="help" id="helpcj" action="#{helpCollapsibleBean.collapse}" rendered="#{!helpCollapsibleBean.collapsed}" immediate="true"   value="Help"/>
+                                                                                
+                                                                                <h:outputText rendered="#{helpCollapsibleBean.collapsed}" value="> " style="color:blue; "/>  <a4j:commandLink reRender="helpform" style="color: black;" styleClass="help" id="helpc" action="#{helpCollapsibleBean.collapse}" rendered="#{helpCollapsibleBean.collapsed}" immediate="true"   value="Help"/>
+                                                                                
+                                                                            </h:panelGrid>
+                                                                        </t:div>
+                                                                    </f:facet>
+                                                                    
+                                                                    <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
+                                                                        <h:outputText value="Tree view of the investigations selected."/>
+                                                                        <h:outputText value="From here you can either add investigations to the Bookmarks by checking the box next the invstigation and the press 'Add Selections' or add data files or datasets to the Data References by doing the same."/>
+                                                                        <h:outputText value="Bookmarks: A persistance place for searched and found investigations for when you next log in."/>
+                                                                        <h:outputText value="Data References: A persistance place for searched and found datafiles and datasets for when you next log in."/>
+                                                                        <h:outputText value="By expanding the tree and viewing the data sets and data files, clicking on their names will make an attempt to download the data, 
+                                                                                      that if you have the correct privileges to access the data."/>
+                                                                        <h:outputText value="If the data file is an image, then expanding that will give you an option to 'Launch va ImageJ', this is a image processing tool that will be opened (no client installation needed, apart from Java) and then download the file for you to process."/>
+                                                                    </h:panelGrid>
+                                                                </t:collapsiblePanel>
+                                                            </a4j:form>
                                                         </td>
                                                     </tr>
                                                 </tbody>

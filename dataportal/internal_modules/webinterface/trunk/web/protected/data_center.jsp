@@ -3,7 +3,11 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+
 <%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
+<%@ taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
+<%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
@@ -14,7 +18,7 @@
         <title>CCLRC Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
         <script language="javascript" src="../css/download.js"></script>
-         <script language="javascript" src="../css/CastleBusyBox.js"></script>
+        <script language="javascript" src="../css/CastleBusyBox.js"></script>
         
     </head>
     <body>
@@ -52,8 +56,8 @@
                                         <td valign="top" width="200">
                                             
                                             <!-- does not work inside subview??? -->
-                                             <f:subview id="navigation">
-                                            <c:import url="inc/header_img.jsp" />
+                                            <f:subview id="navigation">
+                                                <c:import url="inc/header_img.jsp" />
                                             </f:subview>
                                             <%--
                                             <img align="center" src="../../images/diamond.gif" width=170" height="60" />
@@ -67,7 +71,7 @@
                                                     </t:panelNavigation2>
                                                 </t:div>
                                             </t:div>
-                                             <t:div id="subnavigation_nav">
+                                            <t:div id="subnavigation_nav">
                                                 <f:subview id="navigation_search">
                                                     <c:import url="inc/basic_search_inc_2.jsp" />
                                                 </f:subview>
@@ -102,6 +106,32 @@
                                                                 <c:import url="inc/data_center_inc.jsp" />
                                                             </f:subview>
                                                             
+                                                            <a4j:form id="helpform">
+                                                                
+                                                                <t:collapsiblePanel  id="help" value="#{helpCollapsibleBean.collapsed}" title="testTitle" >
+                                                                    <f:facet name="header">
+                                                                        <t:div style="color: black; width:40px;">
+                                                                            <h:panelGrid columns="4" >
+                                                                                <h:outputText rendered="#{!helpCollapsibleBean.collapsed}" value="v " style="color:blue; "/>  <a4j:commandLink reRender="helpform" style="color: black;" styleClass="help" id="helpcj" action="#{helpCollapsibleBean.collapse}" rendered="#{!helpCollapsibleBean.collapsed}" immediate="true"   value="Help"/>
+                                                                                
+                                                                                <h:outputText rendered="#{helpCollapsibleBean.collapsed}" value="> " style="color:blue; "/>  <a4j:commandLink reRender="helpform" style="color: black;" styleClass="help" id="helpc" action="#{helpCollapsibleBean.collapse}" rendered="#{helpCollapsibleBean.collapsed}" immediate="true"   value="Help"/>
+                                                                                
+                                                                            </h:panelGrid>
+                                                                        </t:div>
+                                                                    </f:facet>
+                                                                    <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
+                                                                        <h:outputText value="Data References, a persistant place of investigation's data files and data sets you have found and are interested in."/>
+                                                                        <h:outputText value="Each of the columns can be sorted by clicking on them once or twice for reverse sort."/>
+                                                                        <h:outputText value="The first column allows you to expand the Data Set if show to view all the data files in the data set."/>
+                                                                        <h:outputText value="Click on the name of the data reference to download it"/>
+                                                                        <h:outputText value="The third column with the check box allows you to select multiple data references and the click 'Download now' to download the selected items.  If your email is set either from the preferences page or in the pop up box when hover on the image next to the download now button, you can request for the data to be downloaded and then for a link to the data to be emailed to you.  "/>
+                                                                        <h:outputText value="Hover over the type of data gives you a quick view of the contents a data set."/>
+                                                                        <h:outputText value="Here you can add and view a notes that you want to give to a data object, or by checking a box and clicking 'Delete Selection' remove a investigation from the list."/>
+                                                                        <h:outputText value="Also, to quickly go back to view this investigation, click on the hand arrow image and it will take you to the investigations page, or hover over the arrow and then click on datasets to take you straight to the Data Sets page and bypass the investigation page for this investigation."/>
+                                                                        
+                                                                    </h:panelGrid>
+                                                                </t:collapsiblePanel>
+                                                            </a4j:form>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -109,7 +139,7 @@
                                             <br />
                                             
                                             <hr size="-1" width="100%"  />
-                                              <table id="footer_bar" border="0" width="100%" align="right">
+                                            <table id="footer_bar" border="0" width="100%" align="right">
                                                  <tbody>
                                                     <tr>
                                                         <f:subview id="footer2">
@@ -123,7 +153,7 @@
                                 </tbody>
                             </table>                           
                             
-                         
+                            
                         </td>
                     </tr>
                 </tbody>

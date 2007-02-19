@@ -4,9 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
-
-
-
+<%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
@@ -17,7 +15,7 @@
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
         <title>CCLRC Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
-         <script language="javascript" src="../css/CastleBusyBox.js"></script>
+        <script language="javascript" src="../css/CastleBusyBox.js"></script>
     </head>
     <body>
         <f:view>
@@ -62,7 +60,7 @@
                                             <t:div id="subnavigation_outer">
                                                 <t:div id="subnavigation">
                                                     <t:panelNavigation2 renderAll="false" id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
-                                                                         disabledStyle="color:red;padding: 2px 20px 2px 25px">
+                                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
                                                         <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
                                                     </t:panelNavigation2>
                                                 </t:div>
@@ -103,6 +101,33 @@
                                                                 <c:import url="inc/investigations_inc.jsp" />
                                                             </f:subview>
                                                             
+                                                             <a4j:form id="helpform">
+                                                                
+                                                               <t:collapsiblePanel  id="helpform" value="#{helpCollapsibleBean.collapsed}" title="testTitle" >
+                                                                    <f:facet name="header">
+                                                                        <t:div style="color: black; width:40px;">
+                                                                            <h:panelGrid columns="4" >
+                                                                                <h:outputText rendered="#{!helpCollapsibleBean.collapsed}" value="v " style="color:blue; "/>  <a4j:commandLink reRender="helpform" style="color: black;" styleClass="help" id="helpcj" action="#{helpCollapsibleBean.collapse}" rendered="#{!helpCollapsibleBean.collapsed}" immediate="true"   value="Help"/>
+                                                                                
+                                                                                <h:outputText rendered="#{helpCollapsibleBean.collapsed}" value="> " style="color:blue; "/>  <a4j:commandLink reRender="helpform" style="color: black;" styleClass="help" id="helpc" action="#{helpCollapsibleBean.collapse}" rendered="#{helpCollapsibleBean.collapsed}" immediate="true"   value="Help"/>
+                                                                                
+                                                                            </h:panelGrid>
+                                                                        </t:div>
+                                                                    </f:facet>
+                                                                    
+                                                                    <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
+                                                                        <h:outputText value="Lists the investigations found either of the seach or ones associated with you."/>
+                                                                        <h:outputText value="The tree gives a quick view, whilst the table holds more information.  Click on the facility name in the tree to view all the investigation's datasets from that facility."/>
+                                                                        <h:outputText value="Each of the columns can be sorted by clicking on them once or twice for reverse sort."/>
+                                                                        <h:outputText value="Abstracts can be viewed by clicking the cross in the investigation row or all abstracts can be found by clicking the cross next to the abstract header" />
+                                                                        <h:outputText value="The image picture of a head if shown means that there are users associated with the investigation.  Hover over the image and a list of them will appear in a pop up box" />
+                                                                        <h:outputText value="The key represents the keywords associated with the investigation, hover over it to view them." />
+                                                                        <h:outputText value="Click on the check box for a particular investigation or click the cross on the top header to check all of the investigations, then press 'View Selection' to view their datasets." />
+                                                                        <h:outputText value="If there are more investigations that are set in your preferences 'Results per page' then a scroller will appear to help you naviagate the investigations. To see more investigations on one page, click Preferences in the bottom left navigation tab bar and then choose the number of results per page in the drop down list." />
+                                                                        
+                                                                    </h:panelGrid>
+                                                                </t:collapsiblePanel>
+                                                            </a4j:form>
                                                         </td>
                                                     </tr>
                                                 </tbody>
