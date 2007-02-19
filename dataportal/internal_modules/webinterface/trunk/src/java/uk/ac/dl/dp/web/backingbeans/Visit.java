@@ -65,7 +65,8 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     private AdminData adminData;
     
-
+    private boolean _collapsed;
+    
     private static Logger log = Logger.getLogger(Visit.class);
     
     public Visit(){
@@ -96,7 +97,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
             }
         }
         log.trace("User is admin: "+isAdmin);
-                
+        
         
         //set session facility list
         Collection<FacilityDTO> facs = this.session.getFacilities();
@@ -131,8 +132,8 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public String getSid() {
         return sid;
-    }    
-       
+    }
+    
     public UserPreferencesDTO getUserPreferences() {
         return userPreferences;
     }
@@ -245,15 +246,22 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         }
         return isTopic;
     }
-
+    
     public String getLogonType() {
         return logonType;
     }
-
+    
     public void setLogonType(String logonType) {
         this.logonType = logonType;
     }
-
-   
+    
+    public boolean isCollapsed() {
+        return _collapsed;
+    }
+    
+    public void setCollapsed(boolean collapsed) {
+        _collapsed = collapsed;
+    }
+    
     
 }
