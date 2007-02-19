@@ -113,7 +113,13 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 
                 else if(e.getQt() == DPQueryType.MYDATA){
                     log.trace("Searching type: MyData");
-                    r_i_l =  dpal.getMyInvestigations(e.getFederalID());
+                    if(security){
+                        //security then use there user name = fed id
+                        r_i_l =  dpal.getMyInvestigations(e.getFederalID());
+                    } else {
+                        // if no security then user DN = EMAT
+                        r_i_l =  dpal.getMyInvestigations(e.getDN());
+                    }
                     log.trace("Finished searching for investigations");
                 }
                 
