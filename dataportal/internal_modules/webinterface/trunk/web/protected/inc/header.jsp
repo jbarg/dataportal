@@ -12,15 +12,15 @@
                                       itemMaxHeight="200" orientation="horizontal" effectUnits="2"
                                       itemPadding="10" attachEdge="top" labelEdge="bottom">                    
                 
-                <t:navigationMenuItem  icon="../../images/icon_browser.png"
-                                       itemLabel="Web Browser"                            />
+             <t:navigationMenuItem  icon="../../images/icon_browser.png"
+                                       itemLabel="Web Browser"              rendered="#{visit.admin}"              />
                 <t:navigationMenuItem icon="../../images/icon_calendar.png"
-                                      itemLabel="Calendar"  />
-                <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"     />
-                <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"                            />
-                <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
+                                      itemLabel="Calendar" rendered="#{visit.admin}" />
+                <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"  rendered="#{visit.admin}"    />
+                <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"    rendered="#{visit.admin}"                        />
+                <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"      rendered="#{visit.admin}"                    />
                 <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
-                
+             
             </s:fishEyeNavigationMenu>           
         </t:div>
         
@@ -32,12 +32,12 @@
                                       itemPadding="10" attachEdge="top" labelEdge="bottom">                    
                 
                 <t:navigationMenuItem icon="../../images/icon_browser.png"
-                                      itemLabel="Web Browser"                            />
+                                      itemLabel="Web Browser"          rendered="#{visit.admin}"                  />
                 <t:navigationMenuItem icon="../../images/icon_calendar.png"
-                                      itemLabel="Calendar"  />
-                <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"                          />
-                <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"                            />
-                <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
+                                      itemLabel="Calendar" rendered="#{visit.admin}" />
+                <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"           rendered="#{visit.admin}"               />
+                <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"      rendered="#{visit.admin}"                      />
+                <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"      rendered="#{visit.admin}"                    />
                 <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
         </s:fishEyeNavigationMenu>                    </t:div>
@@ -51,12 +51,12 @@
                                       itemPadding="10" attachEdge="top" labelEdge="bottom">                    
                 
                 <t:navigationMenuItem icon="../../images/icon_browser.png"
-                                      itemLabel="Web Browser"                            />
+                                      itemLabel="Web Browser"                 rendered="#{visit.admin}"           />
                 <t:navigationMenuItem icon="../../images/icon_calendar.png"
-                                      itemLabel="Calendar"  />
-                <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"                          />
-                <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"                            />
-                <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
+                                      itemLabel="Calendar" rendered="#{visit.admin}" />
+                <t:navigationMenuItem icon="../../images/icon_email.png" itemLabel="Email"          rendered="#{visit.admin}"                />
+                <t:navigationMenuItem icon="../../images/icon_texteditor.png" itemLabel="Text Editor"      rendered="#{visit.admin}"                      />
+                <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"      rendered="#{visit.admin}"                    />
                 <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
         </s:fishEyeNavigationMenu>                    </t:div>
