@@ -326,12 +326,14 @@ public class DownloadServlet extends HttpServlet {
                 } else {
                     visit.removeSrbManager(ID);
                     String message = "";
-                    if(man.getException() instanceof NoAccessToDataStorage){
+                    if(man.getException() instanceof NoAccessToDataStorage || (man.getException().getCause() != null && man.getException().getCause() instanceof NoAccessToDataStorage)){
                         log.warn("User: "+visit.getDn()+" is not registered to SRB: "+srbUrl);
                         message = "No access to data storage.";
-                    }else if(man.getException() instanceof ReadAccessException){
+                    } else if(man.getException() instanceof ReadAccessException || (man.getException().getCause() != null && man.getException().getCause() instanceof ReadAccessException)){
                         log.warn("User: "+visit.getDn()+" has no read access to: "+srbUrl);
                         message = "Insufficient access rights to the data.";
+                    } else {
+                        log.error("User: "+visit.getDn()+" has cannot download : "+srbUrl,man.getException());
                     }
                     RequestDispatcher dispatcher =
                             req.getRequestDispatcher("/protected/downloaderror.jsp?message="+message+"&name="+name+"&url="+ID);
