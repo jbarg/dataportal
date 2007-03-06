@@ -425,7 +425,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             DPAccessLayer dpal = null;
             try {
                 dpal = new DPAccessLayer(fac);
-                  log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
+                log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
                 datafiles.addAll(dpal.getDataFiles(datasets_id, user.getUserId(), security));
             } catch (Exception ex) {
                 log.error("Unable to search Investigations ids: ",ex);
@@ -532,7 +532,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             }
             
             dpal = new DPAccessLayer(fac);
-              log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
+            log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
             r_i_l = dpal.getInvestigationsById(investigations, user.getUserId(),security);
             
         } catch (Exception ex) {
