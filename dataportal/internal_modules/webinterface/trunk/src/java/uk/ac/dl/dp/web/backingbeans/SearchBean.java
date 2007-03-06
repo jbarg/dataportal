@@ -328,7 +328,7 @@ public class SearchBean extends AbstractRequestBean {
         //if not results infom user
         if(investigations.size() == 0){
             if(myData){
-                info("No data associated with you.");
+                info("No investigations associated with you.");
             } else {
                 info("No results found. Please refine your query.");
             }

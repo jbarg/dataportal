@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import uk.ac.cclrc.dpal.beans.Investigation;
@@ -23,6 +24,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
+import uk.ac.cclrc.dpal.beans.DataFile;
+import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.DownloadDelegate;
@@ -32,6 +35,7 @@ import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
+import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
@@ -166,9 +170,9 @@ public class DataCenterBean extends SortableList {
                     
                     log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
                     df.setDownload(!df.isDownload());
-                    
-                    checkSingleFacilityChoosen(df.getDataRefId().getFacility());
-                    checkFromSameSRBChoosen(df.getDataRefId().getFacility());
+                    // checkFromSameDataset();
+                    //checkSingleFacilityChosen(df.getDataRefId().getFacility());
+                    // checkFromSameSRBChosen(df.getDataRefId().getFacility());
                     
                     break;
                 } else{
@@ -187,9 +191,9 @@ public class DataCenterBean extends SortableList {
                     //for(Url url :df.getUrls()){
                     //  url.setDownload(df.isDownload());
                     //}
-                    checkSingleFacilityChoosen(df.getFacility());
-                    checkFromSameSRBChoosen(df.getFacility());
-                    
+                    //checkSingleFacilityChosen(df.getFacility());
+                    //checkFromSameSRBChosen(df.getFacility());
+                    //checkFromSameDataset();
                     break;
                 }
             }
@@ -200,103 +204,10 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-    private void checkSingleFacilityChoosen(String facilityAdded){
-        //need to check if this addition is from other facility
-        Collection<DataReference> dataRefs = getVisitData().getCurrentDataReferences();
-        
-        Collection<String> facsChoosen = new ArrayList<String>();
-        for(DataReference df : dataRefs){
-            if(df.isDownload()){
-                if(facsChoosen.isEmpty()){
-                    facsChoosen.add(df.getFacility());
-                } else if(!facsChoosen.contains(df.getFacility())){
-                    error("Unable to download from multiple facilities.");
-                    log.info("Unable to download from multiple facilites. Trying to add: "+facilityAdded+" already have: " +df.getFacility());
-                    getVisitData().setDownloadable(false);
-                    return ;
-                }
-            }
-            for(Url url : df.getUrls()){
-                if(url.isDownload()){
-                    if(facsChoosen.isEmpty()){
-                        facsChoosen.add(df.getFacility());
-                    } else if(!facsChoosen.contains(df.getFacility())){
-                        error("Unable to download from multiple facilities.");
-                        log.info("Unable to download from multiple facilities. Trying to add: "+facilityAdded+" already have: " +df.getFacility());
-                        getVisitData().setDownloadable(false);
-                        return ;
-                    }
-                }
-            }
-        }
-        log.info("Same facility added with: "+facilityAdded);
-        getVisitData().setDownloadable(true);
-        return ;
-        
-    }
     
-    private void checkFromSameSRBChoosen(String facilityAdded){
-        //need to check if this addition is from other facility
-        Collection<DataReference> dataRefs = getVisitData().getCurrentDataReferences();
-        
-        Collection<String> srbsChoosen = new ArrayList<String>();
-        for(DataReference df : dataRefs){
-            if(df.isDownload()){
-                String urlS = df.getUrls().iterator().next().getUrl();
-                log.trace("trying to add: "+urlS);
-                urlS = urlS.replaceFirst("srb://","http://");
-                String host = null;
-                try {
-                    host = new URL(urlS).getHost();
-                } catch (MalformedURLException ex) {
-                    log.warn("SRB location: "+host+" is not a valid URL.");
-                    error("Unable to download from this file location.");
-                    getVisitData().setDownloadable(false);
-                    return ;
-                }
-                
-                if(srbsChoosen.isEmpty()){
-                    srbsChoosen.add(host);
-                } else if(!srbsChoosen.contains(host)){
-                    error("Unable to download from differenr data storage locations. Please download seperately.");
-                    log.info("Unable to download from data storage locations. Trying to add: "+host+" already have: " +host);
-                    getVisitData().setDownloadable(false);
-                    return ;
-                }
-            }
-            for(Url url : df.getUrls()){
-                if(url.isDownload()){
-                    String urlS = url.getUrl();
-                    log.trace("trying to add: "+urlS);
-                    urlS = urlS.replaceFirst("srb://","http://");
-                    String host = null;
-                    try {
-                        host = new URL(urlS).getHost();
-                    } catch (MalformedURLException ex) {
-                        log.warn("SRB location: "+url.getUrl()+" is not a valid URL.");
-                        error("Unable to download from this file location.");
-                        getVisitData().setDownloadable(false);
-                        return ;
-                    }
-                    
-                    if(srbsChoosen.isEmpty()){
-                        srbsChoosen.add(host);
-                    } else if(!srbsChoosen.contains(host)){
-                        error("Unable to download from differenr data storage locations. Please download seperately.");
-                        log.info("Unable to download from data storage locations. Trying to add: "+url.getUrl()+" already have: " +host);
-                        getVisitData().setDownloadable(false);
-                        return ;
-                    }
-                } else {
-                    String urlS = url.getUrl();
-                    log.trace("not trying to add: "+urlS);
-                }
-            }
-        }
-        log.info("Same srb location added with: "+facilityAdded);
-        getVisitData().setDownloadable(true);
-        return ;
-        
+   public String emailErrorMessage(){
+        error("Please select atleast one item to download.");
+        return null;
     }
     
     public String addEmail(){
@@ -315,15 +226,32 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
+    
     public void emailDownload(ActionEvent event){
         log.trace("emailDownload: ");
         String[] srbFilesDownload = getVisitData().getCartSRBURLs();
+        
+        if(srbFilesDownload.length == 0){
+            error("Please select atleast one item to download.");
+            return ;
+        }
+        
         try{
+            //check that all files are from same dataset
+           /* if(!checkFromSameDataset()){
+                error("Unable to download data from multiple investigations.  Select multiple items from one investigation or dataset at a time.");
+                return ;
+            }*/
+            
             SRBInfo info = new SRBInfo();
             info.setSid(getVisit().getSid());
-            info.setSrbFiles(srbFilesDownload);
+            //info.setSrbFiles(srbFilesDownload);
+            info.setSrbUrls(getVisitData().toSRBUrl(srbFilesDownload));
             DownloadDelegate.getInstance().downloadSRBFiles(getVisit().getSid(), info);
             info("Request sent for download");
+        } catch(MalformedURLException mex){
+            log.error("Cannot download data via email, invalid URLS found.",mex);
+            //error("Cannot download data via email");
         } catch(Exception ex){
             log.error("Cannot download data via email",ex);
             //error("Cannot download data via email");
@@ -331,43 +259,9 @@ public class DataCenterBean extends SortableList {
         
     }
     
-   /* private DataReference getDataRef(String param) {
-        String fac = param.split("-")[0];
-        String id = param.split("-")[1];
-        log.trace("looking for:"+ fac+"-"+id);
     
-        for(DataReference file : getVisitData().getCurrentDataReferences()){
-            log.trace(file.getFacility()+"-"+file.getId()+"-"+file.getName());
-            if(file.getId().toString().equals(id) && file.getFacility().equals(fac) ){
-                log.debug("Found dataref: "+file);
-                return file;
-            }
-        }
-        return null;
-    }*/
-    
-   /*private Url getDataUrl(String param) {
-        String fac = param.split("-")[0];
-        String data_ref_id = param.split("-")[1];
-        String url_id = param.split("-")[2];
-    
-        for(DataReference file : getVisitData().getCurrentDataReferences()){
-            if(file.getId().toString().equals(data_ref_id) && file.getFacility().equals(fac) ){
-                log.debug("Found dataurlref: "+file);
-                Collection<Url> urls = file.getUrls();
-                for(Url url : urls){
-                    if(url.getId().toString().equals(url_id)){
-                        return url;
-                    }
-                }
-            }
-        }
-        log.trace("Nothing found with param: "+param);
-        return null;
-    }*/
-    
-    //This listens to changes in the users isSelected.  This is because the list could be
-    //larger than one page so have to do it this way
+//This listens to changes in the users isSelected.  This is because the list could be
+//larger than one page so have to do it this way
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
         Collection<DataReference> dataReference = getVisitData().getCurrentDataReferences();
@@ -395,8 +289,8 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-    //Gets the current data ref and then gets the investigation and searches for the investigation
-    // returns back to the investigations page
+//Gets the current data ref and then gets the investigation and searches for the investigation
+// returns back to the investigations page
     public String viewData(){
         log.trace("view data");
         DataReference qrdto =   (DataReference) table.getRowData();
@@ -426,8 +320,8 @@ public class DataCenterBean extends SortableList {
         
     }
     
-    //Gets the current data reference and then gets the investigation and searches for the investigation
-    // returns back to the dataset page of the investigation
+//Gets the current data reference and then gets the investigation and searches for the investigation
+// returns back to the dataset page of the investigation
     public String viewDataSets(){
         log.trace("view data referenced data");
         DataReference qrdto =   (DataReference) table.getRowData();
@@ -462,8 +356,8 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-    //listens for sort column action events, and gets the column by thge param name passed in
-    // then calls sort on the column
+//listens for sort column action events, and gets the column by thge param name passed in
+// then calls sort on the column
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -508,7 +402,7 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-    //method to select all data
+//method to select all data
     public String selectnone(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(false);
@@ -516,7 +410,7 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-    //mehtod to remove select all
+//mehtod to remove select all
     public String selectall(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(true);
@@ -524,10 +418,10 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-    //listens for changes in the add note section in data center page
-    //iterates over paramaters and gets the data center ID passedd in and sets the note on the data center
-    //once the change has been made they need to press the addNote method and then the data center will be sent
-    // to the EJB to save
+//listens for changes in the add note section in data center page
+//iterates over paramaters and gets the data center ID passedd in and sets the note on the data center
+//once the change has been made they need to press the addNote method and then the data center will be sent
+// to the EJB to save
     public void note(ValueChangeEvent event){
         log.trace("new value: "+event.getNewValue());
         List children  = event.getComponent().getChildren();
@@ -552,7 +446,7 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-    //save to DB
+//save to DB
     public String addNote(){
         
         DataReference bk = (DataReference)table.getRowData();
@@ -575,9 +469,9 @@ public class DataCenterBean extends SortableList {
     
     
     
-    ///////////////////////////////////////////////////
-    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
-    //need this is see if bookmarks is > 0 and the lenght of them
+///////////////////////////////////////////////////
+//these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+//need this is see if bookmarks is > 0 and the lenght of them
     public boolean isPopulated() {
         if(getDataRefs().size() > 0){
             return true;
@@ -644,7 +538,7 @@ public class DataCenterBean extends SortableList {
         if(getSort().equals(column) && !isAscending()) return true;
         else return false;
     }
-    ////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
     
     
     

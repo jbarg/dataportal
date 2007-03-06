@@ -185,8 +185,9 @@ public class Visit  extends AbstractSessionBean implements Serializable{
             log.trace("removing "+param+" from cache");
             SRBFileManagerThread man = srbManager.get(param);
             try {
-                
-                man.stopDownload();
+                if(!man.isFinished()){
+                    man.stopDownload();
+                }
             } finally {
             }
             this.srbManager.remove(param);

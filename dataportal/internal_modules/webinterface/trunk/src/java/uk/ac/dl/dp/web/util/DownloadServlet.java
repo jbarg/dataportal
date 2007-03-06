@@ -1,4 +1,5 @@
 package uk.ac.dl.dp.web.util;
+import edu.sdsc.grid.io.srb.SRBException;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
@@ -101,7 +102,7 @@ public class DownloadServlet extends HttpServlet {
                 name = file.getName();
                 srbUrl = new String[]{file.getUrl()};
                 
-               //this is when a file is a data ref
+                //this is when a file is a data ref
             } else if(TYPE.startsWith(DownloadConstants.DATA_FILE_AS_REF)){
                 DataReference file = visit.getVisitData().getDataReferenceFromCart(ID);
                 DpId = file.getDpId();
@@ -109,7 +110,7 @@ public class DownloadServlet extends HttpServlet {
                 for(Url url : file.getUrls()){
                     srbUrl = new String[]{url.getUrl()};
                     break;
-                }                
+                }
                 
                 //this will get DATASETS and DATASETINFOLDER types
             } else if(TYPE.startsWith(DownloadConstants.DATA_SET)){
@@ -155,7 +156,7 @@ public class DownloadServlet extends HttpServlet {
                 srbUrl = urls.toArray(new String[urls.size()]);
             } else if(TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE)){
                 //multiple file download
-                srbUrl =  visit.getVisitData().getSearchedSRBURLs();
+                srbUrl =  visit.getVisitData().getAllSearchedSRBURLs();
                 name = DownloadConstants.DOWNLOAD_MULTIPLE;
                 DpId = DownloadConstants.DOWNLOAD_MULTIPLE;
             }
@@ -170,15 +171,28 @@ public class DownloadServlet extends HttpServlet {
             
             log.debug("file for download: "+srbUrl);
             
+            //check if nmay file chose
+            if(srbUrl.length == 0){
+                RequestDispatcher dispatcher =
+                        req.getRequestDispatcher("/protected/downloaderror.jsp?message=Please select atleast one item to download.&name="+name);
+                if (dispatcher != null) dispatcher.forward(req, response);
+                return ;
+                
+            }
+            
             try{
                 //not download started so start one
-                SRBFileManagerThread man = new SRBFileManagerThread();
+                
                 Certificate cert = new Certificate(visit.getSession().getCredential());
                 GSSCredential cred = cert.getCredential();
                 
                 log.info("Credential information "+cred.getName());
+                SRBFileManagerThread man = null;
                 try {
-                    man.setCredentials(Util.getSRBHost(srbUrl),Util.getSRBPort(srbUrl),cred);
+                    //turn array into SRBUrls
+                    Collection<SRBUrl> srbUrls = visit.getVisitData().toSRBUrl(srbUrl);
+                    
+                    man = new SRBFileManagerThread(srbUrls,cred);
                     
                     String host = Util.getSRBHost(srbUrl);
                     log.trace("Looking for SRB Server with host: "+host);
@@ -203,20 +217,20 @@ public class DownloadServlet extends HttpServlet {
                 } catch (Exception ex) {
                     log.warn("Error getting SRB host info",ex);
                     RequestDispatcher dispatcher =
-                            req.getRequestDispatcher("/protected/downloaderror.jsp?message=Invalid SRB URL Found&name="+name);
+                            req.getRequestDispatcher("/protected/downloaderror.jsp?message=Invalid URL Found&name="+name);
                     if (dispatcher != null) dispatcher.forward(req, response);
                     return ;
                 }
                 
-                man.setSRBFile(srbUrl);
                 
-                if(TYPE.startsWith(DownloadConstants.DATA_FILE.toString()) || TYPE.startsWith(DownloadConstants.DATA_FILE_AS_REF.toString())) {
+                /*if(TYPE.startsWith(DownloadConstants.DATA_FILE.toString()) || TYPE.startsWith(DownloadConstants.DATA_FILE_AS_REF.toString())) {
                     man.setZipeFile(false);
                 } else {
                     man.setZipeFile(true);
-                }
+                }*/
                 
-                man.setFolderFilesOnly(true);
+                // man.setFolderFilesOnly(true);
+                
                 man.start();
                 visit.putSrbManager(ID, man);
                 //
@@ -326,14 +340,32 @@ public class DownloadServlet extends HttpServlet {
                 } else {
                     visit.removeSrbManager(ID);
                     String message = "";
-                    if(man.getException() instanceof NoAccessToDataStorage || (man.getException().getCause() != null && man.getException().getCause() instanceof NoAccessToDataStorage)){
-                        log.warn("User: "+visit.getDn()+" is not registered to SRB: "+srbUrl);
-                        message = "No access to data storage.";
-                    } else if(man.getException() instanceof ReadAccessException || (man.getException().getCause() != null && man.getException().getCause() instanceof ReadAccessException)){
-                        log.warn("User: "+visit.getDn()+" has no read access to: "+srbUrl);
-                        message = "Insufficient access rights to the data.";
+                    if(man.getException() instanceof SRBException || (man.getException().getCause() != null && man.getException().getCause() instanceof SRBException) ){
+                        SRBException srbException = null;
+                        if(man.getException() instanceof SRBException){
+                            srbException = (SRBException)man.getException();
+                        } else {
+                            srbException = (SRBException)man.getException().getCause();
+                        }
+                        if(srbException.getType() == -1){
+                            //no file
+                            log.warn("User: "+visit.getDn()+": "+srbException.getMessage());
+                            message = "File Not found exception.";
+                        } else if(srbException.getType() == -2){
+                            //read access
+                            log.warn("User: "+visit.getDn()+": "+srbException.getMessage());
+                            message = "Insufficient privileges access data.";
+                        } else if(srbException.getType() == -3){
+                            //no accessd to SRB
+                            log.warn("User: "+visit.getDn()+" is not registered to SRB: "+srbException.getMessage());
+                            message = srbException.getMessage();
+                        } else {
+                            log.error("User: "+visit.getDn()+" has cannot download : "+man.getSrbURLs(),man.getException());
+                            message = "Error downloading data.";
+                        }
                     } else {
                         log.error("User: "+visit.getDn()+" has cannot download : "+srbUrl,man.getException());
+                        message = "Error downloading data.";
                     }
                     RequestDispatcher dispatcher =
                             req.getRequestDispatcher("/protected/downloaderror.jsp?message="+message+"&name="+name+"&url="+ID);
