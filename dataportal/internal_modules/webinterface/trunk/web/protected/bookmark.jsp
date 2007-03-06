@@ -119,10 +119,10 @@
                                                                     </f:facet>
                                                                     <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
                                                                         <h:outputText value="Bookmarks, a persistant place of investigations you have found and are interested in."/>
-                                                                        <h:outputText value="Each of the columns can be sorted by clicking on them once or twice for reverse sort."/>
+                                                                        <h:outputText value="Each of the columns can be sorted by clicking on the header once or twice for reverse sort."/>
                                                                         
                                                                         <h:outputText value="Here you can add and view a notes that you want to give to a investigation, or by checking a box and clicking 'Delete Selection' remove a investigation from the list."/>
-                                                                        <h:outputText value="Also, to quickly go back to view this investigation, click on the hand arrow image and it will take you to the investigations page, or hover over the arrow and then click on datrasets to take you straight to the Data Sets page and bypass the investigation page for this investigation."/>
+                                                                        <h:outputText value="Also, to quickly go back to view the parent investigation, click on the hand arrow image and it will take you to the investigations page, or hover over the arrow and then click on datasets to take you straight to the Data Sets page and bypass the investigation page for this investigation."/>
                                                                         
                                                                     </h:panelGrid>
                                                                 </t:collapsiblePanel>

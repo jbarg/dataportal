@@ -44,8 +44,8 @@
         
     </c:when>
     
-    <c:when test="${visit.width == 1530}">
-        <t:div styleClass="outerbar" style="width:1530px" >
+    <c:when test="${visit.width == 1600}">
+        <t:div styleClass="outerbar" style="width:1590px" >
             <s:fishEyeNavigationMenu  itemWidth="50" itemHeight="53" itemMaxWidth="200"
                                       itemMaxHeight="200" orientation="horizontal" effectUnits="2"
                                       itemPadding="10" attachEdge="top" labelEdge="bottom">                    

@@ -80,6 +80,7 @@
                         
                         <h:inputText styleClass="text" id="emailj_id_1" size="30" validator="#{userPreferencesBean.validateEmail}" value="#{userPreferencesBean.email}">
                             <f:validateLength minimum="5" maximum="160"/>
+                         
                         </h:inputText> 
                         
                         

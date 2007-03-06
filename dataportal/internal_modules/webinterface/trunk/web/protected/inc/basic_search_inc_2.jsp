@@ -205,12 +205,11 @@
             </h:form>
         </t:panelTab>
         
-    </t:panelTabbedPane>
-    
+    </t:panelTabbedPane>  
     
 </a4j:region>
 
-<iframe id="BusyBoxIFrame" name="BusyBoxIFrame" frameBorder="0" scrolling="no" ondrop="return false;">
+<iframe src="blank.html" id="BusyBoxIFrame" name="BusyBoxIFrame" frameBorder="0" scrolling="no" ondrop="return false;">
 </iframe>
 <SCRIPT>
 		// Instantiate our BusyBox object

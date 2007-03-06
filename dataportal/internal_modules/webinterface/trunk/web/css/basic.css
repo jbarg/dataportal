@@ -226,7 +226,7 @@ a:hover
 
 .error {
 	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 10px;
+	font-size: 11px;
 	color: #FF0000;
 }
 
@@ -543,7 +543,7 @@ div.titlebar {
 
 .info {
    font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 10px;
+	font-size: 11px;
 	color: blue;
 }
 
