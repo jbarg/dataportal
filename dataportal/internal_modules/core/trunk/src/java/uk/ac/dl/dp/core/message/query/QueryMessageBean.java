@@ -125,7 +125,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 
                 
             } catch (Exception exception) {
-                log.debug("Interrupted", exception);
+                log.error("Unable to query "+e.getFacility(), exception);
                 ex  = exception;
                 
             } finally{

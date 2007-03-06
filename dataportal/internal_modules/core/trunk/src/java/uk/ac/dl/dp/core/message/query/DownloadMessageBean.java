@@ -13,12 +13,10 @@ import edu.sdsc.grid.io.srb.SRBException;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.Resource;
-import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.EJBContext;
 import javax.ejb.MessageDriven;
@@ -49,9 +47,8 @@ import uk.ac.dl.dp.coreutil.util.ServiceInfo;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
 import uk.ac.dl.srbapi.cog.PortalCredential;
-import uk.ac.dl.srbapi.srb.NoAccessToDataStorage;
-import uk.ac.dl.srbapi.srb.ReadAccessException;
-import uk.ac.dl.srbapi.srb.SRBFileManager;
+import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
+import uk.ac.dl.srbapi.srb.SRBUrl;
 import uk.ac.dl.srbapi.util.IOTools;
 
 
@@ -115,7 +112,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         
     }
     
-    
+    //TODO needs to be rewritten
     private void downloadSRBFiles(SRBInfo srbInfo)  throws IllegalArgumentException, LoginMyProxyException, MalformedURLException, Exception {
         //this should be done on the WSDL/Schema
         checkArguments(srbInfo);
@@ -125,7 +122,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         
         //download the data
         File srbZipFile  = null;
-        String[] fileToDownload = new String[srbInfo.getSrbFiles().length];
+        // String[] fileToDownload = new String[srbInfo.getSrbFiles().length];
         
         StringBuilder files = new StringBuilder();
         String DN = session.getUserId().getDn();
@@ -134,29 +131,50 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         String name = DN.substring(index+3,DN.length());
         
         int i = 0;
-        for(String srbFile : srbInfo.getSrbFiles()){
-            files.append(srbFile+"\n");
-            fileToDownload[i] = srbFile;
+        for(SRBUrl srburl : srbInfo.getSrbUrls()){
+            files.append(srburl.toString()+"\n");
+            //  fileToDownload[i] = srburl.toString();
             i++;
         }
         
         try {
             srbZipFile = getSrbFiles(srbInfo, userCred);
-        } catch(NoAccessToDataStorage nads){
-            
-            log.warn("User: "+session.getUserId().getDn()+" is not registered to SRB: "+srbInfo.getSrbFiles());
-            postMail( session.getUserId().getDpUserPreference().getEmail(), "Download failed", "Hi "+name+"\n\nDownload of :\n\n"+files.toString()+"\n\nfailed:  \n\nReason: No Access to Data Storage", "dataportal_download@dl.ac.uk") ;
-            return ;
-            
-        } catch(ReadAccessException rad){
-            log.warn("User: "+session.getUserId().getDn()+" has no read access to: "+srbInfo.getSrbFiles());
-            postMail( session.getUserId().getDpUserPreference().getEmail(), "Download failed", "Hi "+name+"\n\nDownload of :\n\n"+files.toString()+"\n\nfailed:  \n\nReason: No read access to data ", "dataportal_download@dl.ac.uk") ;
-            return ;
-            
+        } catch(SRBException srb){
+            if(srb.getType() == -1){
+                //no file
+                log.warn("User: "+session.getUserId().getDn()+": File Not Found exception for: "+srbInfo.getSrbUrls());
+                postMail( session.getUserId().getDpUserPreference().getEmail(), "Download failed", "Hi "+name+"\n\nDownload of :\n\n"+files.toString()+"\n\nfailed:  \n\nReason: File Not Found exception", "dataportal_download@dl.ac.uk") ;
+                return ;
+            } else  if(srb.getType() == -2){
+                //no read access
+                log.warn("User: "+session.getUserId().getDn()+" has no read access to: "+srbInfo.getSrbUrls());
+                postMail( session.getUserId().getDpUserPreference().getEmail(), "Download failed", "Hi "+name+"\n\nDownload of :\n\n"+files.toString()+"\n\nfailed:  \n\nReason: No read access to data ", "dataportal_download@dl.ac.uk") ;
+                return ;
+            } else if(srb.getType() == -3){
+                log.warn("User: "+session.getUserId().getDn()+" is not registered to SRB: "+srbInfo.getSrbUrls());
+                postMail( session.getUserId().getDpUserPreference().getEmail(), "Download failed", "Hi "+name+"\n\nDownload of :\n\n"+files.toString()+"\n\nfailed:  \n\nReason: "+srb.getMessage(), "dataportal_download@dl.ac.uk") ;
+                return ;
+            } else {
+                log.warn("Error downloading file, retrying once more",srb);
+                try {
+                    // srbInfo.setSrbFiles(fileToDownload);
+                    srbZipFile = getSrbFiles(srbInfo, userCred);
+                } catch (Exception ex2) {
+                    log.error("Error no. 2 downloading file, send failed email",ex2);
+                    String reason = null;
+                    if(ex2 instanceof SRBException){
+                        if(ex2.getMessage() == null || ex2.getMessage().equals("")){
+                            reason = ((SRBException)ex2).getStandardMessage();
+                        }
+                    } else reason = ex2.getMessage();
+                    postMail( session.getUserId().getDpUserPreference().getEmail(), "Download failed", "Hi "+name+"\n\nDownload of :\n\n"+files.toString()+"\n\nfailed:  \n\nReason: "+reason, "dataportal_download@dl.ac.uk") ;
+                    return ;
+                }
+            }
         } catch (Exception ex) {
             log.warn("Error downloading file, retrying once more",ex);
             try {
-                srbInfo.setSrbFiles(fileToDownload);
+                // srbInfo.setSrbFiles(fileToDownload);
                 srbZipFile = getSrbFiles(srbInfo, userCred);
             } catch (Exception ex2) {
                 log.error("Error no. 2 downloading file, send failed email",ex2);
@@ -165,7 +183,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
                     if(ex2.getMessage() == null || ex2.getMessage().equals("")){
                         reason = ((SRBException)ex2).getStandardMessage();
                     }
-                }else reason = ex2.getMessage();
+                } else reason = ex2.getMessage();
                 postMail( session.getUserId().getDpUserPreference().getEmail(), "Download failed", "Hi "+name+"\n\nDownload of :\n\n"+files.toString()+"\n\nfailed:  \n\nReason: "+reason, "dataportal_download@dl.ac.uk") ;
                 return ;
             }
@@ -174,7 +192,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         File newLocation = zipFiles(srbInfo, srbZipFile);
         
         //send event log
-        sendEventLog(srbInfo.getSid(),"Email download",srbInfo.getSrbFiles());
+        sendEventLog(srbInfo.getSid(),"Email download",srbInfo.getSrbUrls());
         
         //if reached here, email user
         email(srbInfo,session.getUserId(),newLocation);
@@ -237,14 +255,14 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
      */
     private void checkArguments(SRBInfo srbInfo) throws IllegalArgumentException {
         
-        if(srbInfo.getSrbFiles() == null) throw new IllegalArgumentException("SRBFiles cannot be null");
+        if(srbInfo.getSrbFiles() == null && srbInfo.getSrbUrls() == null) throw new IllegalArgumentException("SRBFiles and SRBUrls cannot be null");
     }
     
-    private void sendEventLog(String sid, String message, String[] srbFiles){
+    private void sendEventLog(String sid, String message, Collection<SRBUrl> srbFiles){
         //log download
         Collection<String> urls = new ArrayList<String>();
-        for(String url : srbFiles){
-            urls.add(url);
+        for(SRBUrl url : srbFiles){
+            urls.add(url.toString());
         }
         if(eventLog != null) eventLog.sendDownloadEvent(sid,"Email download",urls);
         else log.warn("EventLocal is null, might be testing, no event saved");
@@ -269,12 +287,14 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
     }
     
     private File getSrbFiles(SRBInfo srbInfo, GSSCredential userCred) throws MalformedURLException, Exception {
-        SRBFileManager man = new SRBFileManager();
         
-        log.trace("Setting download info: "+userCred.getName().toString()+", host: "+getSRBHost(srbInfo.getSrbFiles())+":"+getSRBPort(srbInfo.getSrbFiles()));
-        man.setCredentials(getSRBHost(srbInfo.getSrbFiles()),getSRBPort(srbInfo.getSrbFiles()),userCred);
-        man.setZipeFile(true);
-        man.setFolderFilesOnly(true);
+        SRBUrl url = srbInfo.getSrbUrls().iterator().next();
+        log.trace("Setting download info: "+userCred.getName().toString()+", host: "+url.getHostAndPort());
+        //man.setCredentials(getSRBHost(srbInfo.getSrbFiles()),getSRBPort(srbInfo.getSrbFiles()),userCred);
+        
+        SRBFileManagerThread man = new SRBFileManagerThread(srbInfo.getSrbUrls(),userCred ,true);
+        // man.setZipeFile(true);
+        man.setFolderFileOnly(true);
         
         //check if given default user info
         if(srbInfo.getDefaultUser() != null){
@@ -285,7 +305,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         } else {
             try {
                 //check if we have this info in the database
-                SrbServer srbServer = (SrbServer)em.createNamedQuery("SrbServer.findByHostname").setParameter("hostname",getSRBHost(srbInfo.getSrbFiles())).getSingleResult();
+                SrbServer srbServer = (SrbServer)em.createNamedQuery("SrbServer.findByHostname").setParameter("hostname",url.getHost()).getSingleResult();
                 if(srbServer.isDefaultSet()){
                     man.setDefaultUser(srbServer.getDefaultUser());
                     man.setDefaultPass(srbServer.getDefaultPassword());
@@ -302,35 +322,43 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         log.info("Starting download");
         File returnedFile = null;
         try {
-            returnedFile = man.getSRBFile(srbInfo.getSrbFiles());
+            man.start();
+            
+            while(true){
+                if(man.isFinished()){
+                    
+                    break;
+                } else if(man.getException() != null){
+                    //System.out.println("exception "+th.getException());
+                    break;
+                } else if(man.getException() == null){
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {}
+                }
+            }
+            
+            //System.out.println("Finished upload, awaiting error report.");
+            // System.out.println("");
+            if(man.getException() == null){
+                log.info("No errors downloading: "+srbInfo.getSrbUrls());
+                log.trace("Returned file path is: "+man.getFile().getAbsolutePath());
+                log.trace(man.getTimeStats());
+                
+            } else {
+                throw man.getException();
+            }
         } catch (Exception ex) {
+            man.stopDownload();
             man.stop();
             throw ex;
         }
-        log.info("finished download: "+returnedFile.getAbsolutePath());
+        log.info("finished download: "+man.getFile().getAbsolutePath());
         
-        return returnedFile;
+        return man.getFile();
         
     }
     
-    private  String getSRBHost(String[] urls) throws MalformedURLException{
-        String host1 = urls[0].toLowerCase().replace("srb://","http://");
-        return new URL(host1).getHost();
-    }
-    
-    private  int getSRBPort(String[] urls){
-        try {
-            String host = urls[0].toLowerCase().replace("srb://","http://");
-            int port = new URL(host).getPort();
-            if(port == -1){
-                log.info("Port set to nothing in "+urls[0]+" setting to default: " +DataPortalConstants.SRB_PORT);
-                return DataPortalConstants.SRB_PORT;
-            }else return port;
-        } catch (MalformedURLException ex) {
-            log.warn("Unable to get port, trying default as: "+DataPortalConstants.SRB_PORT);
-            return DataPortalConstants.SRB_PORT;
-        }
-    }
     
     private DPConstants getConstants() {
         return  em.find(DPConstants.class,1L);
@@ -370,8 +398,8 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
             body.append("https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName()+"\n");
             body.append("\n");
             body.append("Contents:\n\n");
-            for(String file : srbInfo.getSrbFiles()){
-                body.append(file+"\n");
+            for(SRBUrl file : srbInfo.getSrbUrls()){
+                body.append(file.getPath()+"\n");
             }
             body.append("\n");
             body.append("Thank you.");

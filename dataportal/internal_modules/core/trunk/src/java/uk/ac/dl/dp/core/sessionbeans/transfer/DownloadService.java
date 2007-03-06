@@ -154,7 +154,7 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
      */
     private void checkArguments(SRBInfo srbInfo) throws IllegalArgumentException {
         
-        if(srbInfo.getSrbFiles() == null) throw new IllegalArgumentException("SRBFiles cannot be null");
+        if(srbInfo.getSrbFiles() == null && srbInfo.getSrbUrls() == null) throw new IllegalArgumentException("SRBFiles and srbUrls cannot be null");
     }
 }
 
