@@ -129,7 +129,7 @@
         <servlet-class>uk.ac.dl.dp.web.util.DownloadRemoveServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
-      
+    
     
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
@@ -156,6 +156,14 @@
         <url-pattern>/servlet/LogonKerberosServlet</url-pattern>        
     </servlet-mapping>
     
+    <error-page>	
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/faces/protected/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/faces/protected/error.jsp</location>
+    </error-page>
     
     <session-config>
         <session-timeout>
@@ -166,7 +174,7 @@
         <welcome-file>
             index.jsp
         </welcome-file>
-         <welcome-file>
+        <welcome-file>
             index.html
         </welcome-file>
     </welcome-file-list>

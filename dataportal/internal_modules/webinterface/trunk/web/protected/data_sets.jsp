@@ -120,13 +120,15 @@
                                                                     </f:facet>
                                                                     
                                                                     <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
-                                                                        <h:outputText value="Tree view of the investigations selected."/>
-                                                                        <h:outputText value="From here you can either add investigations to the Bookmarks by checking the box next the invstigation and the press 'Add Selections' or add data files or datasets to the Data References by doing the same."/>
-                                                                        <h:outputText value="Bookmarks: A persistance place for searched and found investigations for when you next log in."/>
-                                                                        <h:outputText value="Data References: A persistance place for searched and found datafiles and datasets for when you next log in."/>
+                                                                        <h:outputText value="Tree view of the investigations selected with their data sets and data files."/>
+                                                                        <h:outputText value="From here you can either add investigation(s) to the 'Bookmarks' by checking the box next the invstigation and the press 'Add Selections' or add data files or datasets to the 'Data References' by doing the same."/>
+                                                                        <h:outputText value="Bookmarks: A persistant place for searched and found investigations for when you next log in."/>
+                                                                        <h:outputText value="Data References: A persistant place for searched and found data files and datasets for when you next log in."/>
+                                                                        <h:outputText value="Checking the box next to the data file and data sets allows you to select multiple data items and then click 'Download now' to download the selected items.  If your email is set either from the preferences page or in the pop up box when hover on the image next to the 'Add Selections' button, you can request for the data to be downloaded and then for a link to the data to be emailed to you.  "/>
+                                                                        
                                                                         <h:outputText value="By expanding the tree and viewing the data sets and data files, clicking on their names will make an attempt to download the data, 
                                                                                       that if you have the correct privileges to access the data."/>
-                                                                        <h:outputText value="If the data file is an image, then expanding that will give you an option to 'Launch va ImageJ', this is a image processing tool that will be opened (no client installation needed, apart from Java) and then download the file for you to process."/>
+                                                                        <h:outputText value="If the data file is an image, then expanding that will give you an option to 'Launch via ImageJ', this is a image processing tool that will be opened (no client installation needed, apart from Java) and then download the file for you to process."/>
                                                                     </h:panelGrid>
                                                                 </t:collapsiblePanel>
                                                             </a4j:form>

@@ -128,7 +128,7 @@
                                                                     <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
                                                                         <h:outputText value="Choose the facility(s) you wish to search on by clicking on one or multipe items in the 'Search' box."/>
                                                                         <h:outputText value="The auto complete form helps you to find a keyword within the facility(s)." />
-                                                                        <h:outputText value="You can type your own words in and click the 'Like' button to find all investigations that contain it as part of a keyword."/>
+                                                                        <h:outputText value="You can type your own words in and click the 'Like' radio button to find all investigations that contain it as part of a keyword."/>
                                                                         <h:outputText value="Click 'View own data' to see all the investigations that are associated with you."/>
                                                                     </h:panelGrid>
                                                                 </t:collapsiblePanel>

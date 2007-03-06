@@ -17,7 +17,7 @@
                     <table border="0" width="100%">
                         <tbody>
                             <tr>
-                                <tr> <h:messages globalOnly="true" errorClass="error" infoClass="info" />
+                                <tr> <h:messages globalOnly="true" warnClass="error" errorClass="error" infoClass="info" />
                                 </tr>     
                                 <td width="60%">   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>    
@@ -169,7 +169,7 @@
                                                                                     <t:graphicImage id="gr1ff13" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                                                                 </f:facet>
                                                                                 <h:outputText id="text7ff38" styleClass="nodeFolder" value="Description: " />
-                                                                              
+                                                                                
                                                                                 <h:outputText id="text73ff8" styleClass="document" value="#{fn:replace(node.description, '~', 'approx')}" />
                                                                                 
                                                                             </h:panelGroup>
@@ -223,7 +223,7 @@
                                 <%--<h:selectBooleanCheckbox style="background-color:#EAF4F4" title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">--%>
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -244,9 +244,9 @@
                                     <f:param name="id" value="#{node.identifier}"/>               
                                 </h:commandLink>
                                 <h:outputText value="    " />
-                               <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
+                                <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -371,7 +371,7 @@
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -403,7 +403,7 @@
                                 <h:outputText value="         " />
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>                                                                                      
@@ -427,7 +427,7 @@
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -462,8 +462,8 @@
                                 </f:facet>
                                 <h:outputText id="text7ff38" styleClass="nodeFolder" value="Description: " />
                                 
-                                  <h:outputText id="text73ff8" escape="false" styleClass="document" value="#{node.description}" />
-                                                                            
+                                <h:outputText id="text73ff8" escape="false" styleClass="document" value="#{node.description}" />
+                                
                             </h:panelGroup>
                         </f:facet>
                         
@@ -473,15 +473,15 @@
                     <t:tree2 rendered="#{!datasetTree.clientSide}" id="tree2" value="#{datasetTree.data}" var="node" varNodeToggler="t" showRootNode="false" clientSideToggle="false">
                         
                         
-                         
+                        
                         
                         <f:facet name="dataset-folder">
                             <h:panelGroup>
-                              
-                                    <t:graphicImage id="gr99" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
                                 
-                                    <t:graphicImage id="gr98" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                              
+                                <t:graphicImage id="gr99" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                                
+                                <t:graphicImage id="gr98" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                
                                 <h:commandLink onclick="download('#{node.identifier}','DATA_SET','DATA_SETS'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="text90" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
@@ -494,7 +494,7 @@
                                 <%--<h:selectBooleanCheckbox style="background-color:#EAF4F4" title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">--%>
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -515,9 +515,9 @@
                                     <f:param name="id" value="#{node.identifier}"/>               
                                 </h:commandLink>
                                 <h:outputText value="    " />
-                               <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
+                                <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -538,7 +538,7 @@
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select Investigation" >
                                     <f:param name="investigations" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="investigations" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -642,7 +642,7 @@
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -674,7 +674,7 @@
                                 <h:outputText value="         " />
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>                                                                                      
@@ -698,7 +698,7 @@
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -747,28 +747,60 @@
                          <tbody>
                             <tr>   
                                 <td align="left">
-                                    
-                                    <h:commandButton styleClass="button" id="addSelection" disabled="#{!visit.visitData.addSelectionable}" action="#{datasetTree.select}" title="Add selections" value="Add selections"/>
+                                    <%--<h:commandButton styleClass="button" id="addSelection" disabled="#{!visit.visitData.addSelectionable}" action="#{datasetTree.select}" title="Add selections" value="Add selections"/>--%>
+                                   
+                                    <h:commandButton styleClass="button" id="addSelection" style="width: 130px" action="#{datasetTree.select}" title="Add to Data Center" value="Add to Data Center"/>
                                     &nbsp;
                                     <h:selectBooleanCheckbox disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
                                         
                                     </h:selectBooleanCheckbox>
+                                    
+                                    
+                                    &nbsp;
+                                    <t:popup rendered="#{!visit.userPreferences.emailSet}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
+                                             closePopupOnExitingPopup="true"
+                                             displayAtDistanceX="10"
+                                             displayAtDistanceY="-40" >
+                                        <t:graphicImage url="../../images/help.gif" border="0" /> 
+                                        <f:facet name="popup">
+                                            <h:panelGroup>
+                                                <h:panelGrid columns="1" >
+                                                    <h:outputText value="If you specify an email address, you can have the data downloaded link emailed to you."/>    
+                                                    <h:inputText styleClass="text" value="#{visit.userPreferences.email}"  id="email">
+                                                        
+                                                    </h:inputText>
+                                                    
+                                                    <h:commandButton styleClass="button" action="#{datacenterBean.addEmail}" title="Add Email" value="Add Email"/>
+                                                    
+                                                </h:panelGrid>
+                                            </h:panelGroup>
+                                        </f:facet>
+                                    </t:popup>
                                 </td>
-                                <%-- <td align="left">
-                                <a4j:commandButton oncomplete="download('#{node.identifier}','DOWNLOAD','DATA_SETS'); return false;" action="#{datasetTree.setValueChangeListeners}" title="Download selections" value="Download selections"/>
-                               
-                                <%-- <h:commandButton onclick="download('#{node.identifier}','DOWNLOAD','DATA_SETS'); return false;" action="#{datasetTree.select}" title="Download selections" value="Download selections"/>--%>
-                                <%-- &nbsp;
-                                <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
-                               
-                                </h:selectBooleanCheckbox>
-                            </td>--%>
-                                <%--<td align="right">
-                            Select:&nbsp; <h:commandButton action="#{datasetTree.selectall}" title="All" value=" All "/>
-                            &nbsp; 
-                            <h:commandButton action="#{datasetTree.selectnone}" title="None" value="None"/>
-                            </td>--%>
                             </tr>
+                            <tr>
+                                <td align="left">
+                                    <h:commandButton styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections now" value="Download now"/>
+                                    &nbsp;
+                                    <h:selectBooleanCheckbox  disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
+                                        
+                                    </h:selectBooleanCheckbox>
+                                </td>                                
+                                
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    
+                                    <h:commandButton styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
+                                    
+                                    &nbsp;
+                                    <h:selectBooleanCheckbox rendered="#{visit.userPreferences.emailSet}" disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
+                                        
+                                    </h:selectBooleanCheckbox>
+                                    
+                                </td>
+                            </tr>
+                            
                         </tbody>      
                     </table>
                 </a4j:region> 

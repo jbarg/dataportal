@@ -284,7 +284,7 @@
                             
                             <h:column>   
                                 <f:facet name="header">
-                                    <h:outputText style="font-size: 10px; " value="Federal ID" />
+                                    <h:outputText style="font-size: 10px; " value="ID" />
                                 </f:facet>
                                 <h:outputText style="font-size: 10px" value="#{investigatorspis.id}" />
                             </h:column>     
@@ -455,7 +455,7 @@
              <tbody>
                 <tr>
                     <td align="right">
-                        <h:commandButton styleClass="button" id="expand" disabled="#{!visit.visitData.expandable}" action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
+                        <h:commandButton styleClass="button" id="expand"  action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
                         
                     </td>
                     <%--<td align="right">

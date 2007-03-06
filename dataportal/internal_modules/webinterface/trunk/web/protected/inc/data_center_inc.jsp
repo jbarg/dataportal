@@ -88,7 +88,7 @@
                                                     
                                                     <t:graphicImage rendered="#{!data.imageJ && !data.datafileInFolder}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>
                                                     <t:graphicImage id="doc_button2" rendered="#{data.datafileInFolder}" value="../../images/blue-folder-closed.png"  border="0"/>
-                                                      
+                                                    
                                                     
                                                     <h:commandLink title="Download via ImageJ" rendered="#{data.imageJ}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
                                                         <t:graphicImage title="Download via ImageJ" value="../../images/document.png" border="0"/>                                   
@@ -131,12 +131,27 @@
                                             
                                             <h:column>
                                                 <f:facet name="header">
-                                                    <t:graphicImage id="adownload1" value="../../images/download.gif"  border="0"/>
+                                                    <t:popup styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
+                                                             closePopupOnExitingPopup="true"
+                                                             displayAtDistanceX="10"
+                                                             displayAtDistanceY="-40" >
+                                                        <t:graphicImage id="adownloads1" value="../../images/download.gif"  border="0"/>
+                                                        <f:facet name="popup">
+                                                            <h:panelGroup>
+                                                                <h:panelGrid columns="1" >
+                                                                    <h:outputText value="If you specify an email address, you can have the data downloaded link emailed to you."/>    
+                                                                    <h:outputText value="To do this, add your email to the bottom left preferences tab."/>    
+                                                                    
+                                                                </h:panelGrid>
+                                                            </h:panelGroup>
+                                                        </f:facet>
+                                                    </t:popup>
+                                                    
                                                     
                                                     
                                                 </f:facet>
                                                 <h:selectBooleanCheckbox  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >                                                    
-                                                    <a4j:support reRender="message,downloademail,downloadnow" event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
+                                                    <a4j:support reRender="message,downloademail,downloadnow, notdownloadnow" event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
                                                         <a4j:actionparam name="datafiles" value="#{data.dpId}" />
                                                         <a4j:actionparam name="DATA_FILE"  />
                                                     </a4j:support>
@@ -338,7 +353,7 @@
                                                         
                                                         <h:selectBooleanCheckbox style="background-color:#D1E4E4" title="Add to download" value="#{url.download}" immediate="true" >
                                                             <f:param name="datafiles" value="#{url.dpId}"/>
-                                                            <a4j:support reRender="message, datatable,downloademail,downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
+                                                            <a4j:support reRender="message, datatable,downloademail,downloadnow, notdownloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
                                                                 <a4j:actionparam name="datafiles"  value="#{url.dpId}" />                                                                
                                                                 
                                                             </a4j:support>
@@ -388,16 +403,13 @@
                                         
                                         
                                         <br />
-                                        <h:panelGrid border="0" rendered="#{datacenterBean.populated}" width="95%" columns="9">
+                                        <h:panelGrid border="0" rendered="#{datacenterBean.populated}" width="95%" columns="12">
                                             
-                                            <h:commandButton styleClass="button" id="downloadnow" disabled="#{!visit.visitData.downloadable}" onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;"  title="Download selections now" value="Download now"/>
+                                            <h:commandButton styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;"  title="Download selections now" value="Download now"/>
                                             &nbsp;
-                                            <%-- <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
-                                                
-                                            </h:selectBooleanCheckbox> --%>
-                                            <t:graphicImage id="downlaodac1" value="../../images/download.gif" border="0"/>
+                                            <t:graphicImage id="downlaodaci3" value="../../images/download.gif" border="0"/>
                                             
-                                            &nbsp;
+                                          
                                             <t:popup rendered="#{!visit.userPreferences.emailSet}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
                                                      closePopupOnExitingPopup="true"
                                                      displayAtDistanceX="10"
@@ -418,53 +430,40 @@
                                                 </f:facet>
                                             </t:popup>
                                             
-                                            <h:panelGroup rendered="#{visit.userPreferences.emailSet}" />
+                                            <h:panelGroup />
+                                            <h:panelGroup /><h:panelGroup />
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             
                                             <h:commandButton styleClass="button" action="#{datacenterBean.removeDatasets}" title="Delete selections" value="Delete selections"/>
                                             
-                                            <%--   <a4j:commandButton action="#{datacenterBean.removeDatasets}" reRender="datatable" title="Delete selections" value="Delete selections"/>--%>
                                             &nbsp;
                                             
                                             <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>                                                                            
                                             
-                                            <%-- Need panelGrid as need to check to render (cannot use HTML table, so no other waay of gettting butotn to the right??? --%>
-                                            <%--  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            --%>
-              
-                                            <%--  Select:&nbsp; <h:commandButton  action="#{datacenterBean.selectall}" title="All" value=" All "/>
-                                            &nbsp; 
-                                            <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
-                                            --%>
                                             
-                                            <h:commandButton styleClass="button" id="downloademail" disabled="#{!visit.visitData.downloadable}" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datacenterBean.emailDownload}" title="Download via email" value="Email download"/>
-                                            &nbsp;
-                                            <%-- <h:selectBooleanCheckbox disabled="true" style="background-color:#D1E4E4" title="select_investigation" >
-                                                
-                                            </h:selectBooleanCheckbox> --%>
-                                            <t:graphicImage rendered="#{visit.userPreferences.emailSet}" id="downlaodac3" value="../../images/download.gif" border="0"/>
+                                            
                                             
                                         </h:panelGrid>
-                                        
-                                        <%-- <f:verbatim rendered="#{bookmarkBean.populated}">
-                                    <table width="95%" border="0">
-                                    <td>
-                                    <h:commandButton action="#{datacenterBean.removeDatasets}" title="View selections" value="Delete selections"/>
-             
-                                    </td>
-                                    <td align="right">
-                                    Select:&nbsp; <h:commandButton action="#{datacenterBean.selectall}" title="All" value=" All "/>
-                                    &nbsp; 
-                                    <h:commandButton action="#{datacenterBean.selectnone}" title="None" value="None"/>
-                                    </td>
-                                    </table>
-                                    </f:verbatim>--%>
+                                        <h:panelGrid border="0" rendered="#{datacenterBean.populated}" width="95%" columns="13">
+                                            
+                                            <h:commandButton styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datacenterBean.emailDownload}" title="Download via email" value="Email download"/>
+                                            &nbsp;
+                                            
+                                            <t:graphicImage rendered="#{visit.userPreferences.emailSet}" id="downlaodac3" value="../../images/download.gif" border="0"/>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <h:panelGroup /> <h:panelGroup /> <h:panelGroup />
+                                            <h:panelGroup />
+                                        </h:panelGrid>
                                     </td>
                                 </tr>
                             </tbody>     
