@@ -10,6 +10,8 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.*;
 import javax.faces.event.ActionEvent;
@@ -38,6 +40,8 @@ import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.util.WebConstants;
 import javax.faces.component.*;
+import uk.ac.dl.dp.coreutil.delegates.DownloadDelegate;
+import uk.ac.dl.dp.coreutil.util.SRBInfo;
 import uk.ac.dl.srbapi.util.AccessInfo;
 
 /**
@@ -107,10 +111,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         Collection<DataSet> datasets = getVisitData().getCurrentDatasets();
         Collection<DataFile> datafiles = getVisitData().getCurrentDatafiles();
         ///remove all download selections
-        log.trace("Setting all datafile download to false");
-        for(DataFile file : datafiles){
-            file.setDownload(false);
-        }
+        
+        // getVisitData().reinitailise();
         
         data = new TreeNodeBase("foo-folder", "Investigations ("+investigations.size()+")", false);
         
@@ -211,7 +213,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         return data;
     }
     
-    public void checkReadAccess(ActionEvent event){
+   /* public void checkReadAccess(ActionEvent event){
         if(getVisitData().getAccessInfo() == null){
             try {
                 //set dummy Accessinfo
@@ -238,8 +240,9 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             log.trace("Access Done");
         }
         
-    }
-    public boolean isAccessDone(){
+    }*/
+    
+    /*public boolean isAccessDone(){
         
         if(getVisitData().getAccessInfo() == null){
             log.trace("Is access done: false");
@@ -248,9 +251,9 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             log.trace("Is access done: true");
             return true;
         }
-    }
+    }*/
     
-    public void setDataFileDownloadAction(ActionEvent event){
+    /*public void setDataFileDownloadAction(ActionEvent event){
         log.trace("Onchange action event: ");
         List children = event.getComponent().getChildren();
         log.trace("selected checkbox for download");
@@ -269,6 +272,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             }
         }
     }
+     */
+    
     public String setValueChangeListeners(){
         //this is a dummy method so that all the valuechangelisteners are called and then the
         //ajax4jsf calls a javascript function
@@ -276,7 +281,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         return null;
     }
     
-    public void setDataFileDownload(ValueChangeEvent event){
+   /* public void setDataFileDownload(ValueChangeEvent event){
         log.trace("Onchange event: ");
         List children = event.getComponent().getChildren();
         log.trace("selected checkbox for download");
@@ -299,7 +304,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 break;
             }
         }
-    }
+    }*/
     
     public void setSelected(ValueChangeEvent event){
         
@@ -320,6 +325,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                         df.setSelected(true);
                         log.trace("setting to true for "+df.getDpId());
                     } else df.setSelected(false);
+                    
+                    //checkFromSameSRBChosen(df.getFacility());
                     break;
                 }
                 if(current.getName().equals("datasets") && current.getValue() != null){
@@ -330,6 +337,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                         ds.setSelected(true);
                         log.trace("setting to true");
                     } else ds.setSelected(false);
+                    
+                    //checkFromSameSRBChosen(ds.getFacility());
                     break;
                 }
                 if(current.getName().equals("investigations") && current.getValue() != null){
@@ -349,6 +358,83 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         log.trace("");
     }
     
+    /*private void checkFromSameSRBChosen(String facilityAdded){
+        log.debug("Checking the same SRB location");
+        //need to check if this addition is from other facility
+        Collection<DataSet> dataSets = getVisitData().getCurrentDatasets();
+        Collection<DataFile> dataFiles = getVisitData().getCurrentDatafiles();
+     
+        Collection<String> srbsChoosen = new ArrayList<String>();
+        for(DataSet ds : dataSets){
+            if(ds.isSelected()){
+                for(DataFile df : dataFiles){
+                    if(df.getDataSetId().equals(ds.getId())){
+                        String urlS = df.getUri();
+                        log.trace("trying to add: "+urlS);
+                        urlS = urlS.replaceFirst("srb://","http://");
+                        String host = null;
+                        try {
+                            host = new URL(urlS).getHost();
+                        } catch (MalformedURLException ex) {
+                            log.warn("SRB location: "+host+" is not a valid URL.");
+                            error("Unable to download from this file location.");
+                            getVisitData().setDatasetDowloadable(false);
+                            return ;
+                        }
+     
+                        if(srbsChoosen.isEmpty()){
+                            srbsChoosen.add(host);
+                        } else if(!srbsChoosen.contains(host)){
+                            error("Unable to download from differenr data storage locations. Please download seperately.");
+                            log.info("Unable to download from data storage locations. Trying to add: "+host+" already have: " +host);
+                            getVisitData().setDatasetDowloadable(false);
+                            return ;
+                        }
+                    }
+                }
+            }
+        }
+        for(DataFile df : dataFiles){
+            if(df.isSelected()){
+                String urlS = df.getUri();
+                log.trace("trying to add: "+urlS);
+                urlS = urlS.replaceFirst("srb://","http://");
+                String host = null;
+                try {
+                    host = new URL(urlS).getHost();
+                } catch (MalformedURLException ex) {
+                    log.warn("SRB location: "+df.getUri()+" is not a valid URL.");
+                    error("Unable to download from this file location.");
+                    getVisitData().setDatasetDowloadable(false);
+                    return ;
+                }
+     
+                if(srbsChoosen.isEmpty()){
+                    srbsChoosen.add(host);
+                } else if(!srbsChoosen.contains(host)){
+                    error("Unable to download from differenr data storage locations. Please download seperately.");
+                    log.info("Unable to download from data storage locations. Trying to add: "+df.getUri()+" already have: " +host);
+                    getVisitData().setDatasetDowloadable(false);
+                    return ;
+                }
+            } else {
+                String urlS = df.getUri();
+                //log.trace("not trying to add: "+urlS);
+            }
+        }
+     
+        if(srbsChoosen.isEmpty()){
+            log.debug("No selections, so not downloadable");
+            getVisitData().setDatasetDowloadable(false);
+        }else {
+            log.info("Same srb location added with: "+facilityAdded);
+            getVisitData().setDatasetDowloadable(true);
+        }
+        return ;
+     
+    }*/
+    
+    
     public void setSelectedAjax(ActionEvent event){
         
         List children  = event.getComponent().getChildren();
@@ -365,6 +451,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     DataFile df = getVisitData().getDataFileFromSearchedData(param);
                     df.setSelected(!df.isSelected());
                     log.trace("setting "+df.isSelected()+"  for "+df.getDpId());
+                    // checkFromSameSRBChosen(df.getFacility());
+                                        
                     break;
                 }
                 if(current.getName().equals("datasets") && current.getValue() != null){
@@ -372,6 +460,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     DataSet ds = getVisitData().getDataSetFromSearchedData(param);
                     ds.setSelected(!ds.isSelected());
                     log.trace("setting "+ds.isSelected()+"  for "+ds.getDpId());
+                    // checkFromSameSRBChosen(ds.getFacility());
                     break;
                 }
                 if(current.getName().equals("investigations") && current.getValue() != null){
@@ -388,12 +477,65 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         log.trace("");
     }
     
+ /*   private boolean checkFromSameDataset(){
+        log.debug("Checking the same datasets");
+        //need to check if this addition is from other facility
+        Collection<DataSet> dataSets = getVisitData().getCurrentDatasets();
+        Collection<DataFile> dataFiles = getVisitData().getCurrentDatafiles();
+        
+        Collection<String> investigationIds = new HashSet<String>();
+        for(DataSet ds : dataSets){
+            if(ds.isSelected()){
+                investigationIds.add(ds.getInvestigationId());
+            }
+        }
+        for(DataFile df : dataFiles){
+            if(df.isSelected()){
+                for(DataSet ds : dataSets){
+                    if(df.getDataSetId().equals(ds.getId())){
+                        investigationIds.add(ds.getInvestigationId());
+                    }
+                }
+            }
+        }
+        if(investigationIds.size() > 1){
+            return false;
+        } else return true;
+        
+    }*/
+    
+    public void emailDownload(ActionEvent event){
+        log.trace("emailDownload: ");
+        String[] srbFilesDownload = getVisitData().getAllSearchedSRBURLs();
+        if(srbFilesDownload.length == 0){
+            error("Please select atleast one item to download.");
+            return ;
+        }
+        try{
+            //check that all files are from same dataset
+           /* if(!checkFromSameDataset()){
+                error("Unable to download from multiple investigations.  Select multiple items from one investigation at a time.");
+                return ;
+            }*/
+            
+            SRBInfo info = new SRBInfo();
+            info.setSid(getVisit().getSid());
+            info.setSrbUrls(getVisitData().toSRBUrl(srbFilesDownload));
+            DownloadDelegate.getInstance().downloadSRBFiles(getVisit().getSid(), info);
+            info("Request sent for download");
+        } catch(MalformedURLException mex){
+            log.error("Cannot download data via email, invalid URLS found.",mex);
+            //error("Cannot download data via email");
+        }catch(Exception ex){
+            log.error("Cannot download data via email",ex);
+            //error("Cannot download data via email");
+        }
+        
+    }
+    
     public String select(){
         
-        /*if(datafiles.size() == 0 && datasets.size() == 0 && invests.size() ==0){
-            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Please select atleast one checkbox.",""));
-            return null;
-        }*/
+        
         log.trace("Selected file for addition :");
         
         
@@ -422,7 +564,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     ref.setTypeOfReference(DPUrlRefType.FILE_FOLDER.toString());
                 } else {
                     ref.setTypeOfReference(DPUrlRefType.FILE.toString());
-                }                
+                }
                 
                 ref.setTypeOfObject("N/A");
                 ref.setReferenceId(Integer.valueOf(file.getId()));
@@ -439,7 +581,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 
                 ref.setUrls(cs);
                 toAddDataReference.add(ref);
-                log.trace(file);
+                //log.trace(file);
             }
         }
         log.trace("Selected sets for addition :");
@@ -447,7 +589,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         for(DataSet dataset : getVisitData().getCurrentDatasets()){
             
             if(dataset.isSelected()){
-                log.trace(dataset);
+                //log.trace(dataset);
                 DataReference ref = new DataReference();
                 
                 ref.setFacility(dataset.getFacility());
@@ -487,8 +629,16 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     }
                 }
                 ref.setUrls(cs);
-                toAddDataReference.add(ref);
-                log.trace(dataset);
+                //check of the dataset has any data files
+                if(ref.getUrls().size() == 0){
+                    warn(ref.getName()+" not added because it's associated with no data files.");
+                    log.warn("Not adding "+dataset.getId()+", it has not data files associated");
+                } else{
+                    
+                    toAddDataReference.add(ref);
+                    log.trace(dataset +" with "+ref.getUrls().size()+" data files");
+                }
+                
             }
         }
         //TODO move this to methods
@@ -510,13 +660,18 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         
         String sid = getVisit().getSid();
         try {
+            //check if anything selected
+            if(toAddBookmarks.size() == 0 && toAddDataReference.size()== 0){
+                warn("Please select atleast item to addition to data center.");
+                return null;
+            }
             
             if(toAddBookmarks.size() != 0){
-                log.info("Adding bookmarks");
+                log.info("Adding bookmarks: "+ toAddBookmarks.size());
                 DataCenterDelegate.getInstance().addBookmark(sid,toAddBookmarks);
             }
             if(toAddDataReference.size() != 0){
-                log.info("Adding data references");
+                log.info("Adding data references: "+toAddDataReference.size());
                 DataCenterDelegate.getInstance().addDataReference(sid,toAddDataReference);
             }
             

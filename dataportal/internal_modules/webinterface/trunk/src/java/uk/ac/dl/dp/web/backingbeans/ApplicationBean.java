@@ -46,7 +46,11 @@ public class ApplicationBean extends AbstractApplicationBean {
     private HashMap<String, String[]> keywords = new HashMap<String, String[]>();
     
     static {
-        initializeCitiesStatic();
+        try {
+            initializeCitiesStatic();
+        } catch(Throwable e){
+            log.error("Unable to initialize ApplicationBean",e);
+        }
     }
     
     /** Creates a new instance of ApplicationBean */

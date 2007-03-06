@@ -10,8 +10,10 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import uk.ac.cclrc.dpal.beans.DataFile;
 import uk.ac.cclrc.dpal.beans.DataSet;
@@ -24,6 +26,7 @@ import javax.faces.model.SelectItem;
 import org.apache.myfaces.custom.tree2.*;
 import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.web.backingbeans.BasicSearchBean;
+import uk.ac.dl.srbapi.srb.SRBUrl;
 import uk.ac.dl.srbapi.util.AccessInfo;
 /**
  *
@@ -70,10 +73,12 @@ public class VisitData implements Serializable {
     
     private boolean downloadable;
     
+    private boolean datasetDowloadable;
+    
     private String searchedTitle = "Search Results";
     
     private BasicSearchBean basicSearchBean = new BasicSearchBean();
-           
+    
     /** Creates a new instance of VisitData */
     public VisitData() {
     }
@@ -349,6 +354,33 @@ public class VisitData implements Serializable {
         return urls.toArray(new String[urls.size()]);
     }
     
+    public synchronized String[] getAllSearchedSRBURLs() {
+        Collection<String> urls = new HashSet<String>();
+        for(DataFile file : getCurrentDatafiles()){
+            if(file.isSelected()){
+                log.trace("Found datafile to download: "+file);
+                urls.add(file.getUri());
+                //now set to false
+                // file.setDownload(false);
+            }
+        }
+        for(DataSet set : getCurrentDatasets()){
+            if(set.isSelected()){
+                for(DataFile file : getCurrentDatafiles()){
+                    if(file.getDataSetId().equals(set.getId())){
+                        log.trace("Found datafile to download: "+file);
+                        urls.add(file.getUri());
+                        //now set to false
+                        // file.setDownload(false);
+                    }
+                }
+            }
+        }
+        
+        
+        return urls.toArray(new String[urls.size()]);
+    }
+    
     public synchronized String[] getCartSRBURLs() {
         Collection<String> urls = new ArrayList<String>();
         for(DataReference file : getCurrentDataReferences()){
@@ -375,6 +407,14 @@ public class VisitData implements Serializable {
         return urls.toArray(new String[urls.size()]);
     }
     
+    public Collection<SRBUrl> toSRBUrl(String[] urls) throws MalformedURLException{
+        Collection<SRBUrl> srbUrls  =new ArrayList<SRBUrl>();
+        for(String url : urls){
+            srbUrls.add(new SRBUrl(url));
+        }
+        return srbUrls;
+    }
+    
     public boolean isDownloadable() {
         return downloadable;
     }
@@ -393,11 +433,11 @@ public class VisitData implements Serializable {
         for(Investigation invest : getSearchedInvestigations()){
             if(invest.isSelected()){
                 return true;
-            }            
+            }
         }
         return false;
     }
-             
+    
     public boolean isAddSelectionable(){
         Collection<Investigation> invests = getCurrentInvestigations();
         Collection<DataSet> datasets = getCurrentDatasets();
@@ -415,18 +455,43 @@ public class VisitData implements Serializable {
         return false;
         
     }
-
+    
     public String getSearchedTitle() {
         return searchedTitle;
     }
-
+    
     public void setSearchedTitle(String searchedTitle) {
         this.searchedTitle = searchedTitle;
     }
-
+    
     public BasicSearchBean getBasicSearchBean() {
         return basicSearchBean;
     }
     
+    public boolean isDatasetDowloadable() {
+        return datasetDowloadable;
+    }
     
+    public void setDatasetDowloadable(boolean datasetDowloadable) {
+        this.datasetDowloadable = datasetDowloadable;
+    }
+    
+    public  void reinitailise(){
+        Collection<Investigation> investigations = getCurrentInvestigations();
+        Collection<DataSet> datasets = getCurrentDatasets();
+        Collection<DataFile> datafiles = getCurrentDatafiles();
+        log.trace("reinitailising");
+        for(DataFile file : datafiles){
+            file.setDownload(false);
+            file.setSelected(false);
+        }
+        for(DataSet dataset : datasets){
+            dataset.setSelected(false);
+        }
+        for(Investigation investigation : investigations){
+            investigation.setSelected(false);
+        }
+        setDatasetDowloadable(false);
+        setDownloadable(false);
+    }
 }
