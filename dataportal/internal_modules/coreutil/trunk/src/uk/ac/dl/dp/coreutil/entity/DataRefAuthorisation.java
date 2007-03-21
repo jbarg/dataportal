@@ -9,7 +9,7 @@
 
 package uk.ac.dl.dp.coreutil.entity;
 
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;

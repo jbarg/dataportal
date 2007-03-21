@@ -9,10 +9,13 @@
 
 package uk.ac.dl.dp.coreutil.exceptions;
 
+//import javax.ejb.ApplicationException;
+
 /**
  *
  * @author gjd37
  */
+//@ApplicationException(rollback=true)
 public class InSufficientPermissonsException extends java.lang.Exception {
     
     /**
