@@ -458,7 +458,7 @@ public class DataCenterBean extends SortableList {
             error("You do not have access for this operation.");
             return null;
         } catch (Exception ex) {
-            log.warn("User: "+getVisit().getDn()+" cannot add note to data center: "+bk.getId()+" , facility: "+bk.getFacility());
+            log.warn("User: "+getVisit().getDn()+" cannot add note to data links: "+bk.getId()+" , facility: "+bk.getFacility());
             error("Error whilst adding note.");
             return null;
         }

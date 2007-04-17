@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * @author Thomas Spiegl (latest modification by $Author: tomsp $)
+ * @author gjd37
  * @version $Revision: 419187 $ $Date: 2006-07-05 08:11:08 +0000 (Wed, 05 Jul 2006) $
  */
 public class NavigationMenu {
@@ -51,7 +51,7 @@ public class NavigationMenu {
         
         
         // Main
-        NavigationMenuItem data = getMenuNaviagtionItem("Data Center", null);
+        NavigationMenuItem data = getMenuNaviagtionItem("Data Links", null);
         menu.add(data);
         data.add(getMenuNaviagtionItem("Data References", "GOTO_DATA_REFERENCES"));
         NavigationMenuItem bookmark = getMenuNaviagtionItem("Bookmarks", "GOTO_BOOKMARKS");
