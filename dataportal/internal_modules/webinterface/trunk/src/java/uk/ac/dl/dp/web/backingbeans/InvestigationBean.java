@@ -269,6 +269,18 @@ public class InvestigationBean extends SortableList {
         
     }
     
+    public String viewSingleInvestigation(){
+        log.trace("Selecting single investigation");
+        Investigation singleInvestigation = (Investigation)table.getRowData();
+        for(Investigation invest :  getVisitData().getSearchedInvestigations()){
+            if(invest.getId().equals(singleInvestigation.getId())){
+                invest.setSelected(true);
+            }
+        }
+        
+        return datasets();
+    }
+    
 //view selected datasets
     public String datasets(){
         //check which ones are checked, add to arraylist and then send to EJBS

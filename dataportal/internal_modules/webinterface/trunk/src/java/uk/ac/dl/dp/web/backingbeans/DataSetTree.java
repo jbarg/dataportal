@@ -526,7 +526,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         } catch(MalformedURLException mex){
             log.error("Cannot download data via email, invalid URLS found.",mex);
             //error("Cannot download data via email");
-        }catch(Exception ex){
+        } catch(Exception ex){
             log.error("Cannot download data via email",ex);
             //error("Cannot download data via email");
         }
@@ -662,7 +662,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         try {
             //check if anything selected
             if(toAddBookmarks.size() == 0 && toAddDataReference.size()== 0){
-                warn("Please select atleast item to addition to data center.");
+                warn("Please select atleast item to addition to data links.");
                 return null;
             }
             
@@ -692,7 +692,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             log.fatal("UserNotFoundException for user for: "+sid,ex);
             return null;
         } catch (NoAccessToDataCenterException ex) {
-            error("No access to data center: "+ex.getMessage());
+            error("No access to data links: "+ex.getMessage());
             log.fatal("NoAccessToDataCenterException for user for: "+sid,ex);
             return null;
         }

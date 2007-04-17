@@ -83,8 +83,8 @@ public class OtherDataCenterBean extends SortableList {
                 dataRefs = (List<DataReference>) DataCenterAuthDelegate.getInstance().getOtherUsersDataReferences(getVisit().getSid(),getVisitData().getCurrentUserAuthDN());
                 getVisitData().setCurrentDataReferences(dataRefs);
             } catch (NoAccessToDataCenterException ex) {
-                log.error("Access to others data center ("+getVisitData().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
-                error("Access to "+getVisitData().getCurrentUserAuthDN()+"'s data center denied.");
+                log.error("Access to others data links ("+getVisitData().getCurrentUserAuthDN()+" for user "+getVisit().getDn()+" denied",ex);
+                error("Access to "+getVisitData().getCurrentUserAuthDN()+"'s data links denied.");
                 dataRefs = new ArrayList<DataReference>();
                 // getFacesContext().renderResponse();
             } catch (Exception ex) {

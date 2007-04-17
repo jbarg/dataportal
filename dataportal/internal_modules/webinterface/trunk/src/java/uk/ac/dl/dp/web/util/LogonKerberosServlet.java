@@ -67,7 +67,7 @@ public class LogonKerberosServlet extends HttpServlet {
                 if(!loggedIn){
                     log.warn("User "+session.getDN()+" has no access to Data Portal");
                     response.sendRedirect("../faces/logon.jsp");
-                    
+                    return;                   
                 }
                 
                 //logged in ok, get session visit bean, if not there this methoid creates one and sets the returned session

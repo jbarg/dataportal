@@ -132,6 +132,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         //added security
         boolean loggedIn = checkUser(session);
         if(!loggedIn){
+            log.warn("User "+session.getDN()+" has no access to Data Portal");
             error("You have no access to the Data Portal");
             return NavigationConstants.LOGIN_FAILURE;
             
