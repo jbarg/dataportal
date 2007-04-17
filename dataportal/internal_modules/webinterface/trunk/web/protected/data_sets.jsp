@@ -16,7 +16,7 @@
     
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
-        <title>CCLRC Data Portal </title>
+         <title>Sci-Tech Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
         <script language="javascript" src="../css/download.js"></script>
         <script language="javascript" src="../css/CastleBusyBox.js"></script>
@@ -30,33 +30,43 @@
                         <td width="100%">
                             
                             
-                            <table  border="0" width="100%" >
+                          <table   border="0" width="100%" id="image_stfc" >
                                  <tbody>
                                     <tr>
-                                        <td id="nav_bar" width="100%"  > 
+                                        <td width="100%" > 
+                                            <%--  <td id="nav_bar" width="100%"  > 
+                                            <f:subview id="header">
+                                                <c:import url="inc/header.jsp" />
+                                            </f:subview>
+                                             
+                                        </td>--%>
                                             <f:subview id="header">
                                                 <c:import url="inc/header.jsp" />
                                             </f:subview>
                                         </td>
-                                        
-                                        
-                                        <td width="100%" align="right">
+                                    </tr>                                   
+                                </tbody>                                
+                            </table>
+                            <table id="nav_bar_second"   border="0" width="100%" >
+                                 <tbody>
+                                    <tr>                         
+                                        <td width="100%" align="right" >
                                             <f:subview id="header_2">
                                                 <c:import url="inc/header_2.jsp" />
                                             </f:subview>
                                         </td>
-                                    </tr>
-                                </tbody>
+                                    </tr>                                    
+                                </tbody>                                
                             </table>
                             
-                            <table id="nav_bar2" border="0" width="100%">
+                            <table id="nav_bar_accross"  border="0" width="100%">
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">
                                             <!-- does not work inside subview??? -->
-                                            <f:subview id="navigation">
+                                            <%-- <f:subview id="navigation">
                                                 <c:import url="inc/header_img.jsp" />
-                                            </f:subview>
+                                            </f:subview>--%>
                                             <%--
                                             <img align="center" src="../../images/diamond.gif" width=170" height="60" />
                                             --%>    <br />
@@ -121,10 +131,10 @@
                                                                     
                                                                     <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
                                                                         <h:outputText value="Tree view of the investigations selected with their data sets and data files."/>
-                                                                        <h:outputText value="From here you can either add investigation(s) to the 'Bookmarks' by checking the box next the invstigation and the press 'Add Selections' or add data files or datasets to the 'Data References' by doing the same."/>
+                                                                        <h:outputText value="From here you can either add investigation(s) to the 'Bookmarks' by checking the box next the investigation and the press 'Add to Data Links' or add data files or data sets to the 'Data References' by doing the same."/>
                                                                         <h:outputText value="Bookmarks: A persistant place for searched and found investigations for when you next log in."/>
                                                                         <h:outputText value="Data References: A persistant place for searched and found data files and datasets for when you next log in."/>
-                                                                        <h:outputText value="Checking the box next to the data file and data sets allows you to select multiple data items and then click 'Download now' to download the selected items.  If your email is set either from the preferences page or in the pop up box when hover on the image next to the 'Add Selections' button, you can request for the data to be downloaded and then for a link to the data to be emailed to you.  "/>
+                                                                        <h:outputText value="Checking the box next to the data file and data sets allows you to select multiple data items and then click 'Download now' to download the selected items.  If your email is set either from the preferences page or in the pop up box when hover on the image next to the 'Add to Data Links' button, you can request for the data to be downloaded and then for a link to the data to be emailed to you.  "/>
                                                                         
                                                                         <h:outputText value="By expanding the tree and viewing the data sets and data files, clicking on their names will make an attempt to download the data, 
                                                                                       that if you have the correct privileges to access the data."/>

@@ -10,6 +10,7 @@
         Availaible jscookMenu layout: hbr, hbl, hur, hul, vbr, vbl, vur, vul
         respect to Heng Yuan http://www.cs.ucla.edu/~heng/JSCookMenu
         */%>
+        <t:navigationMenuItem id="nav_admin"  itemLabel="Admin" itemValue="gotAdmin" action="GOTO_ADMIN"  rendered="#{visit.admin}"  />    
         
         
         <t:navigationMenuItem id="nav_0"  itemLabel="Search" itemValue="basicSearch" action="GOTO_BASIC_SEARCH">    
@@ -20,7 +21,7 @@
         <t:navigationMenuItem id="nav_2"  itemLabel="Results" action="GOTO_INVESTIGATIONS" rendered="#{visit.visitData.investigations}" />
         <t:navigationMenuItem id="nav_3"  itemLabel="Data Sets" action="GOTO_DATASETS" rendered="#{visit.visitData.datasets}" />
         
-        <t:navigationMenuItem id="nav_4"  itemLabel="Data Center" >                  
+        <t:navigationMenuItem id="nav_4"  itemLabel="Data Links" >                  
         <t:navigationMenuItem id="nav_4_1"  itemLabel="Data References" action="GOTO_DATA_REFERENCES" />
         <t:navigationMenuItem id="nav_4_2"  itemLabel="Bookmarks" action="GOTO_BOOKMARKS" />
         <t:navigationMenuItem id="nav_4_3" rendered="#{visit.visitData.otherUserDn}"  itemLabel="Others" >                  

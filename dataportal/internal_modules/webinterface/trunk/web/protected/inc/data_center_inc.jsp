@@ -22,7 +22,7 @@
                                     <td>
                                         
                                         <h:outputText rendered="#{!datacenterBean.populated}" escape="false "value="<br />"  styleClass="info" />            
-                                        <h:outputText rendered="#{!datacenterBean.populated}" value="There are no items in data center" styleClass="info" />
+                                        <h:outputText rendered="#{!datacenterBean.populated}" value="There are no items in data references" styleClass="info" />
                                         <h:outputText rendered="#{!datacenterBean.populated}" escape="false "value="<br /><br />"  styleClass="info" />
                                         
                                         

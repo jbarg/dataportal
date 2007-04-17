@@ -62,10 +62,10 @@
                             
                             
                             <t:inputCalendar styleClass="text" binding="#{viewAllUserStatsAdmin.calendarFirst}" id="thirdOnej_id_1"  monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
-                                              currentDayCellClass="currentDayCell" value="#{viewAllUserStatsAdmin.firstDate}" renderAsPopup="true"
-                                              popupTodayString="Today is:"
-                                              popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
-                                              helpText="DD/MM/YYYY" />
+                                             currentDayCellClass="currentDayCell" value="#{viewAllUserStatsAdmin.firstDate}" renderAsPopup="true"
+                                             popupTodayString="Today is:"
+                                             popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
+                                             helpText="DD/MM/YYYY" />
                             
                             <h:message for="thirdOnej_id_1" styleClass="error" showSummary="false" showDetail="true" />
                             
@@ -176,7 +176,7 @@
                                         </a4j:commandLink>
                                         
                                     </f:facet>  
-                                     <f:facet name="footer">
+                                    <f:facet name="footer">
                                         <h:outputText value="#{visit.adminData.totalSearches}" />
                                     </f:facet>
                                     <h:commandLink id="viewusersearch" style="table-header; color: black"  action="#{viewAllUserStatsAdmin.viewUserSearch}" >                                        
@@ -200,7 +200,7 @@
                                         </a4j:commandLink>
                                         
                                     </f:facet> 
-                                     <f:facet name="footer">
+                                    <f:facet name="footer">
                                         <h:outputText value="#{visit.adminData.totalDownloads}" />
                                     </f:facet>
                                     <h:commandLink id="viewdoanload" style="table-header; color: black"  action="#{viewAllUserStatsAdmin.viewUserDownload}" >                                        
@@ -224,7 +224,7 @@
                                         </a4j:commandLink>
                                         
                                     </f:facet>  
-                                      <f:facet name="footer">
+                                    <f:facet name="footer">
                                         <h:outputText value="#{visit.adminData.totalDataRefs}" />
                                     </f:facet>
                                     <h:outputText value="#{data.dataReferences}" >
@@ -246,7 +246,7 @@
                                         </a4j:commandLink>
                                         
                                     </f:facet>  
-                                      <f:facet name="footer">
+                                    <f:facet name="footer">
                                         <h:outputText value="#{visit.adminData.totalBookmarks}" />
                                     </f:facet>
                                     <h:outputText value="#{data.bookmarks}" >

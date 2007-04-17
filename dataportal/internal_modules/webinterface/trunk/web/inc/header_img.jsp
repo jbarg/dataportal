@@ -1,2 +1,2 @@
-  <img align="center" src="../images/diamond.gif" width=170" height="60" />
+  <img align="center" src="../images/stfc_954px.jpg"  />
                                           

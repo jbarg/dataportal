@@ -10,46 +10,54 @@
    
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
-        <title>CCLRC Data Portal </title>
+        <title>Sci-Tech Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
        <script language="javascript" src="../css/CastleBusyBox.js"></script>
     </head>
     <body>
         <f:view>
-            
-            <table width="${sessionScope.visit.width}"  > 
+            <table width="${sessionScope.visit.width}" id="top_table" > 
                  <tbody>
                     <tr>
                         <td width="100%">
-                        
-                            <table  border="0" width="100%" >
+                            
+                            <table   border="0" width="100%" id="image_stfc" >
                                  <tbody>
                                     <tr>
-                                        
-                                       <td id="nav_bar" width="100%"  > 
+                                        <td width="100%" > 
+                                            <%--  <td id="nav_bar" width="100%"  > 
+                                            <f:subview id="header">
+                                                <c:import url="inc/header.jsp" />
+                                            </f:subview>
+                                             
+                                        </td>--%>
                                             <f:subview id="header">
                                                 <c:import url="inc/header.jsp" />
                                             </f:subview>
                                         </td>
-                                     
-                                        <td width="100%" align="right">
+                                    </tr>                                   
+                                </tbody>                                
+                            </table>
+                            <table id="nav_bar_second"   border="0" width="100%" >
+                                 <tbody>
+                                    <tr>                         
+                                        <td width="100%" align="right" >
                                             <f:subview id="header_2">
                                                 <c:import url="inc/header_2.jsp" />
                                             </f:subview>
                                         </td>
-                                    </tr>
-                                </tbody>
-                    
+                                    </tr>                                    
+                                </tbody>                                
                             </table>
-            
-                            <table id="nav_bar2" border="0" width="100%">
+                            
+                            <table id="nav_bar_accross"  border="0" width="100%">
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">
                                             <!-- does not work inside subview??? -->
-                                            <f:subview id="navigation">
-                                            <c:import url="inc/header_img.jsp" />
-                                            </f:subview>
+                                            <%-- <f:subview id="navigation">
+                                                <c:import url="inc/header_img.jsp" />
+                                            </f:subview>--%>
                                             <%--
                                             <img align="center" src="../../images/diamond.gif" width=170" height="60" />
                                             --%>     <br />

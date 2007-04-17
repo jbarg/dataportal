@@ -11,4 +11,4 @@
 <a href="http://www.clrc.ac.uk/Activity/ACTIVITY=Copyright;" target="_top"><font size="1" color="black">&copy;
 <script language="JavaScript"><!--
 document.write(new Date().getFullYear());
-//--></script> Powered by CCLRC Data Portal</font></a>&nbsp;</td>
+//--></script> Powered by Sci-Tech Data Portal</font></a>&nbsp;</td>

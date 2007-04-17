@@ -5,8 +5,8 @@
 
 <c:choose>
     <c:when test="${visit.width == 954}">
-        <t:div styleClass="outerbar" style="width:947px" >
-            <s:fishEyeNavigationMenu  itemWidth="50" itemHeight="53" itemMaxWidth="200"
+        <%-- <t:div styleClass="outerbar" style="width:947px" >
+           <s:fishEyeNavigationMenu  itemWidth="50" itemHeight="53" itemMaxWidth="200"
                                       itemMaxHeight="200" orientation="horizontal" effectUnits="2"
                                       itemPadding="10" attachEdge="top" labelEdge="bottom">                    
                 
@@ -19,12 +19,16 @@
                 <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Force Test Error"     action="#{adminBean.forceTestError}"                     />
                 <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
-            </s:fishEyeNavigationMenu>           
-        </t:div>
+            </s:fishEyeNavigationMenu>      
+            
+                             
+            
+        </t:div>     --%>
+        <img  src="../../images/stfc_954px.jpg"  alt="Sci-Tech e-Science" border="0"  />
         
     </c:when>
     <c:when test="${visit.width == 1210}">
-        <t:div styleClass="outerbar" style="width:1210px" >
+       <%--  <t:div styleClass="outerbar" style="width:1210px" >
             <s:fishEyeNavigationMenu  itemWidth="50" itemHeight="53" itemMaxWidth="200"
                                       itemMaxHeight="200" orientation="horizontal" effectUnits="2"
                                       itemPadding="10" attachEdge="top" labelEdge="bottom">                    
@@ -38,12 +42,12 @@
                 <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
                 <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
-        </s:fishEyeNavigationMenu>                    </t:div>
-        
+        </s:fishEyeNavigationMenu>                    </t:div>--%>
+           <img  src="../../images/stfc_1210px.jpg"  alt="Sci-Tech e-Science" border="0"  />
     </c:when>
     
     <c:when test="${visit.width == 1530}">
-        <t:div styleClass="outerbar" style="width:1530px" >
+        <%-- <t:div styleClass="outerbar" style="width:1530px" >
             <s:fishEyeNavigationMenu  itemWidth="50" itemHeight="53" itemMaxWidth="200"
                                       itemMaxHeight="200" orientation="horizontal" effectUnits="2"
                                       itemPadding="10" attachEdge="top" labelEdge="bottom">                    
@@ -57,7 +61,7 @@
                 <t:navigationMenuItem icon="../../images/icon_update.png"   itemLabel="Software Update"                          />
                 <t:navigationMenuItem icon="../../images/icon_users.png" action="GOTO_ADMIN" rendered="#{visit.admin}" itemLabel="Admin"                            />
                 
-        </s:fishEyeNavigationMenu>                    </t:div>
-        
+        </s:fishEyeNavigationMenu>                    </t:div>--%>
+           <img  src="../../images/stfc_1600px.jpg"  alt="Sci-Tech e-Science" border="0"  />
     </c:when>
 </c:choose>     

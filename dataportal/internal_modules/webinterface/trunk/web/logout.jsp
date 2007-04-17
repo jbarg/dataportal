@@ -13,7 +13,7 @@
     
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
-        <title>CCLRC Data Portal</title>
+        <title>Sci-Tech Data Portal </title>
         <link rel="stylesheet" type="text/css" href="css/basic.css" />
         
     </head>
@@ -33,43 +33,45 @@
                     <tr>
                         <td width="100%">
                             
-                            <table  border="0" width="100%" >
+                            <table   border="0" width="100%" id="image_stfc" >
                                  <tbody>
                                     <tr>
-                                        <td width="950"  height="45" > 
-                                            
-                                            <t:div styleClass="outerbar" style="width:954px">
-                                                
-                                                <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
-                                                                         itemMaxHeight="200" orientation="horizontal" effectUnits="2"
-                                                                         itemPadding="10" attachEdge="top" labelEdge="bottom">  
-                                            </s:fishEyeNavigationMenu>                    </t:div>
-                                            
+                                        <td width="100%" > 
+                                            <%--  <td id="nav_bar" width="100%"  > 
+                                            <f:subview id="header">
+                                                <c:import url="inc/header.jsp" />
+                                            </f:subview>
+                                             
+                                        </td>--%>
+                                            <f:subview id="header">
+                                                <c:import url="inc/header_img.jsp" />
+                                            </f:subview>
                                         </td>
-                                       <%-- <div style="position: absolute; z-index:1; left: 0px; top: 0px; height: 50px; width: 170px;">
-                                            <img align="left" src="../images/diamond.gif" width=170" height="50" />
-                                            
-                                        </div>--%>
-                                        
-                                        <td width="100%" align="right">
-                                            <%--   <f:subview id="header_2">
-                                            <c:import url="protected/inc/header_2.jsp" />
+                                    </tr>                                   
+                                </tbody>                                
+                            </table>
+                            <table id="nav_bar_second"   border="0" width="100%" >
+                                 <tbody>
+                                    <tr>                         
+                                        <td width="100%" align="right" >
+                                            <%--     <f:subview id="header_2">
+                                                <c:import url="inc/header_2.jsp" />
                                             </f:subview>--%>
+                                            <br />
+                                              <br />
                                         </td>
-                                    </tr>
-                                </tbody>
+                                    </tr>                                    
+                                </tbody>                                
                             </table>
                             
-                            <table style="margin-top:-50px" border="0" width="100%">
+                            <table id="nav_bar_accross"  border="0" width="100%">
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">
-                                            
-                                            
                                             <!-- does not work inside subview??? -->
-                                             <f:subview id="navigation">
+                                            <%-- <f:subview id="navigation">
                                                 <c:import url="inc/header_img.jsp" />
-                                            </f:subview>
+                                            </f:subview>--%>
                                             <%--
                                             <img align="center" src="../../images/diamond.gif" width=170" height="60" />
                                             --%><%--<br /><br />
