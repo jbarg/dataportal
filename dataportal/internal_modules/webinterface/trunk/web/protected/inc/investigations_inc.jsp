@@ -174,6 +174,29 @@
                 <h:outputText value="#{invest.id}" />
             
                 </h:column>--%>
+                  <h:column>
+                
+                <f:facet name="header">
+                    <h:panelGrid columns="2" >
+                        <a4j:commandLink reRender="data,expand"  style="table-header" ajaxSingle="true" id="selectAll" rendered="#{visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectNone}">           
+                            <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
+                            <t:graphicImage  id="selectNonew" value="../../images/button_minus1.gif"  border="0"/>
+                        </a4j:commandLink>   
+                        
+                        <a4j:commandLink reRender="data,expand" style="table-header" ajaxSingle="true" id="selectNone" rendered="#{!visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectAll}">           
+                            <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>                       
+                            <t:graphicImage  id="selectAllc" value="../../images/button_plus1.gif"  border="0"/>                 
+                        </a4j:commandLink> 
+                    </h:panelGrid>
+                </f:facet>
+                <h:selectBooleanCheckbox title="select_investigation" value="#{invest.selected}" >
+                    <f:param name="id" value="#{invest.id}"/>
+                    <a4j:support reRender="expand" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{investigationBean.listenAjax}">
+                        <a4j:actionparam name="id" value="#{invest.id}"/>   
+                    </a4j:support>
+                </h:selectBooleanCheckbox>
+            </h:column>
+            
             <h:column>
                 <f:facet name="header">
                     <%--  <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">--%>
@@ -187,7 +210,9 @@
                         <%--  </c:if>--%>
                     </a4j:commandLink>
                 </f:facet>
-                <h:outputText  value="#{invest.name}" />
+                
+                <h:commandLink value="#{invest.name}" style=" color: black" styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />
+               <%-- <h:outputText  value="#{invest.name}" />--%>
                 
                 
                 
@@ -328,28 +353,7 @@
                 </t:popup>
             </h:column>
             
-            <h:column>
-                
-                <f:facet name="header">
-                    <h:panelGrid columns="2" >
-                        <a4j:commandLink reRender="data,expand"  style="table-header" ajaxSingle="true" id="selectAll" rendered="#{visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectNone}">           
-                            <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
-                            <t:graphicImage  id="selectNonew" value="../../images/button_minus1.gif"  border="0"/>
-                        </a4j:commandLink>   
-                        
-                        <a4j:commandLink reRender="data,expand" style="table-header" ajaxSingle="true" id="selectNone" rendered="#{!visit.visitData.investigationsSelected}" actionListener="#{investigationBean.selectAll}">           
-                            <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>                       
-                            <t:graphicImage  id="selectAllc" value="../../images/button_plus1.gif"  border="0"/>                 
-                        </a4j:commandLink> 
-                    </h:panelGrid>
-                </f:facet>
-                <h:selectBooleanCheckbox title="select_investigation" value="#{invest.selected}" >
-                    <f:param name="id" value="#{invest.id}"/>
-                    <a4j:support reRender="expand" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{investigationBean.listenAjax}">
-                        <a4j:actionparam name="id" value="#{invest.id}"/>   
-                    </a4j:support>
-                </h:selectBooleanCheckbox>
-            </h:column>
+          
             
             
             <f:facet name="detailStamp">                
@@ -454,7 +458,7 @@
         <table width="90%" border="0">
              <tbody>
                 <tr>
-                    <td align="right">
+                    <td align="left">
                         <h:commandButton styleClass="button" id="expand"  action="#{investigationBean.datasets}" title="View selections" value="View selection"/>
                         
                     </td>

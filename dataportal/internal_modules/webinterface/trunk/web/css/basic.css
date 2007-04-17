@@ -1,14 +1,24 @@
 //hack to allow difference heights for IE and firefox
 //IE cannot undersand the second one
 
-#nav_bar {height: -100;}
-html>body #nav_bar {height: 60;} 
+//#nav_bar {height: -100;}
+//html>body #nav_bar {height: 60;} 
 
-#nav_bar2 {margin-top: -30px;}
-html>body #nav_bar2 {margin-top: -50px;} 
+#nav_bar_accross {margin-top: -25px;}
+html>body #nav_bar_accross {margin-top: -45px;} 
+
+#image_stfc {margin-top: -25px;}
+html>body #image_stfc {margin-top: -40px;} 
+
+#nav_bar_second {margin-top: -40px;}
+html>body #nav_bar_second {margin-top: -22px;} 
+
+#top_table {margin-top: -15px;}
+html>body #top_table {margin-top: 0px;} 
 
 #footer_bar {margin-top: -20px;}
 html>body #footer_bar  {margin-top: -20px;} 
+
 
 .dojoHtmlFisheyeListBar {
 margin: 0 auto;
@@ -28,7 +38,8 @@ body {
 font-family: Arial, Helvetica, sans-serif;
 padding: 0;
 margin: 0;
-font-size:14px;
+margin-top: 0px;
+font-size: 14px;
 }
 
 .body {
@@ -75,7 +86,9 @@ FONT: 11px Verdana, Arial, Helvetica, sans-serif;
 FONT: 11px Verdana, Arial, Helvetica, sans-serif;
 }
 
-
+.investigation { color : black }
+.investigation:visited 	{ color: black; text-decoration: none;  }
+.investigation:hover		{ color: #999999; text-decoration: underline;  }
 
 .logout {
 color: black; font-size: -2; text-decoration: none;
@@ -94,6 +107,7 @@ a:hover		{ color: #999999; text-decoration: underline;  }
 
 
 a:active 	{ color: #9999CC; text-decoration: underline;  }
+
 
 
 .table_no_space {
@@ -142,7 +156,7 @@ font-size: 20px;
 
 
 .scroller {
-    padding-left:20px;
+    padding-left: 20px;
 }
 
 .paginator {

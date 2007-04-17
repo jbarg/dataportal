@@ -195,7 +195,7 @@
             <h:panelGrid columns="3">
                 <h:commandButton id="f" styleClass="button" action="#{searchBean.searchByKeyword}" onclick="busyBox.Show();" title="Search" value="Search"/>
                 <h:panelGroup>&nbsp;</h:panelGroup>
-                <h:commandButton id="own" styleClass="button" action="#{searchBean.searchOwnData}" immediate="true" onclick="busyBox.Show();" title="View own" value="View own data"/>
+                <h:commandButton id="own" styleClass="button" action="#{searchBean.searchOwnData}" immediate="true" onclick="busyBox.Show();" title="View my data" value="View my data"/>
                 
             </h:panelGrid>
             <h:panelGroup/>

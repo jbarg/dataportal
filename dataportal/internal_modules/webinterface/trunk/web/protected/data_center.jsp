@@ -15,7 +15,7 @@
     
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
-        <title>CCLRC Data Portal </title>
+         <title>Sci-Tech Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
         <script language="javascript" src="../css/download.js"></script>
         <script language="javascript" src="../css/CastleBusyBox.js"></script>
@@ -23,42 +23,48 @@
     </head>
     <body>
         <f:view>
-            
-            
-            <table width="${sessionScope.visit.width}"  >  
+            <table width="${sessionScope.visit.width}" id="top_table" > 
                  <tbody>
                     <tr>
                         <td width="100%">
                             
-                            <table  border="0" width="100%" >
+                            <table   border="0" width="100%" id="image_stfc" >
                                  <tbody>
                                     <tr>
-                                        <td id="nav_bar" width="100%"  > 
+                                        <td width="100%" > 
+                                            <%--  <td id="nav_bar" width="100%"  > 
+                                            <f:subview id="header">
+                                                <c:import url="inc/header.jsp" />
+                                            </f:subview>
+                                             
+                                        </td>--%>
                                             <f:subview id="header">
                                                 <c:import url="inc/header.jsp" />
                                             </f:subview>
                                         </td>
-                                        
-                                        
-                                        <td width="100%" align="right">
+                                    </tr>                                   
+                                </tbody>                                
+                            </table>
+                            <table id="nav_bar_second"   border="0" width="100%" >
+                                 <tbody>
+                                    <tr>                         
+                                        <td width="100%" align="right" >
                                             <f:subview id="header_2">
                                                 <c:import url="inc/header_2.jsp" />
                                             </f:subview>
                                         </td>
-                                        
-                                    </tr>
-                                </tbody>
+                                    </tr>                                    
+                                </tbody>                                
                             </table>
                             
-                            <table id="nav_bar2" border="0" width="100%">
+                            <table id="nav_bar_accross"  border="0" width="100%">
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">
-                                            
                                             <!-- does not work inside subview??? -->
-                                            <f:subview id="navigation">
+                                            <%-- <f:subview id="navigation">
                                                 <c:import url="inc/header_img.jsp" />
-                                            </f:subview>
+                                            </f:subview>--%>
                                             <%--
                                             <img align="center" src="../../images/diamond.gif" width=170" height="60" />
                                             --%>     <br />
@@ -124,7 +130,8 @@
                                                                         <h:outputText value="Each of the columns can be sorted by clicking on the header once or twice for reverse sort."/>
                                                                         <h:outputText value="The first column allows you to expand the Data Set if show to view all the data files in the data set."/>
                                                                         <h:outputText value="Click on the name of the data reference to download it, if you have the correct privileges."/>
-                                                                        <h:outputText value="The third column with the check box allows you to select multiple data references and then click 'Email Download' to download the selected items if your email is set.  Do this either from the preferences page, preferences tab or in the pop up box when hover on the image below the table on the left, you then can request for the data to be downloaded and then for a link to the data to be emailed to you.  "/>
+                                                                        <h:outputText value="The third column with the check box allows you to select multiple data references and then click 'Email Download' to download the selected items if your email is set, you can do this either from the preferences page, preferences tab or in the pop up box when hover on the image below the table on the left, you then can request for the data to be downloaded and then for a link to the data to be emailed to you.  
+                                                                                      You can also click 'Download now' to download all the items to you computer."/>                                                                        
                                                                         <h:outputText value="Hover over the type of data gives you a quick view of the contents a data set."/>
                                                                         <h:outputText value="Here you can add and view notes that you want to give to a data object, or by checking a box and clicking 'Delete Selection' remove the data object from the list."/>
                                                                         <h:outputText value="Also, to quickly go back to view the parent investigation, click on the hand arrow image and it will take you to the investigations page, or hover over the arrow and then click on datasets to take you straight to the Data Sets page and bypass the investigation page for this investigation."/>

@@ -17,7 +17,7 @@
                     <table border="0" width="100%">
                         <tbody>
                             <tr>
-                                <tr> <h:messages globalOnly="true" warnClass="error" errorClass="error" infoClass="info" />
+                                <tr> <h:messages id="messages" globalOnly="true" warnClass="error" errorClass="error" infoClass="info" />
                                 </tr>     
                                 <td width="60%">   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>    
@@ -366,7 +366,7 @@
                                     <f:param name="id16" value="#{node.identifier}"/>              
                                 </h:commandLink>
                                 <h:outputText value="         " />
-                                <%-- <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
+                                <%-- <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Links" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="datafiles" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
@@ -422,7 +422,7 @@
                                     <f:param name="id1" value="#{node.identifier}"/>              
                                 </h:commandLink>
                                 <h:outputText value="         " />
-                                <%--    <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
+                                <%--    <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Links" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="datafiles" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
@@ -637,7 +637,7 @@
                                     <f:param name="id16" value="#{node.identifier}"/>              
                                 </h:commandLink>
                                 <h:outputText value="         " />
-                                <%-- <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
+                                <%-- <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Links" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="datafiles" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
@@ -693,7 +693,7 @@
                                     <f:param name="id1" value="#{node.identifier}"/>              
                                 </h:commandLink>
                                 <h:outputText value="         " />
-                                <%--    <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Center" valueChangeListener="#{datasetTree.setSelected}">
+                                <%--    <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Links" valueChangeListener="#{datasetTree.setSelected}">
                                     <f:param name="datafiles" value="#{node.identifier}"/>
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
@@ -749,7 +749,7 @@
                                 <td align="left">
                                     <%--<h:commandButton styleClass="button" id="addSelection" disabled="#{!visit.visitData.addSelectionable}" action="#{datasetTree.select}" title="Add selections" value="Add selections"/>--%>
                                    
-                                    <h:commandButton styleClass="button" id="addSelection" style="width: 130px" action="#{datasetTree.select}" title="Add to Data Center" value="Add to Data Center"/>
+                                    <h:commandButton styleClass="button" id="addSelection" style="width: 130px" action="#{datasetTree.select}" title="Add to Data Links" value="Add to Data Links"/>
                                     &nbsp;
                                     <h:selectBooleanCheckbox disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
                                         
@@ -791,7 +791,7 @@
                             <tr>
                                 <td align="left">
                                     
-                                    <h:commandButton styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
+                                    <a4j:commandButton reRender="messages" styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
                                     
                                     &nbsp;
                                     <h:selectBooleanCheckbox rendered="#{visit.userPreferences.emailSet}" disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
