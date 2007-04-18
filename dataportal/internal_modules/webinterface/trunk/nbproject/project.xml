@@ -12,12 +12,12 @@
                 <library files="1">
                     <file>${libs.log4j.classpath}</file>
                 </library>
-                <library files="2">
-                    <file>${libs.srb_extensions.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
                 <library files="15">
                     <file>${libs.myfaces-impl.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="2">
+                    <file>${libs.srb-extensions-v2.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
@@ -25,26 +25,33 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
-                    <file>${libs.coreutil.classpath}</file>
-                </library>
-                <library files="1">
-                    <file>${libs.tomahawk-1.5.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="3">
-                    <file>${libs.dp_dpal.classpath}</file>
+                    <file>${reference.dataportal-coreutil.jar}</file>
                 </library>
                 <library files="3">
                     <file>${libs.bp-autocomplete.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
-                    <file>${libs.imageJ.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
+                    <file>${reference.DP5_Adaptor_Module.jar}</file>
                 </library>
                 <library files="2">
                     <file>${libs.ajax4jsf.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="3">
+                    <file>${libs.facelets.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${libs.tomahawk-1.5.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${libs.jstl-string.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="7">
+                    <file>${libs.dp_cogkit.classpath}</file>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
@@ -55,5 +62,23 @@
                 <root id="test.src.dir"/>
             </test-roots>
         </data>
+        <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
+            <reference>
+                <foreign-project>DP5_Adaptor_Module</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>dataportal-coreutil</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+        </references>
     </configuration>
 </project>
