@@ -15,6 +15,7 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 
 /**
  *
+ *
  * @author gjd37
  */
 public class FacilityDTO implements Serializable {
