@@ -15,7 +15,7 @@ package uk.ac.dl.dp5.util;
  */
 public class TestConstants {
     
-    public static String MYPROXY_USERNAME = "glen";
+    public static String MYPROXY_USERNAME = "gjd37";
     public static String MYPROXY_PASSWORD = "kkkkkk";
     
     public static String MYPROXY_ADDRESS = "myproxy.grid-support.ac.uk";

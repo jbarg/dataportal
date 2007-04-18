@@ -16,6 +16,7 @@ import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
+import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp5.util.TestConstants;
 
@@ -25,6 +26,16 @@ import uk.ac.dl.dp5.util.TestConstants;
  */
 public class QueryTest extends TestCase {
     
+    
+    static {
+          System.setProperty("org.omg.CORBA.ORBInitialHost","kisumu.esc.rl.ac.uk");
+            System.setProperty("org.omg.CORBA.ORBInitialPort","3700");
+    }
+    
+    {
+          System.setProperty("org.omg.CORBA.ORBInitialHost","kisumu.esc.rl.ac.uk");
+            System.setProperty("org.omg.CORBA.ORBInitialPort","3700");
+    }
     private String sid;
     private static SessionDelegate sd = SessionDelegate.getInstance();
     private static QueryDelegate qd = QueryDelegate.getInstance();
@@ -39,6 +50,7 @@ public class QueryTest extends TestCase {
     
     protected void setUp() throws Exception {
         //login
+       
         sid = sd.login(TestConstants.MYPROXY_USERNAME,TestConstants.MYPROXY_PASSWORD,3);
         System.out.println("logging in");
     }
@@ -56,16 +68,16 @@ public class QueryTest extends TestCase {
         System.out.println("Query");
         
         Collection<String> facs = new ArrayList<String>();
-        facs.add("ISIS");
+        facs.add("DIAMOND");
         
-        String[] keywords = {"raw"};
+        String[] keywords = {"copper"};
         
         qd = QueryDelegate.getInstance();
         QueryRequest queryRequest = null;
         
         try {
             //start download
-            queryRequest = qd.queryByKeyword(sid,keywords,facs, LogicalOperator.AND);
+            queryRequest = qd.query(sid,keywords,facs,LogicalOperator.AND,false,DPQueryType.KEYWORD );
             System.out.println("quering ...");
         } catch (Exception ex) {
             System.out.println("Download error "+ex);
@@ -81,7 +93,7 @@ public class QueryTest extends TestCase {
                 }
             }
             try {
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -99,16 +111,16 @@ public class QueryTest extends TestCase {
         System.out.println("Query");
         
         Collection<String> facs = new ArrayList<String>();
-        facs.add("ISIS");
+        facs.add("DIAMOND");
         
-        String[] keywords = {"raw"};
+        String[] keywords = {"copper"};
         
         qd = QueryDelegate.getInstance();
         QueryRequest queryRequest = null;
         
         try {
             //start download
-            queryRequest = qd.queryByKeyword(sid,keywords,facs, LogicalOperator.AND);
+            queryRequest = qd.query(sid,keywords,facs,LogicalOperator.AND,false,DPQueryType.KEYWORD );
             System.out.println("quering ...");
         } catch (Exception ex) {
             System.out.println("Download error "+ex);
@@ -119,19 +131,20 @@ public class QueryTest extends TestCase {
         
     }
     
- /*   public void testQueryStress() throws Exception {
+    public void testQueryStress() throws Exception {
         System.out.println("testQueryStress");
   
-        int MAX = 50;
+        int MAX = 150;
         for(int i =0 ; i < MAX ; i++){
             testQuery();
+            System.out.println(i);
         }
         tearDown();
         System.out.println("Time taken was : "+(new Date().getTime() - time)/1000+" seconds");
-    }*/
+    }
     
     
-    public void testQueryStressTest() throws Exception {
+ /*   public void testQueryStressTest() throws Exception {
         System.out.println("testQueryStressTest");
         
         int MAX = 1500;
@@ -141,7 +154,7 @@ public class QueryTest extends TestCase {
         //tearDown();
         System.out.println("Time taken was : "+(new Date().getTime() - time)/1000+" seconds");
     }
-    
+   */ 
     
     
     
