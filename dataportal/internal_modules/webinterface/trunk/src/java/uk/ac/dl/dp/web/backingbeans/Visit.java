@@ -118,6 +118,10 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         return isAdmin;
     }
     
+     public boolean isValid(){
+        return (session.getExpireTime().before(new Date())) ? false : true ;
+    }
+    
     public Collection<DPRole> getRoles(){
         return this.roles;
     }
