@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Properties;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
@@ -23,8 +25,6 @@ import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import javax.faces.context.FacesContext;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPDefaultLocation;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
@@ -141,6 +141,12 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         
         //logged in ok, get session visit bean, if not there this methoid creates one and sets the returned session
         Visit visit = (Visit) getBean(WebConstants.SESSION_KEY);
+        
+        //TODO this was used to sets the expire time of application to one min and not 2 hours!
+        /*Calendar cal =  GregorianCalendar.getInstance();
+        cal.add(GregorianCalendar.MINUTE,1); //minus 5 mins
+        session.setExpireTime(cal.getTime());*/
+        
         visit.setSession(session);
         
         //logged in, return ok, return to default location

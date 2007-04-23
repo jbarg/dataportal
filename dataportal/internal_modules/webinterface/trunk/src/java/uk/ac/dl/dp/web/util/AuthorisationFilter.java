@@ -9,6 +9,8 @@
 
 package uk.ac.dl.dp.web.util;
 import java.io.IOException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.servlet.http.*;
 import javax.servlet.*;
 import org.apache.log4j.*;
@@ -47,12 +49,15 @@ public class AuthorisationFilter implements Filter{
             Visit visit = (Visit)session.getAttribute(WebConstants.SESSION_KEY);
             
             if(visit == null || visit.getDn() == null){
-                httpResponse.sendRedirect(httpRequest.getContextPath()+"/index.jsp");
                 log.trace("sending to logon, no visit");
-                
-            } else{
+                httpResponse.sendRedirect(httpRequest.getContextPath()+"/index.jsp");
+            } else if(visit.isValid()){
                 log.trace("Everything ok: "+visit.getDn());
                 chain.doFilter(request,response);
+            } else {
+                log.trace("sending to logon, expired on  "+visit.getSession().getExpireTime());
+                //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Session expired, please login again.", null));
+                httpResponse.sendRedirect(httpRequest.getContextPath()+"/index.jsp");
             }
         }
         
