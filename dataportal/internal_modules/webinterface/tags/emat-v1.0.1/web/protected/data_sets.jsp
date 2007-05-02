@@ -24,7 +24,7 @@
     <body>
         <f:view>
             
-            <table width="${sessionScope.visit.width}"  >  
+            <table width="${sessionScope.visit.width}"  id="top_table">  
                  <tbody>
                     <tr>
                         <td width="100%">
