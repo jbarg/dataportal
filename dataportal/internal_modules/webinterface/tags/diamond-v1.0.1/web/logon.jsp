@@ -28,7 +28,7 @@
             %>
             
             
-            <table width="954" >
+            <table width="954" id="top_table">
                  <tbody>
                     <tr>
                         <td width="100%">
