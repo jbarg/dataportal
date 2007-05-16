@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <mail-resource debug="false" enabled="true" from="root@localhost" host="localhost" jndi-name="MailSession" object-type="user" store-protocol="imap" store-protocol-class="com.sun.mail.imap.IMAPStore" transport-protocol="smtp" transport-protocol-class="com.sun.mail.smtp.SMTPTransport" user="root">
+    <description/>
+  </mail-resource>
+</resources>
