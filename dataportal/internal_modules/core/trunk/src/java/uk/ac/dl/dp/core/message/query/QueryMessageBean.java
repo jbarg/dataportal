@@ -29,6 +29,7 @@ import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
+import uk.ac.dl.dp.coreutil.util.UserUtil;
 
 /**
  *
@@ -83,12 +84,14 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 } else log.debug("no keywords");
                 
                 boolean security = true;
-                for(ModuleLookup fac : facilities){
-                    if(fac.getFacility().equals(e.getFacility())){
-                        log.trace("Found facility, "+e.getFacility()+" is security "+fac.isSecurity());
-                        security = fac.isSecurity();
+                if(! new UserUtil(e.getSid(),em).isAdmin()){
+                    for(ModuleLookup fac : facilities){
+                        if(fac.getFacility().equals(e.getFacility())){
+                            log.trace("Found facility, "+e.getFacility()+" is security "+fac.isSecurity());
+                            security = fac.isSecurity();
+                        }
                     }
-                }
+                } else security = false;
                 
                 dpal = new DPAccessLayer(e.getFacility());
                 

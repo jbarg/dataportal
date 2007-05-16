@@ -349,12 +349,14 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             
             boolean security = true;
             
-            for(ModuleLookup mod : facilitiesList){
-                if(mod.getFacility().equals(fac)){
-                    log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
-                    security = mod.isSecurity();
+            if(!userUtil.isAdmin()){
+                for(ModuleLookup mod : facilitiesList){
+                    if(mod.getFacility().equals(fac)){
+                        log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
+                        security = mod.isSecurity();
+                    }
                 }
-            }
+            } else security = false;
             
             for(Investigation invest : investigations){
                 if(invest.getFacility().equalsIgnoreCase(fac)) investigation_id.add(invest.getId());
@@ -414,13 +416,14 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
             if(datasets_id.size() == 0) continue ;
             
             boolean security = true;
-            
-            for(ModuleLookup mod : facilitiesList){
-                if(mod.getFacility().equals(fac)){
-                    log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
-                    security = mod.isSecurity();
+            if(!userUtil.isAdmin()){
+                for(ModuleLookup mod : facilitiesList){
+                    if(mod.getFacility().equals(fac)){
+                        log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
+                        security = mod.isSecurity();
+                    }
                 }
-            }
+            } else security = false;
             
             DPAccessLayer dpal = null;
             try {
