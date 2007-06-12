@@ -10,8 +10,8 @@
 package uk.ac.dl.dp.coreutil.clients.dto;
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
-import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 
 /**
  *
@@ -59,6 +59,7 @@ public class FacilityDTO implements Serializable {
         this.connection = connection;
     }*/
     
+    @XmlTransient
     public String getPlatform() {
         return platform;
     }

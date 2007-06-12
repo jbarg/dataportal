@@ -11,6 +11,7 @@ package uk.ac.dl.dp.coreutil.clients.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.dl.dp.coreutil.entity.Role;
 import uk.ac.dl.dp.coreutil.entity.Session;
 import uk.ac.dl.dp.coreutil.util.DPCredentialType;
@@ -37,13 +38,16 @@ public class SessionDTO implements Serializable{
     private String DN;
     
     private String name;
-        
+    
     private UserPreferencesDTO userPrefs;
     
     private Collection<FacilityDTO> facilities;
-    
-     private Collection<SrbServer> srbServers;
+        
+    private Collection<SrbServer> srbServers;
     // private User userId;
+    
+    public SessionDTO() {
+    }
     
     /** Creates a new instance of SessionDTO */
     public SessionDTO(Session session) {
@@ -52,7 +56,7 @@ public class SessionDTO implements Serializable{
         this.setCredentialType(session.getCredentialType());
         this.setUserSessionId(session.getUserSessionId());
         for(Role role : session.getUserId().getRoles()){
-           roles.add(role.getName());
+            roles.add(role.getName());
         }
         this.DN = session.getUserId().getDn();
         int index = this.DN.lastIndexOf("CN=");
@@ -68,6 +72,7 @@ public class SessionDTO implements Serializable{
         this.userSessionId = userSessionId;
     }
     
+    @XmlTransient
     public String getCredential() {
         return credential;
     }
@@ -91,11 +96,11 @@ public class SessionDTO implements Serializable{
     public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
     }
-
+    
     public Collection<DPRole> getRoles() {
         return roles;
     }
-
+    
     public String getDN() {
         return DN;
     }
@@ -104,30 +109,31 @@ public class SessionDTO implements Serializable{
         this.userPrefs = userPrefs;
     }
     
-     public UserPreferencesDTO getUserPrefs(){
-       return  this.userPrefs;
+    public UserPreferencesDTO getUserPrefs(){
+        return  this.userPrefs;
     }
-
+    
     public Collection<FacilityDTO> getFacilities() {
         return facilities;
     }
-
+    
     public void setFacilities(Collection<FacilityDTO> facilities) {
         this.facilities = facilities;
     }
-
+    
     public String getName() {
         return name;
     }
-
+    
     public void setName(String name) {
         this.name = name;
-    }  
-
+    }
+    
+    @XmlTransient
     public Collection<SrbServer> getSrbServers() {
         return srbServers;
     }
-
+    
     public void setSrbServers(Collection<SrbServer> srbServers) {
         this.srbServers = srbServers;
     }

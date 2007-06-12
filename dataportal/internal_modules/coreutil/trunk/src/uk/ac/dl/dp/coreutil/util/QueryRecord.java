@@ -47,7 +47,7 @@ public class QueryRecord implements Serializable {
     }*/
     
     public QueryRecord(QueryRequest qr, Timestamp processed, Collection<Investigation> result, Exception ex) {
-        this.setSent(qr.getSent());
+        this.setSent(new Timestamp(qr.getSent().getTime()));
         this.setProcessed(processed);
         this.setResult(result);
         this.setId(qr.getId());

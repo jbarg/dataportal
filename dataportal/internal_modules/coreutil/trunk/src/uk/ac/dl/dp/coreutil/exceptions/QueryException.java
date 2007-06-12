@@ -9,6 +9,8 @@
 
 package uk.ac.dl.dp.coreutil.exceptions;
 
+import javax.ejb.ApplicationException;
+
 //import javax.ejb.ApplicationException;
 
 /**
@@ -16,7 +18,7 @@ package uk.ac.dl.dp.coreutil.exceptions;
  * @author gjd37
  */
 //@ApplicationException(rollback=true)
-public class QueryException extends java.lang.Exception {
+public class QueryException extends DataPortalException {
     
     /**
      * Creates a new instance of <code>QueryException</code> without detail message.

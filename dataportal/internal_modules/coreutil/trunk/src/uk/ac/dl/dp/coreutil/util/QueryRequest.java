@@ -10,9 +10,9 @@
 package uk.ac.dl.dp.coreutil.util;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
 
 /**
@@ -26,7 +26,7 @@ public class QueryRequest implements Serializable{
     private String facility;
     private Collection<String> facilities;
     private String[] keyword;
-    private Timestamp sent;
+    private Date sent;
     private String sid ;
     private String queryid;
     private String DN;
@@ -71,11 +71,11 @@ public class QueryRequest implements Serializable{
         this.keyword = keyword;
     }
 
-    public Timestamp getSent() {
+    public Date getSent() {
         return sent;
     }
 
-    public void setSent(Timestamp sent) {
+    public void setSent(Date sent) {
         this.sent = sent;
     }
 
