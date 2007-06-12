@@ -12,9 +12,9 @@ package uk.ac.dl.dp.core.sessionbeans.query;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.UUID;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -55,6 +55,7 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.core.message.query.QueryManager;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 
 
@@ -63,7 +64,7 @@ import uk.ac.dl.dp.coreutil.util.DPQueryType;
  * @author gjd37
  */
 @Stateless(mappedName=DataPortalConstants.QUERY)
-public class QueryBean extends SessionEJBObject implements QueryRemote{
+public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLocal{
     
     static Logger log = Logger.getLogger(QueryBean.class);
     
@@ -133,7 +134,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote{
                 q_request.setQueryid(search_id);
                 q_request.setDN(user.getDn());
                 q_request.setKeyword(keyword);
-                q_request.setSent(new Timestamp(System.currentTimeMillis()));
+                q_request.setSent(new Date());
                 q_request.setQt(queryType);
                 q_request.setFederalID(user.getUserId());
                 if(logicalex == null) {

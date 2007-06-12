@@ -26,6 +26,7 @@ import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
+import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
@@ -42,9 +43,9 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
  */
 
 @Stateless()
-@WebService(targetNamespace="client.dataportal.uk")
+@WebService(/*targetNamespace="client.dataportal.uk"*/)
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-public class DataPortal extends SessionEJBObject{
+public class DataPortal extends SessionEJBObject {
     
     static Logger log = Logger.getLogger(DataPortal.class);
     
@@ -58,17 +59,17 @@ public class DataPortal extends SessionEJBObject{
     
     
     @WebMethod()
-    public String login(@WebParam(name="username") String username, @WebParam(name="password") String password, @WebParam(name="lifetime") int lifetime) throws CannotCreateNewUserException, LoginMyProxyException {
+    public String login(@WebParam(name="username") String username, @WebParam(name="password") String password, @WebParam(name="lifetime") int lifetime) throws CannotCreateNewUserException, LoginMyProxyException  {
         return sessionBeanLocal.login(username, password, lifetime);
     }
     
     @WebMethod()
-    public Boolean isValid(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, SessionTimedOutException {
+    public boolean isValid(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, SessionTimedOutException  {
         return sessionBeanLocal.isValid(sessionId);
     }
     
     @WebMethod()
-    public SessionDTO getSession(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException {
+    public SessionDTO getSession(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException  {
         return sessionBeanLocal.getSession(sessionId);
     }
     
@@ -78,17 +79,17 @@ public class DataPortal extends SessionEJBObject{
     }
     
     @WebMethod()
-    public String[] getKeywords(@WebParam(name="sessionId") String sessionId, String facility) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, Exception {
+    public String[] getKeywords(@WebParam(name="sessionId") String sessionId, String facility) throws Exception  {
         return queryLocal.getKeywords(facility);
     }
     
     @WebMethod()
-    public QueryRequest query(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException {
+    public QueryRequest query(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy) throws QueryException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException {
         return queryLocal.query(sid, facilities, keyword, logicalex, fuzzy, DPQueryType.KEYWORD);
     }
     
     @WebMethod()
-    public Collection<Investigation> queryAndWait(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException {
+    public Collection<Investigation> queryAndWait(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy) throws QueryException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException {
         QueryRequest request = queryLocal.query(sid, facilities, keyword, logicalex, fuzzy, DPQueryType.KEYWORD);
         
         while(!queryLocal.isFinished(request)){
@@ -108,12 +109,12 @@ public class DataPortal extends SessionEJBObject{
     }
     
     @WebMethod()
-    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
+    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException {
         return queryLocal.getDataSets(sid, investigations);
     }
     
     @WebMethod()
-    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
+    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException {
         return queryLocal.getDataFiles(sid, datasets);
     }
     
