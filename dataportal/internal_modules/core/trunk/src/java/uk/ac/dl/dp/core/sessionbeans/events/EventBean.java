@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
@@ -33,7 +35,6 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.interfaces.EventRemote;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
-import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
 import uk.ac.dl.dp.coreutil.util.EventMessage;
@@ -44,6 +45,7 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
  * @author gjd37
  */
 @Stateless(mappedName=DataPortalConstants.EVENT)
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class EventBean extends SessionEJBObject implements EventRemote, EventLocal {
     
     static Logger log = Logger.getLogger(EventBean.class);

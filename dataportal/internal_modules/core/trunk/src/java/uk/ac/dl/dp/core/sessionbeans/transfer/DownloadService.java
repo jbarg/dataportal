@@ -40,7 +40,6 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
  */
 
 @Stateless(mappedName=DataPortalConstants.DOWNLOAD)
-//@WebService()
 public class DownloadService extends SessionEJBObject  implements DownloadServiceRemote {
     
     static final Logger log = Logger.getLogger(DownloadService.class);

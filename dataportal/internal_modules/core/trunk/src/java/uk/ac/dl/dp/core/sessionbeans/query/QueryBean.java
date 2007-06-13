@@ -64,6 +64,7 @@ import uk.ac.dl.dp.coreutil.util.DPQueryType;
  * @author gjd37
  */
 @Stateless(mappedName=DataPortalConstants.QUERY)
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLocal{
     
     static Logger log = Logger.getLogger(QueryBean.class);

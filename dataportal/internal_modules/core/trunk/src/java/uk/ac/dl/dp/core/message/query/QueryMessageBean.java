@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -43,6 +45,7 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
   @ActivationConfigProperty(propertyName="destination",
     propertyValue=DataPortalConstants.QUERY_MDB)
 })*/
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class QueryMessageBean extends MessageEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(QueryMessageBean.class);

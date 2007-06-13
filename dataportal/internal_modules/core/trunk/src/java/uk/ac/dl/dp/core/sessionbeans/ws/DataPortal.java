@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.core.sessionbeans.ws;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -25,13 +26,17 @@ import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
+import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
+import uk.ac.dl.dp.coreutil.entity.Bookmark;
+import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
-import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
+import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.interfaces.DataCenterLocal;
 import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
 import uk.ac.dl.dp.coreutil.interfaces.SessionLocal;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
@@ -55,8 +60,10 @@ public class DataPortal extends SessionEJBObject {
     
     @EJB
     protected QueryLocal queryLocal;
-    //////////////////////////////////////////////////////////////////////////
     
+    @EJB
+    protected DataCenterLocal dataCenterLocal;
+    //////////////////////////////////////////////////////////////////////////
     
     @WebMethod()
     public String login(@WebParam(name="username") String username, @WebParam(name="password") String password, @WebParam(name="lifetime") int lifetime) throws CannotCreateNewUserException, LoginMyProxyException  {
@@ -84,13 +91,13 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public QueryRequest query(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy) throws QueryException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException {
-        return queryLocal.query(sid, facilities, keyword, logicalex, fuzzy, DPQueryType.KEYWORD);
+    public QueryRequest query(@WebParam(name="sessionId") String sessionId, @WebParam(name="facilities")  Collection<String> facilities, @WebParam(name="keywords") String[] keywords, @WebParam(name="logicaloperator") LogicalOperator logicaloperator, @WebParam(name="fuzzy") boolean fuzzy) throws QueryException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException {
+        return queryLocal.query(sessionId, facilities, keywords, logicaloperator, fuzzy, DPQueryType.KEYWORD);
     }
     
     @WebMethod()
-    public Collection<Investigation> queryAndWait(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy) throws QueryException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException {
-        QueryRequest request = queryLocal.query(sid, facilities, keyword, logicalex, fuzzy, DPQueryType.KEYWORD);
+    public Collection<Investigation> queryAndWait(@WebParam(name="sessionId") String sessionId, @WebParam(name="facilities") Collection<String> facilities, @WebParam(name="keywords") String[] keywords, @WebParam(name="logicaloperator") LogicalOperator logicaloperator, @WebParam(name="fuzzy") boolean fuzzy) throws QueryException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException {
+        QueryRequest request = queryLocal.query(sessionId, facilities, keywords, logicaloperator, fuzzy, DPQueryType.KEYWORD);
         
         while(!queryLocal.isFinished(request)){
             try {
@@ -104,22 +111,60 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public boolean isFinished(QueryRequest q_request){
+    public boolean isFinished(@WebParam(name="username") QueryRequest q_request){
         return queryLocal.isFinished(q_request);
     }
     
     @WebMethod()
-    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException {
-        return queryLocal.getDataSets(sid, investigations);
+    public Collection<DataSet> getDataSets(@WebParam(name="sessionId") String sessionId, @WebParam(name="investigations") Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException {
+        return queryLocal.getDataSets(sessionId, investigations);
     }
     
     @WebMethod()
-    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException {
-        return queryLocal.getDataFiles(sid, datasets);
+    public Collection<DataFile> getDataFiles(@WebParam(name="sessionId") String sessionId, @WebParam(name="datasets") Collection<DataSet> datasets) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException {
+        return queryLocal.getDataFiles(sessionId, datasets);
+    }
+    
+    @WebMethod()
+    public Collection<Investigation> getQueryResults(@WebParam(name="q_request") QueryRequest q_request){
+        return queryLocal.getQueryResults(q_request);
+    }
+    
+    @WebMethod()
+    public Collection<Investigation> getQueryResultsPagination(@WebParam(name="q_request") QueryRequest q_request,@WebParam(name="startIndex") int startIndex, @WebParam(name="numberResults") int numberResults){
+        Collection<Investigation> investigations = queryLocal.getQueryResults(q_request);
+        
+        Collection<Investigation> investigationsToReturn = new ArrayList<Investigation>();
+        Investigation[] array = investigations.toArray(new Investigation[investigations.size()]);
+        for (int i = startIndex; i < startIndex+numberResults; i++) {
+            investigationsToReturn.add(array[i]);
+        }
+        
+        return investigationsToReturn;
+    }
+    
+    @WebMethod()
+    public Collection<DataReference> getDataReferences(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        return dataCenterLocal.getDataReferences(sessionId);
+    }
+    
+    @WebMethod()
+    public Collection<Bookmark> getBookmarks(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        return dataCenterLocal.getBookmarks(sessionId);
+    }
+    
+    @WebMethod()
+    public void removeBookmark(@WebParam(name="sessionId") String sessionId, @WebParam(name="bookmark") Bookmark bookmark) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+        dataCenterLocal.removeBookmark(sessionId, bookmark);
+    }
+    
+    @WebMethod()
+    public void removeDataReference(@WebParam(name="sessionId") String sessionId, @WebParam(name="dataReference") DataReference dataReference) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+        dataCenterLocal.removeDataReference(sessionId, dataReference);
     }
     
      @WebMethod()
-    public Collection<Investigation> getQueryResults(QueryRequest q_request){
-        return queryLocal.getQueryResults(q_request);
+    public UserPreferencesDTO getUserPreferences(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+        return sessionBeanLocal.getUserPrefs(sessionId);
     }
 }

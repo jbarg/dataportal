@@ -48,7 +48,7 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
 
 @Stateless(mappedName=DataPortalConstants.TIMER)
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TimerServiceBean extends SessionEJBObject implements TimerServiceLocal ,TimerServiceRemote {
     
     @Resource
@@ -110,7 +110,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
         }
     }
     
-    
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void timeoutSession(Timer timer) {
         log.debug("Timeout occurred: timeoutSession()");
         Collection<Session> sessions =  null;
