@@ -20,6 +20,8 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.EJBContext;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -66,6 +68,7 @@ import uk.ac.dl.srbapi.util.IOTools;
   @ActivationConfigProperty(propertyName="destination",
     propertyValue=DataPortalConstants.DOWNLOAD_MDB)
 })*/
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class DownloadMessageBean extends MessageEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(DownloadMessageBean.class);

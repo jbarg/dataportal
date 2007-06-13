@@ -62,6 +62,7 @@ import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
  * @author gjd37
  */
 @Stateless(mappedName=DataPortalConstants.SESSION)
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class SessionBean extends SessionEJBObject  implements SessionRemote, SessionLocal {
     
     static Logger log = Logger.getLogger(SessionBean.class);
@@ -94,6 +95,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return sessionDTO;
     }
     
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String login(String kerberosLocation) throws LoginMyProxyException, CannotCreateNewUserException{
         log.debug("login(kerberos): " +sc.getCallerPrincipal() );
         // Run klist to find out the username from the credential
@@ -180,6 +182,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return gsscredential;
     }
     
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String login(String username,String password, int lifetime) throws LoginMyProxyException, CannotCreateNewUserException{
         log.debug("login(): " +sc.getCallerPrincipal() );
         // log.debug("login()" +sc.isCallerInRole("ANYONE") );
@@ -307,7 +310,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
      * - session in database
      * - proxy lifetime still remaining
      * otherwise returns false
-     */
+     */    
     public Boolean isValid(String sid) throws SessionNotFoundException  {
         log.debug("isValid()");
         
@@ -322,6 +325,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
       * Ends a session
       * - deletes session and user authorisation details from database
       */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public boolean logout(String sid) throws SessionNotFoundException ,SessionTimedOutException, UserNotFoundException{
         log.debug("logout()");
         
@@ -345,6 +349,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return true;
     }
     
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("setUserPrefs()");
         
@@ -387,8 +392,5 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         ts.createTimer(1000*60*30,1000*60*30);
         // ts.createTimer(1000*60*2,1000*60*2);
         //lookup default myproxy server
-        
-    }
-    
-    
+    }    
 }

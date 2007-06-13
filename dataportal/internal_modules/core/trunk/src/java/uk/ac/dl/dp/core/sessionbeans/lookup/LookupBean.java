@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.annotation.security.RunAs;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
@@ -17,6 +15,8 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 /**
  * This is the bean class for the LookupBean enterprise bean.
@@ -24,6 +24,7 @@ import javax.ejb.Stateless;
  * @author gjd37
  */
 @Stateless(mappedName=DataPortalConstants.LOOKUP)
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class LookupBean extends SessionEJBObject implements LookupRemote, LookupLocal {
     
     static Logger log = Logger.getLogger(LookupBean.class);
@@ -62,6 +63,7 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         return (Collection<ProxyServers>) em.createNamedQuery("ProxyServers.findAll").getResultList();
     }
     
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ProxyServers getDefaultProxyServer(){
         log.debug("Lookup.getProxyServer()");
         ProxyServers proxyserver =  (ProxyServers) em.createNamedQuery("ProxyServers.findByActive").getSingleResult();

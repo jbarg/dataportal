@@ -12,6 +12,8 @@ package uk.ac.dl.dp.core.sessionbeans.datacenter;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -28,6 +30,7 @@ import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.interfaces.DataCenterLocal;
 
 
 /**
@@ -35,7 +38,7 @@ import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
  * @author gjd37
  */
 @Stateless(mappedName=DataPortalConstants.DATA_CENTER)
-public class DataCenterBean extends SessionEJBObject implements DataCenterRemote {
+public class DataCenterBean extends SessionEJBObject implements DataCenterRemote, DataCenterLocal {
     
     static Logger log = Logger.getLogger(DataCenterBean.class);
     
@@ -49,7 +52,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
     public void addBookmark(String sid, Collection<Bookmark> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addBookmark()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-               
+        
         User user = new UserUtil(sid,em).getUser();
         
         for(Bookmark dto : dtos){
@@ -59,7 +62,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
             if(dto.getId() != null && (long)user.getId() != (long)dto.getUserId().getId()){
                 throw new NoAccessToDataCenterException("Access to add bookmark, Id: "+dto.getId()+", user id: "+dto.getUserId().getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
             } else {
-              //  dto.setUserId(user);
+                //  dto.setUserId(user);
                 //Collection<Bookmark> bookmarks = user.getBookmark();
                 //bookmarks.add(dto);
                 //user.setBookmark(bookmarks);
@@ -99,7 +102,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
                         user.addBookmark(dto);
-                                                
+                        
                         em.persist(dto);
                         continue;
                     } catch(NoResultException nre){
@@ -122,10 +125,11 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         }
     }
     
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Collection<Bookmark> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("getBookmarks()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");       
-                        
+        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        
         User user = new UserUtil(sid,em).getUser();
         
         Collection<Bookmark> bookmarks  = user.getBookmark();
@@ -139,7 +143,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         log.debug("removeBookmark()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
-              User user = new UserUtil(sid,em).getUser();
+        User user = new UserUtil(sid,em).getUser();
         log.trace("Trying to remove bookmark for user "+user.getDn());
         
         for(Bookmark bm : dtos){
@@ -148,13 +152,18 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 log.warn("trying to remove bookmark with no id");
                 continue;
             }
+            
+            //get bookmark
+            Bookmark bookmark = em.find(Bookmark.class,bm.getId());
+            if(bookmark == null) continue;
+            
             //security, check if users bookmark
-            if(bm.getUserId().getId().intValue() == user.getId().intValue()) {
+            if(bookmark.getUserId().getId().intValue() == user.getId().intValue()) {
                 //TODO trouble with detatched entities
                 //could do it this way
                 //Bookmark bookmark = em.find(Bookmark.class,bm.getId());
-                Bookmark bookmark = em.find(Bookmark.class,bm.getId());
-                log.trace("Removing bookmark with id: "+bm.getId());
+                
+                log.trace("Removing bookmark with id: "+bookmark.getId());
                 //remove from model
                 user.getBookmark().remove(bookmark);
                 //remove from DB
@@ -180,7 +189,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
     public void addDataReference(String sid, Collection<DataReference> dtos) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("addDataUrl()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-                            
+        
         for(DataReference dto: dtos){
             if(dto.getUrls() == null || dto.getUrls().size() == 0) throw new IllegalArgumentException("Urls to add cannot be null");
         }
@@ -236,8 +245,8 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                     } catch(NoResultException nre){
                         //no entity then persist
                         log.trace("Entity not found with unique data, persisting new entity");
-                         user.addDataReference(dto);
-                      
+                        user.addDataReference(dto);
+                        
                         em.persist(dto);
                         continue ;
                     }
@@ -256,7 +265,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
     public void removeDataReference(String sid, Collection<DataReference> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("removeUrl()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-                        
+        
         User user = new UserUtil(sid,em).getUser();
         
         for(DataReference url : dtos){
@@ -265,14 +274,17 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 log.warn("Trying to remove null id datareference");
                 continue;
             }
+            DataReference dataReference = em.find(DataReference.class,url.getId());
+            if(dataReference == null) continue;
+            
             //security, check if users bookmark
-            if(url.getUserId().getId().intValue() == user.getId().intValue()) {
+            if(dataReference.getUserId().getId().intValue() == user.getId().intValue()) {
                 //TODO trouble with detatched entities
-                log.trace("trying to remove "+url.getId());
-                DataReference dataReference = em.find(DataReference.class,url.getId());
+                log.trace("trying to remove "+dataReference.getId());
+                
                 
                 //TODO need to remove all urls first cos cannot cascade through a mapping table
-              //  Collection<Url> urls = dataReference.getUrls();
+                //  Collection<Url> urls = dataReference.getUrls();
                /* for(Url dr_url : urls){
                     log.trace("Removing url "+dr_url.getId());
                     em.remove(dr_url);
@@ -293,10 +305,11 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         removeDataReference(sid, dtos);
     }
     
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Collection<DataReference> getDataReferences(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("getUrls()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-                     
+        
         User user = new UserUtil(sid,em).getUser();
         
         Collection<DataReference> urls  = user.getDataReference();
@@ -309,5 +322,5 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         }
         
         return urls;
-    }          
+    }
 }

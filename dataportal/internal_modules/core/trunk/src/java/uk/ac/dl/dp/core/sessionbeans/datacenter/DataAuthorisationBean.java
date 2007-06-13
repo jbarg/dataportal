@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import org.apache.log4j.Logger;
 
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
@@ -110,7 +112,9 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         }
         
     }
-    /* Gets the list of auth given out by current user */
+    
+    
+    /* Gets the list of auth given out by current user */    
     public Collection<DataRefAuthorisation> getGivenAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("getGivenAuthorisedList()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
@@ -276,6 +280,7 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         
     }
     
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Collection<String>  searchUserDns(String sid, String search) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
         log.debug("searchUserDns()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");

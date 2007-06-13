@@ -43,7 +43,7 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
   @ActivationConfigProperty(propertyName="destination",
     propertyValue=DataPortalConstants.KEYWORD_MDB)
 })*/
-//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class KeywordMessageBean extends MessageEJBObject implements MessageListener {
     
     static Logger log = Logger.getLogger(KeywordMessageBean.class);
@@ -144,7 +144,4 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
         log.debug("Message download keyword finished");
         
     }
-    
-    
-    
 }
