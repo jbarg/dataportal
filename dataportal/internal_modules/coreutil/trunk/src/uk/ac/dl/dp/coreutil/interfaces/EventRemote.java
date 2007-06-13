@@ -16,6 +16,6 @@ public interface EventRemote {
     public void sendEvent(String sid, DPEvent event, String description);
     public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords);
     public void sendDownloadEvent(String sid, String message, Collection<String> srburls);
-      public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords, DPEvent event);
+     public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords, DPEvent event);
    
 }

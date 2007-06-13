@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +27,8 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -78,7 +79,7 @@ public class Bookmark implements Serializable {
     private Date modTime;
     
     @JoinColumn(name = "USER_ID")
-    @ManyToOne
+    @ManyToOne   
     private User userId;
     
     @Transient
@@ -87,6 +88,9 @@ public class Bookmark implements Serializable {
     @Transient
     private boolean hasNote;
     
+     @Transient
+    private String dpId;
+         
     @PrePersist
     @PreUpdate
     public void prePersist(){
@@ -113,10 +117,11 @@ public class Bookmark implements Serializable {
         return this.id;
     }
     
-    /*public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }*/
+    }
     
+    @XmlElement(name="investigationId")
     public Integer getStudyId() {
         return this.studyId;
     }
@@ -157,6 +162,7 @@ public class Bookmark implements Serializable {
         this.note = note;
     }
     
+    @XmlTransient
     public Date getModTime() {
         return this.modTime;
     }
@@ -165,6 +171,7 @@ public class Bookmark implements Serializable {
         this.modTime = modTime;
     }*/
     
+     @XmlTransient
     public User getUserId() {
         return this.userId;
     }
@@ -201,6 +208,7 @@ public class Bookmark implements Serializable {
         this.selected = selected;
     }
     
+     @XmlTransient
     public boolean isHasNote() {
         if(getNote() == null || getNote().equals("")) return false;
         else return true;
@@ -208,6 +216,14 @@ public class Bookmark implements Serializable {
     
     public void setHasNote(boolean hasNote) {
         this.hasNote = hasNote;
+    }
+    
+    public void setDpId(String dpId){
+        //do nothing, only for web services
+    }
+     
+    public String getDpId(){
+        return getFacility()+"-"+getId();
     }
     
 }

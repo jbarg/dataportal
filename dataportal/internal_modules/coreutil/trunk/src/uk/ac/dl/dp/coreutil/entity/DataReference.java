@@ -30,6 +30,7 @@ import javax.persistence.Transient;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.dl.dp.coreutil.util.Util;
 
 /**
@@ -88,7 +89,7 @@ public class DataReference implements Serializable {
     private Date modTime;
     
     @JoinColumn(name = "USER_ID")
-    @ManyToOne
+    @ManyToOne   
     private User userId;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dataRefId")
@@ -135,9 +136,9 @@ public class DataReference implements Serializable {
         return this.id;
     }
     
-   /* public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }*/
+    }
     
     public String getName() {
         return this.name;
@@ -203,6 +204,7 @@ public class DataReference implements Serializable {
         this.typeOfObject = typeOfObject;
     }
     
+    @XmlTransient
     public Date getModTime() {
         return this.modTime;
     }
@@ -211,6 +213,7 @@ public class DataReference implements Serializable {
         this.modTime = modTime;
     }*/
     
+     @XmlTransient
     public User getUserId() {
         return this.userId;
     }
@@ -279,7 +282,7 @@ public class DataReference implements Serializable {
         else return false;
     }
     
-     public boolean isDatafileInFolder(){
+    public boolean isDatafileInFolder(){
         if(getTypeOfReference().equals(DPUrlRefType.FILE_FOLDER.toString())) return true;
         else return false;
     }
@@ -296,6 +299,7 @@ public class DataReference implements Serializable {
         this.urls = urls;
     }
     
+     @XmlTransient
     public boolean isHasNote() {
         if(getNote() == null || getNote().equals("")) return false;
         else return true;
@@ -309,6 +313,7 @@ public class DataReference implements Serializable {
         return urls.size();
     }
     
+    @XmlTransient
     public boolean isDownload() {
         return download;
     }
@@ -317,12 +322,15 @@ public class DataReference implements Serializable {
         this.download = download;
     }
     
+     public void setDpId(String dpId){
+        //do nothing, only for web services
+    }
+     
     public String getDpId(){
         return getFacility()+"-"+getId();
     }
     
     public boolean isImageJ(){
         return  Util.isImageJ(getName());
-    }
-    
+    }    
 }

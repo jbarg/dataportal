@@ -27,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.dl.dp.coreutil.util.Util;
 /**
  *
@@ -95,9 +96,9 @@ public class Url implements Serializable {
         return this.id;
     }
     
-    /*public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }*/
+    }
     
     public String getUrl() {
         return this.url;
@@ -107,14 +108,16 @@ public class Url implements Serializable {
         this.url = url;
     }
     
+    @XmlTransient
     public Date getModTime() {
         return this.modTime;
     }
     
-    public void setModTime(Date modTime) {
+    /*public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
+    }*/
     
+    @XmlTransient
     public DataReference getDataRefId() {
         return this.dataRefId;
     }
@@ -169,6 +172,10 @@ public class Url implements Serializable {
 
     public void setDownload(boolean download) {
         this.download = download;
+    }
+    
+    public void setDpId(String dpId){
+        //do nothing, only for web services
     }
     
      public String getDpId(){
