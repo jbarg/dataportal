@@ -76,12 +76,12 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
     //methods action
     public String login(){
         //first section, reload log4j
-        if(new File(System.getProperty("user.home")+File.separator+"log4j.xml").exists()){
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.xml");
-            log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.xml");
+        if(new File(System.getProperty("user.home")+File.separator+".log4j.xml").exists()){
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.xml");
+            //log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.xml");
         } else {
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"log4j.properties");
-            log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.properties");
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.properties");
+            //log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.properties");
         }
         
         String sid = null;
