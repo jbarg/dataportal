@@ -45,7 +45,7 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
  * @author gjd37
  */
 @Stateless(mappedName=DataPortalConstants.EVENT)
-@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class EventBean extends SessionEJBObject implements EventRemote, EventLocal {
     
     static Logger log = Logger.getLogger(EventBean.class);
@@ -105,7 +105,7 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
         }  catch (SessionTimedOutException ex) {
             log.error("No user with user sid "+sid+" in the system",ex);
             return ;
-        }finally{
+        } finally{
             try {
                 if(session != null) session.close();
                 if(connection != null)   connection.close();

@@ -137,7 +137,7 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
             } catch (Exception sqle) {
                 log.error("Unable to initialize keywords for "+facilityDownload.getFacility(),sqle);                 
             } finally{
-                dpal.disconnectFromDB() ;
+                if(dpal != null) dpal.disconnectFromDB() ;
             }            
         }
         
