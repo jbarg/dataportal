@@ -135,7 +135,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 ex  = exception;
                 
             } finally{
-                dpal.disconnectFromDB();
+                if(dpal != null) dpal.disconnectFromDB();
             }
             
             log.debug("Query finished for "+e.getFacility()+"  with id: "+e.getId());

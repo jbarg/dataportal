@@ -62,14 +62,14 @@ public abstract class EJBObject {
     @PostConstruct
     public void init(){
         if(new File(System.getProperty("user.home")+File.separator+".log4j.xml").exists()){
-            System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
+            //System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
             PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.xml");
-            log.debug("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
+            //log.trace("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
             
         } else {
-            System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.properties");
+            //System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.properties");
             PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.properties");
-            log.debug("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.properties");
+            //log.trace("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.properties");
             
         }
         //   log.debug("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+"log4j.properties");
