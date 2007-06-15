@@ -36,7 +36,7 @@
         </h:outputLabel  >
         
         <h:inputSecret styleClass="text" id="Passwordj_id_1"  size="20" required="true" value="#{authorisationBean.password}">
-            <f:validateLength minimum="0" />
+            <f:validateLength minimum="6" />
         </h:inputSecret> 
         <h:message for="Passwordj_id_1" styleClass="error"/>
         <h:panelGroup/>
