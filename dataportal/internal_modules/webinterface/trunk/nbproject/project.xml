@@ -30,6 +30,7 @@
                 </library>
                 <library files="1">
                     <file>${reference.dp-coreutil.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="2">
                     <file>${libs.ajax4jsf.classpath}</file>
@@ -37,6 +38,7 @@
                 </library>
                 <library files="1">
                     <file>${reference.dpal.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="3">
                     <file>${libs.facelets.classpath}</file>
@@ -44,10 +46,6 @@
                 </library>
                 <library files="1">
                     <file>${libs.tomahawk-1.5.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
-                    <file>${libs.jstl-string.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="7">

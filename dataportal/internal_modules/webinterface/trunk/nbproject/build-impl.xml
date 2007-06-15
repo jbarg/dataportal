@@ -442,10 +442,14 @@
         <copy-ear-war file="${libs.bp-autocomplete.classpath.libfile.3}" propname="included.lib.libs.bp-autocomplete.classpath.3.X"/>
         <copy-ear-war file="${libs.bp-autocomplete.classpath.libfile.2}" propname="included.lib.libs.bp-autocomplete.classpath.2.X"/>
         <copy-ear-war file="${libs.bp-autocomplete.classpath.libfile.1}" propname="included.lib.libs.bp-autocomplete.classpath.1.X"/>
+        <basename property="included.lib.reference.dp-coreutil.jar" file="${reference.dp-coreutil.jar}"/>
+        <copy-ear-war file="${reference.dp-coreutil.jar}" propname="included.lib.reference.dp-coreutil.jar.X"/>
         <basename property="included.lib.libs.ajax4jsf.classpath.2" file="${libs.ajax4jsf.classpath.libfile.2}"/>
         <basename property="included.lib.libs.ajax4jsf.classpath.1" file="${libs.ajax4jsf.classpath.libfile.1}"/>
         <copy-ear-war file="${libs.ajax4jsf.classpath.libfile.2}" propname="included.lib.libs.ajax4jsf.classpath.2.X"/>
         <copy-ear-war file="${libs.ajax4jsf.classpath.libfile.1}" propname="included.lib.libs.ajax4jsf.classpath.1.X"/>
+        <basename property="included.lib.reference.dpal.jar" file="${reference.dpal.jar}"/>
+        <copy-ear-war file="${reference.dpal.jar}" propname="included.lib.reference.dpal.jar.X"/>
         <basename property="included.lib.libs.facelets.classpath.3" file="${libs.facelets.classpath.libfile.3}"/>
         <basename property="included.lib.libs.facelets.classpath.2" file="${libs.facelets.classpath.libfile.2}"/>
         <basename property="included.lib.libs.facelets.classpath.1" file="${libs.facelets.classpath.libfile.1}"/>
@@ -454,11 +458,9 @@
         <copy-ear-war file="${libs.facelets.classpath.libfile.1}" propname="included.lib.libs.facelets.classpath.1.X"/>
         <basename property="included.lib.libs.tomahawk-1.5.classpath" file="${libs.tomahawk-1.5.classpath}"/>
         <copy-ear-war file="${libs.tomahawk-1.5.classpath}" propname="included.lib.libs.tomahawk-1.5.classpath.X"/>
-        <basename property="included.lib.libs.jstl-string.classpath" file="${libs.jstl-string.classpath}"/>
-        <copy-ear-war file="${libs.jstl-string.classpath}" propname="included.lib.libs.jstl-string.classpath.X"/>
         <mkdir dir="${build.web.dir.real}/META-INF"/>
         <manifest file="${build.web.dir.real}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.libs.myfaces-impl.classpath.1.X} ${included.lib.libs.myfaces-impl.classpath.2.X} ${included.lib.libs.myfaces-impl.classpath.3.X} ${included.lib.libs.myfaces-impl.classpath.4.X} ${included.lib.libs.myfaces-impl.classpath.5.X} ${included.lib.libs.myfaces-impl.classpath.6.X} ${included.lib.libs.myfaces-impl.classpath.7.X} ${included.lib.libs.myfaces-impl.classpath.8.X} ${included.lib.libs.myfaces-impl.classpath.9.X} ${included.lib.libs.myfaces-impl.classpath.10.X} ${included.lib.libs.myfaces-impl.classpath.11.X} ${included.lib.libs.myfaces-impl.classpath.12.X} ${included.lib.libs.myfaces-impl.classpath.13.X} ${included.lib.libs.myfaces-impl.classpath.14.X} ${included.lib.libs.myfaces-impl.classpath.15.X} ${included.lib.libs.srb-extensions-v2.classpath.1.X} ${included.lib.libs.srb-extensions-v2.classpath.2.X} ${included.lib.libs.tomahawk-sandbox.classpath} ${included.lib.libs.bp-autocomplete.classpath.1.X} ${included.lib.libs.bp-autocomplete.classpath.2.X} ${included.lib.libs.bp-autocomplete.classpath.3.X} ${included.lib.libs.ajax4jsf.classpath.1.X} ${included.lib.libs.ajax4jsf.classpath.2.X} ${included.lib.libs.facelets.classpath.1.X} ${included.lib.libs.facelets.classpath.2.X} ${included.lib.libs.facelets.classpath.3.X} ${included.lib.libs.tomahawk-1.5.classpath} ${included.lib.libs.jstl-string.classpath} "/>
+            <attribute name="Class-Path" value="${included.lib.libs.myfaces-impl.classpath.1.X} ${included.lib.libs.myfaces-impl.classpath.2.X} ${included.lib.libs.myfaces-impl.classpath.3.X} ${included.lib.libs.myfaces-impl.classpath.4.X} ${included.lib.libs.myfaces-impl.classpath.5.X} ${included.lib.libs.myfaces-impl.classpath.6.X} ${included.lib.libs.myfaces-impl.classpath.7.X} ${included.lib.libs.myfaces-impl.classpath.8.X} ${included.lib.libs.myfaces-impl.classpath.9.X} ${included.lib.libs.myfaces-impl.classpath.10.X} ${included.lib.libs.myfaces-impl.classpath.11.X} ${included.lib.libs.myfaces-impl.classpath.12.X} ${included.lib.libs.myfaces-impl.classpath.13.X} ${included.lib.libs.myfaces-impl.classpath.14.X} ${included.lib.libs.myfaces-impl.classpath.15.X} ${included.lib.libs.srb-extensions-v2.classpath.1.X} ${included.lib.libs.srb-extensions-v2.classpath.2.X} ${included.lib.libs.tomahawk-sandbox.classpath} ${included.lib.libs.bp-autocomplete.classpath.1.X} ${included.lib.libs.bp-autocomplete.classpath.2.X} ${included.lib.libs.bp-autocomplete.classpath.3.X} ${included.lib.reference.dp-coreutil.jar} ${included.lib.libs.ajax4jsf.classpath.1.X} ${included.lib.libs.ajax4jsf.classpath.2.X} ${included.lib.reference.dpal.jar} ${included.lib.libs.facelets.classpath.1.X} ${included.lib.libs.facelets.classpath.2.X} ${included.lib.libs.facelets.classpath.3.X} ${included.lib.libs.tomahawk-1.5.classpath} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -484,13 +486,14 @@
         <copy file="${libs.bp-autocomplete.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.bp-autocomplete.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.bp-autocomplete.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${reference.dp-coreutil.jar}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.ajax4jsf.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.ajax4jsf.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${reference.dpal.jar}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.facelets.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.facelets.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.facelets.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.tomahawk-1.5.classpath}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.jstl-string.classpath}" todir="${build.web.dir.real}/WEB-INF/lib"/>
     </target>
     <target name="do-ear-dist" depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest">
         <dirname property="dist.jar.dir" file="${dist.ear.war}"/>
