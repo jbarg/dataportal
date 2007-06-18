@@ -13,7 +13,7 @@ package uk.ac.dl.dp.coreutil.exceptions;
  *
  * @author gjd37
  */
-public class UserNotFoundException extends DataPortalException {
+public class UserNotFoundException extends SessionException {
     
     /**
      * Creates a new instance of <code>UserNotFoundException</code> without detail message.
