@@ -22,6 +22,8 @@ import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.User;
+import uk.ac.dl.dp.coreutil.exceptions.DataCenterException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
@@ -42,93 +44,92 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
     
     static Logger log = Logger.getLogger(DataCenterBean.class);
     
-    public void addBookmark(String sid, Bookmark dto) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void addBookmark(String sid, Bookmark dto) throws  DataCenterException, SessionException {
         Collection<Bookmark> dtos = new ArrayList<Bookmark>();
         dtos.add(dto);
         addBookmark(sid, dtos );
     }
     
     
-    public void addBookmark(String sid, Collection<Bookmark> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void addBookmark(String sid, Collection<Bookmark> dtos) throws  DataCenterException, SessionException {
         log.debug("addBookmark()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         User user = new UserUtil(sid,em).getUser();
         
         for(Bookmark dto : dtos){
             
-            //users the same
-            //if dto id is null then new entry, if not, check users same
-            if(dto.getId() != null && (long)user.getId() != (long)dto.getUserId().getId()){
-                throw new NoAccessToDataCenterException("Access to add bookmark, Id: "+dto.getId()+", user id: "+dto.getUserId().getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
-            } else {
-                //  dto.setUserId(user);
-                //Collection<Bookmark> bookmarks = user.getBookmark();
-                //bookmarks.add(dto);
-                //user.setBookmark(bookmarks);
+            //set the id to zero because were adding stuff
+            dto.setId(null);
+            
+            //set the user
+            dto.setUserId(user);
+            
+            //no bookmark id
+            log.debug("Bookmark has no id, checking data already in DB.");
+            
+            //new one so persist
+            //could have same studyid, facility and user (UNIQUE KEY in bookmarks db here)
+            Query query = em.createNamedQuery("Bookmark.findByUniqueKey");
+            query.setParameter("studyId",dto.getStudyId());
+            query.setParameter("userId",user);
+            query.setParameter("facility",dto.getFacility());
+            
+            Bookmark unique = null;
+            try {
+                unique = (Bookmark)query.getSingleResult();
+                log.trace("Found existing entity with same data, merging data");
+            } catch(EntityNotFoundException enfe){
+                //no entity then persist
+                log.trace("Entity not found with unique data, persisting new entity");
+                user.addBookmark(dto);
                 
-                //no bookmark id, new bookmark or they are equal
-                boolean contains  = (dto.getId() == null ) ? false : true;
-                log.trace("Does this bookmark exist in DB: dto name: "+dto.getName()+": ? "+contains);
-                if(contains){
-                    //modified bookmark so merge
-                    //check merage
-                    Bookmark bm = em.find(Bookmark.class,dto.getId());
-                    if(bm == null){
-                        //no in nDB
-                        log.warn("Bookmark has id: "+dto.getId()+" but not in DB with find(). Not adding");
-                        //em.persist(dto);
-                    } else {
-                        log.debug("Bookmark has id: "+dto.getId()+" is in DB, merging.");
-                        em.merge(dto);
-                    }
-                    
-                } else {
-                    //no bookmark id
-                    log.debug("Bookmark has no id, checking data already in DB.");
-                    
-                    //new one so persist
-                    //could have same studyid, facility and user (UNIQUE KEY in bookmarks db here)
-                    Query query = em.createNamedQuery("Bookmark.findByUniqueKey");
-                    query.setParameter("studyId",dto.getStudyId());
-                    query.setParameter("userId",user);
-                    query.setParameter("facility",dto.getFacility());
-                    
-                    Bookmark unique = null;
-                    try {
-                        unique = (Bookmark)query.getSingleResult();
-                        log.trace("Found existing entity with same data, merging data");
-                    } catch(EntityNotFoundException enfe){
-                        //no entity then persist
-                        log.trace("Entity not found with unique data, persisting new entity");
-                        user.addBookmark(dto);
-                        
-                        em.persist(dto);
-                        continue;
-                    } catch(NoResultException nre){
-                        //no entity then persist
-                        log.trace("Entity not found with unique data, persisting new entity");
-                        user.addBookmark(dto);
-                        
-                        em.persist(dto);
-                        em.flush();
-                        continue ;
-                    }
-                    
-                    //entity here so need to update
-                    unique.setNote(dto.getNote());
-                    unique.setName(dto.getName());
-                    unique.setQuery(dto.getQuery());
-                    em.merge(unique);
-                }
+                em.persist(dto);
+                continue;
+            } catch(NoResultException nre){
+                //no entity then persist
+                log.trace("Entity not found with unique data, persisting new entity");
+                user.addBookmark(dto);
+                
+                em.persist(dto);
+                em.flush();
+                continue ;
             }
+            //not unique
+            throw new DataCenterException("Bookmark is not unique");
+        }
+        
+    }
+    
+    
+    public void modifyBookmark(String sid, Bookmark bookmark) throws SessionException, DataCenterException {
+        log.debug("mergeBookmark()");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
+        if(bookmark.getId() == null) return;
+        
+        User user = new UserUtil(sid,em).getUser();
+        
+        Bookmark bookmarkFound = em.find(Bookmark.class, bookmark.getId());
+        if(bookmarkFound == null){
+            //no in nDB
+            log.warn("Bookmark has id: "+bookmark.getId()+" but not in DB with find(). Not adding");
+            return;
+        } else if((long)user.getId() != (long)bookmarkFound.getUserId().getId()){
+            throw new NoAccessToDataCenterException("Access to modify bookmark, Id: "+bookmarkFound.getId()+", user id: "+bookmarkFound.getUserId().getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
+        } else {
+            //ok here
+            //TODO how to merge from web service
+            //only can change note value of bookmark
+            bookmarkFound.setNote(bookmark.getNote());
+            bookmarkFound.setName(bookmark.getName());
+            bookmarkFound.setQuery(bookmark.getQuery());
         }
     }
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<Bookmark> getBookmarks(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<Bookmark> getBookmarks(String sid) throws SessionException {
         log.debug("getBookmarks()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         User user = new UserUtil(sid,em).getUser();
         
@@ -139,9 +140,9 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         return bookmarks;
     }
     
-    public void removeBookmark(String sid, Collection<Bookmark> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeBookmark(String sid, Collection<Bookmark> dtos) throws  SessionException, DataCenterException {
         log.debug("removeBookmark()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         User user = new UserUtil(sid,em).getUser();
         log.trace("Trying to remove bookmark for user "+user.getDn());
@@ -172,7 +173,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         }
     }
     
-    public void removeBookmark(String sid, Bookmark dto) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeBookmark(String sid, Bookmark dto) throws  SessionException, DataCenterException{
         log.debug("removeBookmarks(Bookmark)");
         Collection<Bookmark> dtos = new ArrayList<Bookmark>();
         dtos.add(dto);
@@ -180,15 +181,15 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
     }
     
     
-    public void addDataReference(String sid, DataReference dto) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void addDataReference(String sid, DataReference dto) throws SessionException, DataCenterException{
         Collection<DataReference> dtos = new ArrayList<DataReference>();
         dtos.add(dto);
         addDataReference(sid, dtos);
     }
     
-    public void addDataReference(String sid, Collection<DataReference> dtos) throws NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void addDataReference(String sid, Collection<DataReference> dtos) throws SessionException, DataCenterException{
         log.debug("addDataUrl()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         for(DataReference dto: dtos){
             if(dto.getUrls() == null || dto.getUrls().size() == 0) throw new IllegalArgumentException("Urls to add cannot be null");
@@ -197,74 +198,53 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         User user = new UserUtil(sid,em).getUser();
         
         for(DataReference dto: dtos){
+            
+            dto.setId(null);
+            
             //users the same
-            if(dto.getUserId() != null && (long)user.getId() != (long)dto.getUserId().getId()){
-                throw new NoAccessToDataCenterException("Access to add DataReference, Id: "+dto.getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
+            dto.setUserId(user);
+            
+            log.debug("DataReference has id: "+dto.getId()+" not in DB, checking data already in DB.");
+            
+            
+            //new one so persist
+            //could have same type of reference, reference id, facility and user (UNIQUE KEY in DataReference db here)
+            //this is because file and dataset might have same id, hence type of reference is there
+            Query query = em.createNamedQuery("DataReference.findByUniqueKey");
+            query.setParameter("referenceId",dto.getReferenceId());
+            query.setParameter("userId",user);
+            query.setParameter("facility",dto.getFacility());
+            query.setParameter("typeOfReference",dto.getTypeOfReference());
+            
+            DataReference unique = null;
+            try {
+                unique = (DataReference)query.getSingleResult();
+                log.trace("Found existing entity with same data, merging data");
+            } catch(EntityNotFoundException enfe){
+                //no entity then persist
+                log.trace("Entity not found with unique data, persisting new entity");
+                user.addDataReference(dto);
+                em.persist(dto);
+                continue;
+            } catch(NoResultException nre){
+                //no entity then persist
+                log.trace("Entity not found with unique data, persisting new entity");
+                user.addDataReference(dto);
                 
-            } else{
-                //set the user to sid user
-                //dto.setUserId(user);
-                //no bookmark id, new bookmark or they are equal
-                boolean contains  = (dto.getId() == null ) ? false : true;
-                log.trace("Does this DataReference exist in DB: dto name: "+dto.getName()+": ? "+contains);
-                if(contains){
-                    //modified DataReference so merge
-                    //check merge
-                    DataReference bm = em.find(DataReference.class,dto.getId());
-                    if(bm == null){
-                        //no in nDB
-                        log.warn("DataReference has id: "+dto.getId()+" but not in DB with find(). Not adding");
-                        //em.persist(dto);
-                    } else {
-                        log.debug("DataReference has id: "+dto.getId()+" is in DB, merging.");
-                        em.merge(dto);
-                    }
-                } else {
-                    log.debug("DataReference has id: "+dto.getId()+" not in DB, checking data already in DB.");
-                    
-                    
-                    //new one so persist
-                    //could have same type of reference, reference id, facility and user (UNIQUE KEY in DataReference db here)
-                    //this is because file and dataset might have same id, hence type of reference is there
-                    Query query = em.createNamedQuery("DataReference.findByUniqueKey");
-                    query.setParameter("referenceId",dto.getReferenceId());
-                    query.setParameter("userId",user);
-                    query.setParameter("facility",dto.getFacility());
-                    query.setParameter("typeOfReference",dto.getTypeOfReference());
-                    
-                    DataReference unique = null;
-                    try {
-                        unique = (DataReference)query.getSingleResult();
-                        log.trace("Found existing entity with same data, merging data");
-                    } catch(EntityNotFoundException enfe){
-                        //no entity then persist
-                        log.trace("Entity not found with unique data, persisting new entity");
-                        user.addDataReference(dto);
-                        em.persist(dto);
-                        continue;
-                    } catch(NoResultException nre){
-                        //no entity then persist
-                        log.trace("Entity not found with unique data, persisting new entity");
-                        user.addDataReference(dto);
-                        
-                        em.persist(dto);
-                        continue ;
-                    }
-                    
-                    //entity here so need to update
-                    unique.setNote(dto.getNote());
-                    unique.setName(dto.getName());
-                    unique.setQuery(dto.getQuery());
-                    em.merge(unique);
-                    
-                }
+                em.persist(dto);
+                continue ;
             }
+            
+              //not unique
+            throw new DataCenterException("DataReference is not unique");
+            
         }
+        
     }
     
-    public void removeDataReference(String sid, Collection<DataReference> dtos) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeDataReference(String sid, Collection<DataReference> dtos) throws  SessionException, DataCenterException{
         log.debug("removeUrl()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         User user = new UserUtil(sid,em).getUser();
         
@@ -298,17 +278,41 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         }
     }
     
-    public void removeDataReference(String sid, DataReference dto) throws  NoAccessToDataCenterException, SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeDataReference(String sid, DataReference dto) throws  SessionException, DataCenterException{
         
         Collection<DataReference> dtos = new ArrayList<DataReference>();
         dtos.add(dto);
         removeDataReference(sid, dtos);
     }
     
+    public void modifyDataReference(String sid, DataReference dataReference) throws SessionException, DataCenterException {
+        log.debug("mergeDataReference()");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
+        if(dataReference.getId() == null) return;
+        
+        User user = new UserUtil(sid,em).getUser();
+        
+        DataReference dataReferenceFound = em.find(DataReference.class, dataReference.getId());
+        if(dataReferenceFound == null){
+            //no in nDB
+            log.warn("DataReference has id: "+dataReferenceFound.getId()+" but not in DB with find(). Not adding");
+            return;
+        } else if((long)user.getId() != (long)dataReferenceFound.getUserId().getId()){
+            throw new NoAccessToDataCenterException("Access to modify bookmark, Id: "+dataReferenceFound.getId()+", user id: "+dataReferenceFound.getUserId().getId()+" denied for user "+user.getDn()+" with user id: "+user.getId());
+        } else {
+            //ok here
+            //TODO how to merge from web service
+            //only can change note value of bookmark
+            dataReferenceFound.setNote(dataReference.getNote());
+            dataReferenceFound.setName(dataReference.getName());
+            dataReferenceFound.setQuery(dataReference.getQuery());
+        }
+    }
+    
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<DataReference> getDataReferences(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<DataReference> getDataReferences(String sid) throws SessionException{
         log.debug("getUrls()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         User user = new UserUtil(sid,em).getUser();
         

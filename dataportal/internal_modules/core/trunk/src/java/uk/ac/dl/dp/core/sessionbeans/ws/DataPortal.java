@@ -30,9 +30,10 @@ import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
+import uk.ac.dl.dp.coreutil.exceptions.DataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
-import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
@@ -144,27 +145,52 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public Collection<DataReference> getDataReferences(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<DataReference> getDataReferences(@WebParam(name="sessionId") String sessionId) throws DataCenterException, SessionException{
         return dataCenterLocal.getDataReferences(sessionId);
     }
     
     @WebMethod()
-    public Collection<Bookmark> getBookmarks(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<Bookmark> getBookmarks(@WebParam(name="sessionId") String sessionId) throws SessionException{
         return dataCenterLocal.getBookmarks(sessionId);
     }
     
     @WebMethod()
-    public void removeBookmark(@WebParam(name="sessionId") String sessionId, @WebParam(name="bookmark") Bookmark bookmark) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+    public void removeBookmark(@WebParam(name="sessionId") String sessionId, @WebParam(name="bookmark") Bookmark bookmark) throws DataCenterException, SessionException{
         dataCenterLocal.removeBookmark(sessionId, bookmark);
     }
     
     @WebMethod()
-    public void removeDataReference(@WebParam(name="sessionId") String sessionId, @WebParam(name="dataReference") DataReference dataReference) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+    public void removeDataReference(@WebParam(name="sessionId") String sessionId, @WebParam(name="dataReference") DataReference dataReference) throws DataCenterException, SessionException{
         dataCenterLocal.removeDataReference(sessionId, dataReference);
     }
     
-     @WebMethod()
-    public UserPreferencesDTO getUserPreferences(@WebParam(name="sessionId") String sessionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    @WebMethod()
+    public void modifyDataReference(@WebParam(name="sessionId") String sessionId, @WebParam(name="dataReference") DataReference dataReference) throws DataCenterException, SessionException{
+        dataCenterLocal.modifyDataReference(sessionId, dataReference);
+    }
+    
+    @WebMethod()
+    public void modifyBookmark(@WebParam(name="sessionId") String sessionId, @WebParam(name="bookmark") Bookmark bookmark) throws DataCenterException, SessionException{
+        dataCenterLocal.modifyBookmark(sessionId, bookmark);
+    }
+    
+    @WebMethod()
+    public void addDataReference(@WebParam(name="sessionId") String sessionId, @WebParam(name="dataReference") DataReference dataReference) throws DataCenterException, SessionException{
+        dataCenterLocal.addDataReference(sessionId, dataReference);
+    }
+    
+    @WebMethod()
+    public void addBookmark(@WebParam(name="sessionId") String sessionId, @WebParam(name="bookmark") Bookmark bookmark) throws DataCenterException, SessionException{
+        dataCenterLocal.addBookmark(sessionId, bookmark);
+    }
+    
+    @WebMethod()
+    public UserPreferencesDTO getUserPreferences(@WebParam(name="sessionId") String sessionId) throws SessionException{
         return sessionBeanLocal.getUserPrefs(sessionId);
+    }
+    
+    @WebMethod()
+    public void setUserPreferences(@WebParam(name="sessionId") String sessionId, @WebParam(name="userPreferencesDTO") UserPreferencesDTO userPreferencesDTO) throws SessionException{
+        sessionBeanLocal.setUserPrefs(sessionId, userPreferencesDTO);
     }
 }
