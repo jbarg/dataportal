@@ -13,7 +13,7 @@ package uk.ac.dl.dp.coreutil.exceptions;
  *
  * @author gjd37
  */
-public class NoAccessToDataCenterException extends DataPortalException {
+public class NoAccessToDataCenterException extends DataCenterException {
     
     /**
      * Creates a new instance of <code>NoAccessToDataCenterException</code> without detail message.
