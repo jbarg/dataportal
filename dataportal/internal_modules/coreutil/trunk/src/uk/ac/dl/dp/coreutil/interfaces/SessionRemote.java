@@ -2,21 +2,11 @@
 
 package uk.ac.dl.dp.coreutil.interfaces;
 
-import java.io.IOException;
-import java.security.cert.*;
-import javax.ejb.Local;
 import javax.ejb.Remote;
-import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
-import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
-import uk.ac.dl.dp.coreutil.entity.Role;
-import uk.ac.dl.dp.coreutil.entity.Session;
-import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 
 
 /**
@@ -26,19 +16,19 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 public interface SessionRemote {
     
     
-    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException;
+    public SessionDTO getSession(String sid) throws SessionException;
     
-    public String login(String username,String password, int lifetime) throws CannotCreateNewUserException, LoginMyProxyException ;
+    public String login(String username,String password, int lifetime) throws SessionException, LoginMyProxyException ;
     
-    public Boolean isValid(String sid) throws SessionNotFoundException,SessionTimedOutException  ;
+    public Boolean isValid(String sid) throws SessionException ;
     
-    public boolean logout(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException;
+    public boolean logout(String sid) throws SessionException;
     
-    public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException;
+    public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws  SessionException;
     
-    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException;
+    public UserPreferencesDTO getUserPrefs(String sid) throws SessionException;
     
-    public String login(String kerberosLocation) throws LoginMyProxyException, CannotCreateNewUserException;
+    public String login(String kerberosLocation) throws LoginMyProxyException, SessionException;
     
     
 }

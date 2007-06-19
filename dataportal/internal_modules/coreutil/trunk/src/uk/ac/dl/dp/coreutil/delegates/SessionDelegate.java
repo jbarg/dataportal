@@ -9,20 +9,15 @@
 
 package uk.ac.dl.dp.coreutil.delegates;
 
-import java.io.IOException;
-import java.security.cert.CertificateException;
 import javax.naming.NamingException;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
-import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
 
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
-
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
@@ -56,31 +51,31 @@ public class SessionDelegate {
     }
     
     /*All SessionBean methods here*/
-    public String login(String username, String password, int lifetime) throws   CannotCreateNewUserException, LoginMyProxyException{
+    public String login(String username, String password, int lifetime) throws   SessionException, LoginMyProxyException{
         return  sb.login(username, password,lifetime);
     }
     
-    public String login(String kerberosLocation) throws   CannotCreateNewUserException, LoginMyProxyException{
+    public String login(String kerberosLocation) throws   SessionException, LoginMyProxyException{
         return  sb.login(kerberosLocation);
     }
     
-    public boolean logout(String sid) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException{
+    public boolean logout(String sid) throws SessionException,UserNotFoundException{
         return  sb.logout(sid);
     }
     
-    public boolean isValid(String sid) throws  SessionNotFoundException,SessionTimedOutException{
+    public boolean isValid(String sid) throws SessionException{
         return  sb.isValid(sid);
     }
     
-    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException,UserNotFoundException{
+    public SessionDTO getSession(String sid) throws SessionException{
         return sb.getSession(sid);
     }
     
-    public void setUserPrefs(String sid, UserPreferencesDTO dto) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException{
+    public void setUserPrefs(String sid, UserPreferencesDTO dto) throws  SessionException{
         sb.setUserPrefs(sid, dto);
     }
     
-    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException,SessionTimedOutException{
+    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionException {
         return sb.getUserPrefs(sid);
     }
     

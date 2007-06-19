@@ -88,7 +88,7 @@ public class Bookmark implements Serializable {
     @Transient
     private boolean hasNote;
     
-     @Transient
+    @Transient
     private String dpId;
          
     @PrePersist
@@ -171,7 +171,7 @@ public class Bookmark implements Serializable {
         this.modTime = modTime;
     }*/
     
-     @XmlTransient
+    @XmlTransient
     public User getUserId() {
         return this.userId;
     }

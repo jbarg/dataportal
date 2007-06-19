@@ -9,34 +9,18 @@
 
 package uk.ac.dl.dp.coreutil.util;
 
-import com.sun.enterprise.deployment.types.EntityManagerReference;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.Collection;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
-import javax.jms.Session;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
-import uk.ac.dl.dp.coreutil.entity.EventLog;
-import uk.ac.dl.dp.coreutil.entity.EventLogDetails;
 import uk.ac.dl.dp.coreutil.entity.Facility;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 import uk.ac.dl.dp.coreutil.entity.Role;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
-
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 
 /**
@@ -51,9 +35,9 @@ public class UserUtil {
     protected EntityManager em;
     
     /** Creates a new instance of SessionUtil */
-    public UserUtil(String sid, EntityManager em) throws SessionNotFoundException ,UserNotFoundException,SessionTimedOutException {
+    public UserUtil(String sid, EntityManager em) throws SessionException {
         this.em = em;
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         user =  new SessionUtil(sid,em).getSession().getUserId();
         
         /*try {
@@ -68,9 +52,9 @@ public class UserUtil {
     }
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(Certificate certificate, EntityManager em) throws UserNotFoundException, CertificateException {
+    public UserUtil(Certificate certificate, EntityManager em) throws SessionException, CertificateException {
         this.em = em;
-        if(certificate == null) throw new IllegalArgumentException("Certificate cannot be null.");
+        if(certificate == null) throw new SessionException("Certificate cannot be null.");
         String DN = certificate.getDn();
         log.debug("Loading user with DN "+DN);
         try {
@@ -83,9 +67,9 @@ public class UserUtil {
     }
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(String DN,String defaultS, EntityManager em) throws UserNotFoundException {
+    public UserUtil(String DN,String defaultS, EntityManager em) throws SessionException {
         this.em = em;
-        if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
+        if(DN == null) throw new SessionException("DN cannot be null.");
         log.debug("Loading user with DN "+DN);
         try {
             loadUser(DN,em);
@@ -98,24 +82,24 @@ public class UserUtil {
     
     
     /** Creates a new instance of UserUtil */
-    public UserUtil(int userId, EntityManager em) throws UserNotFoundException {
+    public UserUtil(int userId, EntityManager em) throws SessionException {
         this.em = em;
-        if(userId == 0) throw new IllegalArgumentException("User ID cannot be 0.");
+        if(userId == 0) throw new SessionException("User ID cannot be 0.");
         user = (User)em.createNamedQuery("User.findById").setParameter("id",userId).getSingleResult();
         
     }
     
     /** Creates a new instance of SessionUtil */
-    public UserUtil(User user, EntityManager em) {
+    public UserUtil(User user, EntityManager em) throws SessionException {
         this.em = em;
-        if(user == null) throw new IllegalArgumentException("User cannot be null.");
+        if(user == null) throw new SessionException("User cannot be null.");
         this.user = user;
     }
     
     
-    private void loadUser(String DN, EntityManager em){
+    private void loadUser(String DN, EntityManager em) throws SessionException{
         this.em = em;
-        if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
+        if(DN == null) throw new SessionException("DN cannot be null.");
         user = (User)em.createNamedQuery("User.findByDn").setParameter("dn",DN).getSingleResult();
         log.debug("Loaded user with user id "+user.getId());
     }
@@ -147,7 +131,7 @@ public class UserUtil {
     }
     
     
-    public static User createDefaultUser(String username, String DN,EntityManager em) throws CannotCreateNewUserException {
+    public static User createDefaultUser(String username, String DN,EntityManager em) throws SessionException {
         User user;
         
         try {
