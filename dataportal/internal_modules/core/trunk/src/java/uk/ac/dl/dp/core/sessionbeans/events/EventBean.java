@@ -29,8 +29,7 @@ import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.entity.EventLog;
 import uk.ac.dl.dp.coreutil.entity.EventLogDetails;
 import uk.ac.dl.dp.coreutil.entity.User;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.interfaces.EventRemote;
@@ -99,13 +98,10 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
         } catch (UserNotFoundException ex) {
             log.error("No user with user sid "+eventMessage.getUserId()+" in the system",ex);
             return ;
-        } catch (SessionNotFoundException ex) {
+        } catch (SessionException ex) {
             log.error("No user with user sid "+sid+" in the system",ex);
             return ;
-        }  catch (SessionTimedOutException ex) {
-            log.error("No user with user sid "+sid+" in the system",ex);
-            return ;
-        } finally{
+        }  finally{
             try {
                 if(session != null) session.close();
                 if(connection != null)   connection.close();

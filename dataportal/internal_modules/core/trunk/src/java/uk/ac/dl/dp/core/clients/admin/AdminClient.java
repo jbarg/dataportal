@@ -25,6 +25,7 @@ import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.InSufficientPermissonsException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
@@ -149,7 +150,7 @@ public class AdminClient {
         bean.addUpdateProxyServer(sid, ps);
         
     }
-    public void removeProxyserver( String sid,  long psId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+    public void removeProxyserver( String sid,  long psId) throws SessionException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
         
@@ -157,7 +158,7 @@ public class AdminClient {
         log.trace("Removed: "+removed);
     }
     
-    public void setDefault( String sid,  long psId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+    public void setDefault( String sid,  long psId) throws SessionException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
         
@@ -165,7 +166,7 @@ public class AdminClient {
         log.trace("set default: "+psId);
     }
     
-    public void addFacility( String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+    public void addFacility( String sid) throws SessionException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
         
@@ -179,7 +180,7 @@ public class AdminClient {
         
     }
     
-    public void removeFacility( String sid, long mluId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+    public void removeFacility( String sid, long mluId) throws SessionException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
         
@@ -187,14 +188,14 @@ public class AdminClient {
     }
     
     
-    public void addAdmin(String sid, long userId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+    public void addAdmin(String sid, long userId) throws SessionException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
         
         bean.addAdmin(sid, userId);
     }
     
-     public void removeAdmin(String sid, long userId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, Exception {
+     public void removeAdmin(String sid, long userId) throws SessionException, Exception {
         bean =  new AdminBean();
         bean.setEntityManager(em);
         
@@ -202,7 +203,7 @@ public class AdminClient {
     }
     
     
-    public void getUser(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public void getUser(String sid, String DN) throws SessionException, InSufficientPermissonsException{
         bean =  new AdminBean();
         bean.setEntityManager(em);
         

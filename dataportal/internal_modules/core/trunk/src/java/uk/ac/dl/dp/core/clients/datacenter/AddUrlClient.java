@@ -3,9 +3,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.Url;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -76,14 +74,9 @@ public class AddUrlClient {
             if(loggingin)
                 try {
                     if(sless1 != null) sless1.logout(sid);
-                } catch (SessionTimedOutException ex) {
+                } catch (SessionException ex) {
                     ex.printStackTrace();
-                } catch (SessionNotFoundException ex) {
-                    ex.printStackTrace();
-                }catch (UserNotFoundException ex) {
-                    ex.printStackTrace();
-                    
-                }
+                } 
         }
     }
     

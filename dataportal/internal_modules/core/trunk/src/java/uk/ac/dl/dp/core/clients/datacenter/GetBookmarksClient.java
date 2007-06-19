@@ -1,9 +1,7 @@
 package uk.ac.dl.dp.core.clients.datacenter;
 import java.util.Collection;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -78,14 +76,9 @@ public class GetBookmarksClient {
             System.out.println("Logging out");
             try {
                 sless1.logout(sid);
-            } catch (SessionNotFoundException ex) {
+            } catch (SessionException ex) {
                 ex.printStackTrace();
-            } catch (SessionTimedOutException ex) {
-                ex.printStackTrace();
-            }catch (UserNotFoundException ex) {
-                ex.printStackTrace();
-                
-            }
+            } 
             
         }
     }
