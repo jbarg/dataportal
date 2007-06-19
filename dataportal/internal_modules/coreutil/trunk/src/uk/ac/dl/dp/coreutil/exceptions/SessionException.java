@@ -29,4 +29,12 @@ public class SessionException extends DataPortalException {
     public SessionException(String msg) {
         super(msg);
     }
+    
+    /**
+     * Constructs an instance of <code>SessionException</code> with the specified detail message.
+     * @param msg the detail message.
+     */
+    public SessionException(String msg,Throwable cause) {
+        super(msg, cause);
+    }
 }

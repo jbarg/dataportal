@@ -13,7 +13,7 @@ package uk.ac.dl.dp.coreutil.exceptions;
  *
  * @author gjd37
  */
-public class CannotCreateNewUserException extends DataPortalException {
+public class CannotCreateNewUserException extends SessionException {
     
     /**
      * Creates a new instance of <code>CannotCreateNewUserException</code> without detail message.

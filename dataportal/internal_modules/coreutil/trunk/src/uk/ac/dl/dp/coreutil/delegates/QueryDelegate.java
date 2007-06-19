@@ -1,6 +1,5 @@
 package uk.ac.dl.dp.coreutil.delegates;
 
-import java.security.cert.CertificateException;
 import java.util.Collection;
 import javax.naming.NamingException;
 import org.apache.log4j.Logger;
@@ -13,10 +12,8 @@ import uk.ac.cclrc.dpal.beans.Keyword;
 import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.QueryRemote;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -55,7 +52,7 @@ public class QueryDelegate {
     
     
     /*All TransferBean methods here*/
-    public QueryRequest query(String sid, String[] keywords, Collection<String> facilities, LogicalOperator logicalOperator, boolean fuzzy, DPQueryType queryType) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
+    public QueryRequest query(String sid, String[] keywords, Collection<String> facilities, LogicalOperator logicalOperator, boolean fuzzy, DPQueryType queryType) throws   SessionException, QueryException{
         return  qsmr.query(sid, facilities, keywords, logicalOperator, fuzzy, queryType);
     }
            
@@ -99,11 +96,11 @@ public class QueryDelegate {
         return qsmr.getInvestigationByStudyId(sid, fac, studyId);
     }*/
     
-    public Collection<Investigation> getInvestigationById(String sid, String fac, String investigationId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+    public Collection<Investigation> getInvestigationById(String sid, String fac, String investigationId) throws SessionException,QueryException{
         return qsmr.getInvestigationById(sid, fac, investigationId);
     }
     
-     public Collection<Keyword> getKeywordsByInvestigationId(String sid,  Collection<Investigation> investigationIds) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+     public Collection<Keyword> getKeywordsByInvestigationId(String sid,  Collection<Investigation> investigationIds) throws SessionException,QueryException{
         return qsmr.getKeywordsByInvestigationId(sid, investigationIds);
     }
     
@@ -111,11 +108,11 @@ public class QueryDelegate {
         return qsmr.getMyInvestigations(sid, facilities);
     }*/
     
-    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
+    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionException, QueryException{
         return qsmr.getDataSets(sid, investigations);
     }
     
-    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets)throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
+    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets)throws SessionException, QueryException{
         return qsmr.getDataFiles(sid, datasets);
     }
     
@@ -128,7 +125,7 @@ public class QueryDelegate {
         
     }
     
-     public String[] getKeywords(String facility, boolean redownload) throws Exception{
+     public String[] getKeywords(String facility, boolean redownload) throws QueryException{
         return qsmr.getKeywords(facility,redownload);
         
     }
