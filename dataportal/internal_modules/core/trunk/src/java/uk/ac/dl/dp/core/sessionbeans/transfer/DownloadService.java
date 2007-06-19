@@ -25,8 +25,7 @@ import org.apache.log4j.Logger;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.User;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.DownloadServiceRemote;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -52,9 +51,7 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
     
     public void downloadSRBFiles(String sid, SRBInfo srbInfo)  {
         
-        //this should be done on the WSDL/Schema
-        checkArguments(srbInfo);
-        
+               
         QueueConnection connection = null;
         QueueSession session = null;
         MessageProducer messageProducer = null;
@@ -75,6 +72,9 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
             return ;
         }
         try {
+            //this should be done on the WSDL/Schema
+            checkArguments(srbInfo);
+            
             ObjectMessage message = session.createObjectMessage();
             
             user =  new UserUtil(sid,em).getUser();
@@ -88,13 +88,10 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
         } catch (UserNotFoundException ex) {
             log.error("No user with user sid "+sid+" in the system",ex);
             return ;
-        } catch (SessionNotFoundException ex) {
+        } catch (SessionException ex) {
             log.error("No user with user sid "+sid+" in the system",ex);
             return ;
-        }  catch (SessionTimedOutException ex) {
-            log.error("No user with user sid "+sid+" in the system",ex);
-            return ;
-        }finally{
+        }  finally{
             try {
                 if(session != null) session.close();
                 if(connection != null)   connection.close();
@@ -140,20 +137,20 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
     /**
      *  This checks if the arguements are valid, should be done on the WSDL/Schema
      */
-    private void checkArguments(SRBInfo srbInfo, ServiceInfo serviceInfo) throws IllegalArgumentException {
+    private void checkArguments(SRBInfo srbInfo, ServiceInfo serviceInfo) throws SessionException {
         checkArguments(srbInfo);
-        if(serviceInfo.getMyProxyUsername() == null) throw new IllegalArgumentException("MyProxy username cannot be null");
-        if(serviceInfo.getMyProxyPassword() == null) throw new IllegalArgumentException("MyProxy password cannot be null");
-        if(serviceInfo.getEmail() == null) throw new IllegalArgumentException("Email address cannot be null");
+        if(serviceInfo.getMyProxyUsername() == null) throw new SessionException("MyProxy username cannot be null");
+        if(serviceInfo.getMyProxyPassword() == null) throw new SessionException("MyProxy password cannot be null");
+        if(serviceInfo.getEmail() == null) throw new SessionException("Email address cannot be null");
         
     }
     
     /**
      *  This checks if the arguements are valid, should be done on the WSDL/Schema
      */
-    private void checkArguments(SRBInfo srbInfo) throws IllegalArgumentException {
+    private void checkArguments(SRBInfo srbInfo) throws SessionException {
         
-        if(srbInfo.getSrbFiles() == null && srbInfo.getSrbUrls() == null) throw new IllegalArgumentException("SRBFiles and srbUrls cannot be null");
+        if(srbInfo.getSrbFiles() == null && srbInfo.getSrbUrls() == null) throw new SessionException("SRBFiles and srbUrls cannot be null");
     }
 }
 

@@ -2,7 +2,6 @@ package uk.ac.dl.dp.core.sessionbeans.session;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.util.Calendar;
@@ -43,9 +42,7 @@ import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
-
-
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.cog.PortalCredential;
 
 
@@ -79,9 +76,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     @EJB
     private EventLocal eventLocal;
     
-    public SessionDTO getSession(String sid) throws SessionNotFoundException,SessionTimedOutException, UserNotFoundException{
+    public SessionDTO getSession(String sid) throws SessionException {
         log.debug("getSession()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         SessionDTO sessionDTO = new SessionUtil(sid,em).getSessionDTO();
         sessionDTO.setUserPrefs(getUserPrefs(sid));
@@ -183,11 +180,11 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public String login(String username,String password, int lifetime) throws LoginMyProxyException, CannotCreateNewUserException{
+    public String login(String username,String password, int lifetime) throws LoginMyProxyException, SessionException{
         log.debug("login(): " +sc.getCallerPrincipal() );
         // log.debug("login()" +sc.isCallerInRole("ANYONE") );
-        if(username == null || username.equals("")) throw new IllegalArgumentException("Usrname cannot be null or empty.");
-        if(password == null || password.equals("")) throw new IllegalArgumentException("Password cannot be null or empty.");
+        if(username == null || username.equals("")) throw new SessionException("Usrname cannot be null or empty.");
+        if(password == null || password.equals("")) throw new SessionException("Password cannot be null or empty.");
         
         GSSCredential myproxy_proxy;
         try {
@@ -213,7 +210,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
     }
     
-    private String insertSessionImpl(String username, GSSCredential credential) throws LoginMyProxyException, CannotCreateNewUserException {
+    private String insertSessionImpl(String username, GSSCredential credential) throws LoginMyProxyException, SessionException {
         
         log.info("Starting insertSessionImpl");
         
@@ -311,7 +308,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
      * - proxy lifetime still remaining
      * otherwise returns false
      */    
-    public Boolean isValid(String sid) throws SessionNotFoundException  {
+    public Boolean isValid(String sid) throws SessionException  {
         log.debug("isValid()");
         
         try {
@@ -326,7 +323,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
       * - deletes session and user authorisation details from database
       */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public boolean logout(String sid) throws SessionNotFoundException ,SessionTimedOutException, UserNotFoundException{
+    public boolean logout(String sid) throws SessionException {
         log.debug("logout()");
         
         //send logout event
@@ -350,7 +347,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void setUserPrefs(String sid, UserPreferencesDTO userprefs) throws SessionException {
         log.debug("setUserPrefs()");
         
         
@@ -372,7 +369,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         }
     }
     
-    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionNotFoundException, UserNotFoundException ,SessionTimedOutException{
+    public UserPreferencesDTO getUserPrefs(String sid) throws  SessionException {
         log.debug("getUserPrefs()");
         
         UserUtil userutil = new UserUtil(sid,em);

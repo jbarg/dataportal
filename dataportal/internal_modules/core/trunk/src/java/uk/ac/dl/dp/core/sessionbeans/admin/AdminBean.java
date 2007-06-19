@@ -33,6 +33,7 @@ import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 import uk.ac.dl.dp.coreutil.entity.Role;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.InSufficientPermissonsException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
@@ -59,7 +60,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public User getUser(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public User getUser(String sid, String DN) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -89,7 +90,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     }
     
     
-    public Collection<EventLogCount> getUserStats(String sid, String searchString, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public Collection<EventLogCount> getUserStats(String sid, String searchString, Date min, Date max) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         if(min == null) min = new Date(1,1,1); //1901.1.1
         if(max == null) max = new Date(System.currentTimeMillis()+10000); //today plus day
@@ -198,11 +199,11 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         return statsCollection;
     }
     
-    public Collection<EventLogCount> getUserStats(String sid, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public Collection<EventLogCount> getUserStats(String sid, Date min, Date max) throws SessionException, InSufficientPermissonsException{
         return getUserStats(sid,null,min,max);
     }
     
-    public Collection<EventLog> getUsersEventStats(String sid, String DN, Date min, Date max, DPEvent event) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public Collection<EventLog> getUsersEventStats(String sid, String DN, Date min, Date max, DPEvent event) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -230,12 +231,12 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         return result;
     }
     
-    public Collection<EventLog> getUsersEventStats(String sid, String DN, Date min, Date max) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public Collection<EventLog> getUsersEventStats(String sid, String DN, Date min, Date max) throws SessionException, InSufficientPermissonsException{
         return getUsersEventStats(sid,DN,min,max,null);
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public ProxyServers addUpdateProxyServer(String sid, ProxyServers proxyServer) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public ProxyServers addUpdateProxyServer(String sid, ProxyServers proxyServer) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -247,8 +248,8 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     }
             
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public boolean deleteProxyServer(String sid, long proxyServerId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+    public boolean deleteProxyServer(String sid, long proxyServerId) throws SessionException, InSufficientPermissonsException{
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         checkPermissions(sid);
         
         ProxyServers ps = em.find(ProxyServers.class,proxyServerId);
@@ -263,8 +264,8 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     }
             
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setDefaultProxyServer(String sid, long proxyServerId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+    public void setDefaultProxyServer(String sid, long proxyServerId) throws SessionException, InSufficientPermissonsException{
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         checkPermissions(sid);
         
         Collection<ProxyServers> proxyServers = em.createNamedQuery("ProxyServers.findAll").getResultList();
@@ -279,7 +280,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     
         
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void updateFacility(String sid, ModuleLookup mlu)throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public void updateFacility(String sid, ModuleLookup mlu)throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
                  
@@ -287,7 +288,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         em.merge(mlu);
     }
     
-    public Collection<ProxyServers> listProxyServers(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public Collection<ProxyServers> listProxyServers(String sid) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -295,7 +296,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         
     }
     
-    public Collection<ModuleLookup> listFacilities(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public Collection<ModuleLookup> listFacilities(String sid) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -303,7 +304,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     }
             
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public ModuleLookup addFacility(String sid, ModuleLookup mlu)throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public ModuleLookup addFacility(String sid, ModuleLookup mlu)throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -346,7 +347,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     }
             
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public boolean deleteFacility(String sid, ModuleLookup mlu) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public boolean deleteFacility(String sid, ModuleLookup mlu) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
       
@@ -361,7 +362,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     }
     
      @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public boolean deleteFacility(String sid, long mluId) throws EntityNotFoundException,SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public boolean deleteFacility(String sid, long mluId) throws EntityNotFoundException,SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -371,12 +372,12 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         return deleteFacility(sid, mlu);
     }
     
-    /* public boolean setActiveFacility(String sid, long mluId, boolean isActive) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    /* public boolean setActiveFacility(String sid, long mluId, boolean isActive) throws SessionException, InSufficientPermissonsException{
      
      }*/
     
       @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void addAdmin(String sid, long userId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public void addAdmin(String sid, long userId) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -389,7 +390,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
     }
     
        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void removeAdmin(String sid, long userId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    public void removeAdmin(String sid, long userId) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
         
@@ -417,7 +418,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         return null;
     }
     
-    private void checkPermissions(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, InSufficientPermissonsException{
+    private void checkPermissions(String sid) throws SessionException, InSufficientPermissonsException{
         UserUtil adminUtil = new UserUtil(sid,em);
         if(!adminUtil.isAdmin()){
             log.fatal("User: "+adminUtil.getUser().getDn()+" is trying to access admin stuff");

@@ -1,11 +1,7 @@
 package uk.ac.dl.dp.core.clients.datacenter;
-import java.util.ArrayList;
 import java.util.Collection;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
-import uk.ac.dl.dp.coreutil.entity.Url;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -41,16 +37,16 @@ public class RemoveDatarefClient {
                 
                 sid =  sless1.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
                 System.out.println(sid);
-               
+                
             }
             
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
-           
+            
             Collection<DataReference> refs = sless.getDataReferences(sid);
             
             for(DataReference ref : refs){
                 System.out.println(ref.getName());
-               
+                
                 if(ref.getTypeOfReference().equals(DPUrlRefType.DATA_SET.toString())){
                     System.out.println("removing:L "+ref.getId());
                     sless.removeDataReference(sid,ref);
@@ -69,14 +65,10 @@ public class RemoveDatarefClient {
             if(loggingin)
                 try {
                     if(sless1 != null) sless1.logout(sid);
-                } catch (SessionTimedOutException ex) {
+                } catch (SessionException ex) {
                     ex.printStackTrace();
-                } catch (SessionNotFoundException ex) {
-                    ex.printStackTrace();
-                }catch (UserNotFoundException ex) {
-                ex.printStackTrace();
-                
-            }
+                }
+            
         }
     }
     

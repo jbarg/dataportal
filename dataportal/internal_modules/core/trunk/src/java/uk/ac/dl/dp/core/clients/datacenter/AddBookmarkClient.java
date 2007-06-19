@@ -1,8 +1,6 @@
 package uk.ac.dl.dp.core.clients.datacenter;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
@@ -59,15 +57,9 @@ public class AddBookmarkClient {
         }  if(loggingin)
             try {
                 if(sless1 != null) sless1.logout(sid);
-            } catch (SessionTimedOutException ex) {
+            } catch (SessionException ex) {
                 ex.printStackTrace();
-            } catch (SessionNotFoundException ex) {
-                ex.printStackTrace();
-                
-            }catch (UserNotFoundException ex) {
-                ex.printStackTrace();
-                
-            }
+            } 
     }
     
     /**

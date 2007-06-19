@@ -26,14 +26,13 @@ import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.User;
 
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.DataAuthorisationRemote;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.exceptions.DataCenterException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.DPAuthType;
 
 /**
@@ -46,9 +45,9 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
     static Logger log = Logger.getLogger(DataAuthorisationBean.class);
     
     
-    public void removeAuthorisedUser(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeAuthorisedUser(String sid, String DN) throws SessionException {
         log.debug("addAuthoriserUser()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
               
         User userSource = new UserUtil(sid,em).getUser();
         
@@ -73,13 +72,13 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         }
     }
     
-    public void removeAuthorisedUser(String sid, DataRefAuthorisation dataRef) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void removeAuthorisedUser(String sid, DataRefAuthorisation dataRef) throws SessionException{
         removeAuthorisedUser(sid,dataRef.getUser().getDn());
     }
     
-    public void addAuthorisedUser(String sid, String DN, Date startDate, Date endDate, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void addAuthorisedUser(String sid, String DN, Date startDate, Date endDate, DPAuthType type) throws SessionException {
         log.debug("addAuthoriserUser()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
            
         //TODO find if already there and update the record
         User userSource = new UserUtil(sid,em).getUser();
@@ -115,9 +114,9 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
     
     
     /* Gets the list of auth given out by current user */    
-    public Collection<DataRefAuthorisation> getGivenAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<DataRefAuthorisation> getGivenAuthorisedList(String sid, DPAuthType type) throws SessionException {
         log.debug("getGivenAuthorisedList()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         if(type == null) {
             type = DPAuthType.NONE;
         }
@@ -167,9 +166,9 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
     }
     
     /* Gets the list of auth given to current user */
-    public Collection<DataRefAuthorisation> getRecievedAuthorisedList(String sid, DPAuthType type) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<DataRefAuthorisation> getRecievedAuthorisedList(String sid, DPAuthType type) throws SessionException {
         log.debug("getRecievedAuthorisedList()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         if(type == null) {
             type = DPAuthType.NONE;
         }
@@ -219,10 +218,10 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         return sc;
     }
     
-    public Collection<DataReference> getOtherUsersDataReferences(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+    public Collection<DataReference> getOtherUsersDataReferences(String sid, String DN) throws SessionException, DataCenterException{
         log.debug("getOtherUsersDataReferences()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
+        if(DN == null) throw new SessionException("DN cannot be null.");
                        
         Collection<DataRefAuthorisation> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.DATA);
         User thisUser = new UserUtil(sid,em).getUser();
@@ -252,10 +251,10 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
         
     }
     
-    public Collection<Bookmark> getOtherUsersBookmarks(String sid, String DN) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, NoAccessToDataCenterException{
+    public Collection<Bookmark> getOtherUsersBookmarks(String sid, String DN) throws SessionException, DataCenterException{
         log.debug("getUserBookmarks()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        if(DN == null) throw new IllegalArgumentException("DN cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
+        if(DN == null) throw new SessionException("DN cannot be null.");
                        
         //source user is recieved user
         Collection<DataRefAuthorisation> DNs_given = getRecievedAuthorisedList(sid, DPAuthType.BOOKMARK);
@@ -281,15 +280,15 @@ public class DataAuthorisationBean extends SessionEJBObject implements DataAutho
     }
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<String>  searchUserDns(String sid, String search) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public Collection<String>  searchUserDns(String sid, String search) throws SessionException{
         log.debug("searchUserDns()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
                        
         User thisUser = new UserUtil(sid, em).getUser();
         Collection<String> dns = new ArrayList<String>();
         Collection<User> users = null;
         
-        if(search == null || search.equals("")){
+        if(search == null || search.equals("") || search.equalsIgnoreCase("all")){
             users = (Collection<User>)em.createNamedQuery("User.findAll").getResultList();
         } else{
             //users = (Collection<User>)em.createNamedQuery("User.findByDnLike").setParameter("dn",search).getResultList();

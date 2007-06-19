@@ -49,12 +49,10 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.core.message.query.QueryManager;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 
@@ -88,7 +86,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     private  Queue queue;
     
     @PermitAll
-    public QueryRequest query(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy, DPQueryType queryType) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+    public QueryRequest query(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy, DPQueryType queryType) throws SessionException, QueryException{
         log.debug("queryByKeyword()");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
@@ -327,9 +325,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }*/
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
+    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionException, QueryException{
         log.debug("getDataSets(String sid, Collection<Investigation> investigations)");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         
         //get a list of facilites
@@ -389,8 +387,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionException, QueryException{
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         //TODO check for nulls
         
         UserUtil userUtil =  new UserUtil(sid,em);
@@ -510,9 +508,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         return r_i_l;
     }*/
     
-    public Collection<Investigation> getInvestigationById(String sid, String fac, String investigastionId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
+    public Collection<Investigation> getInvestigationById(String sid, String fac, String investigastionId) throws SessionException, QueryException{
         log.debug("getInvestigationId(String sid)");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         //TODO check for nulls
         
         //get a list of facilites
@@ -550,10 +548,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<Keyword> getKeywordsByInvestigationId(String sid, Collection<Investigation> investigastions) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
+    public Collection<Keyword> getKeywordsByInvestigationId(String sid, Collection<Investigation> investigastions) throws SessionException, QueryException{
         log.debug("getKeywordsByInvestigationId(String sid)");
         Collection<Keyword> r_i_l = new ArrayList<Keyword>() ;
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         //TODO check for nulls
         
         User user =  new UserUtil(sid,em).getUser();
@@ -612,8 +610,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         return keywords;
     }
     
-    public String[] getKeywords(String facility, boolean redownload) throws Exception {
+    public String[] getKeywords(String facility, boolean redownload) throws QueryException {
         //load stuff from file
+        try{
         File keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+facility+".keyworddata");
         
         if(!keywordFile.exists()){
@@ -631,10 +630,15 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         // Read an object.
         String[] obj = (String[])obj_in.readObject();
         return obj;
+        }
+        catch(Exception e){
+            log.warn("Unable to get keywords for facility: "+facility,e);
+            throw new QueryException("Unable to get keywords for facility: "+facility);
+        }
     }
     
     
-    public String[] getKeywords(String facility) throws Exception{
+    public String[] getKeywords(String facility) throws QueryException {
         return getKeywords(facility,true);
         
     }

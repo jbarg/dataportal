@@ -10,16 +10,13 @@
 package uk.ac.dl.dp.core.session.test;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 import javax.ejb.*;
-import uk.ac.dl.dp.coreutil.entity.Session;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
@@ -27,8 +24,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.QuerySlaveMasterRemote;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
-import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
-import uk.ac.dl.dp.coreutil.util.SessionUtil;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 
 /**
@@ -77,7 +73,7 @@ public class QueryTestBean extends SessionEJBObject implements QueryTestRemote {
     }
     
     
-    public User getUser(String sid) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public User getUser(String sid) throws  SessionException{
         
         User user =  new UserUtil(sid,em).getUser();
         user.getBookmark().size();
@@ -87,7 +83,7 @@ public class QueryTestBean extends SessionEJBObject implements QueryTestRemote {
         
     }
     
-    public void setUser(User user) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException{
+    public void setUser(User user) {
         
         User user2 = em.merge(user);
         
