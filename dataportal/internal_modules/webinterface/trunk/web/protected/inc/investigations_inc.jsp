@@ -5,7 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 
-<%@ taglib uri="http://jakarta.apache.org/taglibs/string-1.1" prefix="str" %>
 
 <a4j:region   selfRendered="true" > 
     <h:form>

@@ -1,8 +1,6 @@
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
-<%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib prefix="tiles" uri="http://struts.apache.org/tags-tiles"%>
-
+<%@taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+<%@taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
+<%@taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <h:form id="userform">
     
     <br />
@@ -23,7 +21,7 @@
         
         <h:outputLabel for="Usernamej_id_1">
             <%--<h:outputText styleClass="body" value="Federal ID: "/>--%>
-             <h:outputText styleClass="body" value="Username: "/>
+            <h:outputText styleClass="body" value="Username: "/>
         </h:outputLabel  >
         
         <h:inputText styleClass="text" id="Usernamej_id_1" size="20" required="true" value="#{authorisationBean.username}">
@@ -46,13 +44,13 @@
         
     </h:panelGrid>
     
-   <br />
+    <br />
     <h:outputText  styleClass="nodeFolder" value="Goto "/> 
     <h:commandLink  onclick="window.open('http://tiber.dl.ac.uk:8080/myproxy'); return false;" target="_blank">
         <h:outputText style="color:blue" styleClass="nodeFolder" value="MyProxy Upload Home"/>
     </h:commandLink> 
     <h:outputText  styleClass="nodeFolder" value=" to upload credentials" />
-   
+    
     
     
     

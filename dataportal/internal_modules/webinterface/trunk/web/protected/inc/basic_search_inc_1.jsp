@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
+
 <%@ taglib prefix="ui" uri="http://java.sun.com/blueprints/ui/14" %>
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -73,13 +73,7 @@
                 <h:outputText value="Search: " style="font-size:14px"/>
             </h:outputLabel  >
             
-            <%--  <s:selectManyPicklist id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{searchBean.facilities}" size="5" required="true" >
-         
-            <f:selectItems value="#{searchBean.facilityList}"/>
-            <f:validateLength minimum="1" />
-            </s:selectManyPicklist>--%>
-            
-                
+                                   
             <%--    <h:selectManyListbox id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >--%>
             <h:selectManyListbox id="facilitiesj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="#{fn:length(visit.facilities)}" required="true" >      
                 <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplay,radio" />
@@ -95,10 +89,7 @@
             <h:outputLabel for="keywordFieldj_id_1">
                 <h:outputText value="Keyword(s): " style="font-size:14px"/>
             </h:outputLabel  >                      
-            
-            <%--   <s:inputSuggestAjax required="true" suggestedItemsMethod="#{keyword.getSuggest}"
-            id="keywordField" value="#{searchBean.keyword}" charset="utf-8"/>--%>
-           
+                        
             <ui:autoComplete styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_1" 
                               completionMethod="#{keyword.completeCity}" 
                               value="#{searchBean.keyword}" required="true"
@@ -123,11 +114,7 @@
                     </h:panelGroup>
                 </f:facet>
             </t:popup> 
-            
-            <%--<s:inputSuggest id="keyword" value="#{searchBean.keyword}" required="true">
-            <f:selectItems value="#{keyword.keywords}"/>
-            </s:inputSuggest>--%>
-                   
+                                        
             <h:message for="keywordFieldj_id_1" styleClass="error"/>
             
             <h:outputLabel>            

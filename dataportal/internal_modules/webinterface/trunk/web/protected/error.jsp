@@ -1,19 +1,18 @@
-
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
-<%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
-<%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
-<%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
-<%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
-<html>
-    
-    
-    
+<%@page contentType="text/html"%>
+<%@page pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+<%@taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
+<%@taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
+<%@taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@page import="uk.ac.dl.dp.web.backingbeans.Visit"%>
+<%@page import="uk.ac.dl.dp.web.util.WebConstants"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>   
     
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
-         <title>Sci-Tech Data Portal </title>
+        <title>Sci-Tech Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
         
     </head>
@@ -29,21 +28,18 @@
             
             
             <table width="954" >
-                 <tbody>
+                Â <tbody>
                     <tr>
                         <td width="100%">
                             
                             <table  border="0" width="100%" >
-                                 <tbody>
+                                Â <tbody>
                                     <tr>
                                         <td width="950"  height="45" > 
                                             
                                             <t:div styleClass="outerbar" style="width:954px">
                                                 
-                                                <s:fishEyeNavigationMenu itemWidth="50" itemHeight="50" itemMaxWidth="200"
-                                                                         itemMaxHeight="200" orientation="horizontal" effectUnits="2"
-                                                                         itemPadding="10" attachEdge="top" labelEdge="bottom">  
-                                            </s:fishEyeNavigationMenu>                    </t:div>
+                                            </t:div>
                                             
                                         </td>
                                         <%-- <div style="position: absolute; z-index:1; left: 0px; top: 0px; height: 50px; width: 170px;">
@@ -61,7 +57,7 @@
                             </table>
                             
                             <table style="margin-top:-50px" border="0" width="100%">
-                                 <tbody>
+                                Â <tbody>
                                     <tr>
                                         <td valign="top" width="200">
                                             
@@ -86,7 +82,7 @@
                                         </td>
                                         <td width="*" valign="top" >
                                             <table border="0" width="100%" >  
-                                                 <tbody>
+                                                Â <tbody>
                                                     <tr>
                                                         <td align="right">
                                                             <%-- <f:subview id="title">
@@ -100,21 +96,21 @@
                                             </table>
                                             <hr size="-1" width="100%"  />
                                             <table border="0" width="100%" >    
-                                                 <tbody>
+                                                Â <tbody>
                                                     <tr>
                                                         <td width="7%">&nbsp;</td>
                                                         <td valign="top" width="93%" >
                                                             <table border="0" width="100%" > 
-                                                                 <tbody>
+                                                                Â <tbody>
                                                                     <tr>
                                                                         <td width="7%">&nbsp;</td>
                                                                         <td valign="top" width="93%" >
                                                                             <table style="margin-top:-20px" width="95%" border="0">
-                                                                                 <tbody>
+                                                                                Â <tbody>
                                                                                     <tr>            
                                                                                         <td>
                                                                                             <table style="margin-top:-20px" width="100%" border="0">
-                                                                                                 <tbody>
+                                                                                                Â <tbody>
                                                                                                     <tr>   
                                                                                                         <td>  <h:form><h:commandLink disabled="true" styleClass="error" style="color: red;" onclick="history.go(-1);" value="An error has occured, press the back button and try again." /></h:form></td>
                                                                                                     </tr>                                
@@ -146,7 +142,7 @@
                             
                             <table id="footer_bar" border="0" width="100%" align="right">
                                 
-                                 <tbody>
+                                Â <tbody>
                                     <tr>
                                         <f:subview id="footer">
                                             <c:import url="inc/footer.jsp" />
