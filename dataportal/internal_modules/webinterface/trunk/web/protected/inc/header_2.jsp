@@ -30,6 +30,9 @@
                 
             </t:navigationMenuItem>             
         </t:navigationMenuItem>
+         <t:navigationMenuItem id="nav_5"  itemLabel="Log out" action="#{authorisationBean.logout}"  />
+       
+        
     </t:jscookMenu>       
     <input type="hidden" name="jscook_action" />
     

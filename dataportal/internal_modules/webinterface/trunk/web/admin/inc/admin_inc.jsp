@@ -94,7 +94,7 @@
                     </h:form>
                     <br />
                     <h:form>
-                        <h:panelGrid id="searchResults" rendered="#{visit.adminData.searched}" columns="3">
+                        <h:panelGrid id="searchResults" rendered="#{visit.adminData.searched}" columns="1">
                             
                             
                             <t:dataTable rendered="#{viewAllUserStatsAdmin.populated}" id="datatable" width="100%"

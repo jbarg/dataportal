@@ -1,5 +1,3 @@
-<%@ taglib uri="http://myfaces.apache.org/sandbox" prefix="s"%>
-<%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%-- style="width:947px"   works but makes it static on div --%>
 
