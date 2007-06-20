@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
-<faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+<faces-config version="1.2"
+xmlns="http://java.sun.com/xml/ns/javaee" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
     <application>       
         <message-bundle>uk.ac.dl.dp.web.messages.validation</message-bundle>
         <locale-config>
             <default-locale>en</default-locale>
         </locale-config>
-        
+       
+       <!-- <view-handler>
+            com.sun.facelets.FaceletViewHandler
+        </view-handler>    -->
+   
     </application>
     
-     <managed-bean>
+    <managed-bean>
         <managed-bean-name>keyword</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.navigation.KeywordBean</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>        
@@ -20,9 +27,9 @@
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.Visit</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
-      
     
-     <managed-bean>
+    
+    <managed-bean>
         <managed-bean-name>helpCollapsibleBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.navigation.HelpCollapsibleBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -40,7 +47,7 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     
-     <managed-bean>
+    <managed-bean>
         <managed-bean-name>viewUserAdmin</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.ViewUserAdminBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
@@ -100,7 +107,7 @@
         <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
     
-     <managed-bean>
+    <managed-bean>
         <managed-bean-name>myDataSearchBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.MyDataSearchBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>        
@@ -112,7 +119,7 @@
         <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
     
-     <managed-bean>
+    <managed-bean>
         <managed-bean-name>investigationMyDataBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationMyDataBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>        
@@ -183,7 +190,7 @@
             User logs into DP successfully, redirect to load images correctly
         </description>
         <from-view-id>/logon.jsp</from-view-id>
-         
+        
         <navigation-case>
             <from-outcome>LOGIN_SUCCESS</from-outcome>
             <to-view-id>/protected/basic_search.jsp</to-view-id>
@@ -195,40 +202,40 @@
             <redirect />            
         </navigation-case>  
         
-          <navigation-case>
+        <navigation-case>
             <from-outcome>LOGIN_SUCCESS_DATA_REFS</from-outcome>
             <to-view-id>/protected/data_center.jsp</to-view-id>
             <redirect />            
         </navigation-case>  
         
-          <navigation-case>
+        <navigation-case>
             <from-outcome>LOGIN_SUCCESS_BOOKMARKS</from-outcome>
             <to-view-id>/protected/bookmark.jsp</to-view-id>
             <redirect />            
         </navigation-case>  
         
-          <navigation-case>
+        <navigation-case>
             <from-outcome>LOGIN_SUCCESS_MYDATA</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
             <redirect />            
         </navigation-case>  
         
-         
+        
     </navigation-rule>
     
-     <navigation-rule>
+    <navigation-rule>
         <description>
             User logs out  DP successfully, redirect to load images correctly
         </description>
         <from-view-id>/logout.jsp</from-view-id>
-         
+        
         <navigation-case>
             <from-outcome>GOTO_LOGON</from-outcome>
             <to-view-id>/../</to-view-id>
             <redirect />            
         </navigation-case>    
-       </navigation-rule>
-       
+    </navigation-rule>
+    
     <navigation-rule>
         <description>
             The search was success for investigations, now show then in the investigations page
@@ -246,7 +253,7 @@
         </navigation-case>
     </navigation-rule>
     
-     <navigation-rule>
+    <navigation-rule>
         <description>
             The search was success for investigations, now show then in the investigations page
         </description>
@@ -326,7 +333,7 @@
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
             <to-view-id>/protected/data_sets.jsp</to-view-id>
         </navigation-case>
@@ -341,7 +348,7 @@
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
             <to-view-id>/protected/data_sets.jsp</to-view-id>
         </navigation-case>
@@ -356,7 +363,7 @@
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
             <to-view-id>/protected/data_sets.jsp</to-view-id>
         </navigation-case>
@@ -371,7 +378,7 @@
             <from-outcome>SEARCH_SUCCESS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>GET_DATASETS_SUCCESS</from-outcome>
             <to-view-id>/protected/data_sets.jsp</to-view-id>
         </navigation-case>
@@ -392,7 +399,7 @@
         </navigation-case>
     </navigation-rule>
     
-     <navigation-rule>
+    <navigation-rule>
         <description>
             From admin to search user.
         </description>
@@ -407,7 +414,7 @@
             <to-view-id>/admin/facilities.jsp</to-view-id>
         </navigation-case>
         
-          <navigation-case>
+        <navigation-case>
             <from-outcome>GOTO_VIEW_USER</from-outcome>
             <to-view-id>/admin/view_user.jsp</to-view-id>
         </navigation-case>
@@ -425,7 +432,7 @@
             <redirect />            
         </navigation-case>
         
-         <navigation-case>
+        <navigation-case>
             <from-outcome>LOGOUT_KERBEROS_SUCCESS</from-outcome>
             <to-view-id>/logout.jsp</to-view-id>
             <redirect />            
@@ -581,14 +588,14 @@
         <component-class>org.apache.myfaces.component.html.ext.HtmlSelectOneRadio</component-class>
     </component>
     <!-- MyFaces custom components (in alphabetical order) -->
-    <component>
+   <!-- <component>
         <component-type>org.apache.myfaces.AliasBean</component-type>
         <component-class>org.apache.myfaces.custom.aliasbean.AliasBean</component-class>
     </component>
     <component>
         <component-type>org.apache.myfaces.AliasBeansScope</component-type>
         <component-class>org.apache.myfaces.custom.aliasbean.AliasBeansScope</component-class>
-    </component>
+    </component>-->
     <component>
         <component-type>org.apache.myfaces.Buffer</component-type>
         <component-class>org.apache.myfaces.custom.buffer.Buffer</component-class>
@@ -892,7 +899,7 @@
             <renderer-class>org.apache.myfaces.renderkit.html.ext.HtmlRadioRenderer</renderer-class>
         </renderer>
         <!-- custom component renderers -->
-        <renderer>
+        <!--<renderer>
             <component-family>javax.faces.Data</component-family>
             <renderer-type>org.apache.myfaces.AliasBean</renderer-type>
             <renderer-class>org.apache.myfaces.custom.aliasbean.AliasBeanRenderer</renderer-class>
@@ -901,7 +908,7 @@
             <component-family>javax.faces.Data</component-family>
             <renderer-type>org.apache.myfaces.AliasBeansScope</renderer-type>
             <renderer-class>org.apache.myfaces.custom.aliasbean.AliasBeansScopeRenderer</renderer-class>
-        </renderer>
+        </renderer>-->
         <renderer>
             <component-family>javax.faces.Data</component-family>
             <renderer-type>org.apache.myfaces.Buffer</renderer-type>
