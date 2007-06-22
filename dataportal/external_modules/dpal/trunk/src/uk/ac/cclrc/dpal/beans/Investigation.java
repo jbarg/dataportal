@@ -36,9 +36,7 @@ public class Investigation extends Common implements Serializable {
         return investigatorsCollection ;
     }
     
-    public LinkedHashSet getInvestigators() {
-        return this.investigators ;
-    }
+  
     
     public Investigator getFirstInvestigator() {
         for (Investigator i : investigators){
@@ -54,7 +52,7 @@ public class Investigation extends Common implements Serializable {
     
     //adders - none bean but neeeded
     public void addInvestigator(Investigator investigator) {
-        this.investigators.add(investigator) ;
+        this.getInvestigators().add(investigator) ;
     }
     
     //setters
@@ -101,7 +99,7 @@ public class Investigation extends Common implements Serializable {
     }
     
     public boolean isInvestigatorsNull(){
-        return (investigators == null || investigators.size() == 0) ? true : false;
+        return (getInvestigators() == null || getInvestigators().size() == 0) ? true : false;
     }
 
     public Collection<String> getKeywords() {
@@ -119,6 +117,14 @@ public class Investigation extends Common implements Serializable {
     
     public void reset(){
         setKeywords(new ArrayList<String>());
+    }
+
+    public LinkedHashSet<Investigator> getInvestigators() {
+        return investigators;
+    }
+
+    public void setInvestigators(LinkedHashSet<Investigator> investigators) {
+       // this.investigators = investigators;
     }
 }
 
