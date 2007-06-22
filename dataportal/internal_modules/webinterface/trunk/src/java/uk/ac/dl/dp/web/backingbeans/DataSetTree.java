@@ -11,7 +11,6 @@ package uk.ac.dl.dp.web.backingbeans;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.*;
 import javax.faces.event.ActionEvent;
@@ -30,10 +29,6 @@ import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.Url;
-import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import uk.ac.dl.dp.coreutil.util.Util;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
@@ -41,8 +36,9 @@ import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.util.WebConstants;
 import javax.faces.component.*;
 import uk.ac.dl.dp.coreutil.delegates.DownloadDelegate;
+import uk.ac.dl.dp.coreutil.exceptions.DataCenterException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
-import uk.ac.dl.srbapi.util.AccessInfo;
 
 /**
  *
@@ -679,19 +675,11 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             getVisitData().setCurrentBookmarks(null);
             getVisitData().setCurrentDataReferences(null);
             
-        } catch (SessionTimedOutException ex) {
-            error("Session Timed Out: "+ex.getMessage());
-            log.fatal("Session timed out for user for: "+sid,ex);
+        } catch (SessionException ex) {
+            error("Session Exception: "+ex.getMessage());
+            log.fatal("SessionException: "+sid,ex);
             return null;
-        } catch (SessionNotFoundException ex) {
-            error("Session Not Found: "+ex.getMessage());
-            log.fatal("Session not found for user for: "+sid,ex);
-            return null;
-        } catch (UserNotFoundException ex) {
-            error("User Not Found : "+ex.getMessage());
-            log.fatal("UserNotFoundException for user for: "+sid,ex);
-            return null;
-        } catch (NoAccessToDataCenterException ex) {
+        } catch (DataCenterException ex) {
             error("No access to data links: "+ex.getMessage());
             log.fatal("NoAccessToDataCenterException for user for: "+sid,ex);
             return null;

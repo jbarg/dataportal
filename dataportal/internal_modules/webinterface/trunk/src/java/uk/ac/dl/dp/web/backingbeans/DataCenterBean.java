@@ -452,7 +452,7 @@ public class DataCenterBean extends SortableList {
         DataReference bk = (DataReference)table.getRowData();
         log.trace("Note id is "+bk.getId()+" with new note: "+bk.getNote());
         try {
-            DataCenterDelegate.getInstance().addDataReference(getVisit().getSid(),bk);
+            DataCenterDelegate.getInstance().modifyDataReference(getVisit().getSid(),bk);
         } catch (NoAccessToDataCenterException ex) {
             log.warn("User: "+getVisit().getDn()+" has no access to add note to: "+getVisitData().getCurrentUserAuthDN());
             error("You do not have access for this operation.");

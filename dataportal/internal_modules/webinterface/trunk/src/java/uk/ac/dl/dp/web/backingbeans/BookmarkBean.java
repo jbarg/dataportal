@@ -324,7 +324,7 @@ public class BookmarkBean extends SortableList {
         Bookmark bk = (Bookmark)table.getRowData();
         log.trace("Note id is "+bk.getId()+" with new note: "+bk.getNote());
         try {
-            DataCenterDelegate.getInstance().addBookmark(getVisit().getSid(),bk);
+            DataCenterDelegate.getInstance().modifyBookmark(getVisit().getSid(),bk);
         }  catch (NoAccessToDataCenterException ex) {
             log.warn("User: "+getVisit().getDn()+" has no access to add note to: "+getVisitData().getCurrentUserAuthDN());
             error("You do not have access for this operation.");

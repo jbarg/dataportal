@@ -121,11 +121,6 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             error(ex.getMessage());
             log.error("Session exception for sid "+sid,ex);
             return NavigationConstants.LOGIN_ERROR;
-        } catch (UserNotFoundException ex) {
-            error(ex.getMessage());
-            log.fatal("Session exception for sid "+sid,ex);
-            return NavigationConstants.LOGIN_ERROR;
-            
         }
         
         //TODO remove
