@@ -12,16 +12,8 @@
                 <library files="1">
                     <file>${libs.log4j.classpath}</file>
                 </library>
-                <library files="15">
-                    <file>${libs.myfaces-impl.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
                 <library files="2">
                     <file>${libs.srb-extensions-v2.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
-                    <file>${libs.tomahawk-sandbox.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="3">
@@ -40,16 +32,20 @@
                     <file>${reference.dpal.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+                <library files="7">
+                    <file>${libs.dp_cogkit.classpath}</file>
+                </library>
+                <library files="9">
+                    <file>${libs.myfaces-impl-1.6.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
                 <library files="3">
-                    <file>${libs.facelets.classpath}</file>
+                    <file>${libs.facelets-1-1-12.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
                     <file>${libs.tomahawk-1.5.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="7">
-                    <file>${libs.dp_cogkit.classpath}</file>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>

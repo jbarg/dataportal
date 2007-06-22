@@ -400,42 +400,10 @@
     </target>
     <target name="do-dist" depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest"/>
     <target name="library-inclusion-in-manifest" depends="init" if="dist.ear.dir">
-        <basename property="included.lib.libs.myfaces-impl.classpath.15" file="${libs.myfaces-impl.classpath.libfile.15}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.14" file="${libs.myfaces-impl.classpath.libfile.14}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.13" file="${libs.myfaces-impl.classpath.libfile.13}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.12" file="${libs.myfaces-impl.classpath.libfile.12}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.11" file="${libs.myfaces-impl.classpath.libfile.11}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.10" file="${libs.myfaces-impl.classpath.libfile.10}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.9" file="${libs.myfaces-impl.classpath.libfile.9}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.8" file="${libs.myfaces-impl.classpath.libfile.8}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.7" file="${libs.myfaces-impl.classpath.libfile.7}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.6" file="${libs.myfaces-impl.classpath.libfile.6}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.5" file="${libs.myfaces-impl.classpath.libfile.5}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.4" file="${libs.myfaces-impl.classpath.libfile.4}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.3" file="${libs.myfaces-impl.classpath.libfile.3}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.2" file="${libs.myfaces-impl.classpath.libfile.2}"/>
-        <basename property="included.lib.libs.myfaces-impl.classpath.1" file="${libs.myfaces-impl.classpath.libfile.1}"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.15}" propname="included.lib.libs.myfaces-impl.classpath.15.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.14}" propname="included.lib.libs.myfaces-impl.classpath.14.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.13}" propname="included.lib.libs.myfaces-impl.classpath.13.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.12}" propname="included.lib.libs.myfaces-impl.classpath.12.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.11}" propname="included.lib.libs.myfaces-impl.classpath.11.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.10}" propname="included.lib.libs.myfaces-impl.classpath.10.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.9}" propname="included.lib.libs.myfaces-impl.classpath.9.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.8}" propname="included.lib.libs.myfaces-impl.classpath.8.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.7}" propname="included.lib.libs.myfaces-impl.classpath.7.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.6}" propname="included.lib.libs.myfaces-impl.classpath.6.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.5}" propname="included.lib.libs.myfaces-impl.classpath.5.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.4}" propname="included.lib.libs.myfaces-impl.classpath.4.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.3}" propname="included.lib.libs.myfaces-impl.classpath.3.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.2}" propname="included.lib.libs.myfaces-impl.classpath.2.X"/>
-        <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.1}" propname="included.lib.libs.myfaces-impl.classpath.1.X"/>
         <basename property="included.lib.libs.srb-extensions-v2.classpath.2" file="${libs.srb-extensions-v2.classpath.libfile.2}"/>
         <basename property="included.lib.libs.srb-extensions-v2.classpath.1" file="${libs.srb-extensions-v2.classpath.libfile.1}"/>
         <copy-ear-war file="${libs.srb-extensions-v2.classpath.libfile.2}" propname="included.lib.libs.srb-extensions-v2.classpath.2.X"/>
         <copy-ear-war file="${libs.srb-extensions-v2.classpath.libfile.1}" propname="included.lib.libs.srb-extensions-v2.classpath.1.X"/>
-        <basename property="included.lib.libs.tomahawk-sandbox.classpath" file="${libs.tomahawk-sandbox.classpath}"/>
-        <copy-ear-war file="${libs.tomahawk-sandbox.classpath}" propname="included.lib.libs.tomahawk-sandbox.classpath.X"/>
         <basename property="included.lib.libs.bp-autocomplete.classpath.3" file="${libs.bp-autocomplete.classpath.libfile.3}"/>
         <basename property="included.lib.libs.bp-autocomplete.classpath.2" file="${libs.bp-autocomplete.classpath.libfile.2}"/>
         <basename property="included.lib.libs.bp-autocomplete.classpath.1" file="${libs.bp-autocomplete.classpath.libfile.1}"/>
@@ -450,39 +418,41 @@
         <copy-ear-war file="${libs.ajax4jsf.classpath.libfile.1}" propname="included.lib.libs.ajax4jsf.classpath.1.X"/>
         <basename property="included.lib.reference.dpal.jar" file="${reference.dpal.jar}"/>
         <copy-ear-war file="${reference.dpal.jar}" propname="included.lib.reference.dpal.jar.X"/>
-        <basename property="included.lib.libs.facelets.classpath.3" file="${libs.facelets.classpath.libfile.3}"/>
-        <basename property="included.lib.libs.facelets.classpath.2" file="${libs.facelets.classpath.libfile.2}"/>
-        <basename property="included.lib.libs.facelets.classpath.1" file="${libs.facelets.classpath.libfile.1}"/>
-        <copy-ear-war file="${libs.facelets.classpath.libfile.3}" propname="included.lib.libs.facelets.classpath.3.X"/>
-        <copy-ear-war file="${libs.facelets.classpath.libfile.2}" propname="included.lib.libs.facelets.classpath.2.X"/>
-        <copy-ear-war file="${libs.facelets.classpath.libfile.1}" propname="included.lib.libs.facelets.classpath.1.X"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.9" file="${libs.myfaces-impl-1.6.classpath.libfile.9}"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.8" file="${libs.myfaces-impl-1.6.classpath.libfile.8}"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.7" file="${libs.myfaces-impl-1.6.classpath.libfile.7}"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.6" file="${libs.myfaces-impl-1.6.classpath.libfile.6}"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.5" file="${libs.myfaces-impl-1.6.classpath.libfile.5}"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.4" file="${libs.myfaces-impl-1.6.classpath.libfile.4}"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.3" file="${libs.myfaces-impl-1.6.classpath.libfile.3}"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.2" file="${libs.myfaces-impl-1.6.classpath.libfile.2}"/>
+        <basename property="included.lib.libs.myfaces-impl-1.6.classpath.1" file="${libs.myfaces-impl-1.6.classpath.libfile.1}"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.9}" propname="included.lib.libs.myfaces-impl-1.6.classpath.9.X"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.8}" propname="included.lib.libs.myfaces-impl-1.6.classpath.8.X"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.7}" propname="included.lib.libs.myfaces-impl-1.6.classpath.7.X"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.6}" propname="included.lib.libs.myfaces-impl-1.6.classpath.6.X"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.5}" propname="included.lib.libs.myfaces-impl-1.6.classpath.5.X"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.4}" propname="included.lib.libs.myfaces-impl-1.6.classpath.4.X"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.3}" propname="included.lib.libs.myfaces-impl-1.6.classpath.3.X"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.2}" propname="included.lib.libs.myfaces-impl-1.6.classpath.2.X"/>
+        <copy-ear-war file="${libs.myfaces-impl-1.6.classpath.libfile.1}" propname="included.lib.libs.myfaces-impl-1.6.classpath.1.X"/>
+        <basename property="included.lib.libs.facelets-1-1-12.classpath.3" file="${libs.facelets-1-1-12.classpath.libfile.3}"/>
+        <basename property="included.lib.libs.facelets-1-1-12.classpath.2" file="${libs.facelets-1-1-12.classpath.libfile.2}"/>
+        <basename property="included.lib.libs.facelets-1-1-12.classpath.1" file="${libs.facelets-1-1-12.classpath.libfile.1}"/>
+        <copy-ear-war file="${libs.facelets-1-1-12.classpath.libfile.3}" propname="included.lib.libs.facelets-1-1-12.classpath.3.X"/>
+        <copy-ear-war file="${libs.facelets-1-1-12.classpath.libfile.2}" propname="included.lib.libs.facelets-1-1-12.classpath.2.X"/>
+        <copy-ear-war file="${libs.facelets-1-1-12.classpath.libfile.1}" propname="included.lib.libs.facelets-1-1-12.classpath.1.X"/>
         <basename property="included.lib.libs.tomahawk-1.5.classpath" file="${libs.tomahawk-1.5.classpath}"/>
         <copy-ear-war file="${libs.tomahawk-1.5.classpath}" propname="included.lib.libs.tomahawk-1.5.classpath.X"/>
         <mkdir dir="${build.web.dir.real}/META-INF"/>
         <manifest file="${build.web.dir.real}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.libs.myfaces-impl.classpath.1.X} ${included.lib.libs.myfaces-impl.classpath.2.X} ${included.lib.libs.myfaces-impl.classpath.3.X} ${included.lib.libs.myfaces-impl.classpath.4.X} ${included.lib.libs.myfaces-impl.classpath.5.X} ${included.lib.libs.myfaces-impl.classpath.6.X} ${included.lib.libs.myfaces-impl.classpath.7.X} ${included.lib.libs.myfaces-impl.classpath.8.X} ${included.lib.libs.myfaces-impl.classpath.9.X} ${included.lib.libs.myfaces-impl.classpath.10.X} ${included.lib.libs.myfaces-impl.classpath.11.X} ${included.lib.libs.myfaces-impl.classpath.12.X} ${included.lib.libs.myfaces-impl.classpath.13.X} ${included.lib.libs.myfaces-impl.classpath.14.X} ${included.lib.libs.myfaces-impl.classpath.15.X} ${included.lib.libs.srb-extensions-v2.classpath.1.X} ${included.lib.libs.srb-extensions-v2.classpath.2.X} ${included.lib.libs.tomahawk-sandbox.classpath} ${included.lib.libs.bp-autocomplete.classpath.1.X} ${included.lib.libs.bp-autocomplete.classpath.2.X} ${included.lib.libs.bp-autocomplete.classpath.3.X} ${included.lib.reference.dp-coreutil.jar} ${included.lib.libs.ajax4jsf.classpath.1.X} ${included.lib.libs.ajax4jsf.classpath.2.X} ${included.lib.reference.dpal.jar} ${included.lib.libs.facelets.classpath.1.X} ${included.lib.libs.facelets.classpath.2.X} ${included.lib.libs.facelets.classpath.3.X} ${included.lib.libs.tomahawk-1.5.classpath} "/>
+            <attribute name="Class-Path" value="${included.lib.libs.srb-extensions-v2.classpath.1.X} ${included.lib.libs.srb-extensions-v2.classpath.2.X} ${included.lib.libs.bp-autocomplete.classpath.1.X} ${included.lib.libs.bp-autocomplete.classpath.2.X} ${included.lib.libs.bp-autocomplete.classpath.3.X} ${included.lib.reference.dp-coreutil.jar} ${included.lib.libs.ajax4jsf.classpath.1.X} ${included.lib.libs.ajax4jsf.classpath.2.X} ${included.lib.reference.dpal.jar} ${included.lib.libs.myfaces-impl-1.6.classpath.1.X} ${included.lib.libs.myfaces-impl-1.6.classpath.2.X} ${included.lib.libs.myfaces-impl-1.6.classpath.3.X} ${included.lib.libs.myfaces-impl-1.6.classpath.4.X} ${included.lib.libs.myfaces-impl-1.6.classpath.5.X} ${included.lib.libs.myfaces-impl-1.6.classpath.6.X} ${included.lib.libs.myfaces-impl-1.6.classpath.7.X} ${included.lib.libs.myfaces-impl-1.6.classpath.8.X} ${included.lib.libs.myfaces-impl-1.6.classpath.9.X} ${included.lib.libs.facelets-1-1-12.classpath.1.X} ${included.lib.libs.facelets-1-1-12.classpath.2.X} ${included.lib.libs.facelets-1-1-12.classpath.3.X} ${included.lib.libs.tomahawk-1.5.classpath} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
     <target name="library-inclusion-in-archive" depends="init" unless="dist.ear.dir">
-        <copy file="${libs.myfaces-impl.classpath.libfile.15}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.14}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.13}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.12}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.11}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.10}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.9}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.8}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.7}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.6}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.5}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.4}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.myfaces-impl.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.srb-extensions-v2.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.srb-extensions-v2.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.tomahawk-sandbox.classpath}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.bp-autocomplete.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.bp-autocomplete.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.bp-autocomplete.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
@@ -490,9 +460,18 @@
         <copy file="${libs.ajax4jsf.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.ajax4jsf.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${reference.dpal.jar}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.facelets.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.facelets.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.facelets.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.9}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.8}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.7}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.6}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.5}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.4}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.myfaces-impl-1.6.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.facelets-1-1-12.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.facelets-1-1-12.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.facelets-1-1-12.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.tomahawk-1.5.classpath}" todir="${build.web.dir.real}/WEB-INF/lib"/>
     </target>
     <target name="do-ear-dist" depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest">
