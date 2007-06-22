@@ -45,6 +45,7 @@ import uk.ac.dl.dp.coreutil.interfaces.TimerServiceLocal;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
+import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.entity.User;
@@ -216,7 +217,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
 //TODO put together a single method to recurse over QueryManager
     @PermitAll
     public Collection<Investigation> getQueryResults(String queryId){
-        log.debug("getQueryResults()");
+        log.debug("getQueryResults()");       
         //Collection<QueryRecord> qra = new ArrayList<QueryRecord>();
         Collection<Investigation> st = new ArrayList<Investigation>();
         

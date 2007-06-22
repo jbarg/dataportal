@@ -34,9 +34,6 @@ import uk.ac.dl.dp.coreutil.entity.Role;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.InSufficientPermissonsException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.AdminRemote;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DPRole;
@@ -80,6 +77,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
                 }
                 details.size();
             }
+            elog.getEventLogDetails().size();
         }
         
         user.getBookmark().size();
@@ -147,7 +145,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
             for(Object ob1 : t){
                 
                 if(i == 0) elc = getEventLogCount(""+ob1,statsCollection);
-                if(i == 1) {                    
+                if(i == 1) {
                     elc.setSearches(new Integer(((BigDecimal)ob1).intValue()));
                 }
                 if(i == 2) elc.setId(new Integer(""+ob1));
@@ -241,12 +239,12 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         checkPermissions(sid);
         
         //add proxy
-        log.trace("Updating/adding proxyserver: "+proxyServer.getProxyServerAddress());        
-       ProxyServers ps =  em.merge(proxyServer);
+        log.trace("Updating/adding proxyserver: "+proxyServer.getProxyServerAddress());
+        ProxyServers ps =  em.merge(proxyServer);
         log.trace("Added/Updated ProxyServers with id: "+ps.getId());
         return ps;
     }
-            
+    
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public boolean deleteProxyServer(String sid, long proxyServerId) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new SessionException("Session ID cannot be null.");
@@ -262,7 +260,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
             return true;
         }
     }
-            
+    
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void setDefaultProxyServer(String sid, long proxyServerId) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new SessionException("Session ID cannot be null.");
@@ -278,12 +276,12 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         
     }
     
-        
+    
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void updateFacility(String sid, ModuleLookup mlu)throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
-                 
+        
         //What if name changed
         em.merge(mlu);
     }
@@ -302,7 +300,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         
         return  em.createNamedQuery("ModuleLookup.findAll").getResultList();
     }
-            
+    
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ModuleLookup addFacility(String sid, ModuleLookup mlu)throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
@@ -338,19 +336,19 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
             //need a record in here first
             log.info("Adding new facility: "+fac.getShortName());
             em.persist(fac);
-           
+            
         }
         
         em.persist(mlu);
         return mlu;
         
     }
-            
+    
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public boolean deleteFacility(String sid, ModuleLookup mlu) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
-      
+        
         //should not delete this as  uses have links to this in the bookmarks etc
         //Facility found_fac = (Facility)em.createNamedQuery("Facility.findByShortName").setParameter("shortName",mlu.getFacility()).getSingleResult();
         //em.remove(found_fac);
@@ -361,7 +359,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         return true;
     }
     
-     @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public boolean deleteFacility(String sid, long mluId) throws EntityNotFoundException,SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
@@ -376,7 +374,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
      
      }*/
     
-      @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void addAdmin(String sid, long userId) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
@@ -389,7 +387,7 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
         }
     }
     
-       @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void removeAdmin(String sid, long userId) throws SessionException, InSufficientPermissonsException{
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         checkPermissions(sid);
@@ -414,8 +412,10 @@ public class AdminBean extends SessionEJBObject  implements AdminRemote {
             log.trace(DN +" "+elc.getDn());
             if(elc.getDn().equals(DN)) return elc;
         }
-        log.trace("Returning null for EventLogCount");
-        return null;
+        log.trace("Returning empty for EventLogCount");
+       EventLogCount logcount = new EventLogCount();
+       logcount.setDn(DN);       
+        return logcount;
     }
     
     private void checkPermissions(String sid) throws SessionException, InSufficientPermissonsException{
