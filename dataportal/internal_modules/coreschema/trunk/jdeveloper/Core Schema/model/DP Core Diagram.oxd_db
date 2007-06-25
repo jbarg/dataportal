@@ -153,6 +153,22 @@
             class="o:d:DBID"/>
       </shape>
       <shape
+         name="DP_FACILITY_SESSION">
+         <elemRef
+            name=""
+            value="TABLE::f3dd65bd-0109-1000-804d-c13e7105febe"
+            type="DatabaseTable"
+            class="o:d:DBID"/>
+      </shape>
+      <shape
+         name="DP_FACILITY_SESSION_DP_FA_FK1">
+         <elemRef
+            name=""
+            value="CONSTRAINT::6296411d-0113-1000-8003-c13e71053f62::TABLE::f3dd65bd-0109-1000-804d-c13e7105febe"
+            type="ForeignKey"
+            class="o:d:DBID"/>
+      </shape>
+      <shape
          name="DP_MODULE_LOOKUP">
          <elemRef
             name=""
@@ -213,14 +229,6 @@
          <elemRef
             name=""
             value="TABLE::cf859ade-010c-1000-8012-c13e7105f9e2"
-            type="DatabaseTable"
-            class="o:d:DBID"/>
-      </shape>
-      <shape
-         name="DP_TOKENS">
-         <elemRef
-            name=""
-            value="TABLE::f3dd65bd-0109-1000-804d-c13e7105febe"
             type="DatabaseTable"
             class="o:d:DBID"/>
       </shape>
@@ -1479,7 +1487,7 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="29.930374"
+                              width="32.0"
                               height="19.067139"/>
                         </infoMap>
                      </infoMap>
@@ -1516,13 +1524,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="302.81857"
+                        x="302.00803"
                         y="117.78496"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -1590,13 +1598,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="261.7422"
+                              width="267.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="220.13696"
+                        x="217.50806"
                         y="95.69121"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -3098,7 +3106,7 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="29.930374"
+                              width="32.0"
                               height="19.067139"/>
                         </infoMap>
                      </infoMap>
@@ -3135,13 +3143,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-192.5373"
+                        x="-193.34784"
                         y="89.28494"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -3209,13 +3217,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="263.07227"
+                              width="268.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-275.88397"
+                        x="-278.34784"
                         y="67.19119"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -4766,13 +4774,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-48.189453"
+                        x="-49.0"
                         y="108.75003"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -4840,13 +4848,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="253.04688"
+                              width="251.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-126.52344"
+                        x="-125.5"
                         y="86.65628"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -5037,13 +5045,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-48.189453"
+                        x="-49.0"
                         y="108.75003"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -5111,13 +5119,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="253.04688"
+                              width="251.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-126.52344"
+                        x="-125.5"
                         y="86.65628"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -5606,7 +5614,7 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="29.930374"
+                              width="32.0"
                               height="19.067139"/>
                         </infoMap>
                      </infoMap>
@@ -5643,13 +5651,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-327.97214"
+                        x="-328.78268"
                         y="65.28494"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -5717,13 +5725,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="220.4043"
+                              width="223.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-389.98483"
+                        x="-391.28268"
                         y="43.191193"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -6257,13 +6265,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-3.1894531"
+                        x="-4.0"
                         y="3.7500305"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -6331,13 +6339,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="227.07227"
+                              width="228.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-68.53613"
+                        x="-69.0"
                         y="-18.34372"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -6528,13 +6536,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-48.189453"
+                        x="-49.0"
                         y="101.25006"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -6602,13 +6610,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="217.73242"
+                              width="220.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-108.86621"
+                        x="-110.0"
                         y="79.15631"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -7711,7 +7719,7 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="29.930374"
+                              width="32.0"
                               height="19.067139"/>
                         </infoMap>
                      </infoMap>
@@ -7748,13 +7756,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-48.189484"
+                        x="-49.00003"
                         y="56.25003"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -7822,13 +7830,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="251.07812"
+                              width="254.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-125.53909"
+                        x="-127.00003"
                         y="34.15628"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -7982,7 +7990,7 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="29.930374"
+                              width="32.0"
                               height="19.067139"/>
                         </infoMap>
                      </infoMap>
@@ -8019,13 +8027,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-231.99597"
+                        x="-232.80652"
                         y="126.78494"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -8093,13 +8101,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="255.0625"
+                              width="256.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-311.33777"
+                        x="-311.80652"
                         y="104.69119"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -8261,7 +8269,7 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="29.930374"
+                              width="32.0"
                               height="19.067139"/>
                         </infoMap>
                      </infoMap>
@@ -8298,13 +8306,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-48.189453"
+                        x="-49.0"
                         y="93.75003"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -8372,13 +8380,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="261.06836"
+                              width="265.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-130.53418"
+                        x="-132.5"
                         y="71.65628"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -8532,7 +8540,7 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="29.930374"
+                              width="32.0"
                               height="19.067139"/>
                         </infoMap>
                      </infoMap>
@@ -8569,13 +8577,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-109.49609"
+                        x="-110.30664"
                         y="33.784943"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -8643,13 +8651,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="237.0625"
+                              width="235.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-179.83789"
+                        x="-178.80664"
                         y="11.691193"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -8848,13 +8856,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="194.51712"
+                        x="193.70657"
                         y="108.78494"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -8922,13 +8930,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="209.06055"
+                              width="210.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="138.1763"
+                        x="137.70657"
                         y="86.69119"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -9127,13 +9135,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="67.017395"
+                        x="66.20685"
                         y="54.784943"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -9201,13 +9209,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="261.06836"
+                              width="264.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-15.327332"
+                        x="-16.793152"
                         y="32.691193"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -9741,13 +9749,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-193.9722"
+                        x="-194.78275"
                         y="41.284943"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -9815,13 +9823,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="193.06445"
+                              width="196.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-242.31497"
+                        x="-243.78275"
                         y="19.191193"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -10355,13 +10363,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-48.189453"
+                        x="-49.0"
                         y="90.0"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -10429,13 +10437,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="251.73438"
+                              width="255.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-125.86719"
+                        x="-127.5"
                         y="67.90625"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -10961,13 +10969,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-30.625366"
+                        x="-31.435913"
                         y="30.0"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -11035,13 +11043,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="251.75781"
+                              width="253.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-108.31482"
+                        x="-108.93591"
                         y="7.90625"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -11232,13 +11240,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="26.810547"
+                        x="26.0"
                         y="3.7500305"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -11306,13 +11314,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="220.41016"
+                              width="225.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-35.20508"
+                        x="-37.5"
                         y="-18.34372"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -11503,13 +11511,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-303.1894"
+                        x="-303.99994"
                         y="-3.0517578E-5"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -11577,13 +11585,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="221.07227"
+                              width="226.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="-365.53607"
+                        x="-367.99994"
                         y="-22.09378"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -11737,13 +11745,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="29.930374"
+                              width="32.0"
                               height="19.067139"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="550.02124"
+                        x="547.9516"
                         y="183.43292"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -11774,13 +11782,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="96.37891"
+                              width="98.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="241.78625"
+                        x="240.97571"
                         y="80.28494"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -11848,13 +11856,13 @@
                            name="symbolic">
                            <dimension
                               name="elementSize"
-                              width="233.07227"
+                              width="233.0"
                               height="22.09375"/>
                         </infoMap>
                      </infoMap>
                      <point
                         name="elementPosition"
-                        x="173.43958"
+                        x="173.47571"
                         y="58.191193"/>
                      <string
                         name="shapeState">symbolic</string>
@@ -12322,6 +12330,281 @@
                   name="visibility"
                   value="true"/>
             </infoMap>
+         </shapeMap>
+         <shapeMap>
+            <long
+               name="DrUID"
+               value="-8303366811887156289"/>
+            <infoMap
+               name="containedShapes">
+               <infoMap
+                  name="dstDeasil">
+                  <long
+                     name="DrUID"
+                     value="1075315580430513099"/>
+                  <infoMap
+                     name="containedShapes"/>
+                  <infoMap
+                     name="displayPreference"/>
+                  <elemRef
+                     name="elementReference"
+                     value="TextShape"
+                     type="TEXT"
+                     class="j:l:String"/>
+                  <infoMap
+                     name="graphicalData">
+                     <infoMap
+                        name="diagramStateProperties">
+                        <infoMap
+                           name="symbolic">
+                           <dimension
+                              name="elementSize"
+                              width="25.0"
+                              height="19.067139"/>
+                        </infoMap>
+                     </infoMap>
+                     <point
+                        name="elementPosition"
+                        x="-1020.0"
+                        y="618.43286"/>
+                     <string
+                        name="shapeState">symbolic</string>
+                     <boolean
+                        name="visibility"
+                        value="true"/>
+                  </infoMap>
+               </infoMap>
+               <infoMap
+                  name="portName">
+                  <long
+                     name="DrUID"
+                     value="7312639047745925036"/>
+                  <infoMap
+                     name="containedShapes"/>
+                  <infoMap
+                     name="displayPreference"/>
+                  <elemRef
+                     name="elementReference"
+                     value="TextShape"
+                     type="TEXT"
+                     class="j:l:String"/>
+                  <infoMap
+                     name="graphicalData">
+                     <infoMap
+                        name="diagramStateProperties">
+                        <infoMap
+                           name="symbolic">
+                           <dimension
+                              name="elementSize"
+                              width="98.0"
+                              height="22.09375"/>
+                        </infoMap>
+                     </infoMap>
+                     <point
+                        name="elementPosition"
+                        x="-1069.0"
+                        y="0.0"/>
+                     <string
+                        name="shapeState">symbolic</string>
+                     <boolean
+                        name="visibility"
+                        value="false"/>
+                  </infoMap>
+               </infoMap>
+               <infoMap
+                  name="srcDeasil">
+                  <long
+                     name="DrUID"
+                     value="3130562393371856942"/>
+                  <infoMap
+                     name="containedShapes"/>
+                  <infoMap
+                     name="displayPreference"/>
+                  <elemRef
+                     name="elementReference"
+                     value="TextShape"
+                     type="TEXT"
+                     class="j:l:String"/>
+                  <infoMap
+                     name="graphicalData">
+                     <infoMap
+                        name="diagramStateProperties">
+                        <infoMap
+                           name="symbolic">
+                           <dimension
+                              name="elementSize"
+                              width="25.0"
+                              height="19.067139"/>
+                        </infoMap>
+                     </infoMap>
+                     <point
+                        name="elementPosition"
+                        x="-25.0"
+                        y="-19.067139"/>
+                     <string
+                        name="shapeState">symbolic</string>
+                     <boolean
+                        name="visibility"
+                        value="true"/>
+                  </infoMap>
+               </infoMap>
+               <infoMap
+                  name="starbordName">
+                  <long
+                     name="DrUID"
+                     value="-435276427510853138"/>
+                  <infoMap
+                     name="containedShapes"/>
+                  <infoMap
+                     name="displayPreference"/>
+                  <elemRef
+                     name="elementReference"
+                     value="TextShape"
+                     type="TEXT"
+                     class="j:l:String"/>
+                  <infoMap
+                     name="graphicalData">
+                     <infoMap
+                        name="diagramStateProperties">
+                        <infoMap
+                           name="symbolic">
+                           <dimension
+                              name="elementSize"
+                              width="242.0"
+                              height="22.09375"/>
+                        </infoMap>
+                     </infoMap>
+                     <point
+                        name="elementPosition"
+                        x="-1141.0"
+                        y="-22.09375"/>
+                     <string
+                        name="shapeState">symbolic</string>
+                     <boolean
+                        name="visibility"
+                        value="false"/>
+                  </infoMap>
+               </infoMap>
+            </infoMap>
+            <long
+               name="destinationShapeDrUID"
+               value="-6583951720504228432"/>
+            <elemRef
+               name="destinationShapeRef"
+               value="TABLE::45e36cfe-010a-1000-8008-c13e7105f4eb"
+               type="DatabaseTable"
+               class="o:d:DBID"/>
+            <infoMap
+               name="displayPreference">
+               <boolean
+                  name="dstDeasil"
+                  value="true"/>
+               <boolean
+                  name="dstWithershins"
+                  value="false"/>
+               <integer
+                  name="edgeType"
+                  value="1"/>
+               <null
+                  name="false"/>
+               <boolean
+                  name="portName"
+                  value="false"/>
+               <boolean
+                  name="srcDeasil"
+                  value="true"/>
+               <boolean
+                  name="srcWithershins"
+                  value="false"/>
+               <boolean
+                  name="starbordName"
+                  value="false"/>
+            </infoMap>
+            <elemRef
+               name="elementReference"
+               value="CONSTRAINT::6296411d-0113-1000-8003-c13e71053f62::TABLE::f3dd65bd-0109-1000-804d-c13e7105febe"
+               type="ForeignKey"
+               class="o:d:DBID"/>
+            <infoMap
+               name="graphicalData">
+               <infoMap
+                  name="diagramStateProperties">
+                  <infoMap
+                     name="symbolic">
+                     <dimension
+                        name="elementSize"
+                        width="0.0"
+                        height="0.0"/>
+                     <infoMap
+                        name="layoutConstraints"/>
+                  </infoMap>
+               </infoMap>
+               <array
+                  name="elementPoints">
+                  <point
+                     name=""
+                     x="1893.6603"
+                     y="269.92078"/>
+                  <point
+                     name=""
+                     x="873.6603"
+                     y="269.92078"/>
+                  <point
+                     name=""
+                     x="873.6603"
+                     y="907.4208"/>
+               </array>
+               <point
+                  name="elementPosition"
+                  x="1623.6603"
+                  y="982.4208"/>
+               <graphicalProperties
+                  name="graphicalProperties">
+                  <color
+                     name="lineColor"
+                     rgb="0x646464"
+                     alpha="0xff"/>
+                  <float
+                     name="lineWidth"
+                     value="1.0"/>
+                  <integer
+                     name="lineStyle"
+                     value="0"/>
+                  <font
+                     name="fontType"
+                     fontFamily="SansSerif"
+                     fontSize="12.0"
+                     fontWeight="normal"
+                     fontStyle="normal"/>
+                  <color
+                     name="fontColor"
+                     rgb="0x0"
+                     alpha="0xff"/>
+               </graphicalProperties>
+               <string
+                  name="shapeState">symbolic</string>
+               <elemRef
+                  name="surrogateOriginalDstRef"
+                  value="TABLE::45e36cfe-010a-1000-8008-c13e7105f4eb"
+                  type="DatabaseTable"
+                  class="o:d:DBID"/>
+               <elemRef
+                  name="surrogateOriginalSrcRef"
+                  value="TABLE::f3dd65bd-0109-1000-804d-c13e7105febe"
+                  type="DatabaseTable"
+                  class="o:d:DBID"/>
+               <boolean
+                  name="visibility"
+                  value="true"/>
+            </infoMap>
+            <long
+               name="sourceShapeDrUID"
+               value="-4973937829055152456"/>
+            <elemRef
+               name="sourceShapeRef"
+               value="TABLE::f3dd65bd-0109-1000-804d-c13e7105febe"
+               type="DatabaseTable"
+               class="o:d:DBID"/>
          </shapeMap>
       </infoList>
    </layer>
