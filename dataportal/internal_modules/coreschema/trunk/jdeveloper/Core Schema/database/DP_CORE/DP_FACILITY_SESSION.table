@@ -7,14 +7,14 @@
    </ID>
    <columns>
       <Item>
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="3">
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="1">
             <ID>f3dd65bd-0109-1000-804e-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
          </ID>
          <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
             <attributeValues class="java.util.HashMap"/>
-            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="1">
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="2">
                <providerClass>oracle.javatools.db.ora.OracleDatabaseImpl</providerClass>
                <schemaName/>
                <typeName>NUMBER</typeName>
@@ -44,42 +44,32 @@
             </Item>
          </properties>
       </Item>
-      <Item id="5">
+      <Item id="3">
          <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
-            <ID>f88ba54d-0109-1000-808a-c13e7105febe</ID>
+            <ID>6296411d-0113-1000-8002-c13e71053f62</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
          </ID>
          <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
             <attributeValues class="java.util.HashMap"/>
-            <dataTypeID idref="1"/>
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+               <providerClass>oracle.javatools.db.ora.OracleDatabaseImpl</providerClass>
+               <schemaName/>
+               <typeName>NUMBER</typeName>
+            </dataTypeID>
          </dataTypeUsage>
          <default/>
-         <name>SESSION_ID</name>
+         <name>DP_SESSION_ID</name>
          <notNull>true</notNull>
          <properties class="java.util.HashMap">
             <Item>
-               <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
-               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID">
-                  <ID/>
-                  <name>SESSION_ID</name>
-                  <parent class="oracle.jdeveloper.offlinedb.marshal.OracleDBReferenceID">
-                     <ID/>
-                     <connectionName>oradmg_shoaib_test</connectionName>
-                     <databaseID>46272</databaseID>
-                     <name>DP_TOKENS</name>
-                     <parent/>
-                     <schemaName>SHOAIB_TEST</schemaName>
-                     <type>TABLE</type>
-                  </parent>
-                  <schemaName/>
-                  <type>COLUMN</type>
-               </Value>
+               <Key>Comment</Key>
+               <Value>foreign key linking to dp_session</Value>
             </Item>
          </properties>
       </Item>
-      <Item>
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="4">
+      <Item id="4">
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
             <ID>f3dd65bd-0109-1000-804f-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
@@ -88,22 +78,22 @@
             <attributeValues class="java.util.HashMap">
                <Item>
                   <Key>size</Key>
-                  <Value class="java.lang.Long">4000</Value>
+                  <Value class="java.lang.Long">256</Value>
                </Item>
             </attributeValues>
-            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="2">
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
                <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
                <schemaName/>
                <typeName>VARCHAR2</typeName>
             </dataTypeID>
          </dataTypeUsage>
          <default/>
-         <name>TOKEN</name>
-         <notNull>false</notNull>
+         <name>FACILITY_NAME</name>
+         <notNull>true</notNull>
          <properties class="java.util.HashMap">
             <Item>
                <Key>Comment</Key>
-               <Value>e.g XML signed role authority document</Value>
+               <Value>name of the facility</Value>
             </Item>
             <Item>
                <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
@@ -127,7 +117,7 @@
       </Item>
       <Item>
          <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
-            <ID>f3dd65bd-0109-1000-8050-c13e7105febe</ID>
+            <ID>f88ba54d-0109-1000-808a-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
          </ID>
@@ -138,17 +128,21 @@
                   <Value class="java.lang.Long">4000</Value>
                </Item>
             </attributeValues>
-            <dataTypeID idref="2"/>
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+               <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
+               <schemaName/>
+               <typeName>VARCHAR2</typeName>
+            </dataTypeID>
          </dataTypeUsage>
          <default/>
-         <name>FACILITY_CERT</name>
-         <notNull>false</notNull>
+         <name>FACILITY_SESSION_ID</name>
+         <notNull>true</notNull>
          <properties class="java.util.HashMap">
             <Item>
                <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
                <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID">
                   <ID/>
-                  <name>FACILITY_CERT</name>
+                  <name>SESSION_ID</name>
                   <parent class="oracle.jdeveloper.offlinedb.marshal.OracleDBReferenceID">
                      <ID/>
                      <connectionName>oradmg_shoaib_test</connectionName>
@@ -217,10 +211,10 @@
          </ID>
          <columns>
             <Item>
-               <ID idref="3"/>
+               <ID idref="1"/>
                <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
                   <attributeValues class="java.util.HashMap"/>
-                  <dataTypeID idref="1"/>
+                  <dataTypeID idref="2"/>
                </dataTypeUsage>
                <default/>
                <name>ID</name>
@@ -251,57 +245,6 @@
          <name>DP_TOKENS_PK</name>
          <properties/>
       </Item>
-      <Item class="oracle.javatools.db.UniqueConstraint">
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
-            <ID>f3dd65bd-0109-1000-8053-c13e7105febe</ID>
-            <parent idref="0"/>
-            <type>CONSTRAINT</type>
-         </ID>
-         <columns>
-            <Item>
-               <ID idref="4"/>
-               <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
-                  <attributeValues class="java.util.HashMap">
-                     <Item>
-                        <Key>size</Key>
-                        <Value class="java.lang.Long">4000</Value>
-                     </Item>
-                  </attributeValues>
-                  <dataTypeID idref="2"/>
-               </dataTypeUsage>
-               <default/>
-               <name>TOKEN</name>
-               <notNull>false</notNull>
-               <properties class="java.util.HashMap">
-                  <Item>
-                     <Key>Comment</Key>
-                     <Value>e.g XML signed role authority document</Value>
-                  </Item>
-                  <Item>
-                     <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
-                     <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID">
-                        <ID/>
-                        <name>TOKEN</name>
-                        <parent class="oracle.jdeveloper.offlinedb.marshal.OracleDBReferenceID">
-                           <ID/>
-                           <connectionName>oradmg_shoaib_test</connectionName>
-                           <databaseID>46125</databaseID>
-                           <name>DP_TOKENS</name>
-                           <parent/>
-                           <schemaName>SHOAIB_TEST</schemaName>
-                           <type>TABLE</type>
-                        </parent>
-                        <schemaName/>
-                        <type>COLUMN</type>
-                     </Value>
-                  </Item>
-               </properties>
-            </Item>
-         </columns>
-         <enabled>true</enabled>
-         <name>DP_TOKENS_UK1</name>
-         <properties/>
-      </Item>
       <Item class="oracle.javatools.db.FKConstraint">
          <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
             <ID>f88ba54d-0109-1000-808b-c13e7105febe</ID>
@@ -309,7 +252,7 @@
             <type>CONSTRAINT</type>
          </ID>
          <columns>
-            <Item idref="5"/>
+            <Item idref="3"/>
          </columns>
          <deleteMode>0</deleteMode>
          <enabled>true</enabled>
@@ -325,10 +268,37 @@
             <type>CONSTRAINT</type>
          </referenceID>
       </Item>
+      <Item class="oracle.javatools.db.FKConstraint">
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+            <ID>6296411d-0113-1000-8003-c13e71053f62</ID>
+            <parent idref="0"/>
+            <type>CONSTRAINT</type>
+         </ID>
+         <columns>
+            <Item idref="4"/>
+         </columns>
+         <deleteMode>0</deleteMode>
+         <enabled>true</enabled>
+         <name>DP_FACILITY_SESSION_DP_FA_FK1</name>
+         <properties/>
+         <referenceID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+            <ID>45e36cfe-010a-1000-800f-c13e7105f4eb</ID>
+            <parent class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+               <ID>45e36cfe-010a-1000-8008-c13e7105f4eb</ID>
+               <parent/>
+               <type>TABLE</type>
+            </parent>
+            <type>CONSTRAINT</type>
+         </referenceID>
+      </Item>
    </constraints>
    <indexes class="[Loracle.javatools.db.Index;"/>
-   <name>DP_TOKENS</name>
+   <name>DP_FACILITY_SESSION</name>
    <properties class="java.util.HashMap">
+      <Item>
+         <Key>Comment</Key>
+         <Value>stores the many facility sessions a particular user may have during a dataportal session</Value>
+      </Item>
       <Item>
          <Key>OfflineDBConstants.GENERATE_TARGET_CONECTION</Key>
          <Value>oradmg_shoaib_test</Value>

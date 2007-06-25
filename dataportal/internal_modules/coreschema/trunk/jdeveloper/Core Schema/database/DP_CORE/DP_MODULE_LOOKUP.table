@@ -64,7 +64,7 @@
             </dataTypeID>
          </dataTypeUsage>
          <default/>
-         <name>CONNECTION</name>
+         <name>LOCATION</name>
          <notNull>true</notNull>
          <properties class="java.util.HashMap">
             <Item>
