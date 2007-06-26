@@ -7,14 +7,14 @@
    </ID>
    <columns>
       <Item>
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="1">
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="2">
             <ID>f3dd65bd-0109-1000-804e-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
          </ID>
          <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
             <attributeValues class="java.util.HashMap"/>
-            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="2">
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="3">
                <providerClass>oracle.javatools.db.ora.OracleDatabaseImpl</providerClass>
                <schemaName/>
                <typeName>NUMBER</typeName>
@@ -44,15 +44,15 @@
             </Item>
          </properties>
       </Item>
-      <Item id="3">
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="4">
             <ID>6296411d-0113-1000-8002-c13e71053f62</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
          </ID>
          <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
             <attributeValues class="java.util.HashMap"/>
-            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="5">
                <providerClass>oracle.javatools.db.ora.OracleDatabaseImpl</providerClass>
                <schemaName/>
                <typeName>NUMBER</typeName>
@@ -60,7 +60,7 @@
          </dataTypeUsage>
          <default/>
          <name>DP_SESSION_ID</name>
-         <notNull>true</notNull>
+         <notNull>false</notNull>
          <properties class="java.util.HashMap">
             <Item>
                <Key>Comment</Key>
@@ -68,8 +68,8 @@
             </Item>
          </properties>
       </Item>
-      <Item id="4">
-         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID" id="6">
             <ID>f3dd65bd-0109-1000-804f-c13e7105febe</ID>
             <parent idref="0"/>
             <type>COLUMN</type>
@@ -78,10 +78,10 @@
             <attributeValues class="java.util.HashMap">
                <Item>
                   <Key>size</Key>
-                  <Value class="java.lang.Long">256</Value>
+                  <Value class="java.lang.Long" id="7">256</Value>
                </Item>
             </attributeValues>
-            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="8">
                <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
                <schemaName/>
                <typeName>VARCHAR2</typeName>
@@ -97,7 +97,7 @@
             </Item>
             <Item>
                <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
-               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID">
+               <Value class="oracle.jdeveloper.offlinedb.marshal.GenericDBReferenceID" id="9">
                   <ID/>
                   <name>TOKEN</name>
                   <parent class="oracle.jdeveloper.offlinedb.marshal.OracleDBReferenceID">
@@ -128,7 +128,7 @@
                   <Value class="java.lang.Long">4000</Value>
                </Item>
             </attributeValues>
-            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID">
+            <dataTypeID class="oracle.javatools.db.datatypes.DataTypeID" id="1">
                <providerClass>oracle.javatools.db.ora.Oracle9i</providerClass>
                <schemaName/>
                <typeName>VARCHAR2</typeName>
@@ -157,6 +157,26 @@
                </Value>
             </Item>
          </properties>
+      </Item>
+      <Item>
+         <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
+            <ID>67b72d29-0113-1000-8004-c13e71053f62</ID>
+            <parent idref="0"/>
+            <type>COLUMN</type>
+         </ID>
+         <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+            <attributeValues class="java.util.HashMap">
+               <Item>
+                  <Key>size</Key>
+                  <Value class="java.lang.Long">4000</Value>
+               </Item>
+            </attributeValues>
+            <dataTypeID idref="1"/>
+         </dataTypeUsage>
+         <default/>
+         <name>FACILITY_SESSION_ERROR</name>
+         <notNull>false</notNull>
+         <properties/>
       </Item>
       <Item>
          <ID class="oracle.jdeveloper.offlinedb.OfflineDBObjectID">
@@ -211,10 +231,10 @@
          </ID>
          <columns>
             <Item>
-               <ID idref="1"/>
+               <ID idref="2"/>
                <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
                   <attributeValues class="java.util.HashMap"/>
-                  <dataTypeID idref="2"/>
+                  <dataTypeID idref="3"/>
                </dataTypeUsage>
                <default/>
                <name>ID</name>
@@ -252,7 +272,22 @@
             <type>CONSTRAINT</type>
          </ID>
          <columns>
-            <Item idref="3"/>
+            <Item>
+               <ID idref="4"/>
+               <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+                  <attributeValues class="java.util.HashMap"/>
+                  <dataTypeID idref="5"/>
+               </dataTypeUsage>
+               <default/>
+               <name>DP_SESSION_ID</name>
+               <notNull>true</notNull>
+               <properties class="java.util.HashMap">
+                  <Item>
+                     <Key>Comment</Key>
+                     <Value>foreign key linking to dp_session</Value>
+                  </Item>
+               </properties>
+            </Item>
          </columns>
          <deleteMode>0</deleteMode>
          <enabled>true</enabled>
@@ -275,7 +310,31 @@
             <type>CONSTRAINT</type>
          </ID>
          <columns>
-            <Item idref="4"/>
+            <Item>
+               <ID idref="6"/>
+               <dataTypeUsage class="oracle.javatools.db.datatypes.PredefinedDataTypeUsage">
+                  <attributeValues class="java.util.HashMap">
+                     <Item>
+                        <Key>size</Key>
+                        <Value idref="7"/>
+                     </Item>
+                  </attributeValues>
+                  <dataTypeID idref="8"/>
+               </dataTypeUsage>
+               <default/>
+               <name>FACILITY_NAME</name>
+               <notNull>true</notNull>
+               <properties class="java.util.HashMap">
+                  <Item>
+                     <Key>Comment</Key>
+                     <Value>name of the facility</Value>
+                  </Item>
+                  <Item>
+                     <Key>OfflineDBConstants.GENERATE_TARGET_ID</Key>
+                     <Value idref="9"/>
+                  </Item>
+               </properties>
+            </Item>
          </columns>
          <deleteMode>0</deleteMode>
          <enabled>true</enabled>
