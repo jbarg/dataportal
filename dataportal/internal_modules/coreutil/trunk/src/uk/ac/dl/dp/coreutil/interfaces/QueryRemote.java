@@ -3,17 +3,13 @@ package uk.ac.dl.dp.coreutil.interfaces;
 
 import java.util.Collection;
 import javax.ejb.Remote;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Keyword;
 
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
+import uk.ac.dp.icatws.Investigation;
 
 /**
  * This is the business interface for QuerySlaveMaster enterprise bean.

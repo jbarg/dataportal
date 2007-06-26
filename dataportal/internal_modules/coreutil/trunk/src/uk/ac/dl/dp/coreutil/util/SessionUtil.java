@@ -11,6 +11,7 @@ package uk.ac.dl.dp.coreutil.util;
 
 import java.security.cert.CertificateException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
@@ -18,7 +19,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
+import uk.ac.dl.dp.coreutil.entity.FacilitySession;
 import uk.ac.dl.dp.coreutil.entity.Session;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
 
@@ -39,13 +42,29 @@ public class SessionUtil {
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         try {
             session  = (Session) em.createNamedQuery("Session.findByUserSessionId").setParameter("userSessionId",sid).getSingleResult();
-           if(!isValid()) throw new SessionTimedOutException(sid);                
-      
+            if(!isValid()) throw new SessionTimedOutException(sid);
+            
         } catch(EntityNotFoundException enfe){
             throw new SessionNotFoundException("No session found for sid: "+sid);
         } catch(javax.persistence.NoResultException nre){
             throw new SessionNotFoundException("No session found for sid: "+sid);
         }
+    }
+    
+    public String getFacilitySessionId(String facility) throws SessionException{
+        Collection<FacilitySession> facIds = session.getFacilitySessionCollection();
+        for (FacilitySession facilitySession : facIds) {
+            if(facilitySession.getFacilityName().equals(facility)) {
+                if(facilitySession.getFacilitySessionId() != null) return facilitySession.getFacilitySessionId();
+                else throw new SessionException("Facility: "+facility+" has no sid, error: "+facilitySession.getFacilitySessionError());
+            }
+        }
+        //if get here then error
+        throw new SessionException("Facility: "+facility+" has not been tried to be logged into");
+    }
+    
+    public boolean isFacilityLoggedIn(){
+        
     }
     
     public boolean isValid() throws SessionTimedOutException{
@@ -61,7 +80,7 @@ public class SessionUtil {
         
         if(now.after(expire)){
             //timed out
-                return false;
+            return false;
         } else return true;
     }
     

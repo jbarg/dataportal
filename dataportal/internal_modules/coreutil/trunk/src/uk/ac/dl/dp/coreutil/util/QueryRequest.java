@@ -13,8 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import uk.ac.cclrc.dpal.enums.LogicalOperator;
-
+//import uk.ac.dp.icatws.dvancedSearch;
 /**
  *
  * @author gjd37
@@ -23,92 +22,83 @@ public class QueryRequest implements Serializable{
     
     
     private String id;
+    private Date sent;
+    private String sessionId ;
+    private String queryid;
+    private String facilitySessionId;
+    private DPQueryType qt;
     private String facility;
     private Collection<String> facilities;
-    private String[] keyword;
-    private Date sent;
-    private String sid ;
-    private String queryid;
-    private String DN;
-    private DPQueryType qt;
-    private LogicalOperator logicalOperator;
-    private boolean fuzzy;   
-    private String federalID;
+    
+    private KeywordQueryRequest keywordQuery;
+    //   private AdvancedSearch advancedSearch;
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
     }
-
+    
     public String getId() {
         return id;
     }
-
+    
     public void setId(String id) {
         this.id = id;
     }
-
-    public String getFacility() {
-        return facility;
-    }
-
-    public void setFacility(String facility) {
-        this.facility = facility;
-    }
-
-    public String[] getKeyword() {
-        return keyword;
-    }
     
-    public Collection<String> getKeywords() {
-        Collection<String> d = new ArrayList<String>();
-        for(String keyword : getKeyword()){
-            d.add(keyword);
-        }
-        return d;
-    }
-
-    public void setKeyword(String[] keyword) {
-        this.keyword = keyword;
-    }
-
     public Date getSent() {
         return sent;
     }
-
+    
     public void setSent(Date sent) {
         this.sent = sent;
     }
-
-    public String getSid() {
-        return sid;
+    
+    public String getSessionId() {
+        return sessionId;
     }
-
-    public void setSid(String sid) {
-        this.sid = sid;
+    
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
-
-    public String getDN() {
-        return DN;
+    
+    public String getQueryid() {
+        return queryid;
     }
-
-    public void setDN(String DN) {
-        this.DN = DN;
+    
+    public void setQueryid(String queryid) {
+        this.queryid = queryid;
+    }
+    
+    public String getFacilitySessionId() {
+        return facilitySessionId;
+    }
+    
+    public void setFacilitySessionId(String facilitySessionId) {
+        this.facilitySessionId = facilitySessionId;
     }
     
     public DPQueryType getQt() {
         return qt;
     }
-
+    
     public void setQt(DPQueryType qt) {
         this.qt = qt;
     }
-
-    public String getQueryid() {
-        return queryid;
+    
+    public String getFacility() {
+        return facility;
     }
-
-    public void setQueryid(String queryid) {
-        this.queryid = queryid;
+    
+    public void setFacility(String facility) {
+        this.facility = facility;
+    }
+    
+    public KeywordQueryRequest getKeywordQuery() {
+        return keywordQuery;
+    }
+    
+    public void setKeywordQuery(KeywordQueryRequest keywordQuery) {
+        this.keywordQuery = keywordQuery;
     }
 
     public Collection<String> getFacilities() {
@@ -118,29 +108,4 @@ public class QueryRequest implements Serializable{
     public void setFacilities(Collection<String> facilities) {
         this.facilities = facilities;
     }
-
-    public LogicalOperator getLogicalLogicalOperator() {
-        return logicalOperator;
-    }
-
-    public void setLogicalOperator(LogicalOperator logicalOperator) {
-        this.logicalOperator = logicalOperator;
-    }
-
-    public boolean isFuzzy() {
-        return fuzzy;
-    }
-
-    public void setFuzzy(boolean fuzzy) {
-        this.fuzzy = fuzzy;
-    }
-  
-    public String getFederalID() {
-        return federalID;
-    }
-
-    public void setFederalID(String federalID) {
-        this.federalID = federalID;
-    }
-    
 }

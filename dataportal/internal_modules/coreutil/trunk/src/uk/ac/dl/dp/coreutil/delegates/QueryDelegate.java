@@ -3,13 +3,7 @@ package uk.ac.dl.dp.coreutil.delegates;
 import java.util.Collection;
 import javax.naming.NamingException;
 import org.apache.log4j.Logger;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Keyword;
 
-
-import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
@@ -18,6 +12,9 @@ import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.Keyword;
+import uk.ac.dp.icatws.LogicalOperator;
 
 /**
  *
@@ -55,11 +52,7 @@ public class QueryDelegate {
     public QueryRequest query(String sid, String[] keywords, Collection<String> facilities, LogicalOperator logicalOperator, boolean fuzzy, DPQueryType queryType) throws   SessionException, QueryException{
         return  qsmr.query(sid, facilities, keywords, logicalOperator, fuzzy, queryType);
     }
-           
-   /* public QueryRequest queryByKeyword(String sid ,String keyword, Collection<String> facilities, LogicalOperator logicalOperator, boolean fuzzy) throws  CertificateException, SessionNotFoundException, SessionTimedOutException, QueryException, UserNotFoundException{
-        return qsmr.queryByKeyword(sid, facilities, new String[] {keyword},logicalOperator, fuzzy);        
-    }*/
-    
+         
     public boolean isFinished(QueryRequest query_request){
         return qsmr.isFinished(query_request);
     }
@@ -84,49 +77,30 @@ public class QueryDelegate {
         return qsmr.getCurrentResults(sid);
     }
     
-   /* public Collection<Investigation> getInvestigations(String sid,Collection<Study> study) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
-        return qsmr.getInvestigations(sid,  study);
-    }*/
-    
-   /* public Collection<DataSet> getDataSets(String sid, String[][] investigations) throws SessionNotFoundException, SessionTimedOutException, UserNotFoundException, QueryException{
-         return qsmr.getDataSets(sid, investigations);
-    }*/
-    
-   /* public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
-        return qsmr.getInvestigationByStudyId(sid, fac, studyId);
-    }*/
-    
+   
     public Collection<Investigation> getInvestigationById(String sid, String fac, String investigationId) throws SessionException,QueryException{
         return qsmr.getInvestigationById(sid, fac, investigationId);
     }
     
-     public Collection<Keyword> getKeywordsByInvestigationId(String sid,  Collection<Investigation> investigationIds) throws SessionException,QueryException{
-        return qsmr.getKeywordsByInvestigationId(sid, investigationIds);
-    }
+   
     
-    /*public Collection<Investigation> getMyInvestigations(String sid, Collection<String> facilities) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException,QueryException{
+    public Collection<Investigation> getMyInvestigations(String sid, Collection<String> facilities) throws SessionException{
         return qsmr.getMyInvestigations(sid, facilities);
-    }*/
-    
-    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionException, QueryException{
-        return qsmr.getDataSets(sid, investigations);
     }
     
-    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets)throws SessionException, QueryException{
-        return qsmr.getDataFiles(sid, datasets);
-    }
+   
     
     public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO query_dto){
         return qsmr.getPastQueryResults(sid, query_dto);
     }
     
-    public String[] getKeywords(String facility) throws Exception{
+    public Collection<String> getKeywords(String sessionId, String facility) throws Exception{
         return qsmr.getKeywords(facility);
         
     }
     
-     public String[] getKeywords(String facility, boolean redownload) throws QueryException{
-        return qsmr.getKeywords(facility,redownload);
+     public Collection<String> getKeywords(String sessionId, String facility, boolean redownload) throws QueryException{
+        return qsmr.getKeywords(sessionId, facility, redownload);
         
     }
 }

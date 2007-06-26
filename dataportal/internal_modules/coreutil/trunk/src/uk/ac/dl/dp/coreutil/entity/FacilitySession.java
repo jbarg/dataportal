@@ -45,11 +45,14 @@ public class FacilitySession implements Serializable {
     @Column(name = "ID", nullable = false)
     private Long id;
        
-    @Column(name = "FACILITY_SESSION_ID", nullable = false)
+    @Column(name = "FACILITY_SESSION_ID")
     private String facilitySessionId;
 
     @Column(name = "FACILITY_NAME")
     private String facilityName;
+    
+    @Column(name = "FACILITY_SESSION_ERROR")
+    private String facilitySessionError;
 
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -136,6 +139,14 @@ public class FacilitySession implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
+    }
+
+    public String getFacilitySessionError() {
+        return facilitySessionError;
+    }
+
+    public void setFacilitySessionError(String facilitySessionError) {
+        this.facilitySessionError = facilitySessionError;
     }
 
     

@@ -13,7 +13,8 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
  */
 @Local
 public interface LookupLocal {
-    
+      public ModuleLookup getFacility(String facility);
+      
     public Collection<FacilityDTO> getFacilities(DPFacilityType type);
     
     public Collection<ModuleLookup> getFacilityInfo(DPFacilityType type);
