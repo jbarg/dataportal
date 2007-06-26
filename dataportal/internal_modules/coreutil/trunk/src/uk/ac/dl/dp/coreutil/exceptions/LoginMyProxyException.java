@@ -96,10 +96,13 @@ public class LoginMyProxyException extends DataPortalException {
         if( trace.compareToIgnoreCase( "MyProxy get failed. [Root error message: invalid pass phrase]") == 0) {
             errMsg = "Invalid Passphrase Please Try Again";
             exceptionType = LoginError.INVALID_PASSPHASE;
-        } else if( trace.compareToIgnoreCase( "MyProxy get failed. [Root error message: Bad password invalid pass phrase]" )==0 ) {
+        } else if( trace.compareToIgnoreCase( "MyProxy get failed. [Root error message: Bad password invalid pass phrase]" )==0 || trace.compareToIgnoreCase( "MyProxy get failed. [Root error message: Bad passwordinvalid pass phrase]" )==0 ) {
             errMsg = "Invalid Passphrase. Please Try Again";
             exceptionType = LoginError.INVALID_PASSPHASE;
-        } else if( trace.compareToIgnoreCase( "MyProxy get failed. [Root error message: requested credentials have expired]" )==0 ) {
+        } else if( trace.contains( "Password must be at least" ) ) {
+            errMsg = "Invalid Passphrase. Passphrase too short";
+            exceptionType = LoginError.TOO_SHORT_PASSPHASE;
+        }else if( trace.compareToIgnoreCase( "MyProxy get failed. [Root error message: requested credentials have expired]" )==0 ) {
             errMsg = "Credentials have expired on MyProxy server. Upload a new proxy and try again";
             exceptionType = LoginError.CREDENTIALS_EXPIRED;
         } else if(  trace.compareToIgnoreCase( "MyProxy get failed. [Root error message: Credentials do not exist Unable to retrieve credential information]" )==0 ) {

@@ -10,12 +10,13 @@
 package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +24,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
@@ -74,6 +76,9 @@ public class Session implements Serializable {
     @JoinColumn(name = "USER_ID")
     @ManyToOne
     private User userId;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sessionId")
+    private Collection<FacilitySession> facilitySessionCollection;
     
     @PrePersist
     public void prePersist(){
@@ -169,6 +174,14 @@ public class Session implements Serializable {
     public String toString() {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
+    }
+
+    public Collection<FacilitySession> getFacilitySessionCollection() {
+        return facilitySessionCollection;
+    }
+
+    public void setFacilitySessionCollection(Collection<FacilitySession> facilitySessionCollection) {
+        this.facilitySessionCollection = facilitySessionCollection;
     }
     
 }

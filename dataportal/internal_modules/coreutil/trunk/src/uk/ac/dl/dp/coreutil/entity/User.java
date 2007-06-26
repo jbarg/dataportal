@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -195,6 +196,7 @@ public class User implements Serializable {
     public void addSession(uk.ac.dl.dp.coreutil.entity.Session session){
         session.setUserId(this);
         Collection<Session> sessions = this.getSession();
+        if(sessions ==null)  sessions = new ArrayList<Session>();
         sessions.add(session);
         this.setSession(sessions);
     }

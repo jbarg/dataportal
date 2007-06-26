@@ -51,8 +51,7 @@ public class Facility implements Serializable {
 
     @Column(name = "LONG_NAME")
     private String longName;
-  
-     
+      
     @Column(name = "INFO_URL", nullable = false)
     private String infoUrl;
 
