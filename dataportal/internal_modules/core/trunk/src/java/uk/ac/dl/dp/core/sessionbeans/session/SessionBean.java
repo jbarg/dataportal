@@ -18,12 +18,15 @@ import org.globus.myproxy.MyProxyException;
 import org.globus.myproxy.SASLParams;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.entity.FacilitySession;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
+import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 
 import uk.ac.dl.dp.coreutil.entity.User;
@@ -51,6 +54,8 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
+import uk.ac.dp.icatws.ICATSingleton;
+import uk.ac.dp.icatws.SessionException_Exception;
 
 
 /**
@@ -72,8 +77,10 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     @EJB
     private LookupLocal lookup;
+
+    private String sid;
     
-     // For testing only
+    // For testing only
     public void setLookupLocal(LookupLocal lookupLocal){
         this.lookup = lookupLocal;
     }
@@ -81,7 +88,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     @EJB
     private EventLocal eventLocal;
     
-     // For testing only
+    // For testing only
     public void setEventLocal(EventLocal eventLocal){
         this.eventLocal = eventLocal;
     }
@@ -191,7 +198,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String login(String username,String password, int lifetime) throws LoginMyProxyException, SessionException{
-       // log.debug("login(): " +sc.getCallerPrincipal() );
+        // log.debug("login(): " +sc.getCallerPrincipal() );
         // log.debug("login()" +sc.isCallerInRole("ANYONE") );
         if(username == null || username.equals("")) throw new SessionException("Usrname cannot be null or empty.");
         if(password == null || password.equals("")) throw new SessionException("Password cannot be null or empty.");
@@ -304,6 +311,8 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             em.persist(session);
             log.info("New session created for user: "+DN+" sid: "+sid);
             
+            log.info("Logging into default ICAT: "+user.getDpUserPreference().getDefaultFacility());
+            
             return sid;
             
         } else {
@@ -312,12 +321,37 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         }
     }
     
+    public String loginICATFacility(String sessionId, String username, String password, int lifetime, String defaultFacility ) throws SessionException{
+        log.debug("loginDefaultFacility: "+defaultFacility );
+        
+        Session session = new SessionUtil(sid,em).getSession();
+        
+        ModuleLookup module = lookup.getFacility(defaultFacility);
+        String facilitySessionId = null;
+        FacilitySession facSession = new FacilitySession();
+        try {
+            facilitySessionId = ICATSingleton.getInstance(module.getWsdlLocation()).loginLifetime(username, password, lifetime);
+            
+        } catch (SessionException_Exception ex) {
+            log.warn("unable to login to facility "+defaultFacility,ex);
+            facSession.setFacilitySessionError(ex.getMessage());
+        }
+        //save info into facility session DB
+        
+        facSession.setFacilityName(defaultFacility);
+        facSession.setFacilitySessionId(facilitySessionId);
+        facSession.setSessionId(session);
+        
+        em.persist(facSession);
+        return facilitySessionId;        
+    }
+    
     /*
      * Returns true if
      * - session in database
      * - proxy lifetime still remaining
      * otherwise returns false
-     */    
+     */
     public Boolean isValid(String sid) throws SessionException  {
         log.debug("isValid()");
         
@@ -399,5 +433,5 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         ts.createTimer(1000*60*30,1000*60*30);
         // ts.createTimer(1000*60*2,1000*60*2);
         //lookup default myproxy server
-    }    
+    }
 }

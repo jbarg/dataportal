@@ -19,10 +19,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
-import uk.ac.cclrc.dpal.beans.Investigation;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
+import uk.ac.dp.icatws.Investigation;
 
 public class QueryManager {
     
@@ -135,7 +135,7 @@ public class QueryManager {
     
     public static void addRecord(QueryRequest qr, Collection<Investigation> result,Exception ex) {
         
-        log.trace("Adding record for "+qr.getFacility()+ " sid: "+qr.getSid()+" with "+result.size()+" results");
+        log.trace("Adding record for "+qr.getFacility()+ " sid: "+qr.getSessionId()+" with "+result.size()+" results");
         
         Timestamp processed =
                 new Timestamp(System.currentTimeMillis());

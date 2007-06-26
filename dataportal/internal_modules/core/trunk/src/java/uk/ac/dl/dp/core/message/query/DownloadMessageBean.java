@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.EJBContext;
 import javax.ejb.MessageDriven;
@@ -51,23 +52,19 @@ import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
 import uk.ac.dl.srbapi.cog.PortalCredential;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
 import uk.ac.dl.srbapi.srb.SRBUrl;
-import uk.ac.dl.srbapi.util.IOTools;
-
 
 /**
  *
  * @author gjd37
  */
-@MessageDriven(mappedName=DataPortalConstants.DOWNLOAD_MDB)
-
-/*activationConfig =
+@MessageDriven(mappedName=DataPortalConstants.DOWNLOAD_MDB, activationConfig =
  
 {
   @ActivationConfigProperty(propertyName="destinationType",
     propertyValue="javax.jms.Queue"),
   @ActivationConfigProperty(propertyName="destination",
     propertyValue=DataPortalConstants.DOWNLOAD_MDB)
-})*/
+})
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class DownloadMessageBean extends MessageEJBObject implements MessageListener {
     
