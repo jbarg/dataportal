@@ -33,101 +33,179 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "DP_CONSTANTS")
-
+@NamedQueries( {
+        @NamedQuery(name = "DpConstants.findById", query = "SELECT d FROM DPConstants d WHERE d.id = :id"),
+        @NamedQuery(name = "DpConstants.findByName", query = "SELECT d FROM DPConstants d WHERE d.name = :name"),
+        @NamedQuery(name = "DpConstants.findByValue", query = "SELECT d FROM DPConstants d WHERE d.value = :value"),
+        @NamedQuery(name = "DpConstants.findByDescription", query = "SELECT d FROM DPConstants d WHERE d.description = :description"),
+        @NamedQuery(name = "DpConstants.findByModTime", query = "SELECT d FROM DPConstants d WHERE d.modTime = :modTime")
+    })
 public class DPConstants implements Serializable {
-    
+
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE,generator="SEQ_GEN")
     @Column(name = "ID", nullable = false)
     private Long id;
-    
-    @Column(name = "SERVER_CONTEXT_ROOT")
-    private String contextRoot;
-    
-    @Column(name = "SERVER_PORT")
-    private Integer portNumber;
-    
-    @Column(name = "SERVER_NAME")
-    private String serviceName;
-    
-    @Column(name = "LOGGING_LEVEL")
-    private String loggingLevel;
-    
-    @Column(name = "DOWNLOAD_LOCATION")
-    private String downloadLocation;
-    
+
+    @Column(name = "NAME", nullable = false)
+    private String name;
+
+    @Column(name = "VALUE", nullable = false)
+    private String value;
+
+    @Column(name = "DESCRIPTION", nullable = false)
+    private String description;
+
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
     
-    @PrePersist
-    @PreUpdate
-    public void prePersist(){
-        modTime = new Date();
-    }
-    
-    /** Creates a new instance of SrbServer */
+    /** Creates a new instance of DpConstants */
     public DPConstants() {
     }
-    
-    public Date getModTime() {
-        return this.modTime;
+
+    /**
+     * Creates a new instance of DpConstants with the specified values.
+     * @param id the id of the DpConstants
+     */
+    public DPConstants(Long id) {
+        this.id = id;
     }
-    
-     public void setModTime(Date modTime) {
+
+    /**
+     * Creates a new instance of DpConstants with the specified values.
+     * @param id the id of the DpConstants
+     * @param name the name of the DpConstants
+     * @param value the value of the DpConstants
+     * @param description the description of the DpConstants
+     * @param modTime the modTime of the DpConstants
+     */
+    public DPConstants(Long id, String name, String value, String description, Date modTime) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
+        this.description = description;
         this.modTime = modTime;
     }
-    
-    public String getContextRoot() {
-        return contextRoot;
-    }
-    
-    public void setContextRoot(String contextRoot) {
-        this.contextRoot = contextRoot;
-    }
-    
-    public Integer getPortNumber() {
-        return portNumber;
-    }
-    
-    public void setPortNumber(Integer portNumber) {
-        this.portNumber = portNumber;
-    }
-    
-    public String getServiceName() {
-        return serviceName;
-    }
-    
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
-    
-    public String getLoggingLevel() {
-        return loggingLevel;
-    }
-    
-    public void setLoggingLevel(String loggingLevel) {
-        this.loggingLevel = loggingLevel;
-    }
-    
-    public String getDownloadLocation() {
-        return downloadLocation;
-    }
-    
-    public void setDownloadLocation(String downloadLocation) {
-        this.downloadLocation = downloadLocation;
-    }
-    
+
+    /**
+     * Gets the id of this DpConstants.
+     * @return the id
+     */
     public Long getId() {
-        return id;
+        return this.id;
     }
-    
+
+    /**
+     * Sets the id of this DpConstants to the specified value.
+     * @param id the new id
+     */
     public void setId(Long id) {
         this.id = id;
     }
-    
-    
-    
-    
+
+    /**
+     * Gets the name of this DpConstants.
+     * @return the name
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Sets the name of this DpConstants to the specified value.
+     * @param name the new name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets the value of this DpConstants.
+     * @return the value
+     */
+    public String getValue() {
+        return this.value;
+    }
+
+    /**
+     * Sets the value of this DpConstants to the specified value.
+     * @param value the new value
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    /**
+     * Gets the description of this DpConstants.
+     * @return the description
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
+    /**
+     * Sets the description of this DpConstants to the specified value.
+     * @param description the new description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Gets the modTime of this DpConstants.
+     * @return the modTime
+     */
+    public Date getModTime() {
+        return this.modTime;
+    }
+
+    /**
+     * Sets the modTime of this DpConstants to the specified value.
+     * @param modTime the new modTime
+     */
+    public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
+
+    /**
+     * Returns a hash code value for the object.  This implementation computes 
+     * a hash code value based on the id fields in this object.
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (this.id != null ? this.id.hashCode() : 0);
+        return hash;
+    }
+
+    /**
+     * Determines whether another object is equal to this DpConstants.  The result is 
+     * <code>true</code> if and only if the argument is not null and is a DpConstants object that 
+     * has the same id field values as this object.
+     * @param object the reference object with which to compare
+     * @return <code>true</code> if this object is the same as the argument;
+     * <code>false</code> otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof DPConstants)) {
+            return false;
+        }
+        DPConstants other = (DPConstants)object;
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) return false;
+        return true;
+    }
+
+    /**
+     * Returns a string representation of the object.  This implementation constructs 
+     * that representation based on the id fields.
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return "DPConstants[id=" + id + "]";
+    }
     
 }

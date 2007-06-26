@@ -24,6 +24,7 @@ public enum LoginError {
     MYPROXY_CREDENTIAL_EXPIRED_EXCEPTION("Credentials have expired on MyProxy server. Upload a new proxy and try again"),
     MYPROXY_LOGIN_EXCEPTION("My Proxy Login Exception"),
     INVALID_PASSPHASE("Invalid Passphrase. Please Try Again"),
+     TOO_SHORT_PASSPHASE("Invalid Passphrase. Passphrase too short"),
     NO_MYPROXY_CREDENTIAL("No credentials on MyProxy server. Upload a proxy and try again"),
          INVALID_PASSWORD("Invalid Password. Please Try Again");
     

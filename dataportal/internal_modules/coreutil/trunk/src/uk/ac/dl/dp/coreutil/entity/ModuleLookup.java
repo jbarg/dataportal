@@ -34,7 +34,7 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 @Table(name = "DP_MODULE_LOOKUP")
 @NamedQueries( {
     @NamedQuery(name = "ModuleLookup.findById", query = "SELECT m FROM ModuleLookup m WHERE m.id = :id"), 
-    @NamedQuery(name = "ModuleLookup.findByConnection", query = "SELECT m FROM ModuleLookup m WHERE m.connection = :connection"), 
+    @NamedQuery(name = "ModuleLookup.findByConnection", query = "SELECT m FROM ModuleLookup m WHERE m.wsdlLocation = :wsdlLocation"), 
     @NamedQuery(name = "ModuleLookup.findByUsername", query = "SELECT m FROM ModuleLookup m WHERE m.username = :username"), 
     @NamedQuery(name = "ModuleLookup.findByPassword", query = "SELECT m FROM ModuleLookup m WHERE m.password = :password"), 
     @NamedQuery(name = "ModuleLookup.findByPlatform", query = "SELECT m FROM ModuleLookup m WHERE m.platform = :platform"), 
@@ -52,8 +52,8 @@ public class ModuleLookup implements Serializable {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "CONNECTION", nullable = false)
-    private String connection;
+    @Column(name = "LOCATION", nullable = false)
+    private String wsdlLocation;
 
     @Column(name = "USERNAME")
     private String username;
@@ -103,9 +103,9 @@ public class ModuleLookup implements Serializable {
         this.id = id;
     }*/
 
-    public ModuleLookup(String connection, String moduleType, String facility, Date modTime) {
+    public ModuleLookup(String wsdlLocation, String moduleType, String facility, Date modTime) {
         //this.id = id;
-        this.connection = connection;
+        this.wsdlLocation = wsdlLocation;
         this.moduleType = moduleType;
         this.facility = facility;
         this.modTime = modTime;
@@ -119,12 +119,12 @@ public class ModuleLookup implements Serializable {
         this.id = id;
     }*/
 
-    public String getConnection() {
-        return this.connection;
+    public String getWsdlLocation() {
+        return this.wsdlLocation;
     }
 
-    public void setConnection(String connection) {
-        this.connection = connection;
+    public void setWsdlLocation(String wsdlLocation) {
+        this.wsdlLocation = wsdlLocation;
     }
 
     public String getUsername() {
