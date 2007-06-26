@@ -175,7 +175,7 @@ public class AdminClient {
         ModuleLookup mlu = new ModuleLookup();
         mlu.setActive("N");
         mlu.setModuleType(DPFacilityType.WRAPPER.toString());
-        mlu.setConnection("Not Needed");
+        mlu.setWsdlLocation("Not Needed");
         mlu.setFacility("TEST");
         
         bean.addFacility(sid,mlu);

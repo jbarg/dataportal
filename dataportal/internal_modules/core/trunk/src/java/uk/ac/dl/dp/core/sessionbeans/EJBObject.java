@@ -40,7 +40,7 @@ public abstract class EJBObject {
     public void setEntityManager(EntityManager em){
         this.em = em;
     }
-    
+            
     public Object mergeEntity(Object entity) {
         return em.merge(entity);
     }

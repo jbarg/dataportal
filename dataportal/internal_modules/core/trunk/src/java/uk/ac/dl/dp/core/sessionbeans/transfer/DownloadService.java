@@ -126,8 +126,8 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
     public boolean isSet(){
         try {
             DPConstants constants=   em.find(DPConstants.class,1L);
-            if(constants == null || constants.getDownloadLocation() == null || constants.getDownloadLocation().equals("")) return false;
-            else return true;
+         //TODO   if(constants == null || constants.getDownloadLocation() == null || constants.getDownloadLocation().equals("")) return false;
+            /*else*/ return true;
         } catch(Exception e){
             log.error("Unable to check if constants set",e);
             return false;
