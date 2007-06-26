@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -29,13 +30,6 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
 import org.apache.log4j.Logger;
-import uk.ac.cclrc.dpal.DPAccessLayer;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.beans.Keyword;
-
-import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
@@ -56,7 +50,9 @@ import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
-
+import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
+import uk.ac.dp.icatws.ICATSingleton;
+import uk.ac.dp.icatws.Investigation;
 
 /**
  *
@@ -87,14 +83,55 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     private  Queue queue;
     
     @PermitAll
-    public QueryRequest query(String sid, Collection<String> facilities, String[] keyword, LogicalOperator logicalex, boolean fuzzy, DPQueryType queryType) throws SessionException, QueryException{
-        log.debug("queryByKeyword()");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
+    public QueryRequest queryByKeyword(String sid, KeywordQueryRequest keywordQueryRequest) throws SessionException, QueryException{
+        log.debug("queryByKeyword");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         String search_id =  UUID.randomUUID().toString();
         UserUtil userUtil =  new UserUtil(sid,em);
         User user = userUtil.getUser();
-        QueryRequest q_request = null;
+        
+        // here we create NewsEntity, that will be sent in JMS message
+        QueryRequest q_request = new QueryRequest();
+        q_request.setFacilities(keywordQueryRequest.getFacilities());
+        q_request.setKeywordQuery(keywordQueryRequest);
+        q_request.setId(search_id);
+        q_request.setSessionId(sid);
+        q_request.setQueryid(search_id);
+        q_request.setSent(new Date());
+        q_request.setQt(DPQueryType.KEYWORD);
+        
+        //send off basic search event
+        //TODO sort out facility, keyword strings properly
+        eventLocal.sendKeywordEvent(sid, keywordQueryRequest.getFacilities(), keywordQueryRequest.getKeywords(), DPEvent.BASIC_SEARCH);
+        
+        log.trace("sent search event log , sid: "+sid );
+    }
+    
+    public QueryRequest queryMydata(String sid, Collection<String> facilities) throws SessionException, QueryException{
+        log.debug("queryByKeyword");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
+        
+        String search_id =  UUID.randomUUID().toString();
+        UserUtil userUtil =  new UserUtil(sid,em);
+        User user = userUtil.getUser();
+        
+        // here we create NewsEntity, that will be sent in JMS message
+        QueryRequest q_request = new QueryRequest();
+        q_request.setFacilities(facilities);
+        q_request.setId(search_id);
+        q_request.setSessionId(sid);
+        q_request.setQueryid(search_id);
+        q_request.setSent(new Date());
+        q_request.setQt(DPQueryType.MYDATA);
+        
+        //send off basic search event
+        //TODO sort out facility, keyword strings properly
+        eventLocal.sendKeywordEvent(sid, facilities, new ArrayList<String>(), DPEvent.MYDATA_SEARCH);
+        log.trace("sent search event log , sid: "+sid );
+    }
+    
+    private QueryRequest query(String sid, QueryRequest q_request) throws SessionException, QueryException{
         
         Connection connection = null;
         Session session = null;
@@ -111,38 +148,18 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
             try {
                 //close connections
                 if(session != null) session.close();
-                if(connection != null)   connection.close();
+                if(connection != null) connection.close();
             } catch (JMSException e) {}
             throw new QueryException("Unexpected error, JSMException with connecting to message queue",ex);
         }
         
         
         //TODO real query
-        for(String fac : facilities){
+        for(String facility : q_request.getFacilities()){
             try {
-                
                 ObjectMessage message = session.createObjectMessage();
                 
-                // here we create NewsEntity, that will be sent in JMS message
-                q_request = new QueryRequest();
-                q_request.setFuzzy(fuzzy);
-                
-                q_request.setId(search_id);
-                q_request.setFacility(fac);
-                q_request.setFacilities(facilities);
-                q_request.setSid(sid);
-                q_request.setQueryid(search_id);
-                q_request.setDN(user.getDn());
-                q_request.setKeyword(keyword);
-                q_request.setSent(new Date());
-                q_request.setQt(queryType);
-                q_request.setFederalID(user.getUserId());
-                if(logicalex == null) {
-                    q_request.setLogicalOperator(LogicalOperator.AND);
-                } else {
-                    q_request.setLogicalOperator(logicalex);
-                }
-                
+                q_request.setFacility(facility);
                 
                 message.setObject(q_request);
                 //TODO  should we do first in first out on QueryManager so can have more than one per session
@@ -153,16 +170,16 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
                 // QueryManager.removeRecord(sid+fac);
                 
                 messageProducer.send(message);
-                log.debug("sent message for facility: "+fac);
+                log.debug("sent message for facility: "+facility);
                 
             } catch (Exception e) {
-                log.error("Unable to send off query to fac "+fac,e);
+                log.error("Unable to send off query to fac "+facility,e);
                 try {
                     //close connections
                     if(session != null) session.close();
                     if(connection != null)   connection.close();
                 } catch (JMSException ex) {}
-                throw new QueryException("Unable to send off query to fac: "+fac,e);
+                throw new QueryException("Unable to send off query to fac: "+facility,e);
             }
         }
         try {
@@ -172,12 +189,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         } catch (JMSException ex) {}
         
         log.trace("sent off querys to MDBs");
-        //send off basic search event
-        //TODO sort out facility, keyword strings properly
-        if(queryType.toString().equals(DPQueryType.KEYWORD.toString())){
-            eventLocal.sendKeywordEvent(sid, facilities, keyword, DPEvent.BASIC_SEARCH);
-        } else  eventLocal.sendKeywordEvent(sid, facilities, keyword, DPEvent.MYDATA_SEARCH);
-        log.trace("sent search event log , sid: "+sid );
+        
         return q_request;
         
     }
@@ -208,25 +220,24 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         return true;
     }
     
-   /* @Remove
-    @PermitAll
-    public void remove(){
-        //TODO remove objects
-    }*/
     
 //TODO put together a single method to recurse over QueryManager
     @PermitAll
-    public Collection<Investigation> getQueryResults(String queryId){
-        log.debug("getQueryResults()");       
+    public Collection<Investigation> getQueryResults(String sessionId, String queryId){
+        log.debug("getQueryResults()");
+        
+        //check is valid sessionid
+        new SessionUtil(sessionId, em);
+        
         //Collection<QueryRecord> qra = new ArrayList<QueryRecord>();
         Collection<Investigation> st = new ArrayList<Investigation>();
         
         Collection<QueryRecord> cqr =  QueryManager.getRecord(queryId);
         
         for(QueryRecord qr : cqr){
-            for(Investigation study : qr.getResult()){
-                st.add(study);
-                log.trace(study);
+            for(Investigation investigation : qr.getResult()){
+                st.add(investigation);
+                log.trace(investigation);
             }
         }
         log.trace("Sending back this");
@@ -238,92 +249,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }
     
     @PermitAll
-    public Collection<Investigation> getQueryResults(QueryRequest q_request){
-        return getQueryResults(q_request.getQueryid());
+    public Collection<Investigation> getQueryResults(String sessionId, QueryRequest q_request){
+        return getQueryResults(sessionId, q_request.getQueryid());
     }
     
-  /*  public Collection<Investigation> getInvestigations(String sid, Collection<Study> studies) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        //TODO check for nulls
-   
-        UserUtil userUtil =  new UserUtil(sid);
-        User user = userUtil.getUser();
-        Collection<String> facilities = new ArrayList<String>();
-   
-        for(Study st : studies){
-            if(!facilities.contains(st.getFacility())) facilities.add(st.getFacility());
-        }
-   
-        Collection<Investigation> investigations = new ArrayList<Investigation>();
-   
-        for(String fac : facilities){
-            ArrayList<String> study_id = new ArrayList<String>();
-   
-            for(Study st : studies){
-                if(st.getFacility().equalsIgnoreCase(fac)) study_id.add(st.getId());
-            }
-   
-            if(study_id.size() == 0) continue ;
-   
-            DPAccessLayer dpal = null;
-            try {
-                dpal = new DPAccessLayer(fac);
-                investigations.addAll(dpal.getInvestigations(study_id, user.getDn()));
-   
-            } catch (Exception ex) {
-                log.error("Unable to search Investigations ids: ",ex);
-                throw new QueryException("Unable to search Investigations ids: ",ex);
-            } finally{
-                dpal.disconnectFromDB();
-            }
-        }
-   
-        return investigations;
-   
-    }*/
-    
-//TODO delete this
-   /* public Collection<DataSet> getDataSets(String sid, String[][] investigations) throws SessionNotFoundException, SessionTimedOutException,UserNotFoundException, QueryException{
-        log.debug("getDataSets(String sid, Collection<Investigation> investigations)");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-    
-    
-        UserUtil userUtil =  new UserUtil(sid);
-        User user = userUtil.getUser();
-        Collection<String> facilities = new ArrayList<String>();
-    
-        for(int i = 0; i < investigations.length ; i++){
-            if(!facilities.contains(investigations[i][1])) facilities.add(investigations[i][1]);
-        }
-    
-        Collection<DataSet> datasets = new ArrayList<DataSet>();
-    
-        for(String fac : facilities){
-            ArrayList<String> investigation_id = new ArrayList<String>();
-    
-            for(int i = 0; i < investigations.length ; i++){
-                if(investigations[i][1].equalsIgnoreCase(fac)) investigation_id.add(investigations[i][0]);
-            }
-    
-            if(investigation_id.size() == 0) continue ;
-    
-            DPAccessLayer dpal = null;
-            try {
-                log.trace("new DPAccessLayer(fac)");
-                dpal = new DPAccessLayer(fac);
-                datasets = dpal.getDataSets(investigation_id, user.getDn());
-                log.debug("Returned size: "+datasets.size());
-                datasets.addAll(datasets);
-            } catch (Exception ex) {
-                log.error("Unable to search Investigations ids: ",ex);
-                throw new QueryException("Unable to search Investigations ids: ",ex);
-            } finally{
-                dpal.disconnectFromDB();
-            }
-        }
-    
-        return datasets;
-    }*/
     
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionException, QueryException{
@@ -468,6 +397,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     
     public Collection<Investigation> getPastQueryResults(String sid, String queryid){
         log.debug("getPastQueryResults(String sid)");
+        
+        //check is valid sessionid
+        new SessionUtil(sessionId, em);
+        
         Collection<Investigation> st = new ArrayList<Investigation>();
         Collection<QueryRecord> ccqr = QueryManager.getRecord(queryid);
         
@@ -478,169 +411,71 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         
     }
     
-    //not needed
-  /*  public Collection<Investigation> getInvestigationByStudyId(String sid, String fac, String studyId) throws SessionNotFoundException, UserNotFoundException, SessionTimedOutException, QueryException{
-        log.debug("getInvestigationByStudyId(String sid)");
-        if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
-        //TODO check for nulls
-        User user =  new UserUtil(sid).getUser();
-   
-        DPAccessLayer dpal = null;
-        Collection<Study> r_s_l = new ArrayList<Study>() ;
-        Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
-        ArrayList<String> studyIds = new ArrayList<String>() ;
-       studyIds.add(studyId);
-        try {
-            dpal = new DPAccessLayer(fac);
-   
-            r_s_l = dpal.getStudiesById(studyIds, user.getDn());
-   
-            ArrayList<String> studies = new ArrayList<String>();
-            for(Study study : r_s_l){
-                studies.add(study.getId());
-            }
-            r_i_l =  dpal.getInvestigations(studies,user.getDn());
-        } catch (Exception ex) {
-            log.error("Unable to search Investigations ids: ",ex);
-            throw new QueryException("Unable to search Investigations ids: ",ex);
-        } finally{
-            dpal.disconnectFromDB();
-        }
-        return r_i_l;
-    }*/
     
-    public Collection<Investigation> getInvestigationById(String sid, String fac, String investigastionId) throws SessionException, QueryException{
+    public Investigation getInvestigationById(String sid, String facility, Long investigastionId) throws SessionException, QueryException{
         log.debug("getInvestigationId(String sid)");
         if(sid == null) throw new SessionException("Session ID cannot be null.");
         //TODO check for nulls
         
-        //get a list of facilites
-        Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
-        
-        
+        //check is valid sessionid
         User user =  new UserUtil(sid,em).getUser();
         
-        DPAccessLayer dpal = null;
-        Collection<Investigation> r_i_l = new ArrayList<Investigation>() ;
-        ArrayList<String> investigations = new ArrayList<String>();
-        investigations.add(investigastionId);
-        try {
+        //get a list of facilites
+        ModuleLookup moduleFacility = lookupLocal.getFacility(facility);
+        
+        try{
             
-            boolean security = true;
-            
-            for(ModuleLookup mod : facilitiesList){
-                if(mod.getFacility().equals(fac)){
-                    log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
-                    security = mod.isSecurity();
-                }
-            }
-            
-            dpal = new DPAccessLayer(fac);
-            log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
-            r_i_l = dpal.getInvestigationsById(investigations, user.getUserId(),security);
+            return ICATSingleton.getInstance(moduleFacility.getWsdlLocation()).getInvestigation("s", investigastionId);
             
         } catch (Exception ex) {
-            log.error("Unable to search Investigations ids: ",ex);
-            throw new QueryException("Unable to search Investigations ids: ",ex);
-        } finally{
-            dpal.disconnectFromDB();
+            log.error("Unable to search Investigations id: "+investigastionId+" for facility "+facility,ex);
+            throw new QueryException("Unable to search Investigations id : "+investigastionId+" for facility "+facility,ex);
         }
-        return r_i_l;
+        
     }
     
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<Keyword> getKeywordsByInvestigationId(String sid, Collection<Investigation> investigastions) throws SessionException, QueryException{
-        log.debug("getKeywordsByInvestigationId(String sid)");
-        Collection<Keyword> r_i_l = new ArrayList<Keyword>() ;
-        if(sid == null) throw new SessionException("Session ID cannot be null.");
-        //TODO check for nulls
-        
-        User user =  new UserUtil(sid,em).getUser();
-        
-        DPAccessLayer dpal = null;
-        Collection<Keyword> keywords = new ArrayList<Keyword>() ;
-        
-        //get a list of facilites
-        Collection<ModuleLookup> facilities = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
-        
-        for(ModuleLookup facs : facilities){
-            if(!facs.isActive()) continue;
+    
+    public HashMap<String, Collection<String>> getKeywords(String sessionId, boolean redownload) throws QueryException {
+        //load stuff from file
+        Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
+        HashMap<String, Collection<String>> keywordsForFacilities = new HashMap<String, Collection<String>>();
+        for (ModuleLookup moduleLookup : facilitiesList) {
             
-            ArrayList<String> investigationIds = new ArrayList<String>();
-            
-            try {
+            try{
+                //check is valid sessionid
+                User user =  new UserUtil(sessionId,em).getUser();
                 
-                //get from the list the list from this facility
+                File keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+moduleLookup.getFacility()+"_"+user.getUserId()+".keyworddata");
                 
-                for(Investigation invest : investigastions){
-                    if(invest.getFacility().equals(facs.getFacility())){
-                        investigationIds.add(invest.getId());
-                    }
-                }
-                
-                if(!investigationIds.isEmpty()){
-                    log.debug("searching "+facs.getFacility()+" for investigations keywords");
+                if(!keywordFile.exists()){
+                    log.info("Keyword data not found, redownloading to: "+DataPortalConstants.KEYWORD_LOCATION);
+                    //TODO wrong sessionid
+                    if(redownload){
+                        Collection<String> keywords = ICATSingleton.getInstance(moduleLookup.getWsdlLocation()).getKeywordsForUser(sessionId);
+                        keywordsForFacilities.put(moduleLookup.getFacility(), keywords);
+                    } else keywordsForFacilities.put(moduleLookup.getFacility(), new ArrayList<String>());
+                } else{
                     
-                    dpal = new DPAccessLayer(facs.getFacility());
-                    Collection<Keyword> returnedKeywords = dpal.getKeywordsByInvestigationId(investigationIds, user.getUserId());
-                    keywords.addAll(returnedKeywords);
-                }
-                
-                
-            } catch (Exception ex) {
-                log.error("Unable to search Investigations for keywords from facility: "+facs.getFacility(),ex);
-                //throw new QueryException("Unable to search Investigations for keywords from facility: "+facs.getFacility() ",ex);
-                //add erro message to investigation
-                
-                for(String id : investigationIds){
-                    Keyword keyword = new Keyword();
-                    keyword.setId(id);
-                    keyword.setName("Unable to initialise keywords.");
-                    keywords.add(keyword);
+                    FileInputStream f_in = new  FileInputStream(keywordFile);
                     
-                    keywords.add(keyword);
+                    // Read object using ObjectInputStream.
+                    ObjectInputStream obj_in = new ObjectInputStream(f_in);
+                    
+                    // Read an object.
+                    Collection<String> obj = (Collection<String>)obj_in.readObject();
+                    
+                    //close streams
+                    obj_in.close();
+                    f_in.close();
+                    
+                    log.trace("Deleted keyword file "+keywordFile.getName()+ "? "+keywordFile.delete());
+                    keywordsForFacilities.put(moduleLookup.getFacility(), obj);
                 }
-            } finally{
-                if(dpal != null) {
-                    log.trace("closing: "+facs.getFacility());
-                    dpal.disconnectFromDB();
-                    dpal = null;
-                }
+            } catch(Exception e){
+                log.warn("Unable to get keywords for facility: "+moduleLookup.getFacility(),e);
+                throw new QueryException("Unable to get keywords for facility: "+moduleLookup.getFacility());
             }
         }
-        return keywords;
-    }
-    
-    public String[] getKeywords(String facility, boolean redownload) throws QueryException {
-        //load stuff from file
-        try{
-        File keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+facility+".keyworddata");
-        
-        if(!keywordFile.exists()){
-            log.info("Keyword data not found, redownloading to: "+DataPortalConstants.KEYWORD_LOCATION+" returning empty set");
-            if(redownload) timerService.downloadKeywords();
-            
-            return new String[0];
-        }
-        
-        FileInputStream f_in = new  FileInputStream(keywordFile);
-        
-        // Read object using ObjectInputStream.
-        ObjectInputStream obj_in = new ObjectInputStream(f_in);
-        
-        // Read an object.
-        String[] obj = (String[])obj_in.readObject();
-        return obj;
-        }
-        catch(Exception e){
-            log.warn("Unable to get keywords for facility: "+facility,e);
-            throw new QueryException("Unable to get keywords for facility: "+facility);
-        }
-    }
-    
-    
-    public String[] getKeywords(String facility) throws QueryException {
-        return getKeywords(facility,true);
-        
+        return keywordsForFacilities;
     }
 }

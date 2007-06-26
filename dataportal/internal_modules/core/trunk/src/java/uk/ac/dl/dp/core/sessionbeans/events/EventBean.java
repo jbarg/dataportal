@@ -132,7 +132,7 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
         sendEvent(sid,eventmessage);
     }
     
-    public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords, DPEvent type){
+    public void sendKeywordEvent(String sid, Collection<String> facilities, Collection<String> keywords, DPEvent type){
         EventLog eventlog = new EventLog();
         StringBuilder builder = new StringBuilder();
         for(String  facility : facilities){
@@ -145,7 +145,7 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
         
         Collection<EventLogDetails> details = new ArrayList<EventLogDetails>();
         
-        if(keywords == null || keywords.length == 0){
+        if(keywords == null || keywords.size() == 0){
             EventLogDetails detail = new EventLogDetails();
             detail.setDetails("all data");
             detail.setEventLogId(eventlog);
@@ -168,8 +168,8 @@ public class EventBean extends SessionEJBObject implements EventRemote, EventLoc
         
     }
     
-    public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords){
-        sendKeywordEvent(sid, facilities,keywords, DPEvent.BASIC_SEARCH);
+    public void sendKeywordEvent(String sid, Collection<String> facilities, Collection<String> keywords){
+        sendKeywordEvent(sid, facilities, keywords, DPEvent.BASIC_SEARCH);
     }
     
     public void sendDownloadEvent(String sid, String message, Collection<String> srburls){

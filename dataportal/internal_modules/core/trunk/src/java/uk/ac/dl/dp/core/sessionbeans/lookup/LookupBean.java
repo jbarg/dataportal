@@ -58,6 +58,17 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         
     }
     
+    public ModuleLookup getFacility(String facility){
+        Collection<ModuleLookup> facilities = getFacilityInfo(DPFacilityType.WRAPPER);
+        for(ModuleLookup moduleFacility : facilities){
+            if(moduleFacility.getFacility().equals(facility)) {
+                log.trace("Default facility "+facility+" has location "+moduleFacility.getWsdlLocation());
+                return moduleFacility;
+            }
+        }
+        return null;
+    }
+    
     public Collection<ProxyServers> getProxyServers(){
         log.debug("Lookup.getProxyServers()");
         return (Collection<ProxyServers>) em.createNamedQuery("ProxyServers.findAll").getResultList();
