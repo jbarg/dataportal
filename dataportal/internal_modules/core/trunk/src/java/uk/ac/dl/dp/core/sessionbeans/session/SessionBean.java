@@ -73,8 +73,18 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     @EJB
     private LookupLocal lookup;
     
+     // For testing only
+    public void setLookupLocal(LookupLocal lookupLocal){
+        this.lookup = lookupLocal;
+    }
+    
     @EJB
     private EventLocal eventLocal;
+    
+     // For testing only
+    public void setEventLocal(EventLocal eventLocal){
+        this.eventLocal = eventLocal;
+    }
     
     public SessionDTO getSession(String sid) throws SessionException {
         log.debug("getSession()");
@@ -181,7 +191,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String login(String username,String password, int lifetime) throws LoginMyProxyException, SessionException{
-        log.debug("login(): " +sc.getCallerPrincipal() );
+       // log.debug("login(): " +sc.getCallerPrincipal() );
         // log.debug("login()" +sc.isCallerInRole("ANYONE") );
         if(username == null || username.equals("")) throw new SessionException("Usrname cannot be null or empty.");
         if(password == null || password.equals("")) throw new SessionException("Password cannot be null or empty.");

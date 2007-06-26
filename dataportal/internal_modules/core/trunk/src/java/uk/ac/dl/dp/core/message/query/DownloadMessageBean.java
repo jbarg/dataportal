@@ -232,14 +232,16 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
     private File zipFiles(SRBInfo srbInfo, File srbZipFile) throws IOException {
         DPConstants constants = getConstants();
         
+        //TODO sort out constants
         //need to copy to server location
-        File newLocationDir = new File(constants.getDownloadLocation()+File.separator+"download");
+        /*File newLocationDir = new File(constants.getDownloadLocation()+File.separator+"download");
         if(!newLocationDir.exists()) newLocationDir.mkdir();
         File newLocation = new File(constants.getDownloadLocation()+File.separator+"download",srbZipFile.getName());
         if(!newLocation.getParentFile().exists()) newLocation.getParentFile().mkdir();
         log.trace("Copying file to: "+newLocation.getAbsolutePath());
         IOTools.fileCopy(srbZipFile,newLocation);
-        return newLocation;
+        return newLocation;*/
+        return null;
     }
     
     /**
@@ -373,7 +375,8 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
             DPConstants constants = getConstants();
             String message = "Data Portal download";
             // String hostURL = "http://"+host.getHostAddress()+":"+sreq.getServerPort()+contextPath+"/download/"+srbZipFile.getName();
-            postMail(serviceInfo.getEmail(),message,"https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName(),"dataportal_download@dl.ac.uk");
+         //TODO   postMail(serviceInfo.getEmail(),message,"https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName(),"dataportal_download@dl.ac.uk");
+            postMail(serviceInfo.getEmail(),message,"https://:/download/"+srbZipFile.getName(),"dataportal_download@dl.ac.uk");
             return true;
         } catch (MessagingException ex) {
             log.error("Not mailed",ex);
@@ -398,7 +401,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
             body.append("\n");
             body.append("Your requested download from the Data Portal can be downloaded at:\n");
             body.append("\n");
-            body.append("https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName()+"\n");
+           //TODO body.append("https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName()+"\n");
             body.append("\n");
             body.append("Contents:\n\n");
             for(SRBUrl file : srbInfo.getSrbUrls()){
