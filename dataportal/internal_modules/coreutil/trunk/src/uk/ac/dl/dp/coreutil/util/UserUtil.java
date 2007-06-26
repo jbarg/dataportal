@@ -129,7 +129,7 @@ public class UserUtil {
             }
         } else return dpup;
     }
-    
+     
     
     public static User createDefaultUser(String username, String DN,EntityManager em) throws SessionException {
         User user;

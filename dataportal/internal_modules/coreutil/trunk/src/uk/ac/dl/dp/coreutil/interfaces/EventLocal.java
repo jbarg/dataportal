@@ -14,7 +14,7 @@ import uk.ac.dl.dp.coreutil.util.EventMessage;
 public interface EventLocal {
     public void sendEvent(String sid, EventMessage eventMessage);
     public void sendEvent(String sid, DPEvent event, String description);
-    public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords);
-    public void sendKeywordEvent(String sid, Collection<String> facilities, String[] keywords, DPEvent event);   
+    public void sendKeywordEvent(String sid, Collection<String> facilities, Collection<String> keywords);
+    public void sendKeywordEvent(String sid, Collection<String> facilities, Collection<String> keywords, DPEvent event);   
     public void sendDownloadEvent(String sid, String message, Collection<String> srburls);  
 }

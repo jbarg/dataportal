@@ -52,6 +52,7 @@ public class DataPortalConstants {
     
     //EJB MDB names
     public final static String QUERY_MDB = "jms/QueryMDBQueue";
+     public final static String LOGIN_ICAT_MDB = "jms/LoginICATMDBQueue";
     public final static String EVENT_MDB = "jms/EventMDBQueue";
     public final static String KEYWORD_MDB = "jms/KeywordMDBQueue";
     public final static String DOWNLOAD_MDB = "jms/DownloadMDBQueue";

@@ -13,10 +13,7 @@ package uk.ac.dl.dp.coreutil.util;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.Collection;
-import uk.ac.cclrc.dpal.beans.Investigation;
-
-
-
+import uk.ac.dp.icatws.Investigation;
 
 /**
  *
@@ -51,12 +48,11 @@ public class QueryRecord implements Serializable {
         this.setProcessed(processed);
         this.setResult(result);
         this.setId(qr.getId());
-        this.setQueryid(qr.getQueryid());
-        this.setDN(qr.getDN());
-        this.setSid(qr.getSid());
+        this.setQueryid(qr.getQueryid());        
+        this.setSid(qr.getSessionId());
         this.setException(ex);
         this.setFac(qr.getFacility());
-        this.setFacilities(qr.getFacilities());
+        
     }
     
     public Timestamp getSent() {
@@ -102,10 +98,10 @@ public class QueryRecord implements Serializable {
     public String toString(){
         StringBuilder b = new StringBuilder();
         for(Investigation study : result){
-            b.append(study.getName()+", ");
+            b.append(study.getTitle()+", ");
         }
         
-        return "QueryRecord[id: "+getId()+"] [sid: "+getSid()+"] [result: "+getResult().size()+"] [Studies: "+b+"]";
+        return "QueryRecord[id: "+getId()+"] [sid: "+getSid()+"] [result: "+getResult().size()+"] [Investigations: "+b+"]";
     }
     
     public Exception getException() {

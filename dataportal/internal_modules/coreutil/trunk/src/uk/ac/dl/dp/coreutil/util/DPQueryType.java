@@ -16,6 +16,7 @@ package uk.ac.dl.dp.coreutil.util;
 public enum DPQueryType {
     
     KEYWORD("KEYWORD"),
+    ADVANCED("ADVANCED"),
     MYDATA("MYDATA");   
      
     DPQueryType(String value) {
