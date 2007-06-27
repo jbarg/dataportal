@@ -10,9 +10,9 @@
 package uk.ac.dl.dp.coreutil.util;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import uk.ac.dp.icatws.Investigation;
 //import uk.ac.dp.icatws.dvancedSearch;
 /**
  *
@@ -30,6 +30,7 @@ public class QueryRequest implements Serializable{
     private String facility;
     private Collection<String> facilities;
     
+   private InvestigationIncludeRequest investigationRequest;
     private KeywordQueryRequest keywordQuery;
     //   private AdvancedSearch advancedSearch;
     
@@ -108,4 +109,14 @@ public class QueryRequest implements Serializable{
     public void setFacilities(Collection<String> facilities) {
         this.facilities = facilities;
     }
+
+    public InvestigationIncludeRequest getInvestigationRequest() {
+        return investigationRequest;
+    }
+
+    public void setInvestigationRequest(InvestigationIncludeRequest investigationRequest) {
+        this.investigationRequest = investigationRequest;
+    }
+
+   
 }

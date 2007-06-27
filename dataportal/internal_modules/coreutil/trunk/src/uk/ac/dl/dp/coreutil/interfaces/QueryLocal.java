@@ -10,32 +10,33 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.InvestigationInclude;
 
 /**
  * This is the business interface for QuerySlaveMaster enterprise bean.
  */
 @Local
 public interface QueryLocal {
-     public QueryRequest queryKeyword(String sid, KeywordQueryRequest kqr) throws QueryException, SessionException;
+    public QueryRequest queryByKeyword(String sid, KeywordQueryRequest kqr) throws QueryException, SessionException;
     
-     public QueryRequest queryMydata(String sid, Collection<String> facilities) throws SessionException, QueryException;
-  
-    public boolean isFinished(QueryRequest request);
+    public QueryRequest queryMydata(String sid, Collection<String> facilities) throws SessionException, QueryException;
     
-    public Collection<Investigation> getQueryResults(String sid, String queryId);
+    public boolean isFinished(QueryRequest request) throws SessionException;
     
-    public Collection<Investigation> getQueryResults(QueryRequest request);
+    public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException;
     
-    public Collection<String> getCompleted(QueryRequest request);
-          
-    public Investigation getInvestigationById(String sid, String facility, String investigationId) throws SessionException,QueryException;
-       
-    public Collection<QueryRecordDTO> getCurrentResults(String sid);
+    public Collection<Investigation> getQueryResults(QueryRequest request) throws SessionException;
     
-    public Collection<Investigation> getPastQueryResults(String sid, String queryid);
+    public Collection<String> getCompleted(QueryRequest request) throws SessionException;
+         
+    public Collection<Investigation> getInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
+   
+    public Collection<QueryRecordDTO> getCurrentResults(String sid) throws SessionException;
     
-    public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO dto);
+    public Collection<Investigation> getPastQueryResults(String sid, String queryid) throws SessionException;
+    
+    public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO dto) throws SessionException;
     
     public HashMap<String, Collection<String>> getKeywords(String sid, boolean redownload) throws QueryException ;
-  
+    
 }

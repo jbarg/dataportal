@@ -29,8 +29,8 @@ public class DataPortalConstants {
     //query cache limit
     public final static int QUERY_LIMIT = 250;
     
-        public final static int MAX_RESULTS = 500;
-        
+    public final static int MAX_RESULTS = 500;
+    
     public static String MYPROXY_USERNAME = "glen";
     public static String MYPROXY_PASSWORD = "kkkkkk";
     
@@ -52,7 +52,8 @@ public class DataPortalConstants {
     
     //EJB MDB names
     public final static String QUERY_MDB = "jms/QueryMDBQueue";
-     public final static String LOGIN_ICAT_MDB = "jms/LoginICATMDBQueue";
+    public final static String SEND_MDB = "jms/sendMDBQueue";
+    public final static String LOGIN_ICAT_MDB = "jms/LoginICATMDBQueue";
     public final static String EVENT_MDB = "jms/EventMDBQueue";
     public final static String KEYWORD_MDB = "jms/KeywordMDBQueue";
     public final static String DOWNLOAD_MDB = "jms/DownloadMDBQueue";
