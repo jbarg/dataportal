@@ -14,6 +14,7 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.InvestigationInclude;
 
 /**
  *
@@ -49,46 +50,46 @@ public class QueryDelegate {
     
     /*All TransferBean methods here*/
     public QueryRequest queryKeyword(String sid, KeywordQueryRequest kqr) throws   SessionException, QueryException{
-        return  qsmr.queryKeyword(sid, kqr);
+        return qsmr.queryByKeyword(sid, kqr);
     }
     
      public QueryRequest queryMyData(String sid, Collection<String> facilities) throws   SessionException, QueryException{
-        return  qsmr.queryMydata(sid, facilities);
+        return qsmr.queryMydata(sid, facilities);
     }
          
-    public boolean isFinished(QueryRequest query_request){
+    public boolean isFinished(QueryRequest query_request) throws SessionException{
         return qsmr.isFinished(query_request);
     }
     
-    public Collection<String> getCompleted(QueryRequest query_request){
+    public Collection<String> getCompleted(QueryRequest query_request) throws SessionException{
         return qsmr.getCompleted(query_request);
     }
     
-    public Collection<Investigation> getQueryResults(String sid, String queryId){
+    public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException{
         return qsmr.getQueryResults(sid, queryId);
     }
     
-    public Collection<Investigation> getQueryResults(QueryRequest query_request){
+    public Collection<Investigation> getQueryResults(QueryRequest query_request) throws SessionException{
         return qsmr.getQueryResults(query_request);
     }
     
-    public Collection<Investigation> getPastQueryResults(String sid, String query_id){
+    public Collection<Investigation> getPastQueryResults(String sid, String query_id) throws SessionException{
         return qsmr.getPastQueryResults(sid, query_id);
     }
     
-    public Collection<QueryRecordDTO> getCurrentResults(String sid){
+    public Collection<QueryRecordDTO> getCurrentResults(String sid) throws SessionException{
         return qsmr.getCurrentResults(sid);
-    }
+    } 
        
-    public Investigation getInvestigationById(String sid, String facility, String investigationId) throws SessionException,QueryException{
-        return qsmr.getInvestigationById(sid, facility, investigationId);
+    public Collection<Investigation> getInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude includes) throws SessionException,QueryException{
+        return qsmr.getInvestigations(sid, investigations, includes);
     }
            
-    public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO query_dto){
+    public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO query_dto) throws SessionException{
         return qsmr.getPastQueryResults(sid, query_dto);
     }
     
-    public HashMap<String, Collection<String>> getKeywords(String sessionId) throws Exception{
+    public HashMap<String, Collection<String>> getKeywords(String sessionId) throws SessionException, QueryException {
         return qsmr.getKeywords(sessionId, false);
         
     }    

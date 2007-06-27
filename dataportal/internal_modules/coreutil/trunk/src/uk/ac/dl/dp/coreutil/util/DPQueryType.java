@@ -17,6 +17,7 @@ public enum DPQueryType {
     
     KEYWORD("KEYWORD"),
     ADVANCED("ADVANCED"),
+    GET_INVESTIGATION_INCLUDES("GET_INVESTIGATION_INCLUDES"),
     MYDATA("MYDATA");   
      
     DPQueryType(String value) {
