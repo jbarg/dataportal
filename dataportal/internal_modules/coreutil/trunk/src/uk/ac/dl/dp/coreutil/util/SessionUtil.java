@@ -63,8 +63,10 @@ public class SessionUtil {
         throw new SessionException("Facility: "+facility+" has not been tried to be logged into");
     }
     
-    public boolean isFacilityLoggedIn(){
-        
+    public boolean isFacilityLoggedIn(int numberActiveFacilities){
+        Collection<FacilitySession> facIds = session.getFacilitySessionCollection();
+        if(facIds.size() >=  numberActiveFacilities) return true;
+        else return false;        
     }
     
     public boolean isValid() throws SessionTimedOutException{
