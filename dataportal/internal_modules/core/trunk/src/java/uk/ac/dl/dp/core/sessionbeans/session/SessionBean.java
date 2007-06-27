@@ -12,21 +12,25 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import javax.ejb.*;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 import org.apache.log4j.Logger;
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.globus.myproxy.SASLParams;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
-import uk.ac.dl.dp.coreutil.entity.FacilitySession;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
-import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 
 import uk.ac.dl.dp.coreutil.entity.User;
@@ -45,7 +49,9 @@ import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
+import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
+import uk.ac.dl.dp.coreutil.util.LoginICATMessage;
 import uk.ac.dl.dp.coreutil.util.cog.PortalCredential;
 
 
@@ -54,9 +60,6 @@ import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
-import uk.ac.dp.icatws.ICATSingleton;
-import uk.ac.dp.icatws.SessionException_Exception;
-
 
 /**
  * This is the bean class for the SessionBean enterprise bean.
@@ -77,7 +80,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     
     @EJB
     private LookupLocal lookup;
-
+    
     private String sid;
     
     // For testing only
@@ -92,6 +95,12 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     public void setEventLocal(EventLocal eventLocal){
         this.eventLocal = eventLocal;
     }
+    
+    @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
+    private ConnectionFactory connectionFactory;
+    
+    @Resource(mappedName=DataPortalConstants.LOGIN_ICAT_MDB)
+    private Queue queue;
     
     public SessionDTO getSession(String sid) throws SessionException {
         log.debug("getSession()");
@@ -159,7 +168,11 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             } else {
                 log.trace("Got a GSSCredential");
                 log.trace("Name: "+cred.getName());
-                String sid = insertSessionImpl(pname, cred);
+                //create login message
+                LoginICATMessage lim = new LoginICATMessage();
+                lim.setUsername(pname);
+                
+                String sid = insertSessionImpl(lim, cred);
                 log.trace("Time taken (insert): "+(System.currentTimeMillis()-time)/1000+" seconds");
                 
                 //add login event
@@ -197,7 +210,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public String login(String username,String password, int lifetime) throws LoginMyProxyException, SessionException{
+    public String login(String username, String password, int lifetime) throws LoginMyProxyException, SessionException{
         // log.debug("login(): " +sc.getCallerPrincipal() );
         // log.debug("login()" +sc.isCallerInRole("ANYONE") );
         if(username == null || username.equals("")) throw new SessionException("Usrname cannot be null or empty.");
@@ -210,7 +223,12 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             myproxy_proxy = DelegateCredential.getProxy(username, password, lifetime, PortalCredential.getPortalProxy(),
                     proxyserver.getProxyServerAddress(),proxyserver.getPortNumber(),proxyserver.getCaRootCertificate());
             
-            String sid = insertSessionImpl(username, myproxy_proxy);
+            //create login message
+            LoginICATMessage lim = new LoginICATMessage();
+            lim.setUsername(username);
+            lim.setLifetime(lifetime);
+            lim.setPassword(password);
+            String sid = insertSessionImpl(lim, myproxy_proxy);
             
             //add login event
             eventLocal.sendEvent(sid,DPEvent.LOG_ON,"Logged on");
@@ -227,7 +245,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
     }
     
-    private String insertSessionImpl(String username, GSSCredential credential) throws LoginMyProxyException, SessionException {
+    private String insertSessionImpl(LoginICATMessage loginICATMessage, GSSCredential credential) throws LoginMyProxyException, SessionException {
         
         log.info("Starting insertSessionImpl");
         
@@ -293,7 +311,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             } catch(UserNotFoundException enfe){
                 //no entity found, so create one
                 log.info("No user found, creating new user.");
-                user = UserUtil.createDefaultUser(username, DN, em);
+                user = UserUtil.createDefaultUser(loginICATMessage.getUsername(), DN, em);
                 userutil = new UserUtil(user,em);
                 
                 //add new user to session
@@ -311,8 +329,10 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             em.persist(session);
             log.info("New session created for user: "+DN+" sid: "+sid);
             
-            log.info("Logging into default ICAT: "+user.getDpUserPreference().getDefaultFacility());
+            //now log into the ICAT facilities and start download keywords
+            loginICATFacilities(loginICATMessage);
             
+            //now check
             return sid;
             
         } else {
@@ -321,29 +341,56 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         }
     }
     
-    public String loginICATFacility(String sessionId, String username, String password, int lifetime, String defaultFacility ) throws SessionException{
-        log.debug("loginDefaultFacility: "+defaultFacility );
+    private String loginICATFacilities(LoginICATMessage loginICATMessage) throws SessionException{
+        log.debug("loginICATFacilities: " );
         
-        Session session = new SessionUtil(sid,em).getSession();
+        Connection connection = null;
+        javax.jms.Session session = null;
+        MessageProducer messageProducer = null;
         
-        ModuleLookup module = lookup.getFacility(defaultFacility);
-        String facilitySessionId = null;
-        FacilitySession facSession = new FacilitySession();
         try {
-            facilitySessionId = ICATSingleton.getInstance(module.getWsdlLocation()).loginLifetime(username, password, lifetime);
             
-        } catch (SessionException_Exception ex) {
-            log.warn("unable to login to facility "+defaultFacility,ex);
-            facSession.setFacilitySessionError(ex.getMessage());
+            connection = connectionFactory.createConnection();
+            session = connection.createSession(false, javax.jms.Session.AUTO_ACKNOWLEDGE);
+            messageProducer = session.createProducer(queue);
+            log.debug("Created ICAT logins connections to MDBs OK");
+        } catch (JMSException ex) {
+            log.error("JMSExcption on connection to meesage: ",ex);
+            try {
+                //close connections
+                if(session != null) session.close();
+                if(connection != null) connection.close();
+            } catch (JMSException e) {}
+            throw new SessionException("Unexpected error, JSMException with connecting to message queue",ex);
         }
-        //save info into facility session DB
+                
+        //TODO real query
+        for(ModuleLookup facility : lookup.getFacilityInfo(DPFacilityType.WRAPPER)){
+            try {
+                ObjectMessage message = session.createObjectMessage();
+                
+                loginICATMessage.setFacility(facility.getFacility());
+                message.setObject(loginICATMessage);
+                
+                messageProducer.send(message);
+                log.debug("sent message for ICAT facility login: "+facility);
+                
+            } catch (Exception e) {
+                log.error("Unable to send off query to login to facility "+facility,e);
+                try {
+                    //close connections
+                    if(session != null) session.close();
+                    if(connection != null)  connection.close();
+                } catch (JMSException ex) {}
+                throw new QueryException("Unable to send off query to login to facility: "+facility,e);
+            }
+        }
+        try {
+            //close connections
+            if(session != null) session.close();
+            if(connection != null)   connection.close();
+        } catch (JMSException ex) {}
         
-        facSession.setFacilityName(defaultFacility);
-        facSession.setFacilitySessionId(facilitySessionId);
-        facSession.setSessionId(session);
-        
-        em.persist(facSession);
-        return facilitySessionId;        
     }
     
     /*

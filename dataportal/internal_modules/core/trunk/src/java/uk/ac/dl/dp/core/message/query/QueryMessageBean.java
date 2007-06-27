@@ -11,6 +11,7 @@ package uk.ac.dl.dp.core.message.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
@@ -22,12 +23,14 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import org.apache.log4j.Logger;
+import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dp.icatws.ICATSingleton;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -77,9 +80,11 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             try{
                 if(query.getQt().toString().equals(DPQueryType.KEYWORD.toString())){
                     investigations = doKeywordSearch(query, facility.getWsdlLocation());
-                } else  if(query.getQt().toString().equals(DPQueryType.KEYWORD.toString())){
+                } else if(query.getQt().toString().equals(DPQueryType.KEYWORD.toString())){
                     investigations = doKeywordSearch(query, facility.getWsdlLocation());
-                } if(query.getQt().toString().equals(DPQueryType.KEYWORD.toString())){
+                } else if(query.getQt().toString().equals(DPQueryType.GET_INVESTIGATION_INCLUDES.toString())){
+                    investigations = doGetInvestigationInclude(query, facility.getWsdlLocation());
+                } else if(query.getQt().toString().equals(DPQueryType.KEYWORD.toString())){
                     investigations = doKeywordSearch(query, facility.getWsdlLocation());
                 }
             } catch (Exception exception) {
@@ -116,5 +121,38 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 InvestigationInclude.INVESTIGATORS_AND_KEYWORDS,
                 request.getKeywordQuery().getStart_index(),
                 request.getKeywordQuery().getMax_results());
-    }    
+    }
+    
+    private Collection<Investigation> doGetInvestigationInclude(QueryRequest request, String wsdlLocation) throws SessionException_Exception, QueryException{
+        
+        Collection<Investigation> returnedInvestigations = new ArrayList<Investigation>();
+                
+        //get a list of facilites
+        ModuleLookup moduleFacility = lookupLocal.getFacility(request.getFacility());
+        ArrayList<Long> investigation_ids = new ArrayList<Long>();
+        
+        //add ids from this facility to list
+        for(Investigation invest : request.getInvestigationRequest().getInvestigations()){
+            if(invest.getFacility().equalsIgnoreCase(request.getFacility())) investigation_ids.add(invest.getId());
+        }
+        //now search
+        try{
+            String facilitySessionId = new SessionUtil(request.getSessionId(), em).getFacilitySessionId(request.getFacility());
+            
+            //TODO add facility session id
+            log.trace("seaching: "+request.getFacility()+" with facSessionID "+facilitySessionId);
+            
+            //TODO return collection
+            /*Collection<*/Investigation/*>*/ investigationsFromFacility = ICATSingleton.getInstance(moduleFacility.getWsdlLocation()).getInvestigationIncludes(facilitySessionId, 5L, request.getInvestigationRequest().getInclude());
+            
+            // log.debug("Returned size: "+investigationsFromFacility.size());
+            //returnedInvestigations.addAll(investigationsFromFacility);
+            
+        } catch (Exception ex) {
+            log.error("Unable to search facility "+request.getFacility(),ex);
+            throw new QueryException("Unable to search Investigations for facility "+request.getFacility(),ex);
+        }
+                
+        return returnedInvestigations;
+    }
 }

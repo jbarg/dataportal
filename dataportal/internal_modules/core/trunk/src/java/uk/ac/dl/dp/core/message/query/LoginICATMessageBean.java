@@ -92,7 +92,9 @@ public class LoginICATMessageBean extends MessageEJBObject implements MessageLis
             facSession.setFacilityName(loginICATMessage.getFacility());           
             facSession.setSessionId(session);
             
-            em.persist(facSession);
+            //em.persist(facSession);            
+            //persist it this way
+            session.addFacilitySession(facSession);
         }
         
         log.debug("Message login ICAT finished");        

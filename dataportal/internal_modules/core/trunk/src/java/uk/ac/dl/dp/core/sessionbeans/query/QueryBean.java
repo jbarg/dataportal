@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
-import javax.ejb.SessionContext;
 import javax.ejb.*;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -35,7 +35,6 @@ import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.coreutil.interfaces.QueryRemote;
-import uk.ac.dl.dp.coreutil.interfaces.TimerServiceLocal;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -50,9 +49,11 @@ import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
+import uk.ac.dl.dp.coreutil.util.InvestigationIncludeRequest;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dp.icatws.ICATSingleton;
 import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.InvestigationInclude;
 
 /**
  *
@@ -64,12 +65,6 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     
     static Logger log = Logger.getLogger(QueryBean.class);
     
-    @Resource
-    SessionContext sc;
-    
-    @EJB()
-    TimerServiceLocal timerService;
-    
     @EJB
     EventLocal eventLocal;
     
@@ -77,10 +72,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     LookupLocal lookupLocal;
     
     @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
-    private  ConnectionFactory connectionFactory;
+    private ConnectionFactory connectionFactory;
     
     @Resource(mappedName=DataPortalConstants.QUERY_MDB)
-    private  Queue queue;
+    private Queue queue;
     
     @PermitAll
     public QueryRequest queryByKeyword(String sid, KeywordQueryRequest keywordQueryRequest) throws SessionException, QueryException{
@@ -106,6 +101,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         eventLocal.sendKeywordEvent(sid, keywordQueryRequest.getFacilities(), keywordQueryRequest.getKeywords(), DPEvent.BASIC_SEARCH);
         
         log.trace("sent search event log , sid: "+sid );
+        
+        return query(sid, q_request);
     }
     
     public QueryRequest queryMydata(String sid, Collection<String> facilities) throws SessionException, QueryException{
@@ -114,7 +111,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         
         String search_id =  UUID.randomUUID().toString();
         UserUtil userUtil =  new UserUtil(sid,em);
-        User user = userUtil.getUser();
+        SessionUtil sessionUtil = new SessionUtil(sid, em);
         
         // here we create NewsEntity, that will be sent in JMS message
         QueryRequest q_request = new QueryRequest();
@@ -129,6 +126,48 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         //TODO sort out facility, keyword strings properly
         eventLocal.sendKeywordEvent(sid, facilities, new ArrayList<String>(), DPEvent.MYDATA_SEARCH);
         log.trace("sent search event log , sid: "+sid );
+        
+        return query(sid, q_request);
+    }
+    
+    public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException{
+        log.debug("getInvestigations(String sid)");
+        if(sid == null) throw new SessionException("Session ID cannot be null.");
+        //TODO check for nulls
+        
+        String search_id =  UUID.randomUUID().toString();
+        UserUtil userUtil =  new UserUtil(sid,em);
+        User user = userUtil.getUser();
+        
+        //get a list of facilities
+        //find out all of the facilities
+        Collection<String> facilitiesToSearch = new HashSet<String>(); //no duplicates
+        
+        for(Investigation invest : investigations){
+            facilitiesToSearch.add(invest.getFacility());
+        }
+        
+        // here we create NewsEntity, that will be sent in JMS message
+        QueryRequest q_request = new QueryRequest();
+        q_request.setFacilities(facilitiesToSearch);
+        q_request.setId(search_id);
+        q_request.setSessionId(sid);
+        q_request.setQueryid(search_id);
+        q_request.setSent(new Date());
+        
+        InvestigationIncludeRequest iireq = new InvestigationIncludeRequest();
+        iireq.setInclude(include);
+        iireq.setInvestigations(investigations);
+        q_request.setInvestigationRequest(iireq);
+        
+        q_request.setQt(DPQueryType.GET_INVESTIGATION_INCLUDES);
+        
+        //TODO sort out facility, keyword strings properly
+        eventLocal.sendEvent(sid, DPEvent.INVESTIGATION_INCLUDE_SEARCH,"Searching for more information about previous search.");
+        
+        return query(sid, q_request);
+        
+        
     }
     
     private QueryRequest query(String sid, QueryRequest q_request) throws SessionException, QueryException{
@@ -160,7 +199,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
                 ObjectMessage message = session.createObjectMessage();
                 
                 q_request.setFacility(facility);
-                
+                q_request.setFacilitySessionId(new SessionUtil(sid, em).getFacilitySessionId(facility));
                 message.setObject(q_request);
                 //TODO  should we do first in first out on QueryManager so can have more than one per session
                 //250 is not going to be full
@@ -177,7 +216,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
                 try {
                     //close connections
                     if(session != null) session.close();
-                    if(connection != null)   connection.close();
+                    if(connection != null)  connection.close();
                 } catch (JMSException ex) {}
                 throw new QueryException("Unable to send off query to fac: "+facility,e);
             }
@@ -195,7 +234,11 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }
     
     @PermitAll
-    public Collection<String> getCompleted(QueryRequest q_request){
+    public Collection<String> getCompleted(QueryRequest q_request) throws SessionException {
+        
+        //check is valid sessionid
+        new SessionUtil(q_request.getSessionId(), em);
+        
         Collection<String> completed  = new ArrayList<String>();
         
         for(String fac : q_request.getFacilities()){
@@ -208,8 +251,12 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }
     
     @PermitAll
-    public boolean isFinished(QueryRequest q_request){
+    public boolean isFinished(QueryRequest q_request) throws SessionException {
         log.trace("isFinished");
+        
+        //check is valid sessionid
+        new SessionUtil(q_request.getSessionId(), em);
+        
         for(String fac : q_request.getFacilities()){
             QueryRecord qr = QueryManager.getRecord(q_request.getQueryid(), fac);
             if(qr == null){
@@ -223,7 +270,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     
 //TODO put together a single method to recurse over QueryManager
     @PermitAll
-    public Collection<Investigation> getQueryResults(String sessionId, String queryId){
+    public Collection<Investigation> getQueryResults(String sessionId, String queryId) throws SessionException {
         log.debug("getQueryResults()");
         
         //check is valid sessionid
@@ -249,136 +296,24 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }
     
     @PermitAll
-    public Collection<Investigation> getQueryResults(String sessionId, QueryRequest q_request){
-        return getQueryResults(sessionId, q_request.getQueryid());
+    public Collection<Investigation> getQueryResults(QueryRequest q_request) throws SessionException {
+        return getQueryResults(q_request.getSessionId(), q_request.getQueryid());
     }
     
-    
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<DataSet> getDataSets(String sid, Collection<Investigation> investigations) throws SessionException, QueryException{
-        log.debug("getDataSets(String sid, Collection<Investigation> investigations)");
-        if(sid == null) throw new SessionException("Session ID cannot be null.");
-        
-        
-        //get a list of facilites
-        Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
-        
-        UserUtil userUtil =  new UserUtil(sid,em);
-        User user = userUtil.getUser();
-        Collection<String> facilities = new ArrayList<String>();
-        
-        for(Investigation invest : investigations){
-            if(!facilities.contains(invest.getFacility())) facilities.add(invest.getFacility());
-        }
-        
-        Collection<DataSet> datasets = new ArrayList<DataSet>();
-        Collection<DataSet> returneddatasets = new ArrayList<DataSet>();
-        
-        for(String fac : facilities){
-            ArrayList<String> investigation_id = new ArrayList<String>();
-            
-            boolean security = true;
-            
-            if(!userUtil.isAdmin()){
-                for(ModuleLookup mod : facilitiesList){
-                    if(mod.getFacility().equals(fac)){
-                        log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
-                        security = mod.isSecurity();
-                    }
-                }
-            } else security = false;
-            
-            for(Investigation invest : investigations){
-                if(invest.getFacility().equalsIgnoreCase(fac)) investigation_id.add(invest.getId());
-            }
-            
-            if(investigation_id.size() == 0) continue ;
-            
-            DPAccessLayer dpal = null;
-            try {
-                log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
-                dpal = new DPAccessLayer(fac);
-                returneddatasets = dpal.getDataSets(investigation_id, user.getUserId(), security);
-                log.debug("Returned size: "+returneddatasets.size());
-                datasets.addAll(returneddatasets);
-            } catch (Exception ex) {
-                log.error("Unable to search Investigations ids: ",ex);
-                throw new QueryException("Unable to search Investigations ids: ",ex);
-            } finally{
-                dpal.disconnectFromDB();
-            }
-        }
-        log.trace("Returning list of datasets");
-        for(DataSet ds : datasets){
-            log.trace(ds);
-        }
-        
-        return datasets;
-    }
-    
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Collection<DataFile> getDataFiles(String sid, Collection<DataSet> datasets) throws SessionException, QueryException{
-        if(sid == null) throw new SessionException("Session ID cannot be null.");
-        //TODO check for nulls
-        
-        UserUtil userUtil =  new UserUtil(sid,em);
-        User user = userUtil.getUser();
-        Collection<String> facilities = new ArrayList<String>();
-        
-        for(DataSet dataset : datasets){
-            if(!facilities.contains(dataset.getFacility())) facilities.add(dataset.getFacility());
-        }
-        
-        //get a list of facilites
-        Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
-        
-        
-        Collection<DataFile> datafiles = new ArrayList<DataFile>();
-        
-        for(String fac : facilities){
-            ArrayList<String> datasets_id = new ArrayList<String>();
-            
-            for(DataSet dataset : datasets){
-                if(dataset.getFacility().equalsIgnoreCase(fac)) datasets_id.add(dataset.getId());
-            }
-            
-            
-            if(datasets_id.size() == 0) continue ;
-            
-            boolean security = true;
-            if(!userUtil.isAdmin()){
-                for(ModuleLookup mod : facilitiesList){
-                    if(mod.getFacility().equals(fac)){
-                        log.trace("Found facility, "+mod.getFacility()+" is security "+mod.isSecurity());
-                        security = mod.isSecurity();
-                    }
-                }
-            } else security = false;
-            
-            DPAccessLayer dpal = null;
-            try {
-                dpal = new DPAccessLayer(fac);
-                log.trace("new DPAccessLayer(fac): "+fac+" searching secuirty: "+security);
-                datafiles.addAll(dpal.getDataFiles(datasets_id, user.getUserId(), security));
-            } catch (Exception ex) {
-                log.error("Unable to search Investigations ids: ",ex);
-                throw new QueryException("Unable to search Investigations ids: ",ex);
-            } finally{
-                dpal.disconnectFromDB();
-            }
-        }
-        
-        return datafiles;
-    }
-    
-    
-    public Collection<QueryRecordDTO> getCurrentResults(String sid){
+    /**
+     *  Gets all current querys
+     */
+    public Collection<QueryRecordDTO> getCurrentResults(String sessionId) throws SessionException {
         log.debug("getCurrentResults(String sid)");
-        Collection<Collection<QueryRecord>> ccqr = QueryManager.getUserAll(sid,em);
+        
+        //check is valid sessionid
+        new SessionUtil(sessionId, em);
+        
+        Collection<Collection<QueryRecord>> ccqr = QueryManager.getUserAll(sessionId,em);
         log.trace("Getting all results, size: "+ccqr.size());
         
         //no duplicates
-        Collection<String> queryIds = QueryManager.getUserQueryIds(sid,em);
+        Collection<String> queryIds = QueryManager.getUserQueryIds(sessionId,em);
         log.trace("Getting all results queryIds, size: "+queryIds.size());
         Collection<QueryRecordDTO> dto  = new ArrayList<QueryRecordDTO>();
         
@@ -390,12 +325,17 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         
     }
     
-    public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO qdto){
-        return getPastQueryResults(sid,qdto.getQueryid());
+    /**
+     * Gets all past investigation results
+     */
+    public Collection<Investigation> getPastQueryResults(String sessionId, QueryRecordDTO qdto) throws SessionException {
+        return getPastQueryResults(sessionId,qdto.getQueryid());
     }
     
-    
-    public Collection<Investigation> getPastQueryResults(String sid, String queryid){
+    /**
+     *  Gets all past investigation results
+     */
+    public Collection<Investigation> getPastQueryResults(String sessionId, String queryid) throws SessionException {
         log.debug("getPastQueryResults(String sid)");
         
         //check is valid sessionid
@@ -408,73 +348,78 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
             st.addAll(qr.getResult());
         }
         return st;
-        
     }
     
-    
-    public Investigation getInvestigationById(String sid, String facility, Long investigastionId) throws SessionException, QueryException{
-        log.debug("getInvestigationId(String sid)");
-        if(sid == null) throw new SessionException("Session ID cannot be null.");
-        //TODO check for nulls
+    public Collection<Investigation> getInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException{
+        QueryRequest queryRequest = queryInvestigations(sid, investigations, include);
         
-        //check is valid sessionid
-        User user =  new UserUtil(sid,em).getUser();
-        
-        //get a list of facilites
-        ModuleLookup moduleFacility = lookupLocal.getFacility(facility);
-        
-        try{
-            
-            return ICATSingleton.getInstance(moduleFacility.getWsdlLocation()).getInvestigation("s", investigastionId);
-            
-        } catch (Exception ex) {
-            log.error("Unable to search Investigations id: "+investigastionId+" for facility "+facility,ex);
-            throw new QueryException("Unable to search Investigations id : "+investigastionId+" for facility "+facility,ex);
+        while(!isFinished(queryRequest)){
+            try {
+                Thread.sleep(1000); //sleep one second
+            } catch (InterruptedException ex) {
+            } //sleep one second
         }
         
+        return getQueryResults(queryRequest);
     }
     
+    public HashMap<String, Collection<String>> getKeywords(String sessionId, long timeout /*secs*/) throws QueryException {
+        return getKeywords(sessionId, false, timeout);
+    }
     
     public HashMap<String, Collection<String>> getKeywords(String sessionId, boolean redownload) throws QueryException {
+        return getKeywords(sessionId, redownload, 9000000);
+    }
+    
+    public HashMap<String, Collection<String>> getKeywords(String sessionId, boolean redownload, long timeout /*secs*/) throws QueryException {
         //load stuff from file
         Collection<ModuleLookup> facilitiesList = lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER);
         HashMap<String, Collection<String>> keywordsForFacilities = new HashMap<String, Collection<String>>();
-        for (ModuleLookup moduleLookup : facilitiesList) {
-            
-            try{
-                //check is valid sessionid
-                User user =  new UserUtil(sessionId,em).getUser();
+        
+        boolean finished = false;
+        long time = System.currentTimeMillis();
+        while(!finished){
+            for (ModuleLookup moduleLookup : facilitiesList) {
                 
-                File keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+moduleLookup.getFacility()+"_"+user.getUserId()+".keyworddata");
-                
-                if(!keywordFile.exists()){
-                    log.info("Keyword data not found, redownloading to: "+DataPortalConstants.KEYWORD_LOCATION);
-                    //TODO wrong sessionid
-                    if(redownload){
-                        Collection<String> keywords = ICATSingleton.getInstance(moduleLookup.getWsdlLocation()).getKeywordsForUser(sessionId);
-                        keywordsForFacilities.put(moduleLookup.getFacility(), keywords);
-                    } else keywordsForFacilities.put(moduleLookup.getFacility(), new ArrayList<String>());
-                } else{
+                try{
+                    //check is valid sessionid
+                    User user =  new UserUtil(sessionId,em).getUser();
                     
-                    FileInputStream f_in = new  FileInputStream(keywordFile);
+                    File keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+moduleLookup.getFacility()+"_"+user.getUserId()+".keyworddata");
                     
-                    // Read object using ObjectInputStream.
-                    ObjectInputStream obj_in = new ObjectInputStream(f_in);
-                    
-                    // Read an object.
-                    Collection<String> obj = (Collection<String>)obj_in.readObject();
-                    
-                    //close streams
-                    obj_in.close();
-                    f_in.close();
-                    
-                    log.trace("Deleted keyword file "+keywordFile.getName()+ "? "+keywordFile.delete());
-                    keywordsForFacilities.put(moduleLookup.getFacility(), obj);
+                    if(!keywordFile.exists()){
+                        log.info("Keyword data not found, redownloading to: "+DataPortalConstants.KEYWORD_LOCATION);
+                        //TODO wrong sessionid
+                        if(redownload){
+                            Collection<String> keywords = ICATSingleton.getInstance(moduleLookup.getWsdlLocation()).getKeywordsForUser(sessionId);
+                            keywordsForFacilities.put(moduleLookup.getFacility(), keywords);
+                        } else keywordsForFacilities.put(moduleLookup.getFacility(), new ArrayList<String>());
+                    } else{
+                        
+                        FileInputStream f_in = new  FileInputStream(keywordFile);
+                        
+                        // Read object using ObjectInputStream.
+                        ObjectInputStream obj_in = new ObjectInputStream(f_in);
+                        
+                        // Read an object.
+                        Collection<String> obj = (Collection<String>)obj_in.readObject();
+                        
+                        //close streams
+                        obj_in.close();
+                        f_in.close();
+                        
+                        log.trace("Deleted keyword file "+keywordFile.getName()+ "? "+keywordFile.delete());
+                        keywordsForFacilities.put(moduleLookup.getFacility(), obj);
+                    }
+                } catch(Exception e){
+                    log.warn("Unable to get keywords for facility: "+moduleLookup.getFacility(),e);
+                    throw new QueryException("Unable to get keywords for facility: "+moduleLookup.getFacility());
                 }
-            } catch(Exception e){
-                log.warn("Unable to get keywords for facility: "+moduleLookup.getFacility(),e);
-                throw new QueryException("Unable to get keywords for facility: "+moduleLookup.getFacility());
             }
+            
+            //check if finished
+            if(facilitiesList.size() == keywordsForFacilities.size()) finished = true;
+            if((System.currentTimeMillis() - time)/1000 > timeout) finished = true;
         }
         return keywordsForFacilities;
     }

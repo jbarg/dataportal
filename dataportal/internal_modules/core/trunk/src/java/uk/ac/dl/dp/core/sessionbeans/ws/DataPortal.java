@@ -134,8 +134,7 @@ public class DataPortal extends SessionEJBObject {
             while(!queryLocal.isFinished(request)){
                 try {
                     Thread.sleep(1000); //sleep one second
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                } catch (InterruptedException ex) {                    
                 } //sleep one second
             }
             
