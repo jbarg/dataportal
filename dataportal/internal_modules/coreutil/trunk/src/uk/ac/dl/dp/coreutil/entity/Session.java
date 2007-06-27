@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.coreutil.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -175,13 +176,26 @@ public class Session implements Serializable {
         //TODO change toString() implementation to return a better display name
         return "" + this.id;
     }
-
+    
     public Collection<FacilitySession> getFacilitySessionCollection() {
         return facilitySessionCollection;
     }
-
+    
     public void setFacilitySessionCollection(Collection<FacilitySession> facilitySessionCollection) {
         this.facilitySessionCollection = facilitySessionCollection;
+    }
+    
+    /**
+     * Need to set two way relationship between FacilitySession and user, otherwise DB
+     * will be correct but the JPA will be out of sync and will need a em.refresh
+     * to sync with DB
+     */
+    public void addFacilitySession(FacilitySession facilitySession){
+        facilitySession.setSessionId(this);
+        Collection<FacilitySession> facilitySessions = this.getFacilitySessionCollection();
+        if(facilitySessions == null) facilitySessions = new ArrayList<FacilitySession>();
+        facilitySessions.add(facilitySession);
+        this.setFacilitySessionCollection(facilitySessions);
     }
     
 }
