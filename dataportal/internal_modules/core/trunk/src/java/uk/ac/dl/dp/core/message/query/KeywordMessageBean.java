@@ -81,9 +81,9 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 //if not EMAT (ie allowed none words) then remove all none words
                 if(!facilityDownload.is_AllKeywords()){
                    //TODO add the type into the search
-                   keywords = ICATSingleton.getInstance(facilityDownload.getWsdlLocation()).getKeywordsForUser(keywordMessage.getSessionId());            
+                   keywords = ICATSingleton.getInstance(facilityDownload.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());            
                 } else{
-                   keywords = ICATSingleton.getInstance(facilityDownload.getWsdlLocation()).getKeywordsForUser(keywordMessage.getSessionId());
+                   keywords = ICATSingleton.getInstance(facilityDownload.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());
                 }
                                 
                 log.trace("Facility: "+facilityDownload.getFacility()+" has: "+keywords.size()+" keywords");
