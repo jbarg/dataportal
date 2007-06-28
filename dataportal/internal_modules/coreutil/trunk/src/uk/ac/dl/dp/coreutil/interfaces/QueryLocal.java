@@ -39,4 +39,6 @@ public interface QueryLocal {
     
     public HashMap<String, Collection<String>> getKeywords(String sid, boolean redownload) throws QueryException ;
     
+     public HashMap<String, Collection<String>> getKeywords(String sid) throws QueryException ;
+   
 }
