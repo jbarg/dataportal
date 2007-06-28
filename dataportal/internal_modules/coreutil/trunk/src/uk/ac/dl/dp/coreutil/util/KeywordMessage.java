@@ -21,6 +21,7 @@ public class KeywordMessage implements Serializable{
     private String facility;
     private KeywordType type;
     private String userId;
+    private String facilitySessionId;
     
     /** Creates a new instance of KeywordMessage */
     public KeywordMessage() {
@@ -56,6 +57,14 @@ public class KeywordMessage implements Serializable{
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getFacilitySessionId() {
+        return facilitySessionId;
+    }
+
+    public void setFacilitySessionId(String facilitySessionId) {
+        this.facilitySessionId = facilitySessionId;
     }
     
 }
