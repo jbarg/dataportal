@@ -71,7 +71,7 @@ public class QueryDelegateHistoryClient {
             printTime("lookup again");
             try {
                 //start download
-                queryRequest = dd.query(sid,keywords,facs, LogicalOperator.AND,false,DPQueryType.KEYWORD);
+                queryRequest = null;//dd.query(sid,keywords,facs, LogicalOperator.AND,false,DPQueryType.KEYWORD);
                 printTime("quering ...");
             } catch (Exception ex) {
                 log.fatal("Download error ",ex);
@@ -95,7 +95,7 @@ public class QueryDelegateHistoryClient {
             printTime("query complete");
             
             
-            Collection<Investigation> qr =  dd.getQueryResults(queryRequest);
+            Collection<Investigation> qr =  null;//dd.getQueryResults(queryRequest);
             double size = 0;
              System.out.println("Results size: "+qr.size());   
             for(Investigation rec : qr){
@@ -118,7 +118,7 @@ public class QueryDelegateHistoryClient {
             
             
             
-            Collection<Investigation> qr1 =  dd.getPastQueryResults(sid, hisotry.iterator().next());
+            Collection<Investigation> qr1 =  null;//dd.getPastQueryResults(sid, hisotry.iterator().next());
             
             System.out.println("Results size: "+qr1.size());            
             for(Investigation rec : qr1){

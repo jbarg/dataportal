@@ -12,6 +12,7 @@ package uk.ac.dl.dp.core.sessionbeans.ws;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -20,10 +21,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import org.apache.log4j.Logger;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.enums.LogicalOperator;
+
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
@@ -36,9 +34,10 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterLocal;
 import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
 import uk.ac.dl.dp.coreutil.interfaces.SessionLocal;
-import uk.ac.dl.dp.coreutil.util.DPQueryType;
+import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
+import uk.ac.dp.icatws.Investigation;
 
 /**
  *
@@ -103,11 +102,11 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public String[] getKeywords(@WebParam(name="sessionId") String sessionId, @WebParam(name="facility") String facility) throws QueryException , SessionException {
+    public HashMap<String, Collection<String>> getKeywords(@WebParam(name="sessionId") String sessionId, @WebParam(name="facility") String facility) throws QueryException , SessionException {
         try {
             //check session
             new SessionUtil(sessionId, em);
-            return queryLocal.getKeywords(facility);
+            return queryLocal.getKeywords(sessionId);
         } catch (QueryException ex) {
             throw ex;
         } catch (SessionException ex) {
@@ -116,9 +115,9 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public QueryRequest query(@WebParam(name="sessionId") String sessionId, @WebParam(name="facilities")  Collection<String> facilities, @WebParam(name="keywords") String[] keywords, @WebParam(name="logicaloperator") LogicalOperator logicaloperator, @WebParam(name="fuzzy") boolean fuzzy) throws QueryException, SessionException {
+    public QueryRequest query(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest ) throws QueryException, SessionException {
         try {
-            return queryLocal.query(sessionId, facilities, keywords, logicaloperator, fuzzy, DPQueryType.KEYWORD);
+            return queryLocal.queryByKeyword(sessionId, keywordQueryRequest);
         } catch (QueryException ex) {
             throw ex;
         } catch (SessionException ex) {
@@ -127,9 +126,9 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public Collection<Investigation> queryAndWait(@WebParam(name="sessionId") String sessionId, @WebParam(name="facilities") Collection<String> facilities, @WebParam(name="keywords") String[] keywords, @WebParam(name="logicaloperator") LogicalOperator logicaloperator, @WebParam(name="fuzzy") boolean fuzzy) throws QueryException, SessionException {
+    public Collection<Investigation> queryAndWait(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest) throws QueryException, SessionException {
         try {
-            QueryRequest request = queryLocal.query(sessionId, facilities, keywords, logicaloperator, fuzzy, DPQueryType.KEYWORD);
+            QueryRequest request = queryLocal.queryByKeyword(sessionId, keywordQueryRequest);
             
             while(!queryLocal.isFinished(request)){
                 try {
@@ -147,39 +146,17 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public boolean isFinished(@WebParam(name="username") QueryRequest q_request){
+    public boolean isFinished(@WebParam(name="username") QueryRequest q_request) throws SessionException {
         return queryLocal.isFinished(q_request);
     }
-    
+          
     @WebMethod()
-    public Collection<DataSet> getDataSets(@WebParam(name="sessionId") String sessionId, @WebParam(name="investigations") Collection<Investigation> investigations) throws SessionException, QueryException {
-        try {
-            return queryLocal.getDataSets(sessionId, investigations);
-        } catch (QueryException ex) {
-            throw ex;
-        } catch (SessionException ex) {
-            throw new SessionException(ex.getMessage());
-        }
-    }
-    
-    @WebMethod()
-    public Collection<DataFile> getDataFiles(@WebParam(name="sessionId") String sessionId, @WebParam(name="datasets") Collection<DataSet> datasets) throws SessionException, QueryException {
-        try {
-            return queryLocal.getDataFiles(sessionId, datasets);
-        } catch (QueryException ex) {
-            throw ex;
-        } catch (SessionException ex) {
-            throw new SessionException(ex.getMessage());
-        }
-    }
-    
-    @WebMethod()
-    public Collection<Investigation> getQueryResults(@WebParam(name="q_request") QueryRequest q_request){
+    public Collection<Investigation> getQueryResults(@WebParam(name="q_request") QueryRequest q_request) throws SessionException{
         return queryLocal.getQueryResults(q_request);
     }
     
     @WebMethod()
-    public Collection<Investigation> getQueryResultsPagination(@WebParam(name="q_request") QueryRequest q_request,@WebParam(name="startIndex") int startIndex, @WebParam(name="numberResults") int numberResults){
+    public Collection<Investigation> getQueryResultsPagination(@WebParam(name="q_request") QueryRequest q_request,@WebParam(name="startIndex") int startIndex, @WebParam(name="numberResults") int numberResults)throws SessionException {
         Collection<Investigation> investigations = queryLocal.getQueryResults(q_request);
         
         Collection<Investigation> investigationsToReturn = new ArrayList<Investigation>();

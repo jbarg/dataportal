@@ -18,17 +18,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
-import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.ejb.*;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.Session;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
@@ -48,6 +40,7 @@ import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
+import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.InvestigationIncludeRequest;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
@@ -71,11 +64,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     @EJB
     LookupLocal lookupLocal;
     
-    @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
-    private ConnectionFactory connectionFactory;
-    
-    @Resource(mappedName=DataPortalConstants.QUERY_MDB)
-    private Queue queue;
+    @EJB
+    private SendMDBLocal sendMDBLocal;  
     
     @PermitAll
     public QueryRequest queryByKeyword(String sid, KeywordQueryRequest keywordQueryRequest) throws SessionException, QueryException{
@@ -102,7 +92,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         
         log.trace("sent search event log , sid: "+sid );
         
-        return query(sid, q_request);
+        return sendMDBLocal.queryICATs(sid, q_request);
     }
     
     public QueryRequest queryMydata(String sid, Collection<String> facilities) throws SessionException, QueryException{
@@ -127,7 +117,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         eventLocal.sendKeywordEvent(sid, facilities, new ArrayList<String>(), DPEvent.MYDATA_SEARCH);
         log.trace("sent search event log , sid: "+sid );
         
-        return query(sid, q_request);
+       return sendMDBLocal.queryICATs(sid, q_request);
     }
     
     public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException{
@@ -165,74 +155,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         //TODO sort out facility, keyword strings properly
         eventLocal.sendEvent(sid, DPEvent.INVESTIGATION_INCLUDE_SEARCH,"Searching for more information about previous search.");
         
-        return query(sid, q_request);
-        
-        
-    }
-    
-    private QueryRequest query(String sid, QueryRequest q_request) throws SessionException, QueryException{
-        
-        Connection connection = null;
-        Session session = null;
-        MessageProducer messageProducer = null;
-        
-        try {
-            
-            connection = connectionFactory.createConnection();
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            messageProducer = session.createProducer(queue);
-            log.debug("Created connections to MDBs OK");
-        } catch (JMSException ex) {
-            log.error("JMSExcption on connection to meesage: ",ex);
-            try {
-                //close connections
-                if(session != null) session.close();
-                if(connection != null) connection.close();
-            } catch (JMSException e) {}
-            throw new QueryException("Unexpected error, JSMException with connecting to message queue",ex);
-        }
-        
-        
-        //TODO real query
-        for(String facility : q_request.getFacilities()){
-            try {
-                ObjectMessage message = session.createObjectMessage();
-                
-                q_request.setFacility(facility);
-                q_request.setFacilitySessionId(new SessionUtil(sid, em).getFacilitySessionId(facility));
-                message.setObject(q_request);
-                //TODO  should we do first in first out on QueryManager so can have more than one per session
-                //250 is not going to be full
-                //TODO tuen QueryManager into Session Bean so can search for own data and remove when needed
-                ///and get old results.
-                //clear out old messages
-                // QueryManager.removeRecord(sid+fac);
-                
-                messageProducer.send(message);
-                log.debug("sent message for facility: "+facility);
-                
-            } catch (Exception e) {
-                log.error("Unable to send off query to fac "+facility,e);
-                try {
-                    //close connections
-                    if(session != null) session.close();
-                    if(connection != null)  connection.close();
-                } catch (JMSException ex) {}
-                throw new QueryException("Unable to send off query to fac: "+facility,e);
-            }
-        }
-        try {
-            //close connections
-            if(session != null) session.close();
-            if(connection != null)   connection.close();
-        } catch (JMSException ex) {}
-        
-        log.trace("sent off querys to MDBs");
-        
-        return q_request;
+        return sendMDBLocal.queryICATs(sid, q_request);        
         
     }
-    
+          
     @PermitAll
     public Collection<String> getCompleted(QueryRequest q_request) throws SessionException {
         
@@ -369,6 +295,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     
     public HashMap<String, Collection<String>> getKeywords(String sessionId, boolean redownload) throws QueryException {
         return getKeywords(sessionId, redownload, 9000000);
+    }
+    
+     public HashMap<String, Collection<String>> getKeywords(String sessionId) throws QueryException {
+        return getKeywords(sessionId, false, 9000000);
     }
     
     public HashMap<String, Collection<String>> getKeywords(String sessionId, boolean redownload, long timeout /*secs*/) throws QueryException {
