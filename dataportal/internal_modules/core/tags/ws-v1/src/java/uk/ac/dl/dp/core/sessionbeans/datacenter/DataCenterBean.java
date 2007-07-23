@@ -24,14 +24,12 @@ import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.DataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterLocal;
 
 
@@ -192,7 +190,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
         if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         for(DataReference dto: dtos){
-            if(dto.getUrls() == null || dto.getUrls().size() == 0) throw new IllegalArgumentException("Urls to add cannot be null");
+            if(dto.getUrls() == null || dto.getUrls().size() == 0) throw new SessionException("Urls added cannot be null");
         }
         
         User user = new UserUtil(sid,em).getUser();
@@ -204,9 +202,14 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
             //users the same
             dto.setUserId(user);
             
+            //make sure url dataref id is set
+            log.trace("Setting dtos urls refId");
+            for(Url url : dto.getUrls()){
+                url.setDataRefId(dto);
+            }
+            
             log.debug("DataReference has id: "+dto.getId()+" not in DB, checking data already in DB.");
-            
-            
+                        
             //new one so persist
             //could have same type of reference, reference id, facility and user (UNIQUE KEY in DataReference db here)
             //this is because file and dataset might have same id, hence type of reference is there
