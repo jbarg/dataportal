@@ -31,7 +31,7 @@ public class SessionDTO implements Serializable{
     
     private DPCredentialType credentialType;
     
-    private Date expireTime;
+    private Date expireTime;        
     
     private Collection<DPRole> roles = new ArrayList<DPRole>();
     
@@ -137,4 +137,4 @@ public class SessionDTO implements Serializable{
     public void setSrbServers(Collection<SrbServer> srbServers) {
         this.srbServers = srbServers;
     }
-}
+    }
