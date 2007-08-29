@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import uk.ac.dl.dp.coreutil.entity.FacilitySession;
 import uk.ac.dl.dp.coreutil.entity.Session;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
@@ -25,13 +26,31 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
  */
 public class SessionInsertUtil {
     
+    public static void addFacilitySession(EntityManager em, Long sessionId){
+         Session found = em.find(Session.class, sessionId);
+        if(found.getFacilitySessionCollection().size() == 0){
+            //now add some sessions
+            FacilitySession facilitySession = new FacilitySession();
+            facilitySession.setFacilityName("ISIS");
+            facilitySession.setFacilitySessionId("sessionid");
+            facilitySession.setModTime(new Date());
+            //facilitySession.setSessionId(found);
+            facilitySession.setFacilitySessionError("null");
+            found.addFacilitySession(facilitySession);
+            System.out.println("Persisting facilitySession "+facilitySession);
+        }
+    }
     
     public static Session getValidSession(EntityManager em) {
         User user = null;
         Session session = null;
         try {
             //select a user
-            user = (User)em.createNamedQuery("User.findByUserId").setParameter("userId","gjd37").getSingleResult();
+            Collection<User> users = (Collection<User>)em.createNamedQuery("User.findByUserId").setParameter("userId","gjd37").getResultList();
+            if(users.size() > 0){
+                user = users.iterator().next();
+            } else throw new RuntimeException("No users with gjd37 found");
+            
             System.out.println("found old user");
             
             Collection<Session> sessions = user.getSession();
@@ -48,6 +67,7 @@ public class SessionInsertUtil {
                 System.out.println("Session created "+session.getUserSessionId());
             } else{
                 for (Session sessionFound : sessions) {
+                    System.out.println("changing session "+sessionFound.getId());
                     sessionFound.setExpireDateTime(new Date(new Date().getTime()+1000000)); //adds 15 mins
                     sessionFound.setUserSessionId(TestConstants.SESSION_ID);
                     session = sessionFound;
@@ -74,7 +94,7 @@ public class SessionInsertUtil {
                 System.out.println(ex);
             }
         }
-        System.out.println("Session is "+session);
+        System.out.println("Session is "+session);       
         return session;
     }
     
