@@ -30,7 +30,9 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.util.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
+import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.ICATSingleton;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -40,13 +42,13 @@ import uk.ac.dp.icatws.SessionException_Exception;
  *
  * @author gjd37
  */
-@MessageDriven(mappedName=DataPortalConstants.QUERY_MDB, activationConfig =
+@MessageDriven(mappedName=DataPortalConstants.QUERY_MDB) /*, activationConfig =
 {
     @ActivationConfigProperty(propertyName="destinationType",
     propertyValue="javax.jms.Queue"),
     @ActivationConfigProperty(propertyName="destination",
     propertyValue=DataPortalConstants.QUERY_MDB)
-})
+})*/
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class QueryMessageBean extends MessageEJBObject implements MessageListener {
     
@@ -80,16 +82,19 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             try{
                 if(query.getQt().toString().equals(DPQueryType.KEYWORD.toString())){
                     investigations = doKeywordSearch(query, facility.getWsdlLocation());
-                } else if(query.getQt().toString().equals(DPQueryType.KEYWORD.toString())){
-                    investigations = doKeywordSearch(query, facility.getWsdlLocation());
+                } else if(query.getQt().toString().equals(DPQueryType.ADVANCED.toString())){
+                    investigations = doAdvancedSearch(query, facility.getWsdlLocation());
                 } else if(query.getQt().toString().equals(DPQueryType.GET_INVESTIGATION_INCLUDES.toString())){
                     investigations = doGetInvestigationInclude(query, facility.getWsdlLocation());
-                } else if(query.getQt().toString().equals(DPQueryType.KEYWORD.toString())){
-                    investigations = doKeywordSearch(query, facility.getWsdlLocation());
+                } else if(query.getQt().toString().equals(DPQueryType.MYDATA.toString())){
+                    investigations = doMyDataSearch(query, facility.getWsdlLocation());
                 }
             } catch (Exception exception) {
                 log.error("Unable to query "+query.getFacility(), exception);
                 ex  = exception;
+            } catch (Throwable exception) {
+                log.error("Unable to query "+query.getFacility(), exception);
+                ex  = new Exception(exception.getMessage());
             }
             
             log.debug("Query finished for "+query.getFacility()+"  with id: "+query.getId());
@@ -105,35 +110,39 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 request.getFacilitySessionId(),
                 (List<String>) request.getKeywordQuery().getKeywords(),
                 InvestigationInclude.INVESTIGATORS_AND_KEYWORDS,
+                false,
                 request.getKeywordQuery().getStart_index(),
                 request.getKeywordQuery().getMax_results());
-        
     }
     
-    private Collection<Investigation>  doAdvancedSearch(QueryRequest request, String wsdlLocation){
-        return new ArrayList<Investigation>();
+    private Collection<Investigation>  doAdvancedSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception {
+        log.debug("Query : Advanced "+request.getAdvancedSearch()+" on facility: "+request.getFacility()+" sent at "+request.getSent());
+        
+        AdvancedSearchDetails advancedSearchDetails = new AdvancedSearchDetails();
+        request.getAdvancedSearch().mergeTo(advancedSearchDetails);
+        
+        return ICATSingleton.getInstance(wsdlLocation).searchByAdvanced(
+                request.getFacilitySessionId(), advancedSearchDetails);
     }
     
     private Collection<Investigation>  doMyDataSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception{
         log.debug("Query : MyInvestigations on facility: "+request.getFacility()+" sent at "+request.getSent());
-        return ICATSingleton.getInstance(wsdlLocation).getMyInvestigationsIncludesPagination(
+        return ICATSingleton.getInstance(wsdlLocation).getMyInvestigationsIncludes(
                 request.getFacilitySessionId(),
-                InvestigationInclude.INVESTIGATORS_AND_KEYWORDS,
-                request.getKeywordQuery().getStart_index(),
-                request.getKeywordQuery().getMax_results());
+                InvestigationInclude.INVESTIGATORS_AND_KEYWORDS);
     }
     
     private Collection<Investigation> doGetInvestigationInclude(QueryRequest request, String wsdlLocation) throws SessionException_Exception, QueryException{
         
         Collection<Investigation> returnedInvestigations = new ArrayList<Investigation>();
-                
+        
         //get a list of facilites
         ModuleLookup moduleFacility = lookupLocal.getFacility(request.getFacility());
         ArrayList<Long> investigation_ids = new ArrayList<Long>();
         
         //add ids from this facility to list
         for(Investigation invest : request.getInvestigationRequest().getInvestigations()){
-            if(invest.getFacility().equalsIgnoreCase(request.getFacility())) investigation_ids.add(invest.getId());
+            if(invest.getFacility().getFacilityShortName().equalsIgnoreCase(request.getFacility())) investigation_ids.add(invest.getId());
         }
         //now search
         try{
@@ -152,7 +161,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             log.error("Unable to search facility "+request.getFacility(),ex);
             throw new QueryException("Unable to search Investigations for facility "+request.getFacility(),ex);
         }
-                
+        
         return returnedInvestigations;
     }
 }

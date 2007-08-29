@@ -13,6 +13,7 @@ package uk.ac.dl.dp.core.sessionbeans.transfer;
 import java.util.Date;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
@@ -22,6 +23,7 @@ import javax.jms.QueueConnectionFactory;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 import org.apache.log4j.Logger;
+import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.User;
@@ -37,7 +39,7 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
  *
  * @author gjd37
  */
-
+//@Interceptors(ArgumentValidator.class)
 @Stateless(mappedName=DataPortalConstants.DOWNLOAD)
 public class DownloadService extends SessionEJBObject  implements DownloadServiceRemote {
     

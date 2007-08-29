@@ -14,10 +14,12 @@ import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
+import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
@@ -39,6 +41,7 @@ import uk.ac.dl.dp.coreutil.interfaces.DataCenterLocal;
  *
  * @author gjd37
  */
+//@Interceptors(ArgumentValidator.class)
 @Stateless(mappedName=DataPortalConstants.DATA_CENTER)
 public class DataCenterBean extends SessionEJBObject implements DataCenterRemote, DataCenterLocal {
     

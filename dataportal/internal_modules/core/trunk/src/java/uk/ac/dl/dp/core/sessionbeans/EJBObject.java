@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 
 /**
@@ -40,7 +41,7 @@ public abstract class EJBObject {
     public void setEntityManager(EntityManager em){
         this.em = em;
     }
-            
+    
     public Object mergeEntity(Object entity) {
         return em.merge(entity);
     }
@@ -79,8 +80,7 @@ public abstract class EJBObject {
     }
     
     @AroundInvoke
-    public Object logMethods(InvocationContext ctx)
-    throws Exception {
+    public Object logMethods(InvocationContext ctx) throws Exception {
         
         String className = ctx.getTarget().getClass().getName();
         String methodName = ctx.getMethod().getName();
@@ -91,13 +91,16 @@ public abstract class EJBObject {
         //log.debug("Invoking " + target);
         try {
             return ctx.proceed();
+        } catch(IllegalArgumentException e) {
+            throw new SessionException(e.getMessage());
         } catch(Exception e) {
             throw e;
         } finally {
-            long time = System.currentTimeMillis() - start;
-            //log.debug("Exiting " + target +" , This method takes " +
-            //time/1000 + "s to execute\n");
-            log.debug("\n");
+            if(!methodName.equals("isFinished")) {
+                long time = System.currentTimeMillis() - start;
+                log.debug("Exiting " + target +" , This method takes " +time/1000f + "s to execute");
+                log.debug("\n");
+            }
         }
     }
     

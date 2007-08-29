@@ -133,7 +133,7 @@ public class QueryManager {
     }
     
     
-    public static void addRecord(QueryRequest qr, Collection<Investigation> result,Exception ex) {
+    public static void addRecord(QueryRequest qr, Collection<Investigation> result, Exception ex) {
         
         log.trace("Adding record for "+qr.getFacility()+ " sid: "+qr.getSessionId()+" with "+result.size()+" results");
         
