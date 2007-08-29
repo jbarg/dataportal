@@ -41,6 +41,7 @@ import uk.ac.dl.dp.coreutil.interfaces.TimerServiceRemote;
 import uk.ac.dl.dp.core.message.query.QueryManager;
 import uk.ac.dl.dp.coreutil.entity.Session;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
+import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
@@ -49,26 +50,17 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
 @Stateless(mappedName=DataPortalConstants.TIMER)
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-public class TimerServiceBean extends SessionEJBObject implements TimerServiceLocal ,TimerServiceRemote {
+public class TimerServiceBean extends SessionEJBObject implements TimerServiceLocal , TimerServiceRemote {
     
     @Resource
     TimerService timerService;
     
     @EJB()
     LookupLocal lookup;
-    
-    @PersistenceUnit(unitName="dataportal")
-    EntityManagerFactory emf;
-    
-    @Resource(mappedName=DataPortalConstants.CONNECTION_FACTORY)
-    private  ConnectionFactory connectionFactory;
-    
-    @Resource(mappedName=DataPortalConstants.KEYWORD_MDB)
-    private  Queue queue;
-    
+                
     static Logger log = Logger.getLogger(TimerServiceBean.class);
     
-    static boolean timerCreated  = false;
+    static boolean timerCreated = false;
     
     /*@PostConstruct
     public void postConstructCreateTimer() {
@@ -89,7 +81,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
         }
     }
     
-    @Timeout
+    //@Timeout
     public void startTimeouts(Timer timer){
         log.debug("startTimeouts()");
         try {
@@ -136,7 +128,7 @@ public class TimerServiceBean extends SessionEJBObject implements TimerServiceLo
         }
     }
     
-    
+    @Timeout
     public void timeoutQueryManager(Timer timer) {
         log.info("Timeout occurred: timeoutQueryManager()");
         Collection<Collection<QueryRecord>> ccqr = QueryManager.getAll();
@@ -191,6 +183,8 @@ Caused by: java.util.ConcurrentModificationException
     public void downloadKeywords() throws Exception{
         log.info("downloadKeywords");
         
+       /* sendMDBLocal.downloadKeywords(sid, keywordMessage)
+        
         Collection<ModuleLookup> facilities = lookup.getFacilityInfo(DPFacilityType.WRAPPER);
         
         Connection connection = null;
@@ -233,7 +227,7 @@ Caused by: java.util.ConcurrentModificationException
             if(connection != null)   connection.close();
         } catch (JMSException ex) {
             
-        }
+        }*/
         
     }
     

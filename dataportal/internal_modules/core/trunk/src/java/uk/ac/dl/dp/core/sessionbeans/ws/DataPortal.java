@@ -13,14 +13,19 @@ package uk.ac.dl.dp.core.sessionbeans.ws;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.interceptor.ExcludeClassInterceptors;
+import javax.interceptor.ExcludeDefaultInterceptors;
+import javax.interceptor.Interceptors;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import org.apache.log4j.Logger;
+import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
@@ -37,6 +42,7 @@ import uk.ac.dl.dp.coreutil.interfaces.SessionLocal;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
+import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.Investigation;
 
 /**
@@ -46,6 +52,7 @@ import uk.ac.dp.icatws.Investigation;
 
 @Stateless()
 @WebService(/*targetNamespace="client.dataportal.uk"*/)
+@Interceptors(ArgumentValidator.class)
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class DataPortal extends SessionEJBObject {
     
@@ -62,6 +69,7 @@ public class DataPortal extends SessionEJBObject {
     protected DataCenterLocal dataCenterLocal;
     //////////////////////////////////////////////////////////////////////////
     
+    @ExcludeClassInterceptors
     @WebMethod()
     public String login(@WebParam(name="username") String username, @WebParam(name="password") String password, @WebParam(name="lifetime") int lifetime) throws SessionException, LoginMyProxyException  {
         try {
@@ -115,9 +123,32 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public QueryRequest query(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest ) throws QueryException, SessionException {
+    public QueryRequest queryMyData(@WebParam(name="sessionId") String sessionId, @WebParam(name="facilities") HashSet<String> facilities ) throws QueryException, SessionException {
+        try {
+            return queryLocal.queryMydata(sessionId, facilities);
+        } catch (QueryException ex) {
+            throw ex;
+        } catch (SessionException ex) {
+            throw new SessionException(ex.getMessage());
+        }
+    }
+    
+     @WebMethod()
+    public QueryRequest queryByKeywords(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest) throws QueryException, SessionException {
         try {
             return queryLocal.queryByKeyword(sessionId, keywordQueryRequest);
+        } catch (QueryException ex) {
+            throw ex;
+        } catch (SessionException ex) {
+            throw new SessionException(ex.getMessage());
+        }
+    }
+    
+    
+     @WebMethod()
+    public QueryRequest queryByAdvanced(@WebParam(name="sessionId") String sessionId, @WebParam(name="advancedSearchDetails") AdvancedSearchDetails advancedSearchDetails, @WebParam(name="facilities") HashSet<String> facilities ) throws QueryException, SessionException {
+        try {
+            return queryLocal.queryAdvanced(sessionId, advancedSearchDetails, facilities);
         } catch (QueryException ex) {
             throw ex;
         } catch (SessionException ex) {
@@ -146,7 +177,9 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public boolean isFinished(@WebParam(name="username") QueryRequest q_request) throws SessionException {
+    @ExcludeClassInterceptors
+    @ExcludeDefaultInterceptors
+    public boolean isFinished(@WebParam(name="q_request") QueryRequest q_request) throws SessionException {
         return queryLocal.isFinished(q_request);
     }
           
@@ -156,7 +189,7 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public Collection<Investigation> getQueryResultsPagination(@WebParam(name="q_request") QueryRequest q_request,@WebParam(name="startIndex") int startIndex, @WebParam(name="numberResults") int numberResults)throws SessionException {
+    public Collection<Investigation> getQueryResultsPagination(@WebParam(name="q_request") QueryRequest q_request, @WebParam(name="startIndex") int startIndex, @WebParam(name="numberResults") int numberResults)throws SessionException {
         Collection<Investigation> investigations = queryLocal.getQueryResults(q_request);
         
         Collection<Investigation> investigationsToReturn = new ArrayList<Investigation>();

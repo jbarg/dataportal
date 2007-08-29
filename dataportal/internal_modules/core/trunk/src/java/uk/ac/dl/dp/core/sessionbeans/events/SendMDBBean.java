@@ -109,7 +109,7 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
         
         
         //TODO real query
-        for(String facility : q_request.getFacilities()){
+        for(String facility : q_request.getFacilities()){          
             try {
                 ObjectMessage message = session.createObjectMessage();
                 
@@ -122,18 +122,17 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
                 
             } catch (Exception e) {
                 log.error("Unable to send off query to fac "+facility,e);
-                throw new QueryException("Unable to send off query to facility: "+facility,e);
-            } finally{
                 try {
                     if(session != null) session.close();
                     if(connection != null)   connection.close();
                 } catch (JMSException ex) {}
+                throw new QueryException("Unable to send off query to facility: "+facility,e);
             }
         }
         try {
             //close connections
             if(session != null) session.close();
-            if(connection != null)   connection.close();
+            if(connection != null) connection.close();
         } catch (JMSException ex) {}
         
         log.trace("sent off querys to MDBs");
@@ -142,7 +141,12 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
         
     }
     
+    
     public void downloadKeywords(String sid, KeywordMessage keywordMessage){
+        downloadKeywords(sid, keywordMessage, null);
+    }
+    
+    public void downloadKeywords(String sid, KeywordMessage keywordMessage, String facilityToDownload){
         
         Connection connection = null;
         Session session = null;
@@ -161,33 +165,36 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
                 if(session != null) session.close();
                 if(connection != null) connection.close();
             } catch (JMSException e) {}
-            for(ModuleLookup facility : lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER)){
+            /*for(ModuleLookup facility : lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER)){
                 keywordMessage.setFacility(facility.getFacility());
-                saveEmptyCollection(sid, keywordMessage);
-            }
-            
+                //saveEmptyCollection(sid, keywordMessage);
+            }*/
         }
-        
         
         //TODO real query
         for(ModuleLookup facility : lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER)){
-            try {
-                ObjectMessage message = session.createObjectMessage();
-                
-                keywordMessage.setFacility(facility.getFacility());
-                keywordMessage.setFacilitySessionId(new SessionUtil(sid, em).getFacilitySessionId(facility.getFacility()));
-                message.setObject(keywordMessage);
-                
-                messageProducer.send(message);
-                log.debug("sent keyword message for facility: "+facility);
-                
-            } catch (Exception e) {
-                log.error("Unable to send off keyword to facility "+facility,e);
-                //TODO
-                saveEmptyCollection(sid, keywordMessage);
-                //save empty array here.
-                //throw new QueryException("Unable to send off keyword to facility: "+facility,e);
-            } 
+            boolean sendMessage = false;
+            if(facilityToDownload == null ) sendMessage = true;
+            else if(facilityToDownload != null && facility.getFacility().equals(facilityToDownload)) sendMessage = true;
+            if(sendMessage){
+                try {
+                    ObjectMessage message = session.createObjectMessage();
+                    
+                    keywordMessage.setFacility(facility.getFacility());
+                    keywordMessage.setFacilitySessionId(new SessionUtil(sid, em).getFacilitySessionId(facility.getFacility()));
+                    message.setObject(keywordMessage);
+                    
+                    messageProducer.send(message);
+                    log.debug("sent keyword message for facility: "+facility);
+                    
+                } catch (Exception e) {
+                    log.error("Unable to send off keyword to facility "+facility,e);
+                    //leave last keywords
+                    //saveEmptyCollection(sid, keywordMessage);
+                    //save empty array here.
+                    //throw new QueryException("Unable to send off keyword to facility: "+facility,e);
+                }
+            }
         }
         try {
             //close connections
@@ -205,6 +212,8 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
         QueueSession session = null;
         MessageProducer messageProducer = null;
         User user = null;
+        
+        long time = System.currentTimeMillis();
         
         try {
             connection = connectionFactory.createQueueConnection();
@@ -239,7 +248,7 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
                 saveLoginICATException(sid, loginICATMessage, new Exception("Unable to log into "+facility.getFacility()));
             }
         }
-        log.trace("sent off login ICATS to MDBs");
+        log.trace("sent off login ICATS to MDBs, "+(System.currentTimeMillis()- time)/1000f+" seconds");
     }
     
     private void saveLoginICATException(String sid, LoginICATMessage loginICATMessage, Exception ex) throws SessionException{
@@ -278,7 +287,7 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
             obj_out.writeObject(new ArrayList<String>());
         } catch (Exception ex) {
             log.warn("Unable to save keyword for facility: "+keywordMessage.getFacility(),ex);
-        } 
+        }
     }
     
     public void sendEvent(String sid, EventMessage eventMessage){

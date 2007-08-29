@@ -17,7 +17,9 @@ import java.util.GregorianCalendar;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.interceptor.Interceptors;
 import org.apache.log4j.Logger;
+import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataRefAuthorisation;
@@ -39,6 +41,7 @@ import uk.ac.dl.dp.coreutil.util.DPAuthType;
  *
  * @author gjd37
  */
+//@Interceptors(ArgumentValidator.class)
 @Stateless(mappedName=DataPortalConstants.DATA_AUTHORISATION)
 public class DataAuthorisationBean extends SessionEJBObject implements DataAuthorisationRemote {
     

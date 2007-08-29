@@ -17,12 +17,15 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.interceptor.Interceptors;
+import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 
 /**
  * This is the bean class for the LookupBean enterprise bean.
  * Created 13-Apr-2006 11:47:07
  * @author gjd37
  */
+//@Interceptors(ArgumentValidator.class)
 @Stateless(mappedName=DataPortalConstants.LOOKUP)
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class LookupBean extends SessionEJBObject implements LookupRemote, LookupLocal {
@@ -62,7 +65,7 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         Collection<ModuleLookup> facilities = getFacilityInfo(DPFacilityType.WRAPPER);
         for(ModuleLookup moduleFacility : facilities){
             if(moduleFacility.getFacility().equals(facility)) {
-                log.trace("Default facility "+facility+" has location "+moduleFacility.getWsdlLocation());
+                log.trace("Facility "+facility+" has WSDL location "+moduleFacility.getWsdlLocation());
                 return moduleFacility;
             }
         }

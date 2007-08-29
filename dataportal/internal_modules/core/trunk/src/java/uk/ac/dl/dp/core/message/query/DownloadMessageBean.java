@@ -43,7 +43,7 @@ import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
-import uk.ac.dl.dp.coreutil.interfaces.EventLocal;
+import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
 import uk.ac.dl.dp.coreutil.util.Certificate;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
 import uk.ac.dl.dp.coreutil.util.ServiceInfo;
@@ -57,14 +57,14 @@ import uk.ac.dl.srbapi.srb.SRBUrl;
  *
  * @author gjd37
  */
-@MessageDriven(mappedName=DataPortalConstants.DOWNLOAD_MDB, activationConfig =
+@MessageDriven(mappedName=DataPortalConstants.DOWNLOAD_MDB)/*, activationConfig =
  
 {
   @ActivationConfigProperty(propertyName="destinationType",
     propertyValue="javax.jms.Queue"),
   @ActivationConfigProperty(propertyName="destination",
     propertyValue=DataPortalConstants.DOWNLOAD_MDB)
-})
+})*/
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class DownloadMessageBean extends MessageEJBObject implements MessageListener {
     
@@ -77,7 +77,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
     EJBContext sc;
     
     @EJB
-    EventLocal eventLog;
+    SendMDBLocal sendMDBLocal;
     
     @Resource(mappedName="MailSession")
     Session mailSession;
@@ -266,8 +266,8 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         for(SRBUrl url : srbFiles){
             urls.add(url.toString());
         }
-        if(eventLog != null) eventLog.sendDownloadEvent(sid,"Email download",urls);
-        else log.warn("EventLocal is null, might be testing, no event saved");
+        if(sendMDBLocal != null) sendMDBLocal.sendDownloadEvent(sid,"Email download",urls);
+        else log.warn("sendMDBLocal is null, might be testing, no event saved");
         
     }
     

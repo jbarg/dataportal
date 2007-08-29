@@ -12,7 +12,6 @@ package uk.ac.dl.dp.core.message.query;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.Collection;
 import java.util.List;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
@@ -28,7 +27,6 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
-import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.KeywordMessage;
 import uk.ac.dp.icatws.ICATSingleton;
 
@@ -36,13 +34,13 @@ import uk.ac.dp.icatws.ICATSingleton;
  *
  * @author gjd37
  */
-@MessageDriven(mappedName=DataPortalConstants.KEYWORD_MDB, activationConfig =
+@MessageDriven(mappedName=DataPortalConstants.KEYWORD_MDB) /*, activationConfig =
 {
     @ActivationConfigProperty(propertyName="destinationType",
     propertyValue="javax.jms.Queue"),
     @ActivationConfigProperty(propertyName="destination",
     propertyValue=DataPortalConstants.KEYWORD_MDB)
-})
+})*/
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class KeywordMessageBean extends MessageEJBObject implements MessageListener {
     
@@ -56,8 +54,8 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
         
         log.debug("onMessage();  Query keyword received");
         ObjectMessage msg = null;
-        KeywordMessage keywordMessage = null;       
-        ModuleLookup facilityDownload = null;
+        KeywordMessage keywordMessage = null;   
+         ModuleLookup facility = null;
         List<String> keywords = null;
         
         if (message instanceof ObjectMessage) {
@@ -67,11 +65,11 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 keywordMessage = (KeywordMessage) msg.getObject();
                 log.debug("onMessage();  Query keyword received for "+keywordMessage.getFacility());
             } catch (JMSException jmsex) {
-                log.debug("Object not correct",jmsex);
+                log.debug("Object not correct", jmsex);
                 return ;
             }
             try{                               
-                ModuleLookup facility = lookupLocal.getFacility(keywordMessage.getFacility());
+                facility = lookupLocal.getFacility(keywordMessage.getFacility());
                                
                 if(facility == null){
                     log.error("Unable to locate facility from lookup with name: "+keywordMessage.getFacility());
@@ -79,21 +77,21 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 }               
                 
                 //if not EMAT (ie allowed none words) then remove all none words
-                if(!facilityDownload.is_AllKeywords()){
+                if(!facility.is_AllKeywords()){
                    //TODO add the type into the search
-                   keywords = ICATSingleton.getInstance(facilityDownload.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());            
+                   keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());            
                 } else{
-                   keywords = ICATSingleton.getInstance(facilityDownload.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());
+                   keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());
                 }
                                 
-                log.trace("Facility: "+facilityDownload.getFacility()+" has: "+keywords.size()+" keywords");
+                log.trace("Facility: "+facility.getFacility()+" has: "+keywords.size()+" keywords");
                 String[] facKeyWords =  keywords.toArray(new String[keywords.size()]);
                 
                 //make sure file location exists
                 if(!new File(DataPortalConstants.KEYWORD_LOCATION).exists()) new File(DataPortalConstants.KEYWORD_LOCATION).mkdir();
                 
                 //save to file
-                FileOutputStream f_out = new FileOutputStream(DataPortalConstants.KEYWORD_LOCATION+facilityDownload.getFacility()+"_"+keywordMessage.getUserId()+".keyworddata");
+                FileOutputStream f_out = new FileOutputStream(DataPortalConstants.KEYWORD_LOCATION+facility.getFacility()+"_"+keywordMessage.getUserId()+".keyworddata");
                 
                 // Use an ObjectOutputStream to send object data to the
                 // FileOutputStream for writing to disk.
@@ -106,7 +104,7 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 
                 
             } catch (Exception sqle) {
-                log.error("Unable to initialize keywords for "+facilityDownload.getFacility(),sqle);
+                log.error("Unable to initialize keywords for "+facility.getFacility(),sqle);
             } 
         }
         
