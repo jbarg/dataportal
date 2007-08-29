@@ -26,6 +26,8 @@ public interface SendMDBLocal {
     public QueryRequest queryICATs(String sid, QueryRequest q_request) throws QueryException;
     
     public void downloadKeywords(String sid, KeywordMessage keywordMessage) ;
+      
+     public void downloadKeywords(String sid, KeywordMessage keywordMessage, String facility) ;
     
     public void loginICATs(String sid, LoginICATMessage loginICATMessage) throws SessionException ;
     

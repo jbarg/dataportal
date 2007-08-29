@@ -162,14 +162,14 @@ public class Bookmark implements Serializable {
         this.note = note;
     }
     
-    @XmlTransient
+    //@XmlTransient
     public Date getModTime() {
         return this.modTime;
     }
     
-   /* public void setModTime(Date modTime) {
-        this.modTime = modTime;
-    }*/
+    public void setModTime(Date modTime) {
+     this.modTime = modTime;
+    }
     
     @XmlTransient
     public User getUserId() {

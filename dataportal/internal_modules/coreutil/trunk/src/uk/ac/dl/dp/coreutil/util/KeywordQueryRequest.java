@@ -11,6 +11,8 @@ package uk.ac.dl.dp.coreutil.util;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.dp.icatws.LogicalOperator;
 
 
@@ -25,7 +27,7 @@ public class KeywordQueryRequest implements Serializable {
     private int start_index;
     private int max_results;
     private String facility;
-    private Collection<String> facilities;
+    private HashSet<String> facilities;
     private Collection<String> keywords;
     
     /** Creates a new instance of KeywordQueryRequest */
@@ -64,6 +66,7 @@ public class KeywordQueryRequest implements Serializable {
         this.max_results = max_results;
     }
 
+    @XmlTransient    
     public String getFacility() {
         return facility;
     }
@@ -72,11 +75,11 @@ public class KeywordQueryRequest implements Serializable {
         this.facility = facility;
     }
 
-    public Collection<String> getFacilities() {
+    public HashSet<String> getFacilities() {
         return facilities;
     }
 
-    public void setFacilities(Collection<String> facilities) {
+    public void setFacilities(HashSet<String> facilities) {
         this.facilities = facilities;
     }
    

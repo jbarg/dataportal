@@ -108,14 +108,14 @@ public class Url implements Serializable {
         this.url = url;
     }
     
-    @XmlTransient
+    //@XmlTransient
     public Date getModTime() {
         return this.modTime;
     }
     
-    /*public void setModTime(Date modTime) {
+    public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }*/
+    }
     
     @XmlTransient
     public DataReference getDataRefId() {

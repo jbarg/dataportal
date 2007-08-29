@@ -60,7 +60,7 @@ public class SessionUtil {
             }
         }
         //if get here then error
-        throw new SessionException("Facility: "+facility+" has not been tried to be logged into");
+        throw new SessionException("Facility: "+facility+" has not been logged on.");
     }
     
     public boolean isFacilityLoggedIn(int numberActiveFacilities){

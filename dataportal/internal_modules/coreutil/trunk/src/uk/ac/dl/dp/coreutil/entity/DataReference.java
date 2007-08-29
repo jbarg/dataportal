@@ -89,7 +89,7 @@ public class DataReference implements Serializable {
     private Date modTime;
     
     @JoinColumn(name = "USER_ID")
-    @ManyToOne   
+    @ManyToOne
     private User userId;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dataRefId")
@@ -112,6 +112,9 @@ public class DataReference implements Serializable {
     
     @Transient
     private String dpId;
+    
+    @Transient
+    private DPUrlRefType referenceType;
     
     @PrePersist
     @PreUpdate
@@ -180,6 +183,7 @@ public class DataReference implements Serializable {
         this.investigationId = investigationId;
     }
     
+     @XmlTransient
     public String getTypeOfReference() {
         return this.typeOfReference;
     }
@@ -204,16 +208,16 @@ public class DataReference implements Serializable {
         this.typeOfObject = typeOfObject;
     }
     
-    @XmlTransient
+    //@XmlTransient
     public Date getModTime() {
         return this.modTime;
     }
     
-   /* public void setModTime(Date modTime) {
+    public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }*/
+    }
     
-     @XmlTransient
+    @XmlTransient
     public User getUserId() {
         return this.userId;
     }
@@ -299,7 +303,7 @@ public class DataReference implements Serializable {
         this.urls = urls;
     }
     
-     @XmlTransient
+    @XmlTransient
     public boolean isHasNote() {
         if(getNote() == null || getNote().equals("")) return false;
         else return true;
@@ -322,15 +326,24 @@ public class DataReference implements Serializable {
         this.download = download;
     }
     
-     public void setDpId(String dpId){
+    public void setDpId(String dpId){
         //do nothing, only for web services
     }
-     
+    
     public String getDpId(){
         return getFacility()+"-"+getId();
     }
     
     public boolean isImageJ(){
         return  Util.isImageJ(getName());
-    }    
+    }
+    
+     public DPUrlRefType getReferenceType() {
+        return referenceType;
+    }
+
+    public void setReferenceType(DPUrlRefType referenceType) {
+        setTypeOfReference(referenceType.toString());
+        this.referenceType = referenceType;
+    }
 }
