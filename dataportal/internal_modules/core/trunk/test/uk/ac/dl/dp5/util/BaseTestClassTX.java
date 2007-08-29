@@ -10,7 +10,9 @@
 
 package uk.ac.dl.dp5.util;
 
+import java.io.File;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,13 +31,18 @@ public class BaseTestClassTX extends BaseTest {
     
     private static Logger log = Logger.getLogger(BaseTestClassTX.class);
     
+    static {
+         PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.properties");          
+    }
+    
+    
     @Before
     public void beginTX(){
-        log.error("setUp(), creating entityManager");
+        log.info("setUp(), creating entityManager");
         em = emf.createEntityManager();
         
         // Begin transaction
-        log.error("beginning transaction on entityManager");
+        log.info("beginning transaction on entityManager");
         
         em.getTransaction().begin();
     }
@@ -44,17 +51,17 @@ public class BaseTestClassTX extends BaseTest {
     public void closeTX(){
         
         // Commit the transaction
-        log.error("commiting transaction on entityManager");
+        log.info("commiting transaction on entityManager");
         try {
             if(!em.getTransaction().getRollbackOnly()){
-                log.error("commiting tx");
+                log.info("commiting tx");
                 em.getTransaction().commit();
             }
         } catch(RuntimeException t){
             log.error(t);
             throw t;
         } finally {
-            log.error("tearDown(), closing entityManager");
+            log.info("tearDown(), closing entityManager");
            if(em !=null) em.close();
         }
     }
