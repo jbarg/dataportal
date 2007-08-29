@@ -3,6 +3,7 @@ package uk.ac.dl.dp.coreutil.interfaces;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import javax.ejb.Remote;
 
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
@@ -20,7 +21,7 @@ import uk.ac.dp.icatws.InvestigationInclude;
 public interface QueryRemote {
      public QueryRequest queryByKeyword(String sid, KeywordQueryRequest kqr) throws QueryException, SessionException;
     
-    public QueryRequest queryMydata(String sid, Collection<String> facilities) throws SessionException, QueryException;
+    public QueryRequest queryMydata(String sid, HashSet<String> facilities) throws SessionException, QueryException;
     
     public boolean isFinished(QueryRequest request) throws SessionException;
     

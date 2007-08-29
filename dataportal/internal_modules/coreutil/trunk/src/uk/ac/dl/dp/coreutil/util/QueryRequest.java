@@ -12,8 +12,7 @@ package uk.ac.dl.dp.coreutil.util;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import uk.ac.dp.icatws.Investigation;
-//import uk.ac.dp.icatws.dvancedSearch;
+import uk.ac.dp.icatws.AdvancedSearchDetails;
 /**
  *
  * @author gjd37
@@ -30,9 +29,10 @@ public class QueryRequest implements Serializable{
     private String facility;
     private Collection<String> facilities;
     
-   private InvestigationIncludeRequest investigationRequest;
+    private InvestigationIncludeRequest investigationRequest;
     private KeywordQueryRequest keywordQuery;
-    //   private AdvancedSearch advancedSearch;
+    private AdvancedSearchDetailsDTO advancedSearch;
+    
     
     /** Creates a new instance of QueryRequest */
     public QueryRequest() {
@@ -101,22 +101,30 @@ public class QueryRequest implements Serializable{
     public void setKeywordQuery(KeywordQueryRequest keywordQuery) {
         this.keywordQuery = keywordQuery;
     }
-
+    
     public Collection<String> getFacilities() {
         return facilities;
     }
-
+    
     public void setFacilities(Collection<String> facilities) {
         this.facilities = facilities;
     }
-
+    
     public InvestigationIncludeRequest getInvestigationRequest() {
         return investigationRequest;
     }
-
+    
     public void setInvestigationRequest(InvestigationIncludeRequest investigationRequest) {
-        this.investigationRequest = investigationRequest;
+        this.investigationRequest = investigationRequest;    
     }
-
-   
+    
+    public AdvancedSearchDetailsDTO getAdvancedSearch() {
+        return advancedSearch;
+    }
+    
+    public void setAdvancedSearch(AdvancedSearchDetailsDTO advancedSearch) {
+        this.advancedSearch = advancedSearch;
+    }
+    
+    
 }

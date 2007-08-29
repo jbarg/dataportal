@@ -2,6 +2,7 @@ package uk.ac.dl.dp.coreutil.delegates;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
@@ -53,7 +54,7 @@ public class QueryDelegate {
         return qsmr.queryByKeyword(sid, kqr);
     }
     
-     public QueryRequest queryMyData(String sid, Collection<String> facilities) throws   SessionException, QueryException{
+     public QueryRequest queryMyData(String sid,  HashSet<String> facilities) throws   SessionException, QueryException{
         return qsmr.queryMydata(sid, facilities);
     }
          

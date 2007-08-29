@@ -167,6 +167,7 @@ public class Certificate {
     
     public boolean isLifetimeLeft() throws CertificateException {
         boolean result = false;
+        log.trace("Timeleft "+getLifetime());
         // Check some lifetime left on proxy certificate (more than 10 mins left)
         if (getLifetime() > 60*10) {
             result = true;

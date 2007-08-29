@@ -3,12 +3,14 @@ package uk.ac.dl.dp.coreutil.interfaces;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import javax.ejb.Local;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
+import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
 
@@ -19,8 +21,10 @@ import uk.ac.dp.icatws.InvestigationInclude;
 public interface QueryLocal {
     public QueryRequest queryByKeyword(String sid, KeywordQueryRequest kqr) throws QueryException, SessionException;
     
-    public QueryRequest queryMydata(String sid, Collection<String> facilities) throws SessionException, QueryException;
+    public QueryRequest queryMydata(String sid, HashSet<String> facilities) throws SessionException, QueryException;
     
+    public QueryRequest queryAdvanced(String sid, AdvancedSearchDetails AdvancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException;
+   
     public boolean isFinished(QueryRequest request) throws SessionException;
     
     public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException;
