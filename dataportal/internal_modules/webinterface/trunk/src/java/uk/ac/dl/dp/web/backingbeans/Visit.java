@@ -11,26 +11,14 @@ package uk.ac.dl.dp.web.backingbeans;
 
 import java.io.Serializable;
 
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
 
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
-import uk.ac.dl.dp.coreutil.delegates.DataCenterAuthDelegate;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegateStateFul;
-import uk.ac.dl.dp.coreutil.entity.Bookmark;
-import uk.ac.dl.dp.coreutil.entity.DataRefAuthorisation;
-import uk.ac.dl.dp.coreutil.entity.DataReference;
-import uk.ac.dl.dp.coreutil.entity.User;
-import uk.ac.dl.dp.coreutil.interfaces.DataAuthorisationRemote;
 import uk.ac.dl.dp.coreutil.util.DPRole;
 import java.util.*;
 import javax.faces.model.SelectItem;
 import org.apache.log4j.*;
-import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
 import uk.ac.dl.dp.web.util.AbstractSessionBean;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;

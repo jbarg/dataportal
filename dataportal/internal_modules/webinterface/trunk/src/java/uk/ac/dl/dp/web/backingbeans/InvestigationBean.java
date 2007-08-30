@@ -19,18 +19,18 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
-import uk.ac.cclrc.dpal.beans.Keyword;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
 import uk.ac.dl.dp.web.util.WebConstants;
+import uk.ac.dp.icatws.Datafile;
+import uk.ac.dp.icatws.Dataset;
+import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.Keyword;
 
 /**
  *
@@ -86,21 +86,21 @@ public class InvestigationBean extends SortableList {
                     return 0;
                 }
                 if (column.equals("facility")) {
-                    return ascending ? c1.getFacility().compareTo(c2.getFacility()) : c2.getFacility()
-                    .compareTo(c1.getFacility());
+                    return ascending ? c1.getFacility().getFacilityShortName().compareTo(c2.getFacility().getFacilityShortName()) : c2.getFacility().getFacilityShortName()
+                    .compareTo(c1.getFacility().getFacilityShortName());
                     
                 } else if (column.equals("name")) {
-                    if(c1.getName() == null) return 0;
-                    else return ascending ? c1.getName().compareTo(c2.getName()) : c2.getName()
-                    .compareTo(c1.getName());
+                    if(c1.getTitle() == null) return 0;
+                    else return ascending ? c1.getTitle().compareTo(c2.getTitle()) : c2.getTitle()
+                    .compareTo(c1.getTitle());
                 }else if (column.equals("abstract")) {
                     //if no abstract put it behind it
-                    if(c1.getInvestigationAbstract() == null) return 1;
-                    else return ascending ? c1.getInvestigationAbstract().compareTo(c2.getInvestigationAbstract()) : c2.getInvestigationAbstract()
-                    .compareTo(c1.getInvestigationAbstract());
+                    if(c1.getInvAbstract() == null) return 1;
+                    else return ascending ? c1.getInvAbstract().compareTo(c2.getInvAbstract()) : c2.getInvAbstract()
+                    .compareTo(c1.getInvAbstract());
                 } else if (column.equals("type")) {
-                    return ascending ? c1.getInvestigationType().compareTo(c2.getInvestigationType()) : c2.getInvestigationType()
-                    .compareTo(c1.getInvestigationType());
+                    return ascending ? c1.getInvType().getName().compareTo(c2.getInvType().getName()) : c2.getInvType().getName()
+                    .compareTo(c1.getInvType().getName());
                 } else
                     return 0;
             }
@@ -307,21 +307,21 @@ public class InvestigationBean extends SortableList {
             return null;
         }
         
-        Collection<DataSet> datasets = null;
-        Collection<DataFile> datafiles = null;
+        Collection<Dataset> datasets = null;
+        Collection<Datafile> datafiles = null;
         
         try{
             QueryDelegate qd = QueryDelegate.getInstance();
             log.debug("About to get datasets from: "+investigations.size());
             
-            datasets = qd.getDataSets(getVisit().getSid(),investigations);
+           // datasets = qd.getDataSets(getVisit().getSid(),investigations);
             log.debug("Got datasets, getting datafiles, size: "+datasets.size());
             
-            datafiles = qd.getDataFiles(getVisit().getSid(), datasets);
+            //datafiles = qd.getDataFiles(getVisit().getSid(), datasets);
             log.debug("Got data files, size: "+datafiles.size());
             
             //TODO remove, print out all datafiles
-            for(DataFile file : datafiles){
+            for(Datafile file : datafiles){
                 log.trace(file.getName()+" "+file.getId());
             }
             
@@ -360,10 +360,10 @@ public class InvestigationBean extends SortableList {
         Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
         
         outerLoop: for(Investigation investigation : investigations){
-            Collection<String> keywords = investigation.getKeywords();
+            Collection<Keyword> keywords = investigation.getKeywordCollection();
             if(keywords != null ){
-                for(String keyword : keywords){
-                    if(keyword.equals("Initialising keywords")){
+                for(Keyword keyword : keywords){
+                    if(keyword.getKeywordPK().getName().equals("Initialising keywords")){
                         break outerLoop;
                     } else {
                         setKeywordDone(true);
@@ -378,7 +378,7 @@ public class InvestigationBean extends SortableList {
         
         
         Collection<Keyword> keywords = null;
-        try{
+      /* try{
             keywords = QueryDelegate.getInstance().getKeywordsByInvestigationId(getVisit().getSid(),investigations);
             
             for(Investigation investigation : investigations){
@@ -421,7 +421,7 @@ public class InvestigationBean extends SortableList {
             //error("Error: Unexpected error getting Data Sets.");
             log.error("Unable to search for investigation keywords",ex);
         }
-        
+        */
         
     }
     

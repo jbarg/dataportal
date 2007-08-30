@@ -5,26 +5,12 @@
  */
 package uk.ac.dl.dp.web.backingbeans;
 
-import java.io.BufferedInputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.faces.context.FacesContext;
-
-import com.sun.j2ee.blueprints.ui.autocomplete.AutoCompleteUtilities;
-import com.sun.j2ee.blueprints.ui.autocomplete.CompletionResult;
-import uk.ac.cclrc.dpal.DPAccessLayer;
-import uk.ac.cclrc.dpal.beans.Keyword;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.LookupDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
-import uk.ac.dl.dp.web.navigation.KeywordBean;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.web.util.AbstractApplicationBean;
 
@@ -64,7 +50,7 @@ public class ApplicationBean extends AbstractApplicationBean {
         
         for(FacilityDTO facility : LookupDelegate.getInstance().lookup(DPFacilityType.WRAPPER)){
             try {
-                String[] fac = QueryDelegate.getInstance().getKeywords(facility.getFacility());
+                String[] fac = null; //QueryDelegate.getInstance().getKeywords(facility.getFacility());
                 log.debug("Got keywords for: "+facility.getFacility()+", no. : "+fac.length);
                 
                 keywords.put(facility.getFacility(),fac);
@@ -80,7 +66,7 @@ public class ApplicationBean extends AbstractApplicationBean {
         
         for(FacilityDTO facility : LookupDelegate.getInstance().lookup(DPFacilityType.WRAPPER)){
             try {
-                String[] fac = QueryDelegate.getInstance().getKeywords(facility.getFacility());
+                String[] fac =  null;//QueryDelegate.getInstance().getKeywords(facility.getFacility());
                 log.debug("Got keywords for: "+facility.getFacility()+", no. : "+fac.length);
                 
                 keywordsStatic.put(facility.getFacility(),fac);
@@ -97,13 +83,13 @@ public class ApplicationBean extends AbstractApplicationBean {
             log.trace("Checking if "+facility+" data there yet");
             String[] fac;
             try {
-                fac = QueryDelegate.getInstance().getKeywords(facility, false);
-                 keywordsStatic.put(facility,fac);
+                //fac = QueryDelegate.getInstance().getKeywords(facility, false);
+                // keywordsStatic.put(facility,fac);
             } catch (Exception ex) {
                log.error("Unable to get keywords for: "+facility);
                return keywords;
             }
-            return fac;
+            return null;
         }
         return keywords;
     }

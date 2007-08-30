@@ -15,9 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
+
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataRefAuthorisation;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
@@ -28,6 +26,9 @@ import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.web.backingbeans.BasicSearchBean;
 import uk.ac.dl.srbapi.srb.SRBUrl;
 import uk.ac.dl.srbapi.util.AccessInfo;
+import uk.ac.dp.icatws.Datafile;
+import uk.ac.dp.icatws.Dataset;
+import uk.ac.dp.icatws.Investigation;
 /**
  *
  * @author gjd37
@@ -59,9 +60,9 @@ public class VisitData implements Serializable {
     
     private Collection<Investigation> currentInvestigations;
     
-    private Collection<DataSet> currentDatasets;
+    private Collection<Dataset> currentDatasets;
     
-    private Collection<DataFile> currentDatafiles;
+    private Collection<Datafile> currentDatafiles;
     
     private Collection<Bookmark> currentBookmarks;
     
@@ -106,20 +107,20 @@ public class VisitData implements Serializable {
     }
     
     //current datasets that the user has picked from the investigations page , used in data sets page
-    public Collection<DataSet> getCurrentDatasets() {
+    public Collection<Dataset> getCurrentDatasets() {
         return currentDatasets;
     }
     
-    public void setCurrentDatasets(Collection<DataSet> currentDatasets) {
+    public void setCurrentDatasets(Collection<Dataset> currentDatasets) {
         this.currentDatasets = currentDatasets;
     }
     
     //current datafiles that the user has picked from the investigations page , used in data sets page
-    public Collection<DataFile> getCurrentDatafiles() {
+    public Collection<Datafile> getCurrentDatafiles() {
         return currentDatafiles;
     }
     
-    public void setCurrentDatafiles(Collection<DataFile> currentDatafiles) {
+    public void setCurrentDatafiles(Collection<Datafile> currentDatafiles) {
         this.currentDatafiles = currentDatafiles;
     }
     
@@ -277,30 +278,30 @@ public class VisitData implements Serializable {
     }
     
     //access methods to search and access Data Sets and file by their unique ID
-    public DataSet getDataSetFromSearchedData(String ID){
+    public Dataset getDataSetFromSearchedData(String ID){
         String fac = ID.split("-")[0];
         String id = ID.split("-")[1];
         
-        for(DataSet file : getCurrentDatasets()){
+        for(Dataset file : getCurrentDatasets()){
             //log.trace(file.getDpId());
-            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.trace("Found dataset: "+file);
-                return file;
-            }
+           //TODO changed if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+                //log.trace("Found dataset: "+file);
+                //return file;
+            //}
         }
         return null;
     }
     
     //access methods to search and access Data Sets and file by their unique ID
-    public DataFile getDataFileFromSearchedData(String ID){
+    public Datafile getDataFileFromSearchedData(String ID){
         String fac = ID.split("-")[0];
         String id = ID.split("-")[1];
         
-        for(DataFile file : getCurrentDatafiles()){
-            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                log.trace("Found datafile: "+file);
-                return file;
-            }
+        for(Datafile file : getCurrentDatafiles()){
+           //TODO changed if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+                //log.trace("Found datafile: "+file);
+               // return file;
+            //}
         }
         return null;
     }
@@ -342,13 +343,13 @@ public class VisitData implements Serializable {
     
     public synchronized String[] getSearchedSRBURLs() {
         Collection<String> urls = new ArrayList<String>();
-        for(DataFile file : getCurrentDatafiles()){
-            if(file.isDownload()){
+        for(Datafile file : getCurrentDatafiles()){
+          /*  if(file.isDownload()){
                 log.trace("Found datafile to download: "+file);
                 urls.add(file.getUri());
                 //now set to false
                 // file.setDownload(false);
-            }
+            }*/
         }
         
         return urls.toArray(new String[urls.size()]);
@@ -356,7 +357,7 @@ public class VisitData implements Serializable {
     
     public synchronized String[] getAllSearchedSRBURLs() {
         Collection<String> urls = new HashSet<String>();
-        for(DataFile file : getCurrentDatafiles()){
+     /*   for(Datafile file : getCurrentDatafiles()){
             if(file.isSelected()){
                 log.trace("Found datafile to download: "+file);
                 urls.add(file.getUri());
@@ -376,7 +377,7 @@ public class VisitData implements Serializable {
                 }
             }
         }
-        
+       */ 
         
         return urls.toArray(new String[urls.size()]);
     }
@@ -440,16 +441,16 @@ public class VisitData implements Serializable {
     
     public boolean isAddSelectionable(){
         Collection<Investigation> invests = getCurrentInvestigations();
-        Collection<DataSet> datasets = getCurrentDatasets();
-        Collection<DataFile> datafiles = getCurrentDatafiles();
+        Collection<Dataset> datasets = getCurrentDatasets();
+        Collection<Datafile> datafiles = getCurrentDatafiles();
         
         for(Investigation invest: invests){
             if(invest.isSelected()) return true;
         }
-        for(DataSet dataset: datasets){
+        for(Dataset dataset: datasets){
             if(dataset.isSelected()) return true;
         }
-        for(DataFile datafile : datafiles){
+        for(Datafile datafile : datafiles){
             if(datafile.isSelected()) return true;
         }
         return false;
@@ -478,14 +479,14 @@ public class VisitData implements Serializable {
     
     public  void reinitailise(){
         Collection<Investigation> investigations = getCurrentInvestigations();
-        Collection<DataSet> datasets = getCurrentDatasets();
-        Collection<DataFile> datafiles = getCurrentDatafiles();
+        Collection<Dataset> datasets = getCurrentDatasets();
+        Collection<Datafile> datafiles = getCurrentDatafiles();
         log.trace("reinitailising");
-        for(DataFile file : datafiles){
-            file.setDownload(false);
+        for(Datafile file : datafiles){
+            //file.setDownload(false);
             file.setSelected(false);
         }
-        for(DataSet dataset : datasets){
+        for(Dataset dataset : datasets){
             dataset.setSelected(false);
         }
         for(Investigation investigation : investigations){

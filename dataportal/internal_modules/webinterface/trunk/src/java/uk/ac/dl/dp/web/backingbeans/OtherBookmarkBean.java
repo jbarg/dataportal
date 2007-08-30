@@ -17,11 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.DataCenterAuthDelegate;
@@ -30,13 +26,10 @@ import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
-import javax.faces.context.FacesContext;
 import javax.faces.application.*;
+import uk.ac.dp.icatws.Investigation;
 
 /**
  *
@@ -164,7 +157,7 @@ public class OtherBookmarkBean extends SortableList {
         log.trace("viewing studyId: "+qrdto.getStudyId());
         Collection<Investigation> investigations = null;
         try {
-            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
+           // investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
             //got investigstion
             
             //check if null so user not allowed access
@@ -206,7 +199,7 @@ public class OtherBookmarkBean extends SortableList {
         log.trace("viewing studyId: "+qrdto.getStudyId());
         Collection<Investigation> investigations = null;
         try {
-            investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
+            //investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
             
             //check if null so user not allowed access
             if(investigations.size() == 0){

@@ -1,22 +1,11 @@
 package uk.ac.dl.dp.web.util;
-import org.ietf.jgss.GSSCredential;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.dl.dp.coreutil.delegates.DownloadDelegate;
-import uk.ac.dl.dp.coreutil.delegates.EventDelegate;
-import uk.ac.dl.dp.coreutil.entity.DPConstants;
-import uk.ac.dl.dp.coreutil.entity.DataReference;
-import uk.ac.dl.dp.coreutil.entity.Url;
-import uk.ac.dl.dp.coreutil.util.Certificate;
-import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
-import uk.ac.dl.dp.web.backingbeans.Visit;
 import org.apache.log4j.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import uk.ac.dl.dp.coreutil.entity.SrbServer;
+import uk.ac.dl.dp.web.backingbeans.Visit;
 import uk.ac.dl.srbapi.srb.*;
 
 /**
