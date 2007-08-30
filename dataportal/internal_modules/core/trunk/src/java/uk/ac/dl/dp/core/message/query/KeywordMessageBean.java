@@ -27,7 +27,9 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
+import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.util.KeywordMessage;
+import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dp.icatws.ICATSingleton;
 
 /**
@@ -54,8 +56,8 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
         
         log.debug("onMessage();  Query keyword received");
         ObjectMessage msg = null;
-        KeywordMessage keywordMessage = null;   
-         ModuleLookup facility = null;
+        KeywordMessage keywordMessage = null;
+        ModuleLookup facility = null;
         List<String> keywords = null;
         
         if (message instanceof ObjectMessage) {
@@ -68,30 +70,31 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 log.debug("Object not correct", jmsex);
                 return ;
             }
-            try{                               
+            try{
                 facility = lookupLocal.getFacility(keywordMessage.getFacility());
-                               
+                
                 if(facility == null){
                     log.error("Unable to locate facility from lookup with name: "+keywordMessage.getFacility());
                     return ;
-                }               
+                }
                 
                 //if not EMAT (ie allowed none words) then remove all none words
                 if(!facility.is_AllKeywords()){
-                   //TODO add the type into the search
-                   keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());            
+                    //TODO add the type into the search
+                    keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());
                 } else{
-                   keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());
+                    keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());
                 }
-                                
-                log.trace("Facility: "+facility.getFacility()+" has: "+keywords.size()+" keywords");
-                String[] facKeyWords =  keywords.toArray(new String[keywords.size()]);
                 
+                log.trace("Facility: "+facility.getFacility()+" has: "+keywords.size()+" keywords");
+                //String[] facKeyWords =  keywords.toArray(new String[keywords.size()]);
+                                                             
                 //make sure file location exists
                 if(!new File(DataPortalConstants.KEYWORD_LOCATION).exists()) new File(DataPortalConstants.KEYWORD_LOCATION).mkdir();
                 
                 //save to file
-                FileOutputStream f_out = new FileOutputStream(DataPortalConstants.KEYWORD_LOCATION+facility.getFacility()+"_"+keywordMessage.getUserId()+".keyworddata");
+                File file  = new File(DataPortalConstants.KEYWORD_LOCATION+facility.getFacility()+"_"+keywordMessage.getUserId()+".keyworddata");
+                FileOutputStream f_out = new FileOutputStream(file);
                 
                 // Use an ObjectOutputStream to send object data to the
                 // FileOutputStream for writing to disk.
@@ -100,12 +103,15 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 // Pass our object to the ObjectOutputStream's
                 // writeObject() method to cause it to be written out
                 // to disk.
-                obj_out.writeObject(facKeyWords);
+                obj_out.writeObject(keywords);
+                log.trace("Saved keyword data for "+facility.getFacility()+" for user "+keywordMessage.getUserId()+" at: "+file.getAbsolutePath());
                 
+                obj_out.close();
+                f_out.close();
                 
             } catch (Exception sqle) {
                 log.error("Unable to initialize keywords for "+facility.getFacility(),sqle);
-            } 
+            }
         }
         
         log.debug("Message download keyword finished");

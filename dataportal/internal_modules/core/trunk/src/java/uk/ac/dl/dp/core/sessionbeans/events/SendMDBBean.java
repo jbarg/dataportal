@@ -109,7 +109,7 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
         
         
         //TODO real query
-        for(String facility : q_request.getFacilities()){          
+        for(String facility : q_request.getFacilities()){
             try {
                 ObjectMessage message = session.createObjectMessage();
                 
@@ -165,6 +165,7 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
                 if(session != null) session.close();
                 if(connection != null) connection.close();
             } catch (JMSException e) {}
+            return ;
             /*for(ModuleLookup facility : lookupLocal.getFacilityInfo(DPFacilityType.WRAPPER)){
                 keywordMessage.setFacility(facility.getFacility());
                 //saveEmptyCollection(sid, keywordMessage);
@@ -178,10 +179,12 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
             else if(facilityToDownload != null && facility.getFacility().equals(facilityToDownload)) sendMessage = true;
             if(sendMessage){
                 try {
+                    SessionUtil sessionUtil = new SessionUtil(sid, em);
                     ObjectMessage message = session.createObjectMessage();
                     
+                    keywordMessage.setUserId(sessionUtil.getSession().getUserId().getUserId());
                     keywordMessage.setFacility(facility.getFacility());
-                    keywordMessage.setFacilitySessionId(new SessionUtil(sid, em).getFacilitySessionId(facility.getFacility()));
+                    keywordMessage.setFacilitySessionId(sessionUtil.getFacilitySessionId(facility.getFacility()));
                     message.setObject(keywordMessage);
                     
                     messageProducer.send(message);
@@ -248,11 +251,18 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
                 saveLoginICATException(sid, loginICATMessage, new Exception("Unable to log into "+facility.getFacility()));
             }
         }
+        
+        try {
+            //close connections
+            if(session != null) session.close();
+            if(connection != null)   connection.close();
+        } catch (JMSException ex) {}
+        
         log.trace("sent off login ICATS to MDBs, "+(System.currentTimeMillis()- time)/1000f+" seconds");
     }
     
     private void saveLoginICATException(String sid, LoginICATMessage loginICATMessage, Exception ex) throws SessionException{
-        log.info("loggin exception loggin on to "+loginICATMessage.getFacility());
+        log.info("logging exception logging on to "+loginICATMessage.getFacility());
         FacilitySession facSession = new FacilitySession();
         
         uk.ac.dl.dp.coreutil.entity.Session session = new SessionUtil(loginICATMessage.getSessionId(),em).getSession();
@@ -262,6 +272,7 @@ public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
         //save info to DB
         facSession.setFacilityName(loginICATMessage.getFacility());
         facSession.setSessionId(session);
+        facSession.setFacilitySessionId("null");
         
         //em.persist(facSession);
         //persist it this way

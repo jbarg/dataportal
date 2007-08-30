@@ -44,6 +44,7 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.InvestigationInclude;
 
 /**
  *
@@ -109,12 +110,25 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod() //HashMaps dont work for JAXWS
     public HashMap<String, Collection<String>> getKeywords(@WebParam(name="sessionId") String sessionId, @WebParam(name="facility") String facility) throws QueryException , SessionException {
         try {
             //check session
             new SessionUtil(sessionId, em);
             return queryLocal.getKeywords(sessionId);
+        } catch (QueryException ex) {
+            throw ex;
+        } catch (SessionException ex) {
+            throw new SessionException(ex.getMessage());
+        }
+    }
+    
+    @WebMethod()
+    public Collection<String> getKeywordsForFacility(@WebParam(name="sessionId") String sessionId, @WebParam(name="facility") String facility) throws QueryException , SessionException {
+        try {
+            //check session
+            new SessionUtil(sessionId, em);
+            return queryLocal.getKeywordsForFacility(sessionId, facility);
         } catch (QueryException ex) {
             throw ex;
         } catch (SessionException ex) {
@@ -133,7 +147,18 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-     @WebMethod()
+    @WebMethod()
+    public QueryRequest queryInvestigations(@WebParam(name="sessionId") String sessionId, @WebParam(name="investigations") Collection<Investigation> investigations, @WebParam(name="include") InvestigationInclude include) throws SessionException, QueryException{
+        try {
+            return queryLocal.queryInvestigations(sessionId, investigations, include);
+        } catch (QueryException ex) {
+            throw ex;
+        } catch (SessionException ex) {
+            throw new SessionException(ex.getMessage());
+        }
+    }
+    
+    @WebMethod()
     public QueryRequest queryByKeywords(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest) throws QueryException, SessionException {
         try {
             return queryLocal.queryByKeyword(sessionId, keywordQueryRequest);
@@ -145,7 +170,7 @@ public class DataPortal extends SessionEJBObject {
     }
     
     
-     @WebMethod()
+    @WebMethod()
     public QueryRequest queryByAdvanced(@WebParam(name="sessionId") String sessionId, @WebParam(name="advancedSearchDetails") AdvancedSearchDetails advancedSearchDetails, @WebParam(name="facilities") HashSet<String> facilities ) throws QueryException, SessionException {
         try {
             return queryLocal.queryAdvanced(sessionId, advancedSearchDetails, facilities);
@@ -157,14 +182,14 @@ public class DataPortal extends SessionEJBObject {
     }
     
     @WebMethod()
-    public Collection<Investigation> queryAndWait(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest) throws QueryException, SessionException {
+    public Collection<Investigation> queryKeywordsAndWait(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest) throws QueryException, SessionException {
         try {
             QueryRequest request = queryLocal.queryByKeyword(sessionId, keywordQueryRequest);
             
             while(!queryLocal.isFinished(request)){
                 try {
                     Thread.sleep(1000); //sleep one second
-                } catch (InterruptedException ex) {                    
+                } catch (InterruptedException ex) {
                 } //sleep one second
             }
             
@@ -182,7 +207,7 @@ public class DataPortal extends SessionEJBObject {
     public boolean isFinished(@WebParam(name="q_request") QueryRequest q_request) throws SessionException {
         return queryLocal.isFinished(q_request);
     }
-          
+    
     @WebMethod()
     public Collection<Investigation> getQueryResults(@WebParam(name="q_request") QueryRequest q_request) throws SessionException{
         return queryLocal.getQueryResults(q_request);

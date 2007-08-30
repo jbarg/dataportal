@@ -134,7 +134,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
     
     private Collection<Investigation> doGetInvestigationInclude(QueryRequest request, String wsdlLocation) throws SessionException_Exception, QueryException{
         
-        Collection<Investigation> returnedInvestigations = new ArrayList<Investigation>();
+        //Collection<Investigation> returnedInvestigations = new ArrayList<Investigation>();
         
         //get a list of facilites
         ModuleLookup moduleFacility = lookupLocal.getFacility(request.getFacility());
@@ -151,17 +151,15 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             //TODO add facility session id
             log.trace("seaching: "+request.getFacility()+" with facSessionID "+facilitySessionId);
             
-            //TODO return collection
-            /*Collection<*/Investigation/*>*/ investigationsFromFacility = ICATSingleton.getInstance(moduleFacility.getWsdlLocation()).getInvestigationIncludes(facilitySessionId, 5L, request.getInvestigationRequest().getInclude());
+            // return collection
+            Collection<Investigation> investigationsFromFacility = ICATSingleton.getInstance(moduleFacility.getWsdlLocation()).getInvestigationsIncludes(facilitySessionId, investigation_ids, request.getInvestigationRequest().getInclude());
             
-            // log.debug("Returned size: "+investigationsFromFacility.size());
+            log.debug("Returned size: "+investigationsFromFacility.size());
             //returnedInvestigations.addAll(investigationsFromFacility);
-            
+             return investigationsFromFacility;
         } catch (Exception ex) {
             log.error("Unable to search facility "+request.getFacility(),ex);
             throw new QueryException("Unable to search Investigations for facility "+request.getFacility(),ex);
-        }
-        
-        return returnedInvestigations;
+        }      
     }
 }

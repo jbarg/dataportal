@@ -25,6 +25,8 @@ import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.FacilitySession;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.Session;
+import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
+import uk.ac.dl.dp.coreutil.util.KeywordMessage;
 import uk.ac.dl.dp.coreutil.util.LoginICATMessage;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dp.icatws.ICATSingleton;
@@ -33,13 +35,13 @@ import uk.ac.dp.icatws.ICATSingleton;
  *
  * @author gjd37
  */
-@MessageDriven(mappedName=DataPortalConstants.LOGIN_ICAT_MDB, activationConfig =
+@MessageDriven(mappedName=DataPortalConstants.LOGIN_ICAT_MDB) /*, activationConfig =
 {
     @ActivationConfigProperty(propertyName="destinationType",
     propertyValue="javax.jms.Queue"),
     @ActivationConfigProperty(propertyName="destination",
     propertyValue=DataPortalConstants.LOGIN_ICAT_MDB)
-})
+})*/
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class LoginICATMessageBean extends MessageEJBObject implements MessageListener {
     
@@ -48,12 +50,15 @@ public class LoginICATMessageBean extends MessageEJBObject implements MessageLis
     @EJB
     private LookupLocal lookupLocal;
     
+    @EJB
+    SendMDBLocal sendMDBLocal;
+    
     public void onMessage(Message message) {
         
-        log.debug("onMessage();  Login ICAT received");
+        log.trace("onMessage();  Login ICAT received");
         ObjectMessage msg = null;
         LoginICATMessage loginICATMessage = null;
-        ModuleLookup facilityDownload = null;
+        ModuleLookup facility = null;
         FacilitySession facSession = new FacilitySession();
         Session session = null;
         
@@ -62,41 +67,54 @@ public class LoginICATMessageBean extends MessageEJBObject implements MessageLis
             
             try {
                 loginICATMessage = (LoginICATMessage) msg.getObject();
+                
+                if(msg.getJMSRedelivered()){
+                    log.fatal("Login Message redelivered");
+                    return ;
+                }
                 log.debug("onMessage();  Login ICAT received for "+loginICATMessage.getFacility());
             } catch (JMSException jmsex) {
                 log.debug("Object not correct",jmsex);
                 return ;
             }
+            
             try{
                 session = new SessionUtil(loginICATMessage.getSessionId(),em).getSession();
-                ModuleLookup facility = lookupLocal.getFacility(loginICATMessage.getFacility());
+                log.trace("Get session "+session.getUserSessionId()+" looking up facility: "+loginICATMessage.getFacility());
+                facility = lookupLocal.getFacility(loginICATMessage.getFacility());
                 
                 if(facility == null){
                     log.error("Unable to locate facility from lookup with name: "+loginICATMessage.getFacility());
                     return ;
                 }
-                
+                log.trace("Logging into "+loginICATMessage.getFacility()+" ICAT API "+facility.getWsdlLocation());
                 //now log in
-                String sessionId = ICATSingleton.getInstance(loginICATMessage.getFacility()).loginLifetime(
+                String sessionId = ICATSingleton.getInstance(facility.getWsdlLocation()).loginLifetime(
                         loginICATMessage.getUsername(),
-                        loginICATMessage.getPassword(),
+                        loginICATMessage.getPassword() ,
                         loginICATMessage.getLifetime());
                 facSession.setFacilitySessionId(sessionId);
-                log.debug("Logged into "+loginICATMessage.getFacility()+" with sessionid "+sessionId);
+                log.debug("Logged into "+loginICATMessage.getFacility()+" ICAT API with sessionid "+sessionId+" for user: "+loginICATMessage.getUsername());
                 
-            } catch (Exception ex) {
-                log.error("Unable to login to facility: "+facilityDownload.getFacility(),ex);
+            } catch (Throwable ex) {
+                log.error("Unable to login to facility: "/*+facility.getFacility()*/,ex);
                 facSession.setFacilitySessionError(ex.getMessage());
+                facSession.setFacilitySessionId("null"); //TODO change to null
             }
             //save info to DB
-            facSession.setFacilityName(loginICATMessage.getFacility());           
+            facSession.setFacilityName(loginICATMessage.getFacility());
+            facSession.setFacilitySessionError("null"); //TODO change to null
             facSession.setSessionId(session);
             
-            //em.persist(facSession);            
+            //em.persist(facSession);
             //persist it this way
             session.addFacilitySession(facSession);
+            
+            //TODO send off download keywords here.
+            sendMDBLocal.downloadKeywords(loginICATMessage.getSessionId(), new KeywordMessage(), loginICATMessage.getFacility());
+            //em.flush();
         }
         
-        log.debug("Message login ICAT finished");        
+        log.debug("Message login ICAT finished");
     }
 }

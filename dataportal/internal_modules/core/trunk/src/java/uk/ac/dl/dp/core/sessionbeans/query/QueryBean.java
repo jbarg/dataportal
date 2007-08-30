@@ -213,7 +213,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     
     @PermitAll
     public Collection<String> getCompleted(QueryRequest q_request) throws SessionException {
-         log.trace("isFinished("+q_request+")");
+        log.trace("isFinished("+q_request+")");
         if(q_request.getSessionId() == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         //check is valid sessionid
@@ -362,6 +362,41 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     
     public HashMap<String, Collection<String>> getKeywords(String sessionId) throws QueryException {
         return getKeywords(sessionId, false, 9000000);
+    }
+    
+    public Collection<String> getKeywordsForFacility(String sessionId, String facility) throws QueryException {
+        if(sessionId == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        
+        try{
+            User user =  new UserUtil(sessionId,em).getUser();
+            
+            File keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+facility+"_"+user.getUserId()+".keyworddata");
+            
+            if(!keywordFile.exists()){
+                log.info("Keyword data not found");
+                
+                return new ArrayList<String>();
+            } else{
+                
+                
+                FileInputStream f_in = new  FileInputStream(keywordFile);
+                
+                // Read object using ObjectInputStream.
+                ObjectInputStream obj_in = new ObjectInputStream(f_in);
+                
+                // Read an object.
+                Collection<String> obj = (Collection<String>)obj_in.readObject();
+                
+                //close streams
+                obj_in.close();
+                f_in.close();
+                
+                return obj;                
+            }
+        } catch(Exception e){
+            log.warn("Unable to get keywords for facility: "+facility,e);
+            throw new QueryException("Unable to get keywords for facility: "+facility);
+        }
     }
     
     public HashMap<String, Collection<String>> getKeywords(String sessionId, boolean redownload, long timeout /*secs*/) throws QueryException {

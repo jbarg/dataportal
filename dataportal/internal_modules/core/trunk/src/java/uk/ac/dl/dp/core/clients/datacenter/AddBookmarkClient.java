@@ -40,7 +40,7 @@ public class AddBookmarkClient {
             DataCenterRemote sless = (DataCenterRemote) csl.lookup(DataPortalConstants.DATA_CENTER);
             Bookmark dto = new Bookmark();
             //dto.setId(759);
-            dto.setStudyId(2557);
+            dto.setStudyId(2557l);
             dto.setFacility("ISIS");
             dto.setName("no DTO");
             dto.setNote("SS");
