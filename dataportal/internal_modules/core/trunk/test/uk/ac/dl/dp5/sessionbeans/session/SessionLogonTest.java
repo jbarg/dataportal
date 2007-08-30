@@ -53,7 +53,7 @@ public class SessionLogonTest extends BaseTestClassTX {
         sessionBean.setLookupLocal(lookupBean);
         sessionBean.setSendMDBLocal(eventLocal);
         
-        String sessionId = sessionBean.login("gjd37" /*System.getProperty("usersso.username"), System.getProperty("password"),*/, "(gsd+37@Dl", 2);
+        String sessionId = sessionBean.login(System.getProperty("usersso.username"), System.getProperty("password"), 2);
         
         assertNotNull("SessionId cannot be null", sessionId);
        
