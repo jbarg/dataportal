@@ -59,7 +59,7 @@ public class DataCenterDelegateClient {
             //adding a bookmark
             Bookmark dto = new Bookmark();
             
-            dto.setStudyId((int)(Math.random()*10000L));
+            dto.setStudyId(new Long(1L*10000L));
             dto.setFacility("ISIS");
             dto.setName(""+(int)(Math.random()*10000L)+" Random name");
             dto.setNote("note bookmark ");
@@ -78,8 +78,8 @@ public class DataCenterDelegateClient {
             duto.setName("DataReference");
             duto.setNote("Silly");
             duto.setQuery("query");
-            duto.setReferenceId(4);
-            duto.setInvestigationId(new Integer("2"));
+            duto.setReferenceId(4l);
+            duto.setInvestigationId(2l);
             Collection<Url> cs = new ArrayList<Url>();
             Url re = new Url("srb://www.data.com"+(int)(Math.random()*10000L));
             re.setName("Name");

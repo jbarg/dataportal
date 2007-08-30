@@ -4,25 +4,32 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.UUID;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import javax.ejb.*;
+import javax.interceptor.ExcludeClassInterceptors;
+import javax.interceptor.Interceptors;
 import org.apache.log4j.Logger;
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.globus.myproxy.SASLParams;
 import org.ietf.jgss.GSSCredential;
+import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
+import uk.ac.dl.dp.coreutil.entity.FacilitySession;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 
 import uk.ac.dl.dp.coreutil.entity.User;
@@ -59,6 +66,7 @@ import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
  * Created 30-Mar-2006 11:44:43
  * @author gjd37
  */
+//@Interceptors(ArgumentValidator.class)
 @Stateless(mappedName=DataPortalConstants.SESSION)
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class SessionBean extends SessionEJBObject  implements SessionRemote, SessionLocal {
@@ -93,15 +101,55 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         log.debug("getSession()");
         if(sid == null) throw new SessionException("Session ID cannot be null.");
         
-        SessionDTO sessionDTO = new SessionUtil(sid,em).getSessionDTO();
+        SessionUtil sessionUtil = new SessionUtil(sid, em);
+        SessionDTO sessionDTO = sessionUtil.getSessionDTO();
         sessionDTO.setUserPrefs(getUserPrefs(sid));
         
         Collection<FacilityDTO> facilities = lookup.getFacilities(DPFacilityType.WRAPPER);
         sessionDTO.setFacilities(facilities);
         
         Collection<SrbServer> srbServers = lookup.getSrbServers();
-        log.trace("Add list of "+srbServers.size()+" to SessionDTO");
+        log.trace("Add list of "+srbServers.size()+" SRB servers to SessionDTO");
         sessionDTO.setSrbServers(srbServers);
+        
+        //now wait for loginICATS to return the sessionIds.
+        int x = 0;
+        while(true){ //wait 10 seconds to log in
+            int loggedInNumber = em.createQuery("SELECT fs FROM FacilitySession fs where fs.sessionId.userSessionId = :sid").setParameter("sid", sessionDTO.getUserSessionId()).getResultList().size();
+            
+            //log.trace(loggedInNumber +" == "+ facilities.size());
+            if(loggedInNumber == facilities.size()) {
+                log.info("Logged in all "+facilities.size()+" facilities");
+                break;
+            } else {
+                try {
+                    //log.trace("Not logged in all of facilities, sleeping 500ms");
+                    Thread.sleep(500);
+                } catch (InterruptedException ignore) {}
+            }
+            x++;
+            if(x > 20){
+                log.info("Timeout with facility session");
+                break;
+            }
+        }
+        
+        //add only ones to be returned
+        Collection<FacilityDTO> facilitiesToAdd = new ArrayList<FacilityDTO>();
+        //need to remove the facility from facility list
+        for(FacilitySession fs : sessionUtil.getSession().getFacilitySessionCollection()){
+            for(FacilityDTO facDTO : facilities){
+                if(fs.getFacilityName().equals(facDTO.getFacility()) && fs.isLoggedIn()){                    
+                    facilitiesToAdd.add(facDTO);
+                }
+            }
+        }
+        log.info("Adding "+facilitiesToAdd.size()+" to list of valid facilities");
+        sessionDTO.setFacilities(facilitiesToAdd);
+        
+        //set fac sessions
+        sessionDTO.setFacilitySessions(sessionUtil.getSession().getFacilitySessionCollection());
+        
         return sessionDTO;
     }
     
@@ -196,6 +244,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return gsscredential;
     }
     
+     @ExcludeClassInterceptors
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String login(String username, String password, int lifetime) throws LoginMyProxyException, SessionException{
         // log.debug("login(): " +sc.getCallerPrincipal() );
@@ -222,6 +271,9 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             
             return sid;
             
+        } catch (IllegalArgumentException irw) {
+            log.warn("Error from myproxy server: "+irw.getMessage(),irw);
+            throw new LoginMyProxyException("Password too short",LoginError.TOO_SHORT_PASSPHASE);
         } catch (MyProxyException mex) {
             log.warn("Error from myproxy server: "+mex.getMessage(),mex);
             throw new LoginMyProxyException(mex);
@@ -229,7 +281,6 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.warn("Unexpected error from myproxy: "+e.getMessage(),e);
             throw new LoginMyProxyException(e);
         }
-        
     }
     
     private String insertSessionImpl(LoginICATMessage loginICATMessage, GSSCredential credential) throws LoginMyProxyException, SessionException {
@@ -283,6 +334,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             }
             session.setExpireDateTime(cal.getTime());
             session.setUserSessionId(sid);
+            loginICATMessage.setSessionId(sid);
             
             //get user
             try {
@@ -308,7 +360,6 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             } catch (CertificateException ex) {
                 log.warn("Unable to load certificate",ex);
                 throw new LoginMyProxyException("Unable to load certificate",LoginError.UNKNOWN,ex);
-                
             }
             
             //save session
@@ -317,10 +368,8 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
             log.info("New session created for user: "+DN+" sid: "+sid);
             
             //now log into the ICAT facilities and start download keywords
-            sendMDBLocal.downloadKeywords(sid, new KeywordMessage());
             sendMDBLocal.loginICATs(sid, loginICATMessage);
             
-            //now wait for loginICATS to return the sessionIds
             //now check
             return sid;
             
