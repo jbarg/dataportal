@@ -9,20 +9,12 @@
 
 package uk.ac.dl.dp.web.navigation;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.TreeMap;
-import uk.ac.cclrc.dpal.DPAccessLayer;
-import uk.ac.cclrc.dpal.beans.Keyword;
 import org.apache.log4j.*;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import com.sun.j2ee.blueprints.ui.autocomplete.AutoCompleteUtilities;
 import com.sun.j2ee.blueprints.ui.autocomplete.CompletionResult;
 import uk.ac.dl.dp.web.backingbeans.ApplicationBean;

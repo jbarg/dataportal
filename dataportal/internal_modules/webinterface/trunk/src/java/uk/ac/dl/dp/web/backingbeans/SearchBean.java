@@ -15,18 +15,18 @@ import java.util.*;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import uk.ac.cclrc.dpal.beans.Investigation;
-import uk.ac.cclrc.dpal.enums.LogicalOperator;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
-import uk.ac.dl.dp.coreutil.util.DPQueryType;
+import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.WebConstants;
+import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.LogicalOperator;
 /**
  *
  * @author gjd37
@@ -109,7 +109,7 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.query(getVisit().getSid(), null, getVisitData().getCurrentSelectedFacilities(), LogicalOperator.AND, false, DPQueryType.MYDATA);
+            query_request = qd.queryMyData(getVisit().getSid(), (HashSet<String>)getVisitData().getCurrentSelectedFacilities());
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -149,7 +149,7 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.query(getVisit().getSid(), null, facilities, LogicalOperator.AND, false, DPQueryType.MYDATA);
+            query_request = qd.queryMyData(getVisit().getSid(), (HashSet<String>)facilities);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -201,7 +201,12 @@ public class SearchBean extends AbstractRequestBean {
             bsb.setLikeExpression(getLikeExpression());
             bsb.setLogicalExpression(getLogicalExpression());
             
-            query_request = qd.query(getVisit().getSid(), getKeywords(),getVisitData().getCurrentSelectedFacilities(), type, fuzzy, DPQueryType.KEYWORD);
+            KeywordQueryRequest kqr = new KeywordQueryRequest();
+            kqr.setFacilities((HashSet<String>)getVisitData().getCurrentSelectedFacilities());
+            kqr.setFuzzy(fuzzy);
+            kqr.setLogicalOperator(type);            
+            
+            query_request = qd.queryKeyword(getVisit().getSid(), kqr);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -252,8 +257,13 @@ public class SearchBean extends AbstractRequestBean {
             bsb.setKeyword(getKeyword());
             bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
             
+            KeywordQueryRequest kqr = new KeywordQueryRequest();
+            kqr.setFacilities((HashSet<String>)getVisitData().getCurrentSelectedFacilities());
+            kqr.setFuzzy(fuzzy);
+            kqr.setLogicalOperator(type);   
+           // kqr.setKeywords(getKeywords())
             
-            query_request = qd.query(getVisit().getSid(), getKeywords(),getVisitData().getBasicSearchBean().getSelectedFacilities(), type, fuzzy, DPQueryType.KEYWORD);
+            query_request = qd.queryKeyword(getVisit().getSid(), kqr);
             getSearchData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {

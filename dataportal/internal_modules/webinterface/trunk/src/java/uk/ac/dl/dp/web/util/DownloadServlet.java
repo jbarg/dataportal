@@ -1,11 +1,8 @@
 package uk.ac.dl.dp.web.util;
 import edu.sdsc.grid.io.srb.SRBException;
 import org.ietf.jgss.GSSCredential;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
 import uk.ac.dl.dp.coreutil.delegates.DownloadDelegate;
 import uk.ac.dl.dp.coreutil.delegates.EventDelegate;
-import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.util.Certificate;
@@ -19,6 +16,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.srbapi.srb.*;
+import uk.ac.dp.icatws.Datafile;
+import uk.ac.dp.icatws.Dataset;
 
 /**
  *
@@ -50,14 +49,14 @@ public class DownloadServlet extends HttpServlet {
                 //set the DB to vales for download
                 InetAddress host = InetAddress.getLocalHost();
                 
-                DPConstants dpConst = new DPConstants();
+             /*   DPConstants dpConst = new DPConstants();
                 dpConst.setLoggingLevel("DEBUG");
                 dpConst.setDownloadLocation(workingDir);
                 dpConst.setPortNumber(8181);
                 dpConst.setContextRoot(context);
                 
                 dpConst.setServiceName(host.getHostAddress());
-                DownloadDelegate.getInstance().setConstants(dpConst);
+                DownloadDelegate.getInstance().setConstants(dpConst);*/
             }
         } catch (Exception ex) {
             log.warn("Error setting up the constants",ex);
@@ -136,21 +135,21 @@ public class DownloadServlet extends HttpServlet {
             // log.debug("Download from datasets.");
             //request from Data Sets
             if(TYPE.startsWith(DownloadConstants.DATA_FILE)){
-                DataFile file = visit.getVisitData().getDataFileFromSearchedData(ID);
-                DpId = file.getDpId();
+                Datafile file = visit.getVisitData().getDataFileFromSearchedData(ID);
+                DpId = file.getUniqueId();
                 name = file.getName();
-                srbUrl = new String[]{file.getUri()};
+                srbUrl = new String[]{file.getLocation()};
                 //this will get DATASETS and DATASETINFOLDER types
             } else if(TYPE.startsWith(DownloadConstants.DATA_SET)){
                 // log.trace("Type Data Set");
-                DataSet file = visit.getVisitData().getDataSetFromSearchedData(ID);
-                DpId = file.getDpId();
+                Dataset file = visit.getVisitData().getDataSetFromSearchedData(ID);
+                DpId = file.getUniqueId();
                 name = file.getName();
                 //iterate through set and get all URLS out of it
                 ArrayList<String> urls = new ArrayList<String>();
-                for(DataFile datafile :visit.getVisitData().getCurrentDatafiles()){
-                    if(datafile.getDataSetId().equals(file.getId())){
-                        urls.add(datafile.getUri());
+                for(Datafile datafile :visit.getVisitData().getCurrentDatafiles()){
+                    if(datafile.getDatasetId().equals(file.getId())){
+                        urls.add(datafile.getLocation());
                     }
                 }
                 srbUrl = urls.toArray(new String[urls.size()]);

@@ -13,26 +13,21 @@ package uk.ac.dl.dp.web.backingbeans;
 import java.util.Collection;
 import java.util.*;
 import org.apache.log4j.Logger;
-import javax.faces.context.FacesContext;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
 import org.apache.myfaces.custom.tree2.HtmlTree;
 import org.apache.myfaces.custom.tree2.TreeNode;
 import org.apache.myfaces.custom.tree2.TreeNodeBase;
-import org.apache.myfaces.custom.tree2.TreeModel;
 import org.apache.myfaces.custom.tree2.TreeModelBase;
-import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 import javax.faces.component.UIComponent;
-import javax.faces.validator.ValidatorException;
 import javax.faces.component.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.util.WebConstants;
+import uk.ac.dp.icatws.Datafile;
+import uk.ac.dp.icatws.Dataset;
+import uk.ac.dp.icatws.Investigation;
 
 /**
  *
@@ -81,7 +76,7 @@ public class InvestigationTree extends AbstractRequestBean {
             Collection<String> facs = new LinkedList<String>();
             for(Investigation invest :  invests){
                 if(!facs.contains(invest.getFacility())){
-                    facs.add(invest.getFacility());
+                    facs.add(invest.getFacility().getFacilityShortName());
                 }
             }
             
@@ -103,7 +98,7 @@ public class InvestigationTree extends AbstractRequestBean {
                     if(invest.getFacility().equals(fac)){
                         //add node, but add identifer as facility-id for uniqueness
                         //id of invest in ISIS could be same as DIAMOND
-                        node.getChildren().add(new TreeNodeBase("foo1-folder", uk.ac.dl.dp.web.util.Util.escapeInvalidStrings(invest.getName()),invest.getFacility()+"-"+invest.getId(), true));
+                        node.getChildren().add(new TreeNodeBase("foo1-folder", uk.ac.dl.dp.web.util.Util.escapeInvalidStrings(invest.getTitle()),invest.getFacility().getFacilityShortName()+"-"+invest.getId(), true));
                         
                         //only show 50??  shoule change
                         j++;
@@ -224,8 +219,8 @@ public class InvestigationTree extends AbstractRequestBean {
         }
         
         
-        Collection<DataSet> datasets = null;
-        Collection<DataFile> datafiles = null;
+        Collection<Dataset> datasets = null;
+        Collection<Datafile> datafiles = null;
         
         try{
             QueryDelegate qd = QueryDelegate.getInstance();
@@ -234,7 +229,7 @@ public class InvestigationTree extends AbstractRequestBean {
                 log.trace(invest);
             }
             
-            datasets = qd.getDataSets(getVisit().getSid(),investigations);
+           /* datasets = qd.getDataSets(getVisit().getSid(),investigations);
             for(DataSet dataset : datasets){
                 log.trace(dataset);
             }
@@ -244,7 +239,7 @@ public class InvestigationTree extends AbstractRequestBean {
             log.debug("Got data files");
             for(DataFile datafile : datafiles){
                 log.trace(datafile);
-            }
+            }*/
             
             //set all of the data is visit for next page
             getVisitData().setCurrentInvestigations(investigations);
@@ -274,7 +269,7 @@ public class InvestigationTree extends AbstractRequestBean {
         String id = param.split("-")[1];
         
         for(Investigation file : getVisitData().getCurrentInvestigations()){
-            if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+            if(file.getId().equals(id)&& file.getFacility().getFacilityShortName().equals(fac)){
                 log.debug("Found invest: "+file);
                 return file;
             }

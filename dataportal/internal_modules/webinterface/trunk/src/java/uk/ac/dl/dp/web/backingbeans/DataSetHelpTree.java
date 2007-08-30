@@ -10,26 +10,16 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import javax.faces.component.*;
-import java.util.Collection;
 import javax.faces.event.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 import javax.faces.context.FacesContext;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
 
 import org.apache.myfaces.custom.tree2.HtmlTree;
 import org.apache.myfaces.custom.tree2.TreeNode;
 import org.apache.myfaces.custom.tree2.TreeNodeBase;
 import org.apache.myfaces.custom.tree2.TreeModel;
 import org.apache.myfaces.custom.tree2.TreeModelBase;
-import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.validator.ValidatorException;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
-import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 
 /**

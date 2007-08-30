@@ -107,7 +107,7 @@ public class FacilitiesAdminBean extends SortableList {
             mlu.setFacility(getName());
             mlu.setUsername("user");
             mlu.setPlatform("oracle");
-            mlu.setConnection("null");
+            mlu.setWsdlLocation("null");
             mlu.setPassword("password");
             
             ModuleLookup returned =  AdminDelegate.getInstance().addFacility(getVisit().getSid(),mlu);

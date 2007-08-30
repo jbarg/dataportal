@@ -10,38 +10,21 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import javax.faces.model.*;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-import uk.ac.cclrc.dpal.beans.DataFile;
-import uk.ac.cclrc.dpal.beans.DataSet;
-import uk.ac.cclrc.dpal.beans.Investigation;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
-import uk.ac.dl.dp.coreutil.delegates.DataCenterDelegate;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
-import uk.ac.dl.dp.coreutil.entity.Bookmark;
-import uk.ac.dl.dp.coreutil.entity.DataReference;
-import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
-import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
-import javax.faces.context.FacesContext;
 import javax.faces.application.*;
+import uk.ac.dp.icatws.Investigation;
 
 /**
  *
@@ -151,7 +134,7 @@ public class HistoryBean extends SortableList {
         log.trace("view data");
         QueryRecordDTO qrdto =   (QueryRecordDTO) table.getRowData();
         log.trace("viewing : "+qrdto.getQueryid());
-        Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults(qrdto.getQueryid());
+        Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults(qrdto);
         getVisitData().setSearchedInvestigations(investigations);
         return NavigationConstants.SEARCH_SUCCESS;
         
