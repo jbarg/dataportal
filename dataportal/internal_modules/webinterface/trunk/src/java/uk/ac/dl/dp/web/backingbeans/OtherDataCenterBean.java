@@ -162,7 +162,9 @@ public class OtherDataCenterBean extends SortableList {
             getVisitData().setSearchedTitle("Search Results");
             getVisitData().setSearchedInvestigations(investigations);
             //remove request info
-            getSearchData().setQueryRequest(null);
+            getVisitData().setQueryRequest(null);
+            
+                if(true) throw new QueryException();
             
             //add the investigation to visit
             InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");
@@ -207,7 +209,7 @@ public class OtherDataCenterBean extends SortableList {
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
         //remove request info
-        getSearchData().setQueryRequest(null);
+        getVisitData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         
     }

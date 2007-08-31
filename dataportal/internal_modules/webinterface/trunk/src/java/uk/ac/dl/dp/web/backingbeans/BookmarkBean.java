@@ -186,6 +186,7 @@ public class BookmarkBean extends SortableList {
         log.trace("viewing studyId: "+qrdto.getStudyId());
         Collection<Investigation> investigations = null;
         try {
+            if(true) throw new QueryException();
         //    investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
@@ -199,7 +200,7 @@ public class BookmarkBean extends SortableList {
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
         //remove request info
-        getSearchData().setQueryRequest(null);
+        getVisitData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         
     }
@@ -212,6 +213,7 @@ public class BookmarkBean extends SortableList {
         log.trace("viewing studyId: "+qrdto.getStudyId());
         Collection<Investigation> investigations = null;
         try {
+             if(true) throw new QueryException();
           //  investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
             //got investigstion
             
@@ -223,7 +225,7 @@ public class BookmarkBean extends SortableList {
             getVisitData().setSearchedTitle("Search Results");
             getVisitData().setSearchedInvestigations(investigations);
             //remove request info
-            getSearchData().setQueryRequest(null);
+            getVisitData().setQueryRequest(null);
             
             //add the investigation to visit
             InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");

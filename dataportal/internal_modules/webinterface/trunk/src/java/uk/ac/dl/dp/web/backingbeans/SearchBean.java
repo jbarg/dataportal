@@ -20,12 +20,14 @@ import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.WebConstants;
 import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.InvestigationInclude;
 import uk.ac.dp.icatws.LogicalOperator;
 /**
  *
@@ -37,7 +39,7 @@ public class SearchBean extends AbstractRequestBean {
     
     //componets on basic search page
     private String keyword;
-    private String keywords[];
+    private Collection<String> keywords;
     private List<String> facilities ;
     
     //default it to AND
@@ -73,19 +75,19 @@ public class SearchBean extends AbstractRequestBean {
      * Splits it into an array of keywords by ' ' and trims
      */
     public void setKeyword(String keyword){
-        
-        
+        Collection<String> keywords = new ArrayList<String>();
+        //if not emat, split, if then put into one collection size
         if(!getVisit().isCurrentFacilitysTopics()){
             String[] keys = keyword.split(" ");
-            ArrayList<String> keys2 = new ArrayList<String>();
             for(String k : keys){
-                if(!k.trim().equals("")) keys2.add(k.trim());
+                if(!k.trim().equals("")) keywords.add(k.trim());
             }
-            this.setKeywords(keys2.toArray(new String[keys2.size()]));
+            this.setKeywords(keywords);
             this.keyword = keyword;
         } else{
             keyword = keyword.trim();
-            this.setKeywords(new String[]{keyword});
+            keywords.add(keyword);
+            this.setKeywords(keywords);
             this.keyword = keyword;
         }
     }
@@ -97,7 +99,7 @@ public class SearchBean extends AbstractRequestBean {
     /**
      * Action method to do basic search
      */
-    public String searchOwnData(){
+    public String searchOwnData() {
         //sets up initial values
         String sid = null;
         QueryRequest query_request = null;
@@ -109,8 +111,8 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.queryMyData(getVisit().getSid(), (HashSet<String>)getVisitData().getCurrentSelectedFacilities());
-            getSearchData().setQueryRequest(query_request);
+            query_request = qd.queryMyData(getVisit().getSid(), getVisitData().getSelectedFacilities());
+            getVisitData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
@@ -129,18 +131,18 @@ public class SearchBean extends AbstractRequestBean {
     }
     
     /**
+     * Searchs user own data
      * Action method to do basic search
      */
-    public String searchOwnDataAll(){
+    public String searchOwnDataAll() {
         //sets up initial values
         String sid = null;
         QueryRequest query_request = null;
         
         log.trace("searching for users own data:");
-        
         log.trace("searching all facilities :"+getVisit().getSession().getFacilities().size());
         
-        Collection<String> facilities = new ArrayList<String>();
+        HashSet<String> facilities = new HashSet<String>();
         for(FacilityDTO fac : getVisit().getSession().getFacilities()){
             facilities.add(fac.getFacility());
             log.trace(fac.getFacility());
@@ -149,8 +151,8 @@ public class SearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            query_request = qd.queryMyData(getVisit().getSid(), (HashSet<String>)facilities);
-            getSearchData().setQueryRequest(query_request);
+            query_request = qd.queryMyData(getVisit().getSid(), facilities);
+            getVisitData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
@@ -202,12 +204,18 @@ public class SearchBean extends AbstractRequestBean {
             bsb.setLogicalExpression(getLogicalExpression());
             
             KeywordQueryRequest kqr = new KeywordQueryRequest();
-            kqr.setFacilities((HashSet<String>)getVisitData().getCurrentSelectedFacilities());
+            kqr.setFacilities(getVisitData().getSelectedFacilities());
             kqr.setFuzzy(fuzzy);
-            kqr.setLogicalOperator(type);            
+            kqr.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
+            kqr.setLogicalOperator(type);
+            kqr.setKeywords(keywords);
+            kqr.setStart_index(0);
+            kqr.setMax_results(WebConstants.MAXIMIUM_RESULTS/4);
             
             query_request = qd.queryKeyword(getVisit().getSid(), kqr);
-            getSearchData().setQueryRequest(query_request);
+            
+            //set the query as last request
+            getVisitData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
@@ -225,7 +233,8 @@ public class SearchBean extends AbstractRequestBean {
         return getQueryResults(query_request, false);
     }
     
-     /**
+    /**
+     * This is the keyword Search but from the navigation bar
      * Action method to do basic search
      */
     public String searchByKeywordNavigation(){
@@ -258,13 +267,16 @@ public class SearchBean extends AbstractRequestBean {
             bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
             
             KeywordQueryRequest kqr = new KeywordQueryRequest();
-            kqr.setFacilities((HashSet<String>)getVisitData().getCurrentSelectedFacilities());
+            kqr.setFacilities(getVisitData().getSelectedFacilities());
             kqr.setFuzzy(fuzzy);
-            kqr.setLogicalOperator(type);   
-           // kqr.setKeywords(getKeywords())
-            
+            kqr.setLogicalOperator(type);
+            kqr.setKeywords(getKeywords());
+            kqr.setStart_index(0);
+            kqr.setMax_results(WebConstants.MAXIMIUM_RESULTS/4);
+             kqr.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
+             
             query_request = qd.queryKeyword(getVisit().getSid(), kqr);
-            getSearchData().setQueryRequest(query_request);
+            getVisitData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
@@ -282,32 +294,25 @@ public class SearchBean extends AbstractRequestBean {
         return getQueryResults(query_request, false);
     }
     
-    
-    private String getQueryResults(QueryRequest query_request, boolean  myData){
+    /**
+     * Mydata search makes the DP show a different message if no results
+     */
+    private String getQueryResults(QueryRequest query_request, boolean  myData) {
         
         QueryDelegate qd = QueryDelegate.getInstance();
         
         //if initial query sent ok, now wait for return, only wait MAXIMIUM_SEARCH_TIME secs
         long time = new Date().getTime();
         //loop is finsihed method
-        while(!qd.isFinished(query_request)){
-            
-            try {
-                //TODO
-                //in future can show these to user
-                //print out facilitei returned
+        try {
+            while(!qd.isFinished(query_request)){
+                
+                //print out facilities returned
                 Collection<String> facs2 = qd.getCompleted(query_request);
                 for(String fac : facs2){
                     log.trace("Completed: "+fac);
                 }
                 
-                //when one returend then display
-              /*  if(facs2 != null && facs2.size() != 0){
-                    //got some results
-                    break;
-                }*/
-                
-                //TODO put max wait in DB
                 //if more than max wait and not finished
                 if(((new Date().getTime() - time)/1000) > WebConstants.MAXIMIUM_SEARCH_TIME) {
                     //if nothing returned display message to user, otherwise show results (break loop)
@@ -318,58 +323,62 @@ public class SearchBean extends AbstractRequestBean {
                     
                 }
                 Thread.sleep(250);
-            } catch (InterruptedException ex) {}
-        }
-        
-        //search results found.  Get the results
-        Collection<Investigation> investigations = qd.getQueryResults(query_request);
-        //lsit investigations
-        int j = 0;
-        for(Investigation invest: investigations){
-            log.trace(invest);
-            //TODO REMOVE
-           /* if( invest.getInvestigationAbstract() == null || invest.getInvestigationAbstract().equals("")){
-                log.trace("Setting dummy abstracts");
-                if((j % 2) == 0) invest.setInvestigationAbstract("This is a dummy abstract added by the Data Portal.   In the future there should be a large absrtact here. The project aims to provide easy, transparent access to experimental, observational, simulation and visualisation data kept on a multitude of systems and sites. Further more it will provide links to other web/grid services, which will allow the scientists to further use the selected data, e.g. via data mining, simulations or visualisation. The Data Portal will aim to work as a broker between the scientists, the facilities, the data and other services. The problem addressed is that currently the scientific data is stored distributed across a multitude of sites and systems. Scientists have only very limited support in accessing, managing and transferring their data or indeed in identifying new data resources. In a true Grid environment it is essential to ease many of these processes and the aim of the Data Portal is to help with automating many of these tasks. The Data Portal originally used Suns Java 2 Enterprise Edition (J2EE) but was replaced using a component based web service model. ");
-                else invest.setInvestigationAbstract("This is a short one added");
-                j++;
-            }*/
-        }
-        //if not results infom user
-        if(investigations.size() == 0){
-            if(myData){
-                info("No investigations associated with you.");
-            } else {
-                info("No results found. Please refine your query.");
             }
+        } catch (Exception ex) {
+            log.error("Exception occured getting investigations from "+query_request.getQueryid(), ex);
+            error("Exception occured. Please try again.");
             return null;
         }
-        //check if result size is too big
-        if(investigations.size() >= WebConstants.MAXIMIUM_RESULTS){
+        
+        try{
+            //search results found.  Get the results
+            Collection<Investigation> investigations = qd.getQueryResults(query_request);
+            //lsit investigations
+            int j = 0;
             
-            log.warn("More than "+WebConstants.MAXIMIUM_RESULTS+" investigations returned "+investigations.size()+" removing all but "+WebConstants.MAXIMIUM_RESULTS);
-            info("More than the "+WebConstants.MAXIMIUM_RESULTS+" results shown was returned.  Please refine your query next time.");
-            
-            //remove unwanted investigations
-            int i = 0;
-            Collection<Investigation> limited = new ArrayList<Investigation>();
-            for(Investigation invest : investigations){
-                
-                if(i < WebConstants.MAXIMIUM_RESULTS) limited.add(invest);
-                else break;
-                i++;
+            //if not results infom user
+            if(investigations.size() == 0){
+                if(myData){
+                    info("No investigations associated with you.");
+                } else {
+                    info("No results found. Please refine your query.");
+                }
+                return null;
             }
-            investigations = limited;
+            //check if result size is too big
+            if(investigations.size() >= WebConstants.MAXIMIUM_RESULTS){
+                
+                log.warn("More than "+WebConstants.MAXIMIUM_RESULTS+" investigations returned "+investigations.size()+" removing all but "+WebConstants.MAXIMIUM_RESULTS);
+                info("More than the "+WebConstants.MAXIMIUM_RESULTS+" results shown was returned.  Please refine your query next time.");
+                
+                //remove unwanted investigations
+                int i = 0;
+                Collection<Investigation> limited = new ArrayList<Investigation>();
+                for(Investigation invest : investigations){
+                    
+                    if(i < WebConstants.MAXIMIUM_RESULTS) limited.add(invest);
+                    else break;
+                    i++;
+                }
+                investigations = limited;
+            }
+            
+            //set investigations
+            log.debug("Adding found investigations to session, size: "+investigations.size());
+            getVisitData().setSearchedInvestigations(investigations);
+            
+            return NavigationConstants.SEARCH_SUCCESS;
+        } catch (Exception ex) {
+            log.error("Exception occured getting investigations from "+query_request.getQueryid(), ex);
+            error("Exception occured. Please try again.");
+            return null;
         }
-        
-        //set investigations
-        log.debug("Adding found investigations to session, size: "+investigations.size());
-        getVisitData().setSearchedInvestigations(investigations);
-        
-        return NavigationConstants.SEARCH_SUCCESS;
         
     }
     
+    /**
+     * Checks weather the keyword is valid for the JSF, if null or no size invalid keyword
+     */
     public void validateKeyword(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
         log.debug("validateKeyword: "+value);
         String val = (String)value;
@@ -383,11 +392,11 @@ public class SearchBean extends AbstractRequestBean {
     
     
     //getters setters of page info
-    public String[] getKeywords() {
+    public Collection<String> getKeywords() {
         return keywords;
     }
     
-    public void setKeywords(String[] keywords) {
+    public void setKeywords(Collection<String> keywords) {
         this.keywords = keywords;
     }
     
@@ -398,7 +407,7 @@ public class SearchBean extends AbstractRequestBean {
     public void setFacilities(List<String> facilities) {
         this.facilities = facilities;
     }
-    
+           
     public String getLogicalExpression() {
         log.trace("LogicalExpression: "+logicalExpression);
         if(logicalExpression == null) return "AND";
@@ -411,14 +420,11 @@ public class SearchBean extends AbstractRequestBean {
     }
     
     public String getLikeExpression() {
-      //  return getVisitData().getBasicSearchBean().getLikeExpression();
+        //  return getVisitData().getBasicSearchBean().getLikeExpression();
         return likeExpression;
     }
     
     public void setLikeExpression(String likeExpression) {
         this.likeExpression = likeExpression;
     }
-    
-    
-    
 }

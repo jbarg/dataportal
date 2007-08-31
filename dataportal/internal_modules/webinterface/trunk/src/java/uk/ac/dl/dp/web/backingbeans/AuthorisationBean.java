@@ -13,8 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Properties;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
@@ -25,12 +23,12 @@ import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import javax.faces.context.FacesContext;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPDefaultLocation;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.WebConstants;
 import javax.servlet.http.HttpSession;
+import uk.ac.dl.dp.coreutil.util.DPEvent;
 /**
  *
  * @author gjd37
@@ -73,8 +71,10 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         this.lifetime = lifetime;
     }
     
-    //methods action
-    public String login(){
+    /**
+     * Logs into the Data Portal
+     */
+    public String login() throws SessionException{
         //first section, reload log4j
         if(new File(System.getProperty("user.home")+File.separator+".log4j.xml").exists()){
             PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.xml");
@@ -138,16 +138,16 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         Visit visit = (Visit) getBean(WebConstants.SESSION_KEY);
         
         //TODO this was used to sets the expire time of application to one min and not 2 hours!
+        //To check against when the application timeout
         /*Calendar cal =  GregorianCalendar.getInstance();
-        cal.add(GregorianCalendar.MINUTE,1); //minus 5 mins
+        cal.add(GregorianCalendar.MINUTE,1); 
         session.setExpireTime(cal.getTime());*/
         
         visit.setSession(session);
         
         //logged in, return ok, return to default location
         DPDefaultLocation defaultLocation = session.getUserPrefs().getDefaultLocation();
-        
-        
+                
         if(defaultLocation.toString().equals(DPDefaultLocation.BASIC_SEARCH.toString())){
             return NavigationConstants.LOGIN_SUCCESS;
         } else if(defaultLocation.toString().equals(DPDefaultLocation.BOOKMARKS.toString())){
@@ -165,16 +165,19 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             if(getVisitData().getSearchedInvestigations() == null || getVisitData().getSearchedInvestigations().size() == 0){
                 //no data associated
                 return NavigationConstants.LOGIN_SUCCESS;
-            }else return NavigationConstants.LOGIN_SUCCESS_MYDATA;
+            } else return NavigationConstants.LOGIN_SUCCESS_MYDATA;
         } else return NavigationConstants.LOGIN_SUCCESS;
     }
     
+    /**
+     * Logs out of the Data Portal
+     */
     public String logout(){
         log.info("Logging out of session");
         
         String logonType = getVisit().getLogonType();
         try {
-            //send logout message
+            //send logout to core DP to remove from DB
             SessionDelegate.getInstance().logout(getVisit().getSid());
         }  catch (Exception ex) {
             log.error("Unable to send event log for "+getVisit().getSid()+", "+getVisit().getDn());
@@ -190,13 +193,17 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         
         //add logout message
         info("Thank you for using the Data Portal.");
-        if(logonType.equals("LOG_ON_KERBEROS")){
+        if(logonType.equals(DPEvent.LOG_ON_KERBEROS.toString())){
             return NavigationConstants.LOGOUT_KERBEROS_SUCCESS;
         } else {
             return NavigationConstants.LOGOUT_SUCCESS;
         }
     }
     
+    /**
+     * This is added to check that the users that has logged on matches a DN in a file on the server
+     * This was added for Eminerals
+     */
     private boolean checkUser(SessionDTO session) {
         Properties prop = new Properties();
         File user_file = new File(System.getProperty("user.home")+File.separator+"users.properties");
@@ -215,7 +222,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         } else return true;
     }
     
-    private String searchMyData() {
+    private String searchMyData() throws SessionException {
         SearchBean searchBean = (SearchBean)getBean("searchBean");
         return    searchBean.searchOwnDataAll();
     }

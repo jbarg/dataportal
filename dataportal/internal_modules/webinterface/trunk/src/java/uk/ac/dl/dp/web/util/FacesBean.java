@@ -27,7 +27,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-import uk.ac.dl.dp.web.backingbeans.SearchData;
 import uk.ac.dl.dp.web.backingbeans.Visit;
 import uk.ac.dl.dp.web.backingbeans.VisitData;
 import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
@@ -188,11 +187,7 @@ public abstract class FacesBean {
      *
      * Added to allow access to the DP session information to every bean
      *
-     */
-    protected SearchData getSearchData(){
-        return ((Visit)getBean("visit")).getSearchData();
-    }
-    
+     */      
     protected VisitData getVisitData(){
         return ((Visit)getBean("visit")).getVisitData();
     }

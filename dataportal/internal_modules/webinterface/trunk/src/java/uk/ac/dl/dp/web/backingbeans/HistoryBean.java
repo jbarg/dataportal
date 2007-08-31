@@ -21,6 +21,7 @@ import javax.faces.component.*;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
 import javax.faces.application.*;
@@ -105,11 +106,8 @@ public class HistoryBean extends SortableList {
                     return 0;
             }
         };      
-        Collections.sort( history, comparator);
-        
+        Collections.sort( history, comparator);        
     }
-    
-    
     
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
@@ -130,15 +128,12 @@ public class HistoryBean extends SortableList {
         }
     }
     
-    public String viewData(){
+    public String viewData() throws SessionException{
         log.trace("view data");
         QueryRecordDTO qrdto =   (QueryRecordDTO) table.getRowData();
         log.trace("viewing : "+qrdto.getQueryid());
-        Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults(qrdto);
+        Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults("234", qrdto.getQueryid());
         getVisitData().setSearchedInvestigations(investigations);
-        return NavigationConstants.SEARCH_SUCCESS;
-        
+        return NavigationConstants.SEARCH_SUCCESS;        
     }
-    
-    
-}
+        }

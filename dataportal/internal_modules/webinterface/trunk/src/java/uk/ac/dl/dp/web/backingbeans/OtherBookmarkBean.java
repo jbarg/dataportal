@@ -174,12 +174,14 @@ public class OtherBookmarkBean extends SortableList {
             getVisitData().setSearchedTitle("Search Results");
             getVisitData().setSearchedInvestigations(investigations);
             //remove request info
-            getSearchData().setQueryRequest(null);
+            getVisitData().setQueryRequest(null);
             
             //add the investigation to visit
             InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");
-            return  investigationBean.datasets();
             
+              if(true) throw new QueryException();
+            return  investigationBean.datasets();
+              
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
             error("Error:  Unable to search for "+qrdto.getName());
@@ -206,7 +208,7 @@ public class OtherBookmarkBean extends SortableList {
                 error("You do not have permission to view the investigation.");
                 return null;
             }
-            
+                if(false) throw new QueryException();
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
             error("Error:  Unable to search for "+qrdto.getName());
@@ -219,7 +221,7 @@ public class OtherBookmarkBean extends SortableList {
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
         //remove request info
-        getSearchData().setQueryRequest(null);
+        getVisitData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         
     }

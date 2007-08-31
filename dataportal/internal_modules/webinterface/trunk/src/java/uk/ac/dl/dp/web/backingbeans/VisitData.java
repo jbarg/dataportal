@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -23,9 +24,10 @@ import org.apache.log4j.*;
 import javax.faces.model.SelectItem;
 import org.apache.myfaces.custom.tree2.*;
 import uk.ac.dl.dp.coreutil.entity.Url;
+import uk.ac.dl.dp.coreutil.util.KeywordsFileBean;
+import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.backingbeans.BasicSearchBean;
 import uk.ac.dl.srbapi.srb.SRBUrl;
-import uk.ac.dl.srbapi.util.AccessInfo;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.Investigation;
@@ -38,24 +40,55 @@ public class VisitData implements Serializable {
     
     private static Logger log = Logger.getLogger(VisitData.class);
     
+    /**
+     * All the keywords from all the facilities (that the user can view)
+     */
+    private HashMap<String, KeywordsFileBean> keywordsFileBeans;
+    
+    /**
+     * Sets the last query set off for the user
+     */
+    private QueryRequest queryRequest;
+    
+    /**
+     * Current selected fac on the basic search page
+     */
     private List<String> currentSelectedFacilities;
     
     //private Collection<Study> currentStudies;
     
+    /**
+     * List of authroisations given BY this user
+     */
     private Collection<DataRefAuthorisation> currentGivenAuthorisations;
     
+    /**
+     * List of authroisations given TO this user
+     */
     private Collection<DataRefAuthorisation> currentRecievedAuthorisations;
     
+    /**
+     * User to display whos Bookmarks or DataRefs you are looking at
+     */
     private String currentUserAuthDN;
     
+     /**
+     * Sets wheather the users has selected all the investigations to be expanded on investigations page
+     */
     private boolean investigationExpanded;
     
+    /**
+     * Sets wheather the users has selected all the investigations to be selected on investigations page
+     */
     private boolean investigationsSelected;
     
     private boolean bookmarkEnabled;
     
     private boolean datacenterEnabled;
     
+    /**
+     * List of returned results from any search
+     */
     private Collection<Investigation> searchedInvestigations;
     
     private Collection<Investigation> currentInvestigations;
@@ -70,18 +103,42 @@ public class VisitData implements Serializable {
     
     private TreeNode dataSetTree;
     
-    private Collection<AccessInfo> accessInfo = null;
-    
     private boolean downloadable;
     
     private boolean datasetDowloadable;
     
+    /**
+     * Title for the basic search page (ie MyData Search or Basic Search - Advanced Seach)
+     */
     private String searchedTitle = "Search Results";
     
+    /**
+     * Bean that keeps the info of the last search for the side nav bar
+     */
     private BasicSearchBean basicSearchBean = new BasicSearchBean();
     
     /** Creates a new instance of VisitData */
     public VisitData() {
+    }
+    
+    /**
+     * Sets the last query set off for the user
+     */
+    public QueryRequest getQueryRequest() {
+        return queryRequest;
+    }
+    
+    public void setQueryRequest(QueryRequest queryRequest) {
+        this.queryRequest = queryRequest;
+        // this.setStartQueryTime(new Date());
+    }
+    
+    public HashMap<String, KeywordsFileBean> getKeywordsFileBeans() {
+        return keywordsFileBeans;
+    }
+    
+    public void setKeywordsFileBeans(HashMap<String,KeywordsFileBean> keywordsFileBeans) {
+        this.keywordsFileBeans = keywordsFileBeans;
     }
     
     //current investigations that the user has picked from the investigations page
@@ -129,6 +186,9 @@ public class VisitData implements Serializable {
         return searchedInvestigations;
     }
     
+    /**
+     * List of returned results from any search
+     */
     public void setSearchedInvestigations(Collection<Investigation> searchedInvestigations) {
         this.searchedInvestigations = searchedInvestigations;
         this.setInvestigationExpanded(false);
@@ -201,16 +261,24 @@ public class VisitData implements Serializable {
         this.datacenterEnabled = datacenterEnabled;
     }
     
-    //current selected fac on the basic search page
-    public List<String> getCurrentSelectedFacilities() {
-        for(String sd :currentSelectedFacilities ){
-            log.trace("Fac: "+sd);
-        }
+    /**
+     * Current selected fac on the basic search page
+     */
+    public List<String> getCurrentSelectedFacilities() {        
         return currentSelectedFacilities;
     }
     
     public void setCurrentSelectedFacilities(List<String> currentSelectedFacilities) {
         this.currentSelectedFacilities = currentSelectedFacilities;
+    }
+    public HashSet<String> getSelectedFacilities(){
+        
+        HashSet<String> facilities = new HashSet<String>();
+        for (String facility : currentSelectedFacilities) {
+            facilities.add(facility);
+        }
+        return facilities;
+        
     }
     
     //list of returned searched users from the
@@ -255,14 +323,6 @@ public class VisitData implements Serializable {
         this.investigationsSelected = investigationsSelected;
     }
     
-    public Collection<AccessInfo> getAccessInfo() {
-        return accessInfo;
-    }
-    
-    public void setAccessInfo(Collection<AccessInfo> accessInfo) {
-        this.accessInfo = accessInfo;
-    }
-    
     //access methods to search and access Data Sets and file by their unique ID
     public Investigation getInvestigationFromSearchedData(String ID) {
         String fac = ID.split("-")[0];
@@ -284,9 +344,9 @@ public class VisitData implements Serializable {
         
         for(Dataset file : getCurrentDatasets()){
             //log.trace(file.getDpId());
-           //TODO changed if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                //log.trace("Found dataset: "+file);
-                //return file;
+            //TODO changed if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+            //log.trace("Found dataset: "+file);
+            //return file;
             //}
         }
         return null;
@@ -298,9 +358,9 @@ public class VisitData implements Serializable {
         String id = ID.split("-")[1];
         
         for(Datafile file : getCurrentDatafiles()){
-           //TODO changed if(file.getId().equals(id)&& file.getFacility().equals(fac)){
-                //log.trace("Found datafile: "+file);
-               // return file;
+            //TODO changed if(file.getId().equals(id)&& file.getFacility().equals(fac)){
+            //log.trace("Found datafile: "+file);
+            // return file;
             //}
         }
         return null;
@@ -377,7 +437,7 @@ public class VisitData implements Serializable {
                 }
             }
         }
-       */ 
+      */
         
         return urls.toArray(new String[urls.size()]);
     }
@@ -461,10 +521,16 @@ public class VisitData implements Serializable {
         return searchedTitle;
     }
     
+    /**
+     * Title for the basic search page (ie MyData Search or Basic Search - Advanced Seach)
+     */
     public void setSearchedTitle(String searchedTitle) {
         this.searchedTitle = searchedTitle;
     }
     
+    /**
+     * Bean that keeps the info of the last search for the side nav bar
+     */
     public BasicSearchBean getBasicSearchBean() {
         return basicSearchBean;
     }

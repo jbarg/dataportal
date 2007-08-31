@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import org.apache.log4j.*;
+import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 
 /**
@@ -20,7 +21,7 @@ public class MyDataSearchBean extends AbstractRequestBean {
     
     private static Logger log = Logger.getLogger(MyDataSearchBean.class);
            
-    public String myDataSearchForKerberos(){
+    public String myDataSearchForKerberos() throws SessionException{
         log.trace("myDataSearchForKerberos");
         SearchBean searchBean = new SearchBean();
         
