@@ -33,7 +33,7 @@ public class SessionUtil {
     
     private Session session;
     
-    @PersistenceContext(unitName="dataportal")
+    //@PersistenceContext(unitName="dataportal")
     protected EntityManager em;
     
     /** Creates a new instance of SessionUtil */

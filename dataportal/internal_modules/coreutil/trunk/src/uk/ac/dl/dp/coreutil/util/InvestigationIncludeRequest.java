@@ -9,6 +9,7 @@
 
 package uk.ac.dl.dp.coreutil.util;
 
+import java.io.Serializable;
 import java.util.Collection;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -17,7 +18,7 @@ import uk.ac.dp.icatws.InvestigationInclude;
  *
  * @author gjd37
  */
-public class InvestigationIncludeRequest {
+public class InvestigationIncludeRequest implements Serializable {
     
      private Collection<Investigation> investigations;
      private InvestigationInclude include;

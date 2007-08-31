@@ -76,10 +76,10 @@ public class DataReference implements Serializable {
     private String typeOfReference;
     
     @Column(name = "INVESTIGATION_ID", nullable = false)
-    private Integer investigationId;
+    private Long investigationId;
     
     @Column(name = "REFERENCE_ID")
-    private Integer referenceId;
+    private Long referenceId;
     
     @Column(name = "TYPE_OF_OBJECT")
     private String typeOfObject;
@@ -175,11 +175,11 @@ public class DataReference implements Serializable {
         this.query = query;
     }
     
-    public Integer getInvestigationId() {
+    public Long getInvestigationId() {
         return this.investigationId;
     }
     
-    public void setInvestigationId(Integer investigationId) {
+    public void setInvestigationId(Long investigationId) {
         this.investigationId = investigationId;
     }
     
@@ -192,11 +192,11 @@ public class DataReference implements Serializable {
         this.typeOfReference = typeOfReference;
     }
     
-    public Integer getReferenceId() {
+    public Long getReferenceId() {
         return this.referenceId;
     }
     
-    public void setReferenceId(Integer referenceId) {
+    public void setReferenceId(Long referenceId) {
         this.referenceId = referenceId;
     }
     
