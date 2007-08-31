@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <a4j:region   selfRendered="true" > 
     <h:form>
@@ -17,7 +17,7 @@
         <table style="margin-top:-90px" width="90%" border="0">
              <tbody>
                 <tr>
-                <td width="30">&nbsp;</td>
+                <td width="20">&nbsp;</td>
                 <tr>
                     <td>
                         <table border="0" width="100%">
@@ -148,7 +148,7 @@
     <a4j:form>
         
         
-        <t:dataTable id="data" width="90%"
+        <t:dataTable id="data" width="97%"
                      styleClass="scrollerTable"
                      headerClass="standardTable_Header"
                      footerClass="standardTable_Header"
@@ -168,12 +168,7 @@
             </f:facet>
             
             
-            <%--<h:column>
-                <f:facet name="header"></f:facet>            
-                <h:outputText value="#{invest.id}" />
-            
-                </h:column>--%>
-                  <h:column>
+            <h:column>
                 
                 <f:facet name="header">
                     <h:panelGrid columns="2" >
@@ -198,6 +193,39 @@
             
             <h:column>
                 <f:facet name="header">
+                    <h:panelGrid columns="" >
+                        
+                        <a4j:commandLink reRender="data"  id="abstract" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
+                            <h:outputText style="font-weight:bold;" value=" " />
+                            <f:param name="column" value="abstract"/>
+                            
+                            <t:graphicImage id="acabstract" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.abstract}" border="0"/>
+                            <t:graphicImage id="deabstract" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notAbstract}" border="0"/>
+                            
+                        </a4j:commandLink>  
+                        
+                        <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">
+                            
+                            <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
+                        </a4j:commandLink>   
+                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">
+                            
+                            <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
+                        </a4j:commandLink> 
+                        
+                    </h:panelGrid>        
+                </f:facet>
+                                
+                <a4j:commandLink  reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
+                    
+                    <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                    <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                </a4j:commandLink>  
+                                
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">
                     <%--  <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">--%>
                                                 
                     <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
@@ -210,63 +238,89 @@
                     </a4j:commandLink>
                 </f:facet>
                 
-                <h:commandLink value="#{invest.name}" style=" color: black" styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />
-               <%-- <h:outputText  value="#{invest.name}" />--%>
-                
+                <h:commandLink value="#{invest.title}" style=" color: black" styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />
                 
                 
             </h:column>
             <h:column>
                 <f:facet name="header">
-                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="type" actionListener="#{investigationBean.sortColumn}">
+                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="visitId" actionListener="#{investigationBean.sortColumn}">
                         
-                        <h:outputText value="Type" />
-                        <f:param name="column" value="type"/>
+                        <h:outputText value="Visit Id" />
+                        <f:param name="column" value="visitId"/>
                         <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
-                        <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.type}" border="0"/>
-                        <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notType}" border="0"/>
+                        <t:graphicImage id="acdhffty" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.visitId}" border="0"/>
+                        <t:graphicImage id="dedffty" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notVisitId}" border="0"/>
                         <%--  </c:if>--%>
                     </a4j:commandLink>
                 </f:facet>
+                <h:outputText  value="#{invest.visitId}" />                              
                 
-                <h:outputText  value="#{fn:toLowerCase(invest.investigationType)}" />               
             </h:column>
             <h:column>
                 <f:facet name="header">
-                    <h:panelGrid columns="2" >
+                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="invNumber" actionListener="#{investigationBean.sortColumn}">
                         
-                        <a4j:commandLink reRender="data"  id="abstract" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
-                            <h:outputText style="font-weight:bold; " value="Abstract" />
-                            <f:param name="column" value="abstract"/>
-                            <%-- <c:if test="${requestScope.investigationBean.sort == 'abstract'}" >--%>
-                            <t:graphicImage id="acabstract" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.abstract}" border="0"/>
-                            <t:graphicImage id="deabstract" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notAbstract}" border="0"/>
-                            <%--   </c:if>--%>
-                        </a4j:commandLink>  
-                        
-                        <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">
-                            
-                            <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
-                            <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
-                        </a4j:commandLink>   
-                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">
-                            
-                            <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>
-                            <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
-                        </a4j:commandLink> 
-                        
-                    </h:panelGrid>        
+                        <h:outputText value="Inv. Number" />
+                        <f:param name="column" value="invNumber"/>
+                        <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
+                        <t:graphicImage id="acdty" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.invNumber}" border="0"/>
+                        <t:graphicImage id="dedty" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notInvNumber}" border="0"/>
+                        <%--  </c:if>--%>
+                    </a4j:commandLink>
                 </f:facet>
+                <h:outputText  value="#{invest.invNumber}" />              
                 
+                <%--   <h:outputText  value="#{fn:toLowerCase(invest.invType.name)}" />               --%>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="grantId" actionListener="#{investigationBean.sortColumn}">
+                        
+                        <h:outputText value="Grant Id" />
+                        <f:param name="column" value="grantId"/>
+                        <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
+                        <t:graphicImage id="acbddty" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.grantId}" border="0"/>
+                        <t:graphicImage id="dddety" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notGrantId}" border="0"/>
+                        <%--  </c:if>--%>
+                    </a4j:commandLink>
+                </f:facet>
+                <h:outputText  value="#{invest.grantId}" />              
                 
-                <a4j:commandLink rendered="#{!invest.abstractNull}" reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
-                    <%--  <h:commandLink  rendered="#{invest.abstractNull}" action="#{detailToggler.toggleDetail}">--%>
-                    <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                    <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                </a4j:commandLink>   
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">
+                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="instrument" actionListener="#{investigationBean.sortColumn}">
+                        
+                        <h:outputText value="Instrument" />
+                        <f:param name="column" value="instrument"/>
+                        <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
+                        <t:graphicImage id="acstddy" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.instrument}" border="0"/>
+                        <t:graphicImage id="dedddty" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notInstrument}" border="0"/>
+                        <%--  </c:if>--%>
+                    </a4j:commandLink>
+                </f:facet>
+                <h:outputText  value="#{invest.instrument.name}" />                              
+                
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="invType" actionListener="#{investigationBean.sortColumn}">
+                        
+                        <h:outputText value="Type" />
+                        <f:param name="column" value="invType"/>
+                        <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
+                        <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.invType}" border="0"/>
+                        <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notInvType}" border="0"/>
+                        <%--  </c:if>--%>
+                    </a4j:commandLink>
+                </f:facet>
+                <h:outputText  value="#{invest.invType.name}" />             
                 
                 
             </h:column>
+            
             <h:column>
                 <f:facet name="header">
                     <%--<a4j:commandLink reRender="data" style="table-header" id="facility" actionListener="#{investigationBean.sortColumn}">--%>
@@ -280,118 +334,100 @@
                         <%--    </c:if>--%>
                     </a4j:commandLink>
                 </f:facet>
-                <h:outputText value="#{invest.facility}" />
+                <h:outputText value="#{invest.facility.facilityShortName}" />
                 
             </h:column>
             
             <h:column>
+                <f:facet name="header">
+                    <%--<a4j:commandLink reRender="data" style="table-header" id="facility" actionListener="#{investigationBean.sortColumn}">--%>
+                   
+                    <a4j:commandLink reRender="data" style="table-header" id="facilityCycle" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
+                        <h:outputText value="Facility Cycle" />
+                        <f:param name="column" value="facilityCycle"/>
+                        <%-- <c:if test="${requestScope.investigationBean.sort == 'facility'}" >                            --%>
+                        <t:graphicImage id="agggcf" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.facilityCycle}" border="0"/>
+                        <t:graphicImage id="gg" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notFacilityCycle}" border="0"/>
+                        <%--    </c:if>--%>
+                    </a4j:commandLink>
+                </f:facet>
+                <h:outputText value="#{invest.facilityCycle.name}" />
                 
-                <f:facet name="header" />
-                
-                <t:popup  styleClass="popup"   closePopupOnExitingElement="true"
-                          closePopupOnExitingPopup="true"
-                          displayAtDistanceX="15"
-                          displayAtDistanceY="-60" >
-                    <t:graphicImage rendered="#{!invest.investigatorsNull}" url="../../images/person.png" border="0" />
-                    
-                    <f:facet name="popup">
-                        
-                        <t:dataTable  id="investigationPIs" styleClass="standardTable_ColumnCenter, standardTable_ColumnCenter,standardTable_ColumnCenter" var="investigatorspis" value="#{invest.listOfInvestigators}">
-                            
-                            <h:column>                    
-                                <f:facet name="header">
-                                    <h:outputText style="font-size: 10px" value="Investigators" />
-                                </f:facet>
-                                
-                                <h:outputText style="font-size: 10px" value="#{investigatorspis.name}" />
-                            </h:column>     
-                            
-                            <h:column>   
-                                <f:facet name="header">
-                                    <h:outputText style="font-size: 10px; " value="ID" />
-                                </f:facet>
-                                <h:outputText style="font-size: 10px" value="#{investigatorspis.id}" />
-                            </h:column>     
-                            
-                            <h:column>    
-                                <f:facet name="header">
-                                    <h:outputText style="font-size: 10px" value="Role" />
-                                </f:facet>
-                                <h:outputText style="font-size: 10px" value="#{investigatorspis.role}" />
-                            </h:column>     
-                            
-                        </t:dataTable> 
-                        
-                    </f:facet>
-                </t:popup>
             </h:column>
             
-            <h:column>
-                
-                <f:facet name="header" />
-                
-                <t:popup  styleClass="popup"   closePopupOnExitingElement="true"
-                          closePopupOnExitingPopup="true"
-                          displayAtDistanceX="15"
-                          displayAtDistanceY="-60" >
-                    <t:graphicImage  url="../../images/Key.jpg" border="0" />
-                    
-                    <f:facet name="popup">
-                        
-                        <t:dataTable id="investigationKeywords" styleClass="standardTable_ColumnCenter, standardTable_ColumnCenter,standardTable_ColumnCenter" var="investkeywords" value="#{invest.keywords}">
-                            
-                            <t:column colspan="4" >                    
-                                <f:facet name="header">
-                                    <h:outputText style="font-size: 10px" value="Keywords" />
-                                </f:facet>                                
-                                <h:outputText style="font-size: 10px" value="#{investkeywords}" />
-                            </t:column>                               
-                        </t:dataTable> 
-                        
-                    </f:facet>
-                </t:popup>
-            </h:column>
             
-          
-            
+            <%--   <h:column>
+                <f:facet name="header">
+                   
+                    <a4j:commandLink reRender="data" style="table-header" id="releaseDate" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
+                        <h:outputText value="Release Date" />
+                        <f:param name="column" value="releaseDate"/>
+                         <t:graphicImage id="fff" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.releaseDate}" border="0"/>
+                        <t:graphicImage id="gffg" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notReleaseDate}" border="0"/>
+                      
+                    </a4j:commandLink>
+                </f:facet>
+                <h:outputText value="#{invest.releaseDate}" />
+                
+            </h:column>--%>
             
             <f:facet name="detailStamp">                
-                <t:dataTable preserveSort="true" width="95%" id="investigationAbstract" styleClass="standardTable_Column" var="abstract" value="#{invest.investigationAbstract}">
+                <t:dataTable preserveSort="true" align="center" columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered" rowClasses="standardTable_Row1,standardTable_Row2" headerClass="standardTable_Header" width="97%" id="invAbstract"  var="invest" value="#{invest}">
                     
                     <h:column>
-                        <h:outputText style="font-size:12px;" value="#{invest.investigationAbstract}" />
-                    </h:column> 
-                    <h:column>
-                        <%--   <t:popup styleClass="popup"   closePopupOnExitingElement="true"
-                                 closePopupOnExitingPopup="true"
-                                 displayAtDistanceX="5"
-                                 displayAtDistanceY="-40" >
-                            <t:graphicImage url="../../images/help.gif" border="0" />
-                            &nbsp;&nbsp;&nbsp;
-                            <f:facet name="popup">
-                                fgdfgdfgdfgd
-                                 <t:dataTable preserveSort="true" width="95%" id="investigationPIs" styleClass="standardTable_Column" var="investigatorspis" value="#{invest.listOfInvestigators}">
-                            <h:column>                    
-                                
-                                
-                                <h:outputText style="font-size: 10px" value="#{investigatorspis.name}" />
-                            </h:column>     
-                            <h:column>                
-                                <h:outputText style="font-size: 10px" value="#{investigatorspis.role}" />
-                            </h:column>     
-                            <h:column>                
-                                <h:outputText style="font-size: 10px" value="#{investigatorspis.id}" />
-                            </h:column>     
-                        </t:dataTable> 
-                        
-                            </f:facet>
-                        </t:popup>--%>
+                        <f:facet name="header">
+                            <h:outputText value="Abstract" style="font-size:12px; color: blue;  font-weight: bold;" />
+                        </f:facet>
+                        <h:outputText style="font-size:12px;" value="#{invest.invAbstract}" />
                     </h:column> 
                     
-                </t:dataTable>   
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Investigators" style="font-size:12px; color: blue;  font-weight: bold;" />
+                        </f:facet>
+                        <t:dataTable columnClasses="standardTable_ColumnCentered, standardTable_ColumnCentered" preserveSort="true" width="95%" id="invAbstract"  var="investigators" value="#{invest.investigatorCollection}">
+                            <h:column>
+                                <h:outputText  value="#{investigators.facilityUser.firstName}" style="font-size:12px; "  />  
+                            </h:column> 
+                            <h:column>
+                                <h:outputText  value="#{investigators.facilityUser.lastName}" style="font-size:12px;"  />  
+                            </h:column> 
+                            <%-- <h:column>
+                                <h:outputText  value="#{investigators.facilityUser.federalId}" style="font-size:12px;"  />  
+                            </h:column>     --%>
+                        </t:dataTable>    
+                    </h:column> 
+                    
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Shift Start" style="font-size:12px; color: blue;  font-weight: bold;" />
+                        </f:facet>
+                        <t:dataTable  columnClasses="standardTable_ColumnCentered, standardTable_ColumnCentered" preserveSort="true" width="95%" id="invshiftsStart"  var="shiftsStart" value="#{invest.shiftCollection}">
+                            <h:column>                           
+                                <h:outputText  value="#{fn:substringBefore(shiftsStart.shiftPK.startDate,\"T\")}" style="font-size:12px;" />  
+                                
+                            </h:column> 
+                          
+                           
+                        </t:dataTable>    
+                    </h:column> 
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Shift End" style="font-size:12px; color: blue;  font-weight: bold;" />
+                        </f:facet>
+                        <t:dataTable  columnClasses="standardTable_ColumnCentered, standardTable_ColumnCentered" preserveSort="true" width="95%" id="invshiftsEnd"  var="shiftsEnd" value="#{invest.shiftCollection}">
+                            
+                            <h:column>
+                                <h:outputText  value="#{fn:substringBefore(shiftsEnd.shiftPK.endDate,\"T\")}" style="font-size:12px;" />  
+                                
+                            </h:column>
+                           
+                        </t:dataTable>    
+                    </h:column> 
+                </t:dataTable>                      
                 
-                
-            </f:facet>            
+            </f:facet>        
+            
         </t:dataTable>
         
         

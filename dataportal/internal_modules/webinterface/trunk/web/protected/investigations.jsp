@@ -104,8 +104,8 @@
                                             <table border="0" width="100%" >    
                                                  <tbody>
                                                     <tr>
-                                                        <td width="7%">&nbsp;</td>
-                                                        <td valign="top" width="93%" >
+                                                        <td width="3%">&nbsp;</td>
+                                                        <td valign="top" width="97%" >
                                                             <f:subview id="body">
                                                                 <c:import url="inc/investigations_inc.jsp" />
                                                             </f:subview>
