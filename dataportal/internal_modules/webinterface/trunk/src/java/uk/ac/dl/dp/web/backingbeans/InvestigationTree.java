@@ -114,8 +114,8 @@ public class InvestigationTree extends AbstractRequestBean {
             
             //now add the facs that have not returned yet.
             //maybe no search yet, coming from Data Center
-            if(getSearchData() !=null && getSearchData().getQueryRequest() != null){
-                Collection<String> searched = getSearchData().getQueryRequest().getFacilities();
+            if(getVisitData() !=null && getVisitData().getQueryRequest() != null){
+                Collection<String> searched = getVisitData().getQueryRequest().getFacilities();
                 for(String searchedFac : searched){
                     boolean isCompleted = false;
                     for(String completedFac : facs){
@@ -245,7 +245,7 @@ public class InvestigationTree extends AbstractRequestBean {
             getVisitData().setCurrentInvestigations(investigations);
             getVisitData().setCurrentDatasets(datasets);
             getVisitData().setCurrentDatafiles(datafiles);
-            
+                if(true) throw new DataPortalException();
         } catch (DataPortalException ex) {
             error("Error:  Unable to search the information for the investigations.");
             log.fatal("Unable to create query user for: "+getVisit().getSid(),ex);

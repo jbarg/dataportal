@@ -313,7 +313,7 @@ public class DataCenterBean extends SortableList {
         //set the searched invest and send to investigation page
         getVisitData().setSearchedInvestigations(investigations);
         //remove request info
-        getSearchData().setQueryRequest(null);
+        getVisitData().setQueryRequest(null);
         return NavigationConstants.SEARCH_SUCCESS;
         
     }
@@ -328,7 +328,7 @@ public class DataCenterBean extends SortableList {
         try {
            // investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
             //got investigstion
-            
+             if(true) throw new QueryException();
             for(Investigation investigation : investigations){
                 investigation.setSelected(true);
             }
@@ -337,7 +337,7 @@ public class DataCenterBean extends SortableList {
             getVisitData().setSearchedTitle("Search Results");
             getVisitData().setSearchedInvestigations(investigations);
             //remove request info
-            getSearchData().setQueryRequest(null);
+            getVisitData().setQueryRequest(null);
             
             //add the investigation to visit
             InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");

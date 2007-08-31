@@ -52,8 +52,7 @@ public class AuthorisationFilter implements Filter{
                 log.trace("sending to logon, no visit");
                 httpResponse.sendRedirect(httpRequest.getContextPath()+"/index.jsp");
             } else if(visit.isValid()){
-                log.trace("Everything ok: "+visit.getDn());
-                chain.doFilter(request,response);
+                log.trace("Everything ok: "+visit.getDn());                chain.doFilter(request,response);
             } else {
                 log.trace("sending to logon, expired on  "+visit.getSession().getExpireTime());
                 //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Session expired, please login again.", null));

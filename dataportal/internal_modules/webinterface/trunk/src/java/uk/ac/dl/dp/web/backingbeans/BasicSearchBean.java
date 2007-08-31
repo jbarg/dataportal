@@ -49,14 +49,14 @@ public class BasicSearchBean {
     }
     
     public String getLogicalExpression() {
-        log.trace("LogicalExpression: "+logicalExpression);
+        //log.trace("LogicalExpression: "+logicalExpression);
         if(logicalExpression == null) return "AND";
         else return logicalExpression;
         
     }
     
     public void setLogicalExpression(String logicalExpression) {
-        log.trace("Setting logical expression: "+logicalExpression);
+       // log.trace("Setting logical expression: "+logicalExpression);
         this.logicalExpression = logicalExpression;
     }
     

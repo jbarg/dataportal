@@ -19,6 +19,9 @@ import uk.ac.dl.dp.coreutil.util.DPRole;
 import java.util.*;
 import javax.faces.model.SelectItem;
 import org.apache.log4j.*;
+import uk.ac.dl.dp.coreutil.entity.FacilitySession;
+import uk.ac.dl.dp.coreutil.util.DPEvent;
+import uk.ac.dl.dp.coreutil.util.KeywordsFileBean;
 import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
 import uk.ac.dl.dp.web.util.AbstractSessionBean;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
@@ -28,30 +31,69 @@ import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
  */
 public class Visit  extends AbstractSessionBean implements Serializable{
     
+    /**
+     * Dn of the user
+     */
     private String dn;
+    
+    /**
+     * List of roles the user has
+     */
     private Collection<DPRole> roles;
+    
+    /**
+     * Session Id of the user
+     */
     private String sid;
+    
+    /**
+     * Is this user a admin, found from sessionDTO
+     */
     private boolean isAdmin = false;
     
+    /**
+     * User prefe returned by the core DP containing all prefs information
+     */
     private UserPreferencesDTO userPreferences;
     
+    /**
+     * SessionDTO returned by the core DP containing all log on information
+     */
     private SessionDTO session;
     
-    private String investigationSort;
+    // private String investigationSort;
     
+    /**
+     * Current width of page that the user wants
+     */
     private String width ;
     
     private HashMap<String, SRBFileManagerThread> srbManager = new HashMap<String, SRBFileManagerThread>();
     
+    /**
+     * List of facilities that have been logged onto as selectItems for JSF pages
+     */
     private List<SelectItem> facilities;
     
-    private String logonType = "LOG_ON";
+    /**
+     * Type of logon, this is used to determine the log out situation
+     */
+    private String logonType = DPEvent.LOG_ON.toString();
     
+    /**
+     * All current Visit Data for this session, selections etc
+     */
     private VisitData visitData;
     
-    private SearchData searchData;
-    
+    /**
+     * All current Admin Data for this session
+     */
     private AdminData adminData;
+    
+    /**
+     * List of all the facilities in the DP and how they have logged on or failed to log on.
+     */
+    private Collection<FacilitySession> facilitySessions;
     
     private boolean _collapsed;
     
@@ -59,13 +101,16 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public Visit(){
         setVisitData(new VisitData());
-        setSearchData(new SearchData());
+        
     }
     
     public SessionDTO getSession() {
         return session;
     }
     
+    /**
+     * This sets all the information from the SessionDTO returned upon logging on
+     */
     public void setSession(SessionDTO session) {
         this.session = session;
         this.sid = session.getUserSessionId();
@@ -89,24 +134,34 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         
         //set session facility list
         Collection<FacilityDTO> facs = this.session.getFacilities();
+        
+        //create the selectitems and the keywordFileBeans from the list of loged in facilities
         List<SelectItem> items = new ArrayList<SelectItem>();
+        HashMap<String, KeywordsFileBean> keywordsFileBeans = new HashMap<String, KeywordsFileBean>();
         for(FacilityDTO dto: facs){
             items.add(new SelectItem(dto.getFacility(),dto.getFacility()));
+            keywordsFileBeans.put(dto.getFacility(), new KeywordsFileBean(session.getFedId(), dto.getFacility()));
         }
+        
+          //initialise the keywords
+        getVisitData().setKeywordsFileBeans(keywordsFileBeans);
         this.setFacilities(items);
+        
+        //sets the information about the logging onto ICATs
+        this.setFacilitySessions(session.getFacilitySessions());
         
         //set the current default as the sleected fac in basic search
         List<String> fac = new ArrayList<String>();
         fac.add(this.userPreferences.getDefaultFacility());
         
-        getVisitData().setCurrentSelectedFacilities(fac);
+        getVisitData().setCurrentSelectedFacilities(fac);              
     }
     
     public boolean isAdmin(){
         return isAdmin;
     }
     
-     public boolean isValid(){
+    public boolean isValid(){
         return (session.getExpireTime().before(new Date())) ? false : true ;
     }
     
@@ -144,6 +199,9 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.userPreferences = userPreferences;
     }
     
+    /**
+     * Current width of page that the user wants
+     */
     public String getWidth() {
         return width;
     }
@@ -166,12 +224,18 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         return srbManager.get(param);
     }
     
+    /**
+     * Used to keep downloads of the SRB
+     */
     public void putSrbManager(String param, SRBFileManagerThread srbManager) {
         // if(!this.srbManager.containsKey(param)){
         this.srbManager.put(param, srbManager);
         //}
     }
     
+    /**
+     * Removes SRB downloads, if not finished it tries to stop the download
+     */
     public void removeSrbManager(String param) {
         if(this.srbManager.containsKey(param)){
             log.trace("removing "+param+" from cache");
@@ -186,6 +250,9 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         }
     }
     
+    /**
+     * Checks weather the visit contains a SRB download1
+     */
     public boolean contains(String param){
         return this.srbManager.containsKey(param);
     }
@@ -207,14 +274,6 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.adminData = adminData;
     }
     
-    public SearchData getSearchData() {
-        return searchData;
-    }
-    
-    public void setSearchData(SearchData searchData) {
-        this.searchData = searchData;
-    }
-    
     public List<SelectItem> getFacilities() {
         return facilities;
     }
@@ -223,6 +282,9 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.facilities = facilities;
     }
     
+    /**
+     * Checks weather one of the current selected facilities only allows one keyword ie ac.isTopics()
+     */
     public boolean isCurrentFacilitysTopics(){
         //check if EMAT is selected as a keyword
         Collection<String> facilities = getVisitData().getCurrentSelectedFacilities();
@@ -256,5 +318,12 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         _collapsed = collapsed;
     }
     
+    public Collection<FacilitySession> getFacilitySessions() {
+        return facilitySessions;
+    }
+    
+    public void setFacilitySessions(Collection<FacilitySession> facilitySessions) {
+        this.facilitySessions = facilitySessions;
+    }
     
 }
