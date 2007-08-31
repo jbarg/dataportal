@@ -69,8 +69,7 @@
             <h:form id="autofillform_nav">
                 
                 <h:panelGrid  border="0" columns="2"  >      
-                    
-                    
+                                        
                     <h:outputLabel for="facilities_navj_id_1">
                         <h:outputText value="Search: " style="font-size:12px"/>
                     </h:outputLabel  >
@@ -80,8 +79,7 @@
                         <f:selectItems value="#{visit.facilities}"/>
                         <f:validateLength minimum="1" />
                     </h:selectManyListbox>
-                    
-                    
+                                        
                     
                     <h:message  for="facilities_navj_id_1" styleClass="error"/>
                     <h:panelGroup/>
@@ -99,9 +97,9 @@
                                       onchoose="function(item) { return chooseCityNav(item); }"  validator="#{searchBean.validateKeyword}"/>
                     
                     
-                     <h:panelGroup/>
+                    <h:panelGroup/>
                     <h:message for="keywordField_navj_id_1" styleClass="error"/>
-                   
+                    
                     
                     
                     
