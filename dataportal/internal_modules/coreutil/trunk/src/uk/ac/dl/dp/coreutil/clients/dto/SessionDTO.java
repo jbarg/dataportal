@@ -48,8 +48,9 @@ public class SessionDTO implements Serializable{
     
      private Collection<FacilitySession> facilitySessions;
 
-   
-    
+   private String fedId;
+
+       
     // private User userId;
     
     public SessionDTO() {
@@ -67,6 +68,7 @@ public class SessionDTO implements Serializable{
         this.DN = session.getUserId().getDn();
         int index = this.DN.lastIndexOf("CN=");
         this.setName(DN.substring(index+3,this.DN.length()));
+        this.fedId = session.getUserId().getUserId();
         
     }
     
@@ -133,6 +135,14 @@ public class SessionDTO implements Serializable{
     
     public void setName(String name) {
         this.name = name;
+    }
+    
+     public String getFedId() {
+        return fedId;
+    }
+
+    public void setFedId(String fedId) {
+        this.fedId = fedId;
     }
     
     @XmlTransient

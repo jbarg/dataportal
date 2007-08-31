@@ -60,7 +60,7 @@ public class Bookmark implements Serializable {
     private Long id;
     
     @Column(name = "STUDY_ID", nullable = false)
-    private Integer studyId;
+    private Long studyId;
     
     @Column(name = "NAME", nullable = false)
     private String name;
@@ -105,7 +105,7 @@ public class Bookmark implements Serializable {
         this.id = id;
     }*/
     
-    public Bookmark(Integer studyId, String name, String query, String facility) {
+    public Bookmark(Long studyId, String name, String query, String facility) {
         
         this.studyId = studyId;
         this.name = name;
@@ -122,11 +122,11 @@ public class Bookmark implements Serializable {
     }
     
     @XmlElement(name="investigationId")
-    public Integer getStudyId() {
+    public Long getStudyId() {
         return this.studyId;
     }
     
-    public void setStudyId(Integer studyId) {
+    public void setStudyId(Long studyId) {
         this.studyId = studyId;
     }
     

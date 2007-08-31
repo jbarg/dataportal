@@ -25,6 +25,8 @@ public interface QueryLocal {
     
     public QueryRequest queryAdvanced(String sid, AdvancedSearchDetails AdvancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException;
    
+    public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
+  
     public boolean isFinished(QueryRequest request) throws SessionException;
     
     public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException;
@@ -41,8 +43,10 @@ public interface QueryLocal {
     
     public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO dto) throws SessionException;
     
-    public HashMap<String, Collection<String>> getKeywords(String sid, boolean redownload) throws QueryException ;
+    public HashMap<String, Collection<String>> getKeywords(String sid, boolean redownload) throws QueryException;
     
-     public HashMap<String, Collection<String>> getKeywords(String sid) throws QueryException ;
+    public HashMap<String, Collection<String>> getKeywords(String sid) throws QueryException;
+     
+    public Collection<String> getKeywordsForFacility(String sid, String facility) throws QueryException;
    
 }
