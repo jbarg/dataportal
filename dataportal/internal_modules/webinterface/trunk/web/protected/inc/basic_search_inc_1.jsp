@@ -164,12 +164,12 @@
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="'Exact' type searches returns all results"/>                                 
+                                     <h:outputText value="'Exact' type searches returns all results"/>                                 
                             <h:outputText escape="true" value=" that exactly match the keyword."/> 
                             <h:outputText value="'Like' type searches returns all results"/>                             
-                            <h:outputText  escape="true" value="that contain party matches keywords."/>  
+                            <h:outputText  escape="true" value="that contain part of the keywords."/>  
                             <h:outputText  escape="true" value="I.e. oxygen would return results with oxygens as a keyword."/>              
-                        </h:panelGrid>
+                   </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
