@@ -109,6 +109,8 @@
                             <%-- <h:outputText value="Exact keyword match only. Case insensititve."/>   --%>
                             <h:outputText value="Auto Complete enabled."/>                                 
                             <h:outputText value="This list is not a full list of all the possible keywords."/>                                 
+                            <h:outputText value="'AND' type searches returns all results"/>                                 
+                            <h:outputText escape="true" value=" that contain all the keywords, i.e. default Google behaviour."/> 
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -136,17 +138,17 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Visit Id of investigation."/>                                 
-                              
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                       
+            
             <h:message for="visitIdj_id_1" styleClass="error"/>
             
-              <!----------------     End of Visit Id ---------------->
+            <!----------------     End of Visit Id ---------------->
               
-               <!----------------     Start of Grant Id ---------------->
+            <!----------------     Start of Grant Id ---------------->
             <h:outputLabel>            
                 <h:outputText value="Grant Id:" style="font-size: 14px" />                   
             </h:outputLabel>
@@ -165,17 +167,17 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Grant Id of investigation."/>                                 
-                              
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                       
+            
             <h:message for="grantIdj_id_1" styleClass="error"/>
             
-              <!----------------     End of Grant Id ---------------->
+            <!----------------     End of Grant Id ---------------->
           
-               <!----------------     Start of Inv name  ---------------->
+            <!----------------     Start of Inv name  ---------------->
             <h:outputLabel>            
                 <h:outputText value="Investigation name:" style="font-size: 14px" />                   
             </h:outputLabel>
@@ -194,17 +196,17 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Name of investigation."/>                                 
-                              
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                       
+            
             <h:message for="invNamej_id_1" styleClass="error"/>
             
-              <!----------------     End of Inv name ---------------->
+            <!----------------     End of Inv name ---------------->
               
-                 <!----------------     Start of Inv abstract ---------------->
+            <!----------------     Start of Inv abstract ---------------->
             <h:outputLabel>            
                 <h:outputText value="Investigation name:" style="font-size: 14px" />                   
             </h:outputLabel>
@@ -223,17 +225,17 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Abstract of investigation."/>                                 
-                              
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                       
+            
             <h:message for="invAbstractj_id_1" styleClass="error"/>
             
-              <!----------------     End of Inv abstract ---------------->
+            <!----------------     End of Inv abstract ---------------->
             
-                    <!----------------     Start of Inv type ---------------->
+            <!----------------     Start of Inv type ---------------->
             <h:outputLabel>            
                 <h:outputText value="Investigation type:" style="font-size: 14px" />                   
             </h:outputLabel>
@@ -252,19 +254,19 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Type of investigation."/>                                 
-                              
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                       
+            
             <h:message for="invTypej_id_1" styleClass="error"/>
             
-              <!----------------     End of Inv type ---------------->
+            <!----------------     End of Inv type ---------------->
               
               
                 
-                    <!----------------     Start of instrument ---------------->
+            <!----------------     Start of instrument ---------------->
             <h:outputLabel>            
                 <h:outputText value="Instrument:" style="font-size: 14px" />                   
             </h:outputLabel>
@@ -283,18 +285,18 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Instrument used in investigation."/>                                 
-                              
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                       
+            
             <h:message for="instrumentj_id_1" styleClass="error"/>
             
-              <!----------------     End of instrument ---------------->
+            <!----------------     End of instrument ---------------->
               
               
-                     <!----------------     Start of sample ---------------->
+            <!----------------     Start of sample ---------------->
             <h:outputLabel>            
                 <h:outputText value="Instrument:" style="font-size: 14px" />                   
             </h:outputLabel>
@@ -313,17 +315,17 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Sample used in investigation."/>                                 
-                              
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                       
+            
             <h:message for="samplej_id_1" styleClass="error"/>
             
-              <!----------------     End of sample ---------------->
+            <!----------------     End of sample ---------------->
               
-                  <!----------------     Start of investigators ---------------->
+            <!----------------     Start of investigators ---------------->
             <h:outputLabel>            
                 <h:outputText value="Investigators:" style="font-size: 14px" />                   
             </h:outputLabel>
@@ -342,15 +344,15 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Investigators used in investigation."/>                                 
-                              
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                       
+            
             <h:message for="investigatorsj_id_1" styleClass="error"/>
             
-              <!----------------     End of investigators ---------------->
+            <!----------------     End of investigators ---------------->
             <h:panelGroup/>
             
             <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
@@ -392,6 +394,6 @@
             <h:panelGroup/>
         </h:panelGrid>
         
-       
+        
     </h:form>
 </a4j:region>
