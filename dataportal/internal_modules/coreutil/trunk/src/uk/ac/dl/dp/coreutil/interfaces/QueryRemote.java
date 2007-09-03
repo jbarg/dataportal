@@ -12,7 +12,6 @@ import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
-import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
 
