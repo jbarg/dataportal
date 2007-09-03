@@ -90,11 +90,11 @@
                 <h:outputText value="Keyword(s): " style="font-size:14px"/>
             </h:outputLabel  >                      
             
-            <ui:autoComplete styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_1" 
+            <ui:autoComplete  styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_1" 
                              completionMethod="#{keyword.completeCity}" 
-                             value="#{searchBean.keyword}" required="true"
+                             value="#{advancedSearchBean.keyword}" required="false"
                              ondisplay="function(item) { return extractCity(item); }"
-                             onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
+                             onchoose="function(item) { return chooseCity(item); }"  />
             
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -119,71 +119,14 @@
             
             <h:message for="keywordFieldj_id_1" styleClass="error"/>
             
-            <!----------------     Start of Visit Id ---------------->
-            <h:outputLabel>            
-                <h:outputText value="Visit Id:" style="font-size: 14px" />                   
-            </h:outputLabel>
             
-            <h:inputText styleClass="text" id="visitIdj_id_1" size="20" required="true" value="#{advancedSearchBean.visitId}">
-                <f:validateLength minimum="1" />
-            </h:inputText>        
-            
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40" >
-                
-                <t:graphicImage url="../../images/help.gif" border="0" />
-                <f:facet name="popup">
-                    <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="Visit Id of investigation."/>                                 
-                            
-                        </h:panelGrid>
-                    </h:panelGroup>
-                </f:facet>
-            </t:popup>
-            
-            <h:message for="visitIdj_id_1" styleClass="error"/>
-            
-            <!----------------     End of Visit Id ---------------->
-              
-            <!----------------     Start of Grant Id ---------------->
-            <h:outputLabel>            
-                <h:outputText value="Grant Id:" style="font-size: 14px" />                   
-            </h:outputLabel>
-            
-            <h:inputText styleClass="text" id="grantIdj_id_1" size="20" required="true" value="#{advancedSearchBean.grantId}">
-                <f:validateLength minimum="1" />
-            </h:inputText>        
-            
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40" >
-                
-                <t:graphicImage url="../../images/help.gif" border="0" />
-                <f:facet name="popup">
-                    <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="Grant Id of investigation."/>                                 
-                            
-                        </h:panelGrid>
-                    </h:panelGroup>
-                </f:facet>
-            </t:popup>
-            
-            <h:message for="grantIdj_id_1" styleClass="error"/>
-            
-            <!----------------     End of Grant Id ---------------->
-          
             <!----------------     Start of Inv name  ---------------->
             <h:outputLabel>            
                 <h:outputText value="Investigation name:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <h:inputText styleClass="text" id="invNamej_id_1" size="20" required="true" value="#{advancedSearchBean.invName}">
-                <f:validateLength minimum="1" />
+            <h:inputText styleClass="text" id="invNamej_id_1" size="20" required="false" value="#{advancedSearchBean.invName}">
+               
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -208,11 +151,11 @@
               
             <!----------------     Start of Inv abstract ---------------->
             <h:outputLabel>            
-                <h:outputText value="Investigation name:" style="font-size: 14px" />                   
+                <h:outputText value="Investigation abstract:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <h:inputText styleClass="text" id="invAbstractj_id_1" size="20" required="true" value="#{advancedSearchBean.invAbstract}">
-                <f:validateLength minimum="1" />
+            <h:inputText styleClass="text" id="invAbstractj_id_1" size="20" required="false" value="#{advancedSearchBean.invAbstract}">
+                
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -235,74 +178,16 @@
             
             <!----------------     End of Inv abstract ---------------->
             
-            <!----------------     Start of Inv type ---------------->
-            <h:outputLabel>            
-                <h:outputText value="Investigation type:" style="font-size: 14px" />                   
-            </h:outputLabel>
-            
-            <h:inputText styleClass="text" id="invTypej_id_1" size="20" required="true" value="#{advancedSearchBean.invType}">
-                <f:validateLength minimum="1" />
-            </h:inputText>        
-            
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40" >
-                
-                <t:graphicImage url="../../images/help.gif" border="0" />
-                <f:facet name="popup">
-                    <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="Type of investigation."/>                                 
-                            
-                        </h:panelGrid>
-                    </h:panelGroup>
-                </f:facet>
-            </t:popup>
-            
-            <h:message for="invTypej_id_1" styleClass="error"/>
-            
-            <!----------------     End of Inv type ---------------->
-              
-              
-                
-            <!----------------     Start of instrument ---------------->
-            <h:outputLabel>            
-                <h:outputText value="Instrument:" style="font-size: 14px" />                   
-            </h:outputLabel>
-            
-            <h:inputText styleClass="text" id="instrumentj_id_1" size="20" required="true" value="#{advancedSearchBean.instrument}">
-                <f:validateLength minimum="1" />
-            </h:inputText>        
-            
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40" >
-                
-                <t:graphicImage url="../../images/help.gif" border="0" />
-                <f:facet name="popup">
-                    <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="Instrument used in investigation."/>                                 
-                            
-                        </h:panelGrid>
-                    </h:panelGroup>
-                </f:facet>
-            </t:popup>
-            
-            <h:message for="instrumentj_id_1" styleClass="error"/>
-            
-            <!----------------     End of instrument ---------------->
+          
               
               
             <!----------------     Start of sample ---------------->
             <h:outputLabel>            
-                <h:outputText value="Instrument:" style="font-size: 14px" />                   
+                <h:outputText value="Sample" style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <h:inputText styleClass="text" id="instrumentj_id_1" size="20" required="true" value="#{advancedSearchBean.sample}">
-                <f:validateLength minimum="1" />
+            <h:inputText styleClass="text" id="samplej_id_1" size="20" required="false" value="#{advancedSearchBean.sample}">
+               
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -327,11 +212,11 @@
               
             <!----------------     Start of investigators ---------------->
             <h:outputLabel>            
-                <h:outputText value="Investigators:" style="font-size: 14px" />                   
+                <h:outputText value="Investigator surname:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <h:inputText styleClass="text" id="investigatorsj_id_1" size="20" required="true" value="#{advancedSearchBean.investigators}">
-                <f:validateLength minimum="1" />
+            <h:inputText styleClass="text" id="investigatorsj_id_1" size="20" required="false" value="#{advancedSearchBean.investigator}">
+              
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -353,6 +238,8 @@
             <h:message for="investigatorsj_id_1" styleClass="error"/>
             
             <!----------------     End of investigators ---------------->
+            
+            <!----------------     Start of Like ---------------->
             <h:panelGroup/>
             
             <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
@@ -382,14 +269,150 @@
             
             
             <h:panelGroup/>
+            <!----------------     End of Like ---------------->
+            
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            
+            <!----------------     Start of Visit Id ---------------->
+            <h:outputLabel>            
+                <h:outputText value="Visit Id:" style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <h:inputText styleClass="text" id="visitIdj_id_1" size="20" required="false" value="#{advancedSearchBean.visitId}" />
+                        
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="Visit Id of investigation."/>                                 
+                            
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            <h:message for="visitIdj_id_1" styleClass="error"/>
+            
+            <!----------------     End of Visit Id ---------------->
+              
+            <!----------------     Start of Grant Id ---------------->
+            <h:outputLabel>            
+                <h:outputText value="Grant Id:" style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <h:inputText styleClass="text" id="grantIdj_id_1" size="20" required="false" value="#{advancedSearchBean.grantId}">
+                 <f:validateDoubleRange minimum="0" maximum="90000000" />
+            </h:inputText>        
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="Grant Id of investigation."/>                                 
+                            
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            <h:message for="grantIdj_id_1" styleClass="error"/>
+            
+            <!----------------     End of Grant Id ---------------->
+            
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            <h:panelGroup/>
+            
+            <!----------------     Start of Inv type ---------------->
+            <h:outputLabel>            
+                <h:outputText value="Investigation type:" style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <h:inputText styleClass="text" id="invTypej_id_1" size="20" required="false" value="#{advancedSearchBean.invType}">
+               
+            </h:inputText>        
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="Type of investigation."/>                                 
+                            
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            <h:message for="invTypej_id_1" styleClass="error"/>
+            
+            <!----------------     End of Inv type ---------------->
+              
+              
+                
+            <!----------------     Start of instrument ---------------->
+            <h:outputLabel>            
+                <h:outputText value="Instrument: " style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <h:inputText styleClass="text" id="instrumentj_id_1" size="20" required="false" value="#{advancedSearchBean.instrument}">
+               
+            </h:inputText>        
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="Instrument used in investigation."/>                                 
+                            
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            <h:message for="instrumentj_id_1" styleClass="error"/>
+            
+            <!----------------     End of instrument ---------------->
+
+     
             
             
             <h:panelGroup/>
-            <h:panelGrid columns="3">
-                <h:commandButton id="f" styleClass="button" action="#{advancedSearchBean.searchByAdvanced}" onclick="busyBox.Show();" title="Search" value="Search"/>
-                <h:panelGroup>&nbsp;</h:panelGroup>
-                <h:panelGroup>&nbsp;</h:panelGroup>
-            </h:panelGrid>
+            
+            <h:commandButton id="f" styleClass="button" action="#{advancedSearchBean.searchAdvanced}" onclick="busyBox.Show();" title="Search" value="Search"/>
+            
+            
             <h:panelGroup/>
             <h:panelGroup/>
         </h:panelGrid>

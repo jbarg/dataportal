@@ -103,13 +103,14 @@
                                                                                 <f:facet name="collapse1">
                                                                                     <t:graphicImage id="gr112" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                                                                 </f:facet>
-                                                                                <h:outputText id="text78" styleClass="nodeFolder" value="Status: " />
+                                                                                <h:outputText id="text7c8" styleClass="nodeFolder" value="Status: " />
                                                                                 
-                                                                                <h:outputText id="text728" styleClass="document" value="#{node.description}" />
+                                                                                <h:outputText id="texft728" styleClass="document" value="#{node.description}" />
                                                                                 
                                                                             </h:panelGroup>
                                                                         </f:facet>
-                                                                        
+                                                                                                                                          
+                                                                                                                                                
                                                                         <f:facet name="type-folder">
                                                                             <h:panelGroup>
                                                                                 <f:facet name="expand17">
@@ -307,9 +308,9 @@
                                 <f:facet name="collapse1">
                                     <t:graphicImage id="gr112" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 </f:facet>
-                                <h:outputText id="text78" styleClass="nodeFolder" value="Status: " />
+                                <h:outputText id="texdsst78" styleClass="nodeFolder" value="Status: " />
                                 
-                                <h:outputText id="text728" styleClass="document" value="#{node.description}" />
+                                <h:outputText id="texht728" styleClass="document" value="#{node.description}" />
                                 
                             </h:panelGroup>
                         </f:facet>
@@ -328,7 +329,94 @@
                                 
                             </h:panelGroup>
                         </f:facet>
+                        <f:facet name="size-folder">
+                            <h:panelGroup>
+                                <f:facet name="expandfg1">
+                                    <t:graphicImage id="gr1fgfgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collapsfge1">
+                                    <t:graphicImage id="grg112" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="tessxt78" styleClass="nodeFolder" value="Size : " />
+                                
+                                <h:outputText id="textf728" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
                         
+                      <f:facet name="format-folder">
+                            <h:panelGroup>
+                                <f:facet name="expda1">
+                                    <t:graphicImage id="gr1ddfgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collsapsge1">
+                                    <t:graphicImage id="grgdd2" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="tedddxt8" styleClass="nodeFolder" value="Format: " />
+                                
+                                <h:outputText id="textfgfg28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                         <f:facet name="format-version-folder">
+                            <h:panelGroup>
+                                <f:facet name="expandf3gd1">
+                                    <t:graphicImage id="gr1fgd3ffgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collaps3dfge1">
+                                    <t:graphicImage id="grgfddd1312" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="textfddd4578" styleClass="nodeFolder" value="Format version: " />
+                                
+                                <h:outputText id="te3xt7ffff28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <f:facet name="format-type-folder">
+                            <h:panelGroup>
+                                <f:facet name="exnfgd1">
+                                    <t:graphicImage id="gr1fg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="clasdfge1">
+                                    <t:graphicImage id="grf112" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="te78" styleClass="nodeFolder" value="Format type: " />
+                                
+                                <h:outputText id="tex28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <f:facet name="createTime-folder">
+                            <h:panelGroup>
+                                <f:facet name="expand1">
+                                    <t:graphicImage id="gr1fgfg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collafge1">
+                                    <t:graphicImage id="grgf2" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="texf78" styleClass="nodeFolder" value="Create Time: " />
+                                
+                                <h:outputText id="tex7f28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                         <f:facet name="instrument-folder">
+                            <h:panelGroup>
+                                <f:facet name="expa4ngd1">
+                                    <t:graphicImage id="d" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="colla4ffge1">
+                                    <t:graphicImage id="grddddgf2" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="te44xf7s8" styleClass="nodeFolder" value="Instrument: " />
+                                
+                                <h:outputText id="te4xs7f28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
                         <f:facet name="imageJ">
                             <h:panelGroup>                                
                                 <h:commandLink  onclick="download('#{node.identifier}','DATA_FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
@@ -557,6 +645,7 @@
                                 
                             </h:panelGroup>
                         </f:facet>
+                        
                         <f:facet name="bar-folder">
                             <h:panelGroup>
                                 <f:facet name="expand3">
@@ -578,9 +667,9 @@
                                 <f:facet name="collapse1">
                                     <t:graphicImage id="gr112" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 </f:facet>
-                                <h:outputText id="text78" styleClass="nodeFolder" value="Status: " />
+                                <h:outputText id="tedsxt78" styleClass="nodeFolder" value="Status: " />
                                 
-                                <h:outputText id="text728" styleClass="document" value="#{node.description}" />
+                                <h:outputText id="tedxt728" styleClass="document" value="#{node.description}" />
                                 
                             </h:panelGroup>
                         </f:facet>
@@ -605,6 +694,96 @@
                                 <h:commandLink  onclick="download('#{node.identifier}','DATA_FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
                                     <h:outputText value="Launch via ImageJ" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />                                    
                                 </h:commandLink>      
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <f:facet name="size-folder">
+                            <h:panelGroup>
+                                <f:facet name="expandfg1">
+                                    <t:graphicImage id="gr1fgfgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collapsfge1">
+                                    <t:graphicImage id="grg112" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="tessxt78" styleClass="nodeFolder" value="Size : " />
+                                
+                                <h:outputText id="textf728" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <f:facet name="format-version-folder">
+                            <h:panelGroup>
+                                <f:facet name="expandddf3gd1">
+                                    <t:graphicImage id="dfssdsdgr1fg3ffgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collaps3dddfge1">
+                                    <t:graphicImage id="grddgfdd1312" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="textfd4578" styleClass="nodeFolder" value="Format version: " />
+                                
+                                <h:outputText id="te3xddt7f28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <f:facet name="format-type-folder">
+                            <h:panelGroup>
+                                <f:facet name="expandgd1">
+                                    <t:graphicImage id="gr1fffgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collapdfge1">
+                                    <t:graphicImage id="grf112" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="tex8" styleClass="nodeFolder" value="Format type: " />
+                                
+                                <h:outputText id="tet7f28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <f:facet name="format-folder">
+                            <h:panelGroup>
+                                <f:facet name="expa1">
+                                    <t:graphicImage id="gr1fgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collapsge1">
+                                    <t:graphicImage id="grg2" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="text8" styleClass="nodeFolder" value="Format: " />
+                                
+                                <h:outputText id="text28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <f:facet name="createTime-folder">
+                            <h:panelGroup>
+                                <f:facet name="expand1">
+                                    <t:graphicImage id="gr1fgfg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="collafge1">
+                                    <t:graphicImage id="grgf2" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="texf78" styleClass="nodeFolder" value="Create Time: " />
+                                
+                                <h:outputText id="tex7f28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                         <f:facet name="instrument-folder">
+                            <h:panelGroup>
+                                <f:facet name="expa4nd1">
+                                    <t:graphicImage id="d" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="colla4fge1">
+                                    <t:graphicImage id="grdddgf2" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="te44xf78" styleClass="nodeFolder" value="Instrument: " />
+                                
+                                <h:outputText id="te4x7f28" styleClass="document" value="#{node.description}" />
+                                
                             </h:panelGroup>
                         </f:facet>
                         

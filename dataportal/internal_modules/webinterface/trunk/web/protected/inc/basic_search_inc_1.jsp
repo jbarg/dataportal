@@ -10,8 +10,7 @@
       function extractCity(citystatezip) {
       var index = citystatezip.indexOf(',');
       var nextcity = citystatezip.substring(0, index+4);
-      //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').value;
-      //alert(oldvalue);
+      
       
       return citystatezip;
       }
@@ -19,41 +18,26 @@
 
       function chooseCity(city) {
       var oldvalue = document.getElementById('body:autofillform:keywordFieldj_id_1').value;
-    //  alert("--"+oldvalue+"--");
+   
       var index = oldvalue.lastIndexOf(' ');
           
       var old = oldvalue.substring(0, index);
-      //alert(old);
-      //alert("data Received =" + city + " - " + state + " - " + zip);
-      
-      
-      //var index2 = city.lastIndexOf('-');
-      //if(index2 != -1){
-      //  city  = city.substring(0, index2-1);
-      //var index3 = city.lastIndexOf('-');
-      //if(index3 != -1){
-      //  city  = city.substring(0, index3-3);
-      //}
-      //}
+     
       
       
       if(old == ""){
-      // alert("no old");
+      
       document.getElementById('body:autofillform:keywordFieldj_id_1').value = city+" ";
       }
       else {
-      // alert("is old");
+     
       document.getElementById('body:autofillform:keywordFieldj_id_1').value = old+" "+city+" ";
       }
-      var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
-      // alert(oldvalue);
+      //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
+     
             
       }
-      
-      function show(){
-      alert("Hello");   
-      }
-         
+           
       
        
 </script>

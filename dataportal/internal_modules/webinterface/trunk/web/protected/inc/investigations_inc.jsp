@@ -9,11 +9,6 @@
 <a4j:region   selfRendered="true" > 
     <h:form>
         
-        <%--  <h:outputText id="h" value="#{investigationBean.keywordDone}"  />--%>
-        <a4j:poll id="poll" actionListener="#{investigationBean.getKeywordsForInvestigations}" interval="500" reRender="h,data, poll" ajaxSingle="true"  enabled="#{!investigationBean.keywordDone}" />
-        
-        <%--   <a4j:poll id="poll" actionListener="#{investigationBean.checkSearchComplete}" interval="1000" reRender="poll,scroll_1,process,searchedTree,data" ajaxSingle="true" enabled="#{!investigationBean.finished}" />
---%>
         <table style="margin-top:-90px" width="90%" border="0">
              <tbody>
                 <tr>
@@ -28,7 +23,7 @@
                                     </tr>                 
                                     <td width="60%">    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
                                     </td>
-                                    <td align="left">&nbsp;&nbsp;&nbsp;
+                                  <td align="left">&nbsp;&nbsp;&nbsp;
                                         <t:popup styleClass="popup"   closePopupOnExitingElement="true"
                                                  closePopupOnExitingPopup="true"
                                                  displayAtDistanceX="5"
@@ -38,9 +33,7 @@
                                             <f:facet name="popup">
                                                 <h:panelGroup>
                                                     <h:panelGrid columns="1" >
-                                                        <%--  <f:subview id="helpl">
-                                                            <c:import url="/investigations_inc_help.jsp" />
-                                                            </f:subview>--%>
+                                                        
                                                         <table width="300" border="0">
                                                              <tbody>
                                                                 <tr>
@@ -101,10 +94,10 @@
                                     </f:facet>
                                     
                                     <%-- <h:outputText id="text" value="#{node.description}" styleClass="nodeFolder"/>--%>
-                                    <h:commandLink  immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.minimise}" actionListener="#{investigationTree.setNodeSelected}">
-                                        <h:outputText escape="false" value="#{node.description}"  />
-                                        <f:param name="id" value="#{node.description}"/>
-                                    </h:commandLink>      
+                                    <%--  <h:commandLink  immediate="true" styleClass="nodeFolder" style="color:black" action="#{investigationTree.minimise}" actionListener="#{investigationTree.setNodeSelected}">--%>
+                                    <h:outputText escape="false" value="#{node.description}" styleClass="nodeFolder" />
+                                    <%--     <f:param name="id" value="#{node.description}"/>
+                                    </h:commandLink>      --%>
                                     <h:outputText id="text1" value=" (#{node.identifier})" styleClass="childCount" rendered="#{!empty node.children}"/>
                                 </h:panelGroup>
                             </f:facet>
@@ -191,7 +184,7 @@
                 </h:selectBooleanCheckbox>
             </h:column>
             
-            <h:column>
+              <h:column>
                 <f:facet name="header">
                     <h:panelGrid columns="" >
                         
@@ -215,13 +208,13 @@
                         
                     </h:panelGrid>        
                 </f:facet>
-                                
+                
                 <a4j:commandLink  reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
                     
                     <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
                     <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
                 </a4j:commandLink>  
-                                
+                
             </h:column>
             
             <h:column>
@@ -316,7 +309,7 @@
                         <%--  </c:if>--%>
                     </a4j:commandLink>
                 </f:facet>
-                <h:outputText  value="#{invest.invType.name}" />             
+                <h:outputText  value="#{invest.invType.name}" />            
                 
                 
             </h:column>
@@ -371,17 +364,18 @@
                 
             </h:column>--%>
             
-            <f:facet name="detailStamp">                
-                <t:dataTable preserveSort="true" align="center" columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered" rowClasses="standardTable_Row1,standardTable_Row2" headerClass="standardTable_Header" width="97%" id="invAbstract"  var="invest" value="#{invest}">
+          
+              <f:facet name="detailStamp">                
+                <t:dataTable preserveSort="true" align="center" columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered" rowClasses="standardTable_Row1,standardTable_Row2" headerClass="standardTable_Header" width="97%" id="invAbstract"  var="investigations" value="#{invest}">
                     
-                    <h:column>
+                  <h:column>
                         <f:facet name="header">
                             <h:outputText value="Abstract" style="font-size:12px; color: blue;  font-weight: bold;" />
                         </f:facet>
-                        <h:outputText style="font-size:12px;" value="#{invest.invAbstract}" />
+                        <h:outputText style="font-size:12px;" value="#{investigations.invAbstract}" />
                     </h:column> 
                     
-                    <h:column>
+                   <h:column>
                         <f:facet name="header">
                             <h:outputText value="Investigators" style="font-size:12px; color: blue;  font-weight: bold;" />
                         </f:facet>
@@ -391,10 +385,7 @@
                             </h:column> 
                             <h:column>
                                 <h:outputText  value="#{investigators.facilityUser.lastName}" style="font-size:12px;"  />  
-                            </h:column> 
-                            <%-- <h:column>
-                                <h:outputText  value="#{investigators.facilityUser.federalId}" style="font-size:12px;"  />  
-                            </h:column>     --%>
+                            </h:column>                          
                         </t:dataTable>    
                     </h:column> 
                     
@@ -404,32 +395,28 @@
                         </f:facet>
                         <t:dataTable  columnClasses="standardTable_ColumnCentered, standardTable_ColumnCentered" preserveSort="true" width="95%" id="invshiftsStart"  var="shiftsStart" value="#{invest.shiftCollection}">
                             <h:column>                           
-                                <h:outputText  value="#{fn:substringBefore(shiftsStart.shiftPK.startDate,\"T\")}" style="font-size:12px;" />  
-                                
-                            </h:column> 
-                          
-                           
+                                <h:outputText  value="#{fn:substringBefore(shiftsStart.shiftPK.startDate,\"T\")}" style="font-size:12px;" />                                  
+                            </h:column>                             
                         </t:dataTable>    
                     </h:column> 
+                    
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Shift End" style="font-size:12px; color: blue;  font-weight: bold;" />
                         </f:facet>
-                        <t:dataTable  columnClasses="standardTable_ColumnCentered, standardTable_ColumnCentered" preserveSort="true" width="95%" id="invshiftsEnd"  var="shiftsEnd" value="#{invest.shiftCollection}">
-                            
+                        <t:dataTable  columnClasses="standardTable_ColumnCentered, standardTable_ColumnCentered" preserveSort="true" width="95%" id="invshiftsEnd"  var="shiftsEnd" value="#{invest.shiftCollection}">                            
                             <h:column>
-                                <h:outputText  value="#{fn:substringBefore(shiftsEnd.shiftPK.endDate,\"T\")}" style="font-size:12px;" />  
-                                
-                            </h:column>
-                           
+                                <h:outputText  value="#{fn:substringBefore(shiftsEnd.shiftPK.endDate,\"T\")}" style="font-size:12px;" />                                  
+                            </h:column>                           
                         </t:dataTable>    
                     </h:column> 
+                    
                 </t:dataTable>                      
                 
-            </f:facet>        
+            </f:facet>  
+           
             
         </t:dataTable>
-        
         
         
         <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
