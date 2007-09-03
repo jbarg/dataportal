@@ -24,6 +24,7 @@ import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
+import uk.ac.dl.dp.web.util.Util;
 import uk.ac.dl.dp.web.util.WebConstants;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
@@ -73,11 +74,9 @@ public class InvestigationTree extends AbstractRequestBean {
             Collection<Investigation> invests = getVisitData().getSearchedInvestigations();
             
             //construct a list of returned facility results
-            Collection<String> facs = new LinkedList<String>();
+            Collection<String> facs = new HashSet<String>();
             for(Investigation invest :  invests){
-                if(!facs.contains(invest.getFacility())){
-                    facs.add(invest.getFacility().getFacilityShortName());
-                }
+                facs.add(invest.getFacility().getFacilityShortName());
             }
             
             //iterate of the list and add investiagtions that are asscoicated with it
@@ -87,7 +86,7 @@ public class InvestigationTree extends AbstractRequestBean {
                 //count how many from this fac
                 int i = 0;
                 for(Investigation invest: invests){
-                    if(invest.getFacility().equals(fac)) i++;
+                    if(invest.getFacility().getFacilityShortName().equals(fac)) i++;
                 }
                 //add count to (#) on investigation page
                 node = new TreeNodeBase("foo-folder", fac, ""+i,false);
@@ -95,10 +94,10 @@ public class InvestigationTree extends AbstractRequestBean {
                 
                 //loop, if equals fac then add node
                 for(Investigation invest : invests){
-                    if(invest.getFacility().equals(fac)){
+                    if(invest.getFacility().getFacilityShortName().equals(fac)){
                         //add node, but add identifer as facility-id for uniqueness
                         //id of invest in ISIS could be same as DIAMOND
-                        node.getChildren().add(new TreeNodeBase("foo1-folder", uk.ac.dl.dp.web.util.Util.escapeInvalidStrings(invest.getTitle()),invest.getFacility().getFacilityShortName()+"-"+invest.getId(), true));
+                        node.getChildren().add(new TreeNodeBase("foo1-folder", Util.escapeInvalidStrings(invest.getTitle()),invest.getFacility().getFacilityShortName()+"-"+invest.getId(), true));
                         
                         //only show 50??  shoule change
                         j++;
@@ -135,7 +134,7 @@ public class InvestigationTree extends AbstractRequestBean {
                         //count how many from this fac
                         int i = 0;
                         for(Investigation invest: invests){
-                            if(invest.getFacility().equals(searchedFac)) i++;
+                            if(invest.getFacility().getFacilityShortName().equals(searchedFac)) i++;
                         }
                         if(i == 0){
                             node = new TreeNodeBase("foo-folder", searchedFac, "0",true);
@@ -187,87 +186,38 @@ public class InvestigationTree extends AbstractRequestBean {
         log.trace("Showing all investigations for "+getNodePath().getDescription());
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
-            if(invest.getFacility().equals(getNodePath().getDescription())){
+            if(invest.getFacility().getFacilityShortName().equals(getNodePath().getDescription())){
                 investigations.add(invest);
-                log.trace(invest.getId()+" is added");
+                log.trace(invest.getId()+" is added from "+invest.getFacility().getFacilityShortName());
             }
         }
-        return viewDataSets(investigations);
+        
+        InvestigationBean investigationBean = (InvestigationBean)getBean("investigationBean");        
+        return investigationBean.datasets();
+        //return viewDataSets(investigations);
+        
     }
     
     //unclick all investigations
-    public String selectone(){
+    /*public String selectone(){
         log.trace("selecting for "+getNodePath().getIdentifier());
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         Investigation invest = getInvestigation(getNodePath().getIdentifier());
         investigations.add(invest);
         return viewDataSets(investigations);
-    }
+    }*/
     
-    //selection to load up all the data files and datasets from the list of investigations
-    public String viewDataSets(Collection<Investigation> investigations){
-        
-        
-        if(investigations.size() == 0 ){
-            info("Please select atleast one investigation.");
-            return null;
-        }
-        //canot display too many datsest, size of dowan too big for next page so limit
-        if(investigations.size() > WebConstants.MAXIMIUM_DATASET_RESULTS ){
-            warn("Please select less than "+WebConstants.MAXIMIUM_DATASET_RESULTS+" investigations to view.");
-            return null;
-        }
-        
-        
-        Collection<Dataset> datasets = null;
-        Collection<Datafile> datafiles = null;
-        
-        try{
-            QueryDelegate qd = QueryDelegate.getInstance();
-            log.debug("About to get datasets from: "+investigations.size());
-            for(Investigation invest :  investigations){
-                log.trace(invest);
-            }
-            
-           /* datasets = qd.getDataSets(getVisit().getSid(),investigations);
-            for(DataSet dataset : datasets){
-                log.trace(dataset);
-            }
-            log.debug("Got datasets, getting datafiles");
-            
-            datafiles = qd.getDataFiles(getVisit().getSid(), datasets);
-            log.debug("Got data files");
-            for(DataFile datafile : datafiles){
-                log.trace(datafile);
-            }*/
-            
-            //set all of the data is visit for next page
-            getVisitData().setCurrentInvestigations(investigations);
-            getVisitData().setCurrentDatasets(datasets);
-            getVisitData().setCurrentDatafiles(datafiles);
-                if(true) throw new DataPortalException();
-        } catch (DataPortalException ex) {
-            error("Error:  Unable to search the information for the investigations.");
-            log.fatal("Unable to create query user for: "+getVisit().getSid(),ex);
-            return null;
-        } catch (Exception ex) {
-            error("Error:  Unable to search the information for the investigations.");
-            log.fatal("exception : "+getVisit().getSid(),ex);
-            return null;
-        }
-        
-        return NavigationConstants.GET_DATASETS_SUCCESS;
-    }
+   
     
     public void setData(TreeNode data) {
         this.data = data;
     }
     
     //helper class that splits the param sent in to identify the current investigation
-    private Investigation getInvestigation(String param) {
+    /*private Investigation getInvestigation(String param) {
         String fac = param.split("-")[0];
         String id = param.split("-")[1];
-        
+     
         for(Investigation file : getVisitData().getCurrentInvestigations()){
             if(file.getId().equals(id)&& file.getFacility().getFacilityShortName().equals(fac)){
                 log.debug("Found invest: "+file);
@@ -275,7 +225,5 @@ public class InvestigationTree extends AbstractRequestBean {
             }
         }
         return null;
-    }
-    
-    
+    }*/
 }

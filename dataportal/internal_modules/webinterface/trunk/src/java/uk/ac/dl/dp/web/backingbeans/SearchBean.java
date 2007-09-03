@@ -197,9 +197,9 @@ public class SearchBean extends AbstractRequestBean {
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
             //set last query data
-            BasicSearchBean bsb = getVisitData().getBasicSearchBean();
+            BasicSearchHistoryBean bsb = getVisitData().getBasicSearchBean();
             bsb.setKeyword(getKeyword());
-            bsb.setSelectedFacilities(getFacilities());
+            bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
             bsb.setLikeExpression(getLikeExpression());
             bsb.setLogicalExpression(getLogicalExpression());
             
@@ -262,7 +262,7 @@ public class SearchBean extends AbstractRequestBean {
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
             //set last query data
-            BasicSearchBean bsb = getVisitData().getBasicSearchBean();
+            BasicSearchHistoryBean bsb = getVisitData().getBasicSearchBean();
             bsb.setKeyword(getKeyword());
             bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
             
@@ -273,7 +273,7 @@ public class SearchBean extends AbstractRequestBean {
             kqr.setKeywords(getKeywords());
             kqr.setStart_index(0);
             kqr.setMax_results(WebConstants.MAXIMIUM_RESULTS/4);
-             kqr.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
+            kqr.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
              
             query_request = qd.queryKeyword(getVisit().getSid(), kqr);
             getVisitData().setQueryRequest(query_request);
@@ -297,7 +297,7 @@ public class SearchBean extends AbstractRequestBean {
     /**
      * Mydata search makes the DP show a different message if no results
      */
-    private String getQueryResults(QueryRequest query_request, boolean  myData) {
+    public String getQueryResults(QueryRequest query_request, boolean  myData) {
         
         QueryDelegate qd = QueryDelegate.getInstance();
         
@@ -388,8 +388,7 @@ public class SearchBean extends AbstractRequestBean {
                 throw new ValidatorException(new FacesMessage("Validation Error", "Validation Error: Enter keyword."));
             }
         }
-    }
-    
+    }    
     
     //getters setters of page info
     public Collection<String> getKeywords() {
@@ -409,13 +408,13 @@ public class SearchBean extends AbstractRequestBean {
     }
            
     public String getLogicalExpression() {
-        log.trace("LogicalExpression: "+logicalExpression);
+        //log.trace("LogicalExpression: "+logicalExpression);        
         if(logicalExpression == null) return "AND";
         else return logicalExpression;
     }
     
     public void setLogicalExpression(String logicalExpression) {
-        log.trace("Setting loca expression: "+logicalExpression);
+        //log.trace("Setting loca expression: "+logicalExpression);
         this.logicalExpression = logicalExpression;
     }
     

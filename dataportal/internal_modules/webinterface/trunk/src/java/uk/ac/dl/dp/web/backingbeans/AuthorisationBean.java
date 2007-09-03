@@ -76,11 +76,11 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
      */
     public String login() throws SessionException{
         //first section, reload log4j
-        if(new File(System.getProperty("user.home")+File.separator+".log4j.xml").exists()){
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.xml");
+        if(new File(System.getProperty("user.home")+File.separator+".dp-web-log4j.xml").exists()){
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".dp-core-log4j.xml");
             //log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.xml");
         } else {
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.properties");
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".dp-web-log4j.properties");
             //log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.properties");
         }
         
@@ -106,7 +106,8 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             //error, user cannot be created in DB, fatal
             fatal("Database exception");
             log.fatal("Unable to create new user for: "+username,ex);
-            return NavigationConstants.LOGIN_ERROR;
+            //return NavigationConstants.LOGIN_ERROR;
+             return null;
         } catch (LoginMyProxyException ex) {
             //problem with either myproxy or user inserted wrong details.
             //LoginMyEx has be done so the the standard message returns a helpful message about the problem,
@@ -115,12 +116,14 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             if(ex.getType().toString().equals(LoginError.UNKNOWN.toString())){
                 log.error("Login error for: "+username+", type: "+ex.getType(),ex);
             } else log.warn("Login error for: "+username+", type: "+ex.getType(),ex);
-            return NavigationConstants.LOGIN_FAILURE;
+            //return NavigationConstants.LOGIN_FAILURE;
+             return null;
         } catch (SessionException ex) {
             //some sort of session error, this should not be thrown normally
             error(ex.getMessage());
             log.error("Session exception for sid "+sid,ex);
-            return NavigationConstants.LOGIN_ERROR;
+            //return NavigationConstants.LOGIN_ERROR;
+            return null;
         }
         
         //TODO remove
@@ -129,7 +132,8 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         if(!loggedIn){
             log.warn("User "+session.getDN()+" has no access to Data Portal");
             error("You have no access to the Data Portal");
-            return NavigationConstants.LOGIN_FAILURE;
+            //return NavigationConstants.LOGIN_FAILURE;
+             return null;
             
         }
         ////End of:  remove this////
@@ -140,18 +144,24 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
         //TODO this was used to sets the expire time of application to one min and not 2 hours!
         //To check against when the application timeout
         /*Calendar cal =  GregorianCalendar.getInstance();
-        cal.add(GregorianCalendar.MINUTE,1); 
+        cal.add(GregorianCalendar.MINUTE,1);
         session.setExpireTime(cal.getTime());*/
         
         visit.setSession(session);
         
         //logged in, return ok, return to default location
         DPDefaultLocation defaultLocation = session.getUserPrefs().getDefaultLocation();
-                
+        if(session.getFacilities().size() == 0){
+            log.warn("Unable to logon to any facilities");
+            error("Unable to log onto any facilties. Please try again later.");
+            return null;
+        }
         if(defaultLocation.toString().equals(DPDefaultLocation.BASIC_SEARCH.toString())){
             return NavigationConstants.LOGIN_SUCCESS;
         } else if(defaultLocation.toString().equals(DPDefaultLocation.BOOKMARKS.toString())){
             return NavigationConstants.LOGIN_SUCCESS_BOOKMARKS;
+        } else if(defaultLocation.toString().equals(DPDefaultLocation.ADVANCED_SEARCH.toString())){
+            return NavigationConstants.LOGIN_SUCCESS_ADVANCED;
         } else if(defaultLocation.toString().equals(DPDefaultLocation.DATA_REFERENCES.toString())){
             return NavigationConstants.LOGIN_SUCCESS_DATA_REFS;
         } else if(defaultLocation.toString().equals(DPDefaultLocation.MY_DATA.toString())){

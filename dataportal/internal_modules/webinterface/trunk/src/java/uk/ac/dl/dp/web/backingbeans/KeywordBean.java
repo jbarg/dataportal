@@ -18,7 +18,6 @@ import javax.faces.context.FacesContext;
 import com.sun.j2ee.blueprints.ui.autocomplete.AutoCompleteUtilities;
 import com.sun.j2ee.blueprints.ui.autocomplete.CompletionResult;
 import java.util.Collection;
-import uk.ac.dl.dp.web.backingbeans.ApplicationBean;
 import uk.ac.dl.dp.web.util.AbstractApplicationBean;
 import uk.ac.dl.dp.web.backingbeans.Visit;
 import javax.faces.event.ValueChangeEvent;

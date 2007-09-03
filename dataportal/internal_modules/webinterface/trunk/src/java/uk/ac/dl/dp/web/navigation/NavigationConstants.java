@@ -20,9 +20,10 @@ public class NavigationConstants {
     public final static String LOGIN_FAILURE = "LOGIN_FAILURE";
     public final static String LOGIN_ERROR = "LOGIN_ERROR";
     public final static String LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
-     public final static String LOGOUT_KERBEROS_SUCCESS = "LOGOUT_KERBEROS_SUCCESS";
+    public final static String LOGOUT_KERBEROS_SUCCESS = "LOGOUT_KERBEROS_SUCCESS";
     public final static String LOGIN_SUCCESS_MYDATA = "LOGIN_SUCCESS_MYDATA";
     public final static String LOGIN_SUCCESS_BOOKMARKS = "LOGIN_SUCCESS_BOOKMARKS";
+    public final static String LOGIN_SUCCESS_ADVANCED = "LOGIN_SUCCESS_ADVANCED";
     public final static String LOGIN_SUCCESS_DATA_REFS = "LOGIN_SUCCESS_DATA_REFS";
     
     //searching navs
@@ -46,6 +47,7 @@ public class NavigationConstants {
     public final static String VIEW_OTHER_BOOKMARKS = "VIEW_OTHER_BOOKMARKS";
     public final static String VIEW_OTHER_DATA_REFERENCES = "VIEW_OTHER_DATA_REFERENCES";
     public final static String GOTO_BASIC_SEARCH = "GOTO_BASIC_SEARCH";
+    public final static String GOTO_ADVANCED_SEARCH = "GOTO_ADVANCED_SEARCH";
     public final static String GOTO_DATA_AUTH = "GOTO_DATA_AUTH";
     public final static String GIVE_DATA_AUTH = "GIVE_DATA_AUTH";
     
