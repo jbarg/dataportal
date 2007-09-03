@@ -21,6 +21,7 @@ import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
+import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
@@ -60,32 +61,34 @@ public class AdvancedSearchBean extends AbstractRequestBean {
      */
     private String grantId;
     
-     /**
+    /**
      * Investigation name
      */
     private String invName;
     
-     /**
+    /**
      * Investigation abstract
      */
     private String invAbstract;
     
-     /**
+    /**
      * Investigation instrument
      */
     private String instrument;
+    private List<String> instruments;
     
-     /**
+    /**
      * Investigation sample
      */
     private String sample;
     
-     /**
+    /**
      * Investigation investigators
      */
-    private String investigators;
-
-    private Collection<String> keywords;
+    private String investigator;
+    private List<String> investigators;
+    
+    private List<String> keywords;
     private List<String> facilities ;
     
     //default to EXACT
@@ -100,7 +103,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
      * Splits it into an array of keywords by ' ' and trims
      */
     public void setKeyword(String keyword){
-        Collection<String> keywords = new ArrayList<String>();
+        List<String> keywords = new ArrayList<String>();
         //if not emat, split, if then put into one collection size
         if(!getVisit().isCurrentFacilitysTopics()){
             String[] keys = keyword.split(" ");
@@ -121,6 +124,14 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         return keyword;
     }
     
+    
+    /**
+     * Action method to do basic search for navigation bar
+     */
+    public String searchAdvancedNavigation() {
+        return searchAdvanced();
+    }
+    
     /**
      * Action method to do basic search
      */
@@ -136,18 +147,49 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
+            
+            boolean fuzzy = false;
+            if(getLikeExpression().equals("LIKE")) fuzzy = true;
+            
+            //set hisotry bean
+            AdvancedSearchHistoryBean advancedSearchHistoryBean = getVisitData().getAdvancedSearchBean();
+            advancedSearchHistoryBean.setInvNumber(getInvNumber());
+            advancedSearchHistoryBean.setKeyword(getKeyword());
+            advancedSearchHistoryBean.setInstrument(getInstrument());
+            advancedSearchHistoryBean.setSample(getSample());
+            advancedSearchHistoryBean.setVisitId(getVisitId());            
+            advancedSearchHistoryBean.setGrantId(getGrantId());
+            advancedSearchHistoryBean.setInvAbstract(getInvAbstract());
+            advancedSearchHistoryBean.setInvType(getInvType());
+            advancedSearchHistoryBean.setInvestigator(getInvestigator());
+            advancedSearchHistoryBean.setLikeExpression(getLikeExpression());
+            advancedSearchHistoryBean.setInvName(getInvName());
+            advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
+            
             //create advanced search bean
-            AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO;
+            AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO();
+            asdDTO.setExperimentNumber(getInvNumber());
+            asdDTO.setKeywords(getKeywords());
+            if(getGrantId() != null) asdDTO.setGrantId(new Long(getGrantId()));
+            asdDTO.setVisitId(getVisitId());
+            asdDTO.setSampleName(getSample());
+            asdDTO.setInvestigators(getInvestigators());
+            asdDTO.setInstruments(getInstruments());
+            asdDTO.setInvestigationAbstract(getInvAbstract());
+            asdDTO.setInvestigationName(getInvName());
+            asdDTO.setInvestigationType(getInvType());
+            asdDTO.setFuzzy(fuzzy);
+            asdDTO.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
             
             //check if the information passed is valid, if not, show the error message
             try{
-            asdDTO.isValid();
-            }catch(IllegalArgumentException iae){
+                asdDTO.isValid();
+            } catch(IllegalStateException iae){
                 error(iae.getMessage());
                 return null;
             }
             
-            query_request = qd.qAdvancedSearchBean(getVisit().getSid(), asdDTO);
+            query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -165,7 +207,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         
         //wait for results.
         SearchBean searchBean = (SearchBean)getBean("searchBean");
-        return searchBean.getQueryResults(query_request, true);
+        return searchBean.getQueryResults(query_request, false);
     }
     
     
@@ -185,11 +227,11 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     
     
     //getters setters of page info
-    public Collection<String> getKeywords() {
+    public List<String> getKeywords() {
         return keywords;
     }
     
-    public void setKeywords(Collection<String> keywords) {
+    public void setKeywords(List<String> keywords) {
         this.keywords = keywords;
     }
     
@@ -210,76 +252,119 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         this.likeExpression = likeExpression;
     }
     
-    
     public String getInvNumber() {
-        return invNumber;
+        if(invNumber == null || invNumber.equals("")) return null;
+        else return invNumber;
     }
-
+    
     public void setInvNumber(String invNumber) {
         this.invNumber = invNumber;
     }
-
+    
     public String getInvType() {
-        return invType;
+        if(invType == null || invType.equals("")) return null;
+        else return invType;
     }
-
+    
     public void setInvType(String invType) {
         this.invType = invType;
     }
-
+    
     public String getVisitId() {
-        return visitId;
+        if(visitId == null || visitId.equals("")) return null;
+        else return visitId;
     }
-
+    
     public void setVisitId(String visitId) {
         this.visitId = visitId;
     }
-
+    
     public String getGrantId() {
-        return grantId;
+        if(grantId == null || grantId.equals("")) return null;
+        else return grantId;
     }
-
+    
     public void setGrantId(String grantId) {
         this.grantId = grantId;
     }
-
+    
     public String getInvName() {
-        return invName;
+        if(invName == null || invName.equals("")) return null;
+        else return invName;
     }
-
+    
     public void setInvName(String invName) {
         this.invName = invName;
     }
-
+    
     public String getInvAbstract() {
-        return invAbstract;
+        if(invAbstract == null || invAbstract.equals("")) return null;
+        else return invAbstract;
     }
-
+    
     public void setInvAbstract(String invAbstract) {
         this.invAbstract = invAbstract;
     }
-
+    
     public String getInstrument() {
         return instrument;
     }
-
+    
     public void setInstrument(String instrument) {
         this.instrument = instrument;
+        if(instrument.equals("")) {
+            this.instrument = null;
+        } else{
+            List<String> instruments = new ArrayList<String>();
+            instruments.add(instrument);
+            this.setInstruments(instruments);
+        }
+        //  log.trace("Instrument is "+instrument);
+        //log.trace("Instruments is "+instruments);
     }
-
+    
+    public List<String> getInstruments() {
+        return instruments;
+    }
+    
+    public void setInstruments(List<String> instruments) {
+        this.instruments = instruments;
+    }
+    
     public String getSample() {
-        return sample;
+        if(sample == null || sample.equals("")) return null;
+        else return sample;
     }
-
+    
     public void setSample(String sample) {
         this.sample = sample;
     }
-
-    public String getInvestigators() {
+    
+    public String getInvestigator() {
+        return investigator;
+    }
+    
+    public void setInvestigator(String investigator) {
+        // log.trace("Investigator : "+investigator);
+        this.investigator = investigator;
+        if(investigator.equals("")) {
+            this.investigators = null;
+        } else{
+            String[] investigatorsSplit = this.investigator.split(" ");
+            List<String> newInvestigators = new ArrayList<String>();
+            for(String k : investigatorsSplit){
+                if(!k.trim().equals("")) newInvestigators.add(k.trim());
+            }
+            this.setInvestigators(newInvestigators);
+        }
+        //  log.trace("Investigators : "+investigators);
+    }
+    
+    public List<String> getInvestigators() {
         return investigators;
     }
-
-    public void setInvestigators(String investigators) {
+    
+    public void setInvestigators(List<String> investigators) {
         this.investigators = investigators;
-    }    
+    }
 }

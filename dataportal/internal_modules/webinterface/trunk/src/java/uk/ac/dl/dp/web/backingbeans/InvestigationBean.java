@@ -31,6 +31,7 @@ import uk.ac.dl.dp.web.util.WebConstants;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.InvestigationInclude;
 import uk.ac.dp.icatws.Keyword;
 
 /**
@@ -41,12 +42,9 @@ public class InvestigationBean extends SortableList {
     
     private static Logger log = Logger.getLogger(InvestigationBean.class);
     
-    
     private  HtmlDataTable table;
     private List<Investigation> investigations;
     private boolean expanded = false;
-    private boolean finished;
-    private boolean keywordDone = false;
     
     public InvestigationBean(){
         super("name");
@@ -64,7 +62,9 @@ public class InvestigationBean extends SortableList {
         return true;
     }
     
-    //data for the table to show, data already got from search bean
+    /**
+     * data for the table to show, data already got from search bean
+     */
     public List<Investigation> getInvestigations() {
         sort(getSort(), isAscending());
         return (List<Investigation>)getVisitData().getSearchedInvestigations();
@@ -93,36 +93,36 @@ public class InvestigationBean extends SortableList {
                             .compareTo(c1.getFacility().getFacilityShortName());
                     
                 } else if (column.equals("name")) {
-                    if(c1.getTitle() == null) return 0;
+                    if(c1.getTitle() == null|| c2.getTitle()  == null) return 0;
                     else return ascending ? c1.getTitle().compareTo(c2.getTitle()) : c2.getTitle()
                             .compareTo(c1.getTitle());
                 } else if (column.equals("grantId")) {
-                    if(c1.getGrantId() == null) return 0;
+                    if(c1.getGrantId() == null || c2.getGrantId() == null ) return 0;
                     else return ascending ? c1.getGrantId().compareTo(c2.getGrantId()) : c2.getGrantId()
                             .compareTo(c1.getGrantId());
                 } else if (column.equals("releaseDate")) {
-                    if(c1.getReleaseDate() == null) return 0;
+                    if(c1.getReleaseDate() == null || c2.getReleaseDate() == null) return 0;
                     else return ascending ? c1.getReleaseDate().toGregorianCalendar().compareTo(c2.getReleaseDate().toGregorianCalendar()) : c2.getReleaseDate().toGregorianCalendar()
                             .compareTo(c1.getReleaseDate().toGregorianCalendar());
                 } else if (column.equals("facilityCycle")) {
-                    if(c1.getFacilityCycle() == null) return 0;
+                    if(c1.getFacilityCycle() == null || c2.getFacilityCycle() == null) return 0;
                     else return ascending ? c1.getFacilityCycle().getName().compareTo(c2.getFacilityCycle().getName()) : c2.getFacilityCycle().getName()
                             .compareTo(c1.getFacilityCycle().getName());
                 } else if (column.equals("invNumber")) {
-                    if(c1.getInvNumber() == null) return 0;
+                    if(c1.getInvNumber() == null || c2.getInvNumber() == null) return 0;
                     else return ascending ? c1.getInvNumber().compareTo(c2.getInvNumber()) : c2.getInvNumber()
                             .compareTo(c1.getInvNumber());
                 } else if (column.equals("visitId")) {
-                    if(c1.getVisitId() == null) return 0;
+                    if(c1.getVisitId() == null || c2.getVisitId()  == null) return 0;
                     else return ascending ? c1.getVisitId().compareTo(c2.getVisitId()) : c2.getVisitId()
                             .compareTo(c1.getVisitId());
                 } else if (column.equals("invType")) {
-                    if(c1.getInvType() == null) return 0;
+                    if(c1.getInvType() == null || c2.getInvType() == null) return 0;
                     else return ascending ? c1.getInvType().getName().compareTo(c2.getInvType().getName()) : c2.getInvType().getName()
                             .compareTo(c1.getInvType().getName());
                 } else if (column.equals("abstract")) {
                     //if no abstract put it behind it
-                    if(c1.getInvAbstract() == null) return 1;
+                    if(c1.getInvAbstract() == null || c2.getInvAbstract() == null) return 0;
                     else return ascending ? c1.getInvAbstract().compareTo(c2.getInvAbstract()) : c2.getInvAbstract()
                             .compareTo(c1.getInvAbstract());
                 } else if (column.equals("type")) {
@@ -165,25 +165,29 @@ public class InvestigationBean extends SortableList {
         }
     }*/
     
-    //This listens to changes in the users isSelected using Ajax.  This is because the list could be
-    //larger than one page so have to do it this way
+    /**
+     * This listens to changes in the users isSelected using Ajax.  This is because the list could be
+     * larger than one page so have to do it this way
+     * This selects an investigation from the investigations page and marks it as selected
+     */
     public void listenAjax(ActionEvent e){
         log.debug("value change action ajax event");
         Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
         
-        Investigation d = (Investigation)table.getRowData();
-        
-        
+        Investigation investigation = (Investigation)table.getRowData();
+                
         for(Investigation invest : investigations){
-            if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
+            if(invest.getId().equals(investigation.getId()) && invest.getFacility().getFacilityShortName().equals(investigation.getFacility().getFacilityShortName())) {
                 invest.setSelected(!invest.isSelected());
                 log.trace("setting " +invest.isSelected()+" for "+invest.getId());
             }
         }
     }
     
-    //listens for sort column action events, and gets the column by thge param name passed in
-    // then calls sort on the column
+    /**
+     * Listens for sort column action events, and gets the column by thge param name passed in
+     * then calls sort on the column
+     */
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -205,49 +209,10 @@ public class InvestigationBean extends SortableList {
         getTable().collapseAllDetails();
     }
     
-    //method is polled to check if all results found
-   /* public void checkSearchComplete(ActionEvent event) throws SessionException{
     
-        Collection<String> facs2 = QueryDelegate.getInstance().getCompleted( getSearchData().getQueryRequest());
-        for(String fac : facs2){
-            log.trace("Completed: "+fac);
-        }
-    
-        //TODO put max wait in DB
-        //if more than max wait and not finished
-        if(((getSearchData().getStartQueryTime().getTime() -  new Date().getTime())/1000) > WebConstants.MAXIMIUM_SEARCH_TIME) {
-            //if nothing returned display message to user, otherwise show results (break loop)
-            //TODO tell user timeout occured
-            info("Timed out sesrch after "+WebConstants.MAXIMIUM_SEARCH_TIME+" seconds.");
-        }
-    
-        Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults(getSearchData().getQueryRequest());
-        //remember selection from user
-        for(Investigation currentInvest : getVisitData().getSearchedInvestigations()){
-            if(currentInvest.isSelected()){
-                for(Investigation invest : investigations){
-                    if(invest.getId().equals(currentInvest.getId())){
-                        invest.setSelected(true);
-                    }
-                }
-            }
-        }
-    
-        getVisitData().setSearchedInvestigations(investigations);
-        if(getSearchData().isFinished()){
-            finished = true;
-        }
-    
-    
-    }*/
-    
-    public boolean isFinished(){
-        //
-        return finished;
-    }
-    
-    
-    //method to select all data
+    /**
+     * method to select all data
+     */
     public String selectall(){
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             invest.setSelected(true);
@@ -255,7 +220,9 @@ public class InvestigationBean extends SortableList {
         return null;
     }
     
-    //method to select no data
+    /**
+     * method to select no data
+     */
     public String selectnone(){
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
             invest.setSelected(false);
@@ -263,7 +230,9 @@ public class InvestigationBean extends SortableList {
         return null;
     }
     
-    //exapnds all the abstracts
+    /**
+     * exapnds all the abstracts
+     */
     public void expandAll(ActionEvent event){
         
         log.debug("Expanding");
@@ -272,7 +241,9 @@ public class InvestigationBean extends SortableList {
         
     }
     
-    // collapses all the abstracts
+    /**
+     * collapses all the abstracts
+     */
     public void collapseAll(ActionEvent event){
         log.debug("Collapsing");
         getTable().collapseAllDetails();
@@ -280,22 +251,27 @@ public class InvestigationBean extends SortableList {
         
     }
     
-    //select none the investigations
+    /**
+     * select none the investigations
+     */
     public void selectNone(ActionEvent event){
         selectnone();
         getVisitData().setInvestigationsSelected(false);
         log.trace("Setect selected false");
     }
     
-    //select all the investigations
+    /**
+     * select all the investigations
+     */
     public void selectAll(ActionEvent event){
         selectall();
         getVisitData().setInvestigationsSelected(true);
         log.trace("Setect selected true");
-        
-        
     }
     
+    /**
+     * when user clicks on the investigation hyperlink on the investigations page
+     */
     public String viewSingleInvestigation(){
         log.trace("Selecting single investigation");
         Investigation singleInvestigation = (Investigation)table.getRowData();
@@ -308,7 +284,9 @@ public class InvestigationBean extends SortableList {
         return datasets();
     }
     
-    //view selected datasets
+    /**
+     * view all selected datasets, need to get the dataset and datafile information from core
+     */
     public String datasets(){
         //check which ones are checked, add to arraylist and then send to EJBS
         Collection<Investigation> investigations = new ArrayList<Investigation>();
@@ -333,33 +311,19 @@ public class InvestigationBean extends SortableList {
             info("Please select less than "+WebConstants.MAXIMIUM_DATASET_RESULTS+" investigations to view.");
             return null;
         }
-        
-        Collection<Dataset> datasets = null;
-        Collection<Datafile> datafiles = null;
-        
+                      
         try{
             QueryDelegate qd = QueryDelegate.getInstance();
-            log.debug("About to get datasets from: "+investigations.size());
+            log.debug("About to get datasets and datafiles from: "+investigations.size());
             
-            // datasets = qd.getDataSets(getVisit().getSid(),investigations);
-            log.debug("Got datasets, getting datafiles, size: "+datasets.size());
-            
-            //datafiles = qd.getDataFiles(getVisit().getSid(), datasets);
-            log.debug("Got data files, size: "+datafiles.size());
-            
-            //TODO remove, print out all datafiles
-            for(Datafile file : datafiles){
-                log.trace(file.getName()+" "+file.getId());
-            }
+            Collection<Investigation> investigationsDatasetsFiles = qd.getInvestigations(getVisit().getSid(),investigations, InvestigationInclude.DATASETS_AND_DATAFILES);
+            log.debug("Got datasets and datafiles, size: "+investigations.size());
             
             //add all the data to the visit
-            getVisitData().setCurrentInvestigations(investigations);
-            getVisitData().setCurrentDatasets(datasets);
-            getVisitData().setCurrentDatafiles(datafiles);
+            getVisitData().setCurrentInvestigations(investigationsDatasetsFiles);
             
             //reset tree so it loads it again
             getVisitData().setDataSetTree(null);
-            if(true) throw new DataPortalException();
         } catch (DataPortalException ex) {
             error("Error: Unable to gets Data Sets.");
             log.fatal("Unable to create query user for: "+getVisit().getSid(),ex);
@@ -372,85 +336,6 @@ public class InvestigationBean extends SortableList {
         return NavigationConstants.GET_DATASETS_SUCCESS;
     }
     
-    public void getKeywordsForInvestigations(ActionEvent event){
-        
-        
-        if(isKeywordDone()){
-            log.trace("Already done keyword investigation search");
-            return ;
-        }
-        
-        //set keyword done
-        setKeywordDone(true);
-        
-        //check if already done search  on vist data
-        Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
-        
-        outerLoop: for(Investigation investigation : investigations){
-            Collection<Keyword> keywords = investigation.getKeywordCollection();
-            if(keywords != null ){
-                for(Keyword keyword : keywords){
-                    if(keyword.getKeywordPK().getName().equals("Initialising keywords")){
-                        break outerLoop;
-                    } else {
-                        setKeywordDone(true);
-                        // log.trace("These investigations have already got keywords");
-                        return ;
-                    }
-                }
-            }
-        }
-        
-        log.debug("getKeywordsForInvestigations()");
-        
-        
-        Collection<Keyword> keywords = null;
-      /* try{
-            keywords = QueryDelegate.getInstance().getKeywordsByInvestigationId(getVisit().getSid(),investigations);
-       
-            for(Investigation investigation : investigations){
-                for(Keyword keyword : keywords){
-                    if(investigation.getId().equals(keyword.getInvestigationId())){
-                        log.trace("Adding keyword "+keyword+" to investigation "+investigation.getId());
-                        if(investigation.getKeywords().contains("Initialising keywords")){
-                            log.trace("Resetting keywords for "+investigation.getId());
-                            investigation.reset();
-                        }
-                        investigation.addKeyword(keyword.getName());
-       
-                        //check if more than 25 keywords returned
-                        //if so add more.. tag and stop.
-                        //TODO fine a way of displaying all keywords, ISIS, some have more than 3000
-                        //diamond about 12
-                        if(investigation.getKeywords().size() > 24){
-                            log.trace("More than 24 keywords");
-                            investigation.addKeyword("more ...");
-                            break;
-                        }
-                    }
-       
-       
-                }
-            }
-       
-        } catch (DataPortalException ex) {
-            for(Investigation investigation : investigations){
-                investigation.reset();
-                investigation.addKeyword("Unable to initialise keywords.");
-            }
-            // error("Error: Unable to gets Data Sets.");
-            log.error("Unable to search for investigation keywords",ex);
-        } catch (Exception ex) {
-            for(Investigation investigation : investigations){
-                investigation.reset();
-                investigation.addKeyword("Unable to initialise keywords.");
-            }
-            //error("Error: Unexpected error getting Data Sets.");
-            log.error("Unable to search for investigation keywords",ex);
-        }
-       */
-        
-    }
     
     public boolean isExpanded() {
         return expanded;
@@ -471,7 +356,7 @@ public class InvestigationBean extends SortableList {
         else return false;
     }
     
-    /****
+    /**
      * These test wheather the columns on the investigaion.jsp page are sorted or not to show
      * if the up or down arrow is displayed next to the column
      */
@@ -582,14 +467,5 @@ public class InvestigationBean extends SortableList {
      * END OF :These test wheather the columns on the investigaion.jsp page are sorted or not to show
      * if the up or down arrow is displayed next to the column
      */
-    
-    
-    public boolean isKeywordDone() {
-        return keywordDone;
-    }
-    
-    public void setKeywordDone(boolean keywordDone) {
-        this.keywordDone = keywordDone;
-    }
     
 }

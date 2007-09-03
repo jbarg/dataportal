@@ -40,12 +40,15 @@ public class NavigationMenu {
         NavigationMenuItem main = getMenuNaviagtionItem("Main", null);
         menu.add(main);
         main.add(getMenuNaviagtionItem("Basic Search", "GOTO_BASIC_SEARCH"));
-        
-        NavigationMenuItem advanced = getMenuNaviagtionItem("My Data Search", "#{searchBean.searchOwnDataAll}");
-        advanced.setOpen(true);
-        
+                
+        NavigationMenuItem advanced = getMenuNaviagtionItem("Advanced Search", "GOTO_ADVANCED_SEARCH");
+        advanced.setOpen(true);        
         main.add(advanced);
         
+        NavigationMenuItem searchMyData = getMenuNaviagtionItem("My Data Search", "#{searchBean.searchOwnDataAll}");
+        searchMyData.setOpen(true);        
+        main.add(searchMyData);
+                       
         NavigationMenuItem nullm = getMenuNaviagtionItem("", null);
         menu.add(nullm);
         

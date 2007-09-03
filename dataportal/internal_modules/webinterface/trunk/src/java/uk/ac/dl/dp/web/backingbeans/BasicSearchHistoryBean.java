@@ -10,15 +10,16 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.util.List;
+import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author gjd37
  */
-public class BasicSearchBean {
+public class BasicSearchHistoryBean {
     
-    private static Logger log = Logger.getLogger(BasicSearchBean.class);
+    private static Logger log = Logger.getLogger(BasicSearchHistoryBean.class);
     
     private String keyword ;
     private List<String> selectedFacilities;
@@ -29,7 +30,7 @@ public class BasicSearchBean {
     private String likeExpression = "EXACT";
     
     /** Creates a new instance of BasicSearchBean */
-    public BasicSearchBean() {
+    public BasicSearchHistoryBean() {
     }
     
     public String getKeyword() {
