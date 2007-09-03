@@ -71,9 +71,9 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     </managed-bean>
     
     <managed-bean>
-        <managed-bean-name>ApplicationBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ApplicationBean</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>       
+        <managed-bean-name>advancedSearchBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.AdvancedSearchBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>       
     </managed-bean>
     
     <managed-bean>
@@ -214,6 +214,12 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
         </navigation-case>  
         
         <navigation-case>
+            <from-outcome>LOGIN_SUCCESS_ADVANCED</from-outcome>
+            <to-view-id>/protected/advanced_search.jsp</to-view-id>
+            <redirect />            
+        </navigation-case>  
+        
+        <navigation-case>
             <from-outcome>LOGIN_SUCCESS_MYDATA</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
             <redirect />            
@@ -256,7 +262,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
         <description>
             The search was success for investigations, now show then in the investigations page
         </description>
-        <from-view-id>/protected/basic_search.jsp</from-view-id>
+        <from-view-id>/protected/advanced_search.jsp</from-view-id>
         <!--
         Not used, was going to put a progrss bar on the search, will do if searchs are getting long
         <navigation-case>
@@ -440,6 +446,11 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
         <navigation-case>
             <from-outcome>GOTO_BASIC_SEARCH</from-outcome>
             <to-view-id>/protected/basic_search.jsp</to-view-id>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>GOTO_ADVANCED_SEARCH</from-outcome>
+            <to-view-id>/protected/advanced_search.jsp</to-view-id>
         </navigation-case>
         
         <navigation-case>
