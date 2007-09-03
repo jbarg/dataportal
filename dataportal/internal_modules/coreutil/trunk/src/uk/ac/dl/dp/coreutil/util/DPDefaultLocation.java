@@ -18,7 +18,7 @@ public enum DPDefaultLocation {
     MY_DATA("MY_DATA"),
     ADVANCED_SEARCH("ADVANCED_SEARCH"),
     DATA_REFERENCES("DATA_REFERENCES"),
-    BOOKMARKS("BOOKMARKS"),
+    BOOKMARKS("BOOKMARKS"),   
     BASIC_SEARCH("BASIC_SEARCH");
     
     DPDefaultLocation(String value) {

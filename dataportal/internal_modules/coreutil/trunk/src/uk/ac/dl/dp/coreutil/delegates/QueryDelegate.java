@@ -10,6 +10,7 @@ import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.QueryRemote;
+import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
@@ -54,10 +55,14 @@ public class QueryDelegate {
         return qsmr.queryByKeyword(sid, kqr);
     }
     
-     public QueryRequest queryMyData(String sid,  HashSet<String> facilities) throws   SessionException, QueryException{
+    public QueryRequest queryMyData(String sid,  HashSet<String> facilities) throws   SessionException, QueryException{
         return qsmr.queryMydata(sid, facilities);
     }
-         
+    
+    public QueryRequest queryAdvanced(String sid,  AdvancedSearchDetailsDTO advancedSearchDetailsDTO, HashSet<String> facilities) throws   SessionException, QueryException{
+        return qsmr.queryAdvanced(sid, advancedSearchDetailsDTO, facilities);
+    }
+    
     public boolean isFinished(QueryRequest query_request) throws SessionException{
         return qsmr.isFinished(query_request);
     }
@@ -80,12 +85,12 @@ public class QueryDelegate {
     
     public Collection<QueryRecordDTO> getCurrentResults(String sid) throws SessionException{
         return qsmr.getCurrentResults(sid);
-    } 
-       
+    }
+    
     public Collection<Investigation> getInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude includes) throws SessionException,QueryException{
         return qsmr.getInvestigations(sid, investigations, includes);
     }
-           
+    
     public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO query_dto) throws SessionException{
         return qsmr.getPastQueryResults(sid, query_dto);
     }
@@ -93,5 +98,5 @@ public class QueryDelegate {
     public HashMap<String, Collection<String>> getKeywords(String sessionId) throws SessionException, QueryException {
         return qsmr.getKeywords(sessionId, false);
         
-    }    
+    }
 }

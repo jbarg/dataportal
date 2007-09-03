@@ -9,6 +9,7 @@
 
 package uk.ac.dl.dp.coreutil.util;
 
+import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;

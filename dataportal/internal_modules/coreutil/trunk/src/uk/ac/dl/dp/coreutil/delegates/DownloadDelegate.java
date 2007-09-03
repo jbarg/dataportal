@@ -46,9 +46,6 @@ public class DownloadDelegate {
      }
      
      public boolean isSet(){
-         return ds.isSet();
-         
-     }
-    
-    
+         return ds.isSet();         
+     }        
 }
