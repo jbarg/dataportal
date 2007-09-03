@@ -9,6 +9,7 @@ import uk.ac.dl.dp.coreutil.clients.dto.QueryRecordDTO;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
+import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.Investigation;
@@ -23,7 +24,7 @@ public interface QueryLocal {
     
     public QueryRequest queryMydata(String sid, HashSet<String> facilities) throws SessionException, QueryException;
     
-    public QueryRequest queryAdvanced(String sid, AdvancedSearchDetails AdvancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException;
+    public QueryRequest queryAdvanced(String sid, AdvancedSearchDetailsDTO AdvancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException;
    
     public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
   

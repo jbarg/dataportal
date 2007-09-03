@@ -11,6 +11,8 @@ import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
+import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
+import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
 
@@ -19,9 +21,13 @@ import uk.ac.dp.icatws.InvestigationInclude;
  */
 @Remote
 public interface QueryRemote {
-     public QueryRequest queryByKeyword(String sid, KeywordQueryRequest kqr) throws QueryException, SessionException;
+    public QueryRequest queryByKeyword(String sid, KeywordQueryRequest kqr) throws QueryException, SessionException;
     
     public QueryRequest queryMydata(String sid, HashSet<String> facilities) throws SessionException, QueryException;
+    
+    public QueryRequest queryAdvanced(String sid, AdvancedSearchDetailsDTO AdvancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException;
+    
+    public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
     
     public boolean isFinished(QueryRequest request) throws SessionException;
     
@@ -32,7 +38,7 @@ public interface QueryRemote {
     public Collection<String> getCompleted(QueryRequest request) throws SessionException;
     
     public Collection<Investigation> getInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
-   
+    
     public Collection<QueryRecordDTO> getCurrentResults(String sid) throws SessionException;
     
     public Collection<Investigation> getPastQueryResults(String sid, String queryid) throws SessionException;

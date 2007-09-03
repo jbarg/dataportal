@@ -7,14 +7,12 @@
  * and open the template in the editor.
  */
 
-package uk.ac.dl.dp.coreutil.util;
+package uk.ac.dl.dp.coreutil.clients.dto;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
@@ -252,6 +250,123 @@ public class AdvancedSearchDetailsDTO implements Serializable {
     public AdvancedSearchDetailsDTO() {
     }
     
+    public boolean hasOtherParameters(){
+        if(investigators != null && investigators.size() != 0) return true;
+        if(keywords != null && keywords.size() != 0) return true;
+        if(sampleName != null) return true;
+        if(datafileName != null) return true;
+        if(runEnd != null || runStart != null) return true;
+        else return false;
+    }
+    
+    public boolean hasInstruments(){
+        if(getInstruments() != null && getInstruments().size() != 0) return true;
+        else return false;
+    }
+    
+    public boolean hasInvestigators(){
+        if(getInvestigators() != null && getInvestigators().size() != 0)return true;
+        else return false;
+    }
+    
+    public boolean hasKeywords(){
+        if(getKeywords() != null && getKeywords().size() != 0) return true;
+        else return false;
+    }
+    
+    public boolean hasAbstract(){
+        if(investigationAbstract != null && investigationAbstract.length() != 0) return true;
+        else return false;
+    }
+    
+    public boolean hasRunNumber(){
+        if(runEnd == null && runStart == null) return false;
+        else if(runEnd != null && runEnd != 0.0) return true;
+        else if(runStart != null && runStart != 0.0) return true;
+        else return false;
+    }
+    
+    public boolean hasSample(){
+        if(sampleName != null && getSampleName().length() != 0) return true;
+        else return false;
+    }
+    
+  /*  public boolean hasDataFileParameters(){
+        if(dateRangeEnd != null || dateRangeStart != null || datafileName != null) return true;
+        else return false;
+    }*/
+    
+    public boolean hasInvestigationParameters(){
+        if(grantId  != null || backCatalogueInvestigatorString != null || experimentNumber != null ||
+                investigationAbstract != null || investigationName != null ||
+                investigationType != null || visitId != null) return true;
+        else return false;
+        
+    }
+    
+    private boolean checkArguements(){
+        //get public, private, protected, package fields in class, but not inherited ones.
+        Field[] allFields = this.getClass().getDeclaredFields();
+        log.trace("Checking validity of "+getClass().getSimpleName());
+        
+        boolean passed = false;
+        
+        for (int i = 0; i < allFields.length; i++) {
+            //get name of field
+            String fieldName = allFields[i].getName();
+                       
+            //check max value now of strings
+            try {
+                //get value
+                Object result = getProperty(fieldName, this);
+                if(result != null) passed = true;
+            } catch (Exception ex) {
+                log.warn(getClass().getSimpleName()+": "+fieldName+" cannot be accessed.",ex);
+            }            
+        }
+        if(!passed) throw new IllegalStateException("Atleast one field needs to be filled in");
+        return true;
+    }
+    
+     /**
+     * Gets the value of the field from a passed in object using reflection
+     *
+     * @param name name of the field in the from object
+     * @param from object wanting to get the bean property value from
+     * @throws java.lang.NoSuchMethodException error
+     * @throws java.lang.IllegalAccessException error
+     * @throws java.lang.reflect.InvocationTargetException error
+     * @throws java.lang.NoSuchFieldException error
+     * @return object value of the field name
+     */
+    @SuppressWarnings("all")
+    private Object getProperty(String name, Object from) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
+        String prop = Character.toUpperCase(name.charAt(0)) +
+                name.substring(1);
+        String mname = "get" + prop;
+        
+        Class[] types = new Class[]{};
+        Method method = from.getClass().getMethod(mname, types);
+        Object result = method.invoke(from, (Object[])types);
+        
+        return result;
+    }
+    
+    public boolean isValid(){
+        checkArguements();
+        if(hasRunNumber()){
+            //so they have set run number, check something on investigation is set)
+            if(hasInvestigationParameters() || getDatafileName() != null || hasInstruments()) return true;
+            else throw new IllegalStateException("Must search investigation information, instruments or datafile name if searching with run numbers");
+        }/* else if(dateRangeEnd != null || dateRangeStart != null){
+            //got to here run number is not set to check all others
+            if(hasInvestigationParameters() || getDatafileName() != null || hasInstruments() ||
+                    hasSample()) return true;
+            else throw new IllegalStateException("Must search investigation information, instruments, sample name or datafile name if searching with datafile date ranges");
+        }*/ else return true;
+        
+    }
+    
     /**
      * From object goes to this
      */
@@ -347,8 +462,8 @@ public class AdvancedSearchDetailsDTO implements Serializable {
         
         if(toThis) {
             Object result = method.invoke(from, (Object[])types);
-            if(toThis){            
-            log.trace("Swapping to: "+name+", setting to: "+result);
+            if(toThis){
+                log.trace("Swapping to: "+name+", setting to: "+result);
             } else  log.trace("Swapping from: "+name+", setting to: "+result);
             
             mname = "set" + prop;
@@ -358,8 +473,8 @@ public class AdvancedSearchDetailsDTO implements Serializable {
         } else if(!method.getReturnType().toString().equals(List.class.toString())){
             Object result = method.invoke(from, (Object[])types);
             
-           if(toThis){            
-            log.trace("Swapping to: "+name+", setting to: "+result);
+            if(toThis){
+                log.trace("Swapping to: "+name+", setting to: "+result);
             } else  log.trace("Swapping from: "+name+", setting to: "+result);
             
             mname = "set" + prop;
