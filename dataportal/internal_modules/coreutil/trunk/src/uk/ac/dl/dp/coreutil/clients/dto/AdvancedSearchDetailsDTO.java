@@ -96,11 +96,11 @@ public class AdvancedSearchDetailsDTO implements Serializable {
     /**
      * InvestigationInclude in the data returned. {@link InvestigationInclude}
      */
-    private InvestigationInclude investigationInclude;
+    private InvestigationInclude investigationInclude = InvestigationInclude.NONE;
     /**
      *
      */
-    private boolean fuzzy = true;
+    private boolean fuzzy = false;
     
     public String getInvestigationName() {
         return investigationName;
@@ -299,7 +299,7 @@ public class AdvancedSearchDetailsDTO implements Serializable {
     public boolean hasInvestigationParameters(){
         if(grantId  != null || backCatalogueInvestigatorString != null || experimentNumber != null ||
                 investigationAbstract != null || investigationName != null ||
-                investigationType != null || visitId != null) return true;
+                investigationType != null || visitId != null ) return true;
         else return false;
         
     }
@@ -314,21 +314,22 @@ public class AdvancedSearchDetailsDTO implements Serializable {
         for (int i = 0; i < allFields.length; i++) {
             //get name of field
             String fieldName = allFields[i].getName();
-                       
+            
             //check max value now of strings
             try {
+                if(fieldName.equals("log") || fieldName.equals("fuzzy") || fieldName.equals("investigationInclude")) continue;
                 //get value
                 Object result = getProperty(fieldName, this);
                 if(result != null) passed = true;
             } catch (Exception ex) {
                 log.warn(getClass().getSimpleName()+": "+fieldName+" cannot be accessed.",ex);
-            }            
+            }
         }
         if(!passed) throw new IllegalStateException("Atleast one field needs to be filled in");
         return true;
     }
     
-     /**
+    /**
      * Gets the value of the field from a passed in object using reflection
      *
      * @param name name of the field in the from object
@@ -346,9 +347,14 @@ public class AdvancedSearchDetailsDTO implements Serializable {
         String mname = "get" + prop;
         
         Class[] types = new Class[]{};
-        Method method = from.getClass().getMethod(mname, types);
+        Method method = null;
+        try{
+            method = from.getClass().getMethod(mname, types);
+        } catch(NoSuchMethodException nsme){
+            mname = "is" + prop;
+            method = from.getClass().getMethod(mname, types);
+        }
         Object result = method.invoke(from, (Object[])types);
-        
         return result;
     }
     
