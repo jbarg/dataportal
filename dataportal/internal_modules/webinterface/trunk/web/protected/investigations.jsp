@@ -75,9 +75,9 @@
                                                 </t:div>
                                             </t:div>
                                             
-                                            <t:div id="subnavigation_nav">
+                                           <t:div id="subnavigation_nav">
                                                 <f:subview id="navigation_search">
-                                                    <c:import url="inc/basic_search_inc_2.jsp" />
+                                                    <c:import url="inc/tabbed_panel_nav_inc.jsp" />
                                                 </f:subview>
                                             </t:div>
                                         </td>
