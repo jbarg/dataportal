@@ -23,7 +23,6 @@ import javax.ejb.EJB;
 import javax.ejb.*;
 import javax.interceptor.ExcludeClassInterceptors;
 import javax.interceptor.ExcludeDefaultInterceptors;
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
@@ -39,13 +38,13 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.core.message.query.QueryManager;
-import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
 import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
-import uk.ac.dl.dp.coreutil.util.AdvancedSearchDetailsDTO;
+
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.InvestigationIncludeRequest;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
@@ -133,7 +132,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         return sendMDBLocal.queryICATs(sid, q_request);
     }
     
-    public QueryRequest queryAdvanced(String sid, AdvancedSearchDetails advancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException{
+    public QueryRequest queryAdvanced(String sid, AdvancedSearchDetailsDTO advancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException{
         log.debug("queryAdvanced");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
@@ -152,10 +151,10 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         q_request.setQueryid(search_id);
         q_request.setSent(new Date());
         
-        AdvancedSearchDetailsDTO dto = new AdvancedSearchDetailsDTO();
-        dto.mergeFrom(advancedSearchDetails);
+        //AdvancedSearchDetailsDTO dto = new AdvancedSearchDetailsDTO();
+        //dto.mergeFrom(advancedSearchDetails);
         
-        q_request.setAdvancedSearch(dto);
+        q_request.setAdvancedSearch(advancedSearchDetails);
         q_request.setQt(DPQueryType.ADVANCED);
         
         //send off basic search event
@@ -205,6 +204,34 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         
     }
     
+    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException{
+        log.debug("getInvestigationById("+sessionId+", "+investigationId+", "+facility+")");
+        if(sessionId == null) throw new IllegalArgumentException("Session ID cannot be null.");
+        
+        //check of user logged into all facilities
+        HashSet<String> facs = new HashSet<String>();
+        facs.add(facility);
+        isLoggedIn(sessionId, facs, em);
+        
+        //check is valid sessionid
+        new SessionUtil(sessionId, em);
+        
+        //now get the investigation
+        try{
+            //get a list of facilites
+            ModuleLookup facilityLookup = lookupLocal.getFacility(facility);
+            
+            String facilitySessionId = new SessionUtil(sessionId, em).getFacilitySessionId(facility);
+            return ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).getInvestigationIncludes(facilitySessionId, investigationId, InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
+        } catch (Exception exception) {
+            log.error("Unable to query for investigation: "+investigationId, exception);
+            throw new QueryException("Unable to query for investigation: "+investigationId);
+        } catch (Throwable exception) {
+            log.error("Unable to query for investigation: "+investigationId, exception);
+            throw new QueryException("Unable to query for investigation: "+investigationId);
+        }        
+    }
+    
     private void isLoggedIn(String sid, HashSet<String> facilities, EntityManager manager) throws SessionException {
         for (String facility : facilities) {
             new SessionUtil(sid, manager).getFacilitySessionId(facility);
@@ -213,7 +240,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     
     @PermitAll
     public Collection<String> getCompleted(QueryRequest q_request) throws SessionException {
-        log.trace("isFinished("+q_request+")");
+        //log.trace("isFinished("+q_request+")");
         if(q_request.getSessionId() == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
         //check is valid sessionid
@@ -224,7 +251,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         for(String fac : q_request.getFacilities()){
             QueryRecord qr = QueryManager.getRecord(q_request.getQueryid(),fac);
             if(qr == null){
-                log.debug("No results from: "+fac);
+                //log.debug("No results from: "+fac);
             } else completed.add(fac);
         }
         return completed;
@@ -391,7 +418,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
                 obj_in.close();
                 f_in.close();
                 
-                return obj;                
+                return obj;
             }
         } catch(Exception e){
             log.warn("Unable to get keywords for facility: "+facility,e);
