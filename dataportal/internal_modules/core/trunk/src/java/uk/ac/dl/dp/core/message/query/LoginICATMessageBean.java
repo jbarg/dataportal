@@ -110,8 +110,10 @@ public class LoginICATMessageBean extends MessageEJBObject implements MessageLis
             //persist it this way
             session.addFacilitySession(facSession);
             
-            //TODO send off download keywords here.
-            sendMDBLocal.downloadKeywords(loginICATMessage.getSessionId(), new KeywordMessage(), loginICATMessage.getFacility());
+            //if no error then download keywords
+            if(facSession.getFacilitySessionError() == null || facSession.getFacilitySessionError().equals("null")){
+                sendMDBLocal.downloadKeywords(loginICATMessage.getSessionId(), new KeywordMessage(), loginICATMessage.getFacility());
+            }
             //em.flush();
         }
         

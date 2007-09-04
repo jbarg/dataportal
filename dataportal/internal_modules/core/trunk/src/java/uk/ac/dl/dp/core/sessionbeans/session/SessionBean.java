@@ -114,7 +114,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         
         //now wait for loginICATS to return the sessionIds.
         int x = 0;
-        while(true){ //wait 10 seconds to log in
+        while(true){ //wait 20 seconds to log in
             int loggedInNumber = em.createQuery("SELECT fs FROM FacilitySession fs where fs.sessionId.userSessionId = :sid").setParameter("sid", sessionDTO.getUserSessionId()).getResultList().size();
             
             //log.trace(loggedInNumber +" == "+ facilities.size());
@@ -128,7 +128,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
                 } catch (InterruptedException ignore) {}
             }
             x++;
-            if(x > 20){
+            if(x > 40){
                 log.info("Timeout with facility session");
                 break;
             }

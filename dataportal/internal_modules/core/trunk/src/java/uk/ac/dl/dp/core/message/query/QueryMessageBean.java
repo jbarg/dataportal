@@ -11,9 +11,7 @@ package uk.ac.dl.dp.core.message.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
@@ -30,7 +28,6 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
-import uk.ac.dl.dp.coreutil.util.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.ICATSingleton;
@@ -98,6 +95,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             }
             
             log.debug("Query finished for "+query.getFacility()+"  with id: "+query.getId());
+            if(investigations == null) investigations = new ArrayList<Investigation>();
             QueryManager.addRecord(query , investigations, ex);
         }
         
@@ -106,11 +104,12 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
     
     private Collection<Investigation>  doKeywordSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception{
         log.debug("Query : Keyword "+request.getKeywordQuery().getKeywords()+" on facility: "+request.getFacility()+" sent at "+request.getSent());
-        return ICATSingleton.getInstance(wsdlLocation).searchByKeywordsPaginationFuzzyAndInclude(
+        return ICATSingleton.getInstance(wsdlLocation).searchByKeywordsAll(
                 request.getFacilitySessionId(),
                 (List<String>) request.getKeywordQuery().getKeywords(),
-                InvestigationInclude.INVESTIGATORS_AND_KEYWORDS,
-                false,
+                request.getKeywordQuery().getLogicalOperator(),
+                request.getKeywordQuery().getInvestigationInclude(),
+                request.getKeywordQuery().isFuzzy(),
                 request.getKeywordQuery().getStart_index(),
                 request.getKeywordQuery().getMax_results());
     }
@@ -129,7 +128,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
         log.debug("Query : MyInvestigations on facility: "+request.getFacility()+" sent at "+request.getSent());
         return ICATSingleton.getInstance(wsdlLocation).getMyInvestigationsIncludes(
                 request.getFacilitySessionId(),
-                InvestigationInclude.INVESTIGATORS_AND_KEYWORDS);
+                InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
     }
     
     private Collection<Investigation> doGetInvestigationInclude(QueryRequest request, String wsdlLocation) throws SessionException_Exception, QueryException{

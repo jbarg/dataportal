@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
-import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
@@ -27,10 +26,9 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
-import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.util.KeywordMessage;
-import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dp.icatws.ICATSingleton;
+import uk.ac.dp.icatws.KeywordType;
 
 /**
  *
@@ -79,15 +77,14 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 }
                 
                 //if not EMAT (ie allowed none words) then remove all none words
-                if(!facility.is_AllKeywords()){
-                    //TODO add the type into the search
-                    keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());
+                if(!facility.is_AllKeywords()){                    
+                    keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUserType(keywordMessage.getFacilitySessionId(), KeywordType.ALPHA_NUMERIC);
                 } else{
                     keywords = ICATSingleton.getInstance(facility.getWsdlLocation()).getKeywordsForUser(keywordMessage.getFacilitySessionId());
                 }
                 
                 log.trace("Facility: "+facility.getFacility()+" has: "+keywords.size()+" keywords");
-                //String[] facKeyWords =  keywords.toArray(new String[keywords.size()]);
+                String[] facKeyWords =  keywords.toArray(new String[keywords.size()]);
                                                              
                 //make sure file location exists
                 if(!new File(DataPortalConstants.KEYWORD_LOCATION).exists()) new File(DataPortalConstants.KEYWORD_LOCATION).mkdir();
@@ -103,7 +100,7 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 // Pass our object to the ObjectOutputStream's
                 // writeObject() method to cause it to be written out
                 // to disk.
-                obj_out.writeObject(keywords);
+                obj_out.writeObject(facKeyWords);
                 log.trace("Saved keyword data for "+facility.getFacility()+" for user "+keywordMessage.getUserId()+" at: "+file.getAbsolutePath());
                 
                 obj_out.close();

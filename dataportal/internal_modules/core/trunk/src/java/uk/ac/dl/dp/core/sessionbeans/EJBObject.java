@@ -11,16 +11,13 @@ package uk.ac.dl.dp.core.sessionbeans;
 
 import java.io.File;
 import javax.annotation.PostConstruct;
-import javax.annotation.security.PermitAll;
 import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptors;
 import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 
 /**
  *
@@ -62,14 +59,14 @@ public abstract class EJBObject {
     
     @PostConstruct
     public void init(){
-        if(new File(System.getProperty("user.home")+File.separator+".log4j.xml").exists()){
+        if(new File(System.getProperty("user.home")+File.separator+".dp-core-log4j.xml").exists()){
             //System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.xml");
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".dp-core-log4j.xml");
             //log.trace("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
             
         } else {
             //System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.properties");
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".log4j.properties");
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".dp-core-log4j.properties");
             //log.trace("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.properties");
             
         }
@@ -96,10 +93,12 @@ public abstract class EJBObject {
         } catch(Exception e) {
             throw e;
         } finally {
-            if(!methodName.equals("isFinished")) {
+            if(methodName.contains("isFinished") || methodName.contains("getCompleted")) {
+                //dont log
+            } else{
                 long time = System.currentTimeMillis() - start;
-                log.debug("Exiting " + target +" , This method takes " +time/1000f + "s to execute");
-                log.debug("\n");
+                log.trace("Exiting " + target +" , This method takes " +time/1000f + "s to execute");
+                log.trace("\n");
             }
         }
     }

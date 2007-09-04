@@ -9,7 +9,8 @@
 
 package uk.ac.dl.dp.core.clients.query;
 
-import uk.ac.dl.dp.coreutil.util.AdvancedSearchDetailsDTO;
+
+import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dp.icatws.AdvancedSearchDetails;
 
 /**

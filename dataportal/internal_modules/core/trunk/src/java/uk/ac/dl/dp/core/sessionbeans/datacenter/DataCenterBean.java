@@ -14,22 +14,17 @@ import java.util.Collection;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
-import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
 import uk.ac.dl.dp.coreutil.entity.DataReference;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.DataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionTimedOutException;
-import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.exceptions.NoAccessToDataCenterException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.DataCenterRemote;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
@@ -191,7 +186,7 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
     }
     
     public void addDataReference(String sid, Collection<DataReference> dtos) throws SessionException, DataCenterException{
-        log.debug("addDataUrl()");
+        log.debug("addDataReference()");
         if(sid == null) throw new SessionException("Session ID cannot be null.");
         
         for(DataReference dto: dtos){

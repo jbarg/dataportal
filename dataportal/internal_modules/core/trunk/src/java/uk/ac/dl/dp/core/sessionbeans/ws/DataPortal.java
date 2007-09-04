@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
+import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.Bookmark;
@@ -52,7 +53,7 @@ import uk.ac.dp.icatws.InvestigationInclude;
  */
 
 @Stateless()
-@WebService(/*targetNamespace="client.dataportal.uk"*/)
+//@WebService(/*targetNamespace="client.dataportal.uk"*/)
 @Interceptors(ArgumentValidator.class)
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class DataPortal extends SessionEJBObject {
@@ -71,7 +72,7 @@ public class DataPortal extends SessionEJBObject {
     //////////////////////////////////////////////////////////////////////////
     
     @ExcludeClassInterceptors
-    @WebMethod()
+    //@WebMethod()
     public String login(@WebParam(name="username") String username, @WebParam(name="password") String password, @WebParam(name="lifetime") int lifetime) throws SessionException, LoginMyProxyException  {
         try {
             return sessionBeanLocal.login(username, password, lifetime);
@@ -82,7 +83,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public boolean isValid(@WebParam(name="sessionId") String sessionId) throws SessionException  {
         try {
             return sessionBeanLocal.isValid(sessionId);
@@ -92,7 +93,7 @@ public class DataPortal extends SessionEJBObject {
         
     }
     
-    @WebMethod()
+    //@WebMethod()
     public SessionDTO getSession(@WebParam(name="sessionId") String sessionId) throws SessionException  {
         try {
             return sessionBeanLocal.getSession(sessionId);
@@ -101,7 +102,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public boolean logout(@WebParam(name="sessionId") String sessionId) throws SessionException{
         try {
             return sessionBeanLocal.logout(sessionId);
@@ -110,7 +111,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    //@WebMethod() //HashMaps dont work for JAXWS
+    ////@WebMethod() //HashMaps dont work for JAXWS
     public HashMap<String, Collection<String>> getKeywords(@WebParam(name="sessionId") String sessionId, @WebParam(name="facility") String facility) throws QueryException , SessionException {
         try {
             //check session
@@ -123,7 +124,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public Collection<String> getKeywordsForFacility(@WebParam(name="sessionId") String sessionId, @WebParam(name="facility") String facility) throws QueryException , SessionException {
         try {
             //check session
@@ -136,7 +137,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public QueryRequest queryMyData(@WebParam(name="sessionId") String sessionId, @WebParam(name="facilities") HashSet<String> facilities ) throws QueryException, SessionException {
         try {
             return queryLocal.queryMydata(sessionId, facilities);
@@ -147,7 +148,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public QueryRequest queryInvestigations(@WebParam(name="sessionId") String sessionId, @WebParam(name="investigations") Collection<Investigation> investigations, @WebParam(name="include") InvestigationInclude include) throws SessionException, QueryException{
         try {
             return queryLocal.queryInvestigations(sessionId, investigations, include);
@@ -158,7 +159,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public QueryRequest queryByKeywords(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest) throws QueryException, SessionException {
         try {
             return queryLocal.queryByKeyword(sessionId, keywordQueryRequest);
@@ -170,8 +171,8 @@ public class DataPortal extends SessionEJBObject {
     }
     
     
-    @WebMethod()
-    public QueryRequest queryByAdvanced(@WebParam(name="sessionId") String sessionId, @WebParam(name="advancedSearchDetails") AdvancedSearchDetails advancedSearchDetails, @WebParam(name="facilities") HashSet<String> facilities ) throws QueryException, SessionException {
+    //@WebMethod()
+    public QueryRequest queryByAdvanced(@WebParam(name="sessionId") String sessionId, @WebParam(name="advancedSearchDetails") AdvancedSearchDetailsDTO advancedSearchDetails, @WebParam(name="facilities") HashSet<String> facilities ) throws QueryException, SessionException {
         try {
             return queryLocal.queryAdvanced(sessionId, advancedSearchDetails, facilities);
         } catch (QueryException ex) {
@@ -181,7 +182,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public Collection<Investigation> queryKeywordsAndWait(@WebParam(name="sessionId") String sessionId, @WebParam(name="keywordQueryRequest") KeywordQueryRequest keywordQueryRequest) throws QueryException, SessionException {
         try {
             QueryRequest request = queryLocal.queryByKeyword(sessionId, keywordQueryRequest);
@@ -201,19 +202,19 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     @ExcludeClassInterceptors
     @ExcludeDefaultInterceptors
     public boolean isFinished(@WebParam(name="q_request") QueryRequest q_request) throws SessionException {
         return queryLocal.isFinished(q_request);
     }
     
-    @WebMethod()
+    //@WebMethod()
     public Collection<Investigation> getQueryResults(@WebParam(name="q_request") QueryRequest q_request) throws SessionException{
         return queryLocal.getQueryResults(q_request);
     }
     
-    @WebMethod()
+    //@WebMethod()
     public Collection<Investigation> getQueryResultsPagination(@WebParam(name="q_request") QueryRequest q_request, @WebParam(name="startIndex") int startIndex, @WebParam(name="numberResults") int numberResults)throws SessionException {
         Collection<Investigation> investigations = queryLocal.getQueryResults(q_request);
         
@@ -227,7 +228,7 @@ public class DataPortal extends SessionEJBObject {
         return investigationsToReturn;
     }
     
-    @WebMethod()
+    //@WebMethod()
     public Collection<DataReference> getDataReferences(@WebParam(name="sessionId") String sessionId) throws DataCenterException, SessionException{
         try {
             return dataCenterLocal.getDataReferences(sessionId);
@@ -236,7 +237,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public Collection<Bookmark> getBookmarks(@WebParam(name="sessionId") String sessionId) throws SessionException{
         try {
             return dataCenterLocal.getBookmarks(sessionId);
@@ -245,7 +246,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public void removeBookmark(@WebParam(name="sessionId") String sessionId, @WebParam(name="bookmark") Bookmark bookmark) throws DataCenterException, SessionException{
         try {
             dataCenterLocal.removeBookmark(sessionId, bookmark);
@@ -256,7 +257,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public void removeDataReference(@WebParam(name="sessionId") String sessionId, @WebParam(name="dataReference") DataReference dataReference) throws DataCenterException, SessionException{
         try {
             dataCenterLocal.removeDataReference(sessionId, dataReference);
@@ -267,7 +268,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public void modifyDataReference(@WebParam(name="sessionId") String sessionId, @WebParam(name="dataReference") DataReference dataReference) throws DataCenterException, SessionException{
         try {
             dataCenterLocal.modifyDataReference(sessionId, dataReference);
@@ -278,7 +279,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public void modifyBookmark(@WebParam(name="sessionId") String sessionId, @WebParam(name="bookmark") Bookmark bookmark) throws DataCenterException, SessionException{
         try {
             dataCenterLocal.modifyBookmark(sessionId, bookmark);
@@ -289,7 +290,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public void addDataReference(@WebParam(name="sessionId") String sessionId, @WebParam(name="dataReference") DataReference dataReference) throws DataCenterException, SessionException{
         try {
             dataCenterLocal.addDataReference(sessionId, dataReference);
@@ -300,7 +301,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public void addBookmark(@WebParam(name="sessionId") String sessionId, @WebParam(name="bookmark") Bookmark bookmark) throws DataCenterException, SessionException{
         try {
             dataCenterLocal.addBookmark(sessionId, bookmark);
@@ -311,7 +312,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public UserPreferencesDTO getUserPreferences(@WebParam(name="sessionId") String sessionId) throws SessionException{
         try {
             return sessionBeanLocal.getUserPrefs(sessionId);
@@ -320,7 +321,7 @@ public class DataPortal extends SessionEJBObject {
         }
     }
     
-    @WebMethod()
+    //@WebMethod()
     public void setUserPreferences(@WebParam(name="sessionId") String sessionId, @WebParam(name="userPreferencesDTO") UserPreferencesDTO userPreferencesDTO) throws SessionException{
         try {
             sessionBeanLocal.setUserPrefs(sessionId, userPreferencesDTO);
