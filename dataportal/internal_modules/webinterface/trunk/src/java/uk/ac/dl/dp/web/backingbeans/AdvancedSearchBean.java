@@ -9,27 +9,18 @@
 
 package uk.ac.dl.dp.web.backingbeans;
 
-import java.util.Collection;
 import org.apache.log4j.*;
 import java.util.*;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
-import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
-import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
-import uk.ac.dl.dp.web.navigation.NavigationConstants;
-import uk.ac.dl.dp.web.util.WebConstants;
-import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
-import uk.ac.dp.icatws.LogicalOperator;
 /**
  *
  * @author gjd37
@@ -129,7 +120,85 @@ public class AdvancedSearchBean extends AbstractRequestBean {
      * Action method to do basic search for navigation bar
      */
     public String searchAdvancedNavigation() {
-        return searchAdvanced();
+        //sets up initial values
+        String sid = null;
+        QueryRequest query_request = null;
+        
+        log.trace("searching for advanced:");
+        
+        log.trace("searching for facilities :"+getVisitData().getCurrentSelectedFacilities());
+        
+        //send off initail query
+        QueryDelegate qd = QueryDelegate.getInstance();
+        try {
+            
+            boolean fuzzy = false;
+            if(getVisitData().getAdvancedSearchBean().getLikeExpression().equals("LIKE")) fuzzy = true;
+            
+            //set hisotry bean
+            AdvancedSearchHistoryBean advancedSearchHistoryBean = getVisitData().getAdvancedSearchBean();
+            advancedSearchHistoryBean.setInvNumber(getVisitData().getAdvancedSearchBean().getInvNumber());
+            advancedSearchHistoryBean.setKeyword(getVisitData().getAdvancedSearchBean().getKeyword());
+            advancedSearchHistoryBean.setInstrument(getVisitData().getAdvancedSearchBean().getInstrument());
+            advancedSearchHistoryBean.setSample(getVisitData().getAdvancedSearchBean().getSample());
+            advancedSearchHistoryBean.setVisitId(getVisitData().getAdvancedSearchBean().getVisitId());
+            advancedSearchHistoryBean.setGrantId(getVisitData().getAdvancedSearchBean().getGrantId());
+            advancedSearchHistoryBean.setInvAbstract(getVisitData().getAdvancedSearchBean().getInvAbstract());
+            advancedSearchHistoryBean.setInvType(getVisitData().getAdvancedSearchBean().getInvType());
+            advancedSearchHistoryBean.setInvestigator(getVisitData().getAdvancedSearchBean().getInvestigator());
+            advancedSearchHistoryBean.setLikeExpression(getVisitData().getAdvancedSearchBean().getLikeExpression());
+            advancedSearchHistoryBean.setInvName(getVisitData().getAdvancedSearchBean().getInvName());
+            advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
+            
+            //create advanced search bean
+            AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO();
+            asdDTO.setExperimentNumber(getVisitData().getAdvancedSearchBean().getInvNumber());
+            
+            setKeyword(getVisitData().getAdvancedSearchBean().getKeyword());
+            asdDTO.setKeywords(getKeywords());
+            if(getVisitData().getAdvancedSearchBean().getGrantId() != null) asdDTO.setGrantId(new Long(getVisitData().getAdvancedSearchBean().getGrantId()));
+            asdDTO.setVisitId(getVisitData().getAdvancedSearchBean().getVisitId());
+            asdDTO.setSampleName(getVisitData().getAdvancedSearchBean().getSample());
+            setInstrument(getVisitData().getAdvancedSearchBean().getInstrument());
+            setInvestigator(getVisitData().getAdvancedSearchBean().getInvestigator());
+            asdDTO.setInvestigators(getInvestigators());
+            asdDTO.setInstruments(getInstruments());
+            asdDTO.setInvestigationAbstract(getVisitData().getAdvancedSearchBean().getInvAbstract());
+            asdDTO.setInvestigationName(getVisitData().getAdvancedSearchBean().getInvName());
+            asdDTO.setInvestigationType(getVisitData().getAdvancedSearchBean().getInvType());
+            asdDTO.setFuzzy(fuzzy);
+            asdDTO.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
+            
+            //check if the information passed is valid, if not, show the error message
+            try{
+                asdDTO.isValid();
+            } catch(IllegalStateException iae){
+                error(iae.getMessage());
+                return null;
+            }
+            
+            query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
+            getVisitData().setQueryRequest(query_request);
+            //set the index of the tabbed pane to a search
+            getVisit().setTabIndex(1);
+            
+            log.info("Query Id is "+query_request.getQueryid());
+        } catch (DataPortalException ex) {
+            error("Unable to perform query");
+            log.fatal("Unable to create query user for: "+sid,ex);
+            return null;
+        }catch (Exception ex) {
+            error("Unable to perform query");
+            log.fatal("Unable to create query user for: "+sid,ex);
+            return null;
+        }
+        
+        //set the title from the seach
+        getVisitData().setSearchedTitle("Advanced Search");
+        
+        //wait for results.
+        SearchBean searchBean = (SearchBean)getBean("searchBean");
+        return searchBean.getQueryResults(query_request, false);
     }
     
     /**
@@ -157,7 +226,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             advancedSearchHistoryBean.setKeyword(getKeyword());
             advancedSearchHistoryBean.setInstrument(getInstrument());
             advancedSearchHistoryBean.setSample(getSample());
-            advancedSearchHistoryBean.setVisitId(getVisitId());            
+            advancedSearchHistoryBean.setVisitId(getVisitId());
             advancedSearchHistoryBean.setGrantId(getGrantId());
             advancedSearchHistoryBean.setInvAbstract(getInvAbstract());
             advancedSearchHistoryBean.setInvType(getInvType());
@@ -191,6 +260,9 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             
             query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
+            //set the index of the tabbed pane to a search
+            getVisit().setTabIndex(1);
+            
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");

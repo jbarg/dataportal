@@ -119,17 +119,17 @@ public class DataCenterBean extends SortableList {
                 }
                 if (column.equals("facility")) {
                     return ascending ? c1.getFacility().compareTo(c2.getFacility()) : c2.getFacility()
-                    .compareTo(c1.getFacility());
+                            .compareTo(c1.getFacility());
                 } else if (column.equals("name")) {
                     if(c1.getName() == null) return 0;
                     else return ascending ? c1.getName().compareTo(c2.getName()) : c2.getName()
-                    .compareTo(c1.getName());
+                            .compareTo(c1.getName());
                 } else if (column.equals("type")) {
                     return ascending ? c1.getTypeOfObject().compareTo(c2.getTypeOfObject()) : c2.getTypeOfObject()
-                    .compareTo(c1.getTypeOfObject());
+                            .compareTo(c1.getTypeOfObject());
                 } else if (column.equals("time")) {
                     return ascending ? c1.getModTime().compareTo(c2.getModTime()) : c2.getModTime()
-                    .compareTo(c1.getModTime());
+                            .compareTo(c1.getModTime());
                 } else
                     return 0;
             }
@@ -202,7 +202,7 @@ public class DataCenterBean extends SortableList {
     }
     
     
-   public String emailErrorMessage(){
+    public String emailErrorMessage(){
         error("Please select atleast one item to download.");
         return null;
     }
@@ -257,8 +257,8 @@ public class DataCenterBean extends SortableList {
     }
     
     
-//This listens to changes in the users isSelected.  This is because the list could be
-//larger than one page so have to do it this way
+    //This listens to changes in the users isSelected.  This is because the list could be
+    //larger than one page so have to do it this way
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
         Collection<DataReference> dataReference = getVisitData().getCurrentDataReferences();
@@ -286,16 +286,20 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-//Gets the current data ref and then gets the investigation and searches for the investigation
-// returns back to the investigations page
+    //Gets the current data ref and then gets the investigation and searches for the investigation
+    // returns back to the investigations page
     public String viewData(){
         log.trace("view data");
         DataReference qrdto =   (DataReference) table.getRowData();
         log.trace("viewing studyId: "+qrdto.getInvestigationId());
         Collection<Investigation> investigations = null;
+        Investigation investigation = null;
         try {
-            if(true) throw new QueryException();
-         //   investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
+            
+            investigation = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getInvestigationId(), qrdto.getFacility());
+            investigation.setSelected(true);
+            investigations.add(investigation);
+            
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
             error("Error:  Unable to search for "+qrdto.getName());
@@ -318,20 +322,18 @@ public class DataCenterBean extends SortableList {
         
     }
     
-//Gets the current data reference and then gets the investigation and searches for the investigation
-// returns back to the dataset page of the investigation
+    //Gets the current data reference and then gets the investigation and searches for the investigation
+    // returns back to the dataset page of the investigation
     public String viewDataSets(){
         log.trace("view data referenced data");
         DataReference qrdto =   (DataReference) table.getRowData();
         log.trace("viewing studyId: "+qrdto.getInvestigationId());
         Collection<Investigation> investigations = null;
+        Investigation investigation = null;
         try {
-           // investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getInvestigationId()));
-            //got investigstion
-             if(true) throw new QueryException();
-            for(Investigation investigation : investigations){
-                investigation.setSelected(true);
-            }
+            investigation = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getInvestigationId(), qrdto.getFacility());
+            investigation.setSelected(true);
+            investigations.add(investigation);
             
             //set the title from the seach
             getVisitData().setSearchedTitle("Search Results");
@@ -354,8 +356,8 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-//listens for sort column action events, and gets the column by thge param name passed in
-// then calls sort on the column
+    //listens for sort column action events, and gets the column by thge param name passed in
+    // then calls sort on the column
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -400,7 +402,7 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-//method to select all data
+    //method to select all data
     public String selectnone(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(false);
@@ -408,7 +410,7 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-//mehtod to remove select all
+    //mehtod to remove select all
     public String selectall(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(true);
@@ -416,10 +418,10 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-//listens for changes in the add note section in data center page
-//iterates over paramaters and gets the data center ID passedd in and sets the note on the data center
-//once the change has been made they need to press the addNote method and then the data center will be sent
-// to the EJB to save
+    //listens for changes in the add note section in data center page
+    //iterates over paramaters and gets the data center ID passedd in and sets the note on the data center
+    //once the change has been made they need to press the addNote method and then the data center will be sent
+    // to the EJB to save
     public void note(ValueChangeEvent event){
         log.trace("new value: "+event.getNewValue());
         List children  = event.getComponent().getChildren();
@@ -444,7 +446,7 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-//save to DB
+    //save to DB
     public String addNote(){
         
         DataReference bk = (DataReference)table.getRowData();
@@ -467,9 +469,9 @@ public class DataCenterBean extends SortableList {
     
     
     
-///////////////////////////////////////////////////
-//these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
-//need this is see if bookmarks is > 0 and the lenght of them
+    ///////////////////////////////////////////////////
+    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+    //need this is see if bookmarks is > 0 and the lenght of them
     public boolean isPopulated() {
         if(getDataRefs().size() > 0){
             return true;
@@ -536,7 +538,7 @@ public class DataCenterBean extends SortableList {
         if(getSort().equals(column) && !isAscending()) return true;
         else return false;
     }
-////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
     
     
     

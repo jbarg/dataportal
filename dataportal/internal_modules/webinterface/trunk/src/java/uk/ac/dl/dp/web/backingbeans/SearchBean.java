@@ -113,6 +113,9 @@ public class SearchBean extends AbstractRequestBean {
         try {
             query_request = qd.queryMyData(getVisit().getSid(), getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
+             //set the index of the tabbed pane to basic search
+            getVisit().setTabIndex(0);
+            
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
@@ -153,6 +156,9 @@ public class SearchBean extends AbstractRequestBean {
         try {
             query_request = qd.queryMyData(getVisit().getSid(), facilities);
             getVisitData().setQueryRequest(query_request);
+             //set the index of the tabbed pane to basic search
+            getVisit().setTabIndex(0);
+            
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
@@ -216,6 +222,9 @@ public class SearchBean extends AbstractRequestBean {
             
             //set the query as last request
             getVisitData().setQueryRequest(query_request);
+             //set the index of the tabbed pane to basic search
+            getVisit().setTabIndex(0);
+            
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
@@ -274,9 +283,12 @@ public class SearchBean extends AbstractRequestBean {
             kqr.setStart_index(0);
             kqr.setMax_results(WebConstants.MAXIMIUM_RESULTS/4);
             kqr.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
-             
+            
             query_request = qd.queryKeyword(getVisit().getSid(), kqr);
             getVisitData().setQueryRequest(query_request);
+            //set the index of the tabbed pane to basic search
+            getVisit().setTabIndex(0);
+            
             log.info("Query Id is "+query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
@@ -367,6 +379,7 @@ public class SearchBean extends AbstractRequestBean {
             log.debug("Adding found investigations to session, size: "+investigations.size());
             getVisitData().setSearchedInvestigations(investigations);
             
+            
             return NavigationConstants.SEARCH_SUCCESS;
         } catch (Exception ex) {
             log.error("Exception occured getting investigations from "+query_request.getQueryid(), ex);
@@ -388,7 +401,7 @@ public class SearchBean extends AbstractRequestBean {
                 throw new ValidatorException(new FacesMessage("Validation Error", "Validation Error: Enter keyword."));
             }
         }
-    }    
+    }
     
     //getters setters of page info
     public Collection<String> getKeywords() {
@@ -406,9 +419,9 @@ public class SearchBean extends AbstractRequestBean {
     public void setFacilities(List<String> facilities) {
         this.facilities = facilities;
     }
-           
+    
     public String getLogicalExpression() {
-        //log.trace("LogicalExpression: "+logicalExpression);        
+        //log.trace("LogicalExpression: "+logicalExpression);
         if(logicalExpression == null) return "AND";
         else return logicalExpression;
     }

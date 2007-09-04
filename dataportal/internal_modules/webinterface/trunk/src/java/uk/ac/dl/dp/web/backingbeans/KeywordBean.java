@@ -43,25 +43,38 @@ public class KeywordBean extends AbstractSessionBean {
     public void completeCity(FacesContext context, String prefix, CompletionResult result) {
         String defaultFacility= getVisit().getUserPreferences().getDefaultFacility();
         log.trace("Completing City - " + prefix +" for default: "+defaultFacility);
-        LinkedHashSet<String> allKeywords = new LinkedHashSet<String>();
+        String[] allKeywords = null;
         
         for(String facility : getVisitData().getCurrentSelectedFacilities()){
-            log.trace("Loading keywords from: "+facility);
+            log.trace("Getting keywords for: "+facility);
             try{
                 KeywordsFileBean keywordsFileBean = getVisitData().getKeywordsFileBeans().get(facility);
                 if(keywordsFileBean.hasBeenUpdated()){
                     keywordsFileBean.loadKeywords();
                 }
-                Collection<String> keywordsFromFacility = keywordsFileBean.getKeywords();               
-                allKeywords.addAll(keywordsFromFacility);
+                String[] keywordsFromFacility = keywordsFileBean.getKeywords();
+                if(allKeywords == null) allKeywords = keywordsFromFacility;
+                else {
+                    //now copy allKeywords and new list wanted to add to a new larger array
+                    String[] newAllKeywords = new String[allKeywords.length + keywordsFromFacility.length];
+                    System.arraycopy(allKeywords, 0, newAllKeywords, 0, allKeywords.length);
+                    System.arraycopy(keywordsFromFacility, 0, newAllKeywords, allKeywords.length, keywordsFromFacility.length);
+                    allKeywords = newAllKeywords;
+                }
+                if(keywordsFromFacility.length > keywordsFileBean.THRESHOLD_SIZE) {
+                    log.trace("Keyword size for "+facility+" too large, removing from memory");
+                    keywordsFileBean.setKeywords(null);
+                }
+                //allKeywords.addAll(keywordsFromFacility);
             } catch(Exception ex){
-                log.debug("Error getting facility keywords from "+facility, ex);
+                log.warn("Error getting facility keywords from "+facility, ex);
             }
         }
         
-        String[] sortedKeywords = allKeywords.toArray(new String[allKeywords.size()]);
+        log.trace("total keyword size is: "+allKeywords.length);
+        //String[] sortedKeywords = allKeywords.toArray(new String[allKeywords.size()]);
         //try and sort words
-        Arrays.sort(sortedKeywords);
+        Arrays.sort(allKeywords);
         
         //TODO problem with if spaces allowed (ie single words only)
         //need to check if current selected fac contins data in folders( there if so
@@ -69,14 +82,14 @@ public class KeywordBean extends AbstractSessionBean {
         if(prefix.indexOf(" ") != -1 ){
             String[] words = prefix.split(" ");
             log.trace("splitting by space: "+words[words.length-1]);
-            AutoCompleteUtilities.addMatchingItems(sortedKeywords, words[words.length-1], result);
+            AutoCompleteUtilities.addMatchingItems(allKeywords, words[words.length-1], result);
         } else if(prefix.indexOf("%20") != -1 ){
             String[] words = prefix.split("%20");
             log.trace("splitting by %20: "+words[words.length-1]);
-            AutoCompleteUtilities.addMatchingItems(sortedKeywords, words[words.length-1], result);
+            AutoCompleteUtilities.addMatchingItems(allKeywords, words[words.length-1], result);
         } else{
             log.trace("nothing split");
-            AutoCompleteUtilities.addMatchingItems(sortedKeywords, prefix, result);
+            AutoCompleteUtilities.addMatchingItems(allKeywords, prefix, result);
         }
     }
     
