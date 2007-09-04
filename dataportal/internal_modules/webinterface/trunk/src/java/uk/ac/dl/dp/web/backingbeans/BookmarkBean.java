@@ -82,7 +82,7 @@ public class BookmarkBean extends SortableList {
             //sort column by default column in constructor
             sort(getSort(), isAscending());
             return (List<Bookmark>)getVisitData().getCurrentBookmarks();
-        }else {
+        } else {
             log.trace("Bookmarks already got is Visit(): "+getVisitData().getCurrentBookmarks().size());
             return (List<Bookmark>) getVisitData().getCurrentBookmarks();
         }
@@ -184,10 +184,12 @@ public class BookmarkBean extends SortableList {
         log.trace("view bookmarked data");
         Bookmark qrdto =   (Bookmark) table.getRowData();
         log.trace("viewing studyId: "+qrdto.getStudyId());
-        Collection<Investigation> investigations = null;
+        Investigation investigation = null;
+        Collection<Investigation> investigations = new ArrayList<Investigation>();
         try {
-            if(true) throw new QueryException();
-        //    investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
+           
+            investigation = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(),  qrdto.getStudyId(), qrdto.getFacility());
+            investigations.add(investigation);
         } catch (QueryException ex) {
             log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
             error("Error:  Unable to search for "+qrdto.getName());
@@ -201,8 +203,7 @@ public class BookmarkBean extends SortableList {
         getVisitData().setSearchedInvestigations(investigations);
         //remove request info
         getVisitData().setQueryRequest(null);
-        return NavigationConstants.SEARCH_SUCCESS;
-        
+        return NavigationConstants.SEARCH_SUCCESS;        
     }
     
     //Gets the current bookmark and then gets the investigation and searches for the investigation

@@ -37,6 +37,14 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     private String dn;
     
     /**
+     * Tabbed pane index of the nav bar
+     * 0 = basic search
+     * 1 = advanced search
+     * 2 = preferneces
+     */
+    private int tabIndex = 0;
+    
+    /**
      * List of roles the user has
      */
     private Collection<DPRole> roles;
@@ -101,7 +109,6 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public Visit(){
         setVisitData(new VisitData());
-        
     }
     
     public SessionDTO getSession() {
@@ -143,7 +150,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
             keywordsFileBeans.put(dto.getFacility(), new KeywordsFileBean(session.getFedId(), dto.getFacility()));
         }
         
-          //initialise the keywords
+        //initialise the keywords
         getVisitData().setKeywordsFileBeans(keywordsFileBeans);
         this.setFacilities(items);
         
@@ -154,7 +161,10 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         List<String> fac = new ArrayList<String>();
         fac.add(this.userPreferences.getDefaultFacility());
         
-        getVisitData().setCurrentSelectedFacilities(fac);              
+        getVisitData().setCurrentSelectedFacilities(fac);
+        
+        getVisitData().setAdvancedSearchBean(new AdvancedSearchHistoryBean());
+        getVisitData().setBasicSearchBean(new BasicSearchHistoryBean());
     }
     
     public boolean isAdmin(){
@@ -324,6 +334,20 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public void setFacilitySessions(Collection<FacilitySession> facilitySessions) {
         this.facilitySessions = facilitySessions;
+    }
+    
+    /**
+     * Tabbed pane index of the nav bar
+     * 0 = basic search
+     * 1 = advanced search
+     * 2 = preferneces
+     */
+    public int getTabIndex() {
+        return tabIndex;
+    }
+    
+    public void setTabIndex(int tabIndex) {
+        this.tabIndex = tabIndex;
     }
     
 }

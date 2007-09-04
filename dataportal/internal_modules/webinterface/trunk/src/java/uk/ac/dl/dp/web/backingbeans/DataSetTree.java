@@ -152,7 +152,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     if(datafile.getDatafileFormat() != null) base.getChildren().add(new TreeNodeBase("format-type-folder", datafile.getDatafileFormat().getFormatType(),false));
                     
                     if(datafile.getDatafileCreateTime() != null) base.getChildren().add(new TreeNodeBase("createTime-folder", ""+datafile.getDatafileCreateTime(),false));
-                    if(datafile.getFileSize() != null) base.getChildren().add(new TreeNodeBase("size-folder", ""+datafile.getFileSize()/1024f*1024f +" MB", false));
+                    if(datafile.getFileSize() != null) base.getChildren().add(new TreeNodeBase("size-folder", ""+(datafile.getFileSize()/(1024f*1024f)) +" MB", false));
                     
                     if(isImageJ){
                         base.getChildren().add(new TreeNodeBase("imageJ", "Launch ImageJ",datafile.getUniqueId(),false));
@@ -257,7 +257,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     // log.trace("selected: "+param+" for "+event.getNewValue());
                     Datafile df = getVisitData().getDataFileFromSearchedData(param);
                     df.setSelected(!df.isSelected());
-                    log.trace("setting "+df.isSelected()+"  for "+df.getId());
+                    log.trace("setting "+df.isSelected()+"  for DATAFILE: "+df.getId());
                     // checkFromSameSRBChosen(df.getFacility());
                     
                     break;
@@ -266,7 +266,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     String param = current.getValue().toString();
                     Dataset ds = getVisitData().getDataSetFromSearchedData(param);
                     ds.setSelected(!ds.isSelected());
-                    log.trace("setting "+ds.isSelected()+"  for "+ds.getId());
+                    log.trace("setting "+ds.isSelected()+"  for DATASET: "+ds.getId());
                     // checkFromSameSRBChosen(ds.getFacility());
                     break;
                 }
@@ -274,7 +274,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     String param = current.getValue().toString();
                     Investigation in =  getVisitData().getInvestigationFromSearchedData(param);
                     in.setSelected(!in.isSelected());
-                    log.trace("setting "+in.isSelected()+"  for "+in.getId());
+                    log.trace("setting "+in.isSelected()+"  for INVESTIGATION: "+in.getId());
                     break;
                 }
             }
@@ -316,115 +316,14 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
     
     public String select(){
         
-        log.trace("Selected file for addition :");
+        log.trace("Selected investigations, datasets, datafiles for addition :");
         
-        //TODO move this to methods
-        Collection<DataReference> toAddDataReference = new ArrayList<DataReference>();
-        for(Datafile file : getVisitData().getCurrentDatafiles()){
-            
-            if(file.isSelected()){
-                log.trace("Adding file: "+file.getUniqueId());
-                DataReference ref = new DataReference();
-                
-                //  ref.setFacility(file.getFacility().getF);
-                ref.setName(file.getName());
-                ref.setNote("");
-                ref.setQuery("N/A");
-                
-                //what type of dataset reference is this
-                boolean isDataInFolders = false;
-                for(FacilityDTO facs : getVisit().getSession().getFacilities()){
-                    //if data in folders then show no leaf in datatree
-                    // if(facs.getFacility().equals(file.getFacility()) && facs.isDataSetInFolders()){
-                    //     isDataInFolders = true;
-                    // }
-                }
-                if(isDataInFolders){
-                    ref.setTypeOfReference(DPUrlRefType.FILE_FOLDER.toString());
-                } else {
-                    ref.setTypeOfReference(DPUrlRefType.FILE.toString());
-                }
-                
-                ref.setTypeOfObject("N/A");
-                ref.setReferenceId(file.getId());
-                ref.setInvestigationId(null);
-                
-                Collection<Url> cs = new ArrayList<Url>();
-                Url url = new Url();
-                url.setDataRefId(ref);
-                //TODO remove line, URL should neve be null
-                if(file.getLocation() == null) file.setLocation(" ");
-                url.setUrl(file.getLocation());
-                cs.add(url);
-                log.trace("Adding: "+file);
-                
-                ref.setUrls(cs);
-                toAddDataReference.add(ref);
-                //log.trace(file);
-            }
-        }
-        log.trace("Selected sets for addition :");
-        //TODO move this to methods
-        for(Dataset dataset : getVisitData().getCurrentDatasets()){
-            
-            if(dataset.isSelected()){
-                //log.trace(dataset);
-                DataReference ref = new DataReference();
-                
-                //ref.setFacility(dataset.getFacility());
-                ref.setName(dataset.getName());
-                ref.setNote("");
-                ref.setQuery("N/A");
-                
-                //what type of dataset reference is this
-                boolean isDataInFolders = false;
-                for(FacilityDTO facs : getVisit().getSession().getFacilities()){
-                    //if data in folders then show no leaf in datatree
-                    //   if(facs.getFacility().equals(dataset.getFacility()) && facs.isDataSetInFolders()){
-                    //     isDataInFolders = true;
-                    //  }
-                }
-                if(isDataInFolders){
-                    ref.setTypeOfReference(DPUrlRefType.DATA_SET_FOLDER.toString());
-                } else {
-                    ref.setTypeOfReference(DPUrlRefType.DATA_SET.toString());
-                }
-                ref.setTypeOfObject(dataset.getDatasetType().getName());
-                ref.setReferenceId(dataset.getId());
-                ref.setInvestigationId(dataset.getInvestigationId());
-                
-                Collection<Url> cs = new ArrayList<Url>();
-                
-                for(Datafile df : getVisitData().getCurrentDatafiles()){
-                    if(true /*df.getFacility().equals(dataset.getFacility()) && df.getDataSetId().equals(dataset.getId())*/){
-                        Url url = new Url();
-                        url.setDataRefId(ref);
-                        url.setName(df.getName());
-                        //TODO remove line, URL should neve be null
-                        if(df.getLocation() == null) df.setLocation("dummy.raw");
-                        url.setUrl(df.getLocation());
-                        cs.add(url);
-                        log.trace("Adding: "+df);
-                    }
-                }
-                ref.setUrls(cs);
-                //check of the dataset has any data files
-                if(ref.getUrls().size() == 0){
-                    warn(ref.getName()+" not added because it's associated with no data files.");
-                    log.warn("Not adding "+dataset.getId()+", it has not data files associated");
-                } else{
-                    
-                    toAddDataReference.add(ref);
-                    log.trace(dataset +" with "+ref.getUrls().size()+" data files");
-                }
-                
-            }
-        }
-        //TODO move this to methods
-        log.trace("Selected invest for addition :");
         Collection<Bookmark> toAddBookmarks = new ArrayList<Bookmark>();
+        Collection<DataReference> toAddDataReference = new ArrayList<DataReference>();
+        
         for(Investigation investigation : getVisitData().getCurrentInvestigations()){
             
+            //add all the investigations to the bookmarks
             if(investigation.isSelected()){
                 Bookmark bookmark = new Bookmark();
                 bookmark.setFacility(investigation.getFacility().getFacilityShortName());
@@ -433,7 +332,105 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 bookmark.setStudyId(investigation.getId());
                 bookmark.setQuery("N/A");
                 toAddBookmarks.add(bookmark);
-                log.trace(investigation);
+                log.trace("Adding this to bookmark" +investigation.getId());
+            }
+            
+            //now add datasets
+            for(Dataset dataset : investigation.getDatasetCollection()){
+                if(dataset.isSelected()){
+                    //log.trace(dataset);
+                    DataReference ref = new DataReference();
+                    
+                    ref.setFacility(investigation.getFacility().getFacilityShortName());
+                    ref.setName(dataset.getName());
+                    ref.setNote("");
+                    ref.setQuery("N/A");
+                    
+                    boolean isDataInFolders = false;
+                    for(FacilityDTO facs : getVisit().getSession().getFacilities()){
+                        //if data in folders then show no leaf in datatree
+                        if(facs.getFacility().equals(investigation.getFacility().getFacilityShortName()) && facs.isDataSetInFolders()){
+                            isDataInFolders = true;
+                        }
+                    }
+                    if(isDataInFolders){
+                        ref.setTypeOfReference(DPUrlRefType.DATA_SET_FOLDER.toString());
+                    } else {
+                        ref.setTypeOfReference(DPUrlRefType.DATA_SET.toString());
+                    }
+                    
+                    ref.setTypeOfObject(dataset.getDatasetType().getName());
+                    ref.setReferenceId(dataset.getId());
+                    ref.setInvestigationId(dataset.getInvestigationId());
+                    
+                    Collection<Url> cs = new ArrayList<Url>();
+                    
+                    for(Datafile df : dataset.getDatafileCollection()){
+                        Url url = new Url();
+                        url.setDataRefId(ref);
+                        url.setName(df.getName());
+                        //TODO remove line, URL should neve be null
+                        if(df.getLocation() == null) df.setLocation("dummy.raw");
+                        url.setUrl(df.getLocation());
+                        cs.add(url);
+                        log.trace("Adding data file "+df.getId()+" to dataset: "+dataset.getId());
+                        
+                    }
+                    ref.setUrls(cs);
+                    //check of the dataset has any data files
+                    if(ref.getUrls().size() == 0){
+                        warn(ref.getName()+" not added because it's associated with no data files.");
+                        log.warn("Not adding "+dataset.getId()+", it has not data files associated");
+                    } else{
+                        toAddDataReference.add(ref);
+                        log.trace(dataset.getId() +" with "+ref.getUrls().size()+" data files");
+                    }
+                }
+                
+                //now add datafiles
+                for(Datafile datafile : dataset.getDatafileCollection()){
+                    if(datafile.isSelected()){
+                        
+                        DataReference ref = new DataReference();
+                        
+                        ref.setFacility(investigation.getFacility().getFacilityShortName());
+                        ref.setName(datafile.getName());
+                        ref.setNote("");
+                        ref.setQuery("N/A");
+                        
+                        //what type of dataset reference is this
+                        boolean isDataInFolders = false;
+                        for(FacilityDTO facs : getVisit().getSession().getFacilities()){
+                            //if data in folders then show no leaf in datatree
+                            if(facs.getFacility().equals(investigation.getFacility().getFacilityShortName()) && facs.isDataSetInFolders()){
+                                isDataInFolders = true;
+                            }
+                        }
+                        if(isDataInFolders){
+                            ref.setTypeOfReference(DPUrlRefType.FILE_FOLDER.toString());
+                        } else {
+                            ref.setTypeOfReference(DPUrlRefType.FILE.toString());
+                        }
+                        
+                        if(datafile.getDatafileFormat() == null) ref.setTypeOfObject("N/A");
+                        else ref.setTypeOfObject(datafile.getDatafileFormat().getFormatType());
+                        ref.setReferenceId(datafile.getId());
+                        ref.setInvestigationId(null);
+                        
+                        Collection<Url> cs = new ArrayList<Url>();
+                        Url url = new Url();
+                        url.setDataRefId(ref);
+                        //TODO remove line, URL should neve be null
+                        if(datafile.getLocation() == null) datafile.setLocation(" ");
+                        url.setUrl(datafile.getLocation());
+                        cs.add(url);
+                        log.trace("Adding: "+datafile.getId());
+                        
+                        ref.setUrls(cs);
+                        toAddDataReference.add(ref);
+                        //log.trace(file);
+                    }
+                }
             }
         }
         
@@ -468,16 +465,17 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             return null;
         }
         
-        //remove all true selections
-        for(Datafile file : getVisitData().getCurrentDatafiles()){
-            file.setSelected(false);
-        }
-        for(Dataset dataSet : getVisitData().getCurrentDatasets()){
-            dataSet.setSelected(false);
-        }
+        //remove all true selections        
         for(Investigation investigation : getVisitData().getCurrentInvestigations()){
             investigation.setSelected(false);
+            for(Dataset dataset : investigation.getDatasetCollection()){
+                dataset.setSelected(false);
+                for(Datafile datafile : dataset.getDatafileCollection()){
+                    datafile.setSelected(false);
+                }
+            }            
         }
+        
         if(toAddBookmarks.size() != 0 &&  toAddDataReference.size() == 0){
             //add all stuff to datacenter
             return NavigationConstants.ADD_BOOKMARK_SUCCESS;

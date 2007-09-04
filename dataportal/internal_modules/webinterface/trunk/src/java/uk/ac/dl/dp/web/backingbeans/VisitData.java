@@ -380,7 +380,7 @@ public class VisitData implements Serializable {
         
         for(Investigation investigation : getCurrentInvestigations()){
             if(investigation.getId().equals(new Long(investigationId))&& investigation.getFacility().getFacilityShortName().equals(fac)){
-                log.trace("Found invest: "+investigation);
+                log.trace("Found invest: "+investigation.getId());
                 return investigation;
             }
         }
@@ -602,6 +602,13 @@ public class VisitData implements Serializable {
      */
     public BasicSearchHistoryBean getBasicSearchBean() {
         return basicSearchBean;
+    }
+    
+     /**
+     * Bean that keeps the info of the last search for the side nav bar
+     */
+    public void setBasicSearchBean(BasicSearchHistoryBean basicSearchHistoryBean) {
+        this.basicSearchBean = basicSearchHistoryBean;
     }
     
     /**

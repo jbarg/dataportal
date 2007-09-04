@@ -9,14 +9,10 @@
 
 package uk.ac.dl.dp.web.backingbeans;
 
-
-
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.event.ActionEvent;
@@ -24,15 +20,11 @@ import javax.faces.component.*;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
 import uk.ac.dl.dp.web.util.WebConstants;
-import uk.ac.dp.icatws.Datafile;
-import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
-import uk.ac.dp.icatws.Keyword;
 
 /**
  *
@@ -175,7 +167,7 @@ public class InvestigationBean extends SortableList {
         Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
         
         Investigation investigation = (Investigation)table.getRowData();
-                
+        
         for(Investigation invest : investigations){
             if(invest.getId().equals(investigation.getId()) && invest.getFacility().getFacilityShortName().equals(investigation.getFacility().getFacilityShortName())) {
                 invest.setSelected(!invest.isSelected());
@@ -311,7 +303,7 @@ public class InvestigationBean extends SortableList {
             info("Please select less than "+WebConstants.MAXIMIUM_DATASET_RESULTS+" investigations to view.");
             return null;
         }
-                      
+        
         try{
             QueryDelegate qd = QueryDelegate.getInstance();
             log.debug("About to get datasets and datafiles from: "+investigations.size());
@@ -336,6 +328,22 @@ public class InvestigationBean extends SortableList {
         return NavigationConstants.GET_DATASETS_SUCCESS;
     }
     
+    /**
+     * TODO: Dummy method to allow the datatable to function.
+     *
+     * Bug, the table does not allow links to work without a ajax request
+     * Only works with Firefox
+     */
+    private boolean dummyDone = false;
+    
+    public void dummyAjax(ActionEvent e){
+        log.trace("Dunny method called");
+        dummyDone = true;
+    }
+    
+    public boolean getDummyAjaxDone(){
+        return dummyDone;
+    }
     
     public boolean isExpanded() {
         return expanded;

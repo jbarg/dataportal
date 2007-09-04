@@ -19,14 +19,14 @@ public class WebConstants {
     public final static String SESSION_KEY= "visit";
     
     //dataset page info
-    public final static int MAXIMIUM_RESULTS = 500;
+    public final static int MAXIMIUM_RESULTS = 200;
     public final static int MAXIMIUM_DATASET_RESULTS = 100;
     public final static int MAXIMIUM_CLIENT_TOTAL_RESULTS = 100;  //100 means 200K, 200b per node, so 100 nodes is ~ 200K dat sent bakc to page
     
     //investigation
      public final static int MAXIMIUM_INVESTIGATION_TREE_RESULTS = 50;
      
-    public final static int MAXIMIUM_SEARCH_TIME = 15; //seconds
+    public final static int MAXIMIUM_SEARCH_TIME = 25; //seconds
     
    
     
