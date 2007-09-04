@@ -11,7 +11,6 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
-import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
 
@@ -25,9 +24,11 @@ public interface QueryLocal {
     public QueryRequest queryMydata(String sid, HashSet<String> facilities) throws SessionException, QueryException;
     
     public QueryRequest queryAdvanced(String sid, AdvancedSearchDetailsDTO AdvancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException;
-   
+    
     public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
-  
+    
+    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException;
+    
     public boolean isFinished(QueryRequest request) throws SessionException;
     
     public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException;
@@ -35,9 +36,9 @@ public interface QueryLocal {
     public Collection<Investigation> getQueryResults(QueryRequest request) throws SessionException;
     
     public Collection<String> getCompleted(QueryRequest request) throws SessionException;
-         
+    
     public Collection<Investigation> getInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
-   
+    
     public Collection<QueryRecordDTO> getCurrentResults(String sid) throws SessionException;
     
     public Collection<Investigation> getPastQueryResults(String sid, String queryid) throws SessionException;
@@ -47,7 +48,7 @@ public interface QueryLocal {
     public HashMap<String, Collection<String>> getKeywords(String sid, boolean redownload) throws QueryException;
     
     public HashMap<String, Collection<String>> getKeywords(String sid) throws QueryException;
-     
+    
     public Collection<String> getKeywordsForFacility(String sid, String facility) throws QueryException;
-   
+    
 }

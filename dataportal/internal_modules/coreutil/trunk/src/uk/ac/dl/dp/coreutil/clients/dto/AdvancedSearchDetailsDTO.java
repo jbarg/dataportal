@@ -320,12 +320,16 @@ public class AdvancedSearchDetailsDTO implements Serializable {
                 if(fieldName.equals("log") || fieldName.equals("fuzzy") || fieldName.equals("investigationInclude")) continue;
                 //get value
                 Object result = getProperty(fieldName, this);
-                if(result != null) passed = true;
+                if(result != null) {
+                    log.trace("Passed with: "+fieldName+" value "+result);
+                    passed = true;
+                    break;
+                }
             } catch (Exception ex) {
                 log.warn(getClass().getSimpleName()+": "+fieldName+" cannot be accessed.",ex);
             }
         }
-        if(!passed) throw new IllegalStateException("Atleast one field needs to be filled in");
+        if(!passed) throw new IllegalStateException("Atleast one field needs to be filled in.");
         return true;
     }
     

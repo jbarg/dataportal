@@ -63,6 +63,10 @@ public class QueryDelegate {
         return qsmr.queryAdvanced(sid, advancedSearchDetailsDTO, facilities);
     }
     
+    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException{
+        return qsmr.getInvestigationById(sessionId,investigationId,facility);
+    }
+    
     public boolean isFinished(QueryRequest query_request) throws SessionException{
         return qsmr.isFinished(query_request);
     }
