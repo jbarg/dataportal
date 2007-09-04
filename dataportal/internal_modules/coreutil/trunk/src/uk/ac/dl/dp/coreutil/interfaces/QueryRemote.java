@@ -28,6 +28,8 @@ public interface QueryRemote {
     
     public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
     
+    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException;
+    
     public boolean isFinished(QueryRequest request) throws SessionException;
     
     public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException;

@@ -29,6 +29,11 @@ public class KeywordsFileBean {
     
      private static Logger log = Logger.getLogger(KeywordsFileBean.class);
      
+     /**
+      * Threadhold to keep keywords in memory
+      */
+    public final int THRESHOLD_SIZE = 40000;
+    
     /**
      * User
      */
@@ -47,7 +52,7 @@ public class KeywordsFileBean {
     /**
      * Keywords for the facility for the user
      */
-    private Collection<String> keywords;
+    private String[] keywords;
     
     /**
      * Location of keyword file
@@ -80,16 +85,17 @@ public class KeywordsFileBean {
         this.facility = facility;
     }
     
-    public Collection<String> getKeywords() {
+    public String[] getKeywords() {
         return keywords;
     }
     
-    public void setKeywords(Collection<String> keywords) {
+    public void setKeywords(String[] keywords) {
         this.keywords = keywords;
     }
     
     public boolean hasBeenUpdated(){
-        if(modTime.before(new Date(keywordFile.lastModified()))) return true;
+        if(keywords == null) return true;
+        else if(modTime.before(new Date(keywordFile.lastModified()))) return true;
         else return false;
     }
     
@@ -106,11 +112,11 @@ public class KeywordsFileBean {
             obj_in = new ObjectInputStream(f_in);
             
             // Read an object.
-            keywords = (Collection<String>)obj_in.readObject();           
-            log.info("Loaded keywords from "+facility+" for user: "+user+" has : "+keywords.size()+" keywords");
+            keywords = (String[])obj_in.readObject();           
+            log.info("Loaded keywords from "+facility+" for user: "+user+" has : "+keywords.length+" keywords");
         } catch(Exception ex){
             log.warn("Error loading keywords "+keywordFile.getAbsolutePath()+" from disk");
-            keywords = new ArrayList<String>();
+            keywords = new String[0];
         } finally {
             try{
                 //close streams
