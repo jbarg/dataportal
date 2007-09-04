@@ -1,13 +1,11 @@
-<%@page contentType="text/html"%>
-<%@page pageEncoding="UTF-8"%>
+
 <%@taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@page import="uk.ac.dl.dp.web.backingbeans.Visit"%>
 <%@page import="uk.ac.dl.dp.web.util.WebConstants" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
             
     <head>
@@ -28,12 +26,12 @@
             
             
             <table width="954" id="top_table" >  
-                Â <tbody>
+                 <tbody>
                     <tr>
                         <td width="100%">
                             
                             <table   border="0" width="100%" id="image_stfc" >
-                                Â <tbody>
+                                 <tbody>
                                     <tr>
                                         <td width="100%" > 
                                             <%--  <td id="nav_bar" width="100%"  > 
@@ -50,7 +48,7 @@
                                 </tbody>                                
                             </table>
                             <table id="nav_bar_second"   border="0" width="100%" >
-                                Â <tbody>
+                                 <tbody>
                                     <tr>                         
                                         <td width="100%" align="right" >
                                             <%--     <f:subview id="header_2">
@@ -64,7 +62,7 @@
                             </table>
                             
                             <table id="nav_bar_accross"  border="0" width="100%">
-                                Â <tbody>
+                                 <tbody>
                                     <tr>
                                         <td valign="top" width="200">
                                             <!-- does not work inside subview??? -->
@@ -87,7 +85,7 @@
                                         </td>
                                         <td width="*" valign="top" >
                                             <table border="0" width="100%" >  
-                                                Â <tbody>
+                                                 <tbody>
                                                     <tr>
                                                         <td align="right">
                                                             <%-- <f:subview id="title">
@@ -101,7 +99,7 @@
                                             </table>
                                             <hr size="-1" width="100%"  />
                                             <table border="0" width="100%" >    
-                                                Â <tbody>
+                                                 <tbody>
                                                     <tr>
                                                         <td width="7%">&nbsp;</td>
                                                         <td valign="top" width="93%" >
@@ -122,7 +120,7 @@
                             
                             <table id="footer_bar" border="0" width="100%" align="right">
                                 
-                                Â <tbody>
+                                 <tbody>
                                     <tr>
                                         <f:subview id="footer">
                                             <c:import url="inc/footer.jsp" />
