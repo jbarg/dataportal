@@ -171,11 +171,11 @@
                                                     </a4j:commandLink>
                                                 </f:facet>
                                                 
-                                                <t:popup rendered="#{data.dataset}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
+                                                   
+                                               <%-- <t:popup rendered="#{data.dataset}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
                                                          closePopupOnExitingPopup="true"
                                                          displayAtDistanceX="20"
                                                          displayAtDistanceY="-40" >
-                                                    <h:outputText style="cursor: default" value="#{fn:toLowerCase(data.typeOfObject)}" />
                                                     
                                                     <f:facet name="popup">
                                                         <h:panelGroup>
@@ -186,8 +186,8 @@
                                                             </h:panelGrid>
                                                         </h:panelGroup>
                                                     </f:facet>
-                                                </t:popup>
-                                                <%-- <h:outputText rendered="#{!data.dataset}" value="#{data.typeOfReference}" />--%>
+                                                </t:popup>--%>
+                                                <h:outputText rendered="#{data.dataset}" value="#{data.typeOfObject}" />
             
                                             </h:column>
                                             
@@ -278,7 +278,7 @@
                                             <h:column>
                                                 
                                                 <f:facet name="header">
-                                                    <h:outputText value="Goto" style="table-header; color:blue"/>                   
+                                                    <h:outputText value="Goto" style="table-header; color:blue" />                   
                                                 </f:facet>          
                                                 <%-- <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               --%>
                   
@@ -326,7 +326,7 @@
                                             
                                             <f:facet name="detailStamp">
                                                 
-                                                <t:dataTable preserveSort="true" rendered="#{data.dataset}" width="55%" id="cities" columnClasses="standardTable_Column,standardTable_Column"
+                                                <t:dataTable preserveSort="true" rendered="#{data.dataset}" width="75%" id="cities" columnClasses="standardTable_Column,standardTable_Column"
                                                              styleClass="standardTable_Column" var="url" value="#{data.urls}">
                                                     <h:column>
                                                         &nbsp;&nbsp; &nbsp;&nbsp;

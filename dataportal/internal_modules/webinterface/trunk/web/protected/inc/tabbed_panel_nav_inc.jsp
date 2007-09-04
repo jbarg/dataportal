@@ -34,7 +34,7 @@
         else {     
             document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1').value = old+" "+city+" ";
         }
-        //var oldvalue = document.getElementById('navigation_search:autofillform_nav:facilities_SELECTED').options[0].value;
+        var oldvalue = document.getElementById('navigation_search:autofillform_nav_adv:facilities_SELECTED').options[0].value;
                 
       }
 
@@ -61,7 +61,7 @@
 <a4j:region  selfRendered="true"> 
     
     
-    <t:panelTabbedPane  width="202px" bgcolor="#D1E4E4" serverSideTabSwitch="false" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
+    <t:panelTabbedPane selectedIndex="#{visit.tabIndex}" width="202px" bgcolor="#D1E4E4" serverSideTabSwitch="false" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
         <t:panelTab id="basicSearch"  label="Basic" >
             <h:form id="autofillform_nav">
                 
@@ -97,7 +97,7 @@
                     <h:panelGroup/>
                     <h:message for="keywordField_navj_id_1" styleClass="error"/>
                     
-                                                            
+                    
                     <h:outputLabel>            
                         <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
                     </h:outputLabel>
@@ -219,21 +219,21 @@
                     <!----------------     End of investigators ---------------->
             
                     <!----------------     Start of Like ---------------->
-                      <h:outputLabel>            
+                    <h:outputLabel>            
                         <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
                     </h:outputLabel>
-                   
+                    
                     <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
                     <h:selectOneRadio style="font-size:12px" id="like" value="#{visit.visitData.advancedSearchBean.likeExpression}" >
                         <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
                         <f:selectItem itemLabel="Like"  itemValue="LIKE" />
                     </h:selectOneRadio>       
                     
-                     <h:panelGroup/>
+                    <h:panelGroup/>
                     <h:panelGroup/>
                     <!----------------     End of Like ---------------->
                     
-                     <!----------------     Start of visit id ---------------->
+                    <!----------------     Start of visit id ---------------->
                     <h:outputLabel>            
                         <h:outputText value="Visit Id" style="font-size: 10px" />                   
                     </h:outputLabel>
@@ -247,7 +247,7 @@
                     
                     <!----------------     End of visit id ---------------->
                     
-                         <!----------------     Start of grant id ---------------->
+                    <!----------------     Start of grant id ---------------->
                     <h:outputLabel>            
                         <h:outputText value="Grant Id" style="font-size: 10px" />                   
                     </h:outputLabel>
@@ -262,7 +262,7 @@
                     <!----------------     End of grant id ---------------->
 
                     
-                        <!----------------     Start of inv type---------------->
+                    <!----------------     Start of inv type---------------->
                     <h:outputLabel>            
                         <h:outputText value="Inv type" style="font-size: 10px" />                   
                     </h:outputLabel>
@@ -276,7 +276,7 @@
                     
                     <!----------------     End ofinv type---------------->
 
-                        <!----------------     Start of inv type---------------->
+                    <!----------------     Start of inv type---------------->
                     <h:outputLabel>            
                         <h:outputText value="Instrument" style="font-size: 10px" />                   
                     </h:outputLabel>
@@ -292,7 +292,7 @@
                     
                     <h:panelGroup/>                  
                     
-                   
+                    
                     <h:commandButton id="f24" styleClass="button" action="#{advancedSearchBean.searchAdvancedNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
                     
                     
