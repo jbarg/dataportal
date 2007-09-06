@@ -11,9 +11,7 @@ package uk.ac.dl.dp.core.sessionbeans.events;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,6 +41,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
 import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
+import uk.ac.dl.dp.coreutil.interfaces.SendMDBRemote;
 import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -57,9 +56,9 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
  *
  * @author gjd37
  */
-@Stateless(mappedName=DataPortalConstants.SEND_MDB)
+@Stateless(mappedName=DataPortalConstants.EVENT)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class SendMDBBean extends SessionEJBObject implements SendMDBLocal {
+public class SendMDBBean extends SessionEJBObject implements SendMDBLocal, SendMDBRemote {
     
     static Logger log = Logger.getLogger(SendMDBBean.class);
     

@@ -43,6 +43,7 @@ import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
+import uk.ac.dl.dp.coreutil.interfaces.DownloadServiceLocal;
 import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
 import uk.ac.dl.dp.coreutil.util.Certificate;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
@@ -52,13 +53,14 @@ import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
 import uk.ac.dl.srbapi.cog.PortalCredential;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
 import uk.ac.dl.srbapi.srb.SRBUrl;
+import uk.ac.dl.srbapi.util.IOTools;
 
 /**
  *
  * @author gjd37
  */
 @MessageDriven(mappedName=DataPortalConstants.DOWNLOAD_MDB)/*, activationConfig =
- 
+                                                            
 {
   @ActivationConfigProperty(propertyName="destinationType",
     propertyValue="javax.jms.Queue"),
@@ -78,6 +80,9 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
     
     @EJB
     SendMDBLocal sendMDBLocal;
+    
+    @EJB
+    DownloadServiceLocal downloadServiceLocal;
     
     @Resource(mappedName="MailSession")
     Session mailSession;
@@ -99,10 +104,13 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
             }
             try{
                 
-                downloadSRBFiles(info);
+                //check that the data is set for DP
+                if(!downloadServiceLocal.isSet()){
+                    log.error("DataPortal is not set its constants for email download");
+                } else downloadSRBFiles(info);
                 
             } catch (Exception exception) {
-                log.error("Exception downloading srb files", exception);
+                log.error("Exception downloading srb files for user sid: "+info.getSid(), exception);
                 return ;
             }
             
@@ -198,7 +206,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         email(srbInfo,session.getUserId(),newLocation);
     }
     
-//@WebMethod
+    //@WebMethod
    /* public boolean downloadSRBFiles(SRBInfo srbInfo, ServiceInfo serviceInfo) throws IllegalArgumentException, LoginMyProxyException, MalformedURLException, Exception {
         //this should be done on the WSDL/Schema
         checkArguments(srbInfo, serviceInfo);
@@ -227,18 +235,17 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
     
     
     private File zipFiles(SRBInfo srbInfo, File srbZipFile) throws IOException {
-        DPConstants constants = getConstants();
+        DPConstants location = getConstants(DPConstants.TYPE.DOWNLOAD_LOCATION);
         
         //TODO sort out constants
         //need to copy to server location
-        /*File newLocationDir = new File(constants.getDownloadLocation()+File.separator+"download");
+        File newLocationDir = new File(location+File.separator+"download");
         if(!newLocationDir.exists()) newLocationDir.mkdir();
-        File newLocation = new File(constants.getDownloadLocation()+File.separator+"download",srbZipFile.getName());
+        File newLocation = new File(location+File.separator+"download",srbZipFile.getName());
         if(!newLocation.getParentFile().exists()) newLocation.getParentFile().mkdir();
         log.trace("Copying file to: "+newLocation.getAbsolutePath());
         IOTools.fileCopy(srbZipFile,newLocation);
-        return newLocation;*/
-        return null;
+        return newLocation;
     }
     
     /**
@@ -362,17 +369,18 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
     }
     
     
-    private DPConstants getConstants() {
-        return  em.find(DPConstants.class,1L);
+    private DPConstants getConstants(DPConstants.TYPE type) {
+        return  (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", type.toString()).getSingleResult();
+        
     }
     
     private boolean email(SRBInfo srbInfo, ServiceInfo serviceInfo, File srbZipFile) throws UnknownHostException {
         log.trace("Emailing now");
         try {
-            DPConstants constants = getConstants();
+            //DPConstants constants = getConstants();
             String message = "Data Portal download";
             // String hostURL = "http://"+host.getHostAddress()+":"+sreq.getServerPort()+contextPath+"/download/"+srbZipFile.getName();
-         //TODO   postMail(serviceInfo.getEmail(),message,"https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName(),"dataportal_download@dl.ac.uk");
+            //   postMail(serviceInfo.getEmail(),message,"https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName(),"dataportal_download@dl.ac.uk");
             postMail(serviceInfo.getEmail(),message,"https://:/download/"+srbZipFile.getName(),"dataportal_download@dl.ac.uk");
             return true;
         } catch (MessagingException ex) {
@@ -385,7 +393,11 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
     private boolean email(SRBInfo srbInfo, User user, File srbZipFile) throws UnknownHostException {
         log.trace("Emailing now");
         try {
-            DPConstants constants = getConstants();
+            DPConstants ip = getConstants(DPConstants.TYPE.SERVER_IP);
+            DPConstants port = getConstants(DPConstants.TYPE.SERVER_PORT);
+            DPConstants root = getConstants(DPConstants.TYPE.SERVER_CONTEXT_ROOT);
+            DPConstants scheme = getConstants(DPConstants.TYPE.SERVER_SCHEME);
+            
             String message = "Data Portal download";
             
             
@@ -398,7 +410,7 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
             body.append("\n");
             body.append("Your requested download from the Data Portal can be downloaded at:\n");
             body.append("\n");
-           //TODO body.append("https://"+constants.getServiceName()+":"+constants.getPortNumber()+constants.getContextRoot()+"/download/"+srbZipFile.getName()+"\n");
+            body.append(scheme.getValue()+"://"+ip.getValue()+":"+port.getValue()+root.getValue()+"/download/"+srbZipFile.getName()+"\n");
             body.append("\n");
             body.append("Contents:\n\n");
             for(SRBUrl file : srbInfo.getSrbUrls()){

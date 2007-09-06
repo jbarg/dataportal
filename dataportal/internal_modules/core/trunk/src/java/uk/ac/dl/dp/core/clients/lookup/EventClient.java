@@ -11,9 +11,9 @@ package uk.ac.dl.dp.core.clients.lookup;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.xml.stream.util.EventReaderDelegate;
-import uk.ac.dl.dp.coreutil.interfaces.EventRemote;
+
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
+import uk.ac.dl.dp.coreutil.interfaces.SendMDBRemote;
 import uk.ac.dl.dp.coreutil.interfaces.SessionRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -47,7 +47,7 @@ public class EventClient {
                 urls.add("srb://lennon.dl.ac.uk/"+Math.random());
             }
             
-            EventRemote event = (EventRemote) csl.lookup(DataPortalConstants.EVENT);
+            SendMDBRemote event = (SendMDBRemote) csl.lookup(DataPortalConstants.EVENT);
            
             event.sendDownloadEvent(session,"ISIS-4657 Default",urls);
         }catch(Exception e){

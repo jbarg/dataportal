@@ -110,8 +110,8 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 request.getKeywordQuery().getLogicalOperator(),
                 request.getKeywordQuery().getInvestigationInclude(),
                 request.getKeywordQuery().isFuzzy(),
-                request.getKeywordQuery().getStart_index(),
-                request.getKeywordQuery().getMax_results());
+                0,
+                DataPortalConstants.MAX_RESULTS);
     }
     
     private Collection<Investigation>  doAdvancedSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception {
@@ -120,8 +120,8 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
         AdvancedSearchDetails advancedSearchDetails = new AdvancedSearchDetails();
         request.getAdvancedSearch().mergeTo(advancedSearchDetails);
         
-        return ICATSingleton.getInstance(wsdlLocation).searchByAdvanced(
-                request.getFacilitySessionId(), advancedSearchDetails);
+        return ICATSingleton.getInstance(wsdlLocation).searchByAdvancedPagination(
+                request.getFacilitySessionId(), advancedSearchDetails, 0, DataPortalConstants.MAX_RESULTS);
     }
     
     private Collection<Investigation>  doMyDataSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception{
@@ -151,7 +151,9 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
             log.trace("seaching: "+request.getFacility()+" with facSessionID "+facilitySessionId);
             
             // return collection
-            Collection<Investigation> investigationsFromFacility = ICATSingleton.getInstance(moduleFacility.getWsdlLocation()).getInvestigationsIncludes(facilitySessionId, investigation_ids, request.getInvestigationRequest().getInclude());
+            Collection<Investigation> investigationsFromFacility = 
+                    ICATSingleton.getInstance(moduleFacility.getWsdlLocation()).getInvestigationsIncludes(
+                    facilitySessionId, investigation_ids, request.getInvestigationRequest().getInclude());
             
             log.debug("Returned size: "+investigationsFromFacility.size());
             //returnedInvestigations.addAll(investigationsFromFacility);
