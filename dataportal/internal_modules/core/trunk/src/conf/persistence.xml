@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence">
     <persistence-unit name="dataportal" transaction-type="JTA">
-        <jta-data-source>jdbc/oracle</jta-data-source>
+        <jta-data-source>jdbc/dataportal</jta-data-source>
         <class>uk.ac.dl.dp.coreutil.entity.Session</class>
         <class>uk.ac.dl.dp.coreutil.entity.User</class>
         <class>uk.ac.dl.dp.coreutil.entity.Role</class>
@@ -10,7 +10,7 @@
         <class>uk.ac.dl.dp.coreutil.entity.ModuleLookup</class>
         <class>uk.ac.dl.dp.coreutil.entity.ProxyServers</class>
         <class>uk.ac.dl.dp.coreutil.entity.Url</class>
-        <class>uk.ac.dl.dp.coreutil.entity.Tokens</class>
+        <class>uk.ac.dl.dp.coreutil.entity.FacilitySession</class>
         <class>uk.ac.dl.dp.coreutil.entity.SrbServer</class>
         <class>uk.ac.dl.dp.coreutil.entity.EventLogDetails</class>
         <class>uk.ac.dl.dp.coreutil.entity.EventLog</class>
@@ -41,7 +41,7 @@
         <class>uk.ac.dl.dp.coreutil.entity.ModuleLookup</class>
         <class>uk.ac.dl.dp.coreutil.entity.ProxyServers</class>
         <class>uk.ac.dl.dp.coreutil.entity.Url</class>
-        <class>uk.ac.dl.dp.coreutil.entity.Tokens</class>
+        <class>uk.ac.dl.dp.coreutil.entity.FacilitySession</class>
         <class>uk.ac.dl.dp.coreutil.entity.SrbServer</class>
         <class>uk.ac.dl.dp.coreutil.entity.EventLogDetails</class>
         <class>uk.ac.dl.dp.coreutil.entity.EventLog</class>
@@ -52,20 +52,20 @@
         <class>uk.ac.dl.dp.coreutil.entity.DataRefAuthorisationPK</class>
         <class>uk.ac.dl.dp.coreutil.entity.DpUserPreference</class>
         <class>uk.ac.dl.dp.coreutil.entity.DPConstants</class>
-        <!--  <properties>
-      <property name="toplink.jdbc.driver" value="oracle.jdbc.xa.client.OracleXADataSource"/>
-      <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@volga.dl.ac.uk:1521:XE"/>
-      <property name="toplink.jdbc.user" value="dp5user"/>
-      <property name="toplink.jdbc.password" value="dp5pass"/>
-      <property name="toplink.logging.level" value="FINE"/>
-    </properties>
-        </persistence-unit>-->
         <properties>
-            <property name="toplink.jdbc.driver" value="oracle.jdbc.xa.client.OracleXADataSource"/>
-            <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@(DESCRIPTION= (LOAD_BALANCE=on) (ADDRESS=(PROTOCOL=TCP)(HOST=honey.esc.rl.ac.uk) (PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=goodnight.esc.rl.ac.uk)(PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=sapphire.esc.rl.ac.uk)(PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=domino.esc.rl.ac.uk)(PORT=1521)) (CONNECT_DATA=(SERVICE_NAME=dpdls.esc.rl.ac.uk)))"/>
-            <property name="toplink.jdbc.user" value="DPDLS"/>
-            <property name="toplink.jdbc.password" value="ajdn1fr"/>
-            <property name="toplink.logging.level" value="FINE"/>
+            <property name="toplink.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
+            <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(HOST=elektra.dl.ac.uk)(PROTOCOL=tcp)(PORT=1521))(CONNECT_DATA=(SID=minerva2)))"/>
+            <property name="toplink.jdbc.user" value="dp5_unit_test"/>
+            <property name="toplink.jdbc.password" value="fl3nd1g"/>
+            <property name="toplink.logging.level" value="OFF"/>
         </properties>
+ 
+  <!--  <properties>
+        <property name="toplink.jdbc.driver" value="oracle.jdbc.pool.OracleDataSource"/>
+        <property name="toplink.jdbc.url" value="jdbc:oracle:thin:@(DESCRIPTION= (LOAD_BALANCE=on) (ADDRESS=(PROTOCOL=TCP)(HOST=honey.esc.rl.ac.uk) (PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=goodnight.esc.rl.ac.uk)(PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=sapphire.esc.rl.ac.uk)(PORT=1521)) (ADDRESS=(PROTOCOL=TCP)(HOST=domino.esc.rl.ac.uk)(PORT=1521)) (CONNECT_DATA=(SERVICE_NAME=dpdls.esc.rl.ac.uk)))"/>
+        <property name="toplink.jdbc.user" value="DPDLS"/>
+        <property name="toplink.jdbc.password" value="ajdn1fr"/>
+        <property name="toplink.logging.level" value="FINE"/>
+    </properties>-->
     </persistence-unit>
 </persistence>
