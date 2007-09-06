@@ -29,7 +29,9 @@ import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
 import javax.faces.application.*;
+import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
 
 /**
  *
@@ -96,7 +98,10 @@ public class OtherBookmarkBean extends SortableList {
         this.dataRefs. = dataRefs;*/
         
     }
-    //this sorts the columns in the table,
+    
+    /**
+     * this sorts the columns in the table
+     */
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -107,17 +112,17 @@ public class OtherBookmarkBean extends SortableList {
                 }
                 if (column.equals("facility")) {
                     return ascending ? c1.getFacility().compareTo(c2.getFacility()) : c2.getFacility()
-                    .compareTo(c1.getFacility());
+                            .compareTo(c1.getFacility());
                 } else if (column.equals("name")) {
                     if(c1.getName() == null) return 0;
                     else return ascending ? c1.getName().compareTo(c2.getName()) : c2.getName()
-                    .compareTo(c1.getName());
+                            .compareTo(c1.getName());
                 } else if (column.equals("note")) {
                     return ascending ? c1.getNote().compareTo(c2.getNote()) : c2.getNote()
-                    .compareTo(c1.getNote());
+                            .compareTo(c1.getNote());
                 } else if (column.equals("time")) {
                     return ascending ? c1.getModTime().compareTo(c2.getModTime()) : c2.getModTime()
-                    .compareTo(c1.getModTime());
+                            .compareTo(c1.getModTime());
                 } else
                     return 0;
             }
@@ -126,8 +131,10 @@ public class OtherBookmarkBean extends SortableList {
         
     }
     
-    //This listens to changes in the users isSelected.  This is because the list could be
-    //larger than one page so have to do it this way
+    /**
+     * This listens to changes in the users isSelected.  This is because the list could be
+     * larger than one page so have to do it this way
+     */
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -149,86 +156,38 @@ public class OtherBookmarkBean extends SortableList {
         getTable().collapseAllDetails();
     }
     
-    //Gets the current bookmark and then gets the investigation and searches for the investigation
-    // returns back to the dataset page of the investigation
+    /**
+     * Gets the current bookmark and then gets the investigation and searches for the investigation
+     * returns back to the dataset page of the investigation
+     */
     public String viewDataSets(){
         log.trace("view bookmarked data");
         Bookmark qrdto =   (Bookmark) table.getRowData();
-        log.trace("viewing studyId: "+qrdto.getStudyId());
-        Collection<Investigation> investigations = null;
-        try {
-           // investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
-            //got investigstion
-            
-            //check if null so user not allowed access
-            if(investigations.size() == 0){
-                error("You do not have permission to view the investigation.");
-                return null;
-            }
-            
-            for(Investigation investigation : investigations){
-                investigation.setSelected(true);
-            }
-            
-            //set the title from the seach
-            getVisitData().setSearchedTitle("Search Results");
-            getVisitData().setSearchedInvestigations(investigations);
-            //remove request info
-            getVisitData().setQueryRequest(null);
-            
-            //add the investigation to visit
-            InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");
-            
-              if(true) throw new QueryException();
-            return  investigationBean.datasets();
-              
-        } catch (QueryException ex) {
-            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
-            error("Error:  Unable to search for "+qrdto.getName());
-            return null;
-        } catch (Exception ex) {
-            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
-            error("Error:  Unexpected error searching for "+qrdto.getName());
-            return null;
-        }
-    }
-    
-    //Gets the current bookmark and then gets the investigation and searches for the investigation
-    // returns back to the investigations page
-    public String viewData(){
-        log.trace("view data");
-        Bookmark qrdto =   (Bookmark) table.getRowData();
-        log.trace("viewing studyId: "+qrdto.getStudyId());
-        Collection<Investigation> investigations = null;
-        try {
-            //investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
-            
-            //check if null so user not allowed access
-            if(investigations.size() == 0){
-                error("You do not have permission to view the investigation.");
-                return null;
-            }
-                if(false) throw new QueryException();
-        } catch (QueryException ex) {
-            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
-            error("Error:  Unable to search for "+qrdto.getName());
-            return null;
-        } catch (Exception ex) {
-            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
-            error("Error:  Unexpected error searching for "+qrdto.getName());
-            return null;
-        }
-        //set the searched invest and send to investigation page
-        getVisitData().setSearchedInvestigations(investigations);
-        //remove request info
-        getVisitData().setQueryRequest(null);
-        return NavigationConstants.SEARCH_SUCCESS;
+        log.trace("viewing investigationId: "+qrdto.getStudyId());
+        
+        BookmarkBean bookmarkBean = (BookmarkBean) getBean("bookmarkBean");
+        return  bookmarkBean.getInvestigationDatasetsById(getVisit().getSid(), qrdto.getStudyId(), qrdto.getFacility(), qrdto.getName());
         
     }
     
+    /**
+     * Gets the current bookmark and then gets the investigation and searches for the investigation
+     * returns back to the investigations page
+     */
+    public String viewData(){
+        log.trace("view data");
+        Bookmark qrdto =   (Bookmark) table.getRowData();
+        log.trace("viewing investigationId: "+qrdto.getStudyId());
+    
+        BookmarkBean bookmarkBean = (BookmarkBean) getBean("bookmarkBean");
+        return  bookmarkBean.getInvestigationById(getVisit().getSid(), qrdto.getStudyId(), qrdto.getFacility(), qrdto.getName());         
+    }
+    
     ///////////////////////////////////////////////////
-    //these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
-    //need this is see if bookmarks is > 0 and the lenght of them
+    /**
+     * these two added cos of JSF 1.2 and myfaces 1.1 version incompatability.
+     * need this is see if bookmarks is > 0 and the lenght of them
+     */
     public boolean isPopulated() {
         if(getDataRefs().size() > 0){
             return true;
@@ -246,9 +205,13 @@ public class OtherBookmarkBean extends SortableList {
     public void setLength(boolean length) {
         this.length = length;
     }
+    ///////////////////////////////////////////////////
     
-    //these are added because cannot find which column is sorted form the page
-    //crappy way of doing it
+    ///////////////////////////////////////////////////
+    /**
+     * these are added because cannot find which column is sorted form the page
+     * crappy way of doing it
+     */
     public boolean isName(){
         return is("name");
     }

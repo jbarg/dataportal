@@ -72,9 +72,9 @@ public class KeywordBean extends AbstractSessionBean {
         }
         
         log.trace("total keyword size is: "+allKeywords.length);
-        //String[] sortedKeywords = allKeywords.toArray(new String[allKeywords.size()]);
-        //try and sort words
-        Arrays.sort(allKeywords);
+        
+        //need to sort to some         
+        Arrays.sort(allKeywords, String.CASE_INSENSITIVE_ORDER);
         
         //TODO problem with if spaces allowed (ie single words only)
         //need to check if current selected fac contins data in folders( there if so

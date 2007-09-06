@@ -168,9 +168,7 @@ public class UserPreferencesBean extends AbstractRequestBean {
         location.add(new SelectItem(DPDefaultLocation.BASIC_SEARCH.toString(),"Basic Search"));
         location.add(new SelectItem(DPDefaultLocation.BOOKMARKS.toString(),"Bookmarks"));
         location.add(new SelectItem(DPDefaultLocation.DATA_REFERENCES.toString(),"Data References"));
-        
-        //TODO add advanced
-        //  location.add(new SelectItem(DPDefaultLocation.ADVANCED_SEARCH.toString,"Advanced Search"));
+        location.add(new SelectItem(DPDefaultLocation.ADVANCED_SEARCH.toString(),"Advanced Search"));
         
         return location;
     }

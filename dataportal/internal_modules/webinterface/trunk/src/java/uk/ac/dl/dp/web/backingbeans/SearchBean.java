@@ -113,7 +113,7 @@ public class SearchBean extends AbstractRequestBean {
         try {
             query_request = qd.queryMyData(getVisit().getSid(), getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
-             //set the index of the tabbed pane to basic search
+            //set the index of the tabbed pane to basic search
             getVisit().setTabIndex(0);
             
             log.info("Query Id is "+query_request.getQueryid());
@@ -156,7 +156,7 @@ public class SearchBean extends AbstractRequestBean {
         try {
             query_request = qd.queryMyData(getVisit().getSid(), facilities);
             getVisitData().setQueryRequest(query_request);
-             //set the index of the tabbed pane to basic search
+            //set the index of the tabbed pane to basic search
             getVisit().setTabIndex(0);
             
             log.info("Query Id is "+query_request.getQueryid());
@@ -222,7 +222,7 @@ public class SearchBean extends AbstractRequestBean {
             
             //set the query as last request
             getVisitData().setQueryRequest(query_request);
-             //set the index of the tabbed pane to basic search
+            //set the index of the tabbed pane to basic search
             getVisit().setTabIndex(0);
             
             log.info("Query Id is "+query_request.getQueryid());
@@ -322,16 +322,21 @@ public class SearchBean extends AbstractRequestBean {
                 //print out facilities returned
                 Collection<String> facs2 = qd.getCompleted(query_request);
                 for(String fac : facs2){
-                    log.trace("Completed: "+fac);
+                    //log.trace("Completed: "+fac);
                 }
                 
                 //if more than max wait and not finished
                 if(((new Date().getTime() - time)/1000) > WebConstants.MAXIMIUM_SEARCH_TIME) {
                     //if nothing returned display message to user, otherwise show results (break loop)
-                    if(facs2 == null ||facs2.size() == 0 ){
+                    if(facs2 == null || facs2.size() == 0 ){
+                        log.debug("Query timed out, no results found. Please refine your query.");
                         info("Query timed out, no results found. Please refine your query.");
                         return null;
-                    } else break;
+                    } else {
+                        log.debug("Results only returned from: "+facs2+", the rest timed out.");
+                        info("Results only returned from: "+facs2+", the rest timed out.");
+                        break;
+                    }
                     
                 }
                 Thread.sleep(250);
@@ -378,7 +383,7 @@ public class SearchBean extends AbstractRequestBean {
             //set investigations
             log.debug("Adding found investigations to session, size: "+investigations.size());
             getVisitData().setSearchedInvestigations(investigations);
-            
+            getVisitData().setDataSetTree(null);
             
             return NavigationConstants.SEARCH_SUCCESS;
         } catch (Exception ex) {

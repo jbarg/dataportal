@@ -14,6 +14,7 @@ import java.net.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.srbapi.srb.*;
 import uk.ac.dp.icatws.Datafile;
@@ -49,14 +50,29 @@ public class DownloadServlet extends HttpServlet {
                 //set the DB to vales for download
                 InetAddress host = InetAddress.getLocalHost();
                 
-             /*   DPConstants dpConst = new DPConstants();
-                dpConst.setLoggingLevel("DEBUG");
-                dpConst.setDownloadLocation(workingDir);
-                dpConst.setPortNumber(8181);
-                dpConst.setContextRoot(context);
+                DPConstants port = new DPConstants();
+                DPConstants logging = new DPConstants();
+                DPConstants ip = new DPConstants();
+                DPConstants scheme = new DPConstants();
+                DPConstants contextRoot = new DPConstants();
+                DPConstants location = new DPConstants();
                 
-                dpConst.setServiceName(host.getHostAddress());
-                DownloadDelegate.getInstance().setConstants(dpConst);*/
+                logging.setValue("DEBUG");
+                location.setValue(workingDir);
+                port.setValue("8181");
+                contextRoot.setValue(context);
+                scheme.setValue("https");
+                ip.setValue(host.getHostAddress());
+                
+                Collection<DPConstants> constants = new ArrayList<DPConstants>();
+                constants.add(port);
+                constants.add(logging);
+                constants.add(ip);
+                constants.add(scheme);
+                constants.add(contextRoot);
+                constants.add(location);               
+                
+                DownloadDelegate.getInstance().setConstants(constants);
             }
         } catch (Exception ex) {
             log.warn("Error setting up the constants",ex);
@@ -74,7 +90,7 @@ public class DownloadServlet extends HttpServlet {
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest req, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         HttpSession session = req.getSession();
         Visit visit  =  (Visit)session.getAttribute(WebConstants.SESSION_KEY);
         
@@ -90,74 +106,43 @@ public class DownloadServlet extends HttpServlet {
         String[] srbUrl = null;
         String name = null;
         File srbDownload = null;
-        String DpId = null;
+        /**
+         * Detail of facility and all ids
+         * eg ISIS:1-ISIS:34-ISIS:5 means ISIS download 1, 34 and 5 of datafile ids
+         * ISIS:1-DIAMOND:34
+         */
+        String detail = "";
         
-        
-        if(FROM.equals(DownloadConstants.DATA_CENTER)){
-            //request from Data Center
-            if(TYPE.startsWith(DownloadConstants.DATA_FILE)){
-                Url file = visit.getVisitData().getDataUrlFromCart(ID);
-                DpId = file.getDpId();
-                name = file.getName();
-                srbUrl = new String[]{file.getUrl()};
-                
-                //this is when a file is a data ref
-            } else if(TYPE.startsWith(DownloadConstants.DATA_FILE_AS_REF)){
-                DataReference file = visit.getVisitData().getDataReferenceFromCart(ID);
-                DpId = file.getDpId();
-                name = file.getName();
-                for(Url url : file.getUrls()){
-                    srbUrl = new String[]{url.getUrl()};
-                    break;
-                }
-                
-                //this will get DATASETS and DATASETINFOLDER types
-            } else if(TYPE.startsWith(DownloadConstants.DATA_SET)){
-                DataReference file = visit.getVisitData().getDataReferenceFromCart(ID);
-                DpId = file.getDpId();
-                name = file.getName();
-                //iterate through reference and get all URLS out of it
-                ArrayList<String> urls = new ArrayList<String>();
-                for(Url url : file.getUrls()){
-                    urls.add(url.getUrl());
-                }
-                
-                srbUrl = urls.toArray(new String[urls.size()]);
-            } else if(TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE)){
-                //multiple file download
-                srbUrl = visit.getVisitData().getCartSRBURLs();
-                name = DownloadConstants.DOWNLOAD_MULTIPLE;
-                DpId = DownloadConstants.DOWNLOAD_MULTIPLE;
-            }
-            
-            //do other types from DATASETS
-        } else if(FROM.equals(DownloadConstants.DATA_SETS)){
+        if(FROM.equals(DownloadConstants.DATA_SETS)){
             // log.debug("Download from datasets.");
             //request from Data Sets
             if(TYPE.startsWith(DownloadConstants.DATA_FILE)){
                 Datafile file = visit.getVisitData().getDataFileFromSearchedData(ID);
-                DpId = file.getUniqueId();
+                detail = ID.split("-")[0]+":"+file.getId();
                 name = file.getName();
                 srbUrl = new String[]{file.getLocation()};
                 //this will get DATASETS and DATASETINFOLDER types
             } else if(TYPE.startsWith(DownloadConstants.DATA_SET)){
                 // log.trace("Type Data Set");
-                Dataset file = visit.getVisitData().getDataSetFromSearchedData(ID);
-                DpId = file.getUniqueId();
-                name = file.getName();
+                Dataset dataset = visit.getVisitData().getDataSetFromSearchedData(ID);
+                name = dataset.getName();
                 //iterate through set and get all URLS out of it
                 ArrayList<String> urls = new ArrayList<String>();
-                for(Datafile datafile :visit.getVisitData().getCurrentDatafiles()){
-                    if(datafile.getDatasetId().equals(file.getId())){
-                        urls.add(datafile.getLocation());
-                    }
+                for(Datafile datafile : dataset.getDatafileCollection()){
+                    urls.add(datafile.getLocation());
+                    detail += ID.split("-")[0]+":"+datafile.getId()+"-";
                 }
                 srbUrl = urls.toArray(new String[urls.size()]);
             } else if(TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE)){
                 //multiple file download
                 srbUrl =  visit.getVisitData().getAllSearchedSRBURLs();
-                name = DownloadConstants.DOWNLOAD_MULTIPLE;
-                DpId = DownloadConstants.DOWNLOAD_MULTIPLE;
+                if(srbUrl.length == 1){
+                    int last = srbUrl[0].lastIndexOf("/");
+                    if(last == -1) last = srbUrl[0].lastIndexOf("\\");
+                    if(last == -1) name = "Download";
+                    name = srbUrl[0].substring(last+1, srbUrl[0].length());
+                } else name = DownloadConstants.DOWNLOAD_MULTIPLE;
+                detail = visit.getVisitData().getDownloadDetail();
             }
         }
         
@@ -221,15 +206,6 @@ public class DownloadServlet extends HttpServlet {
                     return ;
                 }
                 
-                
-                /*if(TYPE.startsWith(DownloadConstants.DATA_FILE.toString()) || TYPE.startsWith(DownloadConstants.DATA_FILE_AS_REF.toString())) {
-                    man.setZipeFile(false);
-                } else {
-                    man.setZipeFile(true);
-                }*/
-                
-                // man.setFolderFilesOnly(true);
-                
                 man.start();
                 visit.putSrbManager(ID, man);
                 //
@@ -241,10 +217,6 @@ public class DownloadServlet extends HttpServlet {
                 for(String url : srbUrl){
                     urls.add(url);
                 }
-                String detail = null;
-                if(name.equals(DownloadConstants.DOWNLOAD_MULTIPLE)){
-                    detail = name;
-                } else detail = DpId+" "+name;
                 
                 EventDelegate.getInstance().sendDownloadEvent(visit.getSid(),detail,urls);
                 
@@ -256,11 +228,12 @@ public class DownloadServlet extends HttpServlet {
                 log.warn(e);
                 visit.removeSrbManager(ID);
                 RequestDispatcher dispatcher =
-                        req.getRequestDispatcher("/protected/downloaderror.jsp");
+                        req.getRequestDispatcher("/protected/downloaderror.jsp?&name="+name);
                 if (dispatcher != null) dispatcher.forward(req, response);
             }
         }
         
+        // download already started
         else {
             // log.trace("SrbManager not null");
             SRBFileManagerThread man = visit.getSrbManager(ID);
@@ -268,6 +241,7 @@ public class DownloadServlet extends HttpServlet {
                 if(man.getException() == null){
                     log.trace("Download complete");
                     
+                    //check if imgaeJ if so create jnlp file
                     if(TYPE.endsWith("IMAGEJ")){
                         //want to veiw data not download it
                         srbDownload = man.getFile();
@@ -292,6 +266,8 @@ public class DownloadServlet extends HttpServlet {
                                 req.getRequestDispatcher("/css/myproxy.jnlp");
                         if (dispatcher != null) dispatcher.forward(req, response);*/
                     }else {
+                        
+                        //send the bytes back to the user
                         //down load data
                         srbDownload = man.getFile();
                         //downloadedFiles.add(srbDownload.getAbsolutePath());
@@ -307,7 +283,10 @@ public class DownloadServlet extends HttpServlet {
                         response.setContentType(contenttype);
                         response.setBufferSize(65536);
                         if(TYPE.startsWith(DPUrlRefType.DATA_SET.toString()) || TYPE.equals(DownloadConstants.DATA_FILE_FOLDER.toString()) || TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE)) {
-                            response.setHeader("Content-disposition","attachment; filename="+name.replaceAll(" ","_")+".zip"+"");
+                            //see if single mutiple file download (could do it srbUrl.length == 0
+                            if(TYPE.equals(DownloadConstants.DOWNLOAD_MULTIPLE) && name.startsWith(DownloadConstants.DOWNLOAD_MULTIPLE)){
+                                response.setHeader("Content-disposition","attachment; filename="+name.replaceAll(" ","_")+".zip"+"");
+                            } else  response.setHeader("Content-disposition","attachment; filename="+name.replaceAll(" ","_")+"");
                         } else {
                             response.setHeader("Content-disposition","attachment; filename="+name.replaceAll(" ","_")+"");
                         }
@@ -336,6 +315,7 @@ public class DownloadServlet extends HttpServlet {
                         
                         out.close();
                     }
+                    //get here means an error with the download
                 } else {
                     visit.removeSrbManager(ID);
                     String message = "";
@@ -370,6 +350,8 @@ public class DownloadServlet extends HttpServlet {
                             req.getRequestDispatcher("/protected/downloaderror.jsp?message="+message+"&name="+name+"&url="+ID);
                     if (dispatcher != null) dispatcher.forward(req, response);
                 }
+                
+                //not finished so send again
             } else{
                 // log.trace("/protected/downloadsrb.jsp?close=0&percentage="+man.getPercentageComplete()+"&name="+name+"&type="+TYPE+"&url="+ID);
                 RequestDispatcher dispatcher =
@@ -384,7 +366,7 @@ public class DownloadServlet extends HttpServlet {
      * @param response servlet response
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
     
@@ -393,7 +375,7 @@ public class DownloadServlet extends HttpServlet {
      * @param response servlet response
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
     
