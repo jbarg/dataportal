@@ -50,8 +50,10 @@ import uk.ac.dl.dp.coreutil.util.InvestigationIncludeRequest;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.ICATSingleton;
+import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
+import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
 
 /**
  *
@@ -204,7 +206,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         
     }
     
-    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException{
+    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception{
         log.debug("getInvestigationById("+sessionId+", "+investigationId+", "+facility+")");
         if(sessionId == null) throw new IllegalArgumentException("Session ID cannot be null.");
         
@@ -223,13 +225,19 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
             
             String facilitySessionId = new SessionUtil(sessionId, em).getFacilitySessionId(facility);
             return ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).getInvestigationIncludes(facilitySessionId, investigationId, InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
+        } catch (InsufficientPrivilegesException_Exception ispe) {
+            log.error("Insufficient privileges to view this investigation: "+investigationId, ispe);
+            throw ispe;
+        } catch (NoSuchObjectFoundException_Exception nsofe) {
+            log.error("No investigation fonund with id:"+investigationId, nsofe);
+            throw nsofe;
         } catch (Exception exception) {
             log.error("Unable to query for investigation: "+investigationId, exception);
             throw new QueryException("Unable to query for investigation: "+investigationId);
-        } catch (Throwable exception) {
-            log.error("Unable to query for investigation: "+investigationId, exception);
+        } catch (Throwable throwable) {
+            log.error("Unable to query for investigation: "+investigationId, throwable);
             throw new QueryException("Unable to query for investigation: "+investigationId);
-        }        
+        }
     }
     
     private void isLoggedIn(String sid, HashSet<String> facilities, EntityManager manager) throws SessionException {
@@ -299,10 +307,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
                 log.trace(investigation);
             }
         }
-        log.trace("Sending back this");
-        for(Investigation invest : st){
-            log.trace("Invest info :"+invest);
-        }
+        log.trace("Sending back #" +st.size());
         return st;
         //return qra;
     }

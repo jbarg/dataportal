@@ -93,8 +93,12 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 em.flush();
                 continue ;
             }
-            //not unique
-            throw new DataCenterException("Bookmark is not unique");
+            
+            //entity here so need to update
+            unique.setNote(dto.getNote());
+            unique.setName(dto.getName());
+            unique.setQuery(dto.getQuery());
+            em.merge(unique);
         }
         
     }
@@ -233,8 +237,12 @@ public class DataCenterBean extends SessionEJBObject implements DataCenterRemote
                 continue ;
             }
             
-              //not unique
-            throw new DataCenterException("DataReference is not unique");
+            //not unique
+            //entity here so need to update
+            unique.setNote(dto.getNote());
+            unique.setName(dto.getName());
+            unique.setQuery(dto.getQuery());
+            em.merge(unique);
             
         }
         

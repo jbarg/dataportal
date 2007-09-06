@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.core.sessionbeans.transfer;
 
 
+import java.util.Collection;
 import java.util.Date;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -29,6 +30,7 @@ import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.User;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.UserNotFoundException;
+import uk.ac.dl.dp.coreutil.interfaces.DownloadServiceLocal;
 import uk.ac.dl.dp.coreutil.interfaces.DownloadServiceRemote;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
@@ -41,7 +43,7 @@ import uk.ac.dl.dp.coreutil.util.UserUtil;
  */
 //@Interceptors(ArgumentValidator.class)
 @Stateless(mappedName=DataPortalConstants.DOWNLOAD)
-public class DownloadService extends SessionEJBObject  implements DownloadServiceRemote {
+public class DownloadService extends SessionEJBObject  implements DownloadServiceLocal, DownloadServiceRemote {
     
     static final Logger log = Logger.getLogger(DownloadService.class);
     
@@ -53,7 +55,6 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
     
     public void downloadSRBFiles(String sid, SRBInfo srbInfo)  {
         
-               
         QueueConnection connection = null;
         QueueSession session = null;
         MessageProducer messageProducer = null;
@@ -101,24 +102,34 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
                 
             }
         }
-        
     }
     
-    public boolean setConstants(DPConstants constants){
+    public boolean addConstant(DPConstants constant){
+        log.debug("Adding Constant");
+        
+        DPConstants dpcon = (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", constant.getName()).getSingleResult();
+        
+        if(dpcon == null){
+            log.info("Adding new constant: "+constant.getName()+" = "+constant.getValue());
+            dpcon.setId(null);
+            em.persist(constant);
+        } else {
+            if(!dpcon.getValue().equals(constant.getValue())){
+                dpcon.setValue(constant.getValue());
+                log.debug("Setting new value for "+dpcon.getName()+" = "+dpcon.getValue());
+            } else log.trace("Same value for "+dpcon.getName()+", nothing been changed");
+        }
+        
+        return true;
+    }
+    
+    public boolean setConstants(Collection<DPConstants> constants){
         log.debug("Setting Constants");
         try {
-            
-            if(em.find(DPConstants.class,1L) != null){
-                log.trace("Already set");
-                return true;
-            } else {
-                log.trace("Setting ..");
-                constants.setId(1L);
-                constants.setModTime(new Date());
-                em.merge(constants);
-                log.trace("Set constants");
-                return true;
+            for (DPConstants dPConstants : constants) {
+                addConstant(dPConstants);
             }
+            return true;
         } catch(Exception e){
             log.error("Unable to set constants",e);
             return false;
@@ -127,9 +138,14 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
     
     public boolean isSet(){
         try {
-            DPConstants constants=   em.find(DPConstants.class,1L);
-         //TODO   if(constants == null || constants.getDownloadLocation() == null || constants.getDownloadLocation().equals("")) return false;
-            /*else*/ return true;
+            DPConstants port = (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", DPConstants.TYPE.SERVER_PORT.toString()).getSingleResult();
+            DPConstants ip = (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", DPConstants.TYPE.SERVER_IP.toString()).getSingleResult();
+            DPConstants download = (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", DPConstants.TYPE.DOWNLOAD_LOCATION.toString()).getSingleResult();
+            DPConstants context =  (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", DPConstants.TYPE.SERVER_CONTEXT_ROOT.toString()).getSingleResult();
+            DPConstants scheme =  (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", DPConstants.TYPE.SERVER_SCHEME.toString()).getSingleResult();
+            
+            if(port != null && ip != null && download != null && context != null && scheme != null) return true;
+            else return false;
         } catch(Exception e){
             log.error("Unable to check if constants set",e);
             return false;
@@ -144,7 +160,6 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
         if(serviceInfo.getMyProxyUsername() == null) throw new SessionException("MyProxy username cannot be null");
         if(serviceInfo.getMyProxyPassword() == null) throw new SessionException("MyProxy password cannot be null");
         if(serviceInfo.getEmail() == null) throw new SessionException("Email address cannot be null");
-        
     }
     
     /**

@@ -83,7 +83,7 @@ public class LookupBean extends SessionEJBObject implements LookupRemote, Lookup
         ProxyServers proxyserver =  (ProxyServers) em.createNamedQuery("ProxyServers.findByActive").getSingleResult();
         
         //refresh incase the DB is changed in background
-        em.refresh(proxyserver);
+       // em.refresh(proxyserver);
         return proxyserver;        
     }
     
