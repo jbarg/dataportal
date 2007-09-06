@@ -315,7 +315,7 @@ public class InvestigationBean extends SortableList {
             getVisitData().setCurrentInvestigations(investigationsDatasetsFiles);
             
             //reset tree so it loads it again
-            getVisitData().setDataSetTree(null);
+            //getVisitData().setDataSetTree(null);
         } catch (DataPortalException ex) {
             error("Error: Unable to gets Data Sets.");
             log.fatal("Unable to create query user for: "+getVisit().getSid(),ex);
@@ -337,7 +337,7 @@ public class InvestigationBean extends SortableList {
     private boolean dummyDone = false;
     
     public void dummyAjax(ActionEvent e){
-        log.trace("Dunny method called");
+        log.trace("Dummy method called");
         dummyDone = true;
     }
     

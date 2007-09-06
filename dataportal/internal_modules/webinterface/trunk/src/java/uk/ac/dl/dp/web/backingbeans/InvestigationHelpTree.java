@@ -57,7 +57,7 @@ public class InvestigationHelpTree extends AbstractRequestBean {
     
     public TreeNode getData() {
         
-        data = new TreeNodeBase("foo-folder", "Search results", false);
+        data = new TreeNodeBase("hfoo-folder", "Search results", false);
                 
         TreeNodeBase node = null;
         

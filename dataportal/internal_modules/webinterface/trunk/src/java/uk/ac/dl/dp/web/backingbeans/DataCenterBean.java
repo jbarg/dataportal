@@ -35,7 +35,9 @@ import uk.ac.dl.dp.coreutil.exceptions.QueryException;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
+import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
+import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
 
 /**
  *
@@ -73,7 +75,6 @@ public class DataCenterBean extends SortableList {
     
     public List<DataReference> getDataRefs() {
         
-        
         //TODO having trouble with this, was always thinking it was not null even though i was setting it as null
         if(getVisitData().getCurrentDataReferences() == null){
             
@@ -107,8 +108,10 @@ public class DataCenterBean extends SortableList {
         
     }
     
-    //listens for sort column action events, and gets the column by thge param name passed in
-    // then calls sort on the column
+    /**
+     * listens for sort column action events, and gets the column by thge param name passed in
+     * then calls sort on the column
+     */
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -138,74 +141,6 @@ public class DataCenterBean extends SortableList {
         
     }
     
-    public void setDataFileDownloadAction(ActionEvent event){
-        log.trace("setDataFileDownloadAction: ");
-        List children = event.getComponent().getChildren();
-        log.trace("selected checkbox for download");
-        int i = 0;
-        //checvk type first
-        boolean isFile = true;
-        for(Object ob : children){
-            if(ob instanceof UIParameter){
-                UIParameter current = (UIParameter)children.get(i);
-                if(current.getValue().toString().split("-").length == 2){
-                    log.trace("IsFile is false");
-                    isFile = false;
-                }
-            }
-        }
-        for(Object ob : children){
-            if(ob instanceof UIParameter){
-                if(isFile){
-                    UIParameter current = (UIParameter)children.get(i);
-                    log.trace("Param name "+current.getName());
-                    
-                    String param = current.getValue().toString();
-                    log.trace("Param value: "+param);
-                    Url df = getVisitData().getDataUrlFromCart(param);
-                    if(df == null) break;
-                    
-                    log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
-                    df.setDownload(!df.isDownload());
-                    // checkFromSameDataset();
-                    //checkSingleFacilityChosen(df.getDataRefId().getFacility());
-                    // checkFromSameSRBChosen(df.getDataRefId().getFacility());
-                    
-                    break;
-                } else{
-                    //ref
-                    UIParameter current = (UIParameter)children.get(i);
-                    log.trace("Param name "+current.getName());
-                    
-                    String param = current.getValue().toString();
-                    log.trace("Param value: "+param);
-                    DataReference df = getVisitData().getDataReferenceFromCart(param);
-                    if(df == null) break;
-                    
-                    log.trace(param+": "+df.isDownload()+" setting to "+!df.isDownload());
-                    df.setDownload(!df.isDownload());
-                    //need to set all individual files to download
-                    //for(Url url :df.getUrls()){
-                    //  url.setDownload(df.isDownload());
-                    //}
-                    //checkSingleFacilityChosen(df.getFacility());
-                    //checkFromSameSRBChosen(df.getFacility());
-                    //checkFromSameDataset();
-                    break;
-                }
-            }
-        }
-        if(getVisitData().isEmptyCart()) {
-            log.trace("Empty cart, setting to not downloadable");
-            getVisitData().setDownloadable(false);
-        }
-    }
-    
-    
-    public String emailErrorMessage(){
-        error("Please select atleast one item to download.");
-        return null;
-    }
     
     public String addEmail(){
         log.trace("adding email");
@@ -224,41 +159,10 @@ public class DataCenterBean extends SortableList {
     }
     
     
-    public void emailDownload(ActionEvent event){
-        log.trace("emailDownload: ");
-        String[] srbFilesDownload = getVisitData().getCartSRBURLs();
-        
-        if(srbFilesDownload.length == 0){
-            error("Please select atleast one item to download.");
-            return ;
-        }
-        
-        try{
-            //check that all files are from same dataset
-           /* if(!checkFromSameDataset()){
-                error("Unable to download data from multiple investigations.  Select multiple items from one investigation or dataset at a time.");
-                return ;
-            }*/
-            
-            SRBInfo info = new SRBInfo();
-            info.setSid(getVisit().getSid());
-            //info.setSrbFiles(srbFilesDownload);
-            info.setSrbUrls(getVisitData().toSRBUrl(srbFilesDownload));
-            DownloadDelegate.getInstance().downloadSRBFiles(getVisit().getSid(), info);
-            info("Request sent for download");
-        } catch(MalformedURLException mex){
-            log.error("Cannot download data via email, invalid URLS found.",mex);
-            //error("Cannot download data via email");
-        } catch(Exception ex){
-            log.error("Cannot download data via email",ex);
-            //error("Cannot download data via email");
-        }
-        
-    }
-    
-    
-    //This listens to changes in the users isSelected.  This is because the list could be
-    //larger than one page so have to do it this way
+    /**
+     * This listens to changes in the users isSelected.  This is because the list could be
+     * larger than one page so have to do it this way
+     */
     public void listen(ValueChangeEvent e){
         log.debug("value change event");
         Collection<DataReference> dataReference = getVisitData().getCurrentDataReferences();
@@ -286,78 +190,37 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-    //Gets the current data ref and then gets the investigation and searches for the investigation
-    // returns back to the investigations page
+    /**
+     * Gets the current data ref and then gets the investigation and searches for the investigation
+     * returns back to the investigations page
+     */
     public String viewData(){
         log.trace("view data");
         DataReference qrdto =   (DataReference) table.getRowData();
-        log.trace("viewing studyId: "+qrdto.getInvestigationId());
-        Collection<Investigation> investigations = null;
-        Investigation investigation = null;
-        try {
-            
-            investigation = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getInvestigationId(), qrdto.getFacility());
-            investigation.setSelected(true);
-            investigations.add(investigation);
-            
-        } catch (QueryException ex) {
-            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
-            error("Error:  Unable to search for "+qrdto.getName());
-            return null;
-        } catch (Exception ex) {
-            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
-            error("Error:  Unexpected error searching for "+qrdto.getName());
-            return null;
-        }
+        log.trace("viewing investigationId: "+qrdto.getInvestigationId());
         
-        if(investigations == null){
-            log.warn("Insufficent funds to view investigation.");
-            return null;
-        }
-        //set the searched invest and send to investigation page
-        getVisitData().setSearchedInvestigations(investigations);
-        //remove request info
-        getVisitData().setQueryRequest(null);
-        return NavigationConstants.SEARCH_SUCCESS;
+        BookmarkBean bookmarkBean = (BookmarkBean) getBean("bookmarkBean");
+        return  bookmarkBean.getInvestigationById(getVisit().getSid(), qrdto.getInvestigationId(), qrdto.getFacility(), qrdto.getName());
         
     }
     
-    //Gets the current data reference and then gets the investigation and searches for the investigation
-    // returns back to the dataset page of the investigation
+    /**
+     * Gets the current data reference and then gets the investigation and searches for the investigation
+     * returns back to the dataset page of the investigation
+     */
     public String viewDataSets(){
         log.trace("view data referenced data");
         DataReference qrdto =   (DataReference) table.getRowData();
-        log.trace("viewing studyId: "+qrdto.getInvestigationId());
-        Collection<Investigation> investigations = null;
-        Investigation investigation = null;
-        try {
-            investigation = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getInvestigationId(), qrdto.getFacility());
-            investigation.setSelected(true);
-            investigations.add(investigation);
-            
-            //set the title from the seach
-            getVisitData().setSearchedTitle("Search Results");
-            getVisitData().setSearchedInvestigations(investigations);
-            //remove request info
-            getVisitData().setQueryRequest(null);
-            
-            //add the investigation to visit
-            InvestigationBean investigationBean = (InvestigationBean) getBean("investigationBean");
-            return  investigationBean.datasets();
-            
-        } catch (QueryException ex) {
-            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
-            error("Error:  Unable to search for "+qrdto.getName());
-            return null;
-        } catch (Exception ex) {
-            log.error("Cannot get investigation for: "+qrdto.getId()+" for facility: "+qrdto.getFacility(),ex);
-            error("Error:  Unexpected error searching for "+qrdto.getName());
-            return null;
-        }
+        log.trace("viewing investigationId: "+qrdto.getInvestigationId());
+        
+        BookmarkBean bookmarkBean = (BookmarkBean) getBean("bookmarkBean");
+        return  bookmarkBean.getInvestigationDatasetsById(getVisit().getSid(), qrdto.getInvestigationId(), qrdto.getFacility(), qrdto.getName());
     }
     
-    //listens for sort column action events, and gets the column by thge param name passed in
-    // then calls sort on the column
+    /**
+     * listens for sort column action events, and gets the column by thge param name passed in
+     * then calls sort on the column
+     */
     public void sortColumn(ActionEvent event){
         log.trace("Sorting column");
         List children  = event.getComponent().getChildren();
@@ -379,6 +242,9 @@ public class DataCenterBean extends SortableList {
         getTable().collapseAllDetails();
     }
     
+    /**
+     * Removes the data sets/file from the DB
+     */
     public String removeDatasets(){
         
         Collection<DataReference> dataReference = new ArrayList<DataReference>();
@@ -389,6 +255,8 @@ public class DataCenterBean extends SortableList {
         }
         try {
             DataCenterDelegate.getInstance().removeDataReference(getVisit().getSid(), dataReference);
+            
+            //set to null so page has to go back and refresh its contents
             getVisitData().setCurrentDataReferences(null);
         } catch (NoAccessToDataCenterException ex) {
             log.warn("User: "+getVisit().getDn()+" has no access to remove from: "+getVisitData().getCurrentUserAuthDN());
@@ -402,7 +270,9 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-    //method to select all data
+    /**
+     * method to select all data
+     */
     public String selectnone(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(false);
@@ -410,7 +280,9 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-    //mehtod to remove select all
+    /**
+     * mehtod to remove select all
+     */
     public String selectall(){
         for(DataReference ref :  getDataRefs()){
             ref.setSelected(true);
@@ -418,10 +290,12 @@ public class DataCenterBean extends SortableList {
         return null;
     }
     
-    //listens for changes in the add note section in data center page
-    //iterates over paramaters and gets the data center ID passedd in and sets the note on the data center
-    //once the change has been made they need to press the addNote method and then the data center will be sent
-    // to the EJB to save
+    /**
+     * listens for changes in the add note section in data center page
+     * iterates over paramaters and gets the data center ID passedd in and sets the note on the data center
+     * once the change has been made they need to press the addNote method and then the data center will be sent
+     * to the EJB to save
+     */
     public void note(ValueChangeEvent event){
         log.trace("new value: "+event.getNewValue());
         List children  = event.getComponent().getChildren();
@@ -446,7 +320,9 @@ public class DataCenterBean extends SortableList {
         }
     }
     
-    //save to DB
+    /**
+     * save note to DB
+     */
     public String addNote(){
         
         DataReference bk = (DataReference)table.getRowData();
@@ -489,7 +365,13 @@ public class DataCenterBean extends SortableList {
     public void setLength(boolean length) {
         this.length = length;
     }
+    ///////////////////////////////////////////////////
     
+    ///////////////////////////////////////////////////
+    /**
+     * these are added because cannot find which column is sorted form the page
+     * crappy way of doing it
+     */
     public boolean isName(){
         return is("name");
     }
@@ -539,7 +421,5 @@ public class DataCenterBean extends SortableList {
         else return false;
     }
     ////////////////////////////////////////////////////////////////////
-    
-    
     
 }

@@ -100,7 +100,7 @@ public class Util {
         BufferedReader in = null;
         BufferedWriter out = null;
         InetAddress host = InetAddress.getLocalHost();
-        String hostURL = "https://"+host.getHostAddress()+":"+sreq.getServerPort()+contextPath+"/web-start/"+createDate();
+        String hostURL = sreq.getScheme()+"://"+host.getHostAddress()+":"+sreq.getServerPort()+contextPath+"/web-start/"+createDate();
         try {
             in = new BufferedReader(new FileReader(file));
             out = new BufferedWriter(new FileWriter(webStartFile));

@@ -104,11 +104,14 @@ public class VisitData implements Serializable {
     
     private Collection<DataReference> currentDataReferences;
     
+    /**
+     * Sets the DatasetTree for the Datasets page, puts this in memory
+     */
     private TreeNode dataSetTree;
     
-    private boolean downloadable;
+    //private boolean downloadable;
     
-    private boolean datasetDowloadable;
+    //private boolean datasetDowloadable;
     
     /**
      * Title for the basic search page (ie MyData Search or Basic Search - Advanced Seach)
@@ -347,7 +350,9 @@ public class VisitData implements Serializable {
         this.investigationExpanded = investigationExpanded;
     }
     
-    
+    /**
+     * Sets the DatasetTree for the Datasets page, puts this in memory
+     */
     public TreeNode getDataSetTree() {
         return dataSetTree;
     }
@@ -432,7 +437,9 @@ public class VisitData implements Serializable {
         } else return null;
     }
     
-    //access methods to search and access Data Sets and file by their unique ID
+    /**
+     * access methods to search and access Data Sets and file by their unique ID
+     */
     public DataReference getDataReferenceFromCart(String ID){
         String fac = ID.split("-")[0];
         String id = ID.split("-")[1];
@@ -447,7 +454,9 @@ public class VisitData implements Serializable {
         return null;
     }
     
-    //access methods to search and access Data Sets and file by their unique ID
+    /**
+     * access methods to search and access Data Sets and file by their unique ID
+     */
     public Url getDataUrlFromCart(String ID){
         String fac = ID.split("-")[0];
         String data_ref_id = ID.split("-")[1];
@@ -467,7 +476,31 @@ public class VisitData implements Serializable {
         return null;
     }
     
-    public synchronized String[] getSearchedSRBURLs() {
+    /**
+     * Prints out a string of all the downloaded ids from the selected current investigations
+     * eg ISIS:4-ISIS:45 for the download servlet to send to core to log as event
+     */
+    public String getDownloadDetail(){
+        String detail = "";
+        
+        for(Investigation investigation : getCurrentInvestigations()){
+            for(Dataset dataset : investigation.getDatasetCollection()){
+                if(dataset.isSelected()){
+                    for(Datafile datafile : dataset.getDatafileCollection()){
+                        detail += investigation.getFacility().getFacilityShortName()+":"+datafile.getId()+"-";
+                    }
+                }
+                for(Datafile datafile : dataset.getDatafileCollection()){
+                    if(datafile.isSelected()){
+                        detail += investigation.getFacility().getFacilityShortName()+":"+datafile.getId()+"-";
+                    }
+                }
+            }
+        }
+        return detail;
+    }
+    
+   /* public synchronized String[] getSearchedSRBURLs() {
         Collection<String> urls = new ArrayList<String>();
         // for(Datafile file : getCurrentDatafiles()){
           /*  if(file.isDownload()){
@@ -476,34 +509,33 @@ public class VisitData implements Serializable {
                 //now set to false
                 // file.setDownload(false);
             }*/
-        // }
-        
-        return urls.toArray(new String[urls.size()]);
-    }
+    // }
     
+    //   return urls.toArray(new String[urls.size()]);
+    //  }
+    
+    /**
+     * Searches through all of the current investigations gets the ones that are selected
+     * and returns a array of all the lcoations
+     */
     public synchronized String[] getAllSearchedSRBURLs() {
         Collection<String> urls = new HashSet<String>();
-     /*   for(Datafile file : getCurrentDatafiles()){
-            if(file.isSelected()){
-                log.trace("Found datafile to download: "+file);
-                urls.add(file.getUri());
-                //now set to false
-                // file.setDownload(false);
-            }
-        }
-        for(DataSet set : getCurrentDatasets()){
-            if(set.isSelected()){
-                for(DataFile file : getCurrentDatafiles()){
-                    if(file.getDataSetId().equals(set.getId())){
-                        log.trace("Found datafile to download: "+file);
-                        urls.add(file.getUri());
-                        //now set to false
-                        // file.setDownload(false);
+        for(Investigation investigation : getCurrentInvestigations()){
+            for(Dataset dataset : investigation.getDatasetCollection()){
+                if(dataset.isSelected()){
+                    for(Datafile datafile : dataset.getDatafileCollection()){
+                        //log.trace("Adding "+datafile.getLocation()+" from datafile: "+datafile.getId()+" for dataset: "+dataset.getId());
+                        urls.add(datafile.getLocation());
+                    }
+                }
+                for(Datafile datafile : dataset.getDatafileCollection()){
+                    if(datafile.isSelected()){
+                        //log.trace("Adding "+datafile.getLocation()+" from datafile: "+datafile.getId());
+                        urls.add(datafile.getLocation());
                     }
                 }
             }
         }
-      */
         
         return urls.toArray(new String[urls.size()]);
     }
@@ -545,20 +577,20 @@ public class VisitData implements Serializable {
         return srbUrls;
     }
     
-    public boolean isDownloadable() {
+   /* public boolean isDownloadable() {
         return downloadable;
     }
     
     public void setDownloadable(boolean downloadable) {
         this.downloadable = downloadable;
-    }
+    }*/
     
     public boolean isEmptyCart(){
         if(getCartSRBURLs().length == 0) return true;
         else return false;
     }
     
-    public boolean isExpandable() {
+   /* public boolean isExpandable() {
         if(getSearchedInvestigations() == null) return false;
         for(Investigation invest : getSearchedInvestigations()){
             if(invest.isSelected()){
@@ -566,13 +598,13 @@ public class VisitData implements Serializable {
             }
         }
         return false;
-    }
+    }*/
     
-    public boolean isAddSelectionable(){
+   /* public boolean isAddSelectionable(){
         Collection<Investigation> invests = getCurrentInvestigations();
         // Collection<Dataset> datasets = getCurrentDatasets();
         //  Collection<Datafile> datafiles = getCurrentDatafiles();
-        
+    
         for(Investigation invest: invests){
             if(invest.isSelected()) return true;
         }
@@ -582,9 +614,9 @@ public class VisitData implements Serializable {
         for(Datafile datafile : datafiles){
             if(datafile.isSelected()) return true;
         }*/
-        return false;
-        
-    }
+   /* return false;
+    
+}*/
     
     public String getSearchedTitle() {
         return searchedTitle;
@@ -604,7 +636,7 @@ public class VisitData implements Serializable {
         return basicSearchBean;
     }
     
-     /**
+    /**
      * Bean that keeps the info of the last search for the side nav bar
      */
     public void setBasicSearchBean(BasicSearchHistoryBean basicSearchHistoryBean) {
@@ -622,30 +654,23 @@ public class VisitData implements Serializable {
         this.advancedSearchBean = advancedSearchBean;
     }
     
-    public boolean isDatasetDowloadable() {
+    /*public boolean isDatasetDowloadable() {
         return datasetDowloadable;
     }
-    
+     
     public void setDatasetDowloadable(boolean datasetDowloadable) {
         this.datasetDowloadable = datasetDowloadable;
-    }
+    }*/
     
     public  void reinitailise(){
-        Collection<Investigation> investigations = getCurrentInvestigations();
-        //  Collection<Dataset> datasets = getCurrentDatasets();
-        //   Collection<Datafile> datafiles = getCurrentDatafiles();
-        log.trace("reinitailising");
-       /* for(Datafile file : datafiles){
-            //file.setDownload(false);
-            file.setSelected(false);
-        }
-        for(Dataset dataset : datasets){
-            dataset.setSelected(false);
-        }*/
-        for(Investigation investigation : investigations){
+        for(Investigation investigation : getCurrentInvestigations()){
             investigation.setSelected(false);
+            for(Dataset dataset : investigation.getDatasetCollection()){
+                dataset.setSelected(false);
+                for(Datafile datafile : dataset.getDatafileCollection()){
+                    datafile.setSelected(false);
+                }
+            }
         }
-        setDatasetDowloadable(false);
-        setDownloadable(false);
     }
 }

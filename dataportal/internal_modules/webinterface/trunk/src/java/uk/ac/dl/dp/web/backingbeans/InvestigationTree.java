@@ -20,14 +20,9 @@ import org.apache.myfaces.custom.tree2.TreeModelBase;
 import javax.faces.event.ActionEvent;
 import javax.faces.component.UIComponent;
 import javax.faces.component.*;
-import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
-import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
-import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.util.Util;
 import uk.ac.dl.dp.web.util.WebConstants;
-import uk.ac.dp.icatws.Datafile;
-import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.Investigation;
 
 /**
@@ -130,7 +125,7 @@ public class InvestigationTree extends AbstractRequestBean {
                         log.trace("Not finished,timed out");
                         node = new TreeNodeBase("foo-folder", searchedFac, "Timed out",true);
                         data.getChildren().add(node);
-                    }else if(isCompleted){
+                    } else if(isCompleted){
                         //count how many from this fac
                         int i = 0;
                         for(Investigation invest: invests){
