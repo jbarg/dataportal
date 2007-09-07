@@ -102,8 +102,9 @@
                         <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <h:selectOneRadio style="font-size:10px" id="radioNav" value="#{visit.visitData.basicSearchBean.logicalExpression}" >
-                        <f:selectItems value="#{searchBean.logicalExpressions}"/>              
+                    <h:selectOneRadio  style="font-size:10px" id="radioNav" value="#{visit.visitData.basicSearchBean.logicalExpression}" >
+                        <f:selectItems value="#{searchBean.logicalExpressions}"/> 
+                         <f:validateLength minimum="1" />
                     </h:selectOneRadio>         
                     
                     
@@ -111,8 +112,9 @@
                     
                     <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
                     <h:selectOneRadio style="font-size:10px" id="likeNav" value="#{visit.visitData.basicSearchBean.likeExpression}" >
-                        <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
+                        <f:selectItem itemLabel="Exact"  itemValue="EXACT" />                         
                         <f:selectItem itemLabel="Like"  itemValue="LIKE" />
+                         <f:validateLength minimum="1" />
                     </h:selectOneRadio>       
                     
                     <h:panelGroup/>           
@@ -227,6 +229,7 @@
                     <h:selectOneRadio style="font-size:12px" id="like" value="#{visit.visitData.advancedSearchBean.likeExpression}" >
                         <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
                         <f:selectItem itemLabel="Like"  itemValue="LIKE" />
+                         <f:validateLength minimum="1" />
                     </h:selectOneRadio>       
                     
                     <h:panelGroup/>
