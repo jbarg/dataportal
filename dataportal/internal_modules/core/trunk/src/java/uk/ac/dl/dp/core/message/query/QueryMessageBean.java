@@ -103,7 +103,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
     }
     
     private Collection<Investigation>  doKeywordSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception{
-        log.debug("Query : Keyword "+request.getKeywordQuery().getKeywords()+" on facility: "+request.getFacility()+" sent at "+request.getSent());
+        log.debug("Query : Keyword "+request.getKeywordQuery().getKeywords()+" on facility: "+request.getFacility()+", fuzzy: "+request.getKeywordQuery().isFuzzy()+"? , sent at "+request.getSent());
         return ICATSingleton.getInstance(wsdlLocation).searchByKeywordsAll(
                 request.getFacilitySessionId(),
                 (List<String>) request.getKeywordQuery().getKeywords(),

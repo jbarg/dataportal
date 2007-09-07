@@ -47,12 +47,12 @@ import uk.ac.dl.dp.coreutil.interfaces.DownloadServiceLocal;
 import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
 import uk.ac.dl.dp.coreutil.util.Certificate;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
+import uk.ac.dl.dp.coreutil.util.SRBUrl;
 import uk.ac.dl.dp.coreutil.util.ServiceInfo;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
 import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
 import uk.ac.dl.srbapi.cog.PortalCredential;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
-import uk.ac.dl.srbapi.srb.SRBUrl;
 import uk.ac.dl.srbapi.util.IOTools;
 
 /**
@@ -239,9 +239,9 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         
         //TODO sort out constants
         //need to copy to server location
-        File newLocationDir = new File(location+File.separator+"download");
+        File newLocationDir = new File(location.getValue()+File.separator+"download");
         if(!newLocationDir.exists()) newLocationDir.mkdir();
-        File newLocation = new File(location+File.separator+"download",srbZipFile.getName());
+        File newLocation = new File(location.getValue()+File.separator+"download",srbZipFile.getName());
         if(!newLocation.getParentFile().exists()) newLocation.getParentFile().mkdir();
         log.trace("Copying file to: "+newLocation.getAbsolutePath());
         IOTools.fileCopy(srbZipFile,newLocation);
@@ -301,7 +301,17 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         log.trace("Setting download info: "+userCred.getName().toString()+", host: "+url.getHostAndPort());
         //man.setCredentials(getSRBHost(srbInfo.getSrbFiles()),getSRBPort(srbInfo.getSrbFiles()),userCred);
         
-        SRBFileManagerThread man = new SRBFileManagerThread(srbInfo.getSrbUrls(),userCred ,true);
+        //problem when loading srbapi.SRBUrl
+        //"IOP00810257: (MARSHAL) Could not load class uk.ac.dl.srbapi.srb.SRBUrl"
+        //org.omg.CORBA.MARSHAL:   vmcid: SUN  minor code: 257 completed: Maybe
+        //at com.sun.corba.ee.impl.logging.ORBUtilSystemException.couldNotFindClass(ORBUtilSystemException.java:9684)
+        //at com.sun.corba.ee.impl.logging.ORBUtilSystemException.couldNotFindClass(ORBUtilSystemException.java:9699)
+        Collection<uk.ac.dl.srbapi.srb.SRBUrl> properSRBUrls = new ArrayList<uk.ac.dl.srbapi.srb.SRBUrl>();
+        for(SRBUrl srbUrl : srbInfo.getSrbUrls()){
+            properSRBUrls.add(new uk.ac.dl.srbapi.srb.SRBUrl(srbUrl.toString()));
+        }
+        
+        SRBFileManagerThread man = new SRBFileManagerThread(properSRBUrls, userCred ,true);
         // man.setZipeFile(true);
         man.setFolderFileOnly(true);
         

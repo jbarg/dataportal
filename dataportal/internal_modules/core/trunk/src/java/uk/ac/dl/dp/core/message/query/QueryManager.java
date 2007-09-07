@@ -93,9 +93,9 @@ public class QueryManager {
         for(Collection<QueryRecord> cqr : ccqr){
             QueryRecord qr = cqr.iterator().next();
             log.trace("Query Record is "+qr.getQueryid()+" with DN: "+qr.getDN()+" search by : "+DN);
-            if(qr.getDN().equals(DN)){
-                ccqr_user_all.add(cqr);
-                
+            
+            if(qr.getDN() !=null && qr.getDN().equals(DN)){
+                ccqr_user_all.add(cqr);                
             }
         }
         
