@@ -1,7 +1,8 @@
 package uk.ac.dl.dp.coreutil.delegates;
+
 import java.util.Collection;
 import javax.naming.NamingException;
-import uk.ac.dl.dp.coreutil.interfaces.EventRemote;
+import uk.ac.dl.dp.coreutil.interfaces.SendMDBRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 
@@ -12,19 +13,19 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 public class EventDelegate {
     
     private static EventDelegate ed;
-    private static EventRemote er ;
-   
+    private static SendMDBRemote er ;
+    
     public static EventDelegate getInstance(){
-            synchronized(DataCenterDelegate.class){
-                if(ed == null){
-                    try {
-                        ed = new EventDelegate();
-                    } catch(Exception se) {
-                        throw new RuntimeException(se);
-                    }
+        synchronized(DataCenterDelegate.class){
+            if(ed == null){
+                try {
+                    ed = new EventDelegate();
+                } catch(Exception se) {
+                    throw new RuntimeException(se);
                 }
-                return ed;
-            }       
+            }
+            return ed;
+        }
     }
     
     
@@ -32,7 +33,7 @@ public class EventDelegate {
     private  EventDelegate() throws NamingException {
         
         CachingServiceLocator csl =  CachingServiceLocator.getInstance();
-        er  = (EventRemote)csl.lookup(DataPortalConstants.EVENT);
+        er  = (SendMDBRemote)csl.lookup(DataPortalConstants.EVENT);
     }
     
     /*All EventDelegate methods here*/

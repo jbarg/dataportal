@@ -71,8 +71,8 @@ public class EventLog implements Serializable {
     static final long serialVersionUID = 7110175216435025451L;
     
     @Id
-    @TableGenerator(name="ID", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="EVENT_LOG",valueColumnName="SEQ_COUNT")
-    @GeneratedValue(strategy=GenerationType.TABLE,generator="ID")
+    @TableGenerator(name="EVENT_LOG", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="EVENT_LOG",valueColumnName="SEQ_COUNT")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="EVENT_LOG")
     @Column(name = "ID", nullable = false)
     private Long id;
     

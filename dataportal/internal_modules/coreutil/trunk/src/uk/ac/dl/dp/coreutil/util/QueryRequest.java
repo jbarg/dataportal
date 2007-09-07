@@ -13,7 +13,6 @@ import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import uk.ac.dp.icatws.AdvancedSearchDetails;
 /**
  *
  * @author gjd37
@@ -29,7 +28,8 @@ public class QueryRequest implements Serializable{
     private DPQueryType qt;
     private String facility;
     private Collection<String> facilities;
-    
+     private String DN;
+       
     private InvestigationIncludeRequest investigationRequest;
     private KeywordQueryRequest keywordQuery;
     private AdvancedSearchDetailsDTO advancedSearch;
@@ -93,6 +93,14 @@ public class QueryRequest implements Serializable{
     
     public void setFacility(String facility) {
         this.facility = facility;
+    }
+    
+      public String getDN() {
+        return DN;
+    }
+
+    public void setDN(String DN) {
+        this.DN = DN;
     }
     
     public KeywordQueryRequest getKeywordQuery() {

@@ -26,10 +26,15 @@ public class DataPortalConstants {
     public final static String SRB_HOST = "srb1.ngs.rl.ac.uk";
     public final static int SRB_PORT = 5544;
     
-    //query cache limit
+    /**
+     * Limit of the amount of queries in memory
+     */
     public final static int QUERY_LIMIT = 250;
     
-    public final static int MAX_RESULTS = 500;
+    /**
+     * Max number of results passed to the iCAT API to return from each ICAT
+     */
+    public final static int MAX_RESULTS = 50;
     
     public static String MYPROXY_USERNAME = "glen";
     public static String MYPROXY_PASSWORD = "kkkkkk";

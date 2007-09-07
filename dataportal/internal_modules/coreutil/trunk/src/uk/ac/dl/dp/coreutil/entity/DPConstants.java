@@ -16,14 +16,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -34,43 +32,65 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "DP_CONSTANTS")
 @NamedQueries( {
-        @NamedQuery(name = "DpConstants.findById", query = "SELECT d FROM DPConstants d WHERE d.id = :id"),
-        @NamedQuery(name = "DpConstants.findByName", query = "SELECT d FROM DPConstants d WHERE d.name = :name"),
-        @NamedQuery(name = "DpConstants.findByValue", query = "SELECT d FROM DPConstants d WHERE d.value = :value"),
-        @NamedQuery(name = "DpConstants.findByDescription", query = "SELECT d FROM DPConstants d WHERE d.description = :description"),
-        @NamedQuery(name = "DpConstants.findByModTime", query = "SELECT d FROM DPConstants d WHERE d.modTime = :modTime")
-    })
-public class DPConstants implements Serializable {
-
+    @NamedQuery(name = "DpConstants.findById", query = "SELECT d FROM DPConstants d WHERE d.id = :id"),
+    @NamedQuery(name = "DpConstants.findByName", query = "SELECT d FROM DPConstants d WHERE d.name = :name"),
+    @NamedQuery(name = "DpConstants.findByValue", query = "SELECT d FROM DPConstants d WHERE d.value = :value"),
+    @NamedQuery(name = "DpConstants.findByDescription", query = "SELECT d FROM DPConstants d WHERE d.description = :description"),
+    @NamedQuery(name = "DpConstants.findByModTime", query = "SELECT d FROM DPConstants d WHERE d.modTime = :modTime")
+})
+        public class DPConstants implements Serializable {
+    
+    public enum TYPE {SERVER_IP, SERVER_PORT, SERVER_CONTEXT_ROOT,  DOWNLOAD_LOCATION, SERVER_SCHEME};
+    
     @Id
+    @TableGenerator(name="CONSTANTS", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="CONSTANTS",valueColumnName="SEQ_COUNT")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="CONSTANTS")
     @Column(name = "ID", nullable = false)
     private Long id;
-
+    
     @Column(name = "NAME", nullable = false)
     private String name;
-
+    
     @Column(name = "VALUE", nullable = false)
     private String value;
-
+    
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
-
+    
     @Column(name = "MOD_TIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modTime;
     
+    @PrePersist
+    @PreUpdate
+    public void prePersist(){
+        modTime = new Date();
+    }
+    
     /** Creates a new instance of DpConstants */
     public DPConstants() {
     }
-
+    
     /**
      * Creates a new instance of DpConstants with the specified values.
      * @param id the id of the DpConstants
      */
-    public DPConstants(Long id) {
-        this.id = id;
+    public DPConstants(String name) {
+        this.name = name;
+        this.description = name;
+        modTime = new Date();
     }
-
+    
+    /**
+     * Creates a new instance of DpConstants with the specified values.
+     * @param id the id of the DpConstants
+     */
+    public DPConstants(TYPE type) {
+        this.name = type.toString();
+        this.description = type.toString();
+        modTime = new Date();
+    }
+    
     /**
      * Creates a new instance of DpConstants with the specified values.
      * @param id the id of the DpConstants
@@ -86,7 +106,7 @@ public class DPConstants implements Serializable {
         this.description = description;
         this.modTime = modTime;
     }
-
+    
     /**
      * Gets the id of this DpConstants.
      * @return the id
@@ -94,7 +114,7 @@ public class DPConstants implements Serializable {
     public Long getId() {
         return this.id;
     }
-
+    
     /**
      * Sets the id of this DpConstants to the specified value.
      * @param id the new id
@@ -102,7 +122,7 @@ public class DPConstants implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     /**
      * Gets the name of this DpConstants.
      * @return the name
@@ -110,7 +130,7 @@ public class DPConstants implements Serializable {
     public String getName() {
         return this.name;
     }
-
+    
     /**
      * Sets the name of this DpConstants to the specified value.
      * @param name the new name
@@ -118,7 +138,7 @@ public class DPConstants implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
+    
     /**
      * Gets the value of this DpConstants.
      * @return the value
@@ -126,7 +146,7 @@ public class DPConstants implements Serializable {
     public String getValue() {
         return this.value;
     }
-
+    
     /**
      * Sets the value of this DpConstants to the specified value.
      * @param value the new value
@@ -134,7 +154,7 @@ public class DPConstants implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
-
+    
     /**
      * Gets the description of this DpConstants.
      * @return the description
@@ -142,7 +162,7 @@ public class DPConstants implements Serializable {
     public String getDescription() {
         return this.description;
     }
-
+    
     /**
      * Sets the description of this DpConstants to the specified value.
      * @param description the new description
@@ -150,7 +170,7 @@ public class DPConstants implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
     /**
      * Gets the modTime of this DpConstants.
      * @return the modTime
@@ -158,7 +178,7 @@ public class DPConstants implements Serializable {
     public Date getModTime() {
         return this.modTime;
     }
-
+    
     /**
      * Sets the modTime of this DpConstants to the specified value.
      * @param modTime the new modTime
@@ -166,9 +186,9 @@ public class DPConstants implements Serializable {
     public void setModTime(Date modTime) {
         this.modTime = modTime;
     }
-
+    
     /**
-     * Returns a hash code value for the object.  This implementation computes 
+     * Returns a hash code value for the object.  This implementation computes
      * a hash code value based on the id fields in this object.
      * @return a hash code value for this object.
      */
@@ -178,10 +198,10 @@ public class DPConstants implements Serializable {
         hash += (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
-
+    
     /**
-     * Determines whether another object is equal to this DpConstants.  The result is 
-     * <code>true</code> if and only if the argument is not null and is a DpConstants object that 
+     * Determines whether another object is equal to this DpConstants.  The result is
+     * <code>true</code> if and only if the argument is not null and is a DpConstants object that
      * has the same id field values as this object.
      * @param object the reference object with which to compare
      * @return <code>true</code> if this object is the same as the argument;
@@ -197,9 +217,9 @@ public class DPConstants implements Serializable {
         if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) return false;
         return true;
     }
-
+    
     /**
-     * Returns a string representation of the object.  This implementation constructs 
+     * Returns a string representation of the object.  This implementation constructs
      * that representation based on the id fields.
      * @return a string representation of the object.
      */

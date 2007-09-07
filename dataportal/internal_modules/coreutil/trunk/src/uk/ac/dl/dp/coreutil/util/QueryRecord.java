@@ -52,7 +52,8 @@ public class QueryRecord implements Serializable {
         this.setSid(qr.getSessionId());
         this.setException(ex);
         this.setFac(qr.getFacility());
-        
+        this.setDN(qr.getDN());
+        this.setFacilities(qr.getFacilities());        
     }
     
     public Timestamp getSent() {

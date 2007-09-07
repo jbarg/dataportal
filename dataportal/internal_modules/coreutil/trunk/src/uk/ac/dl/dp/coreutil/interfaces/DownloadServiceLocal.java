@@ -10,6 +10,7 @@
 package uk.ac.dl.dp.coreutil.interfaces;
 
 import java.util.Collection;
+import javax.ejb.Local;
 import javax.ejb.Remote;
 import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
@@ -19,8 +20,8 @@ import uk.ac.dl.dp.coreutil.util.SRBInfo;
  * @author gjd37
  */
 
-@Remote
-public interface DownloadServiceRemote {
+@Local
+public interface DownloadServiceLocal {
     
     //  boolean downloadSRBFiles(SRBInfo srbInfo, ServiceInfo serviceInfo) throws IllegalArgumentException, LoginMyProxyException, MalformedURLException, Exception;
     
