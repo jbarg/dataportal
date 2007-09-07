@@ -78,15 +78,35 @@ public abstract class EJBObject {
     
     @AroundInvoke
     public Object logMethods(InvocationContext ctx) throws Exception {
-        
+        Object[] args = ctx.getParameters();
         String className = ctx.getTarget().getClass().getName();
         String methodName = ctx.getMethod().getName();
         String target = className + "." + methodName + "()";
         
         long start = System.currentTimeMillis();
         
-        //log.debug("Invoking " + target);
+        //build up method call
+        StringBuilder builder = new StringBuilder();
+        
+        builder.append(className+"."+methodName+"(");
+        
         try {
+            int i = 1;
+            if(args != null){
+                for(Object arg : args){
+                    if(arg == null){
+                        log.trace("Cannot pass null into argument "+i+" into: "+className+"."+methodName+"() method.");
+                        throw new SessionException("Cannot pass null into argument #"+i+" for this method.");
+                    } else if(arg instanceof String && ((String)arg).length() == 0){
+                        log.trace("Cannot pass empty string into argument "+i+" into: "+className+"."+methodName+"() method.");
+                        throw new SessionException("Cannot pass empty string into argument #"+i+" for this method.");
+                    }
+                    if(i == args.length) builder.append(arg+")");
+                    else builder.append(arg+", ");
+                    i++;
+                }
+            } else builder.append(target);
+            
             return ctx.proceed();
         } catch(IllegalArgumentException e) {
             throw new SessionException(e.getMessage());
@@ -97,7 +117,7 @@ public abstract class EJBObject {
                 //dont log
             } else{
                 long time = System.currentTimeMillis() - start;
-                log.trace("Exiting " + target +" , This method takes " +time/1000f + "s to execute");
+                log.trace("Exiting " + builder +" , This method takes " +time/1000f + "s to execute");
                 log.trace("\n");
             }
         }

@@ -23,6 +23,7 @@ import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.QueueSession;
 import javax.jms.Session;
+import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
@@ -107,11 +108,14 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
     public boolean addConstant(DPConstants constant){
         log.debug("Adding Constant");
         
-        DPConstants dpcon = (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", constant.getName()).getSingleResult();
+        DPConstants dpcon = null;
+        try{
+            dpcon = (DPConstants) em.createNamedQuery("DpConstants.findByName").setParameter("name", constant.getName()).getSingleResult();
+        }catch(NoResultException nre){}
         
         if(dpcon == null){
             log.info("Adding new constant: "+constant.getName()+" = "+constant.getValue());
-            dpcon.setId(null);
+            constant.setId(null);
             em.persist(constant);
         } else {
             if(!dpcon.getValue().equals(constant.getValue())){
@@ -146,6 +150,8 @@ public class DownloadService extends SessionEJBObject  implements DownloadServic
             
             if(port != null && ip != null && download != null && context != null && scheme != null) return true;
             else return false;
+        } catch(NoResultException nre){
+            return false;
         } catch(Exception e){
             log.error("Unable to check if constants set",e);
             return false;

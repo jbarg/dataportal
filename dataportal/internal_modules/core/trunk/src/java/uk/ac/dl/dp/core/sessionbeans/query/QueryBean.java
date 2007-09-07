@@ -48,7 +48,6 @@ import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.InvestigationIncludeRequest;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
-import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.ICATSingleton;
 import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
@@ -95,6 +94,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         q_request.setQueryid(search_id);
         q_request.setSent(new Date());
         q_request.setQt(DPQueryType.KEYWORD);
+        q_request.setDN(user.getDn());
         
         //send off basic search event
         //TODO sort out facility, keyword strings properly
@@ -125,7 +125,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         q_request.setQueryid(search_id);
         q_request.setSent(new Date());
         q_request.setQt(DPQueryType.MYDATA);
-        
+         q_request.setDN(userUtil.getUser().getDn());
+         
         //send off basic search event
         //TODO sort out facility, keyword strings properly
         sendMDBLocal.sendKeywordEvent(sid, facilities, (Collection<String>)new ArrayList<String>(), DPEvent.MYDATA_SEARCH);
@@ -152,6 +153,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         q_request.setSessionId(sid);
         q_request.setQueryid(search_id);
         q_request.setSent(new Date());
+        q_request.setDN(userUtil.getUser().getDn());
         
         //AdvancedSearchDetailsDTO dto = new AdvancedSearchDetailsDTO();
         //dto.mergeFrom(advancedSearchDetails);
@@ -191,6 +193,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         q_request.setSessionId(sid);
         q_request.setQueryid(search_id);
         q_request.setSent(new Date());
+        q_request.setDN(userUtil.getUser().getDn());
         
         InvestigationIncludeRequest iireq = new InvestigationIncludeRequest();
         iireq.setInclude(include);
@@ -304,7 +307,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         for(QueryRecord qr : cqr){
             for(Investigation investigation : qr.getResult()){
                 st.add(investigation);
-                log.trace(investigation);
+                //log.trace(investigation);
             }
         }
         log.trace("Sending back #" +st.size());
