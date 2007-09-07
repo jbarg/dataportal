@@ -1,9 +1,8 @@
 package uk.ac.dl.dp.coreutil.delegates;
 
-import java.net.MalformedURLException;
+import java.util.Collection;
 import javax.naming.NamingException;
 import uk.ac.dl.dp.coreutil.entity.DPConstants;
-import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import uk.ac.dl.dp.coreutil.interfaces.DownloadServiceRemote;
 import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
@@ -41,8 +40,12 @@ public class DownloadDelegate {
          ds.downloadSRBFiles(sid,srbInfo);
      }
   
-     public boolean setConstants(DPConstants constants){
+     public boolean setConstants(Collection<DPConstants> constants){
          return ds.setConstants(constants);
+     }
+     
+      public boolean addConstant(DPConstants constant){
+         return ds.addConstant(constant);
      }
      
      public boolean isSet(){

@@ -13,13 +13,12 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import uk.ac.dl.srbapi.srb.SRBUrl;
 
 /**
  *
  * @author gjd37
  */
-public class SRBInfo implements Serializable{
+public class SRBInfo implements Serializable {
     
     private String[] srbFiles;
     private Collection<SRBUrl> srbUrls;

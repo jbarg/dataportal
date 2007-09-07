@@ -15,8 +15,10 @@ import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
+import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
 
 /**
  *
@@ -63,7 +65,7 @@ public class QueryDelegate {
         return qsmr.queryAdvanced(sid, advancedSearchDetailsDTO, facilities);
     }
     
-    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException{
+    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception{
         return qsmr.getInvestigationById(sessionId,investigationId,facility);
     }
     

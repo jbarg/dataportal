@@ -42,8 +42,8 @@ import javax.persistence.TemporalType;
 public class EventLogDetails implements Serializable {
 
     @Id
-    @TableGenerator(name="ID", table="SEQUENCE", pkColumnName="SEQ_NAME",  pkColumnValue="EVENT_LOG",valueColumnName="SEQ_COUNT")
-    @GeneratedValue(strategy=GenerationType.TABLE,generator="ID")
+    @TableGenerator(name="EVENT_LOG_DETAILS", table="SEQUENCE", pkColumnName="SEQ_NAME",  pkColumnValue="EVENT_LOG_DETAILS",valueColumnName="SEQ_COUNT")
+    @GeneratedValue(strategy=GenerationType.TABLE,generator="EVENT_LOG_DETAILS")
     @Column(name = "ID", nullable = false)
     //Changed to idColumn cos of bug in glassfish b48 with StringOutOfBounds https://glassfish.dev.java.net/issues/show_bug.cgi?id=557 
     private Long id;

@@ -11,8 +11,10 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
+import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
+import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
 
 /**
  * This is the business interface for QuerySlaveMaster enterprise bean.
@@ -27,7 +29,7 @@ public interface QueryLocal {
     
     public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
     
-    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException;
+    public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
     
     public boolean isFinished(QueryRequest request) throws SessionException;
     
