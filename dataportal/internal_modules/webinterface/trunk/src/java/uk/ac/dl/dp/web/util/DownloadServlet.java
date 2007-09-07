@@ -3,8 +3,6 @@ import edu.sdsc.grid.io.srb.SRBException;
 import org.ietf.jgss.GSSCredential;
 import uk.ac.dl.dp.coreutil.delegates.DownloadDelegate;
 import uk.ac.dl.dp.coreutil.delegates.EventDelegate;
-import uk.ac.dl.dp.coreutil.entity.DataReference;
-import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.util.Certificate;
 import uk.ac.dl.dp.coreutil.util.DPUrlRefType;
 import uk.ac.dl.dp.web.backingbeans.Visit;
@@ -16,7 +14,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
-import uk.ac.dl.srbapi.srb.*;
+import uk.ac.dl.dp.coreutil.util.SRBUrl;
+import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
 
@@ -50,12 +49,12 @@ public class DownloadServlet extends HttpServlet {
                 //set the DB to vales for download
                 InetAddress host = InetAddress.getLocalHost();
                 
-                DPConstants port = new DPConstants();
-                DPConstants logging = new DPConstants();
-                DPConstants ip = new DPConstants();
-                DPConstants scheme = new DPConstants();
-                DPConstants contextRoot = new DPConstants();
-                DPConstants location = new DPConstants();
+                DPConstants port = new DPConstants(DPConstants.TYPE.SERVER_PORT);
+                DPConstants logging = new DPConstants("LOGGING");
+                DPConstants ip = new DPConstants(DPConstants.TYPE.SERVER_IP);
+                DPConstants scheme = new DPConstants(DPConstants.TYPE.SERVER_SCHEME);
+                DPConstants contextRoot = new DPConstants(DPConstants.TYPE.SERVER_CONTEXT_ROOT);
+                DPConstants location = new DPConstants(DPConstants.TYPE.DOWNLOAD_LOCATION);
                 
                 logging.setValue("DEBUG");
                 location.setValue(workingDir);
@@ -70,7 +69,7 @@ public class DownloadServlet extends HttpServlet {
                 constants.add(ip);
                 constants.add(scheme);
                 constants.add(contextRoot);
-                constants.add(location);               
+                constants.add(location);
                 
                 DownloadDelegate.getInstance().setConstants(constants);
             }
@@ -174,9 +173,11 @@ public class DownloadServlet extends HttpServlet {
                 SRBFileManagerThread man = null;
                 try {
                     //turn array into SRBUrls
-                    Collection<SRBUrl> srbUrls = visit.getVisitData().toSRBUrl(srbUrl);
-                    
-                    man = new SRBFileManagerThread(srbUrls,cred);
+                    Collection<uk.ac.dl.srbapi.srb.SRBUrl> properSRBUrls = new ArrayList<uk.ac.dl.srbapi.srb.SRBUrl>();
+                    for(String properSrbUrl : srbUrl){
+                        properSRBUrls.add(new uk.ac.dl.srbapi.srb.SRBUrl(properSrbUrl));
+                    }
+                    man = new SRBFileManagerThread(properSRBUrls,cred);
                     
                     String host = Util.getSRBHost(srbUrl);
                     log.trace("Looking for SRB Server with host: "+host);
@@ -219,7 +220,6 @@ public class DownloadServlet extends HttpServlet {
                 }
                 
                 EventDelegate.getInstance().sendDownloadEvent(visit.getSid(),detail,urls);
-                
                 
                 RequestDispatcher dispatcher =
                         req.getRequestDispatcher("/protected/downloadsrb.jsp?close=0&name="+name+"&type="+TYPE+"&url="+ID);

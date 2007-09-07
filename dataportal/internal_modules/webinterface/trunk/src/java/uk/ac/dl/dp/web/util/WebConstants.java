@@ -21,7 +21,7 @@ public class WebConstants {
     /**
      * Max number of investigaitons show in investigations page after search
      */
-    public final static int MAXIMIUM_RESULTS = 100;
+    public static int MAXIMIUM_RESULTS = 100;
     
     //dataset page info
     public final static int MAXIMIUM_DATASET_RESULTS = 100;
@@ -30,7 +30,7 @@ public class WebConstants {
     //investigation
      public final static int MAXIMIUM_INVESTIGATION_TREE_RESULTS = 50;
      
-    public final static int MAXIMIUM_SEARCH_TIME = 25; //seconds
+    public final static int MAXIMIUM_SEARCH_TIME = 30; //seconds
     
    
     

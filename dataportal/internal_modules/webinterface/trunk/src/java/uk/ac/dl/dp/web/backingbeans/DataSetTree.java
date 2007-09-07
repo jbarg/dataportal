@@ -154,7 +154,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     } else {
                         boolean canDownload = false;
                         for (Datafile datafile : dataset.getDatafileCollection()) {
-                            if(datafile.getIcatRole().isActionDownload()){
+                            if(datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
                                 log.trace("datafile: "+datafile.getId()+" has downloadAction so dataset: "+dataset.getId()+" is downloadable");
                                 canDownload = true;
                                 break;
@@ -165,7 +165,11 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                     }
                     
                     if(dataset.getDatasetStatus() != null) datasetNode.getChildren().add(new TreeNodeBase("status-folder",dataset.getDatasetStatus().getName(), true));
+                    else datasetNode.getChildren().add(new TreeNodeBase("status-folder","", true));
+                 
                     if(dataset.getDatasetType() != null) datasetNode.getChildren().add(new TreeNodeBase("type-folder", dataset.getDatasetType().getName(), true));
+                    else datasetNode.getChildren().add(new TreeNodeBase("type-folder", "", true));
+                    
                     datasetNode.getChildren().add(new TreeNodeBase("desc-folder", uk.ac.dl.dp.web.util.Util.escapeInvalidStrings(dataset.getDescription()),true));
                     
                     //now calculate the total size of dataset
@@ -192,7 +196,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                         TreeNodeBase datafileNode = null;
                         
                         //check if file downloadable
-                        if(datafile.getIcatRole().isActionDownload()){
+                        if(datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
                             datafileNode = new TreeNodeBase("file-folder", datafile.getName(),invest.getFacility().getFacilityShortName()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false);
                         } else {
                             datafileNode = new TreeNodeBase("file-noread-folder", datafile.getName(),invest.getFacility().getFacilityShortName()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false);
@@ -205,7 +209,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                         if(datafile.getDatafileCreateTime() != null) datafileNode.getChildren().add(new TreeNodeBase("createTime-folder", ""+datafile.getDatafileCreateTime(),false));
                         if(datafile.getFileSize() != null) datafileNode.getChildren().add(new TreeNodeBase("size-folder", ""+df.format((datafile.getFileSize()/(1024f*1024f))) +" MB", false));
                         
-                        if(isImageJ && datafile.getIcatRole().isActionDownload()){
+                        if(isImageJ && datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
                             datafileNode.getChildren().add(new TreeNodeBase("imageJ", "Launch ImageJ",invest.getFacility().getFacilityShortName()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false));
                         }
                         datasetNode.getChildren().add(datafileNode);
@@ -387,13 +391,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         
         //TODO need to check if all the files chosen are allowed to be downloaded
         
-        try{
-            //check that all files are from same dataset
-           /* if(!checkFromSameDataset()){
-                error("Unable to download from multiple investigations.  Select multiple items from one investigation at a time.");
-                return ;
-            }*/
-            
+        try{                      
             SRBInfo info = new SRBInfo();
             info.setSid(getVisit().getSid());
             info.setSrbUrls(getVisitData().toSRBUrl(srbFilesDownload));
@@ -401,10 +399,10 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             info("Request sent for download");
         } catch(MalformedURLException mex){
             log.error("Cannot download data via email, invalid URLS found.",mex);
-            //error("Cannot download data via email");
-        } catch(Exception ex){
+            error("Error: Cannot download data via email");
+        } catch(Throwable ex){
             log.error("Cannot download data via email",ex);
-            //error("Cannot download data via email");
+            error("Error: Cannot download data via email");
         }
         
     }
