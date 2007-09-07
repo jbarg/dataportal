@@ -32,7 +32,7 @@
                                                      headerClass="standardTable_Header"
                                                      footerClass="standardTable_Header"
                                                      rowClasses="standardTable_Row1,standardTable_Row2"
-                                                     columnClasses="standardTable_Column,standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+                                                     columnClasses="standardTable_Column,standardTable_ColumnCentered,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
                                                      var="data"
                                                      value="#{datacenterBean.dataRefs}"
                                                      preserveDataModel="true"
@@ -50,12 +50,12 @@
                                             <h:outputText value="Data References" />
                                             </f:facet>--%>
 
+                                            <%--  Expand column --%>
                                             <h:column>
                                                 <f:facet name="header"> 
                                                     <h:outputText escape="false" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
                                                 </f:facet>  
                                                 <a4j:commandLink  reRender="datatable" rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">
-                                                    <%--<h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">--%>
                                                     <h:panelGroup>
                                                         
                                                         <t:graphicImage id="down" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
@@ -67,18 +67,10 @@
                                                     </h:panelGroup>
                                                     
                                                 </a4j:commandLink>
-                                                <%--   <h:panelGrid columns="4" rendered="#{data.dataset && data.datasetInFolder}"> 
-                                                <h:commandLink  rendered="#{data.dataset && data.datasetInFolder}" disabled="true" style="color:black" id="view-1">
-                                                    --%>
-                                                <%--<h:commandLink rendered="#{data.dataset}" action="#{detailToggler.toggleDetail}">--%>
-                                                <%-- <t:graphicImage id="down-1" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                                                    <t:graphicImage id="down-f-1" value="../../images/blue-folder-closed.png" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>--%>
-                                                <%--    <h:panelGroup rendered="#{data.dataset && data.datasetInFolder}"> --%>
                                                 <h:panelGroup rendered="false">
                                                     <t:graphicImage id="up-1" value="../../images/button_minus1.gif"  border="0"/>
                                                     <t:graphicImage id="up-f-1" value="../../images/blue-folder-open.png"  border="0"/>
                                                 </h:panelGroup>
-                                                <%--  </h:commandLink>--%>
                                                 
                                                 <h:panelGrid columns="4" rendered="#{!data.dataset}">
                                                     
@@ -92,90 +84,45 @@
                                                     
                                                     <h:commandLink title="Download via ImageJ" rendered="#{data.imageJ}" onclick="download('#{data.facility}-#{data.id}','#{data.typeOfReference}_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">                                                        
                                                         <t:graphicImage title="Download via ImageJ" value="../../images/document.png" border="0"/>                                   
-                                                    </h:commandLink>
-                                                    
-                                                </h:panelGrid>
-                                                
+                                                    </h:commandLink>                                                    
+                                                </h:panelGrid>                                                
                                             </h:column>
+                                            
+                                            <%--  Name column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <a4j:commandLink id="name" reRender="datatable" actionListener="#{datacenterBean.sortColumn}">
                                                         
-                                                        <%--     <h:commandLink style="table-header" id="name" actionListener="#{datacenterBean.sortColumn}">--%>
                                                         <h:outputText value="Name" />
                                                         <f:param name="column" value="name"/>
-                                                        <%--<c:if test="${requestScope.datacenterBean.sort == 'name'}" >--%>
                                                         <t:graphicImage id="ac1" value="../../images/ascending-arrow.gif" rendered="#{datacenterBean.name}" border="0"/>
                                                         <t:graphicImage id="de1" value="../../images/descending-arrow.gif" rendered="#{datacenterBean.notName}" border="0"/>
-                                                        <%--    </c:if>--%>
-                                                    </a4j:commandLink>
-                                                    
+                                                    </a4j:commandLink>                                                    
                                                 </f:facet>
-                                                
-                                                <h:panelGrid columns="3">   
-                                                    <h:commandLink onclick="download('#{data.dpId}','#{data.typeOfReference}','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
-                                                        <h:outputText  value="#{data.name}" />
-                                                        <f:param name="id" value="#{data.id}"/>               
-                                                    </h:commandLink>      
-                                                    <h:outputText escape="true" value="   " />
-                                                    
-                                                    
-                                                    <%--<h:selectBooleanCheckbox rendered="#{!data.dataset}"  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >                                                    
-                                                        <a4j:support reRender="message, datatable" event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
-                                                            <a4j:actionparam name="datafiles" value="#{data.dpId}" />
-                                                            <a4j:actionparam name="DATA_FILE"  />
-                                                        </a4j:support>
-                                                    </h:selectBooleanCheckbox>--%>
-                                                </h:panelGrid>
+                                                                                                
+                                                    <h:outputText style="font-size: 12px;" value="#{data.name}" />
+                                               
                                             </h:column>
                                             
-                                            <h:column>
-                                                <f:facet name="header">
-                                                    <t:popup styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
-                                                             closePopupOnExitingPopup="true"
-                                                             displayAtDistanceX="10"
-                                                             displayAtDistanceY="-40" >
-                                                        <t:graphicImage id="adownloads1" value="../../images/download.gif"  border="0"/>
-                                                        <f:facet name="popup">
-                                                            <h:panelGroup>
-                                                                <h:panelGrid columns="1" >
-                                                                    <h:outputText value="If you specify an email address, you can have the data downloaded link emailed to you."/>    
-                                                                    <h:outputText value="To do this, add your email to the bottom left preferences tab."/>    
-                                                                    
-                                                                </h:panelGrid>
-                                                            </h:panelGroup>
-                                                        </f:facet>
-                                                    </t:popup>
-                                                    
-                                                    
-                                                    
-                                                </f:facet>
-                                                <h:selectBooleanCheckbox  value="#{data.download}" style="background-color:#D1E4E4" title="Add to download"  immediate="true" >                                                    
-                                                    <a4j:support reRender="message,downloademail,downloadnow, notdownloadnow" event="onclick" ajaxSingle="true" immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
-                                                        <a4j:actionparam name="datafiles" value="#{data.dpId}" />
-                                                        <a4j:actionparam name="DATA_FILE"  />
-                                                    </a4j:support>
-                                                </h:selectBooleanCheckbox>
-                                            </h:column>
-                                            
+                                            <%--  Type column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="type" actionListener="#{datacenterBean.sortColumn}">
-                                                        <%--<h:commandLink style="table-header" id="type" actionListener="#{datacenterBean.sortColumn}">--%>
                                                         <h:outputText value="Type" />
                                                         <f:param name="column" value="type"/>
-                                                        <%-- <c:if test="${requestScope.datacenterBean.sort == 'type'}" >--%>
                                                         <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{datacenterBean.type}" border="0"/>
                                                         <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{datacenterBean.notType}" border="0"/>
-                                                        <%--   </c:if>--%>               
                                                     </a4j:commandLink>
                                                 </f:facet>
                                                 
-                                                   
-                                               <%-- <t:popup rendered="#{data.dataset}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
-                                                         closePopupOnExitingPopup="true"
-                                                         displayAtDistanceX="20"
-                                                         displayAtDistanceY="-40" >
+                                                <h:outputText rendered="#{!data.dataset}" value="#{data.typeOfObject}" />
+                                                
+                                                <t:popup  rendered="#{data.dataset}" styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
+                                                          closePopupOnExitingPopup="true"
+                                                          displayAtDistanceX="20"
+                                                          displayAtDistanceY="-40" >
+                                                    
+                                                    <h:outputText rendered="#{data.dataset}" value="#{data.typeOfObject}" />
                                                     
                                                     <f:facet name="popup">
                                                         <h:panelGroup>
@@ -186,11 +133,12 @@
                                                             </h:panelGrid>
                                                         </h:panelGroup>
                                                     </f:facet>
-                                                </t:popup>--%>
-                                                <h:outputText rendered="#{data.dataset}" value="#{data.typeOfObject}" />
-            
+                                                </t:popup>
+                                                
+                                                
                                             </h:column>
                                             
+                                            <%--  Facility column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="Facility" actionListener="#{datacenterBean.sortColumn}">
@@ -204,6 +152,7 @@
                                                 <h:outputText value="#{data.facility}" />
                                             </h:column>        
                                             
+                                            <%--  Notes column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="notes" actionListener="#{datacenterBean.sortColumn}">
@@ -260,6 +209,8 @@
                                                 </t:popup>
                                                 
                                             </h:column>
+                                            
+                                            <%--  Time column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="Time" actionListener="#{datacenterBean.sortColumn}">
@@ -274,21 +225,20 @@
                                                 <h:outputText value="#{data.modTime}" >
                                                     <f:convertDateTime pattern="HH:mm  dd.MM.yyyy "/>
                                                 </h:outputText>
-                                            </h:column>       
-                                            <h:column>
-                                                
+                                            </h:column>
+                                            
+                                            <%--  Goto column --%>       
+                                            <h:column>                                                
                                                 <f:facet name="header">
                                                     <h:outputText value="Goto" style="table-header; color:blue" />                   
                                                 </f:facet>          
-                                                <%-- <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               --%>
-                  
                                                 
                                                 <t:popup styleClass="popup"  closePopupOnExitingElement="true"
                                                          closePopupOnExitingPopup="true"
                                                          displayAtDistanceX="10"
                                                          displayAtDistanceY="-30" >
                                                     
-                                                    <h:commandLink style="table-header" id="view2" action="#{datacenterBean.viewData}" rendered="#{data.dataset}">
+                                                    <h:commandLink style="table-header" id="view2" action="#{datacenterBean.viewData}" >
                                                         <t:graphicImage id="goto_button"  value="../../images/goto.gif"  border="0"/>                               
                                                     </h:commandLink>    
                                                     
@@ -300,23 +250,15 @@
                                                     </f:facet>
                                                 </t:popup>
                                                 
-                                                
-                                                
                                             </h:column>
+                                            
+                                            <%--  Deleted column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <h:panelGrid columns="3">  
-                                                        <%--  <a4j:commandLink reRender="datatable" style="table-header" ajaxSingle="true" id="collapseAll" action="#{datacenterBean.selectnone}">           
-                                                            <%-- <h:commandLink id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">--%>
-                                                        <%--    <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
-                                                        </a4j:commandLink>  --%>
                                                         
                                                         <t:graphicImage id="delete_selected"  value="../../images/delete.jpg"  border="0"/>                                                                            
                                                         
-                                                        <%--   <a4j:commandLink reRender="datatable" style="table-header" ajaxSingle="true" id="expandAll" action="#{datacenterBean.selectall}">           
-                                                            <%-- <h:commandLink id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">--%>
-                                                        <%--       <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
-                                                        </a4j:commandLink> --%>
                                                     </h:panelGrid>           
                                                 </f:facet>
                                                 <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{datacenterBean.listen}" value="#{data.selected}" >
@@ -332,32 +274,13 @@
                                                         &nbsp;&nbsp; &nbsp;&nbsp;
                                                     </h:column>    
                                                     <h:column>                                                        
-                                                        <t:graphicImage rendered="#{!url.imageJ && !data.datasetInFolder}" id="doc_button_not"  value="../../images/document2.PNG"  border="0"/>
+                                                        <t:graphicImage rendered="#{!data.datasetInFolder}" id="doc_button_not"  value="../../images/document.png"  border="0"/>
                                                         <t:graphicImage id="doc_button2" rendered="#{data.datasetInFolder}" value="../../images/blue-folder-closed.png"  border="0"/>
-                                                        
-                                                        <h:commandLink rendered="#{url.imageJ}" onclick="download('#{url.dpId}','DATA_FILE_IMAGEJ','DATA_CENTER'); return false;" style="color:black" id="view">
-                                                            <t:graphicImage id="doc_button"  value="../../images/document.png"  border="0"/>
-                                                        </h:commandLink>
                                                         
                                                         <h:outputText escape="false" value=" &nbsp;" />
                                                         
-                                                        <h:commandLink rendered="#{data.datasetInFolder}" onclick="download('#{url.dpId}','DATA_FILE_IN_FOLDERS','DATA_CENTER'); return false;" style="color:black" id="downloadname12" actionListener="#{datacenterBean.download}">
-                                                            <h:outputText  value="#{url.name}" style="font-size: 10px"/>                         
-                                                        </h:commandLink>
+                                                        <h:outputText  value="#{url.name}" style="font-size: 10px"/>                         
                                                         
-                                                        <h:commandLink rendered="#{!data.datasetInFolder}" onclick="download('#{url.dpId}','DATA_FILE','DATA_CENTER'); return false;" style="color:black" id="downloadname" actionListener="#{datacenterBean.download}">
-                                                            <h:outputText  value="#{url.name}" style="font-size: 10px"/>                         
-                                                        </h:commandLink>
-                                                        
-                                                        <h:outputText escape="false" value=" &nbsp;&nbsp;&nbsp;" />
-                                                        
-                                                        <h:selectBooleanCheckbox style="background-color:#D1E4E4" title="Add to download" value="#{url.download}" immediate="true" >
-                                                            <f:param name="datafiles" value="#{url.dpId}"/>
-                                                            <a4j:support reRender="message, datatable,downloademail,downloadnow, notdownloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datacenterBean.setDataFileDownloadAction}">
-                                                                <a4j:actionparam name="datafiles"  value="#{url.dpId}" />                                                                
-                                                                
-                                                            </a4j:support>
-                                                        </h:selectBooleanCheckbox>
                                                     </h:column>   
                                                     
                                                 </t:dataTable>
@@ -405,7 +328,7 @@
                                         <br />
                                         <h:panelGrid border="0" rendered="#{datacenterBean.populated}" width="95%" columns="12">
                                             
-                                            <h:commandButton styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;"  title="Download selections now" value="Download now"/>
+                                            <%-- <h:commandButton styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_CENTER'); return false;"  title="Download selections now" value="Download now"/>
                                             &nbsp;
                                             <t:graphicImage id="downlaodaci3" value="../../images/download.gif" border="0"/>
                                             
@@ -428,8 +351,9 @@
                                                         </h:panelGrid>
                                                     </h:panelGroup>
                                                 </f:facet>
-                                            </t:popup>
-                                            
+                                            </t:popup>--%>
+                                            <h:panelGroup />
+                                            <h:panelGroup /><h:panelGroup />
                                             <h:panelGroup />
                                             <h:panelGroup /><h:panelGroup />
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -449,7 +373,7 @@
                                             
                                             
                                         </h:panelGrid>
-                                        <h:panelGrid border="0" rendered="#{datacenterBean.populated}" width="95%" columns="13">
+                                        <%--  <h:panelGrid border="0" rendered="#{datacenterBean.populated}" width="95%" columns="13">
                                             
                                             <h:commandButton styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datacenterBean.emailDownload}" title="Download via email" value="Email download"/>
                                             &nbsp;
@@ -463,7 +387,7 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <h:panelGroup /> <h:panelGroup /> <h:panelGroup />
                                             <h:panelGroup />
-                                        </h:panelGrid>
+                                        </h:panelGrid>--%>
                                     </td>
                                 </tr>
                             </tbody>     

@@ -253,7 +253,7 @@
                     </h:outputLabel>
                     
                     <h:inputText styleClass="text" id="grantIdj_id_1" size="14" required="false" value="#{visit.visitData.advancedSearchBean.grantId}">
-                        
+                         <f:validateDoubleRange minimum="0" maximum="90000000" />
                     </h:inputText>        
                     
                     <h:panelGroup/>
