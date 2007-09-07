@@ -21,6 +21,7 @@ import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
+import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
@@ -362,11 +363,33 @@ public class SearchBean extends AbstractRequestBean {
                 }
                 return null;
             }
+            
+            //check if max for a single facility has been reached
+            Collection<String> limitedReached = new HashSet<String>();
+            for(FacilityDTO facility :  getVisit().getSession().getFacilities()){
+                int numberFromFacility = 0;
+                for(Investigation invest : investigations){
+                    if(invest.getFacility().getFacilityShortName().equals(facility.getFacility())) numberFromFacility++;
+                }
+                if(numberFromFacility >= DataPortalConstants.MAX_RESULTS) limitedReached.add(facility.getFacility());
+            }
+            
+            if(!limitedReached.isEmpty()){
+                if(getVisit().getSession().getFacilities().size() == 1){
+                    info("More than the maximum of "+DataPortalConstants.MAX_RESULTS+" results shown was returned from facility: "+limitedReached+". Please refine your query next time.");
+                } else info("More than the maximum of "+DataPortalConstants.MAX_RESULTS+" results shown was returned from facility(s): "+limitedReached+". Please refine your query next time.");
+                
+                log.warn("More than "+DataPortalConstants.MAX_RESULTS+" investigations returned "+investigations.size()+" from facility(s): "+limitedReached);
+            }
+            
+            //set max results is number max of fac *number of logged on facilities
+            WebConstants.MAXIMIUM_RESULTS = DataPortalConstants.MAX_RESULTS * getVisit().getSession().getFacilities().size();
+            
             //check if result size is too big
             if(investigations.size() >= WebConstants.MAXIMIUM_RESULTS){
                 
                 log.warn("More than "+WebConstants.MAXIMIUM_RESULTS+" investigations returned "+investigations.size()+" removing all but "+WebConstants.MAXIMIUM_RESULTS);
-                info("More than the "+WebConstants.MAXIMIUM_RESULTS+" results shown was returned.  Please refine your query next time.");
+                info("More than the maximum of "+WebConstants.MAXIMIUM_RESULTS+" results shown was returned.  Please refine your query next time.");
                 
                 //remove unwanted investigations
                 int i = 0;

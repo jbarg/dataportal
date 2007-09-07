@@ -26,8 +26,8 @@ import org.apache.myfaces.custom.tree2.*;
 import uk.ac.dl.dp.coreutil.entity.Url;
 import uk.ac.dl.dp.coreutil.util.KeywordsFileBean;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dl.dp.coreutil.util.SRBUrl;
 import uk.ac.dl.dp.web.backingbeans.BasicSearchHistoryBean;
-import uk.ac.dl.srbapi.srb.SRBUrl;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.Investigation;
@@ -525,13 +525,13 @@ public class VisitData implements Serializable {
                 if(dataset.isSelected()){
                     for(Datafile datafile : dataset.getDatafileCollection()){
                         //log.trace("Adding "+datafile.getLocation()+" from datafile: "+datafile.getId()+" for dataset: "+dataset.getId());
-                        urls.add(datafile.getLocation());
+                        if(datafile.getLocation() !=null && !datafile.getLocation().equals("")) urls.add(datafile.getLocation());
                     }
                 }
                 for(Datafile datafile : dataset.getDatafileCollection()){
                     if(datafile.isSelected()){
                         //log.trace("Adding "+datafile.getLocation()+" from datafile: "+datafile.getId());
-                        urls.add(datafile.getLocation());
+                        if(datafile.getLocation() !=null && !datafile.getLocation().equals("")) urls.add(datafile.getLocation());
                     }
                 }
             }
