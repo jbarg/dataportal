@@ -31,7 +31,7 @@
                                                      headerClass="standardTable_Header"
                                                      footerClass="standardTable_Header"
                                                      rowClasses="standardTable_Row1,standardTable_Row2"
-                                                     columnClasses="standardTable_Column,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered"
+                                                     columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered, standardTable_ColumnCentered, standardTable_ColumnCentered,standardTable_ColumnCentered"
                                                      var="data"
                                                      value="#{bookmarkBean.dataRefs}"
                                                      preserveDataModel="true"
@@ -49,6 +49,9 @@
                                         <f:facet name="header"></f:facet>            
                                         <h:outputText value="#{data.id}" />              
                                         </h:column>--%>
+                                        
+                                        
+                                         <%--  Name column --%>
                                             <h:column >
                                                 <f:facet name="header">
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="name" actionListener="#{bookmarkBean.sortColumn}">
@@ -63,6 +66,7 @@
                                             </h:column>
                                             
                                             
+                                             <%--  FAcility column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="facility" actionListener="#{bookmarkBean.sortColumn}">
@@ -75,6 +79,8 @@
                                                 </f:facet>
                                                 <h:outputText value="#{data.facility}" />
                                             </h:column>
+                                            
+                                             <%--  Notes column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="notes" actionListener="#{bookmarkBean.sortColumn}">
@@ -130,6 +136,7 @@
                                                 &nbsp;
                                             </h:column>
                                             
+                                             <%--  Time column --%>
                                             <h:column>
                                                 <f:facet name="header">                                                
                                                     <a4j:commandLink reRender="datatable" style="table-header" id="time" actionListener="#{bookmarkBean.sortColumn}">
@@ -144,13 +151,12 @@
                                                     <f:convertDateTime pattern="HH:mm  dd.MM.yyyy "/>
                                                 </h:outputText>
                                             </h:column>  
-                                            <h:column>
-                                                
+                                            
+                                             <%--  Goto column --%>
+                                            <h:column>                                                
                                                 <f:facet name="header">
-                                                    <h:outputText value="Goto" style="table-header; color:blue"/>
-                                                    
-                                                </f:facet>
-                                                
+                                                    <h:outputText value="Goto" style="table-header; color:blue"/>                                                    
+                                                </f:facet>                                                
                                                 
                                                 <t:popup styleClass="popup"  closePopupOnExitingElement="true"
                                                          closePopupOnExitingPopup="true"
@@ -167,11 +173,10 @@
                                                             <h:commandLink action="#{bookmarkBean.viewDataSets}" title="View datasets" value="Datasets"/>                                                            
                                                         </h:panelGrid>
                                                     </f:facet>
-                                                </t:popup>
-                                                
-                                                
-                                                
+                                                </t:popup>                                                
                                             </h:column>
+                                            
+                                             <%--  Delete column --%>
                                             <h:column>
                                                 <f:facet name="header">
                                                     <h:panelGrid columns="1">  
@@ -182,7 +187,7 @@
                                                 </f:facet>
                                                 <h:selectBooleanCheckbox title="select_investigation" valueChangeListener="#{bookmarkBean.listen}" value="#{data.selected}" >
                                                     <f:param name="id" value="#{data.id}"/>
-                                                </h:selectBooleanCheckbox>                                           
+                                                </h:selectBooleanCheckbox>                                          
                                                 
                                             </h:column>
                                         </t:dataTable>

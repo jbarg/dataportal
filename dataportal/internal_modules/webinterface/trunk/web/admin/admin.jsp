@@ -78,7 +78,7 @@
                                             
                                                <t:div id="subnavigation_nav">
                                                 <f:subview id="navigation_search">
-                                                    <c:import url="../protected/inc/basic_search_inc_2.jsp" />
+                                                    <c:import url="../protected/inc/tabbed_panel_nav_inc.jsp" />
                                                 </f:subview>
                                             </t:div>
                                         </td>

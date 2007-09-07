@@ -332,7 +332,7 @@
                 </f:facet>
             </t:popup>
             
-            <h:message for="grantIdj_id_1" styleClass="error"/>
+            <h:message for="grantIdj_id_1" showDetail="false" showSummary="true" styleClass="error"/>
             
             <!----------------     End of Grant Id ---------------->
             

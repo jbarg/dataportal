@@ -13,7 +13,7 @@
             <tr>
                 <td width="30">&nbsp;</td>
                 <td>
-                <a4j:region selfRendered="true"> 
+                <a4j:region  selfRendered="true"> 
                     <table border="0" width="100%">
                         <tbody>
                             <tr>
@@ -109,8 +109,8 @@
                                                                                 
                                                                             </h:panelGroup>
                                                                         </f:facet>
-                                                                                                                                          
-                                                                                                                                                
+                                                                        
+                                                                        
                                                                         <f:facet name="type-folder">
                                                                             <h:panelGroup>
                                                                                 <f:facet name="expand17">
@@ -203,7 +203,7 @@
                     <t:tree2 binding="#{datasetTree.tree}" rendered="#{datasetTree.clientSide}" id="tree" value="#{datasetTree.data}" var="node" varNodeToggler="t" showRootNode="false" clientSideToggle="true">
                         
                         
-                        
+                        <%----  Data set branch  ----%>
                         <f:facet name="dataset-folder">
                             <h:panelGroup>
                                 <f:facet name="expand">
@@ -219,32 +219,34 @@
                                     <f:param name="id" value="#{node.identifier}"/>             
                                 </h:commandLink>
                                 
-                                <h:outputText id="text891" value=" (#{node.childCount-3})" styleClass="childCount" rendered="#{!empty node.children}"/>
+                                <h:outputText id="text891" value=" (#{node.childCount-4})" styleClass="childCount" rendered="#{!empty node.children}"/>
                                 <h:outputText value="    " />
-                                <%--<h:selectBooleanCheckbox style="background-color:#EAF4F4" title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">--%>
-                                <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
+                                 
+                                <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                               
+                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail, downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
                             </h:panelGroup>
                         </f:facet>
                         
-                        <f:facet name="dataset-inFolder-folder">
+                        <%----  Data set no read branch (ie, no datafiles or no datafile which can read) ----%>
+                        <f:facet name="dataset-noread-folder">
                             <h:panelGroup>
+                               
+                                    <t:graphicImage id="gr99noread" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
+                             
+                                    <t:graphicImage id="gr98noread" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                              
+                                <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
+                                <h:outputText id="text90noread" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                 
-                                <t:graphicImage id="gr-1" value="../../images/yellow-folder-open.png" rendered="#{t.nodeExpanded}" border="0"/>
-                                
-                                <t:graphicImage id="gr-12" value="../../images/yellow-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                                
-                                <h:commandLink onclick="download('#{node.identifier}','DATA_SET','DATA_SETS'); return false;" style="color:black" id="downloadname-10" actionListener="#{datacenterBean.download}">
-                                    <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
-                                    <h:outputText id="text-10" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
-                                    
-                                    <f:param name="id" value="#{node.identifier}"/>               
-                                </h:commandLink>
+                                <h:outputText id="text891noread" value=" (#{node.childCount-3})" styleClass="childCount" rendered="#{!empty node.children}"/>
                                 <h:outputText value="    " />
+                                
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
                                     <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
@@ -254,6 +256,8 @@
                             </h:panelGroup>
                         </f:facet>
                         
+                        
+                        <%----   Investigation branch ----%>
                         <f:facet name="invest">
                             <h:panelGroup>
                                 
@@ -268,14 +272,29 @@
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select Investigation" >
                                     <f:param name="investigations" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail, downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="investigations" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
                             </h:panelGroup>
                         </f:facet>
                         
-                        <f:facet name="foo1-folder">
+                        <%----   Datasets, list number of datasets ----%>
+                        <f:facet name="dataset-count-folder">
+                            <h:panelGroup>
+                                
+                                <t:graphicImage id="gr9d91" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                
+                                <t:graphicImage id="grd918" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                
+                                <h:outputText id="textd190" value="#{node.description}" styleClass="nodeFolder"/>
+                                <h:outputText id="texdt8ff91" value=" (#{node.childCount})" styleClass="childCount" rendered="#{!empty node.children}"/>
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                        <%----   Datafile, list number of datafile ----%>
+                        <f:facet name="datafile-count-folder">
                             <h:panelGroup>
                                 
                                 <t:graphicImage id="gr991" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
@@ -287,19 +306,8 @@
                                 
                             </h:panelGroup>
                         </f:facet>
-                        <f:facet name="bar-folder">
-                            <h:panelGroup>
-                                <f:facet name="expand3">
-                                    <t:graphicImage id="gr" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
-                                </f:facet>
-                                <f:facet name="collapse3">
-                                    <t:graphicImage id="gr1" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
-                                </f:facet>
-                                <h:outputText id="text786" styleClass="document" value="#{node.description}" />
-                                
-                            </h:panelGroup>
-                        </f:facet>
                         
+                        <%----   Dataset status  ----%>
                         <f:facet name="status-folder">
                             <h:panelGroup>
                                 <f:facet name="expand1">
@@ -315,6 +323,7 @@
                             </h:panelGroup>
                         </f:facet>
                         
+                        <%----  Dataset type  ----%>
                         <f:facet name="type-folder">
                             <h:panelGroup>
                                 <f:facet name="expand17">
@@ -329,6 +338,8 @@
                                 
                             </h:panelGroup>
                         </f:facet>
+                        
+                        <%----  Datafile size  ----%>
                         <f:facet name="size-folder">
                             <h:panelGroup>
                                 <f:facet name="expandfg1">
@@ -344,7 +355,8 @@
                             </h:panelGroup>
                         </f:facet>
                         
-                      <f:facet name="format-folder">
+                        <%---- Datafile format   ----%>
+                        <f:facet name="format-folder">
                             <h:panelGroup>
                                 <f:facet name="expda1">
                                     <t:graphicImage id="gr1ddfgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
@@ -359,7 +371,8 @@
                             </h:panelGroup>
                         </f:facet>
                         
-                         <f:facet name="format-version-folder">
+                        <%----  Datafile format version   ----%>
+                        <f:facet name="format-version-folder">
                             <h:panelGroup>
                                 <f:facet name="expandf3gd1">
                                     <t:graphicImage id="gr1fgd3ffgg72" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
@@ -374,6 +387,7 @@
                             </h:panelGroup>
                         </f:facet>
                         
+                        <%----  Datafile format type   ----%>
                         <f:facet name="format-type-folder">
                             <h:panelGroup>
                                 <f:facet name="exnfgd1">
@@ -389,6 +403,7 @@
                             </h:panelGroup>
                         </f:facet>
                         
+                        <%----  Datafile create time   ----%>
                         <f:facet name="createTime-folder">
                             <h:panelGroup>
                                 <f:facet name="expand1">
@@ -403,7 +418,9 @@
                                 
                             </h:panelGroup>
                         </f:facet>
-                         <f:facet name="instrument-folder">
+                        
+                        <%----  Investigation  instrument   ----%>
+                        <f:facet name="instrument-folder">
                             <h:panelGroup>
                                 <f:facet name="expa4ngd1">
                                     <t:graphicImage id="d" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
@@ -417,6 +434,8 @@
                                 
                             </h:panelGroup>
                         </f:facet>
+                        
+                        <%----  datafile imageJ  ----%>
                         <f:facet name="imageJ">
                             <h:panelGroup>                                
                                 <h:commandLink  onclick="download('#{node.identifier}','DATA_FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
@@ -425,6 +444,7 @@
                             </h:panelGroup>
                         </f:facet>
                         
+                        <%----  datafile  ----%>
                         <f:facet name="file-folder">
                             <h:panelGroup>
                                 <f:facet name="expand6">
@@ -434,48 +454,30 @@
                                     <t:graphicImage id="gr60u" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 </f:facet>
                                 <h:outputText value="         " />
-                                <%-- <h:commandLink immediate="true" styleClass="#{t.nodeSelected ? 'documentSelected':'document'}" actionListener="#{datasetTree.setNodeSelected}">
-                                <t:graphicImage value="../images/document.png" border="0"/>
-                                <h:outputText value="#{node.description}" styleClass="file" />
-                                <f:param name="id" value="#{node.identifier}"/>
-                                </h:commandLink>      --%>
-                             
-                                <%--  <t:graphicImage value="../../images/document.png" border="0"/>  --%>     
-                   
-                                <t:graphicImage value="../../images/document.png" border="0"/>                                   
                                 
-                                <%--<h:commandLink rendered="#{node.leaf}" onclick="download('#{node.identifier}','FILE_IMAGEJ','DATA_SETS'); return false;" style="color:black" id="view">
-                                <t:graphicImage value="../../images/document.png" border="0"/>                                   
-                                </h:commandLink>--%>
-                        
+                                <t:graphicImage value="../../images/document.png" border="0"   />                                   
+                                
                                 <h:commandLink onclick="download('#{node.identifier}','DATA_FILE','DATA_SETS'); return false;" style="color:black" id="downloadname112">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
                                     <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     <f:param name="id16" value="#{node.identifier}"/>              
                                 </h:commandLink>
                                 <h:outputText value="         " />
-                                <%-- <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Links" valueChangeListener="#{datasetTree.setSelected}">
-                                    <f:param name="datafiles" value="#{node.identifier}"/>
-                                </h:selectBooleanCheckbox>--%>
+                                
+                                <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                                                                
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail, downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
-                                <%--
-                               //TOTO for now allow single download only from bookmarks etc
-                               <h:selectBooleanCheckbox  id="checkbox" style="background-color:#D1E4E4" title="Add to download" valueChangeListener="#{datasetTree.setDataFileDownload}">
-                                    <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <%--   <a4j:support  immediate="true" event="onclick" ajaxSingle="true"  actionListener="#{datasetTree.setDataFileDownloadAction}">
-                                    <a4j:actionparam name="datafiles" value="#{node.identifier}" />
-                                    </a4j:support>--%>
-                                    
-                                <%--</h:selectBooleanCheckbox>--%>
                                 
                                 
                             </h:panelGroup>
                         </f:facet>
+                        
+                        <%----  datafile (EMAT) in folder (show folder instead of file image  ----%>
                         <f:facet name="file-inFolder-folder">
                             <h:panelGroup>
                                 
@@ -489,9 +491,12 @@
                                     <f:param name="id16" value="#{node.identifier}"/>              
                                 </h:commandLink>
                                 <h:outputText value="         " />
+                                
+                                <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                                
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail, downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>                                                                                      
@@ -499,32 +504,28 @@
                             </h:panelGroup>
                         </f:facet>
                         
+                        <%----  datafile no download  ----%>
                         <f:facet name="file-noread-folder">
                             <h:panelGroup>                   
                                 <t:graphicImage value="../../images/document.png" border="0"/>                                   
                                 <h:outputText value="         " />
                                 
-                                <h:commandLink disabled="true"  style="color:black" id="downloadname1">
-                                    <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
-                                    <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
-                                    <f:param name="id1" value="#{node.identifier}"/>              
-                                </h:commandLink>
+                                <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="file"--%>
+                                <h:outputText value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
+                                
                                 <h:outputText value="         " />
-                                <%--    <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Add to Data Links" valueChangeListener="#{datasetTree.setSelected}">
-                                    <f:param name="datafiles" value="#{node.identifier}"/>
-                                </h:selectBooleanCheckbox>--%>
+                                
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select DataFile" >
                                     <f:param name="datafiles" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail, downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datafiles" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
-                                <%--  <h:selectBooleanCheckbox  disabled="true" id="checkbox1" style="background-color:#D1E4E4" title="No access to data" >
-                                    
-                                </h:selectBooleanCheckbox>--%>                              
+                                
                             </h:panelGroup>
                         </f:facet>
                         
+                        <%---- Investigation facility  ----%>
                         <f:facet name="fac-folder">
                             <h:panelGroup>
                                 <f:facet name="expand1f3">
@@ -540,6 +541,7 @@
                             </h:panelGroup>
                         </f:facet>
                         
+                        <%----  dataset description  ----%>
                         <f:facet name="desc-folder">
                             <h:panelGroup>
                                 <f:facet name="expand1ff3">
@@ -582,7 +584,7 @@
                                 <%--<h:selectBooleanCheckbox style="background-color:#EAF4F4" title="select_investigation" valueChangeListener="#{datasetTree.setSelected}">--%>
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail, downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -605,7 +607,7 @@
                                 <h:outputText value="    " />
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                     <f:param name="datasets" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="checkSelectedInfomation();ddSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="datasets" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -626,7 +628,7 @@
                                 </h:selectBooleanCheckbox>--%>
                                 <h:selectBooleanCheckbox  style="background-color:#EAF4F4" title="Select Investigation" >
                                     <f:param name="investigations" value="#{node.identifier}"/>
-                                    <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
+                                    <a4j:support reRender="addSelection, downloademail, downloadnow" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
                                         <a4j:actionparam name="investigations" value="#{node.identifier}"/>   
                                     </a4j:support>
                                 </h:selectBooleanCheckbox>
@@ -772,7 +774,7 @@
                             </h:panelGroup>
                         </f:facet>
                         
-                         <f:facet name="instrument-folder">
+                        <f:facet name="instrument-folder">
                             <h:panelGroup>
                                 <f:facet name="expa4nd1">
                                     <t:graphicImage id="d" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
@@ -928,7 +930,7 @@
                                 <td align="left">
                                     <%--<h:commandButton styleClass="button" id="addSelection" disabled="#{!visit.visitData.addSelectionable}" action="#{datasetTree.select}" title="Add selections" value="Add selections"/>--%>
                                    
-                                    <h:commandButton styleClass="button" id="addSelection" style="width: 130px" action="#{datasetTree.select}" title="Add to Data Links" value="Add to Data Links"/>
+                                    <h:commandButton disabled="#{!datasetTree.validSelection}" styleClass="button" id="addSelection" style="width: 130px" action="#{datasetTree.select}" title="Add to Data Links" value="Add to Data Links"/>
                                     &nbsp;
                                     <h:selectBooleanCheckbox disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
                                         
@@ -945,7 +947,7 @@
                                             <h:panelGroup>
                                                 <h:panelGrid columns="1" >
                                                     <h:outputText value="If you specify an email address, you can have the data downloaded link emailed to you."/>    
-                                                    <h:inputText styleClass="text" value="#{visit.userPreferences.email}"  id="email">
+                                                    <h:inputText styleClass="text" value="#{visit.userPreferences.email}" validator="#{userPreferencesBean.validateEmail}"  id="email">
                                                         
                                                     </h:inputText>
                                                     
@@ -959,8 +961,10 @@
                             </tr>
                             <tr>
                                 <td align="left">
-                                    <h:commandButton styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections now" value="Download now"/>
+                                    <h:commandButton disabled="#{!datasetTree.validDownloadSelection}" styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections now" value="Download now"/>
                                     &nbsp;
+                                      <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                             
                                     <h:selectBooleanCheckbox  disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
                                         
                                     </h:selectBooleanCheckbox>
@@ -970,9 +974,11 @@
                             <tr>
                                 <td align="left">
                                     
-                                    <a4j:commandButton reRender="messages" styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
+                                    <a4j:commandButton disabled="#{!datasetTree.validDownloadSelection}" reRender="messages" styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
                                     
                                     &nbsp;
+                                      <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                             
                                     <h:selectBooleanCheckbox rendered="#{visit.userPreferences.emailSet}" disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
                                         
                                     </h:selectBooleanCheckbox>
