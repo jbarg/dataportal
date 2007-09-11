@@ -384,7 +384,7 @@ public class VisitData implements Serializable {
         String investigationId = ID.split("-")[1];
         
         for(Investigation investigation : getCurrentInvestigations()){
-            if(investigation.getId().equals(new Long(investigationId))&& investigation.getFacility().getFacilityShortName().equals(fac)){
+            if(investigation.getId().equals(new Long(investigationId))&& investigation.getFacility().equals(fac)){
                 log.trace("Found invest: "+investigation.getId());
                 return investigation;
             }
@@ -487,12 +487,12 @@ public class VisitData implements Serializable {
             for(Dataset dataset : investigation.getDatasetCollection()){
                 if(dataset.isSelected()){
                     for(Datafile datafile : dataset.getDatafileCollection()){
-                        detail += investigation.getFacility().getFacilityShortName()+":"+datafile.getId()+"-";
+                        detail += investigation.getFacility()+":"+datafile.getId()+"-";
                     }
                 }
                 for(Datafile datafile : dataset.getDatafileCollection()){
                     if(datafile.isSelected()){
-                        detail += investigation.getFacility().getFacilityShortName()+":"+datafile.getId()+"-";
+                        detail += investigation.getFacility()+":"+datafile.getId()+"-";
                     }
                 }
             }

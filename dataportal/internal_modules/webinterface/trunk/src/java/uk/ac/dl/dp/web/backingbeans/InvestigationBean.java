@@ -81,8 +81,8 @@ public class InvestigationBean extends SortableList {
                     return 0;
                 }
                 if (column.equals("facility")) {
-                    return ascending ? c1.getFacility().getFacilityShortName().compareTo(c2.getFacility().getFacilityShortName()) : c2.getFacility().getFacilityShortName()
-                            .compareTo(c1.getFacility().getFacilityShortName());
+                    return ascending ? c1.getFacility().compareTo(c2.getFacility()) : c2.getFacility()
+                            .compareTo(c1.getFacility());
                     
                 } else if (column.equals("name")) {
                     if(c1.getTitle() == null|| c2.getTitle()  == null) return 0;
@@ -110,16 +110,16 @@ public class InvestigationBean extends SortableList {
                             .compareTo(c1.getVisitId());
                 } else if (column.equals("invType")) {
                     if(c1.getInvType() == null || c2.getInvType() == null) return 0;
-                    else return ascending ? c1.getInvType().getName().compareTo(c2.getInvType().getName()) : c2.getInvType().getName()
-                            .compareTo(c1.getInvType().getName());
+                    else return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType()
+                            .compareTo(c1.getInvType());
                 } else if (column.equals("abstract")) {
                     //if no abstract put it behind it
                     if(c1.getInvAbstract() == null || c2.getInvAbstract() == null) return 0;
                     else return ascending ? c1.getInvAbstract().compareTo(c2.getInvAbstract()) : c2.getInvAbstract()
                             .compareTo(c1.getInvAbstract());
                 } else if (column.equals("type")) {
-                    return ascending ? c1.getInvType().getName().compareTo(c2.getInvType().getName()) : c2.getInvType().getName()
-                            .compareTo(c1.getInvType().getName());
+                    return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType()
+                            .compareTo(c1.getInvType());
                 } else
                     return 0;
             }
@@ -169,7 +169,7 @@ public class InvestigationBean extends SortableList {
         Investigation investigation = (Investigation)table.getRowData();
         
         for(Investigation invest : investigations){
-            if(invest.getId().equals(investigation.getId()) && invest.getFacility().getFacilityShortName().equals(investigation.getFacility().getFacilityShortName())) {
+            if(invest.getId().equals(investigation.getId()) && invest.getFacility().equals(investigation.getFacility())) {
                 invest.setSelected(!invest.isSelected());
                 log.trace("setting " +invest.isSelected()+" for "+invest.getId());
             }
