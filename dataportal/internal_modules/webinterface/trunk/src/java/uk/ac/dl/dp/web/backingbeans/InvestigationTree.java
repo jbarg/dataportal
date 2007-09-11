@@ -71,7 +71,7 @@ public class InvestigationTree extends AbstractRequestBean {
             //construct a list of returned facility results
             Collection<String> facs = new HashSet<String>();
             for(Investigation invest :  invests){
-                facs.add(invest.getFacility().getFacilityShortName());
+                facs.add(invest.getFacility());
             }
             
             //iterate of the list and add investiagtions that are asscoicated with it
@@ -81,7 +81,7 @@ public class InvestigationTree extends AbstractRequestBean {
                 //count how many from this fac
                 int i = 0;
                 for(Investigation invest: invests){
-                    if(invest.getFacility().getFacilityShortName().equals(fac)) i++;
+                    if(invest.getFacility().equals(fac)) i++;
                 }
                 //add count to (#) on investigation page
                 node = new TreeNodeBase("foo-folder", fac, ""+i,false);
@@ -89,10 +89,10 @@ public class InvestigationTree extends AbstractRequestBean {
                 
                 //loop, if equals fac then add node
                 for(Investigation invest : invests){
-                    if(invest.getFacility().getFacilityShortName().equals(fac)){
+                    if(invest.getFacility().equals(fac)){
                         //add node, but add identifer as facility-id for uniqueness
                         //id of invest in ISIS could be same as DIAMOND
-                        node.getChildren().add(new TreeNodeBase("foo1-folder", Util.escapeInvalidStrings(invest.getTitle()),invest.getFacility().getFacilityShortName()+"-"+invest.getId(), true));
+                        node.getChildren().add(new TreeNodeBase("foo1-folder", Util.escapeInvalidStrings(invest.getTitle()),invest.getFacility()+"-"+invest.getId(), true));
                         
                         //only show 50??  shoule change
                         j++;
@@ -129,7 +129,7 @@ public class InvestigationTree extends AbstractRequestBean {
                         //count how many from this fac
                         int i = 0;
                         for(Investigation invest: invests){
-                            if(invest.getFacility().getFacilityShortName().equals(searchedFac)) i++;
+                            if(invest.getFacility().equals(searchedFac)) i++;
                         }
                         if(i == 0){
                             node = new TreeNodeBase("foo-folder", searchedFac, "0",true);
@@ -181,9 +181,9 @@ public class InvestigationTree extends AbstractRequestBean {
         log.trace("Showing all investigations for "+getNodePath().getDescription());
         Collection<Investigation> investigations = new ArrayList<Investigation>();
         for(Investigation invest :  getVisitData().getSearchedInvestigations()){
-            if(invest.getFacility().getFacilityShortName().equals(getNodePath().getDescription())){
+            if(invest.getFacility().equals(getNodePath().getDescription())){
                 investigations.add(invest);
-                log.trace(invest.getId()+" is added from "+invest.getFacility().getFacilityShortName());
+                log.trace(invest.getId()+" is added from "+invest.getFacility());
             }
         }
         

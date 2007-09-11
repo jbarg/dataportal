@@ -11,13 +11,10 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.apache.log4j.Logger;
-import org.globus.myproxy.MyProxy;
-import org.globus.myproxy.SASLParams;
-import org.ietf.jgss.GSSCredential;
+
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.util.DPDefaultLocation;
-import uk.ac.dl.dp.web.backingbeans.MyDataSearchBean;
 import uk.ac.dl.dp.web.backingbeans.Visit;
 
 /**
@@ -42,8 +39,7 @@ public class LogonKerberosServlet extends HttpServlet {
         SessionDTO session = null;
         
         if(KRB5CCNAME == null){
-            log.debug("krb5ccname header is null");
-            
+            log.debug("krb5ccname header is null");      
             
             
             response.sendRedirect("../faces/logon.jsp");
@@ -233,7 +229,7 @@ public class LogonKerberosServlet extends HttpServlet {
         }*/
     }
     
-    private static GSSCredential saslProxy(PrintWriter out, String username, String keytab) throws
+   /* private static GSSCredential saslProxy(PrintWriter out, String username, String keytab) throws
             Exception {
         
         log.trace("Getting proxy now");
@@ -254,7 +250,7 @@ public class LogonKerberosServlet extends HttpServlet {
         gsscredential = myproxy.getSASL(null, params);
         log.trace("Got proxy");
         return gsscredential;
-    }
+    }*/
     
     private boolean checkUser(SessionDTO session) {
         Properties prop = new Properties();

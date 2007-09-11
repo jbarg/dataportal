@@ -369,7 +369,7 @@ public class SearchBean extends AbstractRequestBean {
             for(FacilityDTO facility :  getVisit().getSession().getFacilities()){
                 int numberFromFacility = 0;
                 for(Investigation invest : investigations){
-                    if(invest.getFacility().getFacilityShortName().equals(facility.getFacility())) numberFromFacility++;
+                    if(invest.getFacility().equals(facility.getFacility())) numberFromFacility++;
                 }
                 if(numberFromFacility >= DataPortalConstants.MAX_RESULTS) limitedReached.add(facility.getFacility());
             }
