@@ -183,7 +183,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         Collection<String> facilitiesToSearch = new HashSet<String>(); //no duplicates
         
         for(Investigation invest : investigations){
-            facilitiesToSearch.add(invest.getFacility().getFacilityShortName());
+            facilitiesToSearch.add(invest.getFacility());
         }
         
         // here we create NewsEntity, that will be sent in JMS message
