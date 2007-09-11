@@ -15,7 +15,7 @@ package uk.ac.dl.dp5.util;
  */
 public class TestConstants {
     public static String MYPROXY_USERNAME = "gjd37";
-    public static String MYPROXY_PASSWORD = "kkkkkk";
+    public static String MYPROXY_PASSWORD = "(gsd+37@Dl";
     
     public static String MYPROXY_ADDRESS = "myproxy.grid-support.ac.uk";
     
@@ -23,6 +23,6 @@ public class TestConstants {
     public static int MYPROXY_PORT = 7512;
     public static String USER_DN = "/C=UK/O=eScience/OU=CLRC/L=DL/CN=glen drinkwater";
     
-     public static String SESSION_ID = "wesdasdasdas";
+     public static String SESSION_ID = "wesdasdasdas"+Math.random();
     
 }

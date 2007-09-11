@@ -23,7 +23,7 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
  *
  * @author gjd37
  */
-public class EventLocalTest implements SendMDBLocal{
+public class SendMDBLocal_Test implements SendMDBLocal{
     
     public void sendEvent(String sid, EventMessage eventMessage){
         System.out.println("sendEvent");
