@@ -5,8 +5,9 @@
         <data xmlns="http://www.netbeans.org/ns/j2ee-ejbjarproject/3">
             <name>dp_ejb</name>
             <minimum-ant-version>1.6</minimum-ant-version>
+            <explicit-platform explicit-source-supported="true"/>
+            <included-library files="1">libs.log4j.classpath</included-library>
             <included-library files="2">libs.srb-extensions-v2.classpath</included-library>
-            <included-library files="1">reference.dpal.jar</included-library>
             <included-library files="1">reference.dp-coreutil.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
@@ -34,6 +35,14 @@
             </reference>
             <reference>
                 <foreign-project>dpal</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>icat-ws</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
