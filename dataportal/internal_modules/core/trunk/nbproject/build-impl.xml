@@ -33,17 +33,47 @@ is divided into following sections:
     </target>
     <target name="-init-user" depends="-pre-init,-init-private,-init-userdir">
         <property file="${user.properties.file}"/>
+        <!-- The two properties below are usually overridden -->
+        <!-- by the active platform. Just a fallback. -->
+        <property name="default.javac.source" value="1.4"/>
+        <property name="default.javac.target" value="1.4"/>
     </target>
     <target name="-init-project" depends="-pre-init,-init-private,-init-userdir,-init-user">
         <property file="nbproject/project.properties"/>
     </target>
     <target name="-do-init" depends="-pre-init,-init-private,-init-userdir,-init-user,-init-project,-init-macrodef-property">
+        <ejbjarproject1:property name="platform.home" value="platforms.${platform.active}.home"/>
+        <ejbjarproject1:property name="platform.bootcp" value="platforms.${platform.active}.bootclasspath"/>
+        <ejbjarproject1:property name="platform.compiler" value="platforms.${platform.active}.compile"/>
+        <ejbjarproject1:property name="platform.javac.tmp" value="platforms.${platform.active}.javac"/>
+        <condition property="platform.javac" value="${platform.home}/bin/javac">
+            <equals arg1="${platform.javac.tmp}" arg2="$${platforms.${platform.active}.javac}"/>
+        </condition>
+        <property name="platform.javac" value="${platform.javac.tmp}"/>
+        <ejbjarproject1:property name="platform.java.tmp" value="platforms.${platform.active}.java"/>
+        <condition property="platform.java" value="${platform.home}/bin/java">
+            <equals arg1="${platform.java.tmp}" arg2="$${platforms.${platform.active}.java}"/>
+        </condition>
+        <property name="platform.java" value="${platform.java.tmp}"/>
+        <ejbjarproject1:property name="platform.javadoc.tmp" value="platforms.${platform.active}.javadoc"/>
+        <condition property="platform.javadoc" value="${platform.home}/bin/javadoc">
+            <equals arg1="${platform.javadoc.tmp}" arg2="$${platforms.${platform.active}.javadoc}"/>
+        </condition>
+        <property name="platform.javadoc" value="${platform.javadoc.tmp}"/>
+        <condition property="platform.invalid" value="true">
+            <or>
+                <contains string="${platform.javac}" substring="$${platforms."/>
+                <contains string="${platform.java}" substring="$${platforms."/>
+                <contains string="${platform.javadoc}" substring="$${platforms."/>
+            </or>
+        </condition>
+        <fail unless="platform.home">Must set platform.home</fail>
+        <fail unless="platform.bootcp">Must set platform.bootcp</fail>
+        <fail unless="platform.java">Must set platform.java</fail>
+        <fail unless="platform.javac">Must set platform.javac</fail>
+        <fail if="platform.invalid">Platform is not correctly set up</fail>
         <!-- Ensure configuration directory exists. -->
         <mkdir dir="${meta.inf}"/>
-        <!-- The two properties below are usually overridden -->
-        <!-- by the active platform. Just a fallback. -->
-        <property name="default.javac.source" value="1.4"/>
-        <property name="default.javac.target" value="1.4"/>
         <property name="runmain.jvmargs" value=""/>
         <condition property="have.tests">
             <or>
@@ -113,7 +143,7 @@ is divided into following sections:
             <element name="customize" optional="true"/>
             <sequential>
                 <property name="javac.compilerargs" value=""/>
-                <javac srcdir="@{srcdir}" destdir="@{destdir}" debug="@{debug}" deprecation="${javac.deprecation}" source="${javac.source}" target="${javac.target}" includeantruntime="false">
+                <javac srcdir="@{srcdir}" destdir="@{destdir}" debug="@{debug}" deprecation="${javac.deprecation}" source="${javac.source}" target="${javac.target}" fork="yes" executable="${platform.javac}" includeantruntime="false">
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
@@ -127,7 +157,7 @@ is divided into following sections:
         <macrodef name="junit" uri="http://www.netbeans.org/ns/j2ee-ejbjarproject/2">
             <attribute name="includes" default="**/*Test.java"/>
             <sequential>
-                <junit showoutput="true" fork="true" dir="${basedir}" failureproperty="tests.failed" errorproperty="tests.failed">
+                <junit showoutput="true" fork="true" dir="${basedir}" failureproperty="tests.failed" errorproperty="tests.failed" jvm="${platform.java}">
                     <batchtest todir="${build.test.results.dir}">
                         <fileset dir="${test.src.dir}" includes="@{includes}"/>
                     </batchtest>
@@ -150,7 +180,7 @@ is divided into following sections:
             <attribute name="classname" default="${main.class}"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <java fork="true" classname="@{classname}">
+                <java fork="true" classname="@{classname}" jvm="${platform.java}">
                     <jvmarg line="${runmain.jvmargs}"/>
                     <classpath>
                         <path path="${build.classes.dir}:${javac.classpath}:${j2ee.platform.classpath}"/>
@@ -173,6 +203,9 @@ is divided into following sections:
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
+                    <bootclasspath>
+                        <path path="${platform.bootcp}"/>
+                    </bootclasspath>
                 </nbjpdastart>
             </sequential>
         </macrodef>
@@ -185,16 +218,33 @@ is divided into following sections:
             </sequential>
         </macrodef>
     </target>
-    <target name="-init-macrodef-debug">
+    <target name="-init-debug-args">
+        <exec executable="${platform.java}" outputproperty="version-output">
+            <arg value="-version"/>
+        </exec>
+        <condition property="have-jdk-older-than-1.4">
+            <or>
+                <contains string="${version-output}" substring="java version &quot;1.0"/>
+                <contains string="${version-output}" substring="java version &quot;1.1"/>
+                <contains string="${version-output}" substring="java version &quot;1.2"/>
+                <contains string="${version-output}" substring="java version &quot;1.3"/>
+            </or>
+        </condition>
+        <condition property="debug-args-line" value="-Xdebug -Xnoagent -Djava.compiler=none" else="-Xdebug">
+            <istrue value="${have-jdk-older-than-1.4}"/>
+        </condition>
+    </target>
+    <target name="-init-macrodef-debug" depends="-init-debug-args">
         <macrodef name="debug" uri="http://www.netbeans.org/ns/j2ee-ejbjarproject/1">
             <attribute name="classname" default="${main.class}"/>
             <attribute name="classpath" default="${debug.classpath}"/>
             <attribute name="args" default="${application.args}"/>
             <sequential>
-                <java fork="true" classname="@{classname}">
-                    <jvmarg value="-Xdebug"/>
-                    <jvmarg value="-Xnoagent"/>
-                    <jvmarg value="-Djava.compiler=none"/>
+                <java fork="true" classname="@{classname}" jvm="${platform.java}">
+                    <bootclasspath>
+                        <path path="${platform.bootcp}"/>
+                    </bootclasspath>
+                    <jvmarg line="${debug-args-line}"/>
                     <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
                     <classpath>
                         <path path="@{classpath}"/>
@@ -212,11 +262,13 @@ is divided into following sections:
         <ant target="jar" inheritall="false" antfile="${project.DP5_Adaptor_Module}/build.xml"/>
         <ant target="jar" inheritall="false" antfile="${project.dp-coreutil}/build.xml"/>
         <ant target="jar" inheritall="false" antfile="${project.dpal}/build.xml"/>
+        <ant target="jar" inheritall="false" antfile="${project.icat-ws}/build.xml"/>
     </target>
     <target name="-deps-ear-jar" depends="init" if="dist.ear.dir" unless="no.deps">
         <ant target="jar" inheritall="false" antfile="${project.DP5_Adaptor_Module}/build.xml"/>
         <ant target="jar" inheritall="false" antfile="${project.dp-coreutil}/build.xml"/>
         <ant target="jar" inheritall="false" antfile="${project.dpal}/build.xml"/>
+        <ant target="jar" inheritall="false" antfile="${project.icat-ws}/build.xml"/>
     </target>
     <target name="deps-jar" depends="init, -deps-module-jar, -deps-ear-jar"/>
     <target name="wsgen-init" depends="init">
@@ -241,22 +293,22 @@ is divided into following sections:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target name="library-inclusion-in-archive" depends="compile">
+        <copy file="${libs.log4j.classpath}" todir="${build.classes.dir}"/>
         <copy file="${libs.srb-extensions-v2.classpath.libfile.2}" todir="${build.classes.dir}"/>
         <copy file="${libs.srb-extensions-v2.classpath.libfile.1}" todir="${build.classes.dir}"/>
-        <copy file="${reference.dpal.jar}" todir="${build.classes.dir}"/>
         <copy file="${reference.dp-coreutil.jar}" todir="${build.classes.dir}"/>
     </target>
     <target name="library-inclusion-in-manifest" depends="compile">
+        <basename property="included.lib.libs.log4j.classpath" file="${libs.log4j.classpath}"/>
+        <copy file="${libs.log4j.classpath}" todir="${dist.ear.dir}"/>
         <basename property="included.lib.libs.srb-extensions-v2.classpath.2" file="${libs.srb-extensions-v2.classpath.libfile.2}"/>
         <basename property="included.lib.libs.srb-extensions-v2.classpath.1" file="${libs.srb-extensions-v2.classpath.libfile.1}"/>
         <copy file="${libs.srb-extensions-v2.classpath.libfile.2}" todir="${dist.ear.dir}"/>
         <copy file="${libs.srb-extensions-v2.classpath.libfile.1}" todir="${dist.ear.dir}"/>
-        <basename property="included.lib.reference.dpal.jar" file="${reference.dpal.jar}"/>
-        <copy file="${reference.dpal.jar}" todir="${dist.ear.dir}"/>
         <basename property="included.lib.reference.dp-coreutil.jar" file="${reference.dp-coreutil.jar}"/>
         <copy file="${reference.dp-coreutil.jar}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.libs.srb-extensions-v2.classpath.1} ${included.lib.libs.srb-extensions-v2.classpath.2} ${included.lib.reference.dpal.jar} ${included.lib.reference.dp-coreutil.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.libs.log4j.classpath} ${included.lib.libs.srb-extensions-v2.classpath.1} ${included.lib.libs.srb-extensions-v2.classpath.2} ${included.lib.reference.dp-coreutil.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -391,6 +443,9 @@ is divided into following sections:
             <sourcepath>
                 <path path="${web.docbase.dir}"/>
             </sourcepath>
+            <bootclasspath>
+                <path path="${platform.bootcp}"/>
+            </bootclasspath>
         </nbjpdaconnect>
     </target>
     <target name="-debug-start-debugger" if="netbeans.home" depends="init">
@@ -414,7 +469,7 @@ is divided into following sections:
             -->
     <target name="javadoc-build" depends="init">
         <mkdir dir="${dist.javadoc.dir}"/>
-        <javadoc destdir="${dist.javadoc.dir}" source="${javac.source}" notree="${javadoc.notree}" use="${javadoc.use}" nonavbar="${javadoc.nonavbar}" noindex="${javadoc.noindex}" splitindex="${javadoc.splitindex}" author="${javadoc.author}" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}" private="${javadoc.private}" additionalparam="${javadoc.additionalparam}" failonerror="true" useexternalfile="true">
+        <javadoc destdir="${dist.javadoc.dir}" source="${javac.source}" notree="${javadoc.notree}" use="${javadoc.use}" nonavbar="${javadoc.nonavbar}" noindex="${javadoc.noindex}" splitindex="${javadoc.splitindex}" author="${javadoc.author}" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}" private="${javadoc.private}" additionalparam="${javadoc.additionalparam}" failonerror="true" useexternalfile="true" executable="${platform.javadoc}">
             <classpath>
                 <path path="${javac.classpath}:${j2ee.platform.classpath}"/>
             </classpath>
@@ -515,6 +570,7 @@ is divided into following sections:
         <ant target="clean" inheritall="false" antfile="${project.DP5_Adaptor_Module}/build.xml"/>
         <ant target="clean" inheritall="false" antfile="${project.dp-coreutil}/build.xml"/>
         <ant target="clean" inheritall="false" antfile="${project.dpal}/build.xml"/>
+        <ant target="clean" inheritall="false" antfile="${project.icat-ws}/build.xml"/>
     </target>
     <target name="-do-clean" depends="init">
         <delete dir="${build.dir}"/>
