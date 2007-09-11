@@ -141,7 +141,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
         
         //add ids from this facility to list
         for(Investigation invest : request.getInvestigationRequest().getInvestigations()){
-            if(invest.getFacility().getFacilityShortName().equalsIgnoreCase(request.getFacility())) investigation_ids.add(invest.getId());
+            if(invest.getFacility().equalsIgnoreCase(request.getFacility())) investigation_ids.add(invest.getId());
         }
         //now search
         try{

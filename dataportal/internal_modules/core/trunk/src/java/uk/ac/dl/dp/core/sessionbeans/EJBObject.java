@@ -89,10 +89,13 @@ public abstract class EJBObject {
         StringBuilder builder = new StringBuilder();
         
         builder.append(className+"."+methodName+"(");
-        
+         
         try {
             int i = 1;
-            if(args != null){
+            if(className.indexOf("admin") != -1) {
+                log.trace("Admin method called");
+                builder.append(target);
+            } else if(args != null){                
                 for(Object arg : args){
                     if(arg == null){
                         log.trace("Cannot pass null into argument "+i+" into: "+className+"."+methodName+"() method.");
