@@ -81,43 +81,64 @@ public class InvestigationBean extends SortableList {
                     return 0;
                 }
                 if (column.equals("facility")) {
+                    if(c1.getFacility() == null && c2.getFacility() == null ) return 0;
+                    else if(c1.getFacility() == null) return ascending ? 1 : -1;
+                    else if(c2.getFacility() == null) return ascending ? -1 : 1;
                     return ascending ? c1.getFacility().compareTo(c2.getFacility()) : c2.getFacility()
-                            .compareTo(c1.getFacility());
-                    
+                            .compareTo(c1.getFacility());                    
                 } else if (column.equals("name")) {
-                    if(c1.getTitle() == null|| c2.getTitle()  == null) return 0;
+                    if(c1.getTitle() == null && c2.getTitle() == null ) return 0;
+                    else if(c1.getTitle() == null) return ascending ? 1 : -1;
+                    else if(c2.getTitle() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getTitle().compareTo(c2.getTitle()) : c2.getTitle()
                             .compareTo(c1.getTitle());
                 } else if (column.equals("grantId")) {
-                    if(c1.getGrantId() == null || c2.getGrantId() == null ) return 0;
+                    if(c1.getGrantId() == null && c2.getGrantId() == null ) return 0;
+                    else if(c1.getGrantId() == null) return ascending ? 1 : -1;
+                    else if(c2.getGrantId() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getGrantId().compareTo(c2.getGrantId()) : c2.getGrantId()
                             .compareTo(c1.getGrantId());
                 } else if (column.equals("releaseDate")) {
-                    if(c1.getReleaseDate() == null || c2.getReleaseDate() == null) return 0;
+                    if(c1.getReleaseDate() == null && c2.getReleaseDate() == null) return 0;
+                    else if(c1.getReleaseDate() == null) return ascending ? 1 : -1;
+                    else if(c2.getReleaseDate() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getReleaseDate().toGregorianCalendar().compareTo(c2.getReleaseDate().toGregorianCalendar()) : c2.getReleaseDate().toGregorianCalendar()
                             .compareTo(c1.getReleaseDate().toGregorianCalendar());
                 } else if (column.equals("facilityCycle")) {
-                    if(c1.getFacilityCycle() == null || c2.getFacilityCycle() == null) return 0;
+                    if(c1.getFacilityCycle() == null && c2.getFacilityCycle() == null) return 0;
+                    else if(c1.getFacilityCycle() == null) return ascending ? 1 : -1;
+                    else if(c2.getFacilityCycle() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getFacilityCycle().getName().compareTo(c2.getFacilityCycle().getName()) : c2.getFacilityCycle().getName()
                             .compareTo(c1.getFacilityCycle().getName());
                 } else if (column.equals("invNumber")) {
-                    if(c1.getInvNumber() == null || c2.getInvNumber() == null) return 0;
+                    if(c1.getInvNumber() == null && c2.getInvNumber() == null) return 0;
+                    else if(c1.getInvNumber() == null) return ascending ? 1 : -1;
+                    else if(c2.getInvNumber() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getInvNumber().compareTo(c2.getInvNumber()) : c2.getInvNumber()
                             .compareTo(c1.getInvNumber());
                 } else if (column.equals("visitId")) {
-                    if(c1.getVisitId() == null || c2.getVisitId()  == null) return 0;
+                    if(c1.getVisitId() == null && c2.getVisitId()  == null) return 0;
+                    else if(c1.getVisitId() == null) return ascending ? 1 : -1;
+                    else if(c2.getVisitId() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getVisitId().compareTo(c2.getVisitId()) : c2.getVisitId()
                             .compareTo(c1.getVisitId());
                 } else if (column.equals("invType")) {
-                    if(c1.getInvType() == null || c2.getInvType() == null) return 0;
+                    if(c1.getInvType() == null && c2.getInvType() == null) return 0;
+                    else if(c1.getInvType() == null) return ascending ? 1 : -1;
+                    else if(c2.getInvType() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType()
                             .compareTo(c1.getInvType());
                 } else if (column.equals("abstract")) {
                     //if no abstract put it behind it
-                    if(c1.getInvAbstract() == null || c2.getInvAbstract() == null) return 0;
+                    if(c1.getInvAbstract() == null && c2.getInvAbstract() == null) return 0;
+                    else if(c1.getInvAbstract() == null) return ascending ? 1 : -1;
+                    else if(c2.getInvAbstract() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getInvAbstract().compareTo(c2.getInvAbstract()) : c2.getInvAbstract()
                             .compareTo(c1.getInvAbstract());
                 } else if (column.equals("type")) {
+                    if(c1.getInvType() == null && c2.getInvType() == null) return 0;
+                    else if(c1.getInvType() == null) return ascending ? 1 : -1;
+                    else if(c2.getInvType() == null) return ascending ? -1 : 1;
                     return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType()
                             .compareTo(c1.getInvType());
                 } else
