@@ -26,7 +26,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionNotFoundException;
 import uk.ac.dl.dp.coreutil.util.DPCredentialType;
 import uk.ac.dl.dp5.util.BaseTestClassTX;
-import uk.ac.dl.dp5.util.sendMDBLocalTest;
+import uk.ac.dl.dp5.util.SendMDBLocal_Test;
 import uk.ac.dl.dp5.util.SessionInsertUtil;
 import uk.ac.dl.dp5.util.TestConstants;
 
@@ -40,7 +40,7 @@ public class SessionLogonTest extends BaseTestClassTX {
     
     private static SessionBean sessionBean = new SessionBean();
     private static LookupBean lookupBean = new LookupBean();
-    private static sendMDBLocalTest eventLocal = new sendMDBLocalTest();
+    private static SendMDBLocal_Test eventLocal = new SendMDBLocal_Test();
     
     
     
