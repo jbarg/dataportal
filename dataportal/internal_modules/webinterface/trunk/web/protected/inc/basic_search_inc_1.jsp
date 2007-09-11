@@ -92,8 +92,8 @@
                         <h:panelGrid columns="1" >
                             <%-- <h:outputText value="Exact keyword match only. Case insensititve."/>   --%>
                             <h:outputText value="Auto Complete enabled."/>                                 
-                            <h:outputText value="This list is not a full list of all the possible keywords."/>                                 
-                            
+                         <h:outputText value="This list is not a full list of all your possible keywords, only alpha numeric."/>                                 
+                              
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>

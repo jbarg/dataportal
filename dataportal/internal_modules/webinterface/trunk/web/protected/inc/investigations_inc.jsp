@@ -296,7 +296,7 @@
                         <%--  </c:if>--%>
                     </a4j:commandLink>
                 </f:facet>
-                <h:outputText  value="#{invest.instrument.name}" />                              
+                <h:outputText  value="#{invest.instrument}" />                              
                 
             </h:column>
             <h:column>
@@ -311,7 +311,7 @@
                         <%--  </c:if>--%>
                     </a4j:commandLink>
                 </f:facet>
-                <h:outputText  value="#{invest.invType.name}" />            
+                <h:outputText  value="#{invest.invType}" />            
                 
                 
             </h:column>
@@ -329,7 +329,7 @@
                         <%--    </c:if>--%>
                     </a4j:commandLink>
                 </f:facet>
-                <h:outputText value="#{invest.facility.facilityShortName}" />
+                <h:outputText value="#{invest.facility}" />
                 
             </h:column>
             
@@ -368,7 +368,7 @@
             
           
               <f:facet name="detailStamp">                
-                <t:dataTable preserveSort="true" align="center" columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered" rowClasses="standardTable_Row1,standardTable_Row2" headerClass="standardTable_Header" width="97%" id="invAbstract"  var="investigations" value="#{invest}">
+                <t:dataTable preserveSort="true" align="center" columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered" rowClasses="standardTableDetail_Row1,standardTableDetail_Row1" headerClass="standardTable_Header" width="97%" id="invAbstract"  var="investigations" value="#{invest}">
                     
                   <h:column>
                         <f:facet name="header">
