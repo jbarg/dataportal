@@ -91,10 +91,10 @@
             </h:outputLabel  >                      
             
             <ui:autoComplete  styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_1" 
-                             completionMethod="#{keyword.completeCity}" 
-                             value="#{advancedSearchBean.keyword}" required="false"
-                             ondisplay="function(item) { return extractCity(item); }"
-                             onchoose="function(item) { return chooseCity(item); }"  />
+                              completionMethod="#{keyword.completeCity}" 
+                              value="#{advancedSearchBean.keyword}" required="false"
+                              ondisplay="function(item) { return extractCity(item); }"
+                              onchoose="function(item) { return chooseCity(item); }"  />
             
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -108,10 +108,10 @@
                         <h:panelGrid columns="1" >
                             <%-- <h:outputText value="Exact keyword match only. Case insensititve."/>   --%>
                             <h:outputText value="Auto Complete enabled."/>                                 
-                            <h:outputText value="This list is not a full list of all the possible keywords."/>                                 
+                            <h:outputText value="This list is not a full list of all your possible keywords, only alpha numeric."/>                                 
                             <h:outputText value="'AND' type searches returns all results"/>                                 
                             <h:outputText escape="true" value=" that contain all the keywords, i.e. default Google behaviour."/> 
-                            
+                            <h:outputText value="Exact or Like match depending what you select below."/>                              
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -126,7 +126,7 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="invNamej_id_1" size="20" required="false" value="#{advancedSearchBean.invName}">
-               
+                
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -139,6 +139,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Name of investigation."/>                                 
+                            <h:outputText value="Exact or Like match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -168,6 +169,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Abstract of investigation."/>                                 
+                            <h:outputText value="Exact or Like match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -187,7 +189,7 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="samplej_id_1" size="20" required="false" value="#{advancedSearchBean.sample}">
-               
+                
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -200,6 +202,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Sample used in investigation."/>                                 
+                            <h:outputText value="Exact or Like match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -216,7 +219,7 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="investigatorsj_id_1" size="20" required="false" value="#{advancedSearchBean.investigator}">
-              
+                
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -229,6 +232,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Investigators used in investigation."/>                                 
+                            <h:outputText value="Exact or Like match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -286,7 +290,7 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="visitIdj_id_1" size="20" required="false" value="#{advancedSearchBean.visitId}" />
-                        
+            
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
                      displayAtDistanceX="5"
@@ -313,7 +317,7 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="grantIdj_id_1" size="20" required="false" value="#{advancedSearchBean.grantId}">
-                 <f:validateDoubleRange minimum="0" maximum="90000000" />
+                <f:validateDoubleRange minimum="0" maximum="90000000" />
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -351,7 +355,7 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="invTypej_id_1" size="20" required="false" value="#{advancedSearchBean.invType}">
-               
+                
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -364,7 +368,6 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Type of investigation."/>                                 
-                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -382,7 +385,7 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="instrumentj_id_1" size="20" required="false" value="#{advancedSearchBean.instrument}">
-               
+                
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"

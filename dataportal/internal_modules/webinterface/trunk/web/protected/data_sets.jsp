@@ -136,8 +136,9 @@
                                                                         <h:outputText value="Data References: A persistant place for searched and found data files and datasets for when you next log in."/>
                                                                         <h:outputText value="Checking the box next to the data file and data sets allows you to select multiple data items and then click 'Download now' to download the selected items.  If your email is set either from the preferences page or in the pop up box when hover on the image next to the 'Add to Data Links' button, you can request for the data to be downloaded and then for a link to the data to be emailed to you.  "/>
                                                                         
-                                                                        <h:outputText value="By expanding the tree and viewing the data sets and data files, clicking on their names will make an attempt to download the data, 
-                                                                                      that if you have the correct privileges to access the data."/>
+                                                                        <h:outputText value="You can see if you have access to download the dataset or datafile as there will be a "/> <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                             
+                                                                        <h:outputText value=" next to the check box indicating that you have download access.  You can download by clicking on the dataset or datafile name."/>
                                                                         <h:outputText value="If the data file is an image, then expanding that will give you an option to 'Launch via ImageJ', this is a image processing tool that will be opened (no client installation needed, apart from Java) and then download the file for you to process."/>
                                                                     </h:panelGrid>
                                                                 </t:collapsiblePanel>
