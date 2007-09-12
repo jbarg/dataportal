@@ -9,19 +9,17 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.UUID;
-import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import javax.ejb.*;
 import javax.interceptor.ExcludeClassInterceptors;
-import javax.interceptor.Interceptors;
+import javax.interceptor.ExcludeDefaultInterceptors;
 import org.apache.log4j.Logger;
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.globus.myproxy.SASLParams;
 import org.ietf.jgss.GSSCredential;
-import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
@@ -29,7 +27,6 @@ import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
 import uk.ac.dl.dp.coreutil.entity.FacilitySession;
-import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 
 import uk.ac.dl.dp.coreutil.entity.User;
@@ -49,7 +46,6 @@ import uk.ac.dl.dp.coreutil.util.DPFacilityType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.exceptions.LoginMyProxyException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
-import uk.ac.dl.dp.coreutil.util.KeywordMessage;
 import uk.ac.dl.dp.coreutil.util.LoginICATMessage;
 import uk.ac.dl.dp.coreutil.util.cog.PortalCredential;
 
@@ -244,7 +240,8 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         return gsscredential;
     }
     
-     @ExcludeClassInterceptors
+    @ExcludeClassInterceptors
+    @ExcludeDefaultInterceptors
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String login(String username, String password, int lifetime) throws LoginMyProxyException, SessionException{
         // log.debug("login(): " +sc.getCallerPrincipal() );

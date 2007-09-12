@@ -116,7 +116,7 @@ public abstract class EJBObject {
         } catch(Exception e) {
             throw e;
         } finally {
-            if(methodName.contains("isFinished") || methodName.contains("getCompleted")) {
+            if(methodName.contains("isFinished") || methodName.contains("getCompleted") || methodName.contains("login")) {
                 //dont log
             } else{
                 long time = System.currentTimeMillis() - start;
