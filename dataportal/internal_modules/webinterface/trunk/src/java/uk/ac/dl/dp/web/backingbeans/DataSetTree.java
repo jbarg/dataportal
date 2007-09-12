@@ -133,108 +133,110 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         //page going onto this, so disable the button
         datasetNav = false;
         
+        getVisitData().reinitailise();
+        
         checkSelectedInfomation();
         
-        if(getVisitData().getDataSetTree() == null){
-            log.trace("Creating dataset tree");
+        //if(getVisitData().getDataSetTree() == null){
+        log.trace("Creating dataset tree");
+        
+        Collection<Investigation> investigations = getVisitData().getCurrentInvestigations();
+        
+        data = new TreeNodeBase("invest", "Investigations ("+investigations.size()+")", false); //this not shown
+        
+        TreeNodeBase node = null;
+        for(Investigation invest : investigations){
             
-            Collection<Investigation> investigations = getVisitData().getCurrentInvestigations();
+            // log.debug("Adding investigations: "+invest.getName());
+            node = new TreeNodeBase("invest", invest.getTitle(), invest.getFacility()+"-"+invest.getId(),false);
             
-            data = new TreeNodeBase("invest", "Investigations ("+investigations.size()+")", false); //this not shown
+            if(invest.getInvType() != null) node.getChildren().add(new TreeNodeBase("type-folder", invest.getInvType(),true));
+            if(invest.getInstrument() != null) node.getChildren().add(new TreeNodeBase("instrument-folder", invest.getInstrument(),true));
+            node.getChildren().add(new TreeNodeBase("fac-folder",invest.getFacility(),true));
             
-            TreeNodeBase node = null;
-            for(Investigation invest : investigations){
+            TreeNodeBase datasetsNode = new TreeNodeBase("dataset-count-folder", "Datasets", false);
+            
+            for(Dataset dataset : invest.getDatasetCollection()){
                 
-                // log.debug("Adding investigations: "+invest.getName());
-                node = new TreeNodeBase("invest", invest.getTitle(), invest.getFacility()+"-"+invest.getId(),false);
+                TreeNodeBase datasetNode = null;
                 
-                if(invest.getInvType() != null) node.getChildren().add(new TreeNodeBase("type-folder", invest.getInvType(),true));
-                if(invest.getInstrument() != null) node.getChildren().add(new TreeNodeBase("instrument-folder", invest.getInstrument(),true));
-                node.getChildren().add(new TreeNodeBase("fac-folder",invest.getFacility(),true));
-                
-                TreeNodeBase datasetsNode = new TreeNodeBase("dataset-count-folder", "Datasets", false);
-                
-                for(Dataset dataset : invest.getDatasetCollection()){
-                    
-                    TreeNodeBase datasetNode = null;
-                    
-                    //find out if datafile collection is empty, are if not empty has any download permissions
-                    if(dataset.getDatafileCollection() == null || dataset.getDatafileCollection().isEmpty()){
-                        log.trace("dataset: "+dataset.getId()+" is empty so not downloadable");
-                        datasetNode = new TreeNodeBase("dataset-noread-folder", dataset.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId() ,false);
-                    } else {
-                        boolean canDownload = false;
-                        for (Datafile datafile : dataset.getDatafileCollection()) {
-                            if(datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
-                                log.trace("datafile: "+datafile.getId()+" has downloadAction so dataset: "+dataset.getId()+" is downloadable");
-                                canDownload = true;
-                                break;
-                            }
-                        }
-                        if(canDownload) datasetNode = new TreeNodeBase("dataset-folder", dataset.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId() ,false);
-                        else datasetNode = new TreeNodeBase("dataset-noread-folder", dataset.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId() ,false);
-                    }
-                    
-                    if(dataset.getDatasetStatus() != null) datasetNode.getChildren().add(new TreeNodeBase("status-folder",dataset.getDatasetStatus(), true));
-                    else datasetNode.getChildren().add(new TreeNodeBase("status-folder","", true));
-                    
-                    if(dataset.getDatasetType() != null) datasetNode.getChildren().add(new TreeNodeBase("type-folder", dataset.getDatasetType(), true));
-                    else datasetNode.getChildren().add(new TreeNodeBase("type-folder", "", true));
-                    
-                    datasetNode.getChildren().add(new TreeNodeBase("desc-folder", uk.ac.dl.dp.web.util.Util.escapeInvalidStrings(dataset.getDescription()),true));
-                    
-                    //now calculate the total size of dataset
-                    int dsSize = 0;
-                    boolean isSizeAvaliable = !dataset.getDatafileCollection().isEmpty();
+                //find out if datafile collection is empty, are if not empty has any download permissions
+                if(dataset.getDatafileCollection() == null || dataset.getDatafileCollection().isEmpty()){
+                    log.trace("dataset: "+dataset.getId()+" is empty so not downloadable");
+                    datasetNode = new TreeNodeBase("dataset-noread-folder", dataset.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId() ,false);
+                } else {
+                    boolean canDownload = false;
                     for (Datafile datafile : dataset.getDatafileCollection()) {
-                        if(datafile.getFileSize() != null) dsSize += datafile.getFileSize();
-                        else {
-                            isSizeAvaliable = false;
+                        if(datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
+                            log.trace("datafile: "+datafile.getId()+" has downloadAction so dataset: "+dataset.getId()+" is downloadable");
+                            canDownload = true;
                             break;
                         }
                     }
-                    DecimalFormat df = new DecimalFormat();
-                    df.setMaximumFractionDigits(2);
-                    if(isSizeAvaliable) datasetNode.getChildren().add(new TreeNodeBase("size-folder", ""+df.format((dsSize/(1024f*1024f))) +" MB", false));
-                    
-                    //TreeNodeBase datafilesNode = new TreeNodeBase("dataset-count-folder", "Datafiles", false);
-                    
-                    for(Datafile datafile : dataset.getDatafileCollection()){
-                        
-                        boolean isImageJ = Util.isImageJ(datafile.getName());
-                        log.trace(datafile.getName()+" is imageJ "+isImageJ);
-                        
-                        TreeNodeBase datafileNode = null;
-                        
-                        //check if file downloadable
-                        if(datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
-                            datafileNode = new TreeNodeBase("file-folder", datafile.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false);
-                        } else {
-                            datafileNode = new TreeNodeBase("file-noread-folder", datafile.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false);
-                        }
-                        
-                        if(datafile.getDatafileFormat() != null) datafileNode.getChildren().add(new TreeNodeBase("format-folder", datafile.getDatafileFormat().getDatafileFormatPK().getName(),false));
-                        if(datafile.getDatafileFormat() != null) datafileNode.getChildren().add(new TreeNodeBase("format-version-folder", datafile.getDatafileFormat().getDatafileFormatPK().getVersion(),false));
-                        if(datafile.getDatafileFormat() != null) datafileNode.getChildren().add(new TreeNodeBase("format-type-folder", datafile.getDatafileFormat().getFormatType(),false));
-                        
-                        if(datafile.getDatafileCreateTime() != null) datafileNode.getChildren().add(new TreeNodeBase("createTime-folder", ""+datafile.getDatafileCreateTime(),false));
-                        if(datafile.getFileSize() != null) datafileNode.getChildren().add(new TreeNodeBase("size-folder", ""+df.format((datafile.getFileSize()/(1024f*1024f))) +" MB", false));
-                        
-                        if(isImageJ && datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
-                            datafileNode.getChildren().add(new TreeNodeBase("imageJ", "Launch ImageJ",invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false));
-                        }
-                        datasetNode.getChildren().add(datafileNode);
-                    }
-                    //datasetNode.getChildren().add(datafilesNode);
-                    datasetsNode.getChildren().add(datasetNode);
+                    if(canDownload) datasetNode = new TreeNodeBase("dataset-folder", dataset.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId() ,false);
+                    else datasetNode = new TreeNodeBase("dataset-noread-folder", dataset.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId() ,false);
                 }
-                node.getChildren().add(datasetsNode);
                 
-                data.getChildren().add(node);
+                if(dataset.getDatasetStatus() != null) datasetNode.getChildren().add(new TreeNodeBase("status-folder",dataset.getDatasetStatus(), true));
+                else datasetNode.getChildren().add(new TreeNodeBase("status-folder","", true));
+                
+                if(dataset.getDatasetType() != null) datasetNode.getChildren().add(new TreeNodeBase("type-folder", dataset.getDatasetType(), true));
+                else datasetNode.getChildren().add(new TreeNodeBase("type-folder", "", true));
+                
+                datasetNode.getChildren().add(new TreeNodeBase("desc-folder", uk.ac.dl.dp.web.util.Util.escapeInvalidStrings(dataset.getDescription()),true));
+                
+                //now calculate the total size of dataset
+                int dsSize = 0;
+                boolean isSizeAvaliable = !dataset.getDatafileCollection().isEmpty();
+                for (Datafile datafile : dataset.getDatafileCollection()) {
+                    if(datafile.getFileSize() != null) dsSize += datafile.getFileSize();
+                    else {
+                        isSizeAvaliable = false;
+                        break;
+                    }
+                }
+                DecimalFormat df = new DecimalFormat();
+                df.setMaximumFractionDigits(2);
+                if(isSizeAvaliable) datasetNode.getChildren().add(new TreeNodeBase("size-folder", ""+df.format((dsSize/(1024f*1024f))) +" MB", false));
+                
+                //TreeNodeBase datafilesNode = new TreeNodeBase("dataset-count-folder", "Datafiles", false);
+                
+                for(Datafile datafile : dataset.getDatafileCollection()){
+                    
+                    boolean isImageJ = Util.isImageJ(datafile.getName());
+                    log.trace(datafile.getName()+" is imageJ "+isImageJ);
+                    
+                    TreeNodeBase datafileNode = null;
+                    
+                    //check if file downloadable
+                    if(datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
+                        datafileNode = new TreeNodeBase("file-folder", datafile.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false);
+                    } else {
+                        datafileNode = new TreeNodeBase("file-noread-folder", datafile.getName(),invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false);
+                    }
+                    
+                    if(datafile.getDatafileFormat() != null) datafileNode.getChildren().add(new TreeNodeBase("format-folder", datafile.getDatafileFormat().getDatafileFormatPK().getName(),false));
+                    if(datafile.getDatafileFormat() != null) datafileNode.getChildren().add(new TreeNodeBase("format-version-folder", datafile.getDatafileFormat().getDatafileFormatPK().getVersion(),false));
+                    if(datafile.getDatafileFormat() != null) datafileNode.getChildren().add(new TreeNodeBase("format-type-folder", datafile.getDatafileFormat().getFormatType(),false));
+                    
+                    if(datafile.getDatafileCreateTime() != null) datafileNode.getChildren().add(new TreeNodeBase("createTime-folder", ""+datafile.getDatafileCreateTime(),false));
+                    if(datafile.getFileSize() != null) datafileNode.getChildren().add(new TreeNodeBase("size-folder", ""+df.format((datafile.getFileSize()/(1024f*1024f))) +" MB", false));
+                    
+                    if(isImageJ && datafile.getIcatRole().isActionDownload() && datafile.getLocation() !=null && !datafile.getLocation().equals("")){
+                        datafileNode.getChildren().add(new TreeNodeBase("imageJ", "Launch ImageJ",invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId()+"-"+datafile.getId(),false));
+                    }
+                    datasetNode.getChildren().add(datafileNode);
+                }
+                //datasetNode.getChildren().add(datafilesNode);
+                datasetsNode.getChildren().add(datasetNode);
             }
-            getVisitData().setDataSetTree(data);
-            return data;
-        } else return getVisitData().getDataSetTree();
+            node.getChildren().add(datasetsNode);
+            
+            data.getChildren().add(node);
+        }
+        getVisitData().setDataSetTree(data);
+        return data;
+        // } else return getVisitData().getDataSetTree();
         
     }
     
@@ -391,12 +393,12 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         }
     }
     
-    public void emailDownload(ActionEvent event){
+    public String emailDownload(/*ActionEvent event*/){
         log.trace("emailDownload: ");
         String[] srbFilesDownload = getVisitData().getAllSearchedSRBURLs();
         if(srbFilesDownload.length == 0){
             error("Please select atleast one item to download.");
-            return ;
+            return null ;
         }
         
         try{
@@ -405,6 +407,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             info.setSrbUrls(getVisitData().toSRBUrl(srbFilesDownload));
             DownloadDelegate.getInstance().downloadSRBFiles(getVisit().getSid(), info);
             info("Request sent for download");
+            
         } catch(MalformedURLException mex){
             log.error("Cannot download data via email, invalid URLS found.",mex);
             error("Error: Cannot download data via email");
@@ -412,7 +415,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             log.error("Cannot download data via email",ex);
             error("Error: Cannot download data via email");
         }
-        
+        return null;
     }
     
     public String select(){
