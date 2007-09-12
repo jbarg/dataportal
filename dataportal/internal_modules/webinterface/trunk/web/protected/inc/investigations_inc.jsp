@@ -9,8 +9,8 @@
 <a4j:region   selfRendered="true" > 
     <h:form>
         
-        <a4j:poll id="poll" actionListener="#{investigationBean.dummyAjax}" interval="500" reRender="poll, data" ajaxSingle="true"  enabled="#{!investigationBean.dummyAjaxDone}" />
-    
+       <!-- <a4j:poll id="poll" actionListener="#{investigationBean.dummyAjax}" interval="500" reRender="poll, data" ajaxSingle="true"  enabled="#{!investigationBean.dummyAjaxDone}" />
+    -->
         <table style="margin-top:-90px" width="90%" border="0">
              <tbody>
                 <tr>

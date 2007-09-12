@@ -16,8 +16,7 @@
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
          <title>Sci-Tech Data Portal </title>
-        <link rel="stylesheet" type="text/css" href="../css/basic.css" />
-        <script language="javascript" src="../css/download.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/basic.css" />        
         <script language="javascript" src="../css/CastleBusyBox.js"></script>
         
     </head>

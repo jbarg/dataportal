@@ -36,5 +36,5 @@
         
     </t:jscookMenu>       
     <input type="hidden" name="jscook_action" />
-    
+   
 </h:form> 
