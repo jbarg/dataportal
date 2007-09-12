@@ -17,7 +17,7 @@
                     <table border="0" width="100%">
                         <tbody>
                             <tr>
-                                <tr> <h:messages id="messages" globalOnly="true" warnClass="error" errorClass="error" infoClass="info" />
+                            <tr> <h:messages id="messages" globalOnly="true" warnClass="error" errorClass="error" infoClass="info" />
                                 </tr>     
                                 <td width="60%">   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>    
@@ -973,14 +973,14 @@
                             <tr>
                                 <td align="left">
                                     
-                                    <a4j:commandButton disabled="#{!datasetTree.validDownloadSelection}" reRender="messages" styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" actionListener="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
-                                    
+                                    <a4j:commandButton onclick="alert('Email has been sent to #{visit.userPreferences.email}');" immediate="true" reRender="messages" styleClass="button" id="downloademail" style="width: 130px" disabled="#{!datasetTree.validDownloadSelection}" rendered="#{visit.userPreferences.emailSet}" action="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
                                     &nbsp;
                                       <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
                              
                                     <h:selectBooleanCheckbox rendered="#{visit.userPreferences.emailSet}" disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
                                         
                                     </h:selectBooleanCheckbox>
+                                    
                                     
                                 </td>
                             </tr>

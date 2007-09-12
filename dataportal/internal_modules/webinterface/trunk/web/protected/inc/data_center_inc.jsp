@@ -9,7 +9,7 @@
          <tbody>
             <tr>            
                 <td>
-                    <a4j:region   selfRendered="true" > 
+                    <a4j:region selfRendered="true" > 
                         <table style="margin-top:-20px" width="100%" border="0">
                              <tbody>
                                 <tr>   
