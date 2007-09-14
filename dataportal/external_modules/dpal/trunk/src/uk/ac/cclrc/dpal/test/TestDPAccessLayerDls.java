@@ -49,8 +49,8 @@ public class TestDPAccessLayerDls
      if (args.length == 0)
      {
         //funny case to test the automatic case insensitivety of the searches
-        keyword_list.add("chiral") ;
-        keyword_list.add("states") ;
+        keyword_list.add("magnetic") ;
+        keyword_list.add("oxide") ;
      }
      else
      {
@@ -63,9 +63,9 @@ public class TestDPAccessLayerDls
      String fed_id="qgk73476" ;
 
      //extra setup for investigation functions
-     inv_id_list.add("761") ; 
-     inv_id_list.add("762") ; 
-     inv_id_list.add("763") ; 
+     inv_id_list.add("4") ; 
+     inv_id_list.add("6") ; 
+     inv_id_list.add("7") ; 
     
      try
      {
