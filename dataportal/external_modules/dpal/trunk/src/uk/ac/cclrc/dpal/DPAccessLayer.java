@@ -329,6 +329,7 @@ public class DPAccessLayer {
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setVisitId(r.getString("VISIT_ID")) ;
+            st.setInstrument(r.getString("INSTRUMENT")) ;
             st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
             st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
             itor.setId(r.getString("USER_FED_ID"))  ;
@@ -380,6 +381,7 @@ public class DPAccessLayer {
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setVisitId(r.getString("VISIT_ID")) ;
+            st.setInstrument(r.getString("INSTRUMENT")) ;
             st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
             st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
             itor.setId(r.getString("USER_FED_ID"))  ;
@@ -427,6 +429,7 @@ public class DPAccessLayer {
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setVisitId(r.getString("VISIT_ID")) ;
+            st.setInstrument(r.getString("INSTRUMENT")) ;
             st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
             st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
             itor.setId(r.getString("USER_FED_ID"))  ;
@@ -461,6 +464,7 @@ public class DPAccessLayer {
             st.setId(r.getString("ID")) ;
             st.setName(r.getString("TITLE")) ; //note title in db and name in beans
             st.setVisitId(r.getString("VISIT_ID")) ;
+            st.setInstrument(r.getString("INSTRUMENT")) ;
             st.setInvestigationType(r.getString("INVESTIGATION_TYPE")) ;
             st.setInvestigationAbstract(r.getString("INV_ABSTRACT")) ;
             itor.setId(r.getString("USER_FED_ID"))  ;
