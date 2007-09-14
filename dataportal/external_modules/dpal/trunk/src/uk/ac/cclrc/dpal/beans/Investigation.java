@@ -10,6 +10,7 @@ public class Investigation extends Common implements Serializable {
     private String investigationType = null ;
     private String investigationAbstract = null ;
     private String visitId = null ;
+    private String instrument = null ;
     //using the following as it supresses duplicates(just in case)
     private LinkedHashSet<Investigator> investigators = new LinkedHashSet<Investigator>() ;
     private Collection<String> keywords = new ArrayList<String>();
@@ -48,6 +49,12 @@ public class Investigation extends Common implements Serializable {
     public String getVisitId() {
         return this.visitId ;
     }
+
+
+    public String getInstrument() {
+        return this.instrument ;
+    }
+    
     
     
     //adders - none bean but neeeded
@@ -68,6 +75,10 @@ public class Investigation extends Common implements Serializable {
         this.visitId=visit_id ;
     }
     
+    public void setInstrument(String instrument) {
+        this.instrument=instrument ;
+    }
+    
     
     //support for printing
     public String toString() {
@@ -83,6 +94,7 @@ public class Investigation extends Common implements Serializable {
         return "[name]:"+getName()+
                 " [id]:"+getId()+
                 " [visit id]:"+visitId+
+                " [instrument]:"+instrument+
                 " [type]:"+investigationType+
                 " [abstract]:"+investigationAbstract+
                 " [facility]:"+getFacility()+

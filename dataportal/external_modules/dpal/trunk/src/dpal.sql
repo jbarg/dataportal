@@ -63,6 +63,7 @@ create or replace package body dpaccess as
               select i.id,
                      i.title,
                      i.visit_id,
+                     i.instrument,
                      i.inv_type as investigation_type,
                      i.inv_abstract
               from investigator g, facility_user f, investigation i
@@ -73,6 +74,7 @@ create or replace package body dpaccess as
               select id,
                      title,
                      visit_id,
+                     instrument,
                      inv_type as investigation_type,
                      inv_abstract
               from investigation
@@ -107,6 +109,7 @@ create or replace package body dpaccess as
             g.id,
             g.title,
             g.visit_id,
+            g.instrument,
             g.investigation_type,
             g.inv_abstract,
             iu.user_fed_id,
@@ -139,6 +142,7 @@ create or replace package body dpaccess as
               select i.id,
                      i.title,
                      i.visit_id,
+                     i.instrument,
                      i.inv_type as investigation_type,
                      i.inv_abstract
               from investigator g, facility_user f, investigation i
@@ -149,6 +153,7 @@ create or replace package body dpaccess as
               select id,
                      title,
                      visit_id,
+                     instrument,
                      inv_type as investigation_type,
                      inv_abstract
               from investigation
@@ -188,6 +193,7 @@ create or replace package body dpaccess as
             g.id,
             g.title,
             g.visit_id,
+            g.instrument,
             g.investigation_type,
             g.inv_abstract,
             iu.user_fed_id,
@@ -228,6 +234,7 @@ create or replace package body dpaccess as
               select i.id,
                      i.title,
                      i.visit_id,
+                     i.instrument,
                      i.inv_type as investigation_type,
                      i.inv_abstract
               from investigator g, facility_user f, investigation i
@@ -238,6 +245,7 @@ create or replace package body dpaccess as
               select id,
                      title,
                      visit_id,
+                     instrument,
                      inv_type as investigation_type,
                      inv_abstract
               from investigation
@@ -256,6 +264,7 @@ create or replace package body dpaccess as
           select g.id,
                  g.title,
                  g.visit_id,
+                 g.instrument,
                  g.investigation_type,
                  g.inv_abstract,
                  iu.user_fed_id,
@@ -348,6 +357,7 @@ create or replace package body dpaccess as
               select i.id,
                      i.title,
                      i.visit_id,
+                     i.instrument,
                      i.inv_type as investigation_type,
                      i.inv_abstract
               from investigator g, facility_user f, investigation i
@@ -358,6 +368,7 @@ create or replace package body dpaccess as
               select id,
                      title,
                      visit_id,
+                     instrument,
                      inv_type as investigation_type,
                      inv_abstract
               from investigation
@@ -392,6 +403,7 @@ create or replace package body dpaccess as
             g.id,
             g.title,
             g.visit_id,
+            g.instrument,
             g.investigation_type,
             g.inv_abstract,
             iu.user_fed_id,
@@ -424,6 +436,7 @@ create or replace package body dpaccess as
               select i.id,
                      i.title,
                      i.visit_id,
+                     i.instrument,
                      i.inv_type as investigation_type,
                      i.inv_abstract
               from investigator g, facility_user f, investigation i
@@ -434,6 +447,7 @@ create or replace package body dpaccess as
               select id,
                      title,
                      visit_id,
+                     instrument,
                      inv_type as investigation_type,
                      inv_abstract
               from investigation
@@ -473,6 +487,7 @@ create or replace package body dpaccess as
             g.id,
             g.title,
             g.visit_id,
+            g.instrument,
             g.investigation_type,
             g.inv_abstract,
             iu.user_fed_id,
@@ -505,12 +520,13 @@ create or replace package body dpaccess as
             where f.facility_user_id = g.facility_user_id
             and f.federal_id like l_fed_id
           )
-        select id, title, visit_id, investigation_type, inv_abstract,
+        select id, title, visit_id, instrument, investigation_type, inv_abstract,
               user_fed_id, facility_user, user_role
         from(
           select i.id as id,
                  i.title as title,
                  i.visit_id as visit_id,
+                 i.instrument as instrument,
                  i.inv_type as investigation_type,
                  i.inv_abstract as inv_abstract,
                  f.federal_id as user_fed_id,

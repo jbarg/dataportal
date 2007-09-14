@@ -37,7 +37,7 @@ public class TestDPAccessLayerIsis
      String db_host = "elektra.dl.ac.uk";
      String db_port = "1521";
      String db_sid = "minerva2" ;
-     String db_user = "icatisis_dev" ;
+     String db_user = "icatisis" ;
      String db_pass = "ihave4name" ;
      String dbConnectString = "(DESCRIPTION=(ADDRESS=(HOST="+db_host+")"+
                              "(PROTOCOL=tcp)(PORT="+db_port+"))"+
