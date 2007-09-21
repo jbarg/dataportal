@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 
-<%@ taglib uri="http://jakarta.apache.org/taglibs/string-1.1" prefix="str" %>
+
 
 <a4j:region   selfRendered="true" > 
     <h:form>
@@ -174,7 +174,7 @@
                 <h:outputText value="#{invest.id}" />
             
                 </h:column>--%>
-                  <h:column>
+            <h:column>
                 
                 <f:facet name="header">
                     <h:panelGrid columns="2" >
@@ -212,11 +212,42 @@
                 </f:facet>
                 
                 <h:commandLink value="#{invest.name}" style=" color: black" styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />
-               <%-- <h:outputText  value="#{invest.name}" />--%>
-                
-                
+                <%-- <h:outputText  value="#{invest.name}" />--%>
                 
             </h:column>
+            
+            <h:column>
+                <f:facet name="header">
+                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="visitId" actionListener="#{investigationBean.sortColumn}">
+                        
+                        <h:outputText value="Visit Id" />
+                        <f:param name="column" value="visitId"/>
+                        <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
+                        <t:graphicImage id="acdhffty" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.visitId}" border="0"/>
+                        <t:graphicImage id="dedffty" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notVisitId}" border="0"/>
+                        <%--  </c:if>--%>
+                    </a4j:commandLink>
+                </f:facet>
+                <h:outputText  value="#{invest.visitId}" />                              
+                
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">
+                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="instrument" actionListener="#{investigationBean.sortColumn}">
+                        
+                        <h:outputText value="Instrument" />
+                        <f:param name="column" value="instrument"/>
+                        <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
+                        <t:graphicImage id="acsdtddy" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.instrument}" border="0"/>
+                        <t:graphicImage id="deddddty" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notInstrument}" border="0"/>
+                        <%--  </c:if>--%>
+                    </a4j:commandLink>
+                </f:facet>
+                <h:outputText  value="#{invest.instrument}" />                              
+                
+            </h:column>
+            
             <h:column>
                 <f:facet name="header">
                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="type" actionListener="#{investigationBean.sortColumn}">
@@ -353,7 +384,7 @@
                 </t:popup>
             </h:column>
             
-          
+            
             
             
             <f:facet name="detailStamp">                
