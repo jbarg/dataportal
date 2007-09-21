@@ -93,7 +93,15 @@ public class InvestigationBean extends SortableList {
                     if(c1.getName() == null) return 0;
                     else return ascending ? c1.getName().compareTo(c2.getName()) : c2.getName()
                     .compareTo(c1.getName());
-                }else if (column.equals("abstract")) {
+                } else if (column.equals("instrument")) {
+                    if(c1.getInstrument() == null) return 0;
+                    else return ascending ? c1.getInstrument().compareTo(c2.getInstrument()) : c2.getInstrument()
+                    .compareTo(c1.getInstrument());
+                } else if (column.equals("visitId")) {
+                    if(c1.getVisitId() == null) return 0;
+                    else return ascending ? c1.getVisitId().compareTo(c2.getVisitId()) : c2.getVisitId()
+                    .compareTo(c1.getVisitId());
+                } else if (column.equals("abstract")) {
                     //if no abstract put it behind it
                     if(c1.getInvestigationAbstract() == null) return 1;
                     else return ascending ? c1.getInvestigationAbstract().compareTo(c2.getInvestigationAbstract()) : c2.getInvestigationAbstract()
@@ -452,6 +460,22 @@ public class InvestigationBean extends SortableList {
         return isNot("name");
     }
     
+    public boolean isVisitId(){
+        return is("visitId");
+    }
+    
+    public boolean isNotVisitId(){
+        return isNot("visitId");
+    }
+    
+    public boolean isInstrument(){
+        return is("instrument");
+    }
+    
+    public boolean isNotInstrument(){
+        return isNot("instrument");
+    }
+        
     public boolean isAbstract(){
         return is("abstract");
     }
