@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<resources>
-  <jdbc-connection-pool allow-non-component-callers="false" connection-validation-method="table" datasource-classname="oracle.jdbc.pool.OracleDataSource" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" is-isolation-level-guaranteed="true" max-pool-size="32" max-wait-time-in-millis="60000" name="oracle_EMAT_pool" non-transactional-connections="false" pool-resize-quantity="2" res-type="javax.sql.DataSource" steady-pool-size="8" validation-table-name="INVESTIGATION">
-    <property name="URL" value="jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(HOST=elektra.dl.ac.uk)(PROTOCOL=tcp)(PORT=1521))(CONNECT_DATA=(SID=minerva2)))"/>
-    <property name="User" value="metaematview"/>
-    <property name="Password" value="viewb4rk1ng"/>
-  </jdbc-connection-pool>
-</resources>
