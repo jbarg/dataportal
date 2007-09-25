@@ -189,7 +189,7 @@ public class BookmarkBean extends SortableList {
     public String viewData(){
         log.trace("view bookmarked data");
         Bookmark qrdto =   (Bookmark) table.getRowData();
-        log.trace("viewing studyId: "+qrdto.getStudyId());
+        log.trace("viewing investigationId: "+qrdto.getStudyId());
         Collection<Investigation> investigations = null;
         try {
             investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
@@ -215,7 +215,7 @@ public class BookmarkBean extends SortableList {
     public String viewDataSets(){
         log.trace("view bookmarked data");
         Bookmark qrdto =   (Bookmark) table.getRowData();
-        log.trace("viewing studyId: "+qrdto.getStudyId());
+        log.trace("viewing investigationId: "+qrdto.getStudyId());
         Collection<Investigation> investigations = null;
         try {
             investigations = QueryDelegate.getInstance().getInvestigationById(getVisit().getSid(), qrdto.getFacility(), String.valueOf(qrdto.getStudyId()));
