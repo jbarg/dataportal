@@ -236,7 +236,7 @@
                 <f:facet name="header">
                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="instrument" actionListener="#{investigationBean.sortColumn}">
                         
-                        <h:outputText value="Instrument" />
+                        <h:outputText value="Beamline" />
                         <f:param name="column" value="instrument"/>
                         <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
                         <t:graphicImage id="acsdtddy" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.instrument}" border="0"/>
@@ -248,21 +248,21 @@
                 
             </h:column>
             
-            <h:column>
+           <%-- <h:column>
                 <f:facet name="header">
                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="type" actionListener="#{investigationBean.sortColumn}">
                         
                         <h:outputText value="Type" />
                         <f:param name="column" value="type"/>
-                        <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
+                       
                         <t:graphicImage id="acty" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.type}" border="0"/>
                         <t:graphicImage id="dety" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notType}" border="0"/>
-                        <%--  </c:if>--%>
+                       
                     </a4j:commandLink>
                 </f:facet>
                 
                 <h:outputText  value="#{fn:toLowerCase(invest.investigationType)}" />               
-            </h:column>
+            </h:column> --%>
             <h:column>
                 <f:facet name="header">
                     <h:panelGrid columns="2" >
