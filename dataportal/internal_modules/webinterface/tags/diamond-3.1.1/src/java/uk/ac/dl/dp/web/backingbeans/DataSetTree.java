@@ -612,6 +612,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 }
                 ref.setTypeOfObject(dataset.getDataSetType());
                 ref.setReferenceId(Integer.valueOf(dataset.getId()));
+                log.trace("Adding "+dataset.getInvestigationId()+" to data refs from "+dataset.getId());
                 ref.setInvestigationId(Integer.valueOf(dataset.getInvestigationId()));
                 
                 Collection<Url> cs = new ArrayList<Url>();
