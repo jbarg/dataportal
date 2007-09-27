@@ -4,8 +4,9 @@
 //#nav_bar {height: -100;}
 //html>body #nav_bar {height: 60;} 
 
-#nav_bar_accross {margin-top: -25px;}
-html>body #nav_bar_accross {margin-top: -45px;} 
+#nav_bar_accross {margin-top: -10px;} 
+html>body #nav_bar_accross {margin-top: -25px;} 
+
 
 #image_stfc {margin-top: -25px;}
 html>body #image_stfc {margin-top: -40px;} 

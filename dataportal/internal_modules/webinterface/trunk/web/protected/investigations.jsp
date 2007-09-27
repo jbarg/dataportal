@@ -113,7 +113,7 @@
                                                             
                                                             <a4j:form id="helpform">
                                                                 
-                                                                <t:collapsiblePanel  id="helpform" value="#{helpCollapsibleBean.collapsed}" title="testTitle" >
+                                                                <t:collapsiblePanel  id="help" value="#{helpCollapsibleBean.collapsed}" title="testTitle" >
                                                                     <f:facet name="header">
                                                                         <t:div style="color: black; width:40px;">
                                                                             <h:panelGrid columns="4" >
