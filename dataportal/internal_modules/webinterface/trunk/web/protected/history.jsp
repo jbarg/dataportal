@@ -6,13 +6,13 @@
 <%@ page import="uk.ac.dl.dp.web.backingbeans.Visit" %>
 <%@ page import="uk.ac.dl.dp.web.util.WebConstants" %>
 <html>
-
-   
+    
+    
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
         <title>Sci-Tech Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
-       <script language="javascript" src="../css/CastleBusyBox.js"></script>
+        <script language="javascript" src="../css/CastleBusyBox.js"></script>
     </head>
     <body>
         <f:view>
@@ -64,13 +64,15 @@
                                             <br />
                                             <t:div id="subnavigation_outer">
                                                 <t:div id="subnavigation">
-                                                    <t:panelNavigation2 id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
-                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
-                                                        <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
-                                                    </t:panelNavigation2>
+                                                   
+                                                        <t:panelNavigation2 id="nav1" layout="list"       disabledStyle="color:red;padding: 2px 20px 2px 25px">
+                                                            <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
+                                                        </t:panelNavigation2>
+                                                    
                                                 </t:div>
                                             </t:div>
-                                             <t:div id="subnavigation_nav">
+                                           
+                                            <t:div id="subnavigation_nav">
                                                 <f:subview id="navigation_search">
                                                     <c:import url="inc/tabbed_panel_nav_inc.jsp" />
                                                 </f:subview>
@@ -85,7 +87,7 @@
                                                         </td>
                                                         <td align="left" >
                                                             <h:outputText styleClass="header_top" value="Search History"/> 
-                               
+                                                            
                                                         </td>
                                                         <td align="right">
                                                             <f:subview id="title">
@@ -104,7 +106,7 @@
                                                             <f:subview id="body">
                                                                 <c:import url="inc/history_inc.jsp" />
                                                             </f:subview>
-                         
+                                                            
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -112,7 +114,7 @@
                                             <br />
                                             <br />
                                             <hr size="-1" width="100%"  />
-                      <table id="footer_bar" border="0" width="100%" align="right">
+                                            <table id="footer_bar" border="0" width="100%" align="right">
                                                  <tbody>
                                                     <tr>
                                                         <f:subview id="footer2">
@@ -125,14 +127,14 @@
                                     </tr>
                                 </tbody>
                             </table>
-                           
-                          
+                            
+                            
                         </td>
                     </tr>
                 </tbody>
             </table>
         </f:view>
-       
+        
     </body>
-
+    
 </html>

@@ -12,7 +12,7 @@
     
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
-       <title>Sci-Tech Data Portal </title>
+        <title>Sci-Tech Data Portal </title>
         <link rel="stylesheet" type="text/css" href="../css/basic.css" />
         <script language="javascript" src="../css/CastleBusyBox.js"></script>
         
@@ -69,11 +69,12 @@
                                             <br />
                                             <br />
                                             <t:div id="subnavigation_outer">
-                                                <t:div id="subnavigation">
-                                                    <t:panelNavigation2 renderAll="false" id="nav1" layout="list" itemClass="mypage" activeItemClass="selected"
-                                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
+                                                <t:div id="subnavigation"> 
+                                                    
+                                                    <t:panelNavigation2 id="nav1" layout="list"                         disabledStyle="color:red;padding: 2px 20px 2px 25px">
                                                         <t:navigationMenuItems id="navitems" value="#{navigationMenu.panelNavigationItems}" />
                                                     </t:panelNavigation2>
+                                                    
                                                 </t:div>
                                             </t:div>
                                             
@@ -131,8 +132,12 @@
                                                                     </f:facet>
                                                                     
                                                                     <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
-                                                                        <h:outputText value="Advanced Search help."/>
-                                                                       
+                                                                        <h:outputText value="Choose the facility(s) you wish to search on by clicking on one or multipe items in the 'Search' box."/>
+                                                                        <h:outputText value="The auto complete form helps you to find a keyword within the facility(s)." />
+                                                                        <h:outputText value="You can choose to search mutiple keywords and one single Investigation name, abstract, sample and surname." />                                                                        
+                                                                        <h:outputText value="Clicking the 'Like' radio button to find all investigations that contain it as part of the keyword(s), name, abstract, sample and surname."/>
+                                                                        <h:outputText value="You can also choose to search one exact Visit Id, Grand Id, Investigation type and Instrument." />                                                                   
+                                                                        <h:outputText value="In the next version of the Data Portal Investigation type and Instrument will be drop down lists of current types and instruments from the facility." />  
                                                                     </h:panelGrid>
                                                                 </t:collapsiblePanel>
                                                             </a4j:form>

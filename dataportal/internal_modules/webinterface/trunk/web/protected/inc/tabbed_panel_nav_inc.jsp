@@ -25,33 +25,39 @@
        function chooseCityNavAdv(city) {
     
         var oldvalue = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1').value;  
+     
+         // OLD way 1.1.6   var oldvalue = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value;  
         var index = oldvalue.lastIndexOf(' ');          
         var old = oldvalue.substring(0, index);     
       
         if(old == ""){       
             document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1').value = city+" ";
+            // OLD way 1.1.6 document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value = city+" ";
         }
         else {     
-            document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1').value = old+" "+city+" ";
+           document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1').value = old+" "+city+" ";
+            // OLD way 1.1.6 document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value = old+" "+city+" ";
+        
+            }
         }
-        var oldvalue = document.getElementById('navigation_search:autofillform_nav_adv:facilities_SELECTED').options[0].value;
-                
-      }
 
       function chooseCityNav(city) {
-    
+                
+      // OLD way 1.1.6  var oldvalue = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value;         
         var oldvalue = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_1').value;  
         var index = oldvalue.lastIndexOf(' ');          
         var old = oldvalue.substring(0, index);     
-      
+   
         if(old == ""){       
-            document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_1').value = city+" ";
+           document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_1').value = city+" ";
+            // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = city+" ";
         }
         else {     
             document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
+           // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
+      
         }
-        //var oldvalue = document.getElementById('navigation_search:autofillform_nav:facilities_SELECTED').options[0].value;
-                
+                     
       }
                    
        
@@ -104,7 +110,7 @@
                     
                     <h:selectOneRadio  style="font-size:10px" id="radioNav" value="#{visit.visitData.basicSearchBean.logicalExpression}" >
                         <f:selectItems value="#{searchBean.logicalExpressions}"/> 
-                         <f:validateLength minimum="1" />
+                        <f:validateLength minimum="1" />
                     </h:selectOneRadio>         
                     
                     
@@ -114,7 +120,7 @@
                     <h:selectOneRadio style="font-size:10px" id="likeNav" value="#{visit.visitData.basicSearchBean.likeExpression}" >
                         <f:selectItem itemLabel="Exact"  itemValue="EXACT" />                         
                         <f:selectItem itemLabel="Like"  itemValue="LIKE" />
-                         <f:validateLength minimum="1" />
+                        <f:validateLength minimum="1" />
                     </h:selectOneRadio>       
                     
                     <h:panelGroup/>           
@@ -129,7 +135,7 @@
             </h:form>
         </t:panelTab>
         
-        <t:panelTab id="advancedSearch"  label="Advanced" >
+         <t:panelTab id="advancedSearch"  label="Advanced" >
             <h:form id="autofillform_nav_adv">
                 
                 <h:panelGrid  border="0" columns="2"  >      
@@ -225,7 +231,6 @@
                         <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
                     <h:selectOneRadio style="font-size:12px" id="like" value="#{visit.visitData.advancedSearchBean.likeExpression}" >
                         <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
                         <f:selectItem itemLabel="Like"  itemValue="LIKE" />
