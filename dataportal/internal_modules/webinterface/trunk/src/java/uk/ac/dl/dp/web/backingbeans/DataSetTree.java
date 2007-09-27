@@ -150,6 +150,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
             // log.debug("Adding investigations: "+invest.getName());
             node = new TreeNodeBase("invest", invest.getTitle(), invest.getFacility()+"-"+invest.getId(),false);
             
+            if(invest.getVisitId() != null) node.getChildren().add(new TreeNodeBase("visitId-folder", invest.getVisitId(),true));           
             if(invest.getInvType() != null) node.getChildren().add(new TreeNodeBase("type-folder", invest.getInvType(),true));
             if(invest.getInstrument() != null) node.getChildren().add(new TreeNodeBase("instrument-folder", invest.getInstrument(),true));
             node.getChildren().add(new TreeNodeBase("fac-folder",invest.getFacility(),true));

@@ -99,7 +99,7 @@ public class HistoryBean extends SortableList {
                     
                     return ascending ? c1.getSent().compareTo(c2.getSent()) : c2.getSent()
                             .compareTo(c1.getSent());
-                } else if (column.equals("finished")) {
+                } else if (column.equals("processed")) {
                     return ascending ? c1.getProcessed().compareTo(c2.getProcessed()) : c2.getProcessed()
                             .compareTo(c1.getProcessed());
                 } else
