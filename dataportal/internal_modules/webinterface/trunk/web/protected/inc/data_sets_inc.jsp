@@ -437,6 +437,22 @@
                             </h:panelGroup>
                         </f:facet>
                         
+                        <%----  Investigation  visit id   ----%>
+                        <f:facet name="visitId-folder">
+                            <h:panelGroup>
+                                <f:facet name="expa4551">
+                                    <t:graphicImage id="dsfdfd" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="colddffge1">
+                                    <t:graphicImage id="grddd4232" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="te44ggr8" styleClass="nodeFolder" value="Visit Id: " />
+                                
+                                <h:outputText id="t43fgs7f28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
                         <%----  datafile imageJ  ----%>
                         <f:facet name="imageJ">
                             <h:panelGroup>                                
@@ -793,6 +809,22 @@
                                 <h:outputText id="te44xweeef7s8" styleClass="nodeFolder" value="#{facility_properties['instrument.name']}: " />
                                 
                                 <h:outputText id="te4xswewewe7f28" styleClass="document" value="#{node.description}" />
+                                
+                            </h:panelGroup>
+                        </f:facet>
+                        
+                         <%----  Investigation  visit id   ----%>
+                        <f:facet name="visitId-folder">
+                            <h:panelGroup>
+                                <f:facet name="expa4sd1">
+                                    <t:graphicImage id="dddfg34d" value="../../images/blue-folder-open.gif" rendered="#{t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <f:facet name="colddfd1">
+                                    <t:graphicImage id="grd44232" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
+                                </f:facet>
+                                <h:outputText id="te4448" styleClass="nodeFolder" value="Visit Id: " />
+                                
+                                <h:outputText id="t43447f28" styleClass="document" value="#{node.description}" />
                                 
                             </h:panelGroup>
                         </f:facet>
