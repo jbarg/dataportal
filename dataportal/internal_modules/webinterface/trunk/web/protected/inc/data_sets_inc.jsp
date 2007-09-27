@@ -6,7 +6,8 @@
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 
 <h:form>
-    
+      <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties" />
+  
     
     <table width="90%" border="0" >
         <tbody>
@@ -429,7 +430,7 @@
                                 <f:facet name="colla4ffge1">
                                     <t:graphicImage id="grddddgf2" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 </f:facet>
-                                <h:outputText id="te44xf7s8" styleClass="nodeFolder" value="Instrument: " />
+                                <h:outputText id="te44xf7s8" styleClass="nodeFolder" value="#{facility_properties['instrument.name']}: " />
                                 
                                 <h:outputText id="te4xs7f28" styleClass="document" value="#{node.description}" />
                                 
@@ -789,7 +790,7 @@
                                 <f:facet name="colla4ffgwewee1">
                                     <t:graphicImage id="grddddgf2" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 </f:facet>
-                                <h:outputText id="te44xweeef7s8" styleClass="nodeFolder" value="Instrument: " />
+                                <h:outputText id="te44xweeef7s8" styleClass="nodeFolder" value="#{facility_properties['instrument.name']}: " />
                                 
                                 <h:outputText id="te4xswewewe7f28" styleClass="document" value="#{node.description}" />
                                 
@@ -975,7 +976,7 @@
                                     
                                     <a4j:commandButton onclick="alert('Email has been sent to #{visit.userPreferences.email}');" immediate="true" reRender="messages" styleClass="button" id="downloademail" style="width: 130px" disabled="#{!datasetTree.validDownloadSelection}" rendered="#{visit.userPreferences.emailSet}" action="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
                                     &nbsp;
-                                      <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                                      <h:graphicImage rendered="#{visit.userPreferences.emailSet}" value="../../images/download.gif" width="19" height="14" />                                                             
                              
                                     <h:selectBooleanCheckbox rendered="#{visit.userPreferences.emailSet}" disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
                                         
