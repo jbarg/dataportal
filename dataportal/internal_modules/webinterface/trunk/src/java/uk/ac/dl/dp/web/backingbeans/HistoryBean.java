@@ -94,19 +94,19 @@ public class HistoryBean extends SortableList {
                 }
                 if (column.equals("facilities")) {
                     return ascending ? c1.getFacilities().iterator().next().compareTo(c2.getFacilities().iterator().next()) : c2.getFacilities().iterator().next()
-                    .compareTo(c1.getFacilities().iterator().next());
+                            .compareTo(c1.getFacilities().iterator().next());
                 } else if (column.equals("sent")) {
                     
                     return ascending ? c1.getSent().compareTo(c2.getSent()) : c2.getSent()
-                    .compareTo(c1.getSent());
+                            .compareTo(c1.getSent());
                 } else if (column.equals("finished")) {
                     return ascending ? c1.getProcessed().compareTo(c2.getProcessed()) : c2.getProcessed()
-                    .compareTo(c1.getProcessed());
+                            .compareTo(c1.getProcessed());
                 } else
                     return 0;
             }
-        };      
-        Collections.sort( history, comparator);        
+        };
+        Collections.sort( history, comparator);
     }
     
     public void sortColumn(ActionEvent event){
@@ -132,8 +132,8 @@ public class HistoryBean extends SortableList {
         log.trace("view data");
         QueryRecordDTO qrdto =   (QueryRecordDTO) table.getRowData();
         log.trace("viewing : "+qrdto.getQueryid());
-        Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults("234", qrdto.getQueryid());
+        Collection<Investigation> investigations = QueryDelegate.getInstance().getQueryResults(getVisit().getSid(), qrdto.getQueryid());
         getVisitData().setSearchedInvestigations(investigations);
-        return NavigationConstants.SEARCH_SUCCESS;        
+        return NavigationConstants.SEARCH_SUCCESS;
     }
-        }
+}
