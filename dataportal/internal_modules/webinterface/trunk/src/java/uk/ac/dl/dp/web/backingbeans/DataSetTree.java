@@ -133,7 +133,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
         //page going onto this, so disable the button
         datasetNav = false;
         
-        getVisitData().reinitailise();
+        //getVisitData().reinitailise();
         
         checkSelectedInfomation();
         
@@ -329,7 +329,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 }
                 if(current.getName().equals("datasets") && current.getValue() != null){
                     String param = current.getValue().toString();
-                    Dataset ds = getVisitData().getDataSetFromSearchedData(param);
+                    Dataset ds = getVisitData().getDataSetFromSearchedData(param);                    
                     ds.setSelected(!ds.isSelected());
                     log.trace("setting "+ds.isSelected()+"  for DATASET: "+ds.getId());
                     break;
@@ -337,6 +337,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable{
                 if(current.getName().equals("investigations") && current.getValue() != null){
                     String param = current.getValue().toString();
                     Investigation in =  getVisitData().getInvestigationFromSearchedData(param);
+                    //log.trace("? "+in.isSelected()+"  for INVESTIGATION: "+in.getId());
                     in.setSelected(!in.isSelected());
                     log.trace("setting "+in.isSelected()+"  for INVESTIGATION: "+in.getId());
                     break;
