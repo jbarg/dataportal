@@ -22,29 +22,23 @@
                 </library>
                 <library files="1">
                     <file>${reference.dp-coreutil.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="2">
-                    <file>${libs.ajax4jsf.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
-                    <file>${reference.dpal.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
+                    <file>${reference.icat-ws.jar}</file>
                 </library>
                 <library files="7">
                     <file>${libs.dp_cogkit.classpath}</file>
                 </library>
-                <library files="9">
-                    <file>${libs.myfaces-impl-1.6.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="3">
-                    <file>${libs.facelets-1-1-12.classpath}</file>
+                <library files="2">
+                    <file>${libs.jboss-ajax4jsf.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
                     <file>${libs.tomahawk-1.5.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="15">
+                    <file>${libs.myfaces-impl.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
@@ -66,7 +60,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>dpal</foreign-project>
+                <foreign-project>icat-ws</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
