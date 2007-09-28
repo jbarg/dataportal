@@ -62,7 +62,7 @@ public class DataAuthorisationBean extends AbstractRequestBean {
     public void search(ActionEvent event){
         log.trace("Searching for users: "+getSearchString());
         Collection<String> results = null;
-        if(getSearchString().equals("*")) setSearchString("");
+        if(getSearchString().equals("*")) setSearchString("all");
         try {
             results = DataCenterAuthDelegate.getInstance().searchUserDns(getVisit().getSid(), getSearchString());
             //no users found

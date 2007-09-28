@@ -105,6 +105,16 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     private boolean _collapsed;
     
+    /**
+     * Name instrument, this is name instrument,  DLS = Beamline  ISIS = Instrument, CLF = Target Area
+     */
+    private String instrument;
+    
+    /**
+     * Is inv type displayed
+     */
+    private boolean inTypeVisible;
+    
     private static Logger log = Logger.getLogger(Visit.class);
     
     public Visit(){
@@ -165,6 +175,14 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         
         getVisitData().setAdvancedSearchBean(new AdvancedSearchHistoryBean());
         getVisitData().setBasicSearchBean(new BasicSearchHistoryBean());
+        
+        //load resource bundle
+        ResourceBundle facilityResources = ResourceBundle.getBundle("uk.ac.dl.dp.web.messages.facility");
+        try{
+            setInstrument(facilityResources.getString("instrument.name"));
+        } catch(MissingResourceException mre){
+            setInstrument("Instrument");
+        }        
     }
     
     public boolean isAdmin(){
@@ -350,4 +368,11 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.tabIndex = tabIndex;
     }
     
+    public String getInstrument() {
+        return instrument;
+    }
+    
+    public void setInstrument(String instrument) {
+        this.instrument = instrument;
+    }    
 }
