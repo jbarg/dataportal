@@ -306,9 +306,9 @@ public class DownloadMessageBean extends MessageEJBObject implements MessageList
         //org.omg.CORBA.MARSHAL:   vmcid: SUN  minor code: 257 completed: Maybe
         //at com.sun.corba.ee.impl.logging.ORBUtilSystemException.couldNotFindClass(ORBUtilSystemException.java:9684)
         //at com.sun.corba.ee.impl.logging.ORBUtilSystemException.couldNotFindClass(ORBUtilSystemException.java:9699)
-        Collection<uk.ac.dl.srbapi.srb.SRBUrl> properSRBUrls = new ArrayList<uk.ac.dl.srbapi.srb.SRBUrl>();
+        Collection<uk.ac.dl.srbapi.srb.Url> properSRBUrls = new ArrayList<uk.ac.dl.srbapi.srb.Url>();
         for(SRBUrl srbUrl : srbInfo.getSrbUrls()){
-            properSRBUrls.add(new uk.ac.dl.srbapi.srb.SRBUrl(srbUrl.toString()));
+            properSRBUrls.add(new uk.ac.dl.srbapi.srb.Url(srbUrl.toString()));
         }
         
         SRBFileManagerThread man = new SRBFileManagerThread(properSRBUrls, userCred ,true);
