@@ -376,7 +376,8 @@ public class SearchBean extends AbstractRequestBean {
             
             if(!limitedReached.isEmpty()){
                 if(getVisit().getSession().getFacilities().size() == 1){
-                    info("More than the maximum of "+DataPortalConstants.MAX_RESULTS+" results shown was returned from facility: "+limitedReached+". Please refine your query next time.");
+                    //if one, dont need to show this cos the clause below will trigger it
+                    //info("More than the maximum of "+DataPortalConstants.MAX_RESULTS+" results shown was returned from facility: "+limitedReached+". Please refine your query next time.");
                 } else info("More than the maximum of "+DataPortalConstants.MAX_RESULTS+" results shown was returned from facility(s): "+limitedReached+". Please refine your query next time.");
                 
                 log.warn("More than "+DataPortalConstants.MAX_RESULTS+" investigations returned "+investigations.size()+" from facility(s): "+limitedReached);
@@ -389,7 +390,7 @@ public class SearchBean extends AbstractRequestBean {
             if(investigations.size() >= WebConstants.MAXIMIUM_RESULTS){
                 
                 log.warn("More than "+WebConstants.MAXIMIUM_RESULTS+" investigations returned "+investigations.size()+" removing all but "+WebConstants.MAXIMIUM_RESULTS);
-                info("More than the maximum of "+WebConstants.MAXIMIUM_RESULTS+" results shown was returned.  Please refine your query next time.");
+                info("More than the maximum total of "+WebConstants.MAXIMIUM_RESULTS+" dataportal results shown was returned.  Please refine your query next time.");
                 
                 //remove unwanted investigations
                 int i = 0;

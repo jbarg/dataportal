@@ -173,9 +173,9 @@ public class DownloadServlet extends HttpServlet {
                 SRBFileManagerThread man = null;
                 try {
                     //turn array into SRBUrls
-                    Collection<uk.ac.dl.srbapi.srb.SRBUrl> properSRBUrls = new ArrayList<uk.ac.dl.srbapi.srb.SRBUrl>();
+                    Collection<uk.ac.dl.srbapi.srb.Url> properSRBUrls = new ArrayList<uk.ac.dl.srbapi.srb.Url>();
                     for(String properSrbUrl : srbUrl){
-                        properSRBUrls.add(new uk.ac.dl.srbapi.srb.SRBUrl(properSrbUrl));
+                        properSRBUrls.add(new uk.ac.dl.srbapi.srb.Url(properSrbUrl));
                     }
                     man = new SRBFileManagerThread(properSRBUrls,cred);
                     
@@ -339,7 +339,7 @@ public class DownloadServlet extends HttpServlet {
                             log.warn("User: "+visit.getDn()+" is not registered to SRB: "+srbException.getMessage());
                             message = srbException.getMessage();
                         } else {
-                            log.error("User: "+visit.getDn()+" has cannot download : "+man.getSrbURLs(),man.getException());
+                            log.error("User: "+visit.getDn()+" has cannot download : "+man.getURLs(),man.getException());
                             message = "Error downloading data.";
                         }
                     } else {
