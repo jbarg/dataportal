@@ -302,7 +302,7 @@
                 <h:outputText  value="#{invest.instrument}" />                              
                 
             </h:column>
-             <h:column rendered="#{facility_properties['inv.type.visible']}">
+             <h:column rendered="#{visit.invTypeVisible}">
                 <f:facet name="header">
                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="invType" actionListener="#{investigationBean.sortColumn}">
                         
