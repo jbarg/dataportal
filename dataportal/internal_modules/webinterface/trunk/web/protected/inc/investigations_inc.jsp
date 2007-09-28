@@ -6,9 +6,10 @@
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+ 
+ 
 <a4j:region   selfRendered="true" > 
-     <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties" />
-           
+          
     <h:form>
         
        <!-- <a4j:poll id="poll" actionListener="#{investigationBean.dummyAjax}" interval="500" reRender="poll, data" ajaxSingle="true"  enabled="#{!investigationBean.dummyAjaxDone}" />
@@ -225,7 +226,7 @@
                 <f:facet name="header">
                     <%--  <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">--%>
                                                 
-                    <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
+                    <a4j:commandLink reRender="data, props" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
                         <h:outputText value="Name" />
                         <f:param name="column" value="name"/>
                         <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
@@ -290,7 +291,7 @@
                 <f:facet name="header">
                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="instrument" actionListener="#{investigationBean.sortColumn}">
                         
-                        <h:outputText value="#{facility_properties['instrument.name']}" />
+                        <h:outputText value="#{visit.instrument}" />
                         <f:param name="column" value="instrument"/>
                         <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
                         <t:graphicImage id="acstddy" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.instrument}" border="0"/>
@@ -301,7 +302,7 @@
                 <h:outputText  value="#{invest.instrument}" />                              
                 
             </h:column>
-            <h:column rendered="#{facility_properties['inv.type.visible']}">
+             <h:column rendered="#{facility_properties['inv.type.visible']}">
                 <f:facet name="header">
                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="invType" actionListener="#{investigationBean.sortColumn}">
                         
