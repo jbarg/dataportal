@@ -95,7 +95,10 @@ public class DownloadServlet extends HttpServlet {
         
         if(visit == null){
             //user timed out
-            return ;
+            RequestDispatcher dispatcher =
+                    req.getRequestDispatcher("/protected/close.html");
+            if (dispatcher != null) dispatcher.forward(req, response);
+            return ;            
         }
         
         String ID = req.getParameter("url");

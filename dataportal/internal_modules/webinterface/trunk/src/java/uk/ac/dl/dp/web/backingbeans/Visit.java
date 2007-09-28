@@ -113,8 +113,9 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     /**
      * Is inv type displayed
      */
-    private boolean inTypeVisible;
-    
+    private boolean invTypeVisible;
+
+        
     private static Logger log = Logger.getLogger(Visit.class);
     
     public Visit(){
@@ -182,7 +183,12 @@ public class Visit  extends AbstractSessionBean implements Serializable{
             setInstrument(facilityResources.getString("instrument.name"));
         } catch(MissingResourceException mre){
             setInstrument("Instrument");
-        }        
+        }   
+        try{
+            setInvTypeVisible(new Boolean(facilityResources.getString("inv.type.visible")).booleanValue());
+        } catch(Exception mre){
+            setInvTypeVisible(true);
+        }   
     }
     
     public boolean isAdmin(){
@@ -375,4 +381,12 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     public void setInstrument(String instrument) {
         this.instrument = instrument;
     }    
+    
+    public boolean isInvTypeVisible() {
+        return invTypeVisible;
+    }
+
+    public void setInvTypeVisible(boolean invTypeVisible) {
+        this.invTypeVisible = invTypeVisible;
+    }
 }
