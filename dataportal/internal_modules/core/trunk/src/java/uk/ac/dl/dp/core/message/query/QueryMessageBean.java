@@ -111,7 +111,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
                 request.getKeywordQuery().getInvestigationInclude(),
                 request.getKeywordQuery().isFuzzy(),
                 0,
-                DataPortalConstants.MAX_RESULTS);
+                DataPortalConstants.MAX_RESULTS*2);
     }
     
     private Collection<Investigation>  doAdvancedSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception {
@@ -121,7 +121,7 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
         request.getAdvancedSearch().mergeTo(advancedSearchDetails);
         
         return ICATSingleton.getInstance(wsdlLocation).searchByAdvancedPagination(
-                request.getFacilitySessionId(), advancedSearchDetails, 0, DataPortalConstants.MAX_RESULTS);
+                request.getFacilitySessionId(), advancedSearchDetails, 0, DataPortalConstants.MAX_RESULTS*2);
     }
     
     private Collection<Investigation>  doMyDataSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception{
