@@ -6,9 +6,7 @@
             <name>dp_ejb</name>
             <minimum-ant-version>1.6</minimum-ant-version>
             <explicit-platform explicit-source-supported="true"/>
-            <included-library files="1">libs.log4j.classpath</included-library>
-            <included-library files="2">libs.srb-extensions-v2.classpath</included-library>
-            <included-library files="1">reference.dp-coreutil.jar</included-library>
+            <included-library files="2">libs.srb-extensions-v2.1.classpath</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
