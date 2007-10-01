@@ -34,10 +34,8 @@ public class DataPortalConstants {
     /**
      * Max number of results passed to the iCAT API to return from each ICAT
      */
-    public final static int MAX_RESULTS = 50;
-    
-    public static String MYPROXY_USERNAME = "glen";
-    public static String MYPROXY_PASSWORD = "kkkkkk";
+    public final static int MAX_RESULTS = 100;
+        
     
     //allowd imageJ file types
     public final static String[] IMAGEJ_TYPES = {"RAW","TIFF","JPEG","JPG","GIF","BMP","DICOM","FITS","PGM","ZIP","LUT","ROI","TEXT","TXT"};
