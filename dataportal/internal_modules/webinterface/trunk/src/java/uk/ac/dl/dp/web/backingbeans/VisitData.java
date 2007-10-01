@@ -375,7 +375,7 @@ public class VisitData implements Serializable {
     
     /**
      * access methods to search and access Data Sets and file by their unique ID
-     *  FACILITY-INV_ID-DS_ID-DF-ID
+     *  FACILITY-INV_ID-DS_ID-DF_ID
      * ie.  ISIS-23-3-32 for datafile
      * ie.  ISIS-23 for investigation
      */
@@ -394,7 +394,7 @@ public class VisitData implements Serializable {
     
     /**
      * access methods to search and access Data Sets and file by their unique ID
-     * FACILITY-INV_ID-DS_ID-DF-ID
+     * FACILITY-INV_ID-DS_ID-DF_ID
      * ie.  ISIS-23-3-32 for datafile
      * ie.  ISIS-23-3 for dataset
      */
@@ -416,7 +416,7 @@ public class VisitData implements Serializable {
     
     /**
      * access methods to search and access Data Sets and file by their unique I
-     * FACILITY-INV_ID-DS_ID-DF-ID
+     * FACILITY-INV_ID-DS_ID-DF_ID
      * ie.  ISIS-23-3-32 for datafile
      * ie.  ISIS-23-3 for dataset
      */
@@ -525,13 +525,20 @@ public class VisitData implements Serializable {
                 if(dataset.isSelected()){
                     for(Datafile datafile : dataset.getDatafileCollection()){
                         //log.trace("Adding "+datafile.getLocation()+" from datafile: "+datafile.getId()+" for dataset: "+dataset.getId());
-                        if(datafile.getLocation() !=null && !datafile.getLocation().equals("")) urls.add(datafile.getLocation());
+                        if(datafile.getLocation() !=null && !datafile.getLocation().equals("")){
+                            urls.add(datafile.getLocation());
+                            //log.trace("Adding "+datafile.getLocation()+" from datafile: "+datafile.getId()+" for dataset: "+dataset.getId());
+                   
+                        }
                     }
                 }
                 for(Datafile datafile : dataset.getDatafileCollection()){
                     if(datafile.isSelected()){
-                        //log.trace("Adding "+datafile.getLocation()+" from datafile: "+datafile.getId());
-                        if(datafile.getLocation() !=null && !datafile.getLocation().equals("")) urls.add(datafile.getLocation());
+                        
+                        if(datafile.getLocation() !=null && !datafile.getLocation().equals("")){
+                            //log.trace("Adding "+datafile.getLocation()+" from datafile: "+datafile.getId());
+                            urls.add(datafile.getLocation());
+                        }
                     }
                 }
             }

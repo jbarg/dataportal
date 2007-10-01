@@ -96,7 +96,7 @@ public class DownloadServlet extends HttpServlet {
         if(visit == null){
             //user timed out
             RequestDispatcher dispatcher =
-                    req.getRequestDispatcher("/protected/close.html");
+                    req.getRequestDispatcher("/protected/session_timed_out.jsp");
             if (dispatcher != null) dispatcher.forward(req, response);
             return ;            
         }
