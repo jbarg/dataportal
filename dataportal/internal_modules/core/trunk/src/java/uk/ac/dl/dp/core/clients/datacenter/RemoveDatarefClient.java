@@ -35,7 +35,7 @@ public class RemoveDatarefClient {
                 loggingin = true;
                 sless1 = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
                 
-                sid =  sless1.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
+                sid =  sless1.login(null,null,3);
                 System.out.println(sid);
                 
             }

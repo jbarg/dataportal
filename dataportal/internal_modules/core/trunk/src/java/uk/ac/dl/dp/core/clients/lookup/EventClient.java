@@ -38,7 +38,7 @@ public class EventClient {
             
             SessionRemote sless = (SessionRemote) csl.lookup(DataPortalConstants.SESSION);
             
-            String session =  sless.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
+            String session =  sless.login(null, null,3);
             System.out.println("Got session : "+session);
             SessionDTO s = sless.getSession(session);
             

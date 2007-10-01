@@ -46,7 +46,7 @@ public class DataCenterDelegateClient {
             printTime("initial lookup");
             
             //start session
-            String sid  = sd.login(DataPortalConstants.MYPROXY_USERNAME,DataPortalConstants.MYPROXY_PASSWORD,3);
+            String sid  = sd.login(null, null,3);
             log.debug("Started session with sid "+sid);
             printTime("login");
             
