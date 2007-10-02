@@ -71,8 +71,9 @@ public abstract class EJBObject {
             facilityLogFile = facilityResources.getString("facility.name");
         } catch(Exception mre){
             facilityLogFile = "ISIS";
+            System.out.println("Unable to load props file, setting log as  "+facilityLogFile+"\n"+mre);                     
         }
-        
+       
         if(new File(System.getProperty("user.home")+File.separator+"."+facilityLogFile+"-dp-core-log4j.xml").exists()){
             //System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
             PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"."+facilityLogFile+"-dp-core-log4j.xml");
