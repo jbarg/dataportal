@@ -384,15 +384,15 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     
     public void setInstrument(String instrument) {
         this.instrument = instrument;
-        if(instrument.equals("")) {
+        if(instrument == null || instrument.equals("")) {
             this.instrument = null;
         } else{
             List<String> instruments = new ArrayList<String>();
             instruments.add(instrument);
             this.setInstruments(instruments);
         }
-        //  log.trace("Instrument is "+instrument);
-        //log.trace("Instruments is "+instruments);
+         log.trace("Instrument is "+instrument);
+        log.trace("Instruments is "+instruments);
     }
     
     public List<String> getInstruments() {
