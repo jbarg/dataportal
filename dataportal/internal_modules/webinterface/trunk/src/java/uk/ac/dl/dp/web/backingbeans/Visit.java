@@ -10,8 +10,7 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.io.Serializable;
-
-
+import java.net.URL;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
@@ -25,6 +24,7 @@ import uk.ac.dl.dp.coreutil.util.KeywordsFileBean;
 import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
 import uk.ac.dl.dp.web.util.AbstractSessionBean;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
+
 /**
  *
  * @author gjd37
@@ -114,8 +114,19 @@ public class Visit  extends AbstractSessionBean implements Serializable{
      * Is inv type displayed
      */
     private boolean invTypeVisible;
-
-        
+    
+    /**
+     * Hardcoded values of instruments
+     */
+    private List<SelectItem>  instrumentsItems = new ArrayList<SelectItem>();
+    
+    /**
+     * Hardcoded values of instruments
+     */
+    private List<SelectItem>  investigationTypeItems = new ArrayList<SelectItem>();
+    
+    
+    
     private static Logger log = Logger.getLogger(Visit.class);
     
     public Visit(){
@@ -179,16 +190,52 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         
         //load resource bundle
         ResourceBundle facilityResources = ResourceBundle.getBundle("uk.ac.dl.dp.web.messages.facility");
+        
+        Properties props = new Properties();
         try{
             setInstrument(facilityResources.getString("instrument.name"));
-        } catch(MissingResourceException mre){
+        } catch(Exception mre){
             setInstrument("Instrument");
-        }   
+        }
         try{
             setInvTypeVisible(new Boolean(facilityResources.getString("inv.type.visible")).booleanValue());
         } catch(Exception mre){
             setInvTypeVisible(true);
-        }   
+        }
+        
+        //TODO hard code the instruments
+        try{
+            
+            String instrumentList = facilityResources.getString("instrument.list");
+            String[] instruments = instrumentList.split(",");
+            
+            instrumentsItems.add(new SelectItem("",""));
+            for (String instrument : instruments) {
+                //log.trace(instrument);
+                instrumentsItems.add(new SelectItem(instrument,instrument));
+            }
+            
+        } catch(Exception mre){
+            log.warn("Unable to read in instruments", mre);
+            instrumentsItems.add(new SelectItem("error","error"));
+        }
+        
+        //TODO hard code the inv type
+        try{
+            
+            String investigationTypeList = facilityResources.getString("investigation.type.list");
+            String[] types = investigationTypeList.split(",");
+            
+             investigationTypeItems.add(new SelectItem("",""));
+            for (String investigationType : types) {
+               // log.trace(investigationType);               
+                investigationTypeItems.add(new SelectItem(investigationType,investigationType));
+            }
+            
+        } catch(Exception mre){
+            log.warn("Unable to read in investigation type", mre);
+            instrumentsItems.add(new SelectItem("error","error"));
+        }
     }
     
     public boolean isAdmin(){
@@ -380,13 +427,29 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     
     public void setInstrument(String instrument) {
         this.instrument = instrument;
-    }    
+    }
     
     public boolean isInvTypeVisible() {
         return invTypeVisible;
     }
-
+    
     public void setInvTypeVisible(boolean invTypeVisible) {
         this.invTypeVisible = invTypeVisible;
+    }
+    
+    public List<SelectItem> getInstrumentsItems() {
+        return instrumentsItems;
+    }
+    
+    public void setInstrumentsItems(List<SelectItem> instrumentsItems) {
+        this.instrumentsItems = instrumentsItems;
+    }
+    
+    public List<SelectItem> getInvestigationTypeItems() {
+        return investigationTypeItems;
+    }
+    
+    public void setInvestigationTypeItems(List<SelectItem> investigationTypeItems) {
+        this.investigationTypeItems = investigationTypeItems;
     }
 }

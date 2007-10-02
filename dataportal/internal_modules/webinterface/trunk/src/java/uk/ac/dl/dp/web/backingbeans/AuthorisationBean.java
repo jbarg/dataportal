@@ -13,7 +13,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
+import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.delegates.SessionDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.CannotCreateNewUserException;
@@ -75,12 +78,21 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
      * Logs into the Data Portal
      */
     public String login() throws SessionException{
+        //load resource bundle
+         ResourceBundle facilityResources = ResourceBundle.getBundle("uk.ac.dl.dp.web.messages.facility");
+     
+        String facilityLogFile = null;
+        try{                   
+            facilityLogFile = facilityResources.getString("facility.name");
+        } catch(Exception mre){
+            facilityLogFile = "ISIS";
+        }
         //first section, reload log4j
-        if(new File(System.getProperty("user.home")+File.separator+".dp-web-log4j.xml").exists()){
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".dp-core-log4j.xml");
+        if(new File(System.getProperty("user.home")+File.separator+"."+facilityLogFile+"-dp-web-log4j.xml").exists()){
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"."+facilityLogFile+"-dp-web-log4j.xml");
             //log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.xml");
         } else {
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".dp-web-log4j.properties");
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"."+facilityLogFile+"-dp-web-log4j.properties");
             //log.info("Loading "+System.getProperty("user.home")+File.separator+"log4j.properties");
         }
         
@@ -107,7 +119,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             fatal("Database exception");
             log.fatal("Unable to create new user for: "+username,ex);
             //return NavigationConstants.LOGIN_ERROR;
-             return null;
+            return null;
         } catch (LoginMyProxyException ex) {
             //problem with either myproxy or user inserted wrong details.
             //LoginMyEx has be done so the the standard message returns a helpful message about the problem,
@@ -117,7 +129,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
                 log.error("Login error for: "+username+", type: "+ex.getType(),ex);
             } else log.warn("Login error for: "+username+", type: "+ex.getType(),ex);
             //return NavigationConstants.LOGIN_FAILURE;
-             return null;
+            return null;
         } catch (SessionException ex) {
             //some sort of session error, this should not be thrown normally
             error(ex.getMessage());
@@ -133,7 +145,7 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             log.warn("User "+session.getDN()+" has no access to Data Portal");
             error("You have no access to the Data Portal");
             //return NavigationConstants.LOGIN_FAILURE;
-             return null;
+            return null;
             
         }
         ////End of:  remove this////
