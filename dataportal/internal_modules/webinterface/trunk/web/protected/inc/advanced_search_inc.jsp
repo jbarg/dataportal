@@ -354,9 +354,13 @@
                 <h:outputText value="Investigation type:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <h:inputText styleClass="text" id="invTypej_id_1" size="20" required="false" value="#{advancedSearchBean.invType}">
+            <h:selectOneMenu id="invTypej_id_1" required="false" value="#{advancedSearchBean.invType}" >                           
+                <f:selectItems value="#{visit.investigationTypeItems}" />                           
+            </h:selectOneMenu>    
+            
+         <%--   <h:inputText styleClass="text" id="invTypej_id_1" size="20" required="false" value="#{advancedSearchBean.invType}">
                 
-            </h:inputText>        
+            </h:inputText>      --%>  
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
@@ -384,9 +388,13 @@
                 <h:outputText value="Instrument: " style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <h:inputText styleClass="text" id="instrumentj_id_1" size="20" required="false" value="#{advancedSearchBean.instrument}">
+            <h:selectOneMenu id="instrumentj_id_1" required="false" value="#{advancedSearchBean.instrument}" >                           
+                <f:selectItems value="#{visit.instrumentsItems}" />                           
+            </h:selectOneMenu>           
+            
+            <%-- <h:inputText styleClass="text" id="instrumentj_id_1" size="20" required="false" value="#{advancedSearchBean.instrument}">
                 
-            </h:inputText>        
+            </h:inputText>  --%>
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"

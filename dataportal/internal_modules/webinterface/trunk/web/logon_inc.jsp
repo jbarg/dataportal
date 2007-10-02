@@ -3,6 +3,8 @@
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <h:form id="userform">
     
+     <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties" />
+  
     <br />
     
     
@@ -21,7 +23,7 @@
         
         <h:outputLabel for="Usernamej_id_1">
             <%--<h:outputText styleClass="body" value="Federal ID: "/>--%>
-            <h:outputText styleClass="body" value="Username: "/>
+            <h:outputText styleClass="body" value="#{facility_properties['logon.username']}: "/>
         </h:outputLabel  >
         
         <h:inputText styleClass="text" id="Usernamej_id_1" size="20" required="true" value="#{authorisationBean.username}">
@@ -45,11 +47,11 @@
     </h:panelGrid>
     
     <br />
-    <h:outputText  styleClass="nodeFolder" value="Goto "/> 
-    <h:commandLink  onclick="window.open('http://tiber.dl.ac.uk:8080/myproxy'); return false;" target="_blank">
+    <h:outputText rendered="#{facility_properties['myproxy.upload.visible']}" styleClass="nodeFolder" value="Goto "/> 
+    <h:commandLink rendered="#{facility_properties['myproxy.upload.visible']}" onclick="window.open('http://tiber.dl.ac.uk:8080/myproxy'); return false;" target="_blank">
         <h:outputText style="color:blue" styleClass="nodeFolder" value="MyProxy Upload Home"/>
     </h:commandLink> 
-    <h:outputText  styleClass="nodeFolder" value=" to upload credentials" />
+    <h:outputText rendered="#{facility_properties['myproxy.upload.visible']}" styleClass="nodeFolder" value=" to upload credentials" />
     
     
     
