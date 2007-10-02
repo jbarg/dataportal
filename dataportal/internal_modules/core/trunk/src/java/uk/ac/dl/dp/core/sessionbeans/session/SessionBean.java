@@ -27,6 +27,7 @@ import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
 import uk.ac.dl.dp.coreutil.entity.DpUserPreference;
 import uk.ac.dl.dp.coreutil.entity.FacilitySession;
+import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.entity.ProxyServers;
 
 import uk.ac.dl.dp.coreutil.entity.User;
@@ -56,6 +57,7 @@ import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
 
 import uk.ac.dl.dp.coreutil.util.UserUtil;
 import uk.ac.dl.dp.coreutil.util.cog.DelegateCredential;
+import uk.ac.dp.icatws.ICATSingleton;
 
 /**
  * This is the bean class for the SessionBean enterprise bean.
@@ -135,7 +137,7 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         //need to remove the facility from facility list
         for(FacilitySession fs : sessionUtil.getSession().getFacilitySessionCollection()){
             for(FacilityDTO facDTO : facilities){
-                if(fs.getFacilityName().equals(facDTO.getFacility()) && fs.isLoggedIn()){                    
+                if(fs.getFacilityName().equals(facDTO.getFacility()) && fs.isLoggedIn()){
                     facilitiesToAdd.add(facDTO);
                 }
             }
@@ -405,7 +407,8 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         //send logout event
         sendMDBLocal.sendEvent(sid,DPEvent.LOG_OFF,"Logged off");
         
-        Session session = new SessionUtil(sid,em).getSession();
+        SessionUtil sessionUtil = new SessionUtil(sid,em);
+        Session session = sessionUtil.getSession();
         //remove from object model
         User user = new UserUtil(sid,em).getUser();
         user.getSession().remove(session);
@@ -413,12 +416,22 @@ public class SessionBean extends SessionEJBObject  implements SessionRemote, Ses
         //remove from DB
         em.remove(session);
         
-        //clear query cache
-        //ts.removeSessionFromQueryCache(sid);
+        //send log out to all ICAT API
         
+        //get a list of facilites
+        Collection<ModuleLookup> facilities =  lookup.getFacilityInfo(DPFacilityType.WRAPPER);
+                
+        for(FacilitySession fs : session.getFacilitySessionCollection()){
+            for(ModuleLookup facDTO : facilities){
+                if(fs.getFacilityName().equals(facDTO.getFacility()) && fs.isLoggedIn()){
+                    //logout of facility                     
+                    boolean loggedOut = ICATSingleton.getInstance(facDTO.getWsdlLocation()).logout(fs.getFacilitySessionId());
+                    log.info("Logging out of "+facDTO.getFacility()+" with facilitySID: "+fs.getFacilitySessionId()+" ?"+loggedOut);                   
+                }
+            }            
+        }        
         
-        
-        log.info("Ended session: "+sid);
+        log.info("Ended dataportal session: "+sid);
         return true;
     }
     
