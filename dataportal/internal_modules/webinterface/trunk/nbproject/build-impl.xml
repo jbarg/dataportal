@@ -439,16 +439,20 @@
     </target>
     <target name="do-dist" depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest"/>
     <target name="library-inclusion-in-manifest" depends="init" if="dist.ear.dir">
-        <basename property="included.lib.libs.srb-extensions-v2.classpath.2" file="${libs.srb-extensions-v2.classpath.libfile.2}"/>
-        <basename property="included.lib.libs.srb-extensions-v2.classpath.1" file="${libs.srb-extensions-v2.classpath.libfile.1}"/>
-        <copy-ear-war file="${libs.srb-extensions-v2.classpath.libfile.2}" propname="included.lib.libs.srb-extensions-v2.classpath.2.X"/>
-        <copy-ear-war file="${libs.srb-extensions-v2.classpath.libfile.1}" propname="included.lib.libs.srb-extensions-v2.classpath.1.X"/>
+        <basename property="included.lib.libs.log4j.classpath" file="${libs.log4j.classpath}"/>
+        <copy-ear-war file="${libs.log4j.classpath}" propname="included.lib.libs.log4j.classpath.X"/>
         <basename property="included.lib.libs.bp-autocomplete.classpath.3" file="${libs.bp-autocomplete.classpath.libfile.3}"/>
         <basename property="included.lib.libs.bp-autocomplete.classpath.2" file="${libs.bp-autocomplete.classpath.libfile.2}"/>
         <basename property="included.lib.libs.bp-autocomplete.classpath.1" file="${libs.bp-autocomplete.classpath.libfile.1}"/>
         <copy-ear-war file="${libs.bp-autocomplete.classpath.libfile.3}" propname="included.lib.libs.bp-autocomplete.classpath.3.X"/>
         <copy-ear-war file="${libs.bp-autocomplete.classpath.libfile.2}" propname="included.lib.libs.bp-autocomplete.classpath.2.X"/>
         <copy-ear-war file="${libs.bp-autocomplete.classpath.libfile.1}" propname="included.lib.libs.bp-autocomplete.classpath.1.X"/>
+        <basename property="included.lib.libs.srb-extensions-v2.1.classpath.2" file="${libs.srb-extensions-v2.1.classpath.libfile.2}"/>
+        <basename property="included.lib.libs.srb-extensions-v2.1.classpath.1" file="${libs.srb-extensions-v2.1.classpath.libfile.1}"/>
+        <copy-ear-war file="${libs.srb-extensions-v2.1.classpath.libfile.2}" propname="included.lib.libs.srb-extensions-v2.1.classpath.2.X"/>
+        <copy-ear-war file="${libs.srb-extensions-v2.1.classpath.libfile.1}" propname="included.lib.libs.srb-extensions-v2.1.classpath.1.X"/>
+        <basename property="included.lib.reference.dp-coreutil.jar" file="${reference.dp-coreutil.jar}"/>
+        <copy-ear-war file="${reference.dp-coreutil.jar}" propname="included.lib.reference.dp-coreutil.jar.X"/>
         <basename property="included.lib.libs.jboss-ajax4jsf.classpath.2" file="${libs.jboss-ajax4jsf.classpath.libfile.2}"/>
         <basename property="included.lib.libs.jboss-ajax4jsf.classpath.1" file="${libs.jboss-ajax4jsf.classpath.libfile.1}"/>
         <copy-ear-war file="${libs.jboss-ajax4jsf.classpath.libfile.2}" propname="included.lib.libs.jboss-ajax4jsf.classpath.2.X"/>
@@ -485,18 +489,36 @@
         <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.3}" propname="included.lib.libs.myfaces-impl.classpath.3.X"/>
         <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.2}" propname="included.lib.libs.myfaces-impl.classpath.2.X"/>
         <copy-ear-war file="${libs.myfaces-impl.classpath.libfile.1}" propname="included.lib.libs.myfaces-impl.classpath.1.X"/>
+        <basename property="included.lib.libs.cog-kit-without-jce.classpath.8" file="${libs.cog-kit-without-jce.classpath.libfile.8}"/>
+        <basename property="included.lib.libs.cog-kit-without-jce.classpath.7" file="${libs.cog-kit-without-jce.classpath.libfile.7}"/>
+        <basename property="included.lib.libs.cog-kit-without-jce.classpath.6" file="${libs.cog-kit-without-jce.classpath.libfile.6}"/>
+        <basename property="included.lib.libs.cog-kit-without-jce.classpath.5" file="${libs.cog-kit-without-jce.classpath.libfile.5}"/>
+        <basename property="included.lib.libs.cog-kit-without-jce.classpath.4" file="${libs.cog-kit-without-jce.classpath.libfile.4}"/>
+        <basename property="included.lib.libs.cog-kit-without-jce.classpath.3" file="${libs.cog-kit-without-jce.classpath.libfile.3}"/>
+        <basename property="included.lib.libs.cog-kit-without-jce.classpath.2" file="${libs.cog-kit-without-jce.classpath.libfile.2}"/>
+        <basename property="included.lib.libs.cog-kit-without-jce.classpath.1" file="${libs.cog-kit-without-jce.classpath.libfile.1}"/>
+        <copy-ear-war file="${libs.cog-kit-without-jce.classpath.libfile.8}" propname="included.lib.libs.cog-kit-without-jce.classpath.8.X"/>
+        <copy-ear-war file="${libs.cog-kit-without-jce.classpath.libfile.7}" propname="included.lib.libs.cog-kit-without-jce.classpath.7.X"/>
+        <copy-ear-war file="${libs.cog-kit-without-jce.classpath.libfile.6}" propname="included.lib.libs.cog-kit-without-jce.classpath.6.X"/>
+        <copy-ear-war file="${libs.cog-kit-without-jce.classpath.libfile.5}" propname="included.lib.libs.cog-kit-without-jce.classpath.5.X"/>
+        <copy-ear-war file="${libs.cog-kit-without-jce.classpath.libfile.4}" propname="included.lib.libs.cog-kit-without-jce.classpath.4.X"/>
+        <copy-ear-war file="${libs.cog-kit-without-jce.classpath.libfile.3}" propname="included.lib.libs.cog-kit-without-jce.classpath.3.X"/>
+        <copy-ear-war file="${libs.cog-kit-without-jce.classpath.libfile.2}" propname="included.lib.libs.cog-kit-without-jce.classpath.2.X"/>
+        <copy-ear-war file="${libs.cog-kit-without-jce.classpath.libfile.1}" propname="included.lib.libs.cog-kit-without-jce.classpath.1.X"/>
         <mkdir dir="${build.web.dir.real}/META-INF"/>
         <manifest file="${build.web.dir.real}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.libs.srb-extensions-v2.classpath.1.X} ${included.lib.libs.srb-extensions-v2.classpath.2.X} ${included.lib.libs.bp-autocomplete.classpath.1.X} ${included.lib.libs.bp-autocomplete.classpath.2.X} ${included.lib.libs.bp-autocomplete.classpath.3.X} ${included.lib.libs.jboss-ajax4jsf.classpath.1.X} ${included.lib.libs.jboss-ajax4jsf.classpath.2.X} ${included.lib.libs.tomahawk-1.5.classpath} ${included.lib.libs.myfaces-impl.classpath.1.X} ${included.lib.libs.myfaces-impl.classpath.2.X} ${included.lib.libs.myfaces-impl.classpath.3.X} ${included.lib.libs.myfaces-impl.classpath.4.X} ${included.lib.libs.myfaces-impl.classpath.5.X} ${included.lib.libs.myfaces-impl.classpath.6.X} ${included.lib.libs.myfaces-impl.classpath.7.X} ${included.lib.libs.myfaces-impl.classpath.8.X} ${included.lib.libs.myfaces-impl.classpath.9.X} ${included.lib.libs.myfaces-impl.classpath.10.X} ${included.lib.libs.myfaces-impl.classpath.11.X} ${included.lib.libs.myfaces-impl.classpath.12.X} ${included.lib.libs.myfaces-impl.classpath.13.X} ${included.lib.libs.myfaces-impl.classpath.14.X} ${included.lib.libs.myfaces-impl.classpath.15.X} "/>
+            <attribute name="Class-Path" value="${included.lib.libs.log4j.classpath} ${included.lib.libs.bp-autocomplete.classpath.1.X} ${included.lib.libs.bp-autocomplete.classpath.2.X} ${included.lib.libs.bp-autocomplete.classpath.3.X} ${included.lib.libs.srb-extensions-v2.1.classpath.1.X} ${included.lib.libs.srb-extensions-v2.1.classpath.2.X} ${included.lib.reference.dp-coreutil.jar} ${included.lib.libs.jboss-ajax4jsf.classpath.1.X} ${included.lib.libs.jboss-ajax4jsf.classpath.2.X} ${included.lib.libs.tomahawk-1.5.classpath} ${included.lib.libs.myfaces-impl.classpath.1.X} ${included.lib.libs.myfaces-impl.classpath.2.X} ${included.lib.libs.myfaces-impl.classpath.3.X} ${included.lib.libs.myfaces-impl.classpath.4.X} ${included.lib.libs.myfaces-impl.classpath.5.X} ${included.lib.libs.myfaces-impl.classpath.6.X} ${included.lib.libs.myfaces-impl.classpath.7.X} ${included.lib.libs.myfaces-impl.classpath.8.X} ${included.lib.libs.myfaces-impl.classpath.9.X} ${included.lib.libs.myfaces-impl.classpath.10.X} ${included.lib.libs.myfaces-impl.classpath.11.X} ${included.lib.libs.myfaces-impl.classpath.12.X} ${included.lib.libs.myfaces-impl.classpath.13.X} ${included.lib.libs.myfaces-impl.classpath.14.X} ${included.lib.libs.myfaces-impl.classpath.15.X} ${included.lib.libs.cog-kit-without-jce.classpath.1.X} ${included.lib.libs.cog-kit-without-jce.classpath.2.X} ${included.lib.libs.cog-kit-without-jce.classpath.3.X} ${included.lib.libs.cog-kit-without-jce.classpath.4.X} ${included.lib.libs.cog-kit-without-jce.classpath.5.X} ${included.lib.libs.cog-kit-without-jce.classpath.6.X} ${included.lib.libs.cog-kit-without-jce.classpath.7.X} ${included.lib.libs.cog-kit-without-jce.classpath.8.X} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
     <target name="library-inclusion-in-archive" depends="init" unless="dist.ear.dir">
-        <copy file="${libs.srb-extensions-v2.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
-        <copy file="${libs.srb-extensions-v2.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.log4j.classpath}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.bp-autocomplete.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.bp-autocomplete.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.bp-autocomplete.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.srb-extensions-v2.1.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.srb-extensions-v2.1.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${reference.dp-coreutil.jar}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.jboss-ajax4jsf.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.jboss-ajax4jsf.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.tomahawk-1.5.classpath}" todir="${build.web.dir.real}/WEB-INF/lib"/>
@@ -515,6 +537,14 @@
         <copy file="${libs.myfaces-impl.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.myfaces-impl.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
         <copy file="${libs.myfaces-impl.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.cog-kit-without-jce.classpath.libfile.8}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.cog-kit-without-jce.classpath.libfile.7}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.cog-kit-without-jce.classpath.libfile.6}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.cog-kit-without-jce.classpath.libfile.5}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.cog-kit-without-jce.classpath.libfile.4}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.cog-kit-without-jce.classpath.libfile.3}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.cog-kit-without-jce.classpath.libfile.2}" todir="${build.web.dir.real}/WEB-INF/lib"/>
+        <copy file="${libs.cog-kit-without-jce.classpath.libfile.1}" todir="${build.web.dir.real}/WEB-INF/lib"/>
     </target>
     <target name="do-ear-dist" depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest">
         <dirname property="dist.jar.dir" file="${dist.ear.war}"/>
