@@ -10,6 +10,10 @@
 package uk.ac.dl.dp.core.sessionbeans;
 
 import java.io.File;
+import java.net.URL;
+import java.util.MissingResourceException;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
@@ -59,14 +63,24 @@ public abstract class EJBObject {
     
     @PostConstruct
     public void init(){
-        if(new File(System.getProperty("user.home")+File.separator+".dp-core-log4j.xml").exists()){
+        //load resource bundle
+        ResourceBundle facilityResources = ResourceBundle.getBundle("uk.ac.dl.dp.core.messages.facility");
+        
+        String facilityLogFile = null;
+        try{
+            facilityLogFile = facilityResources.getString("facility.name");
+        } catch(Exception mre){
+            facilityLogFile = "ISIS";
+        }
+        
+        if(new File(System.getProperty("user.home")+File.separator+"."+facilityLogFile+"-dp-core-log4j.xml").exists()){
             //System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".dp-core-log4j.xml");
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"."+facilityLogFile+"-dp-core-log4j.xml");
             //log.trace("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.xml");
             
         } else {
             //System.out.println("Loading log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.properties");
-            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+".dp-core-log4j.properties");
+            PropertyConfigurator.configure(System.getProperty("user.home")+File.separator+"."+facilityLogFile+"-dp-core-log4j.properties");
             //log.trace("Loaded log4j properties from : "+System.getProperty("user.home")+File.separator+".log4j.properties");
             
         }
@@ -89,13 +103,13 @@ public abstract class EJBObject {
         StringBuilder builder = new StringBuilder();
         
         builder.append(className+"."+methodName+"(");
-         
+        
         try {
             int i = 1;
             if(className.indexOf("admin") != -1) {
                 log.trace("Admin method called");
                 builder.append(target);
-            } else if(args != null){                
+            } else if(args != null){
                 for(Object arg : args){
                     if(arg == null){
                         log.trace("Cannot pass null into argument "+i+" into: "+className+"."+methodName+"() method.");
