@@ -11,23 +11,22 @@
                 </library>
                 <library files="1">
                     <file>${libs.log4j.classpath}</file>
-                </library>
-                <library files="2">
-                    <file>${libs.srb-extensions-v2.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="3">
                     <file>${libs.bp-autocomplete.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+                <library files="2">
+                    <file>${libs.srb-extensions-v2.1.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
                 <library files="1">
                     <file>${reference.dp-coreutil.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
                     <file>${reference.icat-ws.jar}</file>
-                </library>
-                <library files="7">
-                    <file>${libs.dp_cogkit.classpath}</file>
                 </library>
                 <library files="2">
                     <file>${libs.jboss-ajax4jsf.classpath}</file>
@@ -40,6 +39,13 @@
                 <library files="15">
                     <file>${libs.myfaces-impl.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="8">
+                    <file>${libs.cog-kit-without-jce.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${libs.jce-security-120.classpath}</file>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
