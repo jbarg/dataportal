@@ -212,14 +212,14 @@ public class Visit  extends AbstractSessionBean implements Serializable{
             instrumentsItems.add(new SelectItem("",""));
             for (String instrument : instruments) {
                 //log.trace(instrument);
-                instrumentsItems.add(new SelectItem(instrument,instrument));
+               instrumentsItems.add(new SelectItem(instrument,instrument));
             }
             
         } catch(Exception mre){
             log.warn("Unable to read in instruments", mre);
             instrumentsItems.add(new SelectItem("error","error"));
         }
-        
+       
         //TODO hard code the inv type
         try{
             
@@ -228,8 +228,10 @@ public class Visit  extends AbstractSessionBean implements Serializable{
             
              investigationTypeItems.add(new SelectItem("",""));
             for (String investigationType : types) {
-               // log.trace(investigationType);               
-                investigationTypeItems.add(new SelectItem(investigationType,investigationType));
+               // log.trace(investigationType); 
+                int index = investigationType.indexOf("_");
+                if(index != -1)  investigationTypeItems.add(new SelectItem(investigationType,investigationType.substring(0,index)));
+                else investigationTypeItems.add(new SelectItem(investigationType,investigationType));
             }
             
         } catch(Exception mre){
