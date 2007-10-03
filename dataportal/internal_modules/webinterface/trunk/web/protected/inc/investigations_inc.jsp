@@ -291,7 +291,7 @@
                 <f:facet name="header">
                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="instrument" actionListener="#{investigationBean.sortColumn}">
                         
-                        <h:outputText value="#{visit.instrument}" />
+                        <h:outputText value="#{visit.customisation.instrument}" />
                         <f:param name="column" value="instrument"/>
                         <%--   <c:if test="${requestScope.investigationBean.sort == 'type'}" >--%>
                         <t:graphicImage id="acstddy" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.instrument}" border="0"/>
@@ -302,7 +302,7 @@
                 <h:outputText  value="#{invest.instrument}" />                              
                 
             </h:column>
-             <h:column rendered="#{visit.invTypeVisible}">
+             <h:column rendered="#{visit.customisation.invTypeVisible}">
                 <f:facet name="header">
                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="invType" actionListener="#{investigationBean.sortColumn}">
                         
