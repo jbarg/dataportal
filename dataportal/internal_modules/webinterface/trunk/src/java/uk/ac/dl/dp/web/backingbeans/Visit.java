@@ -23,6 +23,7 @@ import uk.ac.dl.dp.coreutil.util.DPEvent;
 import uk.ac.dl.dp.coreutil.util.KeywordsFileBean;
 import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
 import uk.ac.dl.dp.web.util.AbstractSessionBean;
+import uk.ac.dl.dp.web.util.Customisation;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
 
 /**
@@ -106,25 +107,9 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     private boolean _collapsed;
     
     /**
-     * Name instrument, this is name instrument,  DLS = Beamline  ISIS = Instrument, CLF = Target Area
+     * Customisations
      */
-    private String instrument;
-    
-    /**
-     * Is inv type displayed
-     */
-    private boolean invTypeVisible;
-    
-    /**
-     * Hardcoded values of instruments
-     */
-    private List<SelectItem>  instrumentsItems = new ArrayList<SelectItem>();
-    
-    /**
-     * Hardcoded values of instruments
-     */
-    private List<SelectItem>  investigationTypeItems = new ArrayList<SelectItem>();
-    
+    private Customisation customisation;
     
     
     private static Logger log = Logger.getLogger(Visit.class);
@@ -189,55 +174,12 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         getVisitData().setBasicSearchBean(new BasicSearchHistoryBean());
         
         //load resource bundle
-        ResourceBundle facilityResources = ResourceBundle.getBundle("uk.ac.dl.dp.web.messages.facility");
-        
-        Properties props = new Properties();
         try{
-            setInstrument(facilityResources.getString("instrument.name"));
-        } catch(Exception mre){
-            setInstrument("Instrument");
-        }
-        try{
-            setInvTypeVisible(new Boolean(facilityResources.getString("inv.type.visible")).booleanValue());
-        } catch(Exception mre){
-            setInvTypeVisible(true);
+            customisation = new Customisation();
+        } catch(Exception ex){
+            log.warn("Error reading in facility.properties file", ex);
         }
         
-        //TODO hard code the instruments
-        try{
-            
-            String instrumentList = facilityResources.getString("instrument.list");
-            String[] instruments = instrumentList.split(",");
-            
-            instrumentsItems.add(new SelectItem("",""));
-            for (String instrument : instruments) {
-                //log.trace(instrument);
-               instrumentsItems.add(new SelectItem(instrument,instrument));
-            }
-            
-        } catch(Exception mre){
-            log.warn("Unable to read in instruments", mre);
-            instrumentsItems.add(new SelectItem("error","error"));
-        }
-       
-        //TODO hard code the inv type
-        try{
-            
-            String investigationTypeList = facilityResources.getString("investigation.type.list");
-            String[] types = investigationTypeList.split(",");
-            
-             investigationTypeItems.add(new SelectItem("",""));
-            for (String investigationType : types) {
-               // log.trace(investigationType); 
-                int index = investigationType.indexOf("_");
-                if(index != -1)  investigationTypeItems.add(new SelectItem(investigationType,investigationType.substring(0,index)));
-                else investigationTypeItems.add(new SelectItem(investigationType,investigationType));
-            }
-            
-        } catch(Exception mre){
-            log.warn("Unable to read in investigation type", mre);
-            instrumentsItems.add(new SelectItem("error","error"));
-        }
     }
     
     public boolean isAdmin(){
@@ -423,35 +365,11 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         this.tabIndex = tabIndex;
     }
     
-    public String getInstrument() {
-        return instrument;
+    public Customisation getCustomisation() {
+        return customisation;
     }
     
-    public void setInstrument(String instrument) {
-        this.instrument = instrument;
-    }
-    
-    public boolean isInvTypeVisible() {
-        return invTypeVisible;
-    }
-    
-    public void setInvTypeVisible(boolean invTypeVisible) {
-        this.invTypeVisible = invTypeVisible;
-    }
-    
-    public List<SelectItem> getInstrumentsItems() {
-        return instrumentsItems;
-    }
-    
-    public void setInstrumentsItems(List<SelectItem> instrumentsItems) {
-        this.instrumentsItems = instrumentsItems;
-    }
-    
-    public List<SelectItem> getInvestigationTypeItems() {
-        return investigationTypeItems;
-    }
-    
-    public void setInvestigationTypeItems(List<SelectItem> investigationTypeItems) {
-        this.investigationTypeItems = investigationTypeItems;
+    public void setCustomisation(Customisation customisation) {
+        this.customisation = customisation;
     }
 }
