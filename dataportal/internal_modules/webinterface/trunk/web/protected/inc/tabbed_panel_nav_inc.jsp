@@ -276,7 +276,7 @@
     </h:outputLabel>
     
     <h:selectOneMenu id="invTypej_id_1" required="false" value="#{visit.visitData.advancedSearchBean.invType}" >                           
-        <f:selectItems value="#{visit.investigationTypeItems}" />                           
+        <f:selectItems value="#{visit.customisation.investigationTypeItems}" />                           
     </h:selectOneMenu> 
     
     <%--        <h:inputText styleClass="text" id="invTypej_id_1" size="14" required="false" value="#{visit.visitData.advancedSearchBean.invType}">
@@ -295,7 +295,7 @@
     </h:outputLabel>
     
     <h:selectOneMenu id="instrumentj_id_1" required="false" value="#{visit.visitData.advancedSearchBean.instrument}" >                           
-                <f:selectItems value="#{visit.instrumentsItems}" />                           
+                <f:selectItems value="#{visit.customisation.instrumentsItems}" />                           
             </h:selectOneMenu> 
             
   <%--  <h:inputText styleClass="text" id="instrumentj_id_1" size="14" required="false" value="#{visit.visitData.advancedSearchBean.instrument}">

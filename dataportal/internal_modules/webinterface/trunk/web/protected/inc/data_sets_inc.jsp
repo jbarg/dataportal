@@ -221,7 +221,7 @@
                                     <f:param name="id" value="#{node.identifier}"/>             
                                 </h:commandLink>
                                 
-                                <h:outputText id="text891" value=" (#{node.childCount-3})" styleClass="childCount" rendered="#{!empty node.children}"/>
+                                <h:outputText id="text891" value=" (#{node.childCount-4})" styleClass="childCount" rendered="#{!empty node.children}"/>
                                 <h:outputText value="    " />
                                  
                                 <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
@@ -246,7 +246,7 @@
                                 <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                 <h:outputText id="text90noread" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                 
-                                <h:outputText id="text891noread" value=" (#{node.childCount-3})" styleClass="childCount" rendered="#{!empty node.children}"/>
+                                <h:outputText id="text891noread" value=" (#{node.childCount-4})" styleClass="childCount" rendered="#{!empty node.children}"/>
                                 <h:outputText value="    " />
                                 
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
@@ -622,7 +622,7 @@
                                 <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                 <h:outputText id="text923230noread" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                 
-                                <h:outputText id="text8232391noread" value=" (#{node.childCount-3})" styleClass="childCount" rendered="#{!empty node.children}"/>
+                                <h:outputText id="text8232391noread" value=" (#{node.childCount-4})" styleClass="childCount" rendered="#{!empty node.children}"/>
                                 <h:outputText value="    " />
                                 
                                 <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
