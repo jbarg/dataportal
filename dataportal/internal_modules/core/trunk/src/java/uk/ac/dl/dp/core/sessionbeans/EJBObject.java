@@ -64,11 +64,12 @@ public abstract class EJBObject {
     @PostConstruct
     public void init(){
         //load resource bundle
-        ResourceBundle facilityResources = ResourceBundle.getBundle("uk.ac.dl.dp.core.messages.facility");
-        
+        URL url = this.getClass().getResource("/uk/ac/dl/dp/core/messages/facility.properties");
+        Properties props = new Properties();
         String facilityLogFile = null;
         try{
-            facilityLogFile = facilityResources.getString("facility.name");
+            props.load(url.openStream());
+            facilityLogFile = props.getProperty("facility.name");
         } catch(Exception mre){
             facilityLogFile = "ISIS";
             System.out.println("Unable to load props file, setting log as  "+facilityLogFile+"\n"+mre);                     
