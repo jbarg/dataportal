@@ -3,7 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <h:form id="userform">
     
-     <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties" />
+     <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties"  />
   
     <br />
     
