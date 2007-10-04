@@ -11,9 +11,7 @@ package uk.ac.dl.dp.core.sessionbeans;
 
 import java.io.File;
 import java.net.URL;
-import java.util.MissingResourceException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
