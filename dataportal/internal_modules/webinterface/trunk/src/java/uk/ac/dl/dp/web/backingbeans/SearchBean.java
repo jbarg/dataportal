@@ -307,10 +307,17 @@ public class SearchBean extends AbstractRequestBean {
         return getQueryResults(query_request, false);
     }
     
-    /**
+     /**
      * Mydata search makes the DP show a different message if no results
      */
     public String getQueryResults(QueryRequest query_request, boolean  myData) {
+        return getQueryResults(query_request, myData, WebConstants.MAXIMIUM_SEARCH_TIME);
+    }
+    
+    /**
+     * Mydata search makes the DP show a different message if no results
+     */
+    public String getQueryResults(QueryRequest query_request, boolean  myData, int timeout) {
         
         QueryDelegate qd = QueryDelegate.getInstance();
         
@@ -327,7 +334,7 @@ public class SearchBean extends AbstractRequestBean {
                 }
                 
                 //if more than max wait and not finished
-                if(((new Date().getTime() - time)/1000) > WebConstants.MAXIMIUM_SEARCH_TIME) {
+                if(((new Date().getTime() - time)/1000) > timeout) {
                     //if nothing returned display message to user, otherwise show results (break loop)
                     if(facs2 == null || facs2.size() == 0 ){
                         log.debug("Query timed out, no results found. Please refine your query.");
