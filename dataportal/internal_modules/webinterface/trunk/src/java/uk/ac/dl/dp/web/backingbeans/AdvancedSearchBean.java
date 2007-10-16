@@ -13,10 +13,15 @@ import org.apache.log4j.*;
 import java.util.*;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.validator.ValidatorException;
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
@@ -74,6 +79,11 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     private String sample;
     
     /**
+     * Investigations datafile name
+     */
+    private String datafileName;
+    
+    /**
      * Investigation investigators
      */
     private String investigator;
@@ -84,6 +94,25 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     
     //default to EXACT
     private String likeExpression = "EXACT";
+    
+    /**
+     * Investigation run start number
+     */
+    private String runStart;
+    
+    /**
+     * Investigation run end number
+     */
+    private String runEnd;
+    
+    /**
+     * Dates
+     */
+    private Date firstDate;
+    private Date secondDate;
+    private UIInput runStartUI;
+    private UIInput calendarFirst;
+    private UIInput calendarSecond;
     
     /** Creates a new instance of AdvancedSearchBean */
     public AdvancedSearchBean() {
@@ -96,7 +125,10 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     public void setKeyword(String keyword){
         List<String> keywords = new ArrayList<String>();
         //if not emat, split, if then put into one collection size
-        if(!getVisit().isCurrentFacilitysTopics()){
+        if(keyword == null || keyword.equals("")){
+            //do nothing
+            this.setKeywords(null);
+        } else if(!getVisit().isCurrentFacilitysTopics()){
             String[] keys = keyword.split(" ");
             for(String k : keys){
                 if(!k.trim().equals("")) keywords.add(k.trim());
@@ -150,6 +182,14 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             advancedSearchHistoryBean.setInvName(getVisitData().getAdvancedSearchBean().getInvName());
             advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
             
+            //new stuff
+            advancedSearchHistoryBean.setDatafileName(getVisitData().getAdvancedSearchBean().getDatafileName());
+            advancedSearchHistoryBean.setRunEnd(getVisitData().getAdvancedSearchBean().getRunEnd());
+            advancedSearchHistoryBean.setRunStart(getVisitData().getAdvancedSearchBean().getRunStart());
+            advancedSearchHistoryBean.setSecondDate(getVisitData().getAdvancedSearchBean().getSecondDate());
+            advancedSearchHistoryBean.setFirstDate(getVisitData().getAdvancedSearchBean().getFirstDate());
+            advancedSearchHistoryBean.setInvNumber(getVisitData().getAdvancedSearchBean().getInvNumber());
+            
             //create advanced search bean
             AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO();
             asdDTO.setExperimentNumber(getVisitData().getAdvancedSearchBean().getInvNumber());
@@ -168,6 +208,15 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             asdDTO.setInvestigationType(getVisitData().getAdvancedSearchBean().getInvType());
             asdDTO.setFuzzy(fuzzy);
             asdDTO.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
+            
+            //new stuff
+            asdDTO.setDatafileName(getVisitData().getAdvancedSearchBean().getDatafileName());
+            if(getVisitData().getAdvancedSearchBean().getRunEnd() != null) asdDTO.setRunEnd(new Double(getVisitData().getAdvancedSearchBean().getRunEnd()));
+            if(getVisitData().getAdvancedSearchBean().getRunStart() != null)asdDTO.setRunStart(new Double(getVisitData().getAdvancedSearchBean().getRunStart()));
+            asdDTO.setExperimentNumber(getVisitData().getAdvancedSearchBean().getInvNumber());
+            if(getVisitData().getAdvancedSearchBean().getFirstDate() != null) asdDTO.setDateRangeStart(getXMLGregorianCalendar(getVisitData().getAdvancedSearchBean().getFirstDate()));
+            if(getVisitData().getAdvancedSearchBean().getSecondDate() != null) asdDTO.setDateRangeEnd(getXMLGregorianCalendar(getVisitData().getAdvancedSearchBean().getSecondDate()));
+            
             
             //check if the information passed is valid, if not, show the error message
             try{
@@ -198,7 +247,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         
         //wait for results.
         SearchBean searchBean = (SearchBean)getBean("searchBean");
-        return searchBean.getQueryResults(query_request, false);
+        return searchBean.getQueryResults(query_request, false, 120);
     }
     
     /**
@@ -235,7 +284,16 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             advancedSearchHistoryBean.setInvName(getInvName());
             advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
             
-            //create advanced search bean
+          
+            //new stuff
+            advancedSearchHistoryBean.setDatafileName(getDatafileName());
+            advancedSearchHistoryBean.setRunEnd(getRunEnd());
+            advancedSearchHistoryBean.setRunStart(getRunStart());
+            advancedSearchHistoryBean.setFirstDate(getFirstDate());
+            advancedSearchHistoryBean.setSecondDate(getSecondDate());
+            advancedSearchHistoryBean.setInvNumber(getInvNumber());
+            
+                        //create advanced search bean
             AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO();
             asdDTO.setExperimentNumber(getInvNumber());
             asdDTO.setKeywords(getKeywords());
@@ -248,6 +306,15 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             asdDTO.setInvestigationName(getInvName());
             asdDTO.setInvestigationType(getInvType());
             asdDTO.setFuzzy(fuzzy);
+            
+            //new stuff
+            asdDTO.setDatafileName(getDatafileName());
+            if(getRunEnd() != null) asdDTO.setRunEnd(new Double(getRunEnd()));
+            if(getRunStart() != null)asdDTO.setRunStart(new Double(getRunStart()));
+            asdDTO.setExperimentNumber(getInvNumber());
+            if(getFirstDate() != null) asdDTO.setDateRangeStart(getXMLGregorianCalendar(getFirstDate()));
+            if(getSecondDate() != null) asdDTO.setDateRangeEnd(getXMLGregorianCalendar(getSecondDate()));
+            
             asdDTO.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_AND_SHIFTS);
             
             //check if the information passed is valid, if not, show the error message
@@ -279,9 +346,29 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         
         //wait for results.
         SearchBean searchBean = (SearchBean)getBean("searchBean");
-        return searchBean.getQueryResults(query_request, false);
+        return searchBean.getQueryResults(query_request, false, 120);
     }
     
+    private XMLGregorianCalendar getXMLGregorianCalendar(Date date)  {
+        if(date == null) return null;
+        
+        XMLGregorianCalendar xmlCal;
+        try {
+            xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+        } catch (DatatypeConfigurationException e) {
+            log.warn(e);
+            return null;
+        }
+        Calendar dateNeeded = Calendar.getInstance();
+        dateNeeded.setTime(date);
+        xmlCal.setDay(dateNeeded.get(Calendar.DAY_OF_MONTH));
+        // We do a +1 below because XMLGregorianCalendar goes from 1 to 12
+        // while Calendar.MONTH goes from 0 to 11 !!!
+        xmlCal.setMonth(dateNeeded.get(Calendar.MONTH)+1);
+        xmlCal.setYear(dateNeeded.get(Calendar.YEAR));
+        
+        return xmlCal;
+    }
     
     /**
      * Checks weather the keyword is valid for the JSF, if null or no size invalid keyword
@@ -391,7 +478,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             instruments.add(instrument);
             this.setInstruments(instruments);
         }
-         log.trace("Instrument is "+instrument);
+        log.trace("Instrument is "+instrument);
         log.trace("Instruments is "+instruments);
     }
     
@@ -438,5 +525,107 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     
     public void setInvestigators(List<String> investigators) {
         this.investigators = investigators;
+    }
+    
+    //way to validate two components.  Put val on last one and then check the local value (in this class)
+    // of the other one abobve it in the page
+    // before cannot be after after !!
+    public void validateDate(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
+        log.debug("validateDate: ");
+        if (value != null) {
+            if(getCalendarFirst() != null && getCalendarFirst().getLocalValue() != null){
+                
+                Date first = (Date)getCalendarFirst().getLocalValue();
+                if(first.after((Date)value)){
+                    log.trace("Invalid");
+                    throw new ValidatorException(new FacesMessage("Validation Error", "End Date cannot be before Start Date."));
+                }
+            }
+        }
+    }
+    
+    //way to validate two components.  Put val on last one and then check the local value (in this class)
+    // of the other one abobve it in the page
+    // before cannot be after after !!
+    public void validateRun(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
+        log.debug("validateRunNumber: ");
+        if (value != null) {
+            if(getRunStartUI().getLocalValue() != null){
+                Integer end =  Integer.valueOf((String)value);
+                Integer start =  Integer.valueOf((String)getRunStartUI().getLocalValue());
+                log.trace("Start "+start+" End" + end);
+                if(end.intValue() < start.intValue()){
+                    log.trace("Invalid");
+                    throw new ValidatorException(new FacesMessage("Validation Error", "Run end number cannot be lower than run start number"));
+                }
+            }
+        }
+    }
+    
+    public Date getFirstDate() {
+        return firstDate;
+    }
+    
+    public void setFirstDate(Date firstDate) {       
+        this.firstDate = firstDate;
+    }
+    
+    public Date getSecondDate() {
+        return secondDate;
+    }
+    
+    public void setSecondDate(Date secondDate) {
+        this.secondDate = secondDate;
+    }
+    
+    public UIInput getCalendarFirst() {
+        return calendarFirst;
+    }
+    
+    public void setCalendarFirst(UIInput calendarFirst) {
+        this.calendarFirst = calendarFirst;
+    }
+    
+    public UIInput getCalendarSecond() {
+        return calendarSecond;
+    }
+    
+    public void setCalendarSecond(UIInput calendarSecond) {
+        this.calendarSecond = calendarSecond;
+    }
+    
+    public String getDatafileName() {
+        if(datafileName == null || datafileName.equals("")) return null;
+        else return datafileName;
+    }
+    
+    public void setDatafileName(String datafileName) {
+        this.datafileName = datafileName;
+    }
+    
+    public UIInput getRunStartUI() {
+        return runStartUI;
+    }
+    
+    public void setRunStartUI(UIInput runStartUI) {
+        this.runStartUI = runStartUI;
+    }
+    
+    public String getRunStart() {
+        if(runStart == null || runStart.equals("")) return null;
+        else return runStart;
+    }
+    
+    public void setRunStart(String runStart) {
+        this.runStart = runStart;
+    }
+    
+    public String getRunEnd() {
+        if(runEnd == null || runEnd.equals("")) return null;
+        else return runEnd;
+    }
+    
+    public void setRunEnd(String runEnd) {
+        this.runEnd = runEnd;
     }
 }
