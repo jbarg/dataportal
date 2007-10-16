@@ -134,10 +134,11 @@
                                                                     <h:panelGrid width="600" style="font: 11px Verdana, Arial, Helvetica, sans-serif; background-color:#CCCCCC; ">
                                                                         <h:outputText value="Choose the facility(s) you wish to search on by clicking on one or multipe items in the 'Search' box."/>
                                                                         <h:outputText value="The auto complete form helps you to find a keyword within the facility(s)." />
-                                                                        <h:outputText value="You can choose to search mutiple keywords and one single Investigation name, abstract, sample and surname." />                                                                        
+                                                                        <h:outputText value="You can choose to search mutiple keywords and one single Investigation name, abstract, sample, surname and datafile name." />                                                                        
                                                                         <h:outputText value="Clicking the 'Like' radio button to find all investigations that contain it as part of the keyword(s), name, abstract, sample and surname."/>
-                                                                        <h:outputText value="You can also choose to search one exact Visit Id, Grand Id, Investigation type and Instrument." />                                                                   
-                                                                        <h:outputText value="In the next version of the Data Portal Investigation type and Instrument will be drop down lists of current types and instruments from the facility." />  
+                                                                        <h:outputText value="You can also choose to search one exact Visit Id, Grand Id, Investigation number, Investigation type and Instrument" />                                                                   
+                                                                        <h:outputText value="And you can also choose to search ranges of run numbers and/or dates" />                                                                                                                                                                                                             
+                                                                    
                                                                     </h:panelGrid>
                                                                 </t:collapsiblePanel>
                                                             </a4j:form>

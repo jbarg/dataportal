@@ -59,6 +59,9 @@
 </script>
 <br />
 
+<f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties"  />
+
+
 <a4j:region  selfRendered="true"> 
     <h:form id="autofillform">
         <h:panelGrid border="0" columns="2"> 
@@ -90,7 +93,7 @@
                 <h:outputText value="Keyword(s): " style="font-size:14px"/>
             </h:outputLabel  >                      
             
-            <ui:autoComplete  styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_1" 
+            <ui:autoComplete  styleClass="text" size="30" maxlength="60" id="keywordFieldj_id_1" 
                               completionMethod="#{keyword.completeCity}" 
                               value="#{advancedSearchBean.keyword}" required="false"
                               ondisplay="function(item) { return extractCity(item); }"
@@ -243,6 +246,33 @@
             
             <!----------------     End of investigators ---------------->
             
+            <!----------------     Start of Datafile name---------------->
+            <h:outputLabel>            
+                <h:outputText value="Datafile name:" style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <h:inputText styleClass="text" id="dfNamej_id_1" size="20" required="false" value="#{advancedSearchBean.datafileName}" />
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="Name of a data file in an investigation."/>                                 
+                            
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            <h:message for="dfNamej_id_1" styleClass="error"/>
+            
+            <!----------------     End of Datafile name ---------------->
+            
             <!----------------     Start of Like ---------------->
             <h:panelGroup/>
             
@@ -284,6 +314,117 @@
             <h:panelGroup/>
             <h:panelGroup/>
             
+            
+            <!----------------     Start of Run number ---------------->
+            <h:outputLabel>            
+                <h:outputText value="Run Number (To - From):" style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <h:panelGroup>
+                
+                <h:inputText styleClass="text" id="runNumberMinj_id_1" size="8" required="false" binding="#{advancedSearchBean.runStartUI}" value="#{advancedSearchBean.runStart}" >
+                    <f:validateDoubleRange minimum="0" maximum="90000000" />
+                </h:inputText>                
+                &nbsp;
+                <h:inputText styleClass="text" id="runNumberMaxj_id_1" size="8" required="false" validator="#{advancedSearchBean.validateRun}" value="#{advancedSearchBean.runEnd}" >
+                    <f:validateDoubleRange minimum="0" maximum="90000000" />
+                </h:inputText>
+            </h:panelGroup>
+            
+            <h:panelGroup>
+                <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                         closePopupOnExitingPopup="true"
+                         displayAtDistanceX="5"
+                         displayAtDistanceY="-40" 
+                         
+                >
+                    
+                    <t:graphicImage url="../../images/help.gif" border="0" />
+                    <f:facet name="popup">
+                        <h:panelGroup >
+                            <h:panelGrid columns="1" >
+                                <h:outputText value="Minimum and maximum values of a run number."/>                                 
+                                
+                            </h:panelGrid>
+                        </h:panelGroup>
+                    </f:facet>
+                </t:popup>
+            </h:panelGroup>
+            
+            <h:panelGroup>
+                <h:message for="runNumberMinj_id_1" styleClass="error"/>&nbsp;&nbsp;
+                <h:message for="runNumberMaxj_id_1" styleClass="error"/>
+            </h:panelGroup>
+            <!----------------     End of Run number ---------------->
+            
+            
+                    
+            <!----------------     Start of Start Date ---------------->
+            <h:outputLabel>            
+                <h:outputText value="Start Date:" style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <t:inputCalendar size="15" styleClass="text" binding="#{advancedSearchBean.calendarFirst}" id="startDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                             currentDayCellClass="currentDayCell" value="#{advancedSearchBean.firstDate}" renderAsPopup="true"
+                             popupTodayString="Today is:"
+                             popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
+                             helpText="DD/MM/YYYY" validator="#{advancedSearchBean.validateDate}"/>  
+            
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="Start date range."/>                                 
+                            
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            
+            <h:message for="startDatej_id_1" styleClass="error"/>
+            
+            <!----------------     End of Start Date ---------------->
+            
+            <!----------------     Start of End Date ---------------->
+            <h:outputLabel>            
+                <h:outputText value="End Date:" style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <t:inputCalendar size="15" styleClass="text" binding="#{advancedSearchBean.calendarSecond}" id="endDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                             currentDayCellClass="currentDayCell" value="#{advancedSearchBean.secondDate}" renderAsPopup="true"
+                             popupTodayString="Today is:"
+                             popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
+                             helpText="DD/MM/YYYY" validator="#{advancedSearchBean.validateDate}"/>  
+            
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="End date range."/>                                 
+                            
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            <h:message for="endDatej_id_1" styleClass="error"/>
+            
+            
+            <!----------------     End of End Date ---------------->
+            
             <!----------------     Start of Visit Id ---------------->
             <h:outputLabel>            
                 <h:outputText value="Visit Id:" style="font-size: 14px" />                   
@@ -317,7 +458,7 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="grantIdj_id_1" size="20" required="false" value="#{advancedSearchBean.grantId}">
-                <f:validateDoubleRange minimum="0" maximum="90000000" />
+                <f:validateDoubleRange minimum="0" maximum="9990000000" />
             </h:inputText>        
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -340,6 +481,35 @@
             
             <!----------------     End of Grant Id ---------------->
             
+            <!----------------     Start of Inv no ---------------->
+            <h:outputLabel>            
+                <h:outputText value="Inv Number:" style="font-size: 14px" />                   
+            </h:outputLabel>
+            
+            <h:inputText styleClass="text" id="invNumj_id_1" size="20" required="false" value="#{advancedSearchBean.invNumber}">
+                <f:validateDoubleRange minimum="0" maximum="9990000000" />
+            </h:inputText>        
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            <h:outputText value="Investigation number."/>                                 
+                            
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            <h:message for="invNumj_id_1" showDetail="false" showSummary="true" styleClass="error"/>
+            
+            <!----------------     End of Inv no ---------------->
+            
             <h:panelGroup/>
             <h:panelGroup/>
             <h:panelGroup/>
@@ -358,7 +528,7 @@
                 <f:selectItems value="#{visit.customisation.investigationTypeItems}" />                           
             </h:selectOneMenu>    
             
-         <%--   <h:inputText styleClass="text" id="invTypej_id_1" size="20" required="false" value="#{advancedSearchBean.invType}">
+            <%--   <h:inputText styleClass="text" id="invTypej_id_1" size="20" required="false" value="#{advancedSearchBean.invType}">
                 
             </h:inputText>      --%>  
             
