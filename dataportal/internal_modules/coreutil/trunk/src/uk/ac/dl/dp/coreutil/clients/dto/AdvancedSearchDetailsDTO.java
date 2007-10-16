@@ -84,11 +84,11 @@ public class AdvancedSearchDetailsDTO implements Serializable {
     /**
      * datafile create date
      */
-    private XMLGregorianCalendar yearRangeStart; // (datafile_CREATE_time)
+    private XMLGregorianCalendar dateRangeStart; // (datafile_CREATE_time)
     /**
      * datafile create date
      */
-    private XMLGregorianCalendar yearRangeEnd;// (datafile_CREATE_time)
+    private XMLGregorianCalendar dateRangeEnd;// (datafile_CREATE_time)
     /**
      * List of keywords
      */
@@ -206,20 +206,20 @@ public class AdvancedSearchDetailsDTO implements Serializable {
         this.datafileName = datafileName;
     }
     
-    public XMLGregorianCalendar getYearRangeStart() {
-        return yearRangeStart;
+    public XMLGregorianCalendar getDateRangeStart() {
+        return dateRangeStart;
     }
     
-    public void setYearRangeStart(XMLGregorianCalendar yearRangeStart) {
-        this.yearRangeStart = yearRangeStart;
+    public void setDateRangeStart(XMLGregorianCalendar yearRangeStart) {
+        this.dateRangeStart = yearRangeStart;
     }
     
-    public XMLGregorianCalendar getYearRangeEnd() {
-        return yearRangeEnd;
+    public XMLGregorianCalendar getDateRangeEnd() {
+        return dateRangeEnd;
     }
     
-    public void setYearRangeEnd(XMLGregorianCalendar yearRangeEnd) {
-        this.yearRangeEnd = yearRangeEnd;
+    public void setDateRangeEnd(XMLGregorianCalendar yearRangeEnd) {
+        this.dateRangeEnd = yearRangeEnd;
     }
     
     public List<String> getKeywords() {
@@ -364,7 +364,7 @@ public class AdvancedSearchDetailsDTO implements Serializable {
     
     public boolean isValid(){
         checkArguements();
-        if(hasRunNumber()){
+        /*if(hasRunNumber()){
             //so they have set run number, check something on investigation is set)
             if(hasInvestigationParameters() || getDatafileName() != null || hasInstruments()) return true;
             else throw new IllegalStateException("Must search investigation information, instruments or datafile name if searching with run numbers");
@@ -373,7 +373,7 @@ public class AdvancedSearchDetailsDTO implements Serializable {
             if(hasInvestigationParameters() || getDatafileName() != null || hasInstruments() ||
                     hasSample()) return true;
             else throw new IllegalStateException("Must search investigation information, instruments, sample name or datafile name if searching with datafile date ranges");
-        }*/ else return true;
+        }*/ /*else*/ return true;
         
     }
     
@@ -494,4 +494,8 @@ public class AdvancedSearchDetailsDTO implements Serializable {
         }
     }
     
+    public static void main(String args[]){
+        System.out.println(new AdvancedSearchDetailsDTO().isValid());
+    }
+
 }
