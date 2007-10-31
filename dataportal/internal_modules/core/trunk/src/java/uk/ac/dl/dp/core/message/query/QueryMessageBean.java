@@ -34,6 +34,7 @@ import uk.ac.dp.icatws.ICATSingleton;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
 import uk.ac.dp.icatws.SessionException_Exception;
+import uk.ac.dp.icatws.KeywordDetails;
 
 /**
  *
@@ -103,13 +104,11 @@ public class QueryMessageBean extends MessageEJBObject implements MessageListene
     }
     
     private Collection<Investigation>  doKeywordSearch(QueryRequest request, String wsdlLocation) throws SessionException_Exception{
-        log.debug("Query : Keyword "+request.getKeywordQuery().getKeywords()+" on facility: "+request.getFacility()+", fuzzy: "+request.getKeywordQuery().isFuzzy()+"? , sent at "+request.getSent());
+        log.debug("Query : Keyword "+request.getKeywordQuery().getDetails().getKeywords()+" on facility: "+request.getFacility()+", CaseSensitive: ? "+request.getKeywordQuery().getDetails().isCaseSensitve()+", fuzzy: "+request.getKeywordQuery().getDetails().isFuzzy()+"? , sent at "+request.getSent());
+                
         return ICATSingleton.getInstance(wsdlLocation).searchByKeywordsAll(
                 request.getFacilitySessionId(),
-                (List<String>) request.getKeywordQuery().getKeywords(),
-                request.getKeywordQuery().getLogicalOperator(),
-                request.getKeywordQuery().getInvestigationInclude(),
-                request.getKeywordQuery().isFuzzy(),
+                request.getKeywordQuery().getDetails(),
                 0,
                 DataPortalConstants.MAX_RESULTS);
     }

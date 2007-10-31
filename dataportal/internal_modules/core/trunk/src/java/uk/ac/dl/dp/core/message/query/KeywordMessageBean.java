@@ -85,11 +85,11 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 
                 log.trace("Facility: "+facility.getFacility()+" has: "+keywords.size()+" keywords");
                 String[] facKeyWords =  keywords.toArray(new String[keywords.size()]);
-                                                             
+                                
                 //make sure file location exists
                 if(!new File(DataPortalConstants.KEYWORD_LOCATION).exists()) new File(DataPortalConstants.KEYWORD_LOCATION).mkdir();
                 
-                //save to file
+                //save to file or case sensitive
                 File file  = new File(DataPortalConstants.KEYWORD_LOCATION+facility.getFacility()+"_"+keywordMessage.getUserId()+".keyworddata");
                 FileOutputStream f_out = new FileOutputStream(file);
                 
@@ -105,6 +105,27 @@ public class KeywordMessageBean extends MessageEJBObject implements MessageListe
                 
                 obj_out.close();
                 f_out.close();
+                
+                String[] facKeyWordsCaseInsensitive = keywords.toArray(new String[keywords.size()]);  
+                for (int i = 0; i < facKeyWordsCaseInsensitive.length; i++) {
+                    facKeyWordsCaseInsensitive[i] = facKeyWordsCaseInsensitive[i].toLowerCase();
+                }
+                //save to file or case sensitive
+                File fileInsensitive  = new File(DataPortalConstants.KEYWORD_LOCATION+facility.getFacility()+"_"+keywordMessage.getUserId()+".keyworddata_caseInsensitive");
+                FileOutputStream f_outInsensitive = new FileOutputStream(fileInsensitive);
+                
+                // Use an ObjectOutputStream to send object data to the
+                // FileOutputStream for writing to disk.
+                ObjectOutputStream obj_outInsensitive = new  ObjectOutputStream(f_outInsensitive);
+                
+                // Pass our object to the ObjectOutputStream's
+                // writeObject() method to cause it to be written out
+                // to disk.
+                obj_outInsensitive.writeObject(facKeyWordsCaseInsensitive);
+                log.trace("Saved keyword data for "+facility.getFacility()+" for user "+keywordMessage.getUserId()+" at: "+file.getAbsolutePath());
+                
+                obj_outInsensitive.close();
+                f_outInsensitive.close();
                 
             } catch (Exception sqle) {
                 log.error("Unable to initialize keywords for "+facility.getFacility(),sqle);
