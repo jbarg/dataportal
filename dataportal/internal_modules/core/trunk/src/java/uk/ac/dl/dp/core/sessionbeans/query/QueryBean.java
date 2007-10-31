@@ -76,7 +76,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         log.debug("queryByKeyword");
         if(sid == null) throw new IllegalArgumentException("Session ID cannot be null.");
         if(keywordQueryRequest.getFacilities() == null) throw new IllegalArgumentException("Invalid KeywordQueryRequest, facilities to search cannot be null.");
-        if(keywordQueryRequest.getKeywords() == null) throw new IllegalArgumentException("Invalid KeywordQueryRequest, keywords to search cannot be null.");
+        if(keywordQueryRequest.getDetails().getKeywords() == null) throw new IllegalArgumentException("Invalid KeywordQueryRequest, keywords to search cannot be null.");
         
         //check of user logged into all facilities
         isLoggedIn(sid, keywordQueryRequest.getFacilities(), em);
@@ -98,7 +98,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         
         //send off basic search event
         //TODO sort out facility, keyword strings properly
-        sendMDBLocal.sendKeywordEvent(sid, keywordQueryRequest.getFacilities(), keywordQueryRequest.getKeywords(), DPEvent.BASIC_SEARCH);
+        sendMDBLocal.sendKeywordEvent(sid, keywordQueryRequest.getFacilities(), keywordQueryRequest.getDetails().getKeywords(), DPEvent.BASIC_SEARCH);
         
         log.trace("sent search event log , sid: "+sid );
         
@@ -125,7 +125,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         q_request.setQueryid(search_id);
         q_request.setSent(new Date());
         q_request.setQt(DPQueryType.MYDATA);
-         q_request.setDN(userUtil.getUser().getDn());
+        q_request.setDN(userUtil.getUser().getDn());
          
         //send off basic search event
         //TODO sort out facility, keyword strings properly
