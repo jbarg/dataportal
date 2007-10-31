@@ -117,17 +117,7 @@ public class VisitData implements Serializable {
      * Title for the basic search page (ie MyData Search or Basic Search - Advanced Seach)
      */
     private String searchedTitle = "Search Results";
-    
-    /**
-     * Bean that keeps the info of the last search for the side nav bar
-     */
-    private BasicSearchHistoryBean basicSearchBean = new BasicSearchHistoryBean();
-    
-    /**
-     * Bean that keeps the info of the last search for the side nav bar
-     */
-    private AdvancedSearchHistoryBean advancedSearchBean = new AdvancedSearchHistoryBean();
-    
+        
     
     /** Creates a new instance of VisitData */
     public VisitData() {
@@ -635,31 +625,7 @@ public class VisitData implements Serializable {
     public void setSearchedTitle(String searchedTitle) {
         this.searchedTitle = searchedTitle;
     }
-    
-    /**
-     * Bean that keeps the info of the last search for the side nav bar
-     */
-    public BasicSearchHistoryBean getBasicSearchBean() {
-        return basicSearchBean;
-    }
-    
-    /**
-     * Bean that keeps the info of the last search for the side nav bar
-     */
-    public void setBasicSearchBean(BasicSearchHistoryBean basicSearchHistoryBean) {
-        this.basicSearchBean = basicSearchHistoryBean;
-    }
-    
-    /**
-     * Bean that keeps the info of the last search for the side nav bar
-     */
-    public AdvancedSearchHistoryBean getAdvancedSearchBean() {
-        return advancedSearchBean;
-    }
-    
-    public void setAdvancedSearchBean(AdvancedSearchHistoryBean advancedSearchBean) {
-        this.advancedSearchBean = advancedSearchBean;
-    }
+      
     
     /*public boolean isDatasetDowloadable() {
         return datasetDowloadable;

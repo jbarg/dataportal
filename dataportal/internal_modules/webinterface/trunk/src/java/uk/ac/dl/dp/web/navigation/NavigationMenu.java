@@ -39,7 +39,7 @@ public class NavigationMenu {
         // Main
         NavigationMenuItem main = getMenuNaviagtionItem("Main", null);
         menu.add(main);
-        main.add(getMenuNaviagtionItem("Basic Search", "GOTO_BASIC_SEARCH"));
+        main.add(getMenuNaviagtionItem("Keyword Search", "GOTO_BASIC_SEARCH"));
                 
         NavigationMenuItem advanced = getMenuNaviagtionItem("Advanced Search", "GOTO_ADVANCED_SEARCH");
         advanced.setOpen(true);        

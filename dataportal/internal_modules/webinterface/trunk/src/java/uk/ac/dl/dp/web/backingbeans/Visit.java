@@ -105,11 +105,20 @@ public class Visit  extends AbstractSessionBean implements Serializable{
     private Collection<FacilitySession> facilitySessions;
     
     private boolean _collapsed;
-    
+        
     /**
      * Customisations
      */
     private Customisation customisation;
+
+    public boolean isSingleFacility() {
+        return singleFacility;
+    }
+    
+    /**
+     * Is single facility, then do some customisation
+     */
+    private boolean singleFacility = false;
     
     
     private static Logger log = Logger.getLogger(Visit.class);
@@ -163,6 +172,7 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         
         //sets the information about the logging onto ICATs
         this.setFacilitySessions(session.getFacilitySessions());
+        if(session.getFacilitySessions().size() == 1) this.singleFacility = true;
         
         //set the current default as the sleected fac in basic search
         List<String> fac = new ArrayList<String>();
@@ -170,15 +180,15 @@ public class Visit  extends AbstractSessionBean implements Serializable{
         
         getVisitData().setCurrentSelectedFacilities(fac);
         
-        getVisitData().setAdvancedSearchBean(new AdvancedSearchHistoryBean());
-        getVisitData().setBasicSearchBean(new BasicSearchHistoryBean());
-        
+               
         //load resource bundle
         try{
             customisation = new Customisation();
         } catch(Exception ex){
             log.warn("Error reading in facility.properties file", ex);
         }
+        
+        
         
     }
     

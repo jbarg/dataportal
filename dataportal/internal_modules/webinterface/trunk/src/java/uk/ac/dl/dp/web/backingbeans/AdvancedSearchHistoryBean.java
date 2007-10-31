@@ -81,7 +81,24 @@ public class AdvancedSearchHistoryBean extends AbstractRequestBean {
     private Date startDate;
     private Date endDate;
     
-    
+    private boolean caseSensitive;
+    private boolean autoComplete;
+
+    public boolean isAutoComplete() {
+        return autoComplete;
+    }
+
+    public void setAutoComplete(boolean autoComplete) {
+        this.autoComplete = autoComplete;
+    }
+
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public void setCaseSensitive(boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
+    }
     //default to EXACT
     private String likeExpression = "EXACT";
     
