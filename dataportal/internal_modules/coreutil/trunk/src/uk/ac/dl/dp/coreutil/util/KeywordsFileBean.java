@@ -6,7 +6,6 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package uk.ac.dl.dp.coreutil.util;
 
 import java.io.File;
@@ -26,103 +25,130 @@ import org.apache.log4j.Logger;
  * @author gjd37
  */
 public class KeywordsFileBean {
-    
-     private static Logger log = Logger.getLogger(KeywordsFileBean.class);
-     
-     /**
+
+    private static Logger log = Logger.getLogger(KeywordsFileBean.class);
+    /**
       * Threadhold to keep keywords in memory
       */
-    public final int THRESHOLD_SIZE = 40000;
-    
+    public final int THRESHOLD_SIZE = 1000;
     /**
      * User
      */
     private String user;
-    
     /**
      * Time on the file when last accessed
      */
     private Date modTime;
-    
     /**
      * Facility of the keywords
      */
     private String facility;
-    
     /**
      * Keywords for the facility for the user
      */
     private String[] keywords;
-    
     /**
      * Location of keyword file
      */
-    private File keywordFile;
-    
+    private File keywordFileCaseSensitive;
+    private File keywordFileCaseInsensitive;
+    private boolean caseSensitive = false;
+
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public void setCaseSensitive(boolean caseSensitive) {
+        if (caseSensitive != this.caseSensitive) {
+            this.caseSensitive = caseSensitive;
+            this.keywords = null;
+        }
+    }
+
     public KeywordsFileBean() {
     }
-    
+
     public KeywordsFileBean(String user, String facility) {
         this.user = user;
         this.facility = facility;
-        this.keywordFile = new File(DataPortalConstants.KEYWORD_LOCATION+facility+"_"+user+".keyworddata");
+        this.keywordFileCaseInsensitive = new File(DataPortalConstants.KEYWORD_LOCATION + facility + "_" + user + ".keyworddata_caseInsensitive");
+        this.keywordFileCaseSensitive = new File(DataPortalConstants.KEYWORD_LOCATION + facility + "_" + user + ".keyworddata");
         loadKeywords();
     }
-    
+
     public Date getModTime() {
         return modTime;
     }
-    
+
     public void setModTime(Date modTime) {
         this.modTime = modTime;
     }
-    
+
     public String getFacility() {
         return facility;
     }
-    
+
     public void setFacility(String facility) {
         this.facility = facility;
     }
-    
+
     public String[] getKeywords() {
         return keywords;
     }
-    
+
     public void setKeywords(String[] keywords) {
         this.keywords = keywords;
     }
-    
-    public boolean hasBeenUpdated(){
-        if(keywords == null) return true;
-        else if(modTime.before(new Date(keywordFile.lastModified()))) return true;
-        else return false;
+
+    public boolean hasBeenUpdated() {
+        if (keywords == null) {
+            return true;
+        }
+        if (caseSensitive) {
+            if (modTime.before(new Date(keywordFileCaseSensitive.lastModified()))) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (modTime.before(new Date(keywordFileCaseInsensitive.lastModified()))) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
-    public void loadKeywords(){
-        log.trace("Loading keywords from "+facility+" for user: "+user);
+
+    public void loadKeywords() {
+        log.trace("Loading keywords from " + facility + " for user: " + user + ", caseSensitive: " + caseSensitive);
+        File file = null;
         FileInputStream f_in = null;
         ObjectInputStream obj_in = null;
-        try{
-            modTime = new Date(keywordFile.lastModified());
-            
-            f_in = new  FileInputStream(keywordFile);
-            
+        try {
+            if (caseSensitive) {
+                modTime = new Date(keywordFileCaseSensitive.lastModified());
+                f_in = new FileInputStream(keywordFileCaseSensitive);
+                file = keywordFileCaseSensitive;
+            } else {
+                modTime = new Date(keywordFileCaseInsensitive.lastModified());
+                f_in = new FileInputStream(keywordFileCaseInsensitive);
+                file = keywordFileCaseInsensitive;
+            }
+
             // Read object using ObjectInputStream.
             obj_in = new ObjectInputStream(f_in);
-            
+
             // Read an object.
-            keywords = (String[])obj_in.readObject();           
-            log.info("Loaded keywords from "+facility+" for user: "+user+" has : "+keywords.length+" keywords");
-        } catch(Exception ex){
-            log.warn("Error loading keywords "+keywordFile.getAbsolutePath()+" from disk");
+            keywords = (String[]) obj_in.readObject();
+            log.info("Loaded keywords from " + facility + " for user: " + user + " has : " + keywords.length + " keywords");
+        } catch (Exception ex) {
+            log.warn("Error loading keywords " + file.getAbsolutePath() + " from disk");
             keywords = new String[0];
         } finally {
-            try{
+            try {
                 //close streams
                 obj_in.close();
                 f_in.close();
-            } catch(Exception ignore){}
+            } catch (Exception ignore) {
+            }
         }
     }
 }

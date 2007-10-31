@@ -101,6 +101,18 @@ public class AdvancedSearchDetailsDTO implements Serializable {
      *
      */
     private boolean fuzzy = false;
+
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public void setCaseSensitive(boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
+    }
+    /**
+     *
+     */
+    private boolean caseSensitive = false;
     
     public String getInvestigationName() {
         return investigationName;
