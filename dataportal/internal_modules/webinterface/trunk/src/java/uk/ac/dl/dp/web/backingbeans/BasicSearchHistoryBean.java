@@ -29,6 +29,17 @@ public class BasicSearchHistoryBean {
     //default to EXACT
     private String likeExpression = "EXACT";
     
+    //default to false
+    private boolean caseSensitive = false;
+
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public void setCaseSensitive(boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
+    }
+    
     /** Creates a new instance of BasicSearchBean */
     public BasicSearchHistoryBean() {
     }

@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import uk.ac.dl.dp.web.backingbeans.SessionHistory;
 import uk.ac.dl.dp.web.backingbeans.Visit;
 import uk.ac.dl.dp.web.backingbeans.VisitData;
 import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
@@ -194,6 +195,10 @@ public abstract class FacesBean {
     
     protected AdminData getAdminData(){
         return ((Visit)getBean("visit")).getAdminData();
+    }
+    
+    protected SessionHistory getSessionHistory(){
+        return ((SessionHistory)getBean("sessionHistory"));
     }
     
     protected Visit getVisit(){
