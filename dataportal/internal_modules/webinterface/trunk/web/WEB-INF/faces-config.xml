@@ -28,9 +28,21 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     
-        <managed-bean>
+    <managed-bean>
         <managed-bean-name>helpCollapsibleBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.navigation.HelpCollapsibleBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+     <managed-bean>
+        <managed-bean-name>sessionHistory</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.SessionHistory</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+     <managed-bean>
+        <managed-bean-name>autoCompleteCollapsibleBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.navigation.AutoCompleteCollapsibleBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     
