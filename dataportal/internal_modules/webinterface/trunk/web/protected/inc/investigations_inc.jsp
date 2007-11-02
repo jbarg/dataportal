@@ -145,8 +145,59 @@
         <br />
     </h:panelGrid>
     
-    <a4j:form>
+    <a4j:form id="viewform">
         
+        <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
+            
+            <t:collapsiblePanel  id="scroll" value="#{autoCompleteCollapsibleBean.collapsed}" title="testTitle" >
+                <f:facet name="header">
+                    <t:div style="color: black; width:40px;">
+                        <h:panelGrid columns="4" >
+                            <h:outputText rendered="#{!autoCompleteCollapsibleBean.collapsed}" value="v " style="color:blue; "/>  <a4j:commandLink reRender="viewform" style="color: black;" styleClass="help" id="helpcj" action="#{autoCompleteCollapsibleBean.collapse}" rendered="#{!autoCompleteCollapsibleBean.collapsed}" immediate="true"   value="Hide"/>
+                            
+                            <h:outputText rendered="#{autoCompleteCollapsibleBean.collapsed}" value="> " style="color:blue; "/>  <a4j:commandLink reRender="viewform" style="color: black;" styleClass="help" id="helpc" action="#{autoCompleteCollapsibleBean.collapse}" rendered="#{autoCompleteCollapsibleBean.collapsed}" immediate="true"   value="View"/>
+                            
+                        </h:panelGrid>
+                    </t:div>
+                </f:facet>
+                
+                <h:panelGrid columns="1" styleClass="scrollerTable3" columnClasses="standardTable_ColumnCentered" >
+                    
+                    <t:dataScroller id="scroll_3"
+                                    for="data"
+                                    fastStep="10"
+                                    pageCountVar="pageCount"
+                                    pageIndexVar="pageIndex"
+                                    styleClass="scroller"
+                                    paginator="true"
+                                    paginatorMaxPages="9"
+                                    paginatorTableClass="paginator"
+                                    paginatorActiveColumnStyle="font-weight:bold;">
+                        <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                        <f:facet name="first" >
+                            <t:graphicImage url="../../images/arrow-first.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="last">
+                            <t:graphicImage url="../../images/arrow-last.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="previous">
+                            <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="next">
+                            <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="fastforward">
+                            <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                        </f:facet>
+                        <f:facet name="fastrewind">
+                            <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                        </f:facet>
+                    </t:dataScroller>   
+                </h:panelGrid>        
+            </t:collapsiblePanel>
+            
+            
+        </c:if>
         
         <t:dataTable id="data" width="97%"
                      styleClass="scrollerTable"
@@ -366,10 +417,12 @@
                         
                     </a4j:commandLink>
                 </f:facet>
-                <h:outputText value="#{fn:substringBefore(invest.releaseDate,\"T\")}" />
                 
+                <h:outputText value="#{fn:substringBefore(invest.releaseDate,\"T\")}">
+                     <f:convertDateTime pattern="HH:mm a dd.MM.yyyy "/>
+                </h:outputText>
             </h:column>
-           
+            
             
             <f:facet name="detailStamp">      
                 
@@ -381,7 +434,7 @@
                              footerClass="standardTable_Header"
                              rowClasses="standardTableDetail2_Row1,standardTableDetail2_Row1"
                              columnClasses="standardTable_ColumnCenteredTop"
-                                                      
+                             
                              width="100%" 
                              id="invAbstract" 
                              var="investigations"
@@ -406,16 +459,16 @@
                             
                             
                             <h:column>
-                                  
+                                
                                 <h:column>                           
                                     <h:outputText style="valign:top; font-size:12px;" value="#{abstract.invAbstract}" />
                                 </h:column>  
                             </h:column>
-                                                                       
+                            
                         </t:dataTable>
                     </h:column> 
                     
-                    <h:column rendered="#{visit.customisation.shiftVisible}">
+                    <h:column >
                         <f:facet name="header">
                             <h:outputText value="Shifts" style="font-size:12px; color: blue;  font-weight: bold;" />
                         </f:facet>
@@ -437,7 +490,7 @@
                                     <h:outputText value="Start" style="font-size:12px; color: blue;  font-weight: bold;" />
                                 </f:facet>   
                                 <h:column>                           
-                                    <h:outputText  value="#{fn:substringBefore(shifts.shiftPK.startDate,\"T\")}" style="font-size:12px;" />                                  
+                                    <h:outputText  value="#{fn:substringBefore(fn:substringAfter(shifts.shiftPK.startDate,\"T\"),\".\")}  #{fn:substringBefore(shifts.shiftPK.startDate,\"T\")}" style="font-size:12px;" />                                  
                                 </h:column>  
                             </h:column>
                             
@@ -446,7 +499,7 @@
                                     <h:outputText value="End" style="font-size:12px; color: blue;  font-weight: bold;" />
                                 </f:facet> 
                                 <h:column>
-                                    <h:outputText  value="#{fn:substringBefore(shifts.shiftPK.endDate,\"T\")}" style="font-size:12px;" />                                  
+                                    <h:outputText  value="#{fn:substringBefore(fn:substringAfter(shifts.shiftPK.endDate,\"T\"),\".\")}  #{fn:substringBefore(shifts.shiftPK.endDate,\"T\")}" style="font-size:12px;" />                                  
                                 </h:column>      
                             </h:column>                    
                         </t:dataTable>
