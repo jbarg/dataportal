@@ -465,6 +465,21 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
             <to-view-id>/protected/advanced_search.jsp</to-view-id>
         </navigation-case>
         
+         <navigation-case>
+            <from-outcome>GOTO_CLD_SEARCH</from-outcome>
+            <to-view-id>/protected/clf_search.jsp</to-view-id>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>GOTO_DIAMOND_SEARCH</from-outcome>
+            <to-view-id>/protected/diamond_search.jsp</to-view-id>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>GOTO_ISIS_SEARCH</from-outcome>
+            <to-view-id>/protected/isis_search.jsp</to-view-id>
+        </navigation-case>
+        
         <navigation-case>
             <from-outcome>GOTO_ADMIN</from-outcome>
             <to-view-id>/admin/admin.jsp</to-view-id>
