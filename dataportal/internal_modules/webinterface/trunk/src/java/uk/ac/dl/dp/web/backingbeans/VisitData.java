@@ -118,6 +118,15 @@ public class VisitData implements Serializable {
      */
     private String searchedTitle = "Search Results";
         
+     private boolean newResults = false;
+
+    public boolean isNewResults() {
+        return newResults;
+    }
+
+    public void setNewResults(boolean newResults) {
+        this.newResults = newResults;
+    }
     
     /** Creates a new instance of VisitData */
     public VisitData() {
