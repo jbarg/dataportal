@@ -100,6 +100,13 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     private UIInput calendarFirst;
     private UIInput calendarSecond;
 
+    private enum SEARCH_TYPE {
+
+        ADVANCED, ISIS, DIAMOND, CLF
+    }
+    
+
+    ;
     /** Creates a new instance of AdvancedSearchBean */
     public AdvancedSearchBean() {
     }
@@ -139,6 +146,17 @@ public class AdvancedSearchBean extends AbstractRequestBean {
      * Action method to do basic search for navigation bar
      */
     public String searchAdvancedNavigation() {
+        return searchAdvancedNavigation(SEARCH_TYPE.ADVANCED);
+    }
+
+    /**
+     * Action method to do basic search for navigation bar
+     */
+    public String searchAdvancedNavigationISIS() {
+        return searchAdvancedNavigation(SEARCH_TYPE.ISIS);
+    }
+
+    public String searchAdvancedNavigation(SEARCH_TYPE searchType) {
         //sets up initial values
         String sid = null;
         QueryRequest query_request = null;
@@ -152,74 +170,70 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         try {
 
             boolean fuzzy = false;
-             SessionHistory sessionHistory = getSessionHistory();
-            if (sessionHistory.getAdvancedSearchHistoryBean().getLikeExpression().equals("LIKE")) {
-                fuzzy = true;
+            SessionHistory sessionHistory = getSessionHistory();
+
+
+            AdvancedSearchHistoryBean advancedTypeSearchHistoryBean = null;
+            if (searchType == SEARCH_TYPE.ADVANCED) {
+                if (sessionHistory.getAdvancedSearchHistoryBean().getLikeExpression().equals("LIKE")) {
+                    fuzzy = true;
+                }
+                //set history bean
+                advancedTypeSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
+
+                //prefs           
+                advancedTypeSearchHistoryBean.setAutoComplete(getSessionHistory().isAdvancedSearchNavigationAutoComplete());
+                advancedTypeSearchHistoryBean.setCaseSensitive(getSessionHistory().isAdvancedSearchNavigationCaseSensitive());
+
+            } else if (searchType == SEARCH_TYPE.ISIS) {
+                if (sessionHistory.getIsisSearchHistoryBean().getLikeExpression().equals("LIKE")) {
+                    fuzzy = true;
+                }
+                //set history bean
+                advancedTypeSearchHistoryBean = (AdvancedSearchHistoryBean) sessionHistory.getIsisSearchHistoryBean();
+
+                //prefs           
+                advancedTypeSearchHistoryBean.setAutoComplete(getSessionHistory().isFacilitySearchNavigationAutoComplete());
+                advancedTypeSearchHistoryBean.setCaseSensitive(getSessionHistory().isFacilitySearchNavigationCaseSensitive());
+
             }
-
-            //set history bean
-            AdvancedSearchHistoryBean advancedSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
-            /*advancedSearchHistoryBean.setInvNumber(sessionHistory.getAdvancedSearchBean().getInvNumber());
-            advancedSearchHistoryBean.setKeyword(getVisitData().getAdvancedSearchBean().getKeyword());
-            advancedSearchHistoryBean.setInstrument(getVisitData().getAdvancedSearchBean().getInstrument());
-            advancedSearchHistoryBean.setSample(getVisitData().getAdvancedSearchBean().getSample());
-            advancedSearchHistoryBean.setVisitId(getVisitData().getAdvancedSearchBean().getVisitId());
-            advancedSearchHistoryBean.setGrantId(getVisitData().getAdvancedSearchBean().getGrantId());
-            advancedSearchHistoryBean.setInvAbstract(getVisitData().getAdvancedSearchBean().getInvAbstract());
-            advancedSearchHistoryBean.setInvType(getVisitData().getAdvancedSearchBean().getInvType());
-            advancedSearchHistoryBean.setInvestigator(getVisitData().getAdvancedSearchBean().getInvestigator());
-            advancedSearchHistoryBean.setLikeExpression(getVisitData().getAdvancedSearchBean().getLikeExpression());
-            advancedSearchHistoryBean.setInvName(getVisitData().getAdvancedSearchBean().getInvName());
-            advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
-
-            //new stuff
-            advancedSearchHistoryBean.setDatafileName(getVisitData().getAdvancedSearchBean().getDatafileName());
-            advancedSearchHistoryBean.setRunEnd(getVisitData().getAdvancedSearchBean().getRunEnd());
-            advancedSearchHistoryBean.setRunStart(getVisitData().getAdvancedSearchBean().getRunStart());
-            advancedSearchHistoryBean.setSecondDate(getVisitData().getAdvancedSearchBean().getSecondDate());
-            advancedSearchHistoryBean.setFirstDate(getVisitData().getAdvancedSearchBean().getFirstDate());
-            advancedSearchHistoryBean.setInvNumber(getVisitData().getAdvancedSearchBean().getInvNumber());
-                */
-            //prefs           
-            advancedSearchHistoryBean.setAutoComplete( getSessionHistory().isAdvancedSearchNavigationAutoComplete());
-            advancedSearchHistoryBean.setCaseSensitive( getSessionHistory().isAdvancedSearchNavigationCaseSensitive());
 
             //create advanced search bean
             AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO();
-            asdDTO.setExperimentNumber(advancedSearchHistoryBean.getInvNumber());
+            asdDTO.setExperimentNumber(advancedTypeSearchHistoryBean.getInvNumber());
 
-            setKeyword(advancedSearchHistoryBean.getKeyword());
+            setKeyword(advancedTypeSearchHistoryBean.getKeyword());
             asdDTO.setKeywords(getKeywords());
-            if (advancedSearchHistoryBean.getGrantId() != null) {
-                asdDTO.setGrantId(new Long(advancedSearchHistoryBean.getGrantId()));
+            if (advancedTypeSearchHistoryBean.getGrantId() != null) {
+                asdDTO.setGrantId(new Long(advancedTypeSearchHistoryBean.getGrantId()));
             }
-            asdDTO.setVisitId(advancedSearchHistoryBean.getVisitId());
-            asdDTO.setSampleName(advancedSearchHistoryBean.getSample());
-            setInstrument(advancedSearchHistoryBean.getInstrument());
-            setInvestigator(advancedSearchHistoryBean.getInvestigator());
+            asdDTO.setVisitId(advancedTypeSearchHistoryBean.getVisitId());
+            asdDTO.setSampleName(advancedTypeSearchHistoryBean.getSample());
+            setInstrument(advancedTypeSearchHistoryBean.getInstrument());
+            setInvestigator(advancedTypeSearchHistoryBean.getInvestigator());
             asdDTO.setInvestigators(getInvestigators());
             asdDTO.setInstruments(getInstruments());
-            asdDTO.setInvestigationAbstract(advancedSearchHistoryBean.getInvAbstract());
-            asdDTO.setInvestigationName(advancedSearchHistoryBean.getInvName());
-            asdDTO.setInvestigationType(advancedSearchHistoryBean.getInvType());
+            asdDTO.setInvestigationAbstract(advancedTypeSearchHistoryBean.getInvAbstract());
+            asdDTO.setInvestigationName(advancedTypeSearchHistoryBean.getInvName());
+            asdDTO.setInvestigationType(advancedTypeSearchHistoryBean.getInvType());
             asdDTO.setFuzzy(fuzzy);
             asdDTO.setCaseSensitive(sessionHistory.isAdvancedSearchNavigationCaseSensitive());
             asdDTO.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
 
             //new stuff
-            asdDTO.setDatafileName(advancedSearchHistoryBean.getDatafileName());
-            if (advancedSearchHistoryBean.getRunEnd() != null) {
-                asdDTO.setRunEnd(new Double(advancedSearchHistoryBean.getRunEnd()));
+            asdDTO.setDatafileName(advancedTypeSearchHistoryBean.getDatafileName());
+            if (advancedTypeSearchHistoryBean.getRunEnd() != null) {
+                asdDTO.setRunEnd(new Double(advancedTypeSearchHistoryBean.getRunEnd()));
             }
-            if (advancedSearchHistoryBean.getRunStart() != null) {
-                asdDTO.setRunStart(new Double(advancedSearchHistoryBean.getRunStart()));
+            if (advancedTypeSearchHistoryBean.getRunStart() != null) {
+                asdDTO.setRunStart(new Double(advancedTypeSearchHistoryBean.getRunStart()));
             }
-            asdDTO.setExperimentNumber(advancedSearchHistoryBean.getInvNumber());
-            if (advancedSearchHistoryBean.getFirstDate() != null) {
-                asdDTO.setDateRangeStart(getXMLGregorianCalendar(advancedSearchHistoryBean.getFirstDate()));
+            asdDTO.setExperimentNumber(advancedTypeSearchHistoryBean.getInvNumber());
+            if (advancedTypeSearchHistoryBean.getFirstDate() != null) {
+                asdDTO.setDateRangeStart(getXMLGregorianCalendar(advancedTypeSearchHistoryBean.getFirstDate()));
             }
-            if (advancedSearchHistoryBean.getSecondDate() != null) {
-                asdDTO.setDateRangeEnd(getXMLGregorianCalendar(advancedSearchHistoryBean.getSecondDate()));
+            if (advancedTypeSearchHistoryBean.getSecondDate() != null) {
+                asdDTO.setDateRangeEnd(getXMLGregorianCalendar(advancedTypeSearchHistoryBean.getSecondDate()));
             }
 
             //check if the information passed is valid, if not, show the error message
@@ -233,7 +247,11 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to a search
-            getVisit().setTabIndex(1);
+            if (searchType == SEARCH_TYPE.ADVANCED) {
+                getVisit().setTabIndex(2);
+            } else if(searchType == SEARCH_TYPE.ISIS) {
+                getVisit().setTabIndex(0);
+            }
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -246,8 +264,12 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             return null;
         }
 
-        //set the title from the seach
-        getVisitData().setSearchedTitle("Advanced Search");
+        if (searchType == SEARCH_TYPE.ADVANCED) {
+            //set the title from the seach
+            getVisitData().setSearchedTitle("Advanced Search");
+        } else if (searchType == SEARCH_TYPE.ISIS) {
+            getVisitData().setSearchedTitle(getVisit().getFacility() + " Search");
+        }
 
         //wait for results.
         SearchBean searchBean = (SearchBean) getBean("searchBean");
@@ -255,9 +277,23 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     }
 
     /**
-     * Action method to do basic search
+     * Action method to do advanced search
      */
     public String searchAdvanced() {
+        return searchAdvanced(SEARCH_TYPE.ADVANCED);
+    }
+
+    /**
+     * Action method to do facility search ISIS
+     */
+    public String searchAdvancedISIS() {
+        return searchAdvanced(SEARCH_TYPE.ISIS);
+    }
+
+    /**
+     * Action method to do basic search
+     */
+    public String searchAdvanced(SEARCH_TYPE searchType) {
         //sets up initial values
         String sid = null;
         QueryRequest query_request = null;
@@ -276,34 +312,51 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 fuzzy = true;
             }
 
-            //set history bean
-            AdvancedSearchHistoryBean advancedSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
-            advancedSearchHistoryBean.setInvNumber(getInvNumber());
-            advancedSearchHistoryBean.setKeyword(getKeyword());
-            advancedSearchHistoryBean.setInstrument(getInstrument());
-            advancedSearchHistoryBean.setSample(getSample());
-            advancedSearchHistoryBean.setVisitId(getVisitId());
-            advancedSearchHistoryBean.setGrantId(getGrantId());
-            advancedSearchHistoryBean.setInvAbstract(getInvAbstract());
-            advancedSearchHistoryBean.setInvType(getInvType());
-            advancedSearchHistoryBean.setInvestigator(getInvestigator());
-            advancedSearchHistoryBean.setLikeExpression(getLikeExpression());
-            advancedSearchHistoryBean.setInvName(getInvName());
-            advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
+            if (searchType == SEARCH_TYPE.ADVANCED) {
+                //set history bean
+                AdvancedSearchHistoryBean advancedSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
+                advancedSearchHistoryBean.setInvNumber(getInvNumber());
+                advancedSearchHistoryBean.setKeyword(getKeyword());
+                advancedSearchHistoryBean.setInstrument(getInstrument());
+                advancedSearchHistoryBean.setSample(getSample());
+                advancedSearchHistoryBean.setVisitId(getVisitId());
+                advancedSearchHistoryBean.setGrantId(getGrantId());
+                advancedSearchHistoryBean.setInvAbstract(getInvAbstract());
+                advancedSearchHistoryBean.setInvType(getInvType());
+                advancedSearchHistoryBean.setInvestigator(getInvestigator());
+                advancedSearchHistoryBean.setLikeExpression(getLikeExpression());
+                advancedSearchHistoryBean.setInvName(getInvName());
+                advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
 
+                //new stuff
+                advancedSearchHistoryBean.setDatafileName(getDatafileName());
+                advancedSearchHistoryBean.setRunEnd(getRunEnd());
+                advancedSearchHistoryBean.setRunStart(getRunStart());
+                advancedSearchHistoryBean.setFirstDate(getFirstDate());
+                advancedSearchHistoryBean.setSecondDate(getSecondDate());
+                advancedSearchHistoryBean.setInvNumber(getInvNumber());
 
-            //new stuff
-            advancedSearchHistoryBean.setDatafileName(getDatafileName());
-            advancedSearchHistoryBean.setRunEnd(getRunEnd());
-            advancedSearchHistoryBean.setRunStart(getRunStart());
-            advancedSearchHistoryBean.setFirstDate(getFirstDate());
-            advancedSearchHistoryBean.setSecondDate(getSecondDate());
-            advancedSearchHistoryBean.setInvNumber(getInvNumber());
+                //prefs
+                advancedSearchHistoryBean.setAutoComplete(sessionHistory.isAdvancedSearchAutoComplete());
+                advancedSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
+            } else if (searchType == SEARCH_TYPE.ISIS) {
+                ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
 
-            //prefs
-            advancedSearchHistoryBean.setAutoComplete(sessionHistory.isAdvancedSearchAutoComplete());
-            advancedSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
+                isisSearchHistoryBean.setKeyword(getKeyword());
+                isisSearchHistoryBean.setInstrument(getInstrument());
+                isisSearchHistoryBean.setLikeExpression(getLikeExpression());
+                isisSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
 
+                isisSearchHistoryBean.setRunEnd(getRunEnd());
+                isisSearchHistoryBean.setRunStart(getRunStart());
+                isisSearchHistoryBean.setFirstDate(getFirstDate());
+                isisSearchHistoryBean.setSecondDate(getSecondDate());
+
+                //prefs
+                isisSearchHistoryBean.setAutoComplete(sessionHistory.isAdvancedSearchAutoComplete());
+                isisSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
+
+            }
 
             //create advanced search bean
             AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO();
@@ -320,7 +373,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             asdDTO.setInvestigationName(getInvName());
             asdDTO.setInvestigationType(getInvType());
             asdDTO.setFuzzy(fuzzy);
-            asdDTO.setCaseSensitive(sessionHistory.isAdvancedSearchNavigationCaseSensitive());
+            asdDTO.setCaseSensitive(sessionHistory.isFacilitySearchNavigationCaseSensitive());
 
             //new stuff
             asdDTO.setDatafileName(getDatafileName());
@@ -329,6 +382,10 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             }
             if (getRunStart() != null) {
                 asdDTO.setRunStart(new Double(getRunStart()));
+                if (getRunEnd() == null) {
+                    asdDTO.setRunEnd(new Double(getRunStart()));
+                }
+
             }
             asdDTO.setExperimentNumber(getInvNumber());
             if (getFirstDate() != null) {
@@ -351,7 +408,12 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to a search
-            getVisit().setTabIndex(1);
+            
+             if (searchType == SEARCH_TYPE.ADVANCED) {
+                getVisit().setTabIndex(2);
+            } else if(searchType == SEARCH_TYPE.ISIS) {
+                getVisit().setTabIndex(0);
+            }
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -365,7 +427,11 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         }
 
         //set the title from the seach
-        getVisitData().setSearchedTitle("Advanced Search");
+        if (searchType == SEARCH_TYPE.ADVANCED) {
+            getVisitData().setSearchedTitle("Advanced Search Results");
+        } else {
+            getVisitData().setSearchedTitle(getVisit().getFacility() + " Search Results");
+        }
 
         //wait for results.
         SearchBean searchBean = (SearchBean) getBean("searchBean");
@@ -552,7 +618,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     public void setInvestigator(String investigator) {
         // log.trace("Investigator : "+investigator);
         this.investigator = investigator;
-        if (investigator.equals("")) {
+        if (investigator == null || investigator.equals("")) {
             this.investigators = null;
         } else {
             String[] investigatorsSplit = this.investigator.split(" ");

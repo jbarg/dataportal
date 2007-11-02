@@ -133,7 +133,7 @@ public class SearchBean extends AbstractRequestBean {
         }
 
         //set the title from the seach
-        getVisitData().setSearchedTitle("My Data Search");
+        getVisitData().setSearchedTitle("My Data Search Results");
 
         return getQueryResults(query_request, true);
     }
@@ -162,7 +162,7 @@ public class SearchBean extends AbstractRequestBean {
             query_request = qd.queryMyData(getVisit().getSid(), facilities);
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to basic search
-            getVisit().setTabIndex(0);
+            getVisit().setTabIndex(1);
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -176,7 +176,7 @@ public class SearchBean extends AbstractRequestBean {
         }
 
         //set the title from the seach
-        getVisitData().setSearchedTitle("My Data");
+        getVisitData().setSearchedTitle("My Data Search Results");
 
         return getQueryResults(query_request, true);
     }
@@ -246,7 +246,7 @@ public class SearchBean extends AbstractRequestBean {
             //set the query as last request
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to basic search
-            getVisit().setTabIndex(0);
+            getVisit().setTabIndex(1);
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -260,7 +260,7 @@ public class SearchBean extends AbstractRequestBean {
         }
 
         //set the title from the seach
-        getVisitData().setSearchedTitle("Search Results");
+        getVisitData().setSearchedTitle("Keyword Search Results");
 
         return getQueryResults(query_request, false);
     }
@@ -325,7 +325,7 @@ public class SearchBean extends AbstractRequestBean {
             query_request = qd.queryKeyword(getVisit().getSid(), kqr);
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to basic search
-            getVisit().setTabIndex(0);
+            getVisit().setTabIndex(1);
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -339,7 +339,7 @@ public class SearchBean extends AbstractRequestBean {
         }
 
         //set the title from the seach
-        getVisitData().setSearchedTitle("Search Results");
+        getVisitData().setSearchedTitle("Keyword Search Results");
 
         return getQueryResults(query_request, false);
     }
@@ -526,4 +526,15 @@ public class SearchBean extends AbstractRequestBean {
         this.likeExpression = likeExpression;
     }
        
+    /**
+     * Checks which page to goto for the facility search
+     * 
+     * @return
+     */
+    public String gotoFacilitySearchPage(){
+        if(getVisit().getFacility().equals("ISIS")) return "GOTO_ISIS_SEARCH";
+        else if(getVisit().getFacility().equals("DIAMOND")) return "GOTO_DIAMOND_SEARCH";
+        else if(getVisit().getFacility().equals("CLF")) return "GOTO_CLF_SEARCH";
+        else return "GOTO_ADVANCED_SEARCH";
+    }
 }
