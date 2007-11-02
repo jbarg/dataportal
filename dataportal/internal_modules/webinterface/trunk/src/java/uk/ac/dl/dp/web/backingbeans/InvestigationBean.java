@@ -59,6 +59,10 @@ public class InvestigationBean extends SortableList {
      */
     public List<Investigation> getInvestigations() {
         sort(getSort(), isAscending());
+        if(getVisitData().isNewResults()) {
+            getTable().collapseAllDetails();
+            getVisitData().setNewResults(false);
+        }
         return (List<Investigation>)getVisitData().getSearchedInvestigations();
     }
     

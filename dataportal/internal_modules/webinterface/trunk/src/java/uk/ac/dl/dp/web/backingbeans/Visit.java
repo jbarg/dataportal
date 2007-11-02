@@ -113,6 +113,7 @@ public class Visit extends AbstractSessionBean implements Serializable {
     }
     private static Logger log = Logger.getLogger(Visit.class);
 
+       
     public Visit() {
         setVisitData(new VisitData());
     }

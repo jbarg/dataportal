@@ -461,6 +461,7 @@ public class SearchBean extends AbstractRequestBean {
             log.debug("Adding found investigations to session, size: " + investigations.size());
             getVisitData().setSearchedInvestigations(investigations);
             getVisitData().setDataSetTree(null);
+            getVisitData().setNewResults(true);
 
             return NavigationConstants.SEARCH_SUCCESS;
         } catch (Exception ex) {

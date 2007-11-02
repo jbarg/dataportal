@@ -268,7 +268,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             //set the title from the seach
             getVisitData().setSearchedTitle("Advanced Search");
         } else if (searchType == SEARCH_TYPE.ISIS) {
-            getVisitData().setSearchedTitle(getVisit().getFacility() + " Search");
+            getVisitData().setSearchedTitle(getVisit().getFacility() + " Search Results");
         }
 
         //wait for results.
