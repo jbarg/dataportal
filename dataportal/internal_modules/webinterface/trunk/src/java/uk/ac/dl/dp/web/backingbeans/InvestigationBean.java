@@ -135,6 +135,12 @@ public class InvestigationBean extends SortableList {
                     else if(c2.getInvAbstract() == null) return ascending ? -1 : 1;
                     else return ascending ? c1.getInvAbstract().compareTo(c2.getInvAbstract()) : c2.getInvAbstract()
                             .compareTo(c1.getInvAbstract());
+                } else if (column.equals("bcatInvStr")) {                    
+                    if(c1.getBcatInvStr() == null && c2.getBcatInvStr() == null) return 0;
+                    else if(c1.getBcatInvStr() == null) return ascending ? 1 : -1;
+                    else if(c2.getBcatInvStr() == null) return ascending ? -1 : 1;
+                    else return ascending ? c1.getBcatInvStr().compareTo(c2.getBcatInvStr()) : c2.getBcatInvStr()
+                            .compareTo(c1.getBcatInvStr());
                 } else if (column.equals("type")) {
                     if(c1.getInvType() == null && c2.getInvType() == null) return 0;
                     else if(c1.getInvType() == null) return ascending ? 1 : -1;
@@ -467,6 +473,14 @@ public class InvestigationBean extends SortableList {
     
     public boolean isNotType(){
         return isNot("type");
+    }
+    
+    public boolean isBcatInvStr(){
+        return is("bcatInvStr");
+    }
+    
+    public boolean isNotBcatInvStr(){
+        return isNot("bcatInvStr");
     }
     
     public boolean isFacility(){

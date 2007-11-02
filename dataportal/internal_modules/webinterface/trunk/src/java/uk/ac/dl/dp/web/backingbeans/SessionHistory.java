@@ -18,48 +18,55 @@ import uk.ac.dl.dp.web.util.AbstractSessionBean;
 public class SessionHistory extends AbstractSessionBean implements Serializable {
 
     private static Logger log = Logger.getLogger(SessionHistory.class);
-    
     private BasicSearchHistoryBean basicSearchHistoryBean = new BasicSearchHistoryBean();
     private AdvancedSearchHistoryBean advancedSearchHistoryBean = new AdvancedSearchHistoryBean();
+    private ISISSearchHistoryBean isisSearchHistoryBean = new ISISSearchHistoryBean();
+
+    public ISISSearchHistoryBean getIsisSearchHistoryBean() {
+        return isisSearchHistoryBean;
+    }
+
+    public void setIsisSearchHistoryBean(ISISSearchHistoryBean isisSearchHistoryBean) {
+        this.isisSearchHistoryBean = isisSearchHistoryBean;
+    }
 
     public AdvancedSearchHistoryBean getAdvancedSearchHistoryBean() {
         return advancedSearchHistoryBean;
     }
-    
+
     public BasicSearchHistoryBean getBasicSearchHistoryBean() {
         return basicSearchHistoryBean;
     }
-        
     /**
      * Keyword Search
      */
     private boolean keywordSearchCaseSensitive;
-    private boolean keywordSearchAutoComplete;
+    private boolean keywordSearchAutoComplete = true;
     /**
      * Advanced Search
      */
     private boolean advancedSearchCaseSensitive;
-    private boolean advancedSearchAutoComplete;
+    private boolean advancedSearchAutoComplete = true;
     /**
      * Facility Search
      */
     private boolean facilitySearchCaseSensitive;
-    private boolean facilitySearchAutoComplete;
+    private boolean facilitySearchAutoComplete = true;
     /**
      * Keyword Search Navigation
      */
     private boolean keywordSearchNavigationCaseSensitive;
-    private boolean keywordSearchNavigationAutoComplete;
+    private boolean keywordSearchNavigationAutoComplete = true;
     /**
      * Advanced Search Navigation
      */
     private boolean advancedSearchNavigationCaseSensitive;
-    private boolean advancedSearchNavigationAutoComplete;
+    private boolean advancedSearchNavigationAutoComplete = true;
     /**
      * Facility Search Navigation
      */
     private boolean facilitySearchNavigationCaseSensitive;
-    private boolean facilitySearchNavigationAutoComplete;
+    private boolean facilitySearchNavigationAutoComplete = true;
 
     public boolean isAdvancedSearchNavigationAutoComplete() {
         return advancedSearchNavigationAutoComplete;
@@ -118,7 +125,7 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     }
 
     public void setAdvancedSearchAutoComplete(boolean advancedSearchAutoComplete) {
-        log.trace("Setting AdvancedSearchAutoComplete "+advancedSearchAutoComplete);
+        log.trace("Setting AdvancedSearchAutoComplete " + advancedSearchAutoComplete);
         this.advancedSearchAutoComplete = advancedSearchAutoComplete;
     }
 
@@ -176,7 +183,7 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
                 log.trace("Param name " + current.getName());
                 if (current.getName().equals("keyword")) {
                     this.keywordSearchAutoComplete = !this.keywordSearchAutoComplete;
-                    //log.trace("Setting auto to "+this.keywordSearchAutoComplete);
+                //log.trace("Setting auto to "+this.keywordSearchAutoComplete);
                 } else if (current.getName().equals("keyword_nav")) {
                     this.keywordSearchNavigationAutoComplete = !this.keywordSearchNavigationAutoComplete;
                 } else if (current.getName().equals("advanced")) {
@@ -197,7 +204,7 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
      */
     public void caseSensitive(ActionEvent event) {
 
-       List children = event.getComponent().getChildren();
+        List children = event.getComponent().getChildren();
         int i = 0;
 
         log.trace("caseSensitive checkbox ajax");
