@@ -8,7 +8,7 @@
     <h:outputText value="#{visit.name}"/> 
     <br />
     <b>Expire time: </b>
-     
+    
     <h:outputText value="#{visit.session.expireTime}">
         <f:convertDateTime pattern="HH:mm a dd.MM.yyyy "/>
     </h:outputText>

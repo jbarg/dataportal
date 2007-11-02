@@ -14,7 +14,9 @@
         <t:navigationMenuItem id="nav_admin"  itemLabel="Admin" itemValue="gotAdmin" action="GOTO_ADMIN"  rendered="#{visit.admin}"  />    
                
         <t:navigationMenuItem id="nav_0"  itemLabel="Search" itemValue="basicSearch" action="GOTO_BASIC_SEARCH">    
-        <t:navigationMenuItem id="nav_0_1"  itemLabel="Basic Search" itemValue="basicSearch" action="GOTO_BASIC_SEARCH" />
+        <t:navigationMenuItem id="nav_0_1"  itemLabel="#{facility_properties['facility.name']} Search" itemValue="facilitySearch" action="#{searchBean.gotoFacilitySearchPage}" />
+      
+        <t:navigationMenuItem id="nav_0_1"  itemLabel="Keyword Search" itemValue="keywordSearch" action="GOTO_BASIC_SEARCH" />
         <t:navigationMenuItem id="nav_0_2"  itemLabel="Advanced Search" itemValue="advancedSearch" action="GOTO_ADVANCED_SEARCH" />     
         <t:navigationMenuItem id="nav_0_3"  itemLabel="My Data Search" itemValue="myDataSearch"  action="#{searchBean.searchOwnDataAll}" />
         </t:navigationMenuItem>  

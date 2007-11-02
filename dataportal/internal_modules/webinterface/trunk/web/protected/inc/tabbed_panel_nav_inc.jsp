@@ -110,7 +110,7 @@
 <a4j:region  selfRendered="true"> 
     
     
-    <t:panelTabbedPane selectedIndex="#{visit.tabIndex}" width="202px" bgcolor="#D1E4E4" serverSideTabSwitch="false" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
+    <t:panelTabbedPane selectedIndex="#{visit.tabIndex}" width="202px" bgcolor="#EAF4F4" serverSideTabSwitch="false" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
         <t:panelTab id="ISIS" label="ISIS" >
             <h:form id="autofillform_nav_isis">
                 
