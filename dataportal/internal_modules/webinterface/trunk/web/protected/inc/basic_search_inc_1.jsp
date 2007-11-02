@@ -57,7 +57,7 @@
         
         <h:panelGrid  border="0" columns="4">      
                         
-            <h:outputLabel for="facilitiesj_id_1">
+            <h:outputLabel rendered="#{!visit.singleFacility}" for="facilitiesj_id_1">
                 <h:outputText rendered="#{!visit.singleFacility}" value="Search: " style="font-size:14px"/>
             </h:outputLabel  >
             
@@ -72,26 +72,26 @@
                        
             <h:outputText rendered="#{!visit.singleFacility}" id="facilityDisplay" value="#{visit.visitData.currentSelectedFacilities}" style="font-size:14px"/>
             
-            <h:message for="facilitiesj_id_1" styleClass="error"/>
+            <h:message rendered="#{!visit.singleFacility}" for="facilitiesj_id_1" styleClass="error"/>
             
             <h:outputLabel for="keywordFieldj_id_1">
                 <h:outputText value="Keyword(s): " style="font-size:14px"/>
             </h:outputLabel  >                      
             
             <h:panelGrid id="inputKeywordField" >   
-                <ui:autoComplete rendered="#{sessionHistory.keywordSearchAutoComplete && sessionHistory.keywordSearchCaseSensitive}" styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_1" 
+                <ui:autoComplete rendered="#{sessionHistory.keywordSearchAutoComplete && sessionHistory.keywordSearchCaseSensitive}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_1" 
                                  completionMethod="#{keyword.completeCityCaseSensitive}" 
                                  value="#{searchBean.keyword}" required="true"
                                  ondisplay="function(item) { return extractCity(item); }"
                                  onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
                 
-                <ui:autoComplete rendered="#{sessionHistory.keywordSearchAutoComplete && !sessionHistory.keywordSearchCaseSensitive}" styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_2" 
+                <ui:autoComplete rendered="#{sessionHistory.keywordSearchAutoComplete && !sessionHistory.keywordSearchCaseSensitive}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_2" 
                                  completionMethod="#{keyword.completeCityCaseInsensitive}" 
                                  value="#{searchBean.keyword}" required="true"
                                  ondisplay="function(item) { return extractCity(item); }"
                                  onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
                 
-                <h:inputText rendered="#{!sessionHistory.keywordSearchAutoComplete}" styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_3"
+                <h:inputText rendered="#{!sessionHistory.keywordSearchAutoComplete}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_3"
                              value="#{searchBean.keyword}" required="true" validator="#{searchBean.validateKeyword}" />
             </h:panelGrid> 
             
@@ -113,12 +113,12 @@
                 </f:facet>
             </t:popup> 
             
-            <h:panelGrid  columns="3" >
+                                          
+           <h:panelGrid >
                 <h:message for="keywordFieldj_id_1" styleClass="error"/>
                 <h:message for="keywordFieldj_id_2" styleClass="error"/>
                 <h:message  for="keywordFieldj_id_3" styleClass="error"/>                
-            </h:panelGrid>                     
-            
+            </h:panelGrid>  
             <!----------------     Start of auto complete toggle ---------------->
             
             <h:panelGroup/>

@@ -17,7 +17,7 @@
     }
     
     
-   function chooseCity(city) {
+    function chooseCity(city) {
     var textField = document.getElementById('body:autofillform:keywordFieldj_id_1');
     if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_2');
     if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_3');   
@@ -28,16 +28,16 @@
     
     var old = oldvalue.substring(0, index);
     
-        
+    
     if(old == ""){
     
-        textField.value = city+" ";        
+    textField.value = city+" ";        
     
     }
     else {
     
-        textField.value = old+" "+city+" ";
-        
+    textField.value = old+" "+city+" ";
+    
     }
     //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
     
@@ -62,7 +62,7 @@
         <h:panelGrid  border="0" columns="4">      
             
             
-            <h:outputLabel for="facilitiesj_id_1">
+            <h:outputLabel rendered="#{!visit.singleFacility}" for="facilitiesj_id_1">
                 <h:outputText rendered="#{!visit.singleFacility}" value="Search: " style="font-size:14px"/>
             </h:outputLabel  >
             
@@ -84,20 +84,20 @@
             </h:outputLabel  >                      
             
             <h:panelGrid id="inputKeywordField" >   
-                <ui:autoComplete rendered="#{sessionHistory.advancedSearchAutoComplete && sessionHistory.advancedSearchCaseSensitive}" styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_1" 
+                <ui:autoComplete rendered="#{sessionHistory.advancedSearchAutoComplete && sessionHistory.advancedSearchCaseSensitive}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_1" 
                                  completionMethod="#{keyword.completeCityCaseSensitive}" 
-                                 value="#{advancedSearchBean.keyword}" required="true"
+                                 value="#{advancedSearchBean.keyword}" required="false"
                                  ondisplay="function(item) { return extractCity(item); }"
                                  onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
                 
-                <ui:autoComplete rendered="#{sessionHistory.advancedSearchAutoComplete && !sessionHistory.advancedSearchCaseSensitive}" styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_2" 
+                <ui:autoComplete rendered="#{sessionHistory.advancedSearchAutoComplete && !sessionHistory.advancedSearchCaseSensitive}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_2" 
                                  completionMethod="#{keyword.completeCityCaseInsensitive}" 
-                                 value="#{advancedSearchBean.keyword}" required="true"
+                                 value="#{advancedSearchBean.keyword}" required="false"
                                  ondisplay="function(item) { return extractCity(item); }"
                                  onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
                 
-                <h:inputText rendered="#{!sessionHistory.advancedSearchAutoComplete}" styleClass="text" size="40" maxlength="60" id="keywordFieldj_id_3"
-                             value="#{searchBean.keyword}" required="true" validator="#{searchBean.validateKeyword}" />
+                <h:inputText rendered="#{!sessionHistory.advancedSearchAutoComplete}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_3"
+                             value="#{searchBean.keyword}" required="false" validator="#{searchBean.validateKeyword}" />
             </h:panelGrid> 
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
@@ -110,7 +110,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <%-- <h:outputText value="Exact keyword match only. Case insensititve."/>   --%>
-                            <h:outputText value="Auto Complete enabled."/>                                 
+                            
                             <h:outputText value="This list is not a full list of all your possible keywords, only alpha numeric."/>                                 
                             <h:outputText value="'AND' type searches returns all results"/>                                 
                             <h:outputText escape="true" value=" that contain all the keywords, i.e. default Google behaviour."/> 
@@ -120,13 +120,17 @@
                 </f:facet>
             </t:popup> 
             
-            <h:message for="keywordFieldj_id_1" styleClass="error"/>
-            
+
+              <h:panelGrid  columns="3" >
+                <h:message for="keywordFieldj_id_1" styleClass="error"/>
+                <h:message for="keywordFieldj_id_2" styleClass="error"/>
+                <h:message  for="keywordFieldj_id_3" styleClass="error"/>                
+            </h:panelGrid>    
             <!----------------     Start of auto complete toggle ---------------->
             
             <h:panelGroup/>
             
-            <h:panelGrid columns="4" >
+            <h:panelGrid columns="2" >
                 
                 <%--onchange="submit()" valueChangeListener="#{searchBean.autoCompleteEnabled}"--%>
                 <h:selectBooleanCheckbox  style="font-size:12px" id="auto"   required="true" value="#{sessionHistory.advancedSearchAutoComplete}">                                       
@@ -139,15 +143,6 @@
                     <h:outputText  value="Auto Complete" style="font-size: 12px" />                   
                 </h:outputLabel>
                 
-                <h:selectBooleanCheckbox style="font-size:12px" id="case" required="true" value="#{sessionHistory.advancedSearchCaseSensitive}">                                                           
-                    <a4j:support id="other3" event="onclick" immediate="true" actionListener="#{sessionHistory.caseSensitive}" ajaxSingle="true" reRender="inputKeywordField">
-                        <a4j:actionparam name="advanced" /> 
-                    </a4j:support>
-                </h:selectBooleanCheckbox> 
-                
-                <h:outputLabel>            
-                    <h:outputText value="Case Sensitive" style="font-size: 12px" />                   
-                </h:outputLabel>        
                 
             </h:panelGrid>  
             
@@ -160,14 +155,10 @@
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="These set for the default behaviour for this session for all keyword searches."/>
                             <h:outputText escape="false" value="Auto Complete:"/>
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;   'Yes' auto complete is enabled"/>                                                             
-                            <h:outputText escape="false" value="  &nbsp; &nbsp;  'No' auto complete is disabled"/>   
+                            <h:outputText escape="false" value=" &nbsp; &nbsp;   'Yes' auto complete for keyword(s) is enabled"/>                                                             
+                            <h:outputText escape="false" value="  &nbsp; &nbsp;  'No' auto complete for keyword(s) is disabled"/>   
                             
-                            <h:outputText value="Case Sensitive:"/>
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;  'Yes' search is done regardless of case of keyword"/>                                                             
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;  'No' keyword case is kept and searched"/>   
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -196,7 +187,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Name of investigation."/>                                 
-                            <h:outputText value="Exact or Like match depending what you select below."/>  
+                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -226,7 +217,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Abstract of investigation."/>                                 
-                            <h:outputText value="Exact or Like match depending what you select below."/>  
+                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -256,7 +247,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Sample used in investigation."/>                                 
-                            <h:outputText value="Exact or Like match depending what you select below."/>  
+                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -286,7 +277,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Investigators used in investigation."/>                                 
-                            <h:outputText value="Exact or Like match depending what you select below."/>  
+                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -314,6 +305,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                             <h:outputText value="Name of a data file in an investigation."/>                                 
+                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -324,6 +316,42 @@
             
             <!----------------     End of Datafile name ---------------->
             
+            <h:panelGroup/>
+            
+            <h:panelGrid columns="2" >
+                
+                
+                <h:selectBooleanCheckbox style="font-size:12px" id="case" required="true" value="#{sessionHistory.advancedSearchCaseSensitive}">                                                           
+                    <a4j:support id="other3" event="onclick" immediate="true" actionListener="#{sessionHistory.caseSensitive}" ajaxSingle="true" reRender="inputKeywordField">
+                        <a4j:actionparam name="advanced" /> 
+                    </a4j:support>
+                </h:selectBooleanCheckbox> 
+                
+                <h:outputLabel>            
+                    <h:outputText value="Case Sensitive" style="font-size: 12px" />                   
+                </h:outputLabel>        
+                
+            </h:panelGrid>  
+            
+            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                     closePopupOnExitingPopup="true"
+                     displayAtDistanceX="5"
+                     displayAtDistanceY="-40" >
+                
+                <t:graphicImage url="../../images/help.gif" border="0" />
+                <f:facet name="popup">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" >
+                            
+                            <h:outputText value="Case Sensitive (for all columns above only)"/>
+                            <h:outputText escape="false" value=" &nbsp; &nbsp;  'Yes' search is done regardless of case of keyword"/>                                                             
+                            <h:outputText escape="false" value=" &nbsp; &nbsp;  'No' keyword case is kept and searched"/>   
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </f:facet>
+            </t:popup>
+            
+            <h:panelGroup/>
             <!----------------     Start of Like ---------------->
             <h:outputLabel>            
                 <h:outputText value="Type:" style="font-size: 14px" />                   
@@ -344,6 +372,7 @@
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
+                            <h:outputText value="Type of search (for all columns above only)" />
                             <h:outputText value="'Exact' type searches returns all results"/>                                 
                             <h:outputText escape="true" value=" that exactly match the search text."/> 
                             <h:outputText value="'Like' type searches returns all results"/>                             
@@ -397,7 +426,7 @@
                         <h:panelGroup >
                             <h:panelGrid columns="1" >
                                 <h:outputText value="Minimum and maximum values of a run number."/>                                 
-                                
+                                <h:outputText value="Just enter minimum if you are only search one run number and not a range."/> 
                             </h:panelGrid>
                         </h:panelGroup>
                     </f:facet>
@@ -423,7 +452,7 @@
                              popupTodayString="Today is:"
                              popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
                              helpText="DD/MM/YYYY" validator="#{advancedSearchBean.validateDate}"/>  
-           
+            
             
             <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
@@ -451,7 +480,7 @@
                 <h:outputText value="End Date:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-           
+            
             <t:inputCalendar size="15" styleClass="text" binding="#{advancedSearchBean.calendarSecond}" id="endDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                              currentDayCellClass="currentDayCell" value="#{advancedSearchBean.secondDate}" renderAsPopup="true"
                              popupTodayString="Today is:"
@@ -646,8 +675,11 @@
             
             <h:panelGroup/>
             
-            <h:commandButton id="f" styleClass="button" action="#{advancedSearchBean.searchAdvanced}" onclick="busyBox.Show();" title="Search" value="Search"/>
-            
+            <h:panelGrid columns="3" >
+                <h:commandButton id="f" styleClass="button" action="#{advancedSearchBean.searchAdvanced}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                &nbsp;
+                <h:commandButton id="reset" type="reset" styleClass="button"  title="Reset" value="Reset"/>
+            </h:panelGrid>
             
             <h:panelGroup/>
             <h:panelGroup/>

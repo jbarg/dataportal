@@ -22,21 +22,32 @@
     return citystatezip;
     }
     
+    function extractCityNavISIS(citystatezip) {
+    
+    var index = citystatezip.indexOf(',');
+    var nextcity = citystatezip.substring(0, index+4);   
+    
+    return citystatezip;
+    }
+    
     function chooseCityNavAdv(city) {
     
-    var oldvalue = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1').value;  
-    
+    var textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1');
+    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_2');
+    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_3');   
+    var oldvalue = textField.value;
+        
     // OLD way 1.1.6   var oldvalue = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value;  
     var index = oldvalue.lastIndexOf(' ');          
     var old = oldvalue.substring(0, index);     
     
     if(old == ""){       
-    document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1').value = city+" ";
+    textField.value = city+" ";
     // OLD way 1.1.6 document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value = city+" ";
     }
     else {     
-    document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1').value = old+" "+city+" ";
-    // OLD way 1.1.6 document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value = old+" "+city+" ";
+     textField.value = old+" "+city+" ";
+          // OLD way 1.1.6 document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value = old+" "+city+" ";
     
     }
     }
@@ -65,6 +76,32 @@
     
     }
     
+    function chooseCityNavISIS(city) {
+    
+    
+    // OLD way 1.1.6  var oldvalue = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value;         
+    var textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_1');
+    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_2');
+    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_3');   
+    
+    var oldvalue = textField.value;  
+    var index = oldvalue.lastIndexOf(' ');          
+    var old = oldvalue.substring(0, index);     
+    
+    if(old == ""){       
+    textField.value = city+" ";
+    // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = city+" ";
+    }
+    else {     
+    textField.value = old+" "+city+" ";
+    // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
+    
+    }
+    
+    }
+    
+    
+    
     
 </script>
 <br />
@@ -74,16 +111,189 @@
     
     
     <t:panelTabbedPane selectedIndex="#{visit.tabIndex}" width="202px" bgcolor="#D1E4E4" serverSideTabSwitch="false" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
+        <t:panelTab id="ISIS" label="ISIS" >
+            <h:form id="autofillform_nav_isis">
+                
+                <h:panelGrid  border="0" columns="2"  >      
+                    
+                    <h:outputLabel rendered="#{!visit.singleFacility}" for="facilities_nav_isisj_id_1">
+                        <h:outputText rendered="#{!visit.singleFacility}" value="Search: " style="font-size:10px"/>
+                    </h:outputLabel  >
+                    
+                    <h:panelGrid rendered="#{!visit.singleFacility}">   
+                        <h:selectManyListbox id="facilities_nav_isisj_id_1" immediate="true"  value="#{sessionHistory.isisSearchHistoryBean.selectedFacilities}" size="#{fn:length(visit.facilities)}" required="true" >      
+                            <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplayNav,radioNav" />
+                            <f:selectItems value="#{visit.facilities}"/>
+                            <f:validateLength minimum="1" />
+                        </h:selectManyListbox>
+                    </h:panelGrid>   
+                    
+                    <h:message rendered="#{!visit.singleFacility}" for="facilities_nav_isisj_id_1" styleClass="error"/>
+                    <h:panelGroup rendered="#{!visit.singleFacility}" />
+                    
+                    <h:outputLabel for="keywordField_nav_isisj_id_1">
+                        <h:outputText value="Keyword(s): " style="font-size:10px"/>
+                    </h:outputLabel>                      
+                    
+                    <h:panelGrid id="inputisisKeywordField" >   
+                        <ui:autoComplete rendered="#{sessionHistory.facilitySearchNavigationAutoComplete && sessionHistory.facilitySearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_isisj_id_1" 
+                                         completionMethod="#{keyword.completeCityCaseSensitive}" 
+                                         value="#{sessionHistory.isisSearchHistoryBean.keyword}" required="false"
+                                         ondisplay="function(item) { return extractCityNavISIS(item); }"
+                                         onchoose="function(item) { return chooseCityNavISIS(item); }"  validator="#{searchBean.validateKeyword}"/>
+                        
+                        <ui:autoComplete rendered="#{sessionHistory.facilitySearchNavigationAutoComplete && !sessionHistory.facilitySearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_isisj_id_2" 
+                                         completionMethod="#{keyword.completeCityCaseInsensitive}" 
+                                         value="#{sessionHistory.isisSearchHistoryBean.keyword}" required="false"
+                                         ondisplay="function(item) { return extractCityNavISIS(item); }"
+                                         onchoose="function(item) { return chooseCityNavISIS(item); }"  validator="#{searchBean.validateKeyword}"/>
+                        
+                        <h:inputText rendered="#{!sessionHistory.facilitySearchNavigationAutoComplete}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_isisj_id_3"
+                                     value="#{sessionHistory.isisSearchHistoryBean.keyword}" required="false" validator="#{searchBean.validateKeyword}" />
+                    </h:panelGrid> 
+                    
+                    <h:panelGroup/>
+                    
+                    
+                    <h:message rendered="#{sessionHistory.facilitySearchNavigationAutoComplete && sessionHistory.facilitySearchNavigationCaseSensitive}" for="keywordField_nav_isisj_id_1" styleClass="error"/>
+                    <h:message rendered="#{sessionHistory.facilitySearchNavigationAutoComplete && !sessionHistory.facilitySearchNavigationCaseSensitive}" for="keywordField_nav_isisj_id_2" styleClass="error"/>
+                    <h:message rendered="#{!sessionHistory.facilitySearchNavigationAutoComplete}" for="keywordField_nav_isisj_id_3" styleClass="error"/>  
+                    
+                    <h:panelGroup/>
+                    
+                    <h:panelGrid columns="4" >
+                        <h:selectBooleanCheckbox  style="font-size:10px" id="auto"   required="true" value="#{sessionHistory.facilitySearchNavigationAutoComplete}">                                       
+                            <a4j:support id="othedr" event="onclick" immediate="true" actionListener="#{sessionHistory.autoComplete}" ajaxSingle="true" reRender="inputisisKeywordField" >
+                                <a4j:actionparam name="facility_nav" /> 
+                            </a4j:support>
+                        </h:selectBooleanCheckbox>         
+                        
+                        <h:outputLabel >            
+                            <h:outputText  value="Auto" style="font-size: 10px" />                   
+                        </h:outputLabel>
+                        
+                        <h:selectBooleanCheckbox style="font-size:12px" id="case" required="true" value="#{sessionHistory.facilitySearchNavigationCaseSensitive}">                                                           
+                            <a4j:support id="otherd3" event="onclick" immediate="true" actionListener="#{sessionHistory.caseSensitive}" ajaxSingle="true" reRender="inputisisKeywordField">
+                                <a4j:actionparam name="facility_nav" /> 
+                            </a4j:support>
+                        </h:selectBooleanCheckbox> 
+                        
+                        
+                        <h:outputLabel>            
+                            <h:outputText value="Case " style="font-size: 10px" />                   
+                        </h:outputLabel> 
+                    </h:panelGrid>                      
+                    
+                    <!----------------     Start of Like ---------------->
+                    <h:outputLabel>            
+                        <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
+                    </h:outputLabel>
+                    
+                    <h:selectOneRadio style="font-size:10px" id="like" value="#{sessionHistory.isisSearchHistoryBean.likeExpression}" >
+                        <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
+                        <f:selectItem itemLabel="Like"  itemValue="LIKE" />
+                        <f:validateLength minimum="1" />
+                    </h:selectOneRadio>       
+                    
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <!----------------     End of Like ---------------->
+                    
+                    <!----------------     Start of Run number ---------------->
+                    <h:outputLabel>            
+                        <h:outputText value="Run #" style="font-size: 10px" />                   
+                    </h:outputLabel>
+                    
+                    
+                    <h:panelGroup >
+                        
+                        <h:inputText styleClass="text" id="runNumberMinj_id_1" size="5" required="false" binding="#{sessionHistory.isisSearchHistoryBean.runStartUI}" value="#{sessionHistory.advancedSearchHistoryBean.runStart}" >
+                            <f:validateDoubleRange minimum="0" maximum="90000000" />
+                        </h:inputText>                
+                        &nbsp;
+                        <h:inputText styleClass="text" id="runNumberMaxj_id_1" size="5" required="false" validator="#{sessionHistory.isisSearchHistoryBean.validateRun}" value="#{sessionHistory.advancedSearchHistoryBean.runEnd}" >
+                            <f:validateDoubleRange minimum="0" maximum="90000000" />
+                        </h:inputText>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup/>   
+                    
+                    <h:panelGroup>
+                        <h:message for="runNumberMinj_id_1" styleClass="error"/>
+                        <h:message for="runNumberMaxj_id_1" styleClass="error"/>
+                    </h:panelGroup>
+                    <!----------------     End of Run number ---------------->
+                    
+                    <!----------------     Start of Start Date ---------------->
+                    
+                    
+                    <h:outputLabel>            
+                        <h:outputText value="Date range:" style="font-size: 10px" />                   
+                    </h:outputLabel>
+                    
+                    <h:panelGroup>
+                        
+                        <t:inputCalendar size="1" styleClass="text" binding="#{sessionHistory.isisSearchHistoryBean.calendarFirst}" id="startDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                         currentDayCellClass="currentDayCell" value="#{sessionHistory.isisSearchHistoryBean.firstDate}" renderAsPopup="true"
+                                         popupTodayString="Today is:"
+                                         popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
+                                         helpText="" validator="#{sessionHistory.isisSearchHistoryBean.validateDate}"/>  
+                        
+                        <t:inputCalendar size="1"  styleClass="text"  binding="#{sessionHistory.isisSearchHistoryBean.calendarSecond}" id="endDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                         currentDayCellClass="currentDayCell" value="#{sessionHistory.isisSearchHistoryBean.secondDate}" renderAsPopup="true"
+                                         popupTodayString="Today is:" 
+                                         popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
+                                         helpText="" validator="#{sessionHistory.isisSearchHistoryBean.validateDate}"/>  
+                    </h:panelGroup>
+                    
+                    <h:panelGroup/>   
+                    
+                    <h:panelGroup>
+                        <h:message for="startDatej_id_1" styleClass="error"/>
+                        <h:message for="endDatej_id_1" styleClass="error"/>
+                    </h:panelGroup>
+                    <!----------------     End of Start Date ---------------->                               
+                    
+                    <!----------------     Start of instruemnt ---------------->
+                    <h:outputLabel>            
+                        <h:outputText value="Instrument" style="font-size: 10px" />                   
+                    </h:outputLabel>
+                    
+                    <h:selectOneMenu id="instrumentj_id_1" required="false" value="#{sessionHistory.isisSearchHistoryBean.instrument}" >                           
+                        <f:selectItems value="#{visit.customisation.instrumentsItems}" />                           
+                    </h:selectOneMenu> 
+                    
+                    <%--  <h:inputText styleClass="text" id="instrumentj_id_1" size="14" required="false" value="#{visit.visitData.advancedSearchBean.instrument}">
+                    
+                    </h:inputText>        --%>
+                    
+                    <h:panelGroup/>
+                    <h:message for="instrumentj_id_1" styleClass="error"/>
+                    
+                    <!----------------     End of instruemnt---------------->
+                    
+                    <h:panelGroup/>                  
+                    
+                    <h:panelGrid columns="2" >
+                        <h:commandButton id="f54" style="font-size:9px" styleClass="button" action="#{advancedSearchBean.searchAdvancedNavigationISIS}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                        
+                        <h:commandButton style="font-size:9px" id="reset4" type="reset" styleClass="button"  title="Reset" value="Reset"/>
+                    </h:panelGrid>
+                    
+                    
+                </h:panelGrid>
+            </h:form>
+        </t:panelTab>        
         <t:panelTab id="basicSearch"  label="Keyword" >
             <h:form id="autofillform_nav">
                 
                 <h:panelGrid  border="0" columns="2"  >      
                     
-                    <h:outputLabel for="facilities_navj_id_1">
+                    <h:outputLabel rendered="#{!visit.singleFacility}" for="facilities_navj_id_1">
                         <h:outputText value="Search: " style="font-size:10px"/>
                     </h:outputLabel  >
                     
-                    <h:panelGrid>
+                    <h:panelGrid  rendered="#{!visit.singleFacility}">
                         <h:selectManyListbox id="facilities_navj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="#{fn:length(visit.facilities)}" required="true" >      
                             <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplayNav,radioNav" />
                             <f:selectItems value="#{visit.facilities}"/>
@@ -91,8 +301,8 @@
                         </h:selectManyListbox>
                     </h:panelGrid>
                     
-                    <h:message  for="facilities_navj_id_1" styleClass="error"/>
-                    <h:panelGroup/>
+                    <h:message  rendered="#{!visit.singleFacility}"  for="facilities_navj_id_1" styleClass="error"/>
+                    <h:panelGroup  rendered="#{!visit.singleFacility}" />
                     
                     
                     
@@ -103,18 +313,18 @@
                     <h:panelGrid id="inputKeywordField" >   
                         <ui:autoComplete rendered="#{sessionHistory.keywordSearchNavigationAutoComplete && sessionHistory.keywordSearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_navj_id_1" 
                                          completionMethod="#{keyword.completeCityCaseSensitive}" 
-                                         value="#{searchBean.keyword}" required="true"
+                                         value="#{sessionHistory.basicSearchHistoryBean.keyword}" required="true"
                                          ondisplay="function(item) { return extractCityNav(item); }"
                                          onchoose="function(item) { return chooseCityNav(item); }"  validator="#{searchBean.validateKeyword}"/>
                         
                         <ui:autoComplete rendered="#{sessionHistory.keywordSearchNavigationAutoComplete && !sessionHistory.keywordSearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_navj_id_2" 
                                          completionMethod="#{keyword.completeCityCaseInsensitive}" 
-                                         value="#{searchBean.keyword}" required="true"
+                                         value="#{sessionHistory.basicSearchHistoryBean.keyword}" required="true"
                                          ondisplay="function(item) { return extractCityNav(item); }"
                                          onchoose="function(item) { return chooseCityNav(item); }"  validator="#{searchBean.validateKeyword}"/>
                         
                         <h:inputText rendered="#{!sessionHistory.keywordSearchNavigationAutoComplete}" styleClass="text" size="14" maxlength="60" id="keywordField_navj_id_3"
-                                     value="#{searchBean.keyword}" required="true" validator="#{searchBean.validateKeyword}" />
+                                     value="#{sessionHistory.basicSearchHistoryBean.keyword}" required="true" validator="#{searchBean.validateKeyword}" />
                     </h:panelGrid> 
                     
                     <h:panelGroup/>
@@ -179,7 +389,7 @@
                     <h:panelGroup/>
                     <h:panelGrid columns="2" >
                         <h:commandButton style="font-size:9px" id="f2" styleClass="button" action="#{searchBean.searchByKeywordNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
-                       
+                        
                         <h:commandButton style="font-size:9px" id="reset" type="reset" styleClass="button"  title="Reset" value="Reset"/>
                     </h:panelGrid>
                     
@@ -192,34 +402,62 @@
                 
                 <h:panelGrid  border="0" columns="2"  >      
                     
-                    <h:outputLabel for="facilities_nav_advj_id_1">
-                        <h:outputText value="Search: " style="font-size:10px"/>
+                    <h:outputLabel rendered="#{!visit.singleFacility}" for="facilities_nav_advj_id_1">
+                        <h:outputText rendered="#{!visit.singleFacility}" value="Search: " style="font-size:10px"/>
                     </h:outputLabel  >
                     
-                    <h:selectManyListbox id="facilities_nav_advj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="#{fn:length(visit.facilities)}" required="true" >      
-                        <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplayNav,radioNav" />
-                        <f:selectItems value="#{visit.facilities}"/>
-                        <f:validateLength minimum="1" />
-                    </h:selectManyListbox>
+                    <h:panelGrid rendered="#{!visit.singleFacility}">   
+                        <h:selectManyListbox id="facilities_nav_advj_id_1" immediate="true"  value="#{sessionHistory.advancedSearchHistoryBean.selectedFacilities}" size="#{fn:length(visit.facilities)}" required="true" >      
+                            <a4j:support event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplayNav,radioNav" />
+                            <f:selectItems value="#{visit.facilities}"/>
+                            <f:validateLength minimum="1" />
+                        </h:selectManyListbox>
+                    </h:panelGrid>   
                     
-                    <h:message  for="facilities_nav_advj_id_1" styleClass="error"/>
-                    <h:panelGroup/>
-                    
+                    <h:message rendered="#{!visit.singleFacility}" for="facilities_nav_advj_id_1" styleClass="error"/>
+                    <h:panelGroup rendered="#{!visit.singleFacility}" />
                     
                     <h:outputLabel for="keywordField_nav_advj_id_1">
                         <h:outputText value="Keyword(s): " style="font-size:10px"/>
                     </h:outputLabel>                      
                     
-                    <ui:autoComplete  styleClass="text" size="14" maxlength="60" id="keywordField_nav_advj_id_1" 
-                                      completionMethod="#{keyword.completeCity}" 
-                                      value="#{sessionHistory.advancedSearchHistoryBean.keyword}" required="false"
-                                      ondisplay="function(item) { return extractCityNavAdv(item); }"
-                                      onchoose="function(item) { return chooseCityNavAdv(item); }" />
+                    <h:panelGrid id="inputAdvancedKeywordField" >   
+                        <ui:autoComplete rendered="#{sessionHistory.advancedSearchNavigationAutoComplete && sessionHistory.advancedSearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_advj_id_1" 
+                                         completionMethod="#{keyword.completeCityCaseSensitive}" 
+                                         value="#{sessionHistory.advancedSearchHistoryBean.keyword}" required="false"
+                                         ondisplay="function(item) { return extractCityNavAdv(item); }"
+                                         onchoose="function(item) { return chooseCityNavAdv(item); }"  validator="#{searchBean.validateKeyword}"/>
+                        
+                        <ui:autoComplete rendered="#{sessionHistory.advancedSearchNavigationAutoComplete && !sessionHistory.advancedSearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_advj_id_2" 
+                                         completionMethod="#{keyword.completeCityCaseInsensitive}" 
+                                         value="#{sessionHistory.advancedSearchHistoryBean.keyword}" required="false"
+                                         ondisplay="function(item) { return extractCityNavAdv(item); }"
+                                         onchoose="function(item) { return chooseCityNavAdv(item); }"  validator="#{searchBean.validateKeyword}"/>
+                        
+                        <h:inputText rendered="#{!sessionHistory.advancedSearchNavigationAutoComplete}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_advj_id_3"
+                                     value="#{sessionHistory.advancedSearchHistoryBean.keyword}" required="false" validator="#{searchBean.validateKeyword}" />
+                    </h:panelGrid> 
                     
                     <h:panelGroup/>
-                    <h:message for="keywordField_nav_advj_id_1" styleClass="error"/>
                     
                     
+                    <h:message rendered="#{sessionHistory.advancedSearchNavigationAutoComplete && sessionHistory.advancedSearchNavigationCaseSensitive}" for="keywordField_nav_advj_id_1" styleClass="error"/>
+                    <h:message rendered="#{sessionHistory.advancedSearchNavigationAutoComplete && !sessionHistory.advancedSearchNavigationCaseSensitive}" for="keywordField_nav_advj_id_2" styleClass="error"/>
+                    <h:message rendered="#{!sessionHistory.advancedSearchNavigationAutoComplete}" for="keywordField_nav_advj_id_3" styleClass="error"/>  
+                    
+                    <h:panelGroup/>
+                    
+                    <h:panelGrid columns="2" >
+                        <h:selectBooleanCheckbox  style="font-size:12px" id="auto"   required="true" value="#{sessionHistory.advancedSearchNavigationAutoComplete}">                                       
+                            <a4j:support id="other" event="onclick" immediate="true" actionListener="#{sessionHistory.autoComplete}" ajaxSingle="true" reRender="inputAdvancedKeywordField" >
+                                <a4j:actionparam name="advanced_nav" /> 
+                            </a4j:support>
+                        </h:selectBooleanCheckbox>         
+                        
+                        <h:outputLabel >            
+                            <h:outputText  value="Auto Complete" style="font-size: 10px" />                   
+                        </h:outputLabel>
+                    </h:panelGrid>
                     <!----------------     Start of Inv name  ---------------->
                     <h:outputLabel>            
                         <h:outputText value="Inv name:" style="font-size: 10px" />                   
@@ -289,13 +527,27 @@
                     <h:message for="dfNamej_id_1" styleClass="error"/>
                     
                     <!----------------     End of Datafile name ---------------->
+                    <h:panelGroup/>
+                    
+                    <h:panelGrid columns="2" >
+                        <h:selectBooleanCheckbox style="font-size:12px" id="case" required="true" value="#{sessionHistory.advancedSearchNavigationCaseSensitive}">                                                           
+                            <a4j:support id="other4" event="onclick" immediate="true" actionListener="#{sessionHistory.caseSensitive}" ajaxSingle="true" reRender="inputAdvancedKeywordField">
+                                <a4j:actionparam name="advanced_nav" /> 
+                            </a4j:support>
+                        </h:selectBooleanCheckbox> 
+                        
+                        <h:outputLabel>            
+                            <h:outputText value="Case Sensitive" style="font-size: 10px" />                   
+                        </h:outputLabel>
+                        
+                    </h:panelGrid>                        
                     
                     <!----------------     Start of Like ---------------->
                     <h:outputLabel>            
                         <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <h:selectOneRadio style="font-size:12px" id="like" value="#{sessionHistory.advancedSearchHistoryBean.likeExpression}" >
+                    <h:selectOneRadio style="font-size:10px" id="like" value="#{sessionHistory.advancedSearchHistoryBean.likeExpression}" >
                         <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
                         <f:selectItem itemLabel="Like"  itemValue="LIKE" />
                         <f:validateLength minimum="1" />
@@ -443,83 +695,18 @@
                     
                     <h:panelGroup/>                  
                     
-                    
-                    <h:commandButton id="f24" styleClass="button" action="#{advancedSearchBean.searchAdvancedNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                    <h:panelGrid columns="2" >
+                        <h:commandButton id="f28" style="font-size:9px" styleClass="button" action="#{advancedSearchBean.searchAdvancedNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                        
+                        <h:commandButton style="font-size:9px" id="reset32" type="reset" styleClass="button"  title="Reset" value="Reset"/>
+                    </h:panelGrid>
                     
                     
                 </h:panelGrid>
             </h:form>
         </t:panelTab>
         
-        <t:panelTab id="Preferences" label="Preferences" >
-            <h:form id="preferencesform">
-                <h:panelGrid columns="2">
-                    
-                    <h:outputLabel>
-                        <h:outputText styleClass="body" style="font-size:10px" value="Results Per Page"/>
-                    </h:outputLabel  >
-                    
-                    <h:selectOneMenu id="results_navj_id_1"  style="font-size:7pt" required="true" value="#{userPreferencesBean.defaultresults}" >
-                        <f:selectItems value="#{userPreferencesBean.results}"/>
-                        <f:validateLength minimum="1" />
-                        
-                        
-                    </h:selectOneMenu>
-                    
-                    <h:outputLabel>
-                        <h:outputText styleClass="body" style="font-size:10px" value="Default Facility"/>
-                    </h:outputLabel  >
-                    
-                    <h:selectOneMenu id="default_navj_id_1" style="font-size:7pt" required="true" value="#{userPreferencesBean.defaultFacility}" >
-                        <f:selectItems value="#{userPreferencesBean.facilities}"/>
-                        <f:validateLength minimum="1" />
-                        
-                        
-                    </h:selectOneMenu>
-                    
-                    <h:outputLabel>
-                        <h:outputText styleClass="body" style="font-size:10px" value="Screen Resolution"/>
-                    </h:outputLabel>
-                    
-                    <h:selectOneMenu id="res_navj_id_1" style="font-size:7pt" required="true" value="#{userPreferencesBean.defaultResolution}" >
-                        
-                        <f:selectItems value="#{userPreferencesBean.resolution}" />
-                        <f:validateLength minimum="1" />
-                        
-                    </h:selectOneMenu>
-                    
-                    
-                    <h:outputLabel>
-                        <h:outputText styleClass="body" style="font-size:10px" value="Default Location"/>
-                    </h:outputLabel>
-                    
-                    <h:selectOneMenu id="location_navj_id_1" style="font-size:7pt" required="true" value="#{userPreferencesBean.defaultLocation}" >
-                        
-                        <f:selectItems  value="#{userPreferencesBean.location}" />
-                        <f:validateLength minimum="1" />
-                        
-                    </h:selectOneMenu>
-                    
-                    
-                    <h:outputLabel>
-                        <h:outputText styleClass="body" style="font-size:10px" value="Email Address"/>
-                    </h:outputLabel>
-                    
-                    <h:inputText styleClass="text" id="email_navj_id_1" size="15" validator="#{userPreferencesBean.validateEmail}" value="#{userPreferencesBean.email}">
-                        <f:validateLength minimum="5" maximum="160"/>
-                    </h:inputText> 
-                    <h:panelGroup/>
-                    
-                    <h:message for="email_navj_id_1" styleClass="error" showSummary="false" showDetail="true" />
-                    
-                    <h:panelGroup/>
-                    
-                    <h:commandButton styleClass="button" action="#{userPreferencesBean.save}" title="Search" value="Update"/>
-                    
-                    
-                </h:panelGrid>
-            </h:form>
-        </t:panelTab>
+        
         
     </t:panelTabbedPane>  
     

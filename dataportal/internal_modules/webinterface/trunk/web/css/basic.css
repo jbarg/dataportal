@@ -148,6 +148,16 @@ outerbarbody {
     border-width: 1px;    
 }
 
+.detailTable {
+	font-family : verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+    padding: 2;
+    border-style: solid;
+    border-width: 0px;   
+     valign: top; 
+}
+
 .header_top {
 font-size: 20px;
   color: #00008b;
@@ -173,6 +183,7 @@ font-size: 20px;
     padding: 2;
     border-style: solid;
     border-width: 1px;
+    valign: top;
 }
 
 .standardTable_Header {
@@ -201,7 +212,20 @@ font-size: 20px;
 }
 
 .standardTableDetail_Row1 {
-        background-color: #F6F4F4;
+   background-color: #F6F4F4;
+    valign: top; 
+}
+
+.standardTableDetail2_Row1 {
+  background-color: white;   
+}
+
+.standardTableDetail2_Row2 {
+   background-color: white;    
+}
+
+.standardTableDetail_Row2 {
+   background-color: #F6F4F4;
 }
 
 .standardTable_Row2 {
@@ -224,10 +248,16 @@ height: 200px;
 overflow: auto;
 }
 
-
-.standardTable_ColumnCentered {
+.standardTable_ColumnCenteredTop {
     text-align: center;
+    vertical-align: top;
     word-wrap: break-word;
+   
+}
+.standardTable_ColumnCentered {
+    text-align: center;    
+    word-wrap: break-word;
+   
 }
 
 a
