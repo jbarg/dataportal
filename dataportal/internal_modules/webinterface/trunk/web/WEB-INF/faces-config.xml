@@ -95,24 +95,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     </managed-bean>
     
     <managed-bean>
-        <managed-bean-name>dataAuthorisationBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DataAuthorisationBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>      
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>viewDataGivenAuthorisationBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ViewDataGivenAuthorisationBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>          
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>viewDataReceivedAuthorisationBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.ViewDataReceivedAuthorisationBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>        
-    </managed-bean>
-    
-    <managed-bean>
         <managed-bean-name>searchBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.SearchBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>        
@@ -167,26 +149,8 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     </managed-bean>
     
     <managed-bean>
-        <managed-bean-name>otherdatacenterBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.OtherDataCenterBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>       
-    </managed-bean>
-    
-    <managed-bean>
         <managed-bean-name>bookmarkBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.BookmarkBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>        
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>otherbookmarkBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.OtherBookmarkBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>        
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>historyBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.HistoryBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
     
@@ -485,17 +449,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
             <to-view-id>/admin/admin.jsp</to-view-id>
             <redirect />      
         </navigation-case>
-        
-        <navigation-case>
-            <from-outcome>GIVE_DATA_AUTH</from-outcome>
-            <to-view-id>/protected/datacenter_authorisation.jsp</to-view-id>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-outcome>GOTO_DATA_AUTH</from-outcome>
-            <to-view-id>/protected/view_data_auth.jsp</to-view-id>
-        </navigation-case>
-        
+                                
         <navigation-case>
             <from-outcome>GOTO_INVESTIGATIONS</from-outcome>
             <to-view-id>/protected/investigations.jsp</to-view-id>
@@ -515,22 +469,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
             <from-outcome>GOTO_BOOKMARKS</from-outcome>
             <to-view-id>/protected/bookmark.jsp</to-view-id>
         </navigation-case>
-        
-        <navigation-case>
-            <from-outcome>VIEW_OTHER_BOOKMARKS</from-outcome>
-            <to-view-id>/protected/other_bookmark.jsp</to-view-id>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-outcome>VIEW_OTHER_DATA_REFERENCES</from-outcome>
-            <to-view-id>/protected/other_data_center.jsp</to-view-id>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-outcome>GOTO_HISTORY</from-outcome>
-            <to-view-id>/protected/history.jsp</to-view-id>
-        </navigation-case>
-        
+                            
         <navigation-case>
             <from-outcome>GOTO_USER_PREFS</from-outcome>
             <to-view-id>/protected/preferences.jsp</to-view-id>
