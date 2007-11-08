@@ -78,6 +78,11 @@ public class VisitData implements Serializable {
     private boolean investigationExpanded;
     
     /**
+     * Sets wheather the users has selected all the datafile to be expanded on datasets page
+     */
+    private boolean datafileExpanded;
+    
+    /**
      * Sets wheather the users has selected all the investigations to be selected on investigations page
      */
     private boolean investigationsSelected;
@@ -120,6 +125,25 @@ public class VisitData implements Serializable {
         
      private boolean newResults = false;
 
+     private boolean datafileTableVisable = false;
+     private boolean datasetTableVisable = false;
+
+    public boolean isDatasetTableVisable() {
+        return datasetTableVisable;
+    }
+
+    public void setDatasetTableVisable(boolean datasetTableVisable) {
+        this.datasetTableVisable = datasetTableVisable;
+    }
+
+    public boolean isDatafileTableVisable() {
+        return datafileTableVisable;
+    }
+
+    public void setDatafileTableVisable(boolean datafileTableVisable) {
+        this.datafileTableVisable = datafileTableVisable;
+    }
+     
     public boolean isNewResults() {
         return newResults;
     }
@@ -164,7 +188,8 @@ public class VisitData implements Serializable {
     
     public void setCurrentInvestigations(Collection<Investigation> currentInvestigations) {
         this.currentInvestigations = currentInvestigations;
-        
+        this.datafileTableVisable = false;
+        this.datasetTableVisable = false;
         //construct tree data
     }
     //check weather user has picked investigations, used in the nav bar
@@ -195,6 +220,8 @@ public class VisitData implements Serializable {
     
     public void setCurrentDatafiles(Collection<Datafile> currentDatafiles) {
         this.currentDatafiles = currentDatafiles;
+        this.datafileTableVisable = true;
+        this.datasetTableVisable = false;
     }
     
     //this is the results of the search from the wrappers
@@ -347,6 +374,18 @@ public class VisitData implements Serializable {
     
     public void setInvestigationExpanded(boolean investigationExpanded) {
         this.investigationExpanded = investigationExpanded;
+    }
+    
+    /**
+     * Has user selected to expand all the datafile.
+     * This boolean helps to decide what image to show on the datafile table
+     */
+    public boolean isDatafileExpanded() {
+        return datafileExpanded;
+    }
+    
+    public void setDatafileExpanded(boolean datafileExpanded) {
+        this.datafileExpanded = datafileExpanded;
     }
     
     /**

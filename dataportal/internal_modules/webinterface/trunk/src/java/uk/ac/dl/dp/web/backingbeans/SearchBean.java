@@ -533,9 +533,9 @@ public class SearchBean extends AbstractRequestBean {
      * @return
      */
     public String gotoFacilitySearchPage(){
-        if(getVisit().getFacility().equals("ISIS")) return "GOTO_ISIS_SEARCH";
-        else if(getVisit().getFacility().equals("DIAMOND")) return "GOTO_DIAMOND_SEARCH";
-        else if(getVisit().getFacility().equals("CLF")) return "GOTO_CLF_SEARCH";
-        else return "GOTO_ADVANCED_SEARCH";
+        if(getVisit().getFacility().equals("ISIS")) return NavigationConstants.GOTO_ISIS_SEARCH;
+        else if(getVisit().getFacility().equals("DIAMOND")) return NavigationConstants.GOTO_DIAMOND_SEARCH;
+        else if(getVisit().getFacility().equals("CLF")) return NavigationConstants.GOTO_CLF_SEARCH;
+        else return NavigationConstants.GOTO_ADVANCED_SEARCH;
     }
 }
