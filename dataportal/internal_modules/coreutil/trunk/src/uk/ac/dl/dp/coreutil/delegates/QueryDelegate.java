@@ -15,6 +15,8 @@ import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
+import uk.ac.dp.icatws.Datafile;
+import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -99,6 +101,10 @@ public class QueryDelegate {
     
     public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO query_dto) throws SessionException{
         return qsmr.getPastQueryResults(sid, query_dto);
+    }
+    
+    public Collection<Datafile> getDatafiles(String sid, Dataset dataset, String facility)throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception {
+        return qsmr.getDatafiles(sid, dataset, facility);
     }
     
     public HashMap<String, Collection<String>> getKeywords(String sessionId) throws SessionException, QueryException {
