@@ -42,6 +42,8 @@ import javax.persistence.TemporalType;
     
     public enum TYPE {SERVER_IP, SERVER_PORT, SERVER_CONTEXT_ROOT,  DOWNLOAD_LOCATION, SERVER_SCHEME};
     
+    static final long serialVersionUID = 1234567890987654321L;
+            
     @Id
     @TableGenerator(name="CONSTANTS", table="SEQUENCE", pkColumnName="SEQ_NAME", pkColumnValue="CONSTANTS",valueColumnName="SEQ_COUNT")
     @GeneratedValue(strategy=GenerationType.TABLE,generator="CONSTANTS")

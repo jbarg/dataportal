@@ -11,6 +11,8 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
+import uk.ac.dp.icatws.Datafile;
+import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -31,6 +33,8 @@ public interface QueryLocal {
     
     public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
     
+    public Collection<Datafile> getDatafiles(String sid, Dataset dataset, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception ;
+             
     public boolean isFinished(QueryRequest request) throws SessionException;
     
     public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException;

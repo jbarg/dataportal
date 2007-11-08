@@ -329,7 +329,7 @@ public class AdvancedSearchDetailsDTO implements Serializable {
             
             //check max value now of strings
             try {
-                if(fieldName.equals("log") || fieldName.equals("fuzzy") || fieldName.equals("investigationInclude")) continue;
+                if(fieldName.equals("caseSensitive")  || fieldName.equals("log") || fieldName.equals("fuzzy") || fieldName.equals("investigationInclude")) continue;
                 //get value
                 Object result = getProperty(fieldName, this);
                 if(result != null) {
