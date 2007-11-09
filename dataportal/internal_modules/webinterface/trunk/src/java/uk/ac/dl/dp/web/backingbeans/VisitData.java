@@ -82,6 +82,11 @@ public class VisitData implements Serializable {
      */
     private boolean datafileExpanded;
     
+     /**
+     * Sets wheather the users has selected all the datafile to be expanded on datasets page
+     */
+    private boolean datasetExpanded;
+    
     /**
      * Sets wheather the users has selected all the investigations to be selected on investigations page
      */
@@ -386,6 +391,18 @@ public class VisitData implements Serializable {
     
     public void setDatafileExpanded(boolean datafileExpanded) {
         this.datafileExpanded = datafileExpanded;
+    }
+    
+     /**
+     * Has user selected to expand all the datafile.
+     * This boolean helps to decide what image to show on the dataset table
+     */
+    public boolean isDatasetExpanded() {
+        return datasetExpanded;
+    }
+    
+    public void setDatasetExpanded(boolean datasetExpanded) {
+        this.datasetExpanded = datasetExpanded;
     }
     
     /**

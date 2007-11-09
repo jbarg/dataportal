@@ -52,7 +52,7 @@ public class DatafileBean extends SortableList {
      */
     public List<Datafile> getDatafiles() {
         sort(getSort(), isAscending());
-                
+
         List<Datafile> datafiles = (List<Datafile>) getVisitData().getCurrentDatafiles();
         if (datafiles == null) {
             return (List<Datafile>) new ArrayList<Datafile>();
@@ -61,7 +61,7 @@ public class DatafileBean extends SortableList {
         }
     }
 
-    public void setDatafiles(List<Datafile> datafiles) {        
+    public void setDatafiles(List<Datafile> datafiles) {
         this.datafiles = datafiles;
     }
 
@@ -103,9 +103,9 @@ public class DatafileBean extends SortableList {
                         }
                     }
                 };
-                if(getVisitData().getCurrentDatafiles() != null){
-                    Collections.sort((List<Datafile>) getVisitData().getCurrentDatafiles(), comparator);
-                }
+        if (getVisitData().getCurrentDatafiles() != null) {
+            Collections.sort((List<Datafile>) getVisitData().getCurrentDatafiles(), comparator);
+        }
 
     }
 
@@ -180,7 +180,7 @@ public class DatafileBean extends SortableList {
 
         log.debug("Expanding");
         getTable().expandAllDetails();
-       getVisitData().setDatafileExpanded(true);
+        getVisitData().setDatafileExpanded(true);
 
     }
 
@@ -255,7 +255,7 @@ public class DatafileBean extends SortableList {
     }
 
     /**
-     * These test wheather the columns on the investigaion.jsp page are sorted or not to show
+     * These test wheather the columns on the datasets.jsp page are sorted or not to show
      * if the up or down arrow is displayed next to the column
      */
     public boolean isName() {
@@ -273,7 +273,7 @@ public class DatafileBean extends SortableList {
     public boolean isNotFileSize() {
         return isNot("filesize");
     }
-    
+
     public boolean isFormat() {
         return is("format");
     }
@@ -281,8 +281,32 @@ public class DatafileBean extends SortableList {
     public boolean isNotFormat() {
         return isNot("format");
     }
+
+    public boolean isFormatVersion() {
+        return is("formatVersion");
+    }
+
+    public boolean isNotFormatVersion() {
+        return isNot("formatVersion");
+    }
+
+    public boolean isFormatType() {
+        return is("formatType");
+    }
+
+    public boolean isNotFormatType() {
+        return isNot("formatType");
+    }
+
+    public boolean isCreateTime() {
+        return is("createTime");
+    }
+
+    public boolean isNotCreateTime() {
+        return isNot("createTime");
+    }
     /****
-     * END OF :These test wheather the columns on the investigaion.jsp page are sorted or not to show
+     * END OF :These test wheather the columns on the datasets.jsp page are sorted or not to show
      * if the up or down arrow is displayed next to the column
      */
 }
