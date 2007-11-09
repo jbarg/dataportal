@@ -73,7 +73,7 @@
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="text934" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     
-                                    <f:param name="datasets" value="#{node.identifier}"/>             
+                                    <f:param name="datafiles" value="#{node.identifier}"/>             
                                 </h:commandLink>
                                 <%-- <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                 <f:param name="datasets" value="#{node.identifier}"/>
@@ -414,8 +414,8 @@
                                     <h:outputText value="Format" />
                                     <f:param name="column" value="format"/>
                                     <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="aformat" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.fileSize}" border="0"/>
-                                    <t:graphicImage id="dformat" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFileSize}" border="0"/>
+                                    <t:graphicImage id="aformat" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.format}" border="0"/>
+                                    <t:graphicImage id="dformat" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormat}" border="0"/>
                                     <%--  </c:if>--%>
                                 </a4j:commandLink>
                             </f:facet>
@@ -433,8 +433,8 @@
                                     <h:outputText value="Format Version" />
                                     <f:param name="column" value="formatVersion"/>
                                     <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="aversion" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.fileSize}" border="0"/>
-                                    <t:graphicImage id="dversion" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFileSize}" border="0"/>
+                                    <t:graphicImage id="aversion" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.formatVersion}" border="0"/>
+                                    <t:graphicImage id="dversion" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormatVersion}" border="0"/>
                                     <%--  </c:if>--%>
                                 </a4j:commandLink>
                             </f:facet>
@@ -452,8 +452,8 @@
                                     <h:outputText value="Format Type" />
                                     <f:param name="column" value="formatType"/>
                                     <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="aformatType" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.fileSize}" border="0"/>
-                                    <t:graphicImage id="dformatType" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFileSize}" border="0"/>
+                                    <t:graphicImage id="aformatType" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.formatType}" border="0"/>
+                                    <t:graphicImage id="dformatType" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormatType}" border="0"/>
                                     <%--  </c:if>--%>
                                 </a4j:commandLink>
                             </f:facet>
@@ -470,8 +470,8 @@
                                     <h:outputText value="Create Time" />
                                     <f:param name="column" value="createTime"/>
                                     <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="acreateTime" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.fileSize}" border="0"/>
-                                    <t:graphicImage id="dcreateTime" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFileSize}" border="0"/>
+                                    <t:graphicImage id="acreateTime" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.createTime}" border="0"/>
+                                    <t:graphicImage id="dcreateTime" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notCreateTime}" border="0"/>
                                     <%--  </c:if>--%>
                                 </a4j:commandLink>
                             </f:facet>
