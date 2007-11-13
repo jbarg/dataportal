@@ -69,12 +69,12 @@
                                 <h:outputText value=" " />
                                 <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                 
-                                <h:commandLink style="color:black" id="viewFiles" actionListener="#{datasetTree.viewDataFiles}">
+                                <a4j:commandLink reRender="tableGrid" style="color:black" id="viewFiles" actionListener="#{datasetTree.viewDataFiles}">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="text934" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     
                                     <f:param name="datafiles" value="#{node.identifier}"/>             
-                                </h:commandLink>
+                                </a4j:commandLink>
                                 <%-- <h:selectBooleanCheckbox style="background-color:#EAF4F4" title="Select Datasets">   
                                 <f:param name="datasets" value="#{node.identifier}"/>
                                 <a4j:support reRender="addSelection, downloademail" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datasetTree.setSelectedAjax}">
@@ -115,9 +115,12 @@
                                 
                                 <t:graphicImage id="grd918" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 
-                                <h:outputText id="textd190" value="#{node.description}" styleClass="nodeFolder"/>
-                                <%--<h:outputText id="texdt8ff91" value=" (#{node.childCount})" styleClass="childCount" rendered="#{!empty node.children}"/>--%>
-                                
+                                <a4j:commandLink reRender="tableGrid" style="color:black" id="viewSets" actionListener="#{datasetTree.viewDataSets}">
+                                    <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
+                                    <h:outputText id="textd19g0" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
+                                    
+                                    <f:param name="datasets" value="#{node.identifier}"/>             
+                                </a4j:commandLink>
                             </h:panelGroup>
                         </f:facet>
                         
@@ -319,342 +322,612 @@
                         
                     </t:tree2>
                     
-                    
-                    
                     <br />
-                    
-                    <t:dataTable id="data" width="97%"
-                                 styleClass="scrollerTable"
-                                 headerClass="standardTable_Header"
-                                 footerClass="standardTable_Header"
-                                 rowClasses="standardTable_Row1,standardTable_Row2"
-                                 columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
-                                 var="dataFile"
-                                 value="#{datafileBean.datafiles}"
-                                 preserveDataModel="true"
-                                 rows="#{visit.userPreferences.resultsPerPage}"       
-                                 binding="#{datafileBean.table}"
-                                 sortColumn="#{datafileBean.sort}"
-                                 sortAscending="#{datafileBean.ascending}"
-                                 preserveSort="true"
-                                 varDetailToggler="detailToggler"  
-                                 rendered="#{visit.visitData.datafileTableVisable}"  >
-                        <f:facet name="header">
-                            <h:outputText value="Datafiles" />
-                        </f:facet>
+                    <h:panelGrid id="tableGrid" columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                         
-                        <!--  Expand -->
-                        <h:column>
+                        <%---  ///////////  DataFile Table /////////        -----%>
+                        <t:dataTable id="data" width="97%"
+                                     styleClass="scrollerTable"
+                                     headerClass="standardTable_Header"
+                                     footerClass="standardTable_Header"
+                                     rowClasses="standardTable_Row1,standardTable_Row2"
+                                     columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+                                     var="dataFile"
+                                     value="#{datafileBean.datafiles}"
+                                     preserveDataModel="true"
+                                     rows="#{visit.userPreferences.resultsPerPage}"       
+                                     binding="#{datafileBean.table}"
+                                     sortColumn="#{datafileBean.sort}"
+                                     sortAscending="#{datafileBean.ascending}"
+                                     preserveSort="true"
+                                     varDetailToggler="detailToggler"  
+                                     rendered="#{visit.visitData.datafileTableVisable}"  >
                             <f:facet name="header">
-                                <h:panelGrid columns="" >
-                                    
-                                    <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datafileExpanded}" actionListener="#{datafileBean.expandAll}">
+                                <h:outputText value="#{visit.visitData.currentDataset}'s datafiles" />
+                            </f:facet>
+                            
+                            <!--  Expand -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:panelGrid columns="" >
                                         
-                                        <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
-                                    </a4j:commandLink>   
-                                    <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.datafileExpanded}" actionListener="#{datafileBean.collapseAll}">
+                                        <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datafileExpanded}" actionListener="#{datafileBean.expandAll}">
+                                            
+                                            <t:graphicImage   id="exp" value="../../images/button_plus1.gif"  border="0"/>
+                                        </a4j:commandLink>   
+                                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.datafileExpanded}" actionListener="#{datafileBean.collapseAll}">
+                                            
+                                            <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
+                                        </a4j:commandLink> 
                                         
-                                        <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
-                                    </a4j:commandLink> 
+                                    </h:panelGrid>        
+                                </f:facet>
+                                
+                                <h:panelGrid rendered="#{fn:length(dataFile.datafileParameterCollection) > 0}" columns="" >
+                                    <a4j:commandLink  reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
+                                        
+                                        <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                        <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                                    </a4j:commandLink>  
+                                </h:panelGrid>
+                                
+                            </h:column>
+                            
+                            <!--  Name -->
+                            <h:column>
+                                <f:facet name="header">
                                     
-                                </h:panelGrid>        
-                            </f:facet>
-                            
-                            <a4j:commandLink  reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
+                                    <a4j:commandLink reRender="data, props" style="table-header" id="name" actionListener="#{datafileBean.sortColumn}">
+                                        <h:outputText value="Name" />
+                                        <f:param name="column" value="name"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="acname" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.name}" border="0"/>
+                                        <t:graphicImage id="dename" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notName}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
                                 
-                                <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                                <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                            </a4j:commandLink>  
-                            
-                        </h:column>
-                        
-                        <!--  Name -->
-                        <h:column>
-                            <f:facet name="header">
+                                <h:outputText value="#{dataFile.name}" />
                                 
-                                <a4j:commandLink reRender="data, props" style="table-header" id="name" actionListener="#{datafileBean.sortColumn}">
-                                    <h:outputText value="Name" />
-                                    <f:param name="column" value="name"/>
-                                    <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="acname" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.name}" border="0"/>
-                                    <t:graphicImage id="dename" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notName}" border="0"/>
-                                    <%--  </c:if>--%>
-                                </a4j:commandLink>
-                            </f:facet>
+                            </h:column>
                             
-                            <h:commandLink value="#{dataFile.name}" style=" color: black" styleClass="investigation"  />
-                            
-                            
-                        </h:column>
-                        
-                        <!--  File Size -->
-                        <h:column>
-                            <f:facet name="header">
+                            <!--  File Size -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="data, props" style="table-header" id="size" actionListener="#{datafileBean.sortColumn}">
+                                        <h:outputText value="File Size" />
+                                        <f:param name="column" value="size"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="afilesize" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.fileSize}" border="0"/>
+                                        <t:graphicImage id="dfilesize" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFileSize}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
                                 
-                                <a4j:commandLink reRender="data, props" style="table-header" id="size" actionListener="#{datafileBean.sortColumn}">
-                                    <h:outputText value="File Size" />
-                                    <f:param name="column" value="size"/>
-                                    <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="afilesize" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.fileSize}" border="0"/>
-                                    <t:graphicImage id="dfilesize" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFileSize}" border="0"/>
-                                    <%--  </c:if>--%>
-                                </a4j:commandLink>
-                            </f:facet>
-                            
-                            <h:commandLink value="#{dataFile.fileSize}" style=" color: black" styleClass="investigation"  />
-                            
-                            
-                        </h:column>
-                        
-                        <!--  Format -->
-                        <h:column>
-                            <f:facet name="header">
+                                <h:outputText value="#{dataFile.fileSize}" />
                                 
-                                <a4j:commandLink reRender="data, props" style="table-header" id="format" actionListener="#{datafileBean.sortColumn}">
-                                    <h:outputText value="Format" />
-                                    <f:param name="column" value="format"/>
-                                    <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="aformat" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.format}" border="0"/>
-                                    <t:graphicImage id="dformat" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormat}" border="0"/>
-                                    <%--  </c:if>--%>
-                                </a4j:commandLink>
-                            </f:facet>
+                            </h:column>
                             
-                            <h:commandLink value="#{dataFile.datafileFormat.datafileFormatPK.name}" style=" color: black" styleClass="investigation"  />
-                            
-                        </h:column>
-                        
-                        
-                        <!--  Version -->
-                        <h:column>
-                            <f:facet name="header">
+                            <!--  Format -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="data, props" style="table-header" id="format" actionListener="#{datafileBean.sortColumn}">
+                                        <h:outputText value="Format" />
+                                        <f:param name="column" value="format"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="aformat" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.format}" border="0"/>
+                                        <t:graphicImage id="dformat" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormat}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
                                 
-                                <a4j:commandLink reRender="data, props" style="table-header" id="version" actionListener="#{datafileBean.sortColumn}">
-                                    <h:outputText value="Format Version" />
-                                    <f:param name="column" value="formatVersion"/>
-                                    <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="aversion" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.formatVersion}" border="0"/>
-                                    <t:graphicImage id="dversion" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormatVersion}" border="0"/>
-                                    <%--  </c:if>--%>
-                                </a4j:commandLink>
-                            </f:facet>
+                                <h:outputText value="#{dataFile.datafileFormat.datafileFormatPK.name}" />
+                            </h:column>
                             
-                            <h:commandLink value="#{dataFile.datafileFormat.datafileFormatPK.version}" style=" color: black" styleClass="investigation"  />
                             
-                        </h:column>
-                        
-                        
-                        <!-- Format Type -->
-                        <h:column>
-                            <f:facet name="header">
+                            <!--  Version -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="data, props" style="table-header" id="version" actionListener="#{datafileBean.sortColumn}">
+                                        <h:outputText value="Format Version" />
+                                        <f:param name="column" value="formatVersion"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="aversion" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.formatVersion}" border="0"/>
+                                        <t:graphicImage id="dversion" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormatVersion}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
                                 
-                                <a4j:commandLink reRender="data, props" style="table-header" id="formatType" actionListener="#{datafileBean.sortColumn}">
-                                    <h:outputText value="Format Type" />
-                                    <f:param name="column" value="formatType"/>
-                                    <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="aformatType" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.formatType}" border="0"/>
-                                    <t:graphicImage id="dformatType" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormatType}" border="0"/>
-                                    <%--  </c:if>--%>
-                                </a4j:commandLink>
-                            </f:facet>
+                                <h:outputText value="#{dataFile.datafileFormat.datafileFormatPK.version}" />
+                            </h:column>
                             
-                            <h:commandLink value="#{dataFile.datafileFormat.formatType}" style=" color: black" styleClass="investigation"  />
                             
-                        </h:column>
-                        
-                        <!-- Create Time -->
-                        <h:column>
-                            <f:facet name="header">
+                            <!-- Format Type -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="data, props" style="table-header" id="formatType" actionListener="#{datafileBean.sortColumn}">
+                                        <h:outputText value="Format Type" />
+                                        <f:param name="column" value="formatType"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="aformatType" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.formatType}" border="0"/>
+                                        <t:graphicImage id="dformatType" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormatType}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
                                 
-                                <a4j:commandLink reRender="data, props" style="table-header" id="createTime" actionListener="#{datafileBean.sortColumn}">
-                                    <h:outputText value="Create Time" />
-                                    <f:param name="column" value="createTime"/>
-                                    <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
-                                    <t:graphicImage id="acreateTime" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.createTime}" border="0"/>
-                                    <t:graphicImage id="dcreateTime" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notCreateTime}" border="0"/>
-                                    <%--  </c:if>--%>
-                                </a4j:commandLink>
-                            </f:facet>
+                                <h:outputText value="#{dataFile.datafileFormat.formatType}" />
+                            </h:column>
                             
-                            <h:commandLink value="#{fn:substringBefore(fn:substringAfter(dataFile.datafileCreateTime,\"T\"),\"+\")}  #{fn:substringBefore(dataFile.datafileCreateTime,\"T\")}" style=" color: black" styleClass="investigation"  />
-                            
-                        </h:column>
-                        
-                        
-                        
-                        <f:facet name="detailStamp">      
-                            
-                            
-                            <t:dataTable preserveSort="true" 
-                                         align="center" 
-                                         styleClass="detailTable"
-                                         headerClass="standardTable_Header"
-                                         footerClass="standardTable_Header"
-                                         rowClasses="standardTableDetail_Row1,standardTableDetail_Row1"
-                                         columnClasses="standardTable_ColumnCenteredTop"
-                                         
-                                         width="100%" 
-                                         id="parameter" 
-                                         var="parameter"
-                                         value="#{dataFile.datafileParameterCollection}">
+                            <!-- Create Time -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="data, props" style="table-header" id="createTime" actionListener="#{datafileBean.sortColumn}">
+                                        <h:outputText value="Create Time" />
+                                        <f:param name="column" value="createTime"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="acreateTime" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.createTime}" border="0"/>
+                                        <t:graphicImage id="dcreateTime" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notCreateTime}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
                                 
-                                <!-- Name -->
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Name" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                <h:outputText value="#{fn:substringBefore(fn:substringAfter(dataFile.datafileCreateTime,\"T\"),\"+\")}  #{fn:substringBefore(dataFile.datafileCreateTime,\"T\")}" />
+                            </h:column>
+                            
+                            <!-- Download -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <t:graphicImage id="download" value="../../images/download.gif" border="0"/>
+                                    
+                                </f:facet>
+                                
+                                <h:selectBooleanCheckbox title="select datafile" rendered="#{dataFile.icatRole.actionDownload}" value="#{dataFile.selected}" >
+                                    <f:param name="id" value="#{dataFile.id}"/>
+                                    <a4j:support reRender="data" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datafileBean.listenAjax}">
+                                        <a4j:actionparam name="id" value="#{dataFile.id}"/>   
+                                    </a4j:support>
+                                </h:selectBooleanCheckbox>   
+                            </h:column>
+                            
+                            
+                            
+                            <f:facet name="detailStamp">      
+                                
+                                
+                                <t:dataTable preserveSort="true" 
+                                             align="center" 
+                                             styleClass="detailTable"
+                                             headerClass="standardTable_Header"
+                                             footerClass="standardTable_Header"
+                                             rowClasses="standardTableDetail_Row1,standardTableDetail_Row1"
+                                             columnClasses="standardTable_ColumnCenteredTop"
+                                             
+                                             width="100%" 
+                                             id="parameter" 
+                                             var="parameter"
+                                             value="#{dataFile.datafileParameterCollection}">
+                                    
+                                    <!-- Name -->
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Name" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                        </f:facet>
+                                        
+                                        <h:outputText style="valign:top; font-size:12px;" value="#{parameter.datafileParameterPK.name}" />
+                                        
+                                    </h:column> 
+                                    
+                                    <!-- Units -->
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Units" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                        </f:facet>
+                                        
+                                        <h:outputText style="valign:top; font-size:12px;" value="#{parameter.datafileParameterPK.units}" />
+                                        
+                                    </h:column> 
+                                    
+                                    <!-- Value -->
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Value" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                        </f:facet>
+                                        
+                                        <h:outputText rendered="#{parameter.numeric}" style="valign:top; font-size:12px;" value="#{parameter.numericValue}" />
+                                        <h:outputText rendered="#{!parameter.numeric}" style="valign:top; font-size:12px;" value="#{parameter.stringValue}" />
+                                        
+                                    </h:column> 
+                                    
+                                </t:dataTable>                      
+                                
+                            </f:facet>              
+                            
+                        </t:dataTable>
+                        
+                        
+                        <c:if test="${fn:length(sessionScope.visit.visitData.currentDatafiles) > sessionScope.visit.userPreferences.resultsPerPage}" >
+                            
+                            <h:panelGrid id="datafileTableScroller" rendered="#{visit.visitData.datafileTableVisable}" columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+                                
+                                <t:dataScroller id="scroll_1"
+                                                for="data"
+                                                fastStep="10"
+                                                pageCountVar="pageCount"
+                                                pageIndexVar="pageIndex"
+                                                styleClass="scroller"
+                                                paginator="true"
+                                                paginatorMaxPages="9"
+                                                paginatorTableClass="paginator"
+                                                paginatorActiveColumnStyle="font-weight:bold;">
+                                    <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                                    <f:facet name="first" >
+                                        <t:graphicImage url="../../images/arrow-first.gif" border="1" />
                                     </f:facet>
-                                    
-                                    <h:outputText style="valign:top; font-size:12px;" value="#{parameter.datafileParameterPK.name}" />
-                                                                        
-                                </h:column> 
-                                
-                                <!-- Units -->
-                                 <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Units" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                    <f:facet name="last">
+                                        <t:graphicImage url="../../images/arrow-last.gif" border="1" />
                                     </f:facet>
-                                    
-                                    <h:outputText style="valign:top; font-size:12px;" value="#{parameter.datafileParameterPK.units}" />
-                                    
-                                </h:column> 
-                                
-                                <!-- Value -->
-                                 <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Units" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                    <f:facet name="previous">
+                                        <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
                                     </f:facet>
-                                    
-                                    <h:outputText rendered="#{parameter.numeric}" style="valign:top; font-size:12px;" value="#{parameter.numericValue}" />
-                                     <h:outputText rendered="#{!parameter.numeric}" style="valign:top; font-size:12px;" value="#{parameter.stringValue}" />
-                                   
-                                </h:column> 
+                                    <f:facet name="next">
+                                        <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                                    </f:facet>
+                                    <f:facet name="fastforward">
+                                        <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                                    </f:facet>
+                                    <f:facet name="fastrewind">
+                                        <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                                    </f:facet>
+                                </t:dataScroller>
                                 
-                            </t:dataTable>                      
-                            
-                        </f:facet>              
+                                <t:dataScroller rendered="#{visit.visitData.datafileTableVisable}" id="scroll_2"
+                                                for="data"
+                                                rowsCountVar="rowsCount"
+                                                displayedRowsCountVar="displayedRowsCountVar"
+                                                firstRowIndexVar="firstRowIndex"
+                                                lastRowIndexVar="lastRowIndex"
+                                                pageCountVar="pageCount"
+                                                immediate="true"
+                                                pageIndexVar="pageIndex"
+                                                >
+                                    <h:outputFormat value="{0} Datafiles found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                                        <f:param value="#{rowsCount}" />
+                                        <f:param value="#{displayedRowsCountVar}" />
+                                        <f:param value="#{firstRowIndex}" />
+                                        <f:param value="#{lastRowIndex}" />
+                                        <f:param value="#{pageIndex}" />
+                                        <f:param value="#{pageCount}" />
+                                    </h:outputFormat>
+                                </t:dataScroller>
+                            </h:panelGrid>
+                        </c:if>
+                        <%---  ///////////  End of DataFile Table /////////        -----%>
                         
-                    </t:dataTable>
-                    
-                    
-                    <c:if test="${fn:length(sessionScope.visit.visitData.currentDatafiles) > sessionScope.visit.userPreferences.resultsPerPage}" >
+                        <%---  ///////////  DataSet Table /////////        -----%>
+                        <t:dataTable id="dataset" width="97%"
+                                     styleClass="scrollerTable"
+                                     headerClass="standardTable_Header"
+                                     footerClass="standardTable_Header"
+                                     rowClasses="standardTable_Row1,standardTable_Row2"
+                                     columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+                                     var="dataSet"
+                                     value="#{datasetBean.datasets}"
+                                     preserveDataModel="true"
+                                     rows="#{visit.userPreferences.resultsPerPage}"       
+                                     binding="#{datasetBean.table}"
+                                     sortColumn="#{datasetBean.sort}"
+                                     sortAscending="#{datasetBean.ascending}"
+                                     preserveSort="true"
+                                     varDetailToggler="detailToggler"  
+                                     rendered="#{visit.visitData.datasetTableVisable}"  >
+                            <f:facet name="header">
+                                <h:outputText value="#{visit.visitData.currentInvestigation}'s datasets" />
+                            </f:facet>
+                            
+                            <!--  Expand -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:panelGrid columns="" >
+                                        
+                                        
+                                        <a4j:commandLink reRender="dataset"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datasetExpanded}" actionListener="#{datasetBean.expandAll}">
+                                            
+                                            <t:graphicImage  id="expds" value="../../images/button_plus1.gif"  border="0"/>
+                                        </a4j:commandLink>   
+                                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.datasetExpanded}" actionListener="#{datasetBean.collapseAll}">
+                                            
+                                            <t:graphicImage  id="collds" value="../../images/button_minus1.gif"  border="0"/>
+                                        </a4j:commandLink> 
+                                        
+                                    </h:panelGrid>        
+                                </f:facet>
+                                
+                                <h:panelGrid rendered="#{fn:length(dataSet.datasetParameterCollection) > 0}" columns="" >
+                                    
+                                    <a4j:commandLink reRender="dataset" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
+                                        
+                                        <t:graphicImage id="upds" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
+                                        <t:graphicImage id="up-fds" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
+                                    </a4j:commandLink>  
+                                </h:panelGrid>
+                            </h:column>
+                            
+                            <!--  Name -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="dataset, props" style="table-header" id="name" actionListener="#{datasetBean.sortColumn}">
+                                        <h:outputText value="Name" />
+                                        <f:param name="column" value="name"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="acname" value="../../images/ascending-arrow.gif" rendered="#{datasetBean.name}" border="0"/>
+                                        <t:graphicImage id="dename" value="../../images/descending-arrow.gif" rendered="#{datasetBean.notName}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
+                                
+                                <a4j:commandLink reRender="tableGrid" style="color:black" id="viewFilesTable" actionListener="#{datasetTree.viewDataFiles}">
+                                    <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
+                                    <h:outputText id="textfgg4" value="#{dataSet.name}" style="font-family: Verdana, Geneva, sans-serif; font-size: 12px;" />
+                                    
+                                    <f:param name="datafiles" value="#{dataSet.uniqueId}}"/>             
+                                    
+                                </a4j:commandLink>
+                                
+                            </h:column>
+                            
+                            <!-- Status -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="dataset, props" style="table-header" id="status" actionListener="#{datasetBean.sortColumn}">
+                                        <h:outputText value="Status" />
+                                        <f:param name="column" value="status"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="afilesizeds" value="../../images/ascending-arrow.gif" rendered="#{datasetBean.status}" border="0"/>
+                                        <t:graphicImage id="dfilesizeds" value="../../images/descending-arrow.gif" rendered="#{datasetBean.notStatus}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
+                                <h:outputText value="#{dataSet.datasetStatus}" />
+                                
+                            </h:column>
+                            
+                            <!--  Type -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="dataset, props" style="table-header" id="type" actionListener="#{datasetBean.sortColumn}">
+                                        <h:outputText value="Type" />
+                                        <f:param name="column" value="type"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="aformatds" value="../../images/ascending-arrow.gif" rendered="#{datasetBean.type}" border="0"/>
+                                        <t:graphicImage id="dformatds" value="../../images/descending-arrow.gif" rendered="#{datasetBean.notType}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
+                                
+                                <h:outputText value="#{dataSet.datasetType}" />
+                                
+                            </h:column>
+                            
+                            
+                            <!--  Description -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="dataset, props" style="table-header" id="description" actionListener="#{datasetBean.sortColumn}">
+                                        <h:outputText value="Description" />
+                                        <f:param name="column" value="description"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="aversionds" value="../../images/ascending-arrow.gif" rendered="#{datasetBean.description}" border="0"/>
+                                        <t:graphicImage id="dversionds" value="../../images/descending-arrow.gif" rendered="#{datasetBean.notDescription}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
+                                
+                                <h:outputText value="#{dataSet.description}" />
+                                
+                            </h:column>
+                            
+                            
+                            <!-- Sample -->
+                            <h:column>
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="dataset, props" style="table-header" id="sample" actionListener="#{datasetBean.sortColumn}">
+                                        <h:outputText value="Sample - Instance" />
+                                        <f:param name="column" value="sample"/>
+                                        <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
+                                        <t:graphicImage id="aformatTypeds" value="../../images/ascending-arrow.gif" rendered="#{datasetBean.sample}" border="0"/>
+                                        <t:graphicImage id="dformatTypeds" value="../../images/descending-arrow.gif" rendered="#{datasetBean.notSample}" border="0"/>
+                                        <%--  </c:if>--%>
+                                    </a4j:commandLink>
+                                </f:facet>
+                                
+                                <h:outputText value="#{fn:substringAfter(dataSet.uniqueId,\":\")}" />
+                                
+                            </h:column>
+                            
+                            
+                            <f:facet name="detailStamp">    
+                                
+                                <t:dataTable preserveSort="true" 
+                                             align="center" 
+                                             styleClass="detailTable"
+                                             headerClass="standardTable_Header"
+                                             footerClass="standardTable_Header"
+                                             rowClasses="standardTableDetail_Row1,standardTableDetail_Row1"
+                                             columnClasses="standardTable_ColumnCenteredTop"
+                                             
+                                             width="100%" 
+                                             id="datasetParameter" 
+                                             var="datasetParameter"
+                                             value="#{dataSet.datasetParameterCollection}">
+                                    
+                                    <!-- Name -->
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Name" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                        </f:facet>
+                                        
+                                        <h:outputText style="valign:top; font-size:12px;" value="#{datasetParameter.datasetParameterPK.name}" />
+                                        
+                                    </h:column> 
+                                    
+                                    <!-- Units -->
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Units" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                        </f:facet>
+                                        
+                                        <h:outputText style="valign:top; font-size:12px;" value="#{datasetParameter.datasetParameterPK.units}" />
+                                        
+                                    </h:column> 
+                                    
+                                    <!-- Value -->
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Value" style="font-size:12px; color: blue;  font-weight: bold;" />
+                                        </f:facet>
+                                        
+                                        <h:outputText rendered="#{datasetParameter.numeric}" style="valign:top; font-size:12px;" value="#{datasetParameter.numericValue}" />
+                                        <h:outputText rendered="#{!datasetParameter.numeric}" style="valign:top; font-size:12px;" value="#{datasetParameter.stringValue}" />
+                                        
+                                    </h:column> 
+                                    
+                                </t:dataTable>                      
+                                
+                            </f:facet>              
+                            
+                        </t:dataTable>
                         
-                        <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+                        
+                        <c:if test="${fn:length(sessionScope.visit.visitData.currentDatasets) > sessionScope.visit.userPreferences.resultsPerPage}" >
                             
-                            <t:dataScroller id="scroll_1"
-                                            for="data"
-                                            fastStep="10"
-                                            pageCountVar="pageCount"
-                                            pageIndexVar="pageIndex"
-                                            styleClass="scroller"
-                                            paginator="true"
-                                            paginatorMaxPages="9"
-                                            paginatorTableClass="paginator"
-                                            paginatorActiveColumnStyle="font-weight:bold;">
-                                <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
-                                <f:facet name="first" >
-                                    <t:graphicImage url="../../images/arrow-first.gif" border="1" />
-                                </f:facet>
-                                <f:facet name="last">
-                                    <t:graphicImage url="../../images/arrow-last.gif" border="1" />
-                                </f:facet>
-                                <f:facet name="previous">
-                                    <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
-                                </f:facet>
-                                <f:facet name="next">
-                                    <t:graphicImage url="../../images/arrow-next.gif" border="1" />
-                                </f:facet>
-                                <f:facet name="fastforward">
-                                    <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
-                                </f:facet>
-                                <f:facet name="fastrewind">
-                                    <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
-                                </f:facet>
-                            </t:dataScroller>
+                            <h:panelGrid id="datasetTableScroller" rendered="#{visit.visitData.datasetTableVisable}" columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
+                                
+                                <t:dataScroller id="scroll_1_ds"
+                                                for="dataset"
+                                                fastStep="10"
+                                                pageCountVar="pageCount"
+                                                pageIndexVar="pageIndex"
+                                                styleClass="scroller"
+                                                paginator="true"
+                                                paginatorMaxPages="9"
+                                                paginatorTableClass="paginator"
+                                                paginatorActiveColumnStyle="font-weight:bold;">
+                                    <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                                    <f:facet name="first" >
+                                        <t:graphicImage url="../../images/arrow-first.gif" border="1" />
+                                    </f:facet>
+                                    <f:facet name="last">
+                                        <t:graphicImage url="../../images/arrow-last.gif" border="1" />
+                                    </f:facet>
+                                    <f:facet name="previous">
+                                        <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
+                                    </f:facet>
+                                    <f:facet name="next">
+                                        <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                                    </f:facet>
+                                    <f:facet name="fastforward">
+                                        <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                                    </f:facet>
+                                    <f:facet name="fastrewind">
+                                        <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                                    </f:facet>
+                                </t:dataScroller>
+                                
+                                <t:dataScroller id="scroll_2_ds"
+                                                for="dataset"
+                                                rowsCountVar="rowsCount"
+                                                displayedRowsCountVar="displayedRowsCountVar"
+                                                firstRowIndexVar="firstRowIndex"
+                                                lastRowIndexVar="lastRowIndex"
+                                                pageCountVar="pageCount"
+                                                immediate="true"
+                                                pageIndexVar="pageIndex"
+                                                >
+                                    <h:outputFormat value="{0} Datasets found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                                        <f:param value="#{rowsCount}" />
+                                        <f:param value="#{displayedRowsCountVar}" />
+                                        <f:param value="#{firstRowIndex}" />
+                                        <f:param value="#{lastRowIndex}" />
+                                        <f:param value="#{pageIndex}" />
+                                        <f:param value="#{pageCount}" />
+                                    </h:outputFormat>
+                                </t:dataScroller>
+                            </h:panelGrid>
+                        </c:if>
+                        
+                        
+                        <h:panelGrid  width="100%" border="0" columns="1" style="align: right" rendered="#{visit.visitData.datafileTableVisable}">
                             
-                            <t:dataScroller id="scroll_2"
-                                            for="data"
-                                            rowsCountVar="rowsCount"
-                                            displayedRowsCountVar="displayedRowsCountVar"
-                                            firstRowIndexVar="firstRowIndex"
-                                            lastRowIndexVar="lastRowIndex"
-                                            pageCountVar="pageCount"
-                                            immediate="true"
-                                            pageIndexVar="pageIndex"
-                                            >
-                                <h:outputFormat value="{0} Datafiles found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
-                                    <f:param value="#{rowsCount}" />
-                                    <f:param value="#{displayedRowsCountVar}" />
-                                    <f:param value="#{firstRowIndex}" />
-                                    <f:param value="#{lastRowIndex}" />
-                                    <f:param value="#{pageIndex}" />
-                                    <f:param value="#{pageCount}" />
-                                </h:outputFormat>
-                            </t:dataScroller>
+                            
+                            <%-- <tr>   
+                            <td align="left">
+                            
+                            <h:commandButton disabled="#{!datasetTree.validSelection}" styleClass="button" id="addSelection" style="width: 130px" action="#{datasetTree.select}" title="Add to Data Links" value="Add to Data Links"/>
+                            &nbsp;
+                            <h:selectBooleanCheckbox disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
+                            
+                            </h:selectBooleanCheckbox>
+                            
+                            
+                            
+                            &nbsp;
+                            <t:popup rendered="#{!visit.userPreferences.emailSet}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
+                            closePopupOnExitingPopup="true"
+                            displayAtDistanceX="10"
+                            displayAtDistanceY="-40" >
+                            <t:graphicImage url="../../images/help.gif" border="0" /> 
+                            <f:facet name="popup">
+                            <h:panelGroup>
+                            <h:panelGrid columns="1" >
+                            <h:outputText value="If you specify an email address, you can have the data downloaded link emailed to you."/>    
+                            <h:inputText styleClass="text" value="#{visit.userPreferences.email}" validator="#{userPreferencesBean.validateEmail}"  id="email">
+                            
+                            </h:inputText>
+                            
+                            <h:commandButton styleClass="button" action="#{datacenterBean.addEmail}" title="Add Email" value="Add Email"/>
+                            
+                            </h:panelGrid>
+                            </h:panelGroup>
+                            </f:facet>
+                            </t:popup>
+                            </td>
+                            </tr>--%>
+                            <h:panelGroup style="float: right" >
+                                <h:commandButton styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections" value="Download selection"/>
+                                <h:panelGroup/>
+                                <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                            </h:panelGroup>
+                            
+                             <h:panelGroup style="float: right" >
+                                <h:commandButton styleClass="button" id="downloaddataset" style="width: 130px"  onclick="download('DOWNLOAD_ALL','DATA_SET','DATA_SETS'); return false;"  title="Download All" value="Download All"/>
+                                <h:panelGroup/>
+                                <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                            </h:panelGroup>
+                            
+                            <%--<h:panelGroup style="float: right" >  
+                                <a4j:commandButton onclick="alert('Email has been sent to #{visit.userPreferences.email}');" immediate="true" reRender="messages" styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" action="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
+                                 &nbsp;
+                                <h:graphicImage rendered="#{visit.userPreferences.emailSet}" value="../../images/download.gif" width="19" height="14" />                                                             
+                                 &nbsp;
+                                <h:selectBooleanCheckbox rendered="#{visit.userPreferences.emailSet}" disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
+                                    
+                                </h:selectBooleanCheckbox>
+                            </h:panelGroup>    --%>
+                            
+                            
                         </h:panelGrid>
-                    </c:if>
-                    <%-- <table width="90%" border="0">
-                     <tbody>
-                    <tr>   
-                    <td align="left">
-                    
-                    <h:commandButton disabled="#{!datasetTree.validSelection}" styleClass="button" id="addSelection" style="width: 130px" action="#{datasetTree.select}" title="Add to Data Links" value="Add to Data Links"/>
-                    &nbsp;
-                    <h:selectBooleanCheckbox disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
-                    
-                    </h:selectBooleanCheckbox>
-                    
-                    
-                    &nbsp;
-                    <t:popup rendered="#{!visit.userPreferences.emailSet}"  styleClass="popup" style="font-size: 14px; cursor: default" closePopupOnExitingElement="true"
-                    closePopupOnExitingPopup="true"
-                    displayAtDistanceX="10"
-                    displayAtDistanceY="-40" >
-                    <t:graphicImage url="../../images/help.gif" border="0" /> 
-                    <f:facet name="popup">
-                    <h:panelGroup>
-                    <h:panelGrid columns="1" >
-                    <h:outputText value="If you specify an email address, you can have the data downloaded link emailed to you."/>    
-                    <h:inputText styleClass="text" value="#{visit.userPreferences.email}" validator="#{userPreferencesBean.validateEmail}"  id="email">
-                    
-                    </h:inputText>
-                    
-                    <h:commandButton styleClass="button" action="#{datacenterBean.addEmail}" title="Add Email" value="Add Email"/>
-                    
                     </h:panelGrid>
-                    </h:panelGroup>
-                    </f:facet>
-                    </t:popup>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td align="left">
-                    <h:commandButton disabled="#{!datasetTree.validDownloadSelection}" styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections now" value="Download now"/>
-                    &nbsp;
-                    <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
-                    
-                    <h:selectBooleanCheckbox  disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
-                    
-                    </h:selectBooleanCheckbox>
-                    </td>                                
-                    
-                    </tr>
-                    <tr>
-                    <td align="left">
-                    
-                    <a4j:commandButton onclick="alert('Email has been sent to #{visit.userPreferences.email}');" immediate="true" reRender="messages" styleClass="button" id="downloademail" style="width: 130px" disabled="#{!datasetTree.validDownloadSelection}" rendered="#{visit.userPreferences.emailSet}" action="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
-                    &nbsp;
-                    <h:graphicImage rendered="#{visit.userPreferences.emailSet}" value="../../images/download.gif" width="19" height="14" />                                                             
-                    
-                    <h:selectBooleanCheckbox rendered="#{visit.userPreferences.emailSet}" disabled="true" style="background-color:#EAF4F4" title="select_investigation" >
-                    
-                    </h:selectBooleanCheckbox>
-                    
-                    
-                    </td>
-                    </tr>
-                    
-                    </tbody>      
-                    </table>--%>
                 </a4j:region> 
             </tr>
         </tbody>      

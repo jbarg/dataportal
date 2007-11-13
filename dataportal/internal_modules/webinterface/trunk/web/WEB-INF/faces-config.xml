@@ -119,6 +119,12 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     </managed-bean>
     
     <managed-bean>
+        <managed-bean-name>datasetBean</managed-bean-name>
+        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DatasetBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>        
+    </managed-bean>
+    
+    <managed-bean>
         <managed-bean-name>investigationMyDataBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationMyDataBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>        
