@@ -117,7 +117,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
                 node.getChildren().add(new TreeNodeBase("fac-folder", invest.getFacility(), true));
             }
 
-            TreeNodeBase datasetsNode = new TreeNodeBase("dataset-count-folder", "Datasets", false);
+            TreeNodeBase datasetsNode = new TreeNodeBase("dataset-count-folder", "Datasets", invest.getFacility() + "-" + invest.getId() ,false);
 
             for (Dataset dataset : invest.getDatasetCollection()) {
 
@@ -239,7 +239,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
         for (Object ob : children) {
             if (ob instanceof UIParameter) {
                 UIParameter current = (UIParameter) children.get(i);
-                log.trace("Param name " + current.getName());
+                log.trace("Param name " + current.getName()+" and value "+current.getValue());
 
                 if (current.getName().equals("datafiles") && current.getValue() != null) {
                     String param = current.getValue().toString();
@@ -248,28 +248,33 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
                     log.trace("viewing datafiles for DATASET: " + ds.getId());
 
                     //check if already got datafiles
-                    if (ds.getDatafileCollection() != null) {
-                        log.trace("dataset " + ds.getId() + " is null so searching for then");
+                    if (ds.getDatafileCollection() == null || ds.getDatafileCollection().size() == 0) {
+                        log.trace("dataset " + ds.getId() + " is null or zero so searching for then");
                         String fac = param.split("-")[0];
 
                         try {
                             //now get the datafiles for the dataset
                             Collection<Datafile> datafiles = QueryDelegate.getInstance().getDatafiles(getVisit().getSid(), ds, fac);
                             log.trace("Returned " + datafiles.size() + " for " + ds.getId());
-                            for (Investigation investigation : getVisitData().getSearchedInvestigations()) {
+                            for (Investigation investigation : getVisitData().getCurrentInvestigations()) {
                                 if (investigation.getId().equals(ds.getInvestigationId()) && investigation.getFacility().equals(fac)) {
+                                    log.trace("Found that dataset: "+ds.getId()+" belongs to investigation: "+investigation.getId());
                                     Collection<Dataset> datasets = investigation.getDatasetCollection();
                                     for (Dataset dataset : datasets) {
                                         if (dataset.getId().equals(ds.getId())) {
-                                            Collection<Datafile> datafilesSearched = dataset.getDatafileCollection();
-                                            datafilesSearched = datafiles;
+                                            Collection<Datafile> datafilesSearched = dataset.getDatafileCollection(); //will return empty collection
+                                            datafilesSearched.clear(); //make sure if clear though should be
+                                            for(Datafile df : datafiles){
+                                                dataset.getDatafileCollection().add(df);
+                                            }                                            
                                             log.trace("Setting datafiles for Investigation " + investigation.getId() + " and dataset " + dataset.getId());
+                                            getVisitData().setCurrentDataset(dataset.getName());
                                         }
                                     }
                                 }
                             }
 
-                            //now set current datafiles
+                            //now set current datafiles                           
                             getVisitData().setCurrentDatafiles(datafiles);
                         } catch (Throwable ex) {
                             log.error("Cannot view datafiles", ex);
@@ -294,7 +299,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
         for (Object ob : children) {
             if (ob instanceof UIParameter) {
                 UIParameter current = (UIParameter) children.get(i);
-                log.trace("Param name " + current.getName());
+                log.trace("Param name " + current.getName()+" and value "+current.getValue());
 
                 if (current.getName().equals("datasets") && current.getValue() != null) {
                     String param = current.getValue().toString();
@@ -302,6 +307,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
                     log.trace("viewing datasets for INVESTIGATION: " + investigation.getId());
 
                     //now set current datasets
+                     getVisitData().setCurrentInvestigation(investigation.getTitle());
                     getVisitData().setCurrentDatasets(investigation.getDatasetCollection());
                 }
                 break;

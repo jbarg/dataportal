@@ -25,6 +25,7 @@ import uk.ac.dl.dp.web.util.WebConstants;
 import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
+import uk.ac.dp.icatws.Sample;
 
 /**
  *
@@ -387,9 +388,29 @@ public class InvestigationBean extends SortableList {
             for (Investigation investigation : investigationsDatasets) {
                 for (Investigation investigationsSearched : getVisitData().getSearchedInvestigations()) {
                     if (investigation.getId().equals(investigationsSearched.getId()) && investigation.getFacility().equals(investigationsSearched.getFacility())) {
-                             Collection<Dataset> datasets = investigationsSearched.getDatasetCollection();
-                             datasets = investigation.getDatasetCollection();
-                              log.debug("Adding "+datasets.size()+" to investigation "+investigation.getId());
+                        Collection<Dataset> datasets = investigationsSearched.getDatasetCollection();
+                        datasets.clear(); //make sure is zero                       
+                        datasets = investigation.getDatasetCollection();
+                        log.debug("Adding " + datasets.size() + " to investigation " + investigation.getId());
+                    }
+                }
+            }
+            //trick to show sample in the page, as sample Id is only show so going to get 
+            //unique id string as sample
+            for (Investigation invest : investigationsDatasets) {
+                for (Dataset dataset : invest.getDatasetCollection()) {
+                    Long sampleId = dataset.getSampleId();
+                    log.trace("dataset " + dataset.getId() + " has sampleId " + sampleId);
+                    //now find the investigation with that sampleId
+                    for (Investigation investigationsSearched : getVisitData().getSearchedInvestigations()) {
+                        for (Sample sample : investigationsSearched.getSampleCollection()) {
+                            if (sample.getId().equals(sampleId)) {
+                                log.trace("Setting unique id for " + dataset.getId() + " to " + sample.getName() + " - " + sample.getInstance());
+                                //got the sample for dataset from its Id from parent investigation
+                                dataset.setUniqueId(invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId()+"-:"+sample.getName() + " - " + sample.getInstance());
+                                break;
+                            }
+                        }
                     }
                 }
             }
