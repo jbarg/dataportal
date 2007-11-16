@@ -3,12 +3,12 @@
 <sun-ejb-jar>
   <enterprise-beans>
    
-    <ejb>
+    <!--<ejb>
       <ejb-name>DataPortal</ejb-name>
       <webservice-endpoint>
         <port-component-name>DataPortal</port-component-name>
         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
       </webservice-endpoint>
-    </ejb>
+    </ejb>-->
   </enterprise-beans>
 </sun-ejb-jar>

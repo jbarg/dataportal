@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
@@ -256,6 +257,33 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         } catch (Throwable throwable) {
             log.error("Unable to query for investigation: " + investigationId, throwable);
             throw new QueryException("Unable to query for investigation: " + investigationId);
+        }
+    }
+    
+     public Collection<Datafile> queryDatafiles(String sessionId, AdvancedSearchDetailsDTO asdDTO, String facility, int startIndex, int numberResults) throws SessionException, QueryException {
+        log.debug("queryDatafiles(" + sessionId + ", " + asdDTO + ", " + facility + ")");
+        if (sessionId == null) {
+            throw new IllegalArgumentException("Session ID cannot be null.");
+        }
+
+        //check of user logged into all facilities
+        HashSet<String> facs = new HashSet<String>();       
+        facs.add(facility);        
+        isLoggedIn(sessionId, facs, em);
+
+        //check is valid sessionid
+        new SessionUtil(sessionId, em);
+
+        //now get the investigation
+        try {
+            //get a list of facilites
+            ModuleLookup facilityLookup = lookupLocal.getFacility(facility);
+
+            String facilitySessionId = new SessionUtil(sessionId, em).getFacilitySessionId(facility);
+            return ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).searchByRunNumberPagination(facilitySessionId, asdDTO.getInstruments(), asdDTO.getRunStart().floatValue(), asdDTO.getRunEnd().floatValue(), startIndex, numberResults );
+        } catch (Throwable throwable) {
+            log.error("Unable to query for datafiles: " + asdDTO, throwable);
+            throw new QueryException("Unable to query for datafiles ");
         }
     }
 
