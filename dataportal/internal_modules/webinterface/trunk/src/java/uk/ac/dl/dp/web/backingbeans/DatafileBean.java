@@ -267,11 +267,11 @@ public class DatafileBean extends SortableList {
     }
 
     public boolean isFileSize() {
-        return is("filesize");
+        return is("size");
     }
 
     public boolean isNotFileSize() {
-        return isNot("filesize");
+        return isNot("size");
     }
 
     public boolean isFormat() {

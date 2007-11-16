@@ -94,6 +94,15 @@ public class VisitData implements Serializable {
     private Collection<Dataset> currentDatasets;
     private String currentDataset;
     private Collection<Datafile> currentDatafiles;
+    private boolean dataFilesDownloadable = false;
+
+    public boolean isDataFilesDownloadable() {
+        return dataFilesDownloadable;
+    }
+
+    public void setIsDataFilesDownloadable(boolean dataFilesDownloadable) {
+        this.dataFilesDownloadable = dataFilesDownloadable;
+    }
     private Collection<Bookmark> currentBookmarks;
     private Collection<DataReference> currentDataReferences;
     /**
@@ -111,6 +120,23 @@ public class VisitData implements Serializable {
     private boolean newResults = false;
     private boolean datafileTableVisable = false;
     private boolean datasetTableVisable = false;
+    private boolean investigatonTreeVisable = false;
+
+    public boolean isInvestigatonTreeVisable() {
+        return investigatonTreeVisable;
+    }
+
+    public void setInvestigatonTreeVisable(boolean investigatonTreeVisable) {
+        this.investigatonTreeVisable = investigatonTreeVisable;
+    }
+
+    public Collection<DataRefAuthorisation> getCurrentRecievedAuthorisations() {
+        return currentRecievedAuthorisations;
+    }
+
+    public void setCurrentRecievedAuthorisations(Collection<DataRefAuthorisation> currentRecievedAuthorisations) {
+        this.currentRecievedAuthorisations = currentRecievedAuthorisations;
+    }
 
     public String getCurrentDataset() {
         return currentDataset;
@@ -190,6 +216,7 @@ public class VisitData implements Serializable {
         this.currentInvestigations = currentInvestigations;
         this.datafileTableVisable = false;
         this.datasetTableVisable = false;
+        this.investigatonTreeVisable = true;
     //construct tree data
     }
     //check weather user has picked investigations, used in the nav bar
@@ -222,6 +249,7 @@ public class VisitData implements Serializable {
         this.currentDatasets = currentDatasets;
         this.datafileTableVisable = false;
         this.datasetTableVisable = true;
+        this.investigatonTreeVisable = true;
     }
 
     //current datafiles that the user has picked from the investigations page , used in data sets page
@@ -234,6 +262,16 @@ public class VisitData implements Serializable {
         this.currentDatafiles = currentDatafiles;
         this.datafileTableVisable = true;
         this.datasetTableVisable = false;
+        this.investigatonTreeVisable = true;
+        
+        //check if one is downloadable
+        this.dataFilesDownloadable = false;
+        for(Datafile file  : currentDatafiles){
+            if(file.getIcatRole().isActionDownload()) {
+                 this.dataFilesDownloadable = true;
+                break;
+            }
+        }
     }
 
     //this is the results of the search from the wrappers

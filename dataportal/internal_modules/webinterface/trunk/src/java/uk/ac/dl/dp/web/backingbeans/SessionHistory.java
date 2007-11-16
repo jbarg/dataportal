@@ -68,6 +68,7 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     private boolean facilitySearchNavigationCaseSensitive;
     private boolean facilitySearchNavigationAutoComplete = true;
 
+
     public boolean isAdvancedSearchNavigationAutoComplete() {
         return advancedSearchNavigationAutoComplete;
     }
@@ -168,8 +169,8 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     public void setKeywordSearchCaseSensitive(boolean keywordSearchCaseSensitive) {
         this.keywordSearchCaseSensitive = keywordSearchCaseSensitive;
     }
-
-    /**
+    
+             /**
      * Sets if auto complete is  for a particular item
      */
     public void autoComplete(ActionEvent event) {

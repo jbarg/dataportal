@@ -401,14 +401,18 @@ public class InvestigationBean extends SortableList {
                 for (Dataset dataset : invest.getDatasetCollection()) {
                     Long sampleId = dataset.getSampleId();
                     log.trace("dataset " + dataset.getId() + " has sampleId " + sampleId);
-                    //now find the investigation with that sampleId
-                    for (Investigation investigationsSearched : getVisitData().getSearchedInvestigations()) {
-                        for (Sample sample : investigationsSearched.getSampleCollection()) {
-                            if (sample.getId().equals(sampleId)) {
-                                log.trace("Setting unique id for " + dataset.getId() + " to " + sample.getName() + " - " + sample.getInstance());
-                                //got the sample for dataset from its Id from parent investigation
-                                dataset.setUniqueId(invest.getFacility()+"-"+invest.getId()+"-"+dataset.getId()+"-:"+sample.getName() + " - " + sample.getInstance());
-                                break;
+                    if (sampleId == null) log.trace("Setting unique id for " + dataset.getId() + " to: " + invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:");
+                    dataset.setUniqueId(invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:");
+                    if (sampleId != null) {
+                        //now find the investigation with that sampleId                    
+                        for (Investigation investigationsSearched : getVisitData().getSearchedInvestigations()) {
+                            for (Sample sample : investigationsSearched.getSampleCollection()) {
+                                if (sample.getId().equals(sampleId)) {
+                                    log.trace("Setting unique id for " + dataset.getId() + " to: " + invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName() + " - " + sample.getInstance());
+                                    //got the sample for dataset from its Id from parent investigation
+                                    dataset.setUniqueId(invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName() + " - " + sample.getInstance());
+                                    break;
+                                }
                             }
                         }
                     }
