@@ -22,6 +22,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
+import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -64,7 +65,9 @@ public class AdvancedSearchBean extends AbstractRequestBean {
      * Investigation instrument
      */
     private String instrument;
+    private String instrumentDF;
     private List<String> instruments;
+    private List<String> instrumentsDF;
     /**
      * Investigation sample
      */
@@ -92,21 +95,23 @@ public class AdvancedSearchBean extends AbstractRequestBean {
      */
     private String runEnd;
     /**
+     * Investigation run start number for Data file search
+     */
+    private String runStartDF;
+    /**
+     * Investigation run end number for Data file search
+     */
+    private String runEndDF;
+    /**
      * Dates
      */
     private Date firstDate;
     private Date secondDate;
     private UIInput runStartUI;
+    private UIInput runStartUIDF;
     private UIInput calendarFirst;
     private UIInput calendarSecond;
 
-    private enum SEARCH_TYPE {
-
-        ADVANCED, ISIS, DIAMOND, CLF
-    }
-    
-
-    ;
     /** Creates a new instance of AdvancedSearchBean */
     public AdvancedSearchBean() {
     }
@@ -146,19 +151,18 @@ public class AdvancedSearchBean extends AbstractRequestBean {
      * Action method to do basic search for navigation bar
      */
     public String searchAdvancedNavigation() {
-        return searchAdvancedNavigation(SEARCH_TYPE.ADVANCED);
+        return searchAdvancedNavigation(DPQueryType.ADVANCED);
     }
 
     /**
      * Action method to do basic search for navigation bar
      */
     public String searchAdvancedNavigationISIS() {
-        return searchAdvancedNavigation(SEARCH_TYPE.ISIS);
+        return searchAdvancedNavigation(DPQueryType.ISIS);
     }
 
-    public String searchAdvancedNavigation(SEARCH_TYPE searchType) {
-        //sets up initial values
-        String sid = null;
+    public String searchAdvancedNavigation(DPQueryType searchType) {
+        //sets up initial values        
         QueryRequest query_request = null;
 
         log.trace("searching for advanced:");
@@ -174,7 +178,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
 
             AdvancedSearchHistoryBean advancedTypeSearchHistoryBean = null;
-            if (searchType == SEARCH_TYPE.ADVANCED) {
+            if (searchType == DPQueryType.ADVANCED) {
                 if (sessionHistory.getAdvancedSearchHistoryBean().getLikeExpression().equals("LIKE")) {
                     fuzzy = true;
                 }
@@ -185,7 +189,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 advancedTypeSearchHistoryBean.setAutoComplete(getSessionHistory().isAdvancedSearchNavigationAutoComplete());
                 advancedTypeSearchHistoryBean.setCaseSensitive(getSessionHistory().isAdvancedSearchNavigationCaseSensitive());
 
-            } else if (searchType == SEARCH_TYPE.ISIS) {
+            } else if (searchType == DPQueryType.ISIS) {
                 if (sessionHistory.getIsisSearchHistoryBean().getLikeExpression().equals("LIKE")) {
                     fuzzy = true;
                 }
@@ -247,55 +251,62 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to a search
-            if (searchType == SEARCH_TYPE.ADVANCED) {
+            if (searchType == DPQueryType.ADVANCED) {
                 getVisit().setTabIndex(2);
-            } else if(searchType == SEARCH_TYPE.ISIS) {
+            } else if (searchType == DPQueryType.ISIS) {
                 getVisit().setTabIndex(0);
             }
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
-            log.fatal("Unable to create query user for: " + sid, ex);
+            log.fatal("Unable to create query user for: " + getVisit().getSid(), ex);
             return null;
         } catch (Exception ex) {
             error("Unable to perform query");
-            log.fatal("Unable to create query user for: " + sid, ex);
+            log.fatal("Unable to create query user for: " + getVisit().getSid(), ex);
             return null;
         }
 
-        if (searchType == SEARCH_TYPE.ADVANCED) {
+        if (searchType == DPQueryType.ADVANCED) {
             //set the title from the seach
             getVisitData().setSearchedTitle("Advanced Search");
-        } else if (searchType == SEARCH_TYPE.ISIS) {
+        } else if (searchType == DPQueryType.ISIS) {
             getVisitData().setSearchedTitle(getVisit().getFacility() + " Search Results");
         }
 
         //wait for results.
         SearchBean searchBean = (SearchBean) getBean("searchBean");
-        return searchBean.getQueryResults(query_request, false, 120);
+        return searchBean.getQueryResults(query_request, searchType, 120);
     }
 
     /**
      * Action method to do advanced search
      */
     public String searchAdvanced() {
-        return searchAdvanced(SEARCH_TYPE.ADVANCED);
+        return searchAdvanced(DPQueryType.ADVANCED);
     }
 
     /**
      * Action method to do facility search ISIS
      */
     public String searchAdvancedISIS() {
-        return searchAdvanced(SEARCH_TYPE.ISIS);
+        return searchAdvanced(DPQueryType.ISIS);
+    }
+
+    /**
+     * Action method to do facility search ISIS
+     */
+    public String searchAdvancedISISDF() {
+        return searchAdvanced(DPQueryType.ADVANCED_DATAFILE);
     }
 
     /**
      * Action method to do basic search
      */
-    public String searchAdvanced(SEARCH_TYPE searchType) {
+    public String searchAdvanced(DPQueryType searchType) {
         //sets up initial values
-        String sid = null;
+
         QueryRequest query_request = null;
 
         log.trace("searching for advanced:");
@@ -312,7 +323,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 fuzzy = true;
             }
 
-            if (searchType == SEARCH_TYPE.ADVANCED) {
+            if (searchType == DPQueryType.ADVANCED) {
                 //set history bean
                 AdvancedSearchHistoryBean advancedSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
                 advancedSearchHistoryBean.setInvNumber(getInvNumber());
@@ -339,7 +350,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 //prefs
                 advancedSearchHistoryBean.setAutoComplete(sessionHistory.isAdvancedSearchAutoComplete());
                 advancedSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
-            } else if (searchType == SEARCH_TYPE.ISIS) {
+            } else if (searchType == DPQueryType.ISIS) {
                 ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
 
                 isisSearchHistoryBean.setKeyword(getKeyword());
@@ -356,6 +367,15 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 isisSearchHistoryBean.setAutoComplete(sessionHistory.isAdvancedSearchAutoComplete());
                 isisSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
 
+            } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+                ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
+
+                isisSearchHistoryBean.setInstrumentDF(getInstrumentDF());
+                isisSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
+
+                isisSearchHistoryBean.setRunEndDF(getRunEndDF());
+                isisSearchHistoryBean.setRunStartDF(getRunStartDF());
+
             }
 
             //create advanced search bean
@@ -367,8 +387,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             }
             asdDTO.setVisitId(getVisitId());
             asdDTO.setSampleName(getSample());
-            asdDTO.setInvestigators(getInvestigators());
-            asdDTO.setInstruments(getInstruments());
+            asdDTO.setInvestigators(getInvestigators());            
             asdDTO.setInvestigationAbstract(getInvAbstract());
             asdDTO.setInvestigationName(getInvName());
             asdDTO.setInvestigationType(getInvType());
@@ -377,16 +396,31 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
             //new stuff
             asdDTO.setDatafileName(getDatafileName());
-            if (getRunEnd() != null) {
-                asdDTO.setRunEnd(new Double(getRunEnd()));
-            }
-            if (getRunStart() != null) {
-                asdDTO.setRunStart(new Double(getRunStart()));
-                if (getRunEnd() == null) {
-                    asdDTO.setRunEnd(new Double(getRunStart()));
-                }
 
+            if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+                asdDTO.setInstruments(getInstrumentsDF());
+                if (getRunEndDF() != null) {
+                    asdDTO.setRunEnd(new Double(getRunEndDF()));
+                }
+                if (getRunStartDF() != null) {
+                    asdDTO.setRunStart(new Double(getRunStartDF()));
+                    if (getRunEndDF() == null) {
+                        asdDTO.setRunEnd(new Double(getRunStartDF()));
+                    }
+                }
+            } else {
+                asdDTO.setInstruments(getInstruments());
+                if (getRunEnd() != null) {
+                    asdDTO.setRunEnd(new Double(getRunEnd()));
+                }
+                if (getRunStart() != null) {
+                    asdDTO.setRunStart(new Double(getRunStart()));
+                    if (getRunEnd() == null) {
+                        asdDTO.setRunEnd(new Double(getRunStart()));
+                    }
+                }
             }
+
             asdDTO.setExperimentNumber(getInvNumber());
             if (getFirstDate() != null) {
                 asdDTO.setDateRangeStart(getXMLGregorianCalendar(getFirstDate()));
@@ -405,37 +439,48 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 return null;
             }
 
+            //set the type of search
+            if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+                query_request = new QueryRequest();
+                query_request.setAdvancedSearch(asdDTO);
+                //wait for results.
+                SearchBean searchBean = (SearchBean) getBean("searchBean");
+                return searchBean.getQueryResults(query_request, searchType, 120);
+            }
+
             query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to a search
-            
-             if (searchType == SEARCH_TYPE.ADVANCED) {
+
+            if (searchType == DPQueryType.ADVANCED) {
                 getVisit().setTabIndex(2);
-            } else if(searchType == SEARCH_TYPE.ISIS) {
+            } else if (searchType == DPQueryType.ISIS) {
+                getVisit().setTabIndex(0);
+            } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
                 getVisit().setTabIndex(0);
             }
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
             error("Unable to perform query");
-            log.fatal("Unable to create query user for: " + sid, ex);
+            log.error("Unable to create query user for: " + getVisit().getSid(), ex);
             return null;
         } catch (Exception ex) {
             error("Unable to perform query");
-            log.fatal("Unable to create query user for: " + sid, ex);
+            log.error("Unable to create query user for: " + getVisit().getSid(), ex);
             return null;
         }
 
         //set the title from the seach
-        if (searchType == SEARCH_TYPE.ADVANCED) {
+        if (searchType == DPQueryType.ADVANCED) {
             getVisitData().setSearchedTitle("Advanced Search Results");
-        } else {
+        } else if (searchType == DPQueryType.ISIS) {
             getVisitData().setSearchedTitle(getVisit().getFacility() + " Search Results");
         }
 
         //wait for results.
         SearchBean searchBean = (SearchBean) getBean("searchBean");
-        return searchBean.getQueryResults(query_request, false, 120);
+        return searchBean.getQueryResults(query_request, searchType, 120);
     }
 
     private XMLGregorianCalendar getXMLGregorianCalendar(Date date) {
@@ -583,12 +628,37 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         if (instrument == null || instrument.equals("")) {
             this.instrument = null;
         } else {
-            List<String> instruments = new ArrayList<String>();
-            instruments.add(instrument);
-            this.setInstruments(instruments);
+            List<String> instrumentsNew = new ArrayList<String>();
+            instrumentsNew.add(instrument);
+            this.setInstruments(instrumentsNew);
         }
-        log.trace("Instrument is " + instrument);
-        log.trace("Instruments is " + instruments);
+        log.trace("Instrument is " + this.instrument);
+        log.trace("Instruments is " + this.instruments);
+    }
+
+    public String getInstrumentDF() {
+        return instrumentDF;
+    }
+
+    public void setInstrumentDF(String instrumentDF) {
+        this.instrumentDF = instrumentDF;
+        if (instrumentDF == null || instrumentDF.equals("")) {
+            this.instrumentDF = null;
+        } else {
+            List<String> instrumentsDF = new ArrayList<String>();
+            instrumentsDF.add(instrumentDF);
+            this.setInstrumentsDF(instrumentsDF);
+        }
+        log.trace("Instrument is " + this.instrumentDF);
+        log.trace("Instruments is " + this.instrumentsDF);
+    }
+
+    public List<String> getInstrumentsDF() {
+        return instrumentsDF;
+    }
+
+    public void setInstrumentsDF(List<String> instrumentsDF) {
+        this.instrumentsDF = instrumentsDF;
     }
 
     public List<String> getInstruments() {
@@ -678,6 +748,25 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         }
     }
 
+    //way to validate two components.  Put val on last one and then check the local value (in this class)
+    // of the other one abobve it in the page
+    // before cannot be after after !!
+
+    public void validateRunDF(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+        log.debug("validateRunNumberDF: ");
+        if (value != null) {
+            if (getRunStartUIDF().getLocalValue() != null) {
+                Integer end = Integer.valueOf((String) value);
+                Integer start = Integer.valueOf((String) getRunStartUIDF().getLocalValue());
+                log.trace("Start " + start + " End" + end);
+                if (end.intValue() < start.intValue()) {
+                    log.trace("Invalid");
+                    throw new ValidatorException(new FacesMessage("Validation Error", "Run end number cannot be lower than run start number"));
+                }
+            }
+        }
+    }
+
     public Date getFirstDate() {
         return firstDate;
     }
@@ -730,6 +819,14 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         this.runStartUI = runStartUI;
     }
 
+    public UIInput getRunStartUIDF() {
+        return runStartUIDF;
+    }
+
+    public void setRunStartUIDF(UIInput runStartUIDF) {
+        this.runStartUIDF = runStartUIDF;
+    }
+
     public String getRunStart() {
         if (runStart == null || runStart.equals("")) {
             return null;
@@ -752,5 +849,29 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
     public void setRunEnd(String runEnd) {
         this.runEnd = runEnd;
+    }
+
+    public String getRunStartDF() {
+        if (runStartDF == null || runStartDF.equals("")) {
+            return null;
+        } else {
+            return runStartDF;
+        }
+    }
+
+    public void setRunStartDF(String runStartDF) {
+        this.runStartDF = runStartDF;
+    }
+
+    public String getRunEndDF() {
+        if (runEndDF == null || runEndDF.equals("")) {
+            return null;
+        } else {
+            return runEndDF;
+        }
+    }
+
+    public void setRunEndDF(String runEndDF) {
+        this.runEndDF = runEndDF;
     }
 }

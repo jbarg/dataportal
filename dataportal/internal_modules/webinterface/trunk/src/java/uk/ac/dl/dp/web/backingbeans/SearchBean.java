@@ -22,12 +22,14 @@ import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
+import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.WebConstants;
+import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
 import uk.ac.dp.icatws.LogicalOperator;
@@ -135,7 +137,7 @@ public class SearchBean extends AbstractRequestBean {
         //set the title from the seach
         getVisitData().setSearchedTitle("My Data Search Results");
 
-        return getQueryResults(query_request, true);
+        return getQueryResults(query_request, DPQueryType.MYDATA);
     }
 
     /**
@@ -178,7 +180,7 @@ public class SearchBean extends AbstractRequestBean {
         //set the title from the seach
         getVisitData().setSearchedTitle("My Data Search Results");
 
-        return getQueryResults(query_request, true);
+        return getQueryResults(query_request, DPQueryType.MYDATA);
     }
 
     /**
@@ -262,7 +264,7 @@ public class SearchBean extends AbstractRequestBean {
         //set the title from the seach
         getVisitData().setSearchedTitle("Keyword Search Results");
 
-        return getQueryResults(query_request, false);
+        return getQueryResults(query_request, DPQueryType.KEYWORD);
     }
 
     /**
@@ -341,21 +343,71 @@ public class SearchBean extends AbstractRequestBean {
         //set the title from the seach
         getVisitData().setSearchedTitle("Keyword Search Results");
 
-        return getQueryResults(query_request, false);
+        return getQueryResults(query_request, DPQueryType.KEYWORD);
     }
 
     /**
      * Mydata search makes the DP show a different message if no results
      */
-    public String getQueryResults(QueryRequest query_request, boolean myData) {
-        return getQueryResults(query_request, myData, WebConstants.MAXIMIUM_SEARCH_TIME);
+    public String getQueryResults(QueryRequest query_request,  DPQueryType typeOfSearch) {
+        return getQueryResults(query_request, typeOfSearch, WebConstants.MAXIMIUM_SEARCH_TIME);
     }
 
     /**
      * Mydata search makes the DP show a different message if no results
      */
-    public String getQueryResults(QueryRequest query_request, boolean myData, int timeout) {
+    public String getQueryResults(QueryRequest query_request, DPQueryType typeOfSearch, int timeout) {
+          if(typeOfSearch == DPQueryType.ADVANCED_DATAFILE){
+              return getQueryDatafilesResults(query_request, typeOfSearch, timeout);
+          }else {
+               return getQueryInvestigationResults(query_request, typeOfSearch, timeout);
+          }
+    }
+    
+    public String getQueryDatafilesResults(QueryRequest query_request, DPQueryType typeOfSearch, int timeout) {
+    
+        QueryDelegate qd = QueryDelegate.getInstance();
+         
+        try {
+            log.trace(query_request.getAdvancedSearch());
+            log.trace(getVisitData().getSelectedFacilities());
+            //search results found.  Get the results
+            Collection<Datafile> datafiles = qd.queryDatafiles(getVisit().getSid(), query_request.getAdvancedSearch(), getVisitData().getSelectedFacilities().iterator().next(), 0, 1000 );
+            //lsit investigations
+            int j = 0;
 
+            //if not results infom user
+            if (datafiles.size() == 0) {                
+                 info("No results found. Please refine your query.");
+                
+                return null;
+            }
+                      
+            //check if result size is too big
+            if (datafiles.size() == 1000) {
+
+                log.warn("More than " + WebConstants.MAXIMIUM_RESULTS + " datafiles returned " + datafiles.size() + " removing all but " + WebConstants.MAXIMIUM_RESULTS);
+                info("More than the maximum total of " + WebConstants.MAXIMIUM_RESULTS + " dataportal results shown was returned.  Please refine your query next time.");
+            }
+
+            //set investigations
+            log.debug("Adding found datafiles to session, size: " + datafiles.size());
+            getVisitData().setCurrentDatafiles(datafiles);   
+            getVisitData().setInvestigatonTreeVisable(false);
+            getVisitData().setNewResults(true);
+            getVisitData().setCurrentDataset("Search result");
+            
+            return NavigationConstants.GOTO_DATASETS;
+        } catch (Exception ex) {
+            log.error("Exception occured getting datafiles ", ex);
+            error("Exception occured. Please try again.");
+            return null;
+        }
+
+    }
+    
+     public String getQueryInvestigationResults(QueryRequest query_request, DPQueryType typeOfSearch, int timeout) {
+    
         QueryDelegate qd = QueryDelegate.getInstance();
 
         //if initial query sent ok, now wait for return, only wait MAXIMIUM_SEARCH_TIME secs
@@ -400,7 +452,7 @@ public class SearchBean extends AbstractRequestBean {
 
             //if not results infom user
             if (investigations.size() == 0) {
-                if (myData) {
+                if (typeOfSearch == DPQueryType.MYDATA) {
                     info("No investigations associated with you.");
                 } else {
                     info("No results found. Please refine your query.");
