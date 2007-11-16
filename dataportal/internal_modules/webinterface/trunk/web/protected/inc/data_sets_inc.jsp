@@ -26,7 +26,7 @@
                     
                     <br />
                     
-                    <t:tree2  binding="#{datasetTree.tree}" id="tree" value="#{datasetTree.data}" var="node" varNodeToggler="t" showRootNode="false" clientSideToggle="true">
+                    <t:tree2 rendered="#{visit.visitData.investigatonTreeVisable}" binding="#{datasetTree.tree}" id="tree" value="#{datasetTree.data}" var="node" varNodeToggler="t" showRootNode="false" clientSideToggle="true">
                         
                         <%----  Data set branch  ----%>
                         <f:facet name="dataset-folder">
@@ -867,7 +867,7 @@
                         </c:if>
                         
                         
-                        <h:panelGrid  width="100%" border="0" columns="1" style="align: right" rendered="#{visit.visitData.datafileTableVisable}">
+                        <h:panelGrid  width="100%" border="0" columns="1" style="align: right" rendered="#{visit.visitData.datafileTableVisable && visit.visitData.dataFilesDownloadable}">
                             
                             
                             <%-- <tr>   
@@ -902,18 +902,19 @@
                             </f:facet>
                             </t:popup>
                             </td>
+                            
                             </tr>--%>
-                            <h:panelGroup style="float: right" >
+                            <h:panelGrid columns="3" style="float: right" >
                                 <h:commandButton styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections" value="Download selection"/>
                                 <h:panelGroup/>
                                 <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
-                            </h:panelGroup>
+                            </h:panelGrid>
                             
-                             <h:panelGroup style="float: right" >
+                              <h:panelGrid columns="3" style="float: right" >
                                 <h:commandButton styleClass="button" id="downloaddataset" style="width: 130px"  onclick="download('DOWNLOAD_ALL','DATA_SET','DATA_SETS'); return false;"  title="Download All" value="Download All"/>
                                 <h:panelGroup/>
                                 <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
-                            </h:panelGroup>
+                            </h:panelGrid>
                             
                             <%--<h:panelGroup style="float: right" >  
                                 <a4j:commandButton onclick="alert('Email has been sent to #{visit.userPreferences.email}');" immediate="true" reRender="messages" styleClass="button" id="downloademail" style="width: 130px" rendered="#{visit.userPreferences.emailSet}" action="#{datasetTree.emailDownload}" title="Download via email" value="Email download"/>
