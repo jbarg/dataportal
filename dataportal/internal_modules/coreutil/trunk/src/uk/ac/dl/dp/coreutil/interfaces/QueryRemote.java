@@ -36,6 +36,8 @@ public interface QueryRemote {
 
     public Collection<Datafile> getDatafiles(String sid, Dataset dataset, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
 
+    public Collection<Datafile> queryDatafiles(String sessionId, AdvancedSearchDetailsDTO asdDTO, String facility, int startIndex, int numberResults) throws SessionException, QueryException;
+   
     public boolean isFinished(QueryRequest request) throws SessionException;
 
     public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException;

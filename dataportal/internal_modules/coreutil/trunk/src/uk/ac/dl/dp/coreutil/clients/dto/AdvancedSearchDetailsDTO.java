@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
+import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.InvestigationInclude;
 
@@ -28,6 +29,7 @@ import uk.ac.dp.icatws.InvestigationInclude;
 public class AdvancedSearchDetailsDTO implements Serializable {
     
     static Logger log = Logger.getLogger(AdvancedSearchDetailsDTO.class);
+          
     
     /**
      * Investigation Name
