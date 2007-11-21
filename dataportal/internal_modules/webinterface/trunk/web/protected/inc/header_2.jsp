@@ -5,7 +5,7 @@
    <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties" />
   
 <h:form>
-    
+        
     <t:jscookMenu layout="hbr" theme="ThemeOffice" styleLocation="../css/jscookmenu">
         <%/* Availaible jscookMenu themes: ThemeIE, ThemeMiniBlack, ThemeOffice, ThemePanel
         Availaible jscookMenu layout: hbr, hbl, hur, hul, vbr, vbl, vur, vul
@@ -14,7 +14,7 @@
         <t:navigationMenuItem id="nav_admin"  itemLabel="Admin" itemValue="gotAdmin" action="GOTO_ADMIN"  rendered="#{visit.admin}"  />    
                
         <t:navigationMenuItem id="nav_0"  itemLabel="Search" itemValue="basicSearch" action="GOTO_BASIC_SEARCH">    
-        <t:navigationMenuItem id="nav_0_0_1"  itemLabel="#{facility_properties['facility.name']} Search" itemValue="facilitySearch" action="#{searchBean.gotoFacilitySearchPage}" />
+        <t:navigationMenuItem id="nav_0_0_1" rendered="#{visit.customisation.facilitySearchPageVisible}" itemLabel="#{facility_properties['facility.name']} Search" itemValue="facilitySearch" action="#{searchBean.gotoFacilitySearchPage}" />
       
         <t:navigationMenuItem id="nav_0_1"  itemLabel="Keyword Search" itemValue="keywordSearch" action="GOTO_BASIC_SEARCH" />
         <t:navigationMenuItem id="nav_0_2"  itemLabel="Advanced Search" itemValue="advancedSearch" action="GOTO_ADVANCED_SEARCH" />     
@@ -27,13 +27,8 @@
         <t:navigationMenuItem id="nav_4"  itemLabel="Data Links" >                  
         <t:navigationMenuItem id="nav_4_1"  itemLabel="Data References" action="GOTO_DATA_REFERENCES" />
         <t:navigationMenuItem id="nav_4_2"  itemLabel="Bookmarks" action="GOTO_BOOKMARKS" />
-        <t:navigationMenuItem id="nav_4_3" rendered="#{visit.visitData.otherUserDn}"  itemLabel="Others" >                  
-        <t:navigationMenuItem id="nav_4_3_1" rendered="#{visit.visitData.datacenterEnabled}"  itemLabel="Data References" action="VIEW_OTHER_DATA_REFERENCES" />
-            <t:navigationMenuItem id="nav_4_3_2" rendered="#{visit.visitData.bookmarkEnabled}"  itemLabel="Bookmarks" action="VIEW_OTHER_BOOKMARKS" />
-                
-            </t:navigationMenuItem>             
+                   
         </t:navigationMenuItem>
-        <t:navigationMenuItem id="nav_5"  itemLabel="Log out" action="#{authorisationBean.logout}"  />
         
         
     </t:jscookMenu>       

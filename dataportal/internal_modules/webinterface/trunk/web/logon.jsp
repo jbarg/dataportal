@@ -7,7 +7,7 @@
 <%@page import="uk.ac.dl.dp.web.util.WebConstants" %>
 
 <html>
-            
+    
     <head>
         <meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8" />
         <title>Sci-Tech Data Portal </title>
@@ -36,10 +36,10 @@
                                         <td width="100%" > 
                                             <%--  <td id="nav_bar" width="100%"  > 
                                             <f:subview id="header">
-                                                <c:import url="inc/header.jsp" />
+                                            <c:import url="inc/header.jsp" />
                                             </f:subview>
-                                             
-                                        </td>--%>
+                                            
+                                            </td>--%>
                                             <f:subview id="header">
                                                 <c:import url="inc/header_img.jsp" />
                                             </f:subview>
@@ -51,9 +51,7 @@
                                  <tbody>
                                     <tr>                         
                                         <td width="100%" align="right" >
-                                            <%--     <f:subview id="header_2">
-                                                <c:import url="inc/header_2.jsp" />
-                                            </f:subview>--%>
+                                           
                                             <br />
                                             <br />
                                         </td>
@@ -67,7 +65,7 @@
                                         <td valign="top" width="200">
                                             <!-- does not work inside subview??? -->
                                             <%-- <f:subview id="navigation">
-                                                <c:import url="inc/header_img.jsp" />
+                                            <c:import url="inc/header_img.jsp" />
                                             </f:subview>--%>
                                             <%--
                                             <img align="center" src="../../images/diamond.gif" width=170" height="60" />

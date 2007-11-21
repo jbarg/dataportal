@@ -337,7 +337,7 @@
                                                      closePopupOnExitingPopup="true"
                                                      displayAtDistanceX="10"
                                                      displayAtDistanceY="-40" >
-                                                <t:graphicImage url="../../images/help.gif" border="0" /> 
+                                                <t:graphicImage url="../../images/help_16.png" border="0" /> 
                                                 <f:facet name="popup">
                                                     <h:panelGroup>
                                                         <h:panelGrid columns="1" >

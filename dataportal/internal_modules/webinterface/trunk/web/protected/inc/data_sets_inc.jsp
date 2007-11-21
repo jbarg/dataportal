@@ -335,7 +335,7 @@
                                      var="dataFile"
                                      value="#{datafileBean.datafiles}"
                                      preserveDataModel="true"
-                                     rows="#{visit.userPreferences.resultsPerPage}"       
+                                     rows="#{sessionHistory.numberOfResultsDatafiles}"       
                                      binding="#{datafileBean.table}"
                                      sortColumn="#{datafileBean.sort}"
                                      sortAscending="#{datafileBean.ascending}"
@@ -551,7 +551,7 @@
                         </t:dataTable>
                         
                         
-                        <c:if test="${fn:length(sessionScope.visit.visitData.currentDatafiles) > sessionScope.visit.userPreferences.resultsPerPage}" >
+                        <c:if test="${fn:length(sessionScope.visit.visitData.currentDatafiles) > sessionScope.sessionHistory.numberOfResultsDatafiles}" >
                             
                             <h:panelGrid id="datafileTableScroller" rendered="#{visit.visitData.datafileTableVisable}" columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                                 
@@ -619,7 +619,7 @@
                                      var="dataSet"
                                      value="#{datasetBean.datasets}"
                                      preserveDataModel="true"
-                                     rows="#{visit.userPreferences.resultsPerPage}"       
+                                     rows="#{sessionHistory.numberOfResultsDatsets}"       
                                      binding="#{datasetBean.table}"
                                      sortColumn="#{datasetBean.sort}"
                                      sortAscending="#{datasetBean.ascending}"
@@ -809,7 +809,7 @@
                         </t:dataTable>
                         
                         
-                        <c:if test="${fn:length(sessionScope.visit.visitData.currentDatasets) > sessionScope.visit.userPreferences.resultsPerPage}" >
+                        <c:if test="${fn:length(sessionScope.visit.visitData.currentDatasets) > sessionScope.sessionHistory.numberOfResultsDatasets}" >
                             
                             <h:panelGrid id="datasetTableScroller" rendered="#{visit.visitData.datasetTableVisable}" columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                                 
@@ -886,7 +886,7 @@
                             closePopupOnExitingPopup="true"
                             displayAtDistanceX="10"
                             displayAtDistanceY="-40" >
-                            <t:graphicImage url="../../images/help.gif" border="0" /> 
+                            <t:graphicImage url="../../images/help_16.png" border="0" /> 
                             <f:facet name="popup">
                             <h:panelGroup>
                             <h:panelGrid columns="1" >

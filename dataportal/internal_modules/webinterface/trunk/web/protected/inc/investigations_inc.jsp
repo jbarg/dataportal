@@ -33,7 +33,7 @@
                                                  closePopupOnExitingPopup="true"
                                                  displayAtDistanceX="5"
                                                  displayAtDistanceY="-40" >
-                                            <t:graphicImage url="../../images/help.gif" border="0" />
+                                            <t:graphicImage url="../../images/help_16.png" border="0" />
                                             &nbsp;&nbsp;&nbsp;
                                             <f:facet name="popup">
                                                 <h:panelGroup>
@@ -147,7 +147,7 @@
     
     <a4j:form id="viewform">
         
-        <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
+        <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >
             
             <t:collapsiblePanel  id="scroll" value="#{autoCompleteCollapsibleBean.collapsed}" title="testTitle" >
                 <f:facet name="header">
@@ -208,7 +208,7 @@
                      var="invest"
                      value="#{investigationBean.investigations}"
                      preserveDataModel="true"
-                     rows="#{visit.userPreferences.resultsPerPage}"       
+                     rows="#{sessionHistory.numberOfResultsInvestigations}"       
                      binding="#{investigationBean.table}"
                      sortColumn="#{investigationBean.sort}"
                      sortAscending="#{investigationBean.ascending}"
@@ -576,7 +576,7 @@
         </t:dataTable>
         
         
-        <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.visit.userPreferences.resultsPerPage}" >
+        <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >
             
             <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
                 
