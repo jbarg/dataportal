@@ -6,10 +6,12 @@
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+
 <script type="text/javascript">
     function extractCity(citystatezip) {
     var index = citystatezip.indexOf(',');
     var nextcity = citystatezip.substring(0, index+4);
+    
     
     
     return citystatezip;
@@ -27,16 +29,16 @@
     
     var old = oldvalue.substring(0, index);
     
-        
+    
     if(old == ""){
     
-        textField.value = city+" ";        
+    textField.value = city+" ";        
     
     }
     else {
     
-        textField.value = old+" "+city+" ";
-        
+    textField.value = old+" "+city+" ";
+    
     }
     //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
     
@@ -46,9 +48,12 @@
     
     
 </script>
+
+
 <br />
 
 <a4j:region  selfRendered="true"> 
+     <h5>Investigation Search</h5>
     <h:form id="autofillform">
         <h:panelGrid border="0" columns="2"> 
             <h:messages globalOnly="true" errorClass="error" infoClass="info" />
@@ -56,7 +61,7 @@
         </h:panelGrid>
         
         <h:panelGrid  border="0" columns="4">      
-                        
+            
             <h:outputLabel rendered="#{!visit.singleFacility}" for="facilitiesj_id_1">
                 <h:outputText rendered="#{!visit.singleFacility}" value="Search: " style="font-size:14px"/>
             </h:outputLabel  >
@@ -69,7 +74,7 @@
                     <f:validateLength minimum="1" />
                 </h:selectManyListbox>
             </h:panelGrid> 
-                       
+            
             <h:outputText rendered="#{!visit.singleFacility}" id="facilityDisplay" value="#{visit.visitData.currentSelectedFacilities}" style="font-size:14px"/>
             
             <h:message rendered="#{!visit.singleFacility}" for="facilitiesj_id_1" styleClass="error"/>
@@ -95,26 +100,30 @@
                              value="#{searchBean.keyword}" required="true" validator="#{searchBean.validateKeyword}" />
             </h:panelGrid> 
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            
+            
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40">
+                     displayAtDistanceX="15"
+                     displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <%-- <h:outputText value="Exact keyword match only. Case insensititve."/>   --%>
+                        <h:panelGrid  columns="1" >                            
+                            <h3>Keyword(s)</h3>
+                            <p> Use * to denote a wild card.  I.e.  *data, data* or *data*portal*<br />
+                            <br />Searching ship* will match ships and shipping, when SHIP* will match SHIPS and shipping<br />
+                           if Case Sensitive is turned off (unchecked)</p> 
                             
-                            <h:outputText value="This list is not a full list of all your possible keywords, only alpha numeric."/>                                 
                             
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup> 
             
-                                          
-           <h:panelGrid >
+            
+            <h:panelGrid >
                 <h:message for="keywordFieldj_id_1" styleClass="error"/>
                 <h:message for="keywordFieldj_id_2" styleClass="error"/>
                 <h:message  for="keywordFieldj_id_3" styleClass="error"/>                
@@ -148,92 +157,32 @@
                 
             </h:panelGrid>  
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="These set for the default behaviour for this session for all keyword searches."/>
-                            <h:outputText escape="false" value="Auto Complete:"/>
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;   'Yes' auto complete is enabled"/>                                                             
-                            <h:outputText escape="false" value="  &nbsp; &nbsp;  'No' auto complete is disabled"/>   
+                            <h3>Auto Complete</h3>
+                            <p>'Yes' auto complete is enabled.  If enabled, the list is not a full <br />
+                              list of all your possible keywords, only alpha numeric.<br /> 
+                            'No' auto complete is disabled</p>   
                             
-                            <h:outputText value="Case Sensitive:"/>
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;  'Yes' search is done regardless of case of keyword"/>                                                             
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;  'No' keyword case is kept and searched"/>   
+                            <h3>Case Sensitive</h3>
+                            <p> 'Yes' keyword case is kept and searched<br />
+                            'No' search is done regardless of case of keyword (Case Insensitive), <br />i.e SHIP will match ship and ShIp</p>   
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
-                        
+            
             <h:panelGroup/>
             
             <!--                End of toggle auto complete  -->  
-                   
             
-            <!--     End of toggle case sensitive -->
-            
-            <h:outputLabel>            
-                <h:outputText value="Type:" style="font-size: 14px" />                   
-            </h:outputLabel>
-            
-            <%--    <h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-            <h:selectOneRadio style="font-size:12px" id="radio" value="#{searchBean.logicalExpression}" >
-                <f:selectItems value="#{searchBean.logicalExpressions}"/>              
-            </h:selectOneRadio>         
-            
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40" >
-                
-                <t:graphicImage url="../../images/help.gif" border="0" />
-                <f:facet name="popup">
-                    <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="'And' type searches returns all results"/>                                 
-                            <h:outputText escape="true" value=" that contain all the keywords, i.e. default Google behaviour."/> 
-                            <h:outputText value="'Or' type searches returns all results"/>                             
-                            <h:outputText  escape="true" value="that contain atleast one of the keywords."/>  
-                        </h:panelGrid>
-                    </h:panelGroup>
-                </f:facet>
-            </t:popup>            
-            
-            <h:panelGroup/>
-            
-            <h:panelGroup/>
-            
-            <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-            <h:selectOneRadio style="font-size:12px" id="like" value="#{searchBean.likeExpression}" >
-                <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
-                <f:selectItem itemLabel="Like"  itemValue="LIKE" />
-            </h:selectOneRadio>       
-            
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40" >
-                
-                <t:graphicImage url="../../images/help.gif" border="0" />
-                <f:facet name="popup">
-                    <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="'Exact' type searches returns all results"/>                                 
-                            <h:outputText escape="true" value=" that exactly match the keyword."/> 
-                            <h:outputText value="'Like' type searches returns all results"/>                             
-                            <h:outputText  escape="true" value="that contain part of the keywords."/>  
-                            <h:outputText  escape="true" value="I.e. oxygen would return results with oxygens as a keyword."/>              
-                        </h:panelGrid>
-                    </h:panelGroup>
-                </f:facet>
-            </t:popup>
-                        
-            <h:panelGroup/>            
             
             <h:panelGroup/>
             

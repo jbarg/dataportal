@@ -621,9 +621,9 @@ div.titlebar {
 #subnavigation {
 margin-left: 0px;
 margin-right: 20px;
-padding: 0px 0px 20px 0px;
+padding: 10px 6px 0px 0px;
 border: 1px solid #546359;
-background-color: #EAF4F4;
+background-color: #D1E4E4;
 }
 
 #subnavigation_nav {
@@ -672,6 +672,7 @@ width: 220px;
 padding: 0px;
 margin: 0px 0px 0px 0px;
 }
+
 #subnavigation_outer h1  {
 font-size: 1.5em;
 margin: 0px;

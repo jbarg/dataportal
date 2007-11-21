@@ -184,21 +184,7 @@
                         </h:outputLabel> 
                     </h:panelGrid>                      
                     
-                    <!----------------     Start of Like ---------------->
-                    <h:outputLabel>            
-                        <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
-                    </h:outputLabel>
-                    
-                    <h:selectOneRadio style="font-size:10px" id="like" value="#{sessionHistory.isisSearchHistoryBean.likeExpression}" >
-                        <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
-                        <f:selectItem itemLabel="Like"  itemValue="LIKE" />
-                        <f:validateLength minimum="1" />
-                    </h:selectOneRadio>       
-                    
-                    <h:panelGroup/>
-                    <h:panelGroup/>
-                    <!----------------     End of Like ---------------->
-                    
+                                       
                     <!----------------     Start of Run number ---------------->
                     <h:outputLabel>            
                         <h:outputText value="Run #" style="font-size: 10px" />                   
@@ -363,28 +349,8 @@
                         
                     </h:panelGrid>  
                     
-                    <h:outputLabel>            
-                        <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
-                    </h:outputLabel>
                     
-                    <h:selectOneRadio  style="font-size:10px" id="radioNav" value="#{sessionHistory.basicSearchHistoryBean.logicalExpression}" >
-                        <f:selectItems value="#{searchBean.logicalExpressions}"/> 
-                        <f:validateLength minimum="1" />
-                    </h:selectOneRadio>         
-                    
-                    
-                    <h:panelGroup/>
-                    
-                    <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-                    <h:selectOneRadio style="font-size:10px" id="likeNav" value="#{sessionHistory.basicSearchHistoryBean.likeExpression}" >
-                        <f:selectItem itemLabel="Exact"  itemValue="EXACT" />                         
-                        <f:selectItem itemLabel="Like"  itemValue="LIKE" />
-                        <f:validateLength minimum="1" />
-                    </h:selectOneRadio>       
-                    
-                    <h:panelGroup/>           
-                    <h:panelGroup/>
-                    
+                   
                     
                     <h:panelGroup/>
                     <h:panelGrid columns="2" >
@@ -542,21 +508,7 @@
                         
                     </h:panelGrid>                        
                     
-                    <!----------------     Start of Like ---------------->
-                    <h:outputLabel>            
-                        <h:outputText escape="false" value="Type:" style="font-size: 10px" />                   
-                    </h:outputLabel>
-                    
-                    <h:selectOneRadio style="font-size:10px" id="like" value="#{sessionHistory.advancedSearchHistoryBean.likeExpression}" >
-                        <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
-                        <f:selectItem itemLabel="Like"  itemValue="LIKE" />
-                        <f:validateLength minimum="1" />
-                    </h:selectOneRadio>       
-                    
-                    <h:panelGroup/>
-                    <h:panelGroup/>
-                    <!----------------     End of Like ---------------->
-                    
+                                       
                     <!----------------     Start of Run number ---------------->
                     <h:outputLabel>            
                         <h:outputText value="Run #" style="font-size: 10px" />                   
@@ -646,8 +598,7 @@
                         <h:outputText value="Inv Number:" style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <h:inputText styleClass="text" id="invNumj_id_1" size="14" required="false" value="#{sessionHistory.advancedSearchHistoryBean.invNumber}">
-                        <f:validateDoubleRange minimum="0" maximum="9990000000" />
+                    <h:inputText styleClass="text" id="invNumj_id_1" size="14" required="false" value="#{sessionHistory.advancedSearchHistoryBean.invNumber}">                       
                     </h:inputText>        
                     
                     

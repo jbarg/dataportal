@@ -53,6 +53,7 @@
 
 
 <a4j:region  selfRendered="true"> 
+    <h5>Investigation Search</h5>
     <h:form id="autofillform">
         <h:panelGrid border="0" columns="2"> 
             <h:messages globalOnly="true" errorClass="error" infoClass="info" />
@@ -100,28 +101,26 @@
                              value="#{searchBean.keyword}" required="false" validator="#{searchBean.validateKeyword}" />
             </h:panelGrid> 
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40">
+                     displayAtDistanceX="15"
+                     displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <%-- <h:outputText value="Exact keyword match only. Case insensititve."/>   --%>
-                            
-                            <h:outputText value="This list is not a full list of all your possible keywords, only alpha numeric."/>                                 
-                            <h:outputText value="'AND' type searches returns all results"/>                                 
-                            <h:outputText escape="true" value=" that contain all the keywords, i.e. default Google behaviour."/> 
-                            <h:outputText value="Exact or Like match depending what you select below."/>                              
+                            <h3>Keyword(s)</h3>
+                            <p> Use * to denote a wild card.  I.e.  *data, data* or *data*portal*<br />
+                                <br /> Searching ship* will match ships and shipping, when SHIP* will match SHIPS and shipping<br />
+                            if Case Sensitive is turned off (unchecked)</p> 
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup> 
             
-
-              <h:panelGrid  columns="3" >
+            
+            <h:panelGrid  columns="3" >
                 <h:message for="keywordFieldj_id_1" styleClass="error"/>
                 <h:message for="keywordFieldj_id_2" styleClass="error"/>
                 <h:message  for="keywordFieldj_id_3" styleClass="error"/>                
@@ -146,19 +145,19 @@
                 
             </h:panelGrid>  
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText escape="false" value="Auto Complete:"/>
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;   'Yes' auto complete for keyword(s) is enabled"/>                                                             
-                            <h:outputText escape="false" value="  &nbsp; &nbsp;  'No' auto complete for keyword(s) is disabled"/>   
-                            
+                            <h3>Auto Complete</h3>
+                            <p>'Yes' auto complete is enabled.  If enabled, the list is not a full <br />
+                                list of all your possible keywords, only alpha numeric.<br /> 
+                            'No' auto complete is disabled</p>
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -177,18 +176,17 @@
                 
             </h:inputText>        
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Name of investigation."/>                                 
-                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
-                            
+                            <h3>Investigation name</h3>
+                            <p>Seaches for the name/title of an investigation, use of wildcards (*) is allowed</p>                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -207,18 +205,17 @@
                 
             </h:inputText>        
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Abstract of investigation."/>                                 
-                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
-                            
+                            <h3>Abstract</h3>
+                            <p>Seaches for the abstract of an investigation, use of wildcards (*) is allowed</p>                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -237,18 +234,17 @@
                 
             </h:inputText>        
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Sample used in investigation."/>                                 
-                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
-                            
+                            <h3>Sample</h3>
+                            <p>Seaches for a sample name used in investigation, use of wildcards (*) is allowed</p>                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -267,17 +263,18 @@
                 
             </h:inputText>        
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Investigators used in investigation."/>                                 
-                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
+                            <h3>Investigator</h3>
+                            <p>Seaches for a investigator surname asscoicated <br />
+                            with an investigation, use of wildcards (*) is allowed</p>  
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -295,17 +292,18 @@
             
             <h:inputText styleClass="text" id="dfNamej_id_1" size="20" required="false" value="#{advancedSearchBean.datafileName}" />
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Name of a data file in an investigation."/>                                 
-                            <h:outputText value="Exact/Like and case sensitive match depending what you select below."/>  
+                            <h3>Datafile</h3>
+                            <p>Seaches for a generated datafile that is associated <br />
+                            with an investigation, use of wildcards (*) is allowed</p>                              
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -333,59 +331,25 @@
                 
             </h:panelGrid>  
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            
-                            <h:outputText value="Case Sensitive (for all columns above only)"/>
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;  'Yes' search is done regardless of case of keyword"/>                                                             
-                            <h:outputText escape="false" value=" &nbsp; &nbsp;  'No' keyword case is kept and searched"/>   
+                            <h3>Case Sensitive (for all columns above only)</h3>
+                            <p> 'Yes' case is kept and searched<br />
+                            'No' search is done regardless of case of input text (Case Insensitive), <br /> i.e SHIP will match ship and ShIp</p> 
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
             </t:popup>
             
             <h:panelGroup/>
-            <!----------------     Start of Like ---------------->
-            <h:outputLabel>            
-                <h:outputText value="Type:" style="font-size: 14px" />                   
-            </h:outputLabel>
             
-            <%--<h:selectBooleanCheckbox value="#{searchBean.logicalExpressionBoolean}"  />--%>
-            <h:selectOneRadio style="font-size:12px" id="like" value="#{advancedSearchBean.likeExpression}" >
-                <f:selectItem itemLabel="Exact"  itemValue="EXACT" /> 
-                <f:selectItem itemLabel="Like"  itemValue="LIKE" />
-            </h:selectOneRadio>       
-            
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
-                     closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
-                     displayAtDistanceY="-40" >
-                
-                <t:graphicImage url="../../images/help.gif" border="0" />
-                <f:facet name="popup">
-                    <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="Type of search (for all columns above only)" />
-                            <h:outputText value="'Exact' type searches returns all results"/>                                 
-                            <h:outputText escape="true" value=" that exactly match the search text."/> 
-                            <h:outputText value="'Like' type searches returns all results"/>                             
-                            <h:outputText  escape="true" value="that contain part of the search text."/>  
-                            <h:outputText  escape="true" value="I.e. oxygen would return results with oxygens."/>              
-                        </h:panelGrid>
-                    </h:panelGroup>
-                </f:facet>
-            </t:popup>
-            
-            
-            <h:panelGroup/>
-            <!----------------     End of Like ---------------->
             
             <h:panelGroup/>
             <h:panelGroup/>
@@ -414,19 +378,24 @@
             </h:panelGroup>
             
             <h:panelGroup>
-                <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+                <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                          closePopupOnExitingPopup="true"
-                         displayAtDistanceX="5"
-                         displayAtDistanceY="-40" 
-                         
-                         >
+                         displayAtDistanceX="15"
+                         displayAtDistanceY="-40" >
                     
-                    <t:graphicImage url="../../images/help.gif" border="0" />
+                    
+                    <t:graphicImage url="../../images/help_16.png" border="0" />
                     <f:facet name="popup">
                         <h:panelGroup >
                             <h:panelGrid columns="1" >
-                                <h:outputText value="Minimum and maximum values of a run number."/>                                 
-                                <h:outputText value="Just enter minimum if you are only search one run number and not a range."/> 
+                                <h3>Run number</h3>
+                                <p>Seaches for a single or range of run numbers that is associated <br />
+                                    with an investigation, use of wildcards (*) is allowed<br />                                    
+                                    <br />                                    
+                                    Just enter the minimum and maximum values of a run number, <br />
+                                    or enter minimum if you are only search one run number and not a range
+                                </p>                
+                                
                             </h:panelGrid>
                         </h:panelGroup>
                     </f:facet>
@@ -454,16 +423,20 @@
                              helpText="DD/MM/YYYY" validator="#{advancedSearchBean.validateDate}"/>  
             
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Start date range."/>                                 
+                            <h3>Start date</h3>
+                            <p>Start date range for the investigation.<br />
+                                <br />If this is left empty the search will have no start date, only a end date<br />
+                                so it will return all the investigations before the end date
+                            </p>
                             
                         </h:panelGrid>
                     </h:panelGroup>
@@ -488,17 +461,20 @@
                              helpText="DD/MM/YYYY" validator="#{advancedSearchBean.validateDate}"/>  
             
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="End date range."/>                                 
-                            
+                           <h3>End date</h3>
+                            <p>End date range for the investigation.<br />
+                                <br />If this is left empty the search will have no end date, only a start date<br />
+                                so it will return all the investigations after the start date
+                            </p>
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -516,17 +492,18 @@
             
             <h:inputText styleClass="text" id="visitIdj_id_1" size="20" required="false" value="#{advancedSearchBean.visitId}" />
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Visit Id of investigation."/>                                 
-                            
+                            <h3>Visit Id</h3>
+                            <p>Visit Id of the investigation.                            
+                            </p>
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -545,17 +522,18 @@
                 <f:validateDoubleRange minimum="0" maximum="9990000000" />
             </h:inputText>        
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Grant Id of investigation."/>                                 
-                            
+                            <h3>Grant Id</h3>
+                            <p>Grant Id of the investigation.                            
+                            </p>
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -571,20 +549,21 @@
             </h:outputLabel>
             
             <h:inputText styleClass="text" id="invNumj_id_1" size="20" required="false" value="#{advancedSearchBean.invNumber}">
-                <f:validateDoubleRange minimum="0" maximum="9990000000" />
+                
             </h:inputText>        
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Investigation number."/>                                 
-                            
+                            <h3>Investigation number</h3>
+                            <p>Investigation number of the investigation.                            
+                            </p>
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -616,16 +595,18 @@
             
             </h:inputText>      --%>  
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                            <h:outputText value="Type of investigation."/>                                 
+                            <h3>Investigation type</h3>
+                            <p>Investigation tpye of the investigation.                            
+                            </p>
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -650,17 +631,19 @@
             
             </h:inputText>  --%>
             
-            <t:popup styleClass="popup" style="font-size: 14px" closePopupOnExitingElement="true"
+            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
-                     displayAtDistanceX="5"
+                     displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help.gif" border="0" />
+                <t:graphicImage url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
-                        <h:panelGrid columns="1" >
-                            <h:outputText value="Instrument used in investigation."/>                                 
-                            
+                        <h:panelGrid columns="1" >                                                            
+                            <h3>Instrument</h3>
+                            <p>Instrument used in investigation/<br /><br />
+                            If you do not select any it will search all intruments.
+                            </p>
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>

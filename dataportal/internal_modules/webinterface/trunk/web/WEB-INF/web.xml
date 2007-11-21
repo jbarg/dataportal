@@ -122,7 +122,11 @@
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <init-param>
+            <param-name>javax.faces.LIFECYCLE_ID</param-name>
+            <param-value>com.sun.faces.lifecycle.PARTIAL</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>       
     </servlet>
     <servlet>
         <servlet-name>DownloadServlet</servlet-name>
@@ -140,6 +144,18 @@
         <load-on-startup>2</load-on-startup>
     </servlet>
     
+     <!-- Theme Servlet -->
+    <servlet>
+        <servlet-name>ThemeServlet</servlet-name>
+        <servlet-class>com.sun.webui.theme.ThemeServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>          
+    
+    <!-- Theme Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>ThemeServlet</servlet-name>
+        <url-pattern>/theme/*</url-pattern>
+    </servlet-mapping>     
     
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
