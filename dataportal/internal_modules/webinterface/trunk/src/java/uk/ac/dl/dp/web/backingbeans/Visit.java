@@ -113,7 +113,6 @@ public class Visit extends AbstractSessionBean implements Serializable {
     }
     private static Logger log = Logger.getLogger(Visit.class);
 
-       
     public Visit() {
         setVisitData(new VisitData());
     }
@@ -133,6 +132,12 @@ public class Visit extends AbstractSessionBean implements Serializable {
         this.userPreferences = session.getUserPrefs();
 
         String res = this.userPreferences.getResolution().toString();
+
+        //set default history of number results
+        this.getSessionHistory().setNumberOfResultsDatafiles(this.userPreferences.getResultsPerPage());
+        this.getSessionHistory().setNumberOfResultsDatasets(this.userPreferences.getResultsPerPage());
+        this.getSessionHistory().setNumberOfResultsInvestigations(this.userPreferences.getResultsPerPage());
+
         setUserWidth(res);
         log.trace("Width set to: " + width);
 
@@ -182,7 +187,7 @@ public class Visit extends AbstractSessionBean implements Serializable {
         }
 
         ResourceBundle facilityResources = ResourceBundle.getBundle("uk.ac.dl.dp.web.messages.facility");
-       
+
         try {
             facility = facilityResources.getString("facility.name");
         } catch (Exception mre) {

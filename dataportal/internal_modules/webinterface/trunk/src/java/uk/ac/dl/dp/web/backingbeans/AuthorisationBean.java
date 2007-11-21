@@ -186,7 +186,8 @@ public class AuthorisationBean extends AbstractRequestBean implements Serializab
             //check that have some data
             if(getVisitData().getSearchedInvestigations() == null || getVisitData().getSearchedInvestigations().size() == 0){
                 //no data associated
-                return NavigationConstants.LOGIN_SUCCESS;
+                if(getVisit().getCustomisation().isFacilitySearchPageVisible()) return searchBean.gotoFacilitySearchPage();
+                else return NavigationConstants.LOGIN_SUCCESS;               
             } else return NavigationConstants.LOGIN_SUCCESS_MYDATA;
         } else return NavigationConstants.LOGIN_SUCCESS;
     }

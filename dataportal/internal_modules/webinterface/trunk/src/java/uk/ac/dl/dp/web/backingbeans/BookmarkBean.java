@@ -324,7 +324,7 @@ public class BookmarkBean extends SortableList {
             //set current bookmarks to null so next time web calls to get new list
             getVisitData().setCurrentBookmarks(null);
         } catch (NoAccessToDataCenterException ex) {
-            log.warn("User: "+getVisit().getDn()+" has no access to remove from: "+getVisitData().getCurrentUserAuthDN());
+            log.warn("User: "+getVisit().getDn()+" has no access to remove");
             error("You do not have access for this operation.");
             return null;
         } catch (Exception ex) {
@@ -375,7 +375,7 @@ public class BookmarkBean extends SortableList {
         try {
             DataCenterDelegate.getInstance().modifyBookmark(getVisit().getSid(),bk);
         }  catch (NoAccessToDataCenterException ex) {
-            log.warn("User: "+getVisit().getDn()+" has no access to add note to: "+getVisitData().getCurrentUserAuthDN());
+            log.warn("User: "+getVisit().getDn()+" has no access to add note ");
             error("You do not have access for this operation.");
             return null;
         } catch (Exception ex) {

@@ -50,6 +50,10 @@ public class Customisation {
      * Is visit displayed
      */
     private boolean visitIdVisible;
+     /**
+     * Is facility search page displayed
+     */
+    private boolean facilitySearchPageVisible;
     /**
      * Hardcoded values of instruments
      */
@@ -95,6 +99,12 @@ public class Customisation {
                 bcatInvStr = new Boolean(getProperty("bcatinvstr.visible", "true")).booleanValue();
             } catch (Exception mre) {
                 bcatInvStr = true;
+            }
+            
+             try {
+                facilitySearchPageVisible = new Boolean(getProperty("facility.search.page.visible", "false")).booleanValue();
+            } catch (Exception mre) {
+                facilitySearchPageVisible = false;
             }
              
             //load up select items for advanced search
@@ -223,6 +233,15 @@ public class Customisation {
 
     public void setBcatInvStr(boolean bcatInvStr) {
         this.bcatInvStr = bcatInvStr;
+    }
+    
+    
+    public boolean isFacilitySearchPageVisible() {
+        return facilitySearchPageVisible;
+    }
+
+    public void setFacilitySearchPageVisible(boolean facilitySearchPageVisible) {
+        this.facilitySearchPageVisible = facilitySearchPageVisible;
     }
 }
 

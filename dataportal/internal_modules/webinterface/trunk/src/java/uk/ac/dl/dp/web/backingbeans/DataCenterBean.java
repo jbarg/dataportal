@@ -259,7 +259,7 @@ public class DataCenterBean extends SortableList {
             //set to null so page has to go back and refresh its contents
             getVisitData().setCurrentDataReferences(null);
         } catch (NoAccessToDataCenterException ex) {
-            log.warn("User: "+getVisit().getDn()+" has no access to remove from: "+getVisitData().getCurrentUserAuthDN());
+            log.warn("User: "+getVisit().getDn()+" has no access to remove ");
             error("You do not have access for this operation.");
             return null;
         } catch (Exception ex) {
@@ -330,7 +330,7 @@ public class DataCenterBean extends SortableList {
         try {
             DataCenterDelegate.getInstance().modifyDataReference(getVisit().getSid(),bk);
         } catch (NoAccessToDataCenterException ex) {
-            log.warn("User: "+getVisit().getDn()+" has no access to add note to: "+getVisitData().getCurrentUserAuthDN());
+            log.warn("User: "+getVisit().getDn()+" has no access to add note ");
             error("You do not have access for this operation.");
             return null;
         } catch (Exception ex) {
