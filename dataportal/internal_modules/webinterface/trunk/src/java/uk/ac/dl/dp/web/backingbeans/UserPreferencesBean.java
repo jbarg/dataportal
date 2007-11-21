@@ -103,7 +103,7 @@ public class UserPreferencesBean extends AbstractRequestBean {
         results.add(new SelectItem("15","15"));
         results.add(new SelectItem("20","20"));
         results.add(new SelectItem("50","50"));
-        
+        results.add(new SelectItem("100","100"));
         return results;
     }
     
@@ -165,10 +165,13 @@ public class UserPreferencesBean extends AbstractRequestBean {
     public List<SelectItem> getLocation(){
         List<SelectItem> location = new ArrayList<SelectItem>();
         location.add(new SelectItem(DPDefaultLocation.MY_DATA.toString(),"My Data Search"));
-        location.add(new SelectItem(DPDefaultLocation.BASIC_SEARCH.toString(),"Basic Search"));
+        location.add(new SelectItem(DPDefaultLocation.BASIC_SEARCH.toString(),"Keyword Search"));
+         if(getVisit().getCustomisation().isFacilitySearchPageVisible()){
+              location.add(new SelectItem(DPDefaultLocation.FACILITY_SEARCH.toString(),getVisit().getFacility()+" Search"));      
+        }
+        location.add(new SelectItem(DPDefaultLocation.ADVANCED_SEARCH.toString(),"Advanced Search"));       
         location.add(new SelectItem(DPDefaultLocation.BOOKMARKS.toString(),"Bookmarks"));
         location.add(new SelectItem(DPDefaultLocation.DATA_REFERENCES.toString(),"Data References"));
-        location.add(new SelectItem(DPDefaultLocation.ADVANCED_SEARCH.toString(),"Advanced Search"));
         
         return location;
     }

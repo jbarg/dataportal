@@ -22,21 +22,21 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     private AdvancedSearchHistoryBean advancedSearchHistoryBean = new AdvancedSearchHistoryBean();
     private ISISSearchHistoryBean isisSearchHistoryBean = new ISISSearchHistoryBean();
 
-    public ISISSearchHistoryBean getIsisSearchHistoryBean() {
-        return isisSearchHistoryBean;
-    }
+    /**
+     * Investigation page results
+     */
+    private int numberOfResultsInvestigations;
+    
+    /**
+     * dataset page results
+     */
+    private int numberOfResultsDatasets;
+    
+    /**
+     * datafile page results
+     */
+    private int numberOfResultsDatafiles;
 
-    public void setIsisSearchHistoryBean(ISISSearchHistoryBean isisSearchHistoryBean) {
-        this.isisSearchHistoryBean = isisSearchHistoryBean;
-    }
-
-    public AdvancedSearchHistoryBean getAdvancedSearchHistoryBean() {
-        return advancedSearchHistoryBean;
-    }
-
-    public BasicSearchHistoryBean getBasicSearchHistoryBean() {
-        return basicSearchHistoryBean;
-    }
     /**
      * Keyword Search
      */
@@ -170,6 +170,46 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
         this.keywordSearchCaseSensitive = keywordSearchCaseSensitive;
     }
     
+     public ISISSearchHistoryBean getIsisSearchHistoryBean() {
+        return isisSearchHistoryBean;
+    }
+
+    public void setIsisSearchHistoryBean(ISISSearchHistoryBean isisSearchHistoryBean) {
+        this.isisSearchHistoryBean = isisSearchHistoryBean;
+    }
+
+    public AdvancedSearchHistoryBean getAdvancedSearchHistoryBean() {
+        return advancedSearchHistoryBean;
+    }
+
+    public BasicSearchHistoryBean getBasicSearchHistoryBean() {
+        return basicSearchHistoryBean;
+    }
+    
+     public int getNumberOfResultsDatafiles() {
+        return numberOfResultsDatafiles;
+    }
+
+    public void setNumberOfResultsDatafiles(int numberOfResultsDatafiles) {
+        this.numberOfResultsDatafiles = numberOfResultsDatafiles;
+    }
+
+    public int getNumberOfResultsDatasets() {
+        return numberOfResultsDatasets;
+    }
+
+    public void setNumberOfResultsDatasets(int numberOfResultsDatasets) {
+        this.numberOfResultsDatasets = numberOfResultsDatasets;
+    }
+
+    public int getNumberOfResultsInvestigations() {
+        return numberOfResultsInvestigations;
+    }
+
+    public void setNumberOfResultsInvestigations(int numberOfResultsInvestigations) {
+        this.numberOfResultsInvestigations = numberOfResultsInvestigations;
+    }
+    
              /**
      * Sets if auto complete is  for a particular item
      */
@@ -215,6 +255,7 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
                 log.trace("Param name " + current.getName());
                 if (current.getName().equals("keyword")) {
                     this.keywordSearchCaseSensitive = !this.keywordSearchCaseSensitive;
+                    log.trace("keywordSearchCaseSensitive? "+keywordSearchCaseSensitive);
                 } else if (current.getName().equals("keyword_nav")) {
                     this.keywordSearchNavigationCaseSensitive = !this.keywordSearchNavigationCaseSensitive;
                 } else if (current.getName().equals("advanced")) {

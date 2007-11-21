@@ -313,6 +313,7 @@ public class SearchBean extends AbstractRequestBean {
 
             KeywordDetails details = new KeywordDetails();
             details.setFuzzy(fuzzy);
+            details.setCaseSensitve(sessionHistory.isKeywordSearchNavigationCaseSensitive());
             details.setInvestigationIncludes(InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
             details.setOperator(type);
             for (String keyword : getKeywords()) {

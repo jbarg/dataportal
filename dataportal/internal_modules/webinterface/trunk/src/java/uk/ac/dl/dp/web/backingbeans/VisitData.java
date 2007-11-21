@@ -52,19 +52,7 @@ public class VisitData implements Serializable {
     private List<String> currentSelectedFacilities;
     //private Collection<Study> currentStudies;
 
-    /**
-     * List of authroisations given BY this user
-     */
-    private Collection<DataRefAuthorisation> currentGivenAuthorisations;
-    /**
-     * List of authroisations given TO this user
-     */
-    private Collection<DataRefAuthorisation> currentRecievedAuthorisations;
-    /**
-     * User to display whos Bookmarks or DataRefs you are looking at
-     */
-    private String currentUserAuthDN;
-    /**
+            /**
      * Sets wheather the users has selected all the investigations to be expanded on investigations page
      */
     private boolean investigationExpanded;
@@ -129,15 +117,7 @@ public class VisitData implements Serializable {
     public void setInvestigatonTreeVisable(boolean investigatonTreeVisable) {
         this.investigatonTreeVisable = investigatonTreeVisable;
     }
-
-    public Collection<DataRefAuthorisation> getCurrentRecievedAuthorisations() {
-        return currentRecievedAuthorisations;
-    }
-
-    public void setCurrentRecievedAuthorisations(Collection<DataRefAuthorisation> currentRecievedAuthorisations) {
-        this.currentRecievedAuthorisations = currentRecievedAuthorisations;
-    }
-
+   
     public String getCurrentDataset() {
         return currentDataset;
     }
@@ -310,48 +290,7 @@ public class VisitData implements Serializable {
     public void setCurrentDataReferences(Collection<DataReference> currentDataReferences) {
         this.currentDataReferences = currentDataReferences;
     }
-
-    /**
-     * list of autherised people user given to the see user's data
-     */
-    public Collection<DataRefAuthorisation> getCurrentGivenAuthorisations() {
-        return currentGivenAuthorisations;
-    }
-
-    public void setCurrentGivenAuthorisations(Collection<DataRefAuthorisation> currentGivenAuthorisations) {
-        this.currentGivenAuthorisations = currentGivenAuthorisations;
-    }
-
-    /**
-     * list of autherised people who have given user to see thier data
-     */
-    public Collection<DataRefAuthorisation> getCurrentReceivedAuthorisations() {
-        return currentRecievedAuthorisations;
-    }
-
-    public void setCurrentReceivedAuthorisations(Collection<DataRefAuthorisation> currentRecievedAuthorisations) {
-        this.currentRecievedAuthorisations = currentRecievedAuthorisations;
-    }
-
-    /**
-     * sets the cuurent user that the user wishes to view thier data
-     */
-    public String getCurrentUserAuthDN() {
-        return currentUserAuthDN;
-    }
-
-    public void setCurrentUserAuthDN(String currentUserAuthDN) {
-        this.currentUserAuthDN = currentUserAuthDN;
-    }
-
-    public boolean isOtherUserDn() {
-        if (currentUserAuthDN == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
+   
     /**
      * is bookmarks enabled from the authoirsation, so that nav bar can be shown to view it
      */
