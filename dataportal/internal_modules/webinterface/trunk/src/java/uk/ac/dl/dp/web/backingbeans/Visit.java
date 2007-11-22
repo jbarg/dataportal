@@ -37,9 +37,9 @@ public class Visit extends AbstractSessionBean implements Serializable {
     private String dn;
     /**
      * Tabbed pane index of the nav bar
-     * 0 = basic search
+     * 0 = Keyword search
      * 1 = advanced search
-     * 2 = preferneces
+     * 2 = facility ISIS
      */
     private int tabIndex = 0;
     /**
@@ -57,11 +57,11 @@ public class Visit extends AbstractSessionBean implements Serializable {
     /**
      * User prefe returned by the core DP containing all prefs information
      */
-    private UserPreferencesDTO userPreferences;
+    private transient UserPreferencesDTO userPreferences;
     /**
      * SessionDTO returned by the core DP containing all log on information
      */
-    private SessionDTO session;
+    private transient SessionDTO session;
     // private String investigationSort;
 
     /**
@@ -80,20 +80,20 @@ public class Visit extends AbstractSessionBean implements Serializable {
     /**
      * All current Visit Data for this session, selections etc
      */
-    private VisitData visitData;
+    private transient VisitData visitData;
     /**
      * All current Admin Data for this session
      */
-    private AdminData adminData;
+    private transient AdminData adminData;
     /**
      * List of all the facilities in the DP and how they have logged on or failed to log on.
      */
-    private Collection<FacilitySession> facilitySessions;
+    private transient Collection<FacilitySession> facilitySessions;
     private boolean _collapsed;
     /**
      * Customisations
      */
-    private Customisation customisation;
+    private transient Customisation customisation;
 
     public boolean isSingleFacility() {
         return singleFacility;

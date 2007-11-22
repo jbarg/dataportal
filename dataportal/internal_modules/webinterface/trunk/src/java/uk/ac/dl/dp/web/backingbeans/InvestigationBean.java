@@ -194,6 +194,15 @@ public class InvestigationBean extends SortableList {
                                 return ascending ? -1 : 1;
                             }
                             return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType().compareTo(c1.getInvType());
+                        } else if (column.equals("instrument")) {
+                            if (c1.getInstrument() == null && c2.getInstrument() == null) {
+                                return 0;
+                            } else if (c1.getInstrument() == null) {
+                                return ascending ? 1 : -1;
+                            } else if (c2.getInstrument() == null) {
+                                return ascending ? -1 : 1;
+                            }
+                            return ascending ? c1.getInstrument().compareTo(c2.getInstrument()) : c2.getInstrument().compareTo(c1.getInstrument());
                         } else {
                             return 0;
                         }

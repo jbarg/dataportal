@@ -120,8 +120,7 @@ public class SearchBean extends AbstractRequestBean {
         try {
             query_request = qd.queryMyData(getVisit().getSid(), getVisitData().getSelectedFacilities());
             getVisitData().setQueryRequest(query_request);
-            //set the index of the tabbed pane to basic search
-            getVisit().setTabIndex(0);
+            
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -163,8 +162,7 @@ public class SearchBean extends AbstractRequestBean {
         try {
             query_request = qd.queryMyData(getVisit().getSid(), facilities);
             getVisitData().setQueryRequest(query_request);
-            //set the index of the tabbed pane to basic search
-            getVisit().setTabIndex(1);
+            
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -230,11 +228,10 @@ public class SearchBean extends AbstractRequestBean {
             KeywordQueryRequest kqr = new KeywordQueryRequest();
             kqr.setFacilities(getVisitData().getSelectedFacilities());
            
-            KeywordDetails details = new KeywordDetails();
-            details.setFuzzy(fuzzy);
+            KeywordDetails details = new KeywordDetails();            
             details.setCaseSensitve(sessionHistory.isKeywordSearchCaseSensitive());
             details.setInvestigationIncludes(InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
-            details.setOperator(type);
+           
             for (String keyword : keywords) {
                 details.getKeywords().add(keyword);
             }
@@ -248,7 +245,7 @@ public class SearchBean extends AbstractRequestBean {
             //set the query as last request
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to basic search
-            getVisit().setTabIndex(1);
+            getVisit().setTabIndex(0);
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -311,8 +308,7 @@ public class SearchBean extends AbstractRequestBean {
             KeywordQueryRequest kqr = new KeywordQueryRequest();
             kqr.setFacilities(getVisitData().getSelectedFacilities());
 
-            KeywordDetails details = new KeywordDetails();
-            details.setFuzzy(fuzzy);
+            KeywordDetails details = new KeywordDetails();            
             details.setCaseSensitve(sessionHistory.isKeywordSearchNavigationCaseSensitive());
             details.setInvestigationIncludes(InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
             details.setOperator(type);
@@ -328,7 +324,7 @@ public class SearchBean extends AbstractRequestBean {
             query_request = qd.queryKeyword(getVisit().getSid(), kqr);
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to basic search
-            getVisit().setTabIndex(1);
+            getVisit().setTabIndex(0);
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {

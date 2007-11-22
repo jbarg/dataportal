@@ -252,9 +252,9 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to a search
             if (searchType == DPQueryType.ADVANCED) {
-                getVisit().setTabIndex(2);
+                getVisit().setTabIndex(1);
             } else if (searchType == DPQueryType.ISIS) {
-                getVisit().setTabIndex(0);
+                getVisit().setTabIndex(2);
             }
 
             log.info("Query Id is " + query_request.getQueryid());
@@ -453,11 +453,11 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             //set the index of the tabbed pane to a search
 
             if (searchType == DPQueryType.ADVANCED) {
-                getVisit().setTabIndex(2);
+                getVisit().setTabIndex(1);
             } else if (searchType == DPQueryType.ISIS) {
-                getVisit().setTabIndex(0);
+                getVisit().setTabIndex(2);
             } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
-                getVisit().setTabIndex(0);
+                getVisit().setTabIndex(2);
             }
 
             log.info("Query Id is " + query_request.getQueryid());
