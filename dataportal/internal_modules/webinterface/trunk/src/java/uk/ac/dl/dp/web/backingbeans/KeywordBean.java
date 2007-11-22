@@ -130,7 +130,6 @@ public class KeywordBean extends AbstractSessionBean {
      * Sets the selected facility for a user
      */
     //For ajax4jsf
-
     public void selectedFacilities() {
         log.trace("New ajax request: ");
         List<String> facs = getVisitData().getCurrentSelectedFacilities();

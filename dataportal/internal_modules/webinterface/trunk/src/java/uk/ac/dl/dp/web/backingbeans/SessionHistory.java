@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.faces.component.UIParameter;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.web.util.AbstractSessionBean;
 
@@ -26,16 +27,17 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
      * Investigation page results
      */
     private int numberOfResultsInvestigations;
-    
+    private String numberOfResultsInvestigationsString;
     /**
      * dataset page results
      */
     private int numberOfResultsDatasets;
-    
+    private String numberOfResultsDatasetsString;
     /**
      * datafile page results
      */
     private int numberOfResultsDatafiles;
+    private String numberOfResultsDatafilesString;
 
     /**
      * Keyword Search
@@ -67,7 +69,6 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
      */
     private boolean facilitySearchNavigationCaseSensitive;
     private boolean facilitySearchNavigationAutoComplete = true;
-
 
     public boolean isAdvancedSearchNavigationAutoComplete() {
         return advancedSearchNavigationAutoComplete;
@@ -169,8 +170,8 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     public void setKeywordSearchCaseSensitive(boolean keywordSearchCaseSensitive) {
         this.keywordSearchCaseSensitive = keywordSearchCaseSensitive;
     }
-    
-     public ISISSearchHistoryBean getIsisSearchHistoryBean() {
+
+    public ISISSearchHistoryBean getIsisSearchHistoryBean() {
         return isisSearchHistoryBean;
     }
 
@@ -185,8 +186,8 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     public BasicSearchHistoryBean getBasicSearchHistoryBean() {
         return basicSearchHistoryBean;
     }
-    
-     public int getNumberOfResultsDatafiles() {
+
+    public int getNumberOfResultsDatafiles() {
         return numberOfResultsDatafiles;
     }
 
@@ -209,8 +210,45 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     public void setNumberOfResultsInvestigations(int numberOfResultsInvestigations) {
         this.numberOfResultsInvestigations = numberOfResultsInvestigations;
     }
-    
-             /**
+
+    public String getNumberOfResultsDatafilesString() {
+        return numberOfResultsDatafilesString;
+    }
+
+    public void setNumberOfResultsDatafilesString(String numberOfResultsDatafilesString) {
+        this.numberOfResultsDatafilesString  = numberOfResultsDatafilesString;
+        if (numberOfResultsDatafilesString != null) {
+            this.numberOfResultsDatafiles = parseString(numberOfResultsDatafilesString);
+        }
+    }
+
+    public String getNumberOfResultsDatasetsString() {
+        return numberOfResultsDatasetsString;
+    }
+
+    public void setNumberOfResultsDatasetsString(String numberOfResultsDatasetsString) {   
+        this.numberOfResultsDatasetsString = numberOfResultsDatasetsString;
+        if (numberOfResultsDatasetsString != null) {
+            this.numberOfResultsDatasets = parseString(numberOfResultsDatasetsString);
+        }
+    }
+
+    public String getNumberOfResultsInvestigationsString() {
+        return numberOfResultsInvestigationsString;
+    }
+
+    public void setNumberOfResultsInvestigationsString(String numberOfResultsInvestigationsString) {
+        this.numberOfResultsInvestigationsString = numberOfResultsInvestigationsString;
+        if (numberOfResultsInvestigationsString != null) {
+            this.numberOfResultsInvestigations = parseString(numberOfResultsInvestigationsString);
+        }
+    }
+
+    private int parseString(String number) {
+        return new Integer(number).intValue();
+    }
+
+    /**
      * Sets if auto complete is  for a particular item
      */
     public void autoComplete(ActionEvent event) {
@@ -255,7 +293,6 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
                 log.trace("Param name " + current.getName());
                 if (current.getName().equals("keyword")) {
                     this.keywordSearchCaseSensitive = !this.keywordSearchCaseSensitive;
-                    log.trace("keywordSearchCaseSensitive? "+keywordSearchCaseSensitive);
                 } else if (current.getName().equals("keyword_nav")) {
                     this.keywordSearchNavigationCaseSensitive = !this.keywordSearchNavigationCaseSensitive;
                 } else if (current.getName().equals("advanced")) {
@@ -269,5 +306,12 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
                 }
             }
         }
+    }
+
+    /**
+     * Sets if case sensitive is  for a particular item
+     */
+    public void maxDisplay() {
+        log.trace("Max display changed");
     }
 }
