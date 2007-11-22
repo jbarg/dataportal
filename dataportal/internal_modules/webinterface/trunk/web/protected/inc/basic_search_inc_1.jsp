@@ -66,7 +66,7 @@
                 <h:outputText rendered="#{!visit.singleFacility}" value="Search: " style="font-size:14px"/>
             </h:outputLabel  >
             
-            <h:panelGrid rendered="#{!visit.singleFacility}" id="nothing" >    
+            <h:panelGrid  id="nothing" >    
                 <%--<h:selectManyListbox id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >--%>
                 <h:selectManyListbox id="facilitiesj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="#{fn:length(visit.facilities)}" required="false" >      
                     <a4j:support id="facs" event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplay,radio" />
@@ -113,8 +113,8 @@
                         <h:panelGrid  columns="1" >                            
                             <h3>Keyword(s)</h3>
                             <p> Use * to denote a wild card.  I.e.  *data, data* or *data*portal*<br />
-                            <br />Searching ship* will match ships and shipping, when SHIP* will match SHIPS and shipping<br />
-                           if Case Sensitive is turned off (unchecked)</p> 
+                            <br />Searching ship* will match ships and shipping, when SHIP* will<br />
+                             match SHIPS and shipping if Case Sensitive is turned off (unchecked)</p> 
                             
                             
                         </h:panelGrid>

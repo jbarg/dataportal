@@ -13,7 +13,7 @@
         */%>
         <t:navigationMenuItem id="nav_admin"  itemLabel="Admin" itemValue="gotAdmin" action="GOTO_ADMIN"  rendered="#{visit.admin}"  />    
                
-        <t:navigationMenuItem id="nav_0"  itemLabel="Search" itemValue="basicSearch" action="GOTO_BASIC_SEARCH">    
+        <t:navigationMenuItem id="nav_0"  itemLabel="Search" itemValue="basicSearch">    
         <t:navigationMenuItem id="nav_0_0_1" rendered="#{visit.customisation.facilitySearchPageVisible}" itemLabel="#{facility_properties['facility.name']} Search" itemValue="facilitySearch" action="#{searchBean.gotoFacilitySearchPage}" />
       
         <t:navigationMenuItem id="nav_0_1"  itemLabel="Keyword Search" itemValue="keywordSearch" action="GOTO_BASIC_SEARCH" />

@@ -114,8 +114,9 @@
                         <h:panelGrid columns="1" >
                             <h3>Keyword(s)</h3>
                             <p> Use * to denote a wild card.  I.e.  *data, data* or *data*portal*<br />
-                                <br /> Searching ship* will match ships and shipping, when SHIP* will match SHIPS and shipping<br />
-                            if Case Sensitive is turned off (unchecked)</p> 
+                                 <br />Searching ship* will match ships and shipping, when SHIP* will<br />
+                             match SHIPS and shipping if Case Sensitive is turned off (unchecked)</p> 
+                          
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -309,10 +310,10 @@
                             <h:panelGrid columns="1" >
                               <h3>Run number</h3>
                                 <p>Seaches for a single or range of run numbers that is associated <br />
-                                    with an investigation, use of wildcards (*) is allowed<br />                                    
+                                    with an investigation.<br />                                    
                                     <br />                                    
                                     Just enter the minimum and maximum values of a run number, <br />
-                                    or enter minimum if you are only search one run number and not a range
+                                    or enter minimum if you are only searching one run number and not a range.
                                 </p>                
                                  </h:panelGrid>
                         </h:panelGroup>
@@ -349,7 +350,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                              <h3>Instrument</h3>
-                            <p>Instrument used in investigation/<br /><br />
+                            <p>Instrument used in investigation<br /><br />
                             If you do not select any it will search all intruments.
                             </p>  
                         </h:panelGrid>
@@ -408,7 +409,7 @@
                             <h:panelGrid columns="1" >
                                <h3>Run number</h3>
                                 <p>Seaches for a single or range of run numbers that is associated <br />
-                                    with an datafile, use of wildcards (*) is allowed<br />                                    
+                                    with an datafile.<br />                                    
                                     <br />                                    
                                     Just enter the minimum and maximum values of a run number, <br />
                                     or enter minimum if you are only search one run number and not a range

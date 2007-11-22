@@ -7,7 +7,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
-
 <a4j:region   selfRendered="true" > 
     
     <h:form>
@@ -146,58 +145,59 @@
     </h:panelGrid>
     
     <a4j:form id="viewform">
-        
-        <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >
-            
-            <t:collapsiblePanel  id="scroll" value="#{autoCompleteCollapsibleBean.collapsed}" title="testTitle" >
-                <f:facet name="header">
-                    <t:div style="color: black; width:40px;">
-                        <h:panelGrid columns="4" >
-                            <h:outputText rendered="#{!autoCompleteCollapsibleBean.collapsed}" value="v " style="color:blue; "/>  <a4j:commandLink reRender="viewform" style="color: black;" styleClass="help" id="helpcj" action="#{autoCompleteCollapsibleBean.collapse}" rendered="#{!autoCompleteCollapsibleBean.collapsed}" immediate="true"   value="Hide"/>
-                            
-                            <h:outputText rendered="#{autoCompleteCollapsibleBean.collapsed}" value="> " style="color:blue; "/>  <a4j:commandLink reRender="viewform" style="color: black;" styleClass="help" id="helpc" action="#{autoCompleteCollapsibleBean.collapse}" rendered="#{autoCompleteCollapsibleBean.collapsed}" immediate="true"   value="View"/>
-                            
-                        </h:panelGrid>
-                    </t:div>
-                </f:facet>
+        <h:panelGrid id="topgrid" border="0" width="97%" columns="2" styleClass="scrollerTable3" columnClasses="standardTable_ColumnCentered">
+                        
+            <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}"   >
                 
-                <h:panelGrid columns="1" styleClass="scrollerTable3" columnClasses="standardTable_ColumnCentered" >
+                <t:dataScroller id="scroll_3"
+                                for="data"
+                                fastStep="10"
+                                pageCountVar="pageCount"
+                                pageIndexVar="pageIndex"
+                                styleClass="scroller"
+                                paginator="true"
+                                paginatorMaxPages="9"
+                                paginatorTableClass="paginator"
+                                paginatorActiveColumnStyle="font-weight:bold;">
+                    <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
+                    <f:facet name="first" >
+                        <t:graphicImage url="../../images/arrow-first.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="last">
+                        <t:graphicImage url="../../images/arrow-last.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="previous">
+                        <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="next">
+                        <t:graphicImage url="../../images/arrow-next.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="fastforward">
+                        <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
+                    </f:facet>
+                    <f:facet name="fastrewind">
+                        <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
+                    </f:facet>
+                </t:dataScroller>   
+            </h:panelGroup>        
+                        
+            <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) <= sessionScope.sessionHistory.numberOfResultsInvestigations}"  />
+            
+             <!---  Drop down list of length of table -->
+            <h:panelGroup style="float: right">
+                <h:outputText style="font-size:10px; color: black;  font-weight: bold;" value="Maximum displayed: " />
+                <h:selectOneMenu id="listj_id_2" required="false" immediate="true" value="#{sessionHistory.numberOfResultsInvestigationsString}" >                           
+                    <a4j:support event="onchange" action="#{sessionHistory.maxDisplay}" ajaxSingle="true" reRender="data, topgrid, bottomgrid" />            
                     
-                    <t:dataScroller id="scroll_3"
-                                    for="data"
-                                    fastStep="10"
-                                    pageCountVar="pageCount"
-                                    pageIndexVar="pageIndex"
-                                    styleClass="scroller"
-                                    paginator="true"
-                                    paginatorMaxPages="9"
-                                    paginatorTableClass="paginator"
-                                    paginatorActiveColumnStyle="font-weight:bold;">
-                        <f:actionListener type="uk.ac.dl.dp.web.navigation.DataScrollerActionListener"/>
-                        <f:facet name="first" >
-                            <t:graphicImage url="../../images/arrow-first.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="last">
-                            <t:graphicImage url="../../images/arrow-last.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="previous">
-                            <t:graphicImage url="../../images/arrow-previous.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="next">
-                            <t:graphicImage url="../../images/arrow-next.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="fastforward">
-                            <t:graphicImage url="../../images/arrow-ff.gif" border="1" />
-                        </f:facet>
-                        <f:facet name="fastrewind">
-                            <t:graphicImage url="../../images/arrow-fr.gif" border="1" />
-                        </f:facet>
-                    </t:dataScroller>   
-                </h:panelGrid>        
-            </t:collapsiblePanel>
+                    <f:selectItem itemLabel="5"  itemValue="5"/> 
+                    <f:selectItem itemLabel="10"  itemValue="10"/> 
+                    <f:selectItem itemLabel="20"  itemValue="20"/> 
+                    <f:selectItem itemLabel="50"  itemValue="50"/> 
+                    <f:selectItem itemLabel="100"  itemValue="100"/> 
+                </h:selectOneMenu>   
+            </h:panelGroup>
             
-            
-        </c:if>
+        </h:panelGrid>
         
         <t:dataTable id="data" width="97%"
                      styleClass="scrollerTable"
@@ -244,33 +244,23 @@
                 <f:facet name="header">
                     <h:panelGrid columns="" >
                         
-                        <a4j:commandLink reRender="data"  id="abstract" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
-                            <h:outputText style="font-weight:bold;" value=" " />
-                            <f:param name="column" value="abstract"/>
-                            
-                            <t:graphicImage id="acabstract" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.abstract}" border="0"/>
-                            <t:graphicImage id="deabstract" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notAbstract}" border="0"/>
-                            
-                        </a4j:commandLink>  
                         
                         <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.investigationExpanded}" actionListener="#{investigationBean.expandAll}">
-                            
-                            <t:graphicImage  id="exp" value="../../images/button_plus1.gif"  border="0"/>
+                            <t:graphicImage  id="exp" value="../../images/button_plus1.gif" border="0"/>                                               
                         </a4j:commandLink>   
-                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">
-                            
-                            <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
+                        <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.investigationExpanded}" actionListener="#{investigationBean.collapseAll}">                            
+                            <t:graphicImage  id="coll" value="../../images/button_minus1.gif" border="0"/>
                         </a4j:commandLink> 
                         
                     </h:panelGrid>        
                 </f:facet>
                 
-                <a4j:commandLink  reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
-                    
-                    <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
-                    <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
-                </a4j:commandLink>  
-                
+                <h:panelGrid rendered="#{fn:length(invest.sampleCollection) > 0 || invest.invAbstract != null || fn:length(invest.shiftCollection) > 0 || fn:length(invest.investigatorCollection) > 0}" >                    
+                    <a4j:commandLink  reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">                        
+                        <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0" />
+                        <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0" />                        
+                    </a4j:commandLink>  
+                </h:panelGrid>
             </h:column>
             
             <h:column>
@@ -419,7 +409,7 @@
                 </f:facet>
                 
                 <h:outputText value="#{fn:substringBefore(invest.releaseDate,\"T\")}">
-                     <f:convertDateTime pattern="HH:mm a dd.MM.yyyy "/>
+                    <f:convertDateTime pattern="HH:mm a dd.MM.yyyy "/>
                 </h:outputText>
             </h:column>
             
@@ -575,11 +565,8 @@
             
         </t:dataTable>
         
-        
-        <c:if test="${fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >
-            
-            <h:panelGrid columns="1" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" >
-                
+        <h:panelGrid id="bottomgrid" columns="2" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" border="0" width="97%">
+            <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >            
                 <t:dataScroller id="scroll_1"
                                 for="data"
                                 fastStep="10"
@@ -611,27 +598,48 @@
                     </f:facet>
                 </t:dataScroller>
                 
-                <t:dataScroller id="scroll_2"
-                                for="data"
-                                rowsCountVar="rowsCount"
-                                displayedRowsCountVar="displayedRowsCountVar"
-                                firstRowIndexVar="firstRowIndex"
-                                lastRowIndexVar="lastRowIndex"
-                                pageCountVar="pageCount"
-                                immediate="true"
-                                pageIndexVar="pageIndex"
-                                >
-                    <h:outputFormat value="{0} Investigations found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
-                        <f:param value="#{rowsCount}" />
-                        <f:param value="#{displayedRowsCountVar}" />
-                        <f:param value="#{firstRowIndex}" />
-                        <f:param value="#{lastRowIndex}" />
-                        <f:param value="#{pageIndex}" />
-                        <f:param value="#{pageCount}" />
-                    </h:outputFormat>
-                </t:dataScroller>
-            </h:panelGrid>
-        </c:if>
+            </h:panelGroup>
+            
+            <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) <= sessionScope.sessionHistory.numberOfResultsInvestigations}"  />
+            
+            <!---  Drop down list of length of table -->
+            <h:panelGroup  style="float: right">
+                <h:outputText style="font-size:10px; color: black;  font-weight: bold;" value="Maximum displayed: " />
+                <h:selectOneMenu id="listj_id_1" required="false" immediate="true" value="#{sessionHistory.numberOfResultsInvestigationsString}" >                           
+                    <a4j:support event="onchange" action="#{sessionHistory.maxDisplay}" ajaxSingle="true" reRender="data, topgrid, bottomgrid" />            
+                    
+                    <f:selectItem itemLabel="5"  itemValue="5"/> 
+                    <f:selectItem itemLabel="10"  itemValue="10"/> 
+                    <f:selectItem itemLabel="20"  itemValue="20"/> 
+                    <f:selectItem itemLabel="50"  itemValue="50"/> 
+                    <f:selectItem itemLabel="100"  itemValue="100"/> 
+                </h:selectOneMenu>   
+            </h:panelGroup>
+            
+            <h:panelGroup style="float: left" rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >            
+                                      
+                        <t:dataScroller id="scroll_2"
+                                        for="data"
+                                        rowsCountVar="rowsCount"
+                                        displayedRowsCountVar="displayedRowsCountVar"
+                                        firstRowIndexVar="firstRowIndex"
+                                        lastRowIndexVar="lastRowIndex"
+                                        pageCountVar="pageCount"
+                                        immediate="true"
+                                        pageIndexVar="pageIndex"
+                                        >
+                            <h:outputFormat value="{0} Investigations found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                                <f:param value="#{rowsCount}" />
+                                <f:param value="#{displayedRowsCountVar}" />
+                                <f:param value="#{firstRowIndex}" />
+                                <f:param value="#{lastRowIndex}" />
+                                <f:param value="#{pageIndex}" />
+                                <f:param value="#{pageCount}" />
+                            </h:outputFormat>
+                        </t:dataScroller>
+                    </h:panelGroup>           
+        </h:panelGrid>
+        
         
         
         <table width="90%" border="0">

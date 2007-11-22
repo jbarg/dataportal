@@ -148,8 +148,8 @@ BusyBox.prototype.RenderContent = function()
 	doc.writeln("<body ondragstart='return false;' style='Margin: 0px; Background-Color: white'>");
 	doc.writeln("   <div id='" + this.DivID + "' align=center " + style + ">");
 	doc.writeln("      <img id='" + this.ImgID + "' src=''>");
-	doc.writeln("      <br><h3><a href='#' onclick='stopSearch()' />Stop</a></h3>");
-      //  doc.writeln("      <br><h3><a href='#' onclick='"+this.Hide()+"' />Stop</a></h3>");
+	doc.writeln("      <br><h3>Searching</h3>");
+      
 	doc.writeln("   </div>");
 	doc.writeln("</body>");
 	doc.close();

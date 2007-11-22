@@ -619,7 +619,7 @@
                                      var="dataSet"
                                      value="#{datasetBean.datasets}"
                                      preserveDataModel="true"
-                                     rows="#{sessionHistory.numberOfResultsDatsets}"       
+                                     rows="#{sessionHistory.numberOfResultsDatasets}"       
                                      binding="#{datasetBean.table}"
                                      sortColumn="#{datasetBean.sort}"
                                      sortAscending="#{datasetBean.ascending}"
@@ -648,7 +648,7 @@
                                     </h:panelGrid>        
                                 </f:facet>
                                 
-                                <h:panelGrid rendered="#{fn:length(dataSet.datasetParameterCollection) > 0}" columns="" >
+                                <h:panelGrid  columns="" >
                                     
                                     <a4j:commandLink reRender="dataset" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
                                         
