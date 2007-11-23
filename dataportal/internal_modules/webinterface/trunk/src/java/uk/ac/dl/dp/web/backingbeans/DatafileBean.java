@@ -30,7 +30,8 @@ public class DatafileBean extends SortableList {
     private HtmlDataTable table;
     private List<Datafile> datafiles;
     private boolean expanded = false;
-
+    private boolean startFirst = false;
+    
     public DatafileBean() {
         super("name");
     }
@@ -52,7 +53,7 @@ public class DatafileBean extends SortableList {
      */
     public List<Datafile> getDatafiles() {
         sort(getSort(), isAscending());
-
+        if(startFirst) table.setFirst(0);
         List<Datafile> datafiles = (List<Datafile>) getVisitData().getCurrentDatafiles();
         if (datafiles == null) {
             return (List<Datafile>) new ArrayList<Datafile>();
@@ -234,6 +235,14 @@ public class DatafileBean extends SortableList {
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+    
+     /**
+     * Sets if case sensitive is  for a particular item
+     */
+    public void maxDisplay() {
+        log.trace("Max display changed");
+        startFirst = true;
     }
 
     //for sorting columns
