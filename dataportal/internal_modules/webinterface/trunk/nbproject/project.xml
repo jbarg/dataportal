@@ -29,23 +29,23 @@
                     <file>${reference.icat-ws.jar}</file>
                 </library>
                 <library files="2">
-                    <file>${libs.jboss-ajax4jsf.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="1">
-                    <file>${libs.tomahawk-1.5.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="15">
-                    <file>${libs.myfaces-impl.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library files="8">
                     <file>${libs.cog-kit-without-jce.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library files="1">
                     <file>${libs.jce-security-120.classpath}</file>
+                </library>
+                <library files="2">
+                    <file>${libs.jboss-ajax4jsf.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="9">
+                    <file>${libs.myfaces-impl-1.6.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library files="1">
+                    <file>${libs.tomahawk-1.6.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
