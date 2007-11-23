@@ -10,9 +10,7 @@
 <a4j:region   selfRendered="true" > 
     
     <h:form>
-        
-        <!-- <a4j:poll id="poll" actionListener="#{investigationBean.dummyAjax}" interval="500" reRender="poll, data" ajaxSingle="true"  enabled="#{!investigationBean.dummyAjaxDone}" />
-        -->
+                
         <table style="margin-top:-90px" width="90%" border="0">
              <tbody>
                 <tr>
@@ -142,12 +140,11 @@
     
     <h:panelGrid rendered="#{!visit.singleFacility}">
         <br />
-    </h:panelGrid>
-    
-    <a4j:form id="viewform">
+    </h:panelGrid>    
+   <a4j:form>
         <h:panelGrid id="topgrid" border="0" width="97%" columns="2" styleClass="scrollerTable3" columnClasses="standardTable_ColumnCentered">
-                        
-            <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}"   >
+            
+            <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >
                 
                 <t:dataScroller id="scroll_3"
                                 for="data"
@@ -180,14 +177,14 @@
                     </f:facet>
                 </t:dataScroller>   
             </h:panelGroup>        
-                        
-            <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) <= sessionScope.sessionHistory.numberOfResultsInvestigations}"  />
             
-             <!---  Drop down list of length of table -->
-            <h:panelGroup style="float: right">
+            <h:panelGroup rendered="#{fn:length(visit.visitData.searchedInvestigations) <= sessionScope.sessionHistory.numberOfResultsInvestigations}"  />
+            
+            <!---  Drop down list of length of table -->             
+            <h:panelGroup rendered="#{fn:length(visit.visitData.searchedInvestigations) > 5 }" style="float: right">
                 <h:outputText style="font-size:10px; color: black;  font-weight: bold;" value="Maximum displayed: " />
-                <h:selectOneMenu id="listj_id_2" required="false" immediate="true" value="#{sessionHistory.numberOfResultsInvestigationsString}" >                           
-                    <a4j:support event="onchange" action="#{sessionHistory.maxDisplay}" ajaxSingle="true" reRender="data, topgrid, bottomgrid" />            
+                <h:selectOneMenu id="listj_id_2" required="false" immediate="true" value="#{sessionHistory.numberOfResultsInvestigationsString2}" >                           
+                    <a4j:support event="onchange" action="#{investigationBean.maxDisplay}" ajaxSingle="true" reRender="data, topgrid, bottomgrid, topgrid2" />            
                     
                     <f:selectItem itemLabel="5"  itemValue="5"/> 
                     <f:selectItem itemLabel="10"  itemValue="10"/> 
@@ -199,7 +196,8 @@
             
         </h:panelGrid>
         
-        <t:dataTable id="data" width="97%"
+        <t:dataTable renderedIfEmpty="true"
+                     id="data" width="97%"
                      styleClass="scrollerTable"
                      headerClass="standardTable_Header"
                      footerClass="standardTable_Header"
@@ -600,13 +598,13 @@
                 
             </h:panelGroup>
             
-            <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) <= sessionScope.sessionHistory.numberOfResultsInvestigations}"  />
+            <h:panelGroup rendered="#{fn:length(visit.visitData.searchedInvestigations) <= sessionHistory.numberOfResultsInvestigations}"  />
             
             <!---  Drop down list of length of table -->
-            <h:panelGroup  style="float: right">
+            <h:panelGroup rendered="#{fn:length(visit.visitData.searchedInvestigations) > 5 }" style="float: right">
                 <h:outputText style="font-size:10px; color: black;  font-weight: bold;" value="Maximum displayed: " />
                 <h:selectOneMenu id="listj_id_1" required="false" immediate="true" value="#{sessionHistory.numberOfResultsInvestigationsString}" >                           
-                    <a4j:support event="onchange" action="#{sessionHistory.maxDisplay}" ajaxSingle="true" reRender="data, topgrid, bottomgrid" />            
+                    <a4j:support event="onchange" action="#{investigationBean.maxDisplay}" ajaxSingle="true" reRender="data, topgrid, bottomgrid" />            
                     
                     <f:selectItem itemLabel="5"  itemValue="5"/> 
                     <f:selectItem itemLabel="10"  itemValue="10"/> 
@@ -616,28 +614,28 @@
                 </h:selectOneMenu>   
             </h:panelGroup>
             
-            <h:panelGroup style="float: left" rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >            
-                                      
-                        <t:dataScroller id="scroll_2"
-                                        for="data"
-                                        rowsCountVar="rowsCount"
-                                        displayedRowsCountVar="displayedRowsCountVar"
-                                        firstRowIndexVar="firstRowIndex"
-                                        lastRowIndexVar="lastRowIndex"
-                                        pageCountVar="pageCount"
-                                        immediate="true"
-                                        pageIndexVar="pageIndex"
-                                        >
-                            <h:outputFormat value="{0} Investigations found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
-                                <f:param value="#{rowsCount}" />
-                                <f:param value="#{displayedRowsCountVar}" />
-                                <f:param value="#{firstRowIndex}" />
-                                <f:param value="#{lastRowIndex}" />
-                                <f:param value="#{pageIndex}" />
-                                <f:param value="#{pageCount}" />
-                            </h:outputFormat>
-                        </t:dataScroller>
-                    </h:panelGroup>           
+            <h:panelGroup style="float: left" rendered="#{fn:length(visit.visitData.searchedInvestigations) > sessionHistory.numberOfResultsInvestigations}" >            
+                
+                <t:dataScroller id="scroll_2"
+                                for="data"
+                                rowsCountVar="rowsCount"
+                                displayedRowsCountVar="displayedRowsCountVar"
+                                firstRowIndexVar="firstRowIndex"
+                                lastRowIndexVar="lastRowIndex"
+                                pageCountVar="pageCount"
+                                immediate="true"
+                                pageIndexVar="pageIndex"
+                                >
+                    <h:outputFormat value="{0} Investigations found, displaying {1}, from {2} to {3}. Page {4} / {5}" styleClass="standard" >
+                        <f:param value="#{rowsCount}" />
+                        <f:param value="#{displayedRowsCountVar}" />
+                        <f:param value="#{firstRowIndex}" />
+                        <f:param value="#{lastRowIndex}" />
+                        <f:param value="#{pageIndex}" />
+                        <f:param value="#{pageCount}" />
+                    </h:outputFormat>
+                </t:dataScroller>
+            </h:panelGroup>           
         </h:panelGrid>
         
         

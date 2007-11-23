@@ -91,7 +91,7 @@
                                                             &nbsp;
                                                         </td>
                                                         <td align="left" >
-                                                            <h:outputText styleClass="header_top" value="Data Sets"/> 
+                                                            <h:outputText styleClass="header_top" value="Data"/> 
                                                             
                                                         </td>
                                                         <td align="right">

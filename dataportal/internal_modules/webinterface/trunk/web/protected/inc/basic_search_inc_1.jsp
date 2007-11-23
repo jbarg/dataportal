@@ -66,7 +66,7 @@
                 <h:outputText rendered="#{!visit.singleFacility}" value="Search: " style="font-size:14px"/>
             </h:outputLabel  >
             
-            <h:panelGrid  id="nothing" >    
+            <h:panelGrid rendered="#{!visit.singleFacility}" id="nothing" >    
                 <%--<h:selectManyListbox id="facilities" immediate="true" onchange="submit()" valueChangeListener="#{keyword.selectedFacilities}" value="#{visit.visitData.currentSelectedFacilities}" size="3" required="true" >--%>
                 <h:selectManyListbox id="facilitiesj_id_1" immediate="true"  value="#{visit.visitData.currentSelectedFacilities}" size="#{fn:length(visit.facilities)}" required="false" >      
                     <a4j:support id="facs" event="onchange" action="#{keyword.selectedFacilities}" ajaxSingle="true" reRender="facilityDisplay,radio" />
