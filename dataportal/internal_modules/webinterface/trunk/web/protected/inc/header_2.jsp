@@ -22,7 +22,7 @@
         </t:navigationMenuItem>  
         
         <t:navigationMenuItem id="nav_2"  itemLabel="Results" action="GOTO_INVESTIGATIONS" rendered="#{visit.visitData.investigations}" />
-        <t:navigationMenuItem id="nav_3"  itemLabel="Data Sets" action="GOTO_DATASETS" rendered="#{visit.visitData.datasets}" />
+        <t:navigationMenuItem id="nav_3"  itemLabel="Data" action="GOTO_DATASETS" rendered="#{visit.visitData.datasets}" />
         
         <t:navigationMenuItem id="nav_4"  itemLabel="Data Links" >                  
         <t:navigationMenuItem id="nav_4_1"  itemLabel="Data References" action="GOTO_DATA_REFERENCES" />
