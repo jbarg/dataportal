@@ -19,25 +19,28 @@ import uk.ac.dl.dp.web.util.AbstractSessionBean;
 public class SessionHistory extends AbstractSessionBean implements Serializable {
 
     private static Logger log = Logger.getLogger(SessionHistory.class);
-    private BasicSearchHistoryBean basicSearchHistoryBean = new BasicSearchHistoryBean();
-    private AdvancedSearchHistoryBean advancedSearchHistoryBean = new AdvancedSearchHistoryBean();
-    private ISISSearchHistoryBean isisSearchHistoryBean = new ISISSearchHistoryBean();
+    private transient  BasicSearchHistoryBean basicSearchHistoryBean = new BasicSearchHistoryBean();
+    private transient AdvancedSearchHistoryBean advancedSearchHistoryBean = new AdvancedSearchHistoryBean();
+    private transient ISISSearchHistoryBean isisSearchHistoryBean = new ISISSearchHistoryBean();
 
     /**
      * Investigation page results
      */
     private int numberOfResultsInvestigations;
     private String numberOfResultsInvestigationsString;
+    private String numberOfResultsInvestigationsString2;
     /**
      * dataset page results
      */
     private int numberOfResultsDatasets;
     private String numberOfResultsDatasetsString;
+    private String numberOfResultsDatasetsString2;
     /**
      * datafile page results
      */
     private int numberOfResultsDatafiles;
     private String numberOfResultsDatafilesString;
+    private String numberOfResultsDatafilesString2;
 
     /**
      * Keyword Search
@@ -216,9 +219,28 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     }
 
     public void setNumberOfResultsDatafilesString(String numberOfResultsDatafilesString) {
-        this.numberOfResultsDatafilesString  = numberOfResultsDatafilesString;
         if (numberOfResultsDatafilesString != null) {
+            this.numberOfResultsDatafilesString = numberOfResultsDatafilesString;
+            this.numberOfResultsDatafilesString2 = numberOfResultsDatafilesString;
             this.numberOfResultsDatafiles = parseString(numberOfResultsDatafilesString);
+            log.trace("Sent " + numberOfResultsDatafilesString);
+        } else {
+            log.trace("Sent null for numberOfResultsDatafilesString");
+        }
+    }
+
+    public String getNumberOfResultsDatafilesString2() {
+        return numberOfResultsDatafilesString2;
+    }
+
+    public void setNumberOfResultsDatafilesString2(String numberOfResultsDatafilesString2) {
+        if (numberOfResultsDatafilesString2 != null) {
+            this.numberOfResultsDatafilesString2 = numberOfResultsDatafilesString2;
+            this.numberOfResultsDatafiles = parseString(numberOfResultsDatafilesString2);
+            this.numberOfResultsDatafilesString = numberOfResultsDatafilesString2;
+            log.trace("Sent " + numberOfResultsDatafilesString2);
+        } else {
+            log.trace("Sent null for numberOfResultsDatafilesString2");
         }
     }
 
@@ -226,10 +248,23 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
         return numberOfResultsDatasetsString;
     }
 
-    public void setNumberOfResultsDatasetsString(String numberOfResultsDatasetsString) {   
-        this.numberOfResultsDatasetsString = numberOfResultsDatasetsString;
+    public void setNumberOfResultsDatasetsString(String numberOfResultsDatasetsString) {
         if (numberOfResultsDatasetsString != null) {
+            this.numberOfResultsDatasetsString = numberOfResultsDatasetsString;
+            this.numberOfResultsDatasetsString2 = numberOfResultsDatasetsString;
             this.numberOfResultsDatasets = parseString(numberOfResultsDatasetsString);
+        }
+    }
+
+    public String getNumberOfResultsDatasetsString2() {
+        return numberOfResultsDatasetsString2;
+    }
+
+    public void setNumberOfResultsDatasetsString2(String numberOfResultsDatasetsString2) {
+        if (numberOfResultsDatasetsString2 != null) {
+            this.numberOfResultsDatasetsString2 = numberOfResultsDatasetsString2;
+            this.numberOfResultsDatasetsString = numberOfResultsDatasetsString2;
+            this.numberOfResultsDatasets = parseString(numberOfResultsDatasetsString2);
         }
     }
 
@@ -238,9 +273,22 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     }
 
     public void setNumberOfResultsInvestigationsString(String numberOfResultsInvestigationsString) {
-        this.numberOfResultsInvestigationsString = numberOfResultsInvestigationsString;
         if (numberOfResultsInvestigationsString != null) {
+            this.numberOfResultsInvestigationsString = numberOfResultsInvestigationsString;
+            this.numberOfResultsInvestigationsString2 = numberOfResultsInvestigationsString;
             this.numberOfResultsInvestigations = parseString(numberOfResultsInvestigationsString);
+        }
+    }
+
+    public String getNumberOfResultsInvestigationsString2() {
+        return numberOfResultsInvestigationsString2;
+    }
+
+    public void setNumberOfResultsInvestigationsString2(String numberOfResultsInvestigationsString2) {
+        if (numberOfResultsInvestigationsString2 != null) {
+            this.numberOfResultsInvestigationsString2 = numberOfResultsInvestigationsString2;
+            this.numberOfResultsInvestigationsString = numberOfResultsInvestigationsString2;
+            this.numberOfResultsInvestigations = parseString(numberOfResultsInvestigationsString2);
         }
     }
 
@@ -306,6 +354,20 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
                 }
             }
         }
+    }
+
+    /**
+     * Sets if case sensitive is  for a particular item
+     */
+    public void maxDisplay(ValueChangeEvent event) {
+        log.trace("Max display value changed event " + event.getOldValue() + " " + event.getNewValue());
+    }
+
+    /**
+     * Sets if case sensitive is  for a particular item
+     */
+    public void maxDisplay(ActionEvent event) {
+        log.trace("Max display action event " + event);
     }
 
     /**

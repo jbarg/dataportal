@@ -375,8 +375,11 @@ public class SearchBean extends AbstractRequestBean {
 
             //if not results infom user
             if (datafiles.size() == 0) {                
-                 info("No results found. Please refine your query.");
-                
+                info("No results found. Please refine your query.");
+                getVisitData().setCurrentDatafiles(datafiles);  
+                getVisitData().setInvestigatonTreeVisable(false);
+                getVisitData().setDatasetTableVisable(false);
+                getVisitData().setDatafileTableVisable(false);
                 return null;
             }
                       
@@ -454,6 +457,8 @@ public class SearchBean extends AbstractRequestBean {
                 } else {
                     info("No results found. Please refine your query.");
                 }
+                //set the current to empty collection
+                getVisitData().setSearchedInvestigations(investigations);
                 return null;
             }
 

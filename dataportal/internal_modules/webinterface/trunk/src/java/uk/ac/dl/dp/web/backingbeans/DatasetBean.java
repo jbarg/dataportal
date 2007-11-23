@@ -31,7 +31,8 @@ public class DatasetBean extends SortableList {
     private HtmlDataTable table;
     private List<Dataset> datasets;
     private boolean expanded = false;
-
+    private boolean startFirst = false;
+    
     public DatasetBean() {
         super("name");
     }
@@ -53,7 +54,7 @@ public class DatasetBean extends SortableList {
      */
     public List<Dataset> getDatasets() {
         sort(getSort(), isAscending());
-
+        if(startFirst) table.setFirst(0);
         List<Dataset> datasets = (List<Dataset>) getVisitData().getCurrentDatasets();
         if (datasets == null) {
             return (List<Dataset>) new ArrayList<Dataset>();
@@ -267,6 +268,14 @@ public class DatasetBean extends SortableList {
         this.expanded = expanded;
     }
 
+     /**
+     * Sets if case sensitive is  for a particular item
+     */
+    public void maxDisplay() {
+        log.trace("Max display changed");
+        startFirst = true;
+    }
+    
     //for sorting columns
 
     private boolean is(String column) {

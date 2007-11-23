@@ -37,9 +37,10 @@ public class InvestigationBean extends SortableList {
     private HtmlDataTable table;
     private List<Investigation> investigations;
     private boolean expanded = false;
+    private boolean startFirst = false;
 
     public InvestigationBean() {
-        super("name");
+        super("name");        
     }
 
     public HtmlDataTable getTable() {
@@ -47,7 +48,7 @@ public class InvestigationBean extends SortableList {
     }
 
     public void setTable(HtmlDataTable aTable) {
-        table = aTable;
+        table = aTable;       
     }
 
     protected boolean isDefaultAscending(String sortColumn) {
@@ -63,6 +64,7 @@ public class InvestigationBean extends SortableList {
             getTable().collapseAllDetails();
             getVisitData().setNewResults(false);
         }
+        if(startFirst) table.setFirst(0);
         return (List<Investigation>) getVisitData().getSearchedInvestigations();
     }
 
@@ -455,6 +457,14 @@ public class InvestigationBean extends SortableList {
     public void dummyAjax(ActionEvent e) {
         log.trace("Dummy method called");
         dummyDone = true;
+    }
+    
+     /**
+     * Sets if case sensitive is  for a particular item
+     */
+    public void maxDisplay() {
+        log.trace("Max display changed");
+        startFirst = true;
     }
 
     public boolean getDummyAjaxDone() {

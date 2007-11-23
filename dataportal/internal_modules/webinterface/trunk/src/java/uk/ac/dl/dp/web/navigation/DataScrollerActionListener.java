@@ -19,6 +19,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import org.apache.log4j.*;
+import org.apache.myfaces.custom.datascroller.HtmlDataScroller;
 
 /**
  * @author MBroekelmann
@@ -32,6 +33,6 @@ public class DataScrollerActionListener implements ActionListener {
      */
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException {
         log.trace("process dataScroller ActionEvent");
-    }
-    
+       
+    }    
 }
