@@ -17,8 +17,10 @@ import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.event.ActionEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
+import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.web.util.SortableList;
 import uk.ac.dp.icatws.Datafile;
+import uk.ac.dp.icatws.DatafileParameter;
 
 /**
  *
@@ -31,7 +33,7 @@ public class DatafileBean extends SortableList {
     private List<Datafile> datafiles;
     private boolean expanded = false;
     private boolean startFirst = false;
-    
+
     public DatafileBean() {
         super("name");
     }
@@ -53,7 +55,9 @@ public class DatafileBean extends SortableList {
      */
     public List<Datafile> getDatafiles() {
         sort(getSort(), isAscending());
-        if(startFirst) table.setFirst(0);
+        if (startFirst) {
+            table.setFirst(0);
+        }
         List<Datafile> datafiles = (List<Datafile>) getVisitData().getCurrentDatafiles();
         if (datafiles == null) {
             return (List<Datafile>) new ArrayList<Datafile>();
@@ -129,6 +133,36 @@ public class DatafileBean extends SortableList {
         }
     }
 
+    public void getDatafileParameters(ActionEvent event) {
+        log.trace("getting datafile parameters");
+        Datafile datafileTable = (Datafile) table.getRowData();
+
+        if (datafileTable.getDatafileParameterCollection().size() == 0) {
+            try {
+                QueryDelegate qd = QueryDelegate.getInstance();
+
+                //get the datafile
+                Datafile datafile = qd.getDatafile(getVisit().getSid(), datafileTable, datafileTable.getUniqueId());
+
+                Collection<Datafile> datafiles = getVisitData().getCurrentDatafiles();
+                for (Datafile currentDatafile : datafiles) {
+                    if (currentDatafile.getId().equals(datafileTable.getId())) {
+                        log.debug("Adding " + datafile.getDatafileParameterCollection().size() + " parameters to " + currentDatafile.getId());
+                        for (DatafileParameter datafileparameter : datafile.getDatafileParameterCollection()) {
+                            currentDatafile.getDatafileParameterCollection().add(datafileparameter);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                error("Error: Unable to get Data File Parameters.");
+                log.fatal("Unable to get datafile parameters for " + datafileTable.getId() + " user for: " + getVisit().getSid(), ex);
+            }
+        } else {
+            log.trace("Already have parameters for " + datafileTable.getId());
+        }
+    }
+
+
     /**
      * Listens for sort column action events, and gets the column by thge param name passed in
      * then calls sort on the column
@@ -147,10 +181,12 @@ public class DatafileBean extends SortableList {
                     sort(param);
                     break;
                 }
+
             }
             i++;
         }
         //collaspe all details in the data table.
+
         getTable().collapseAllDetails();
     }
 
@@ -161,6 +197,7 @@ public class DatafileBean extends SortableList {
         for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
             datafile.setSelected(true);
         }
+
         return null;
     }
 
@@ -171,6 +208,7 @@ public class DatafileBean extends SortableList {
         for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
             datafile.setSelected(false);
         }
+
         return null;
     }
 
@@ -222,7 +260,8 @@ public class DatafileBean extends SortableList {
 
     public void dummyAjax(ActionEvent e) {
         log.trace("Dummy method called");
-        dummyDone = true;
+        dummyDone =
+                true;
     }
 
     public boolean getDummyAjaxDone() {
@@ -236,13 +275,14 @@ public class DatafileBean extends SortableList {
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
-    
-     /**
+
+    /**
      * Sets if case sensitive is  for a particular item
      */
     public void maxDisplay() {
         log.trace("Max display changed");
-        startFirst = true;
+        startFirst =
+                true;
     }
 
     //for sorting columns
@@ -253,6 +293,7 @@ public class DatafileBean extends SortableList {
         } else {
             return false;
         }
+
     }
 
     private boolean isNot(String column) {
@@ -261,6 +302,7 @@ public class DatafileBean extends SortableList {
         } else {
             return false;
         }
+
     }
 
     /**
