@@ -5,9 +5,28 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 
+<script>
+
+function waitStatus(){
+        
+        var image =  document.getElementById("body:tableForm:status");
+        image.src = "../images/connect_active.gif";
+        document.body.style.cursor = 'wait';
+        return true;
+        }  
+        
+        function normalStatus(){
+        
+        var image =  document.getElementById("body:tableForm:status");
+        image.src = "../images/connect_idle.gif";
+        document.body.style.cursor = 'default';
+        return true;
+        }          
+
+</script>
 <a4j:region  selfRendered="true"> 
     
-    <h:form>
+    <h:form id="tableForm">
         <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties" />
         
         <table width="95%" border="0" >
@@ -19,9 +38,11 @@
                     <table border="0" width="100%">
                         <tbody>
                             <tr>
-                                <tr> <h:messages id="messages" globalOnly="true" warnClass="error" errorClass="error" infoClass="info" />
-                                </tr>     
-                                
+                                <td> <h:messages id="messages" globalOnly="true" warnClass="error" errorClass="error" infoClass="info" />
+                                </td>     
+                                <td align="right"> 
+                                     <h:graphicImage id="status" url="../images/connect_idle.gif" />
+                                </td> 
                             </tr>
                         </tbody>      
                     </table>
@@ -71,7 +92,7 @@
                                 <h:outputText value=" " />
                                 <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                 
-                                <a4j:commandLink reRender="tableGrid" style="color:black" id="viewFiles" actionListener="#{datasetTree.viewDataFiles}">
+                                <a4j:commandLink oncomplete="normalStatus();" onclick="waitStatus();"  reRender="tableGrid, status" style="color:black" id="viewFiles" actionListener="#{datasetTree.viewDataFiles}">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="text934" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     
@@ -117,7 +138,7 @@
                                 
                                 <t:graphicImage id="grd918" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 
-                                <a4j:commandLink reRender="tableGrid" style="color:black" id="viewSets" actionListener="#{datasetTree.viewDataSets}">
+                                <a4j:commandLink  oncomplete="normalStatus();" onclick="waitStatus();"  reRender="tableGrid, status" style="color:black" id="viewSets" actionListener="#{datasetTree.viewDataSets}">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="textd19g0" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     
@@ -337,7 +358,7 @@
             
             <%---  ///////////  DataFile Table /////////        -----%>
             <h:panelGrid rendered="#{visit.visitData.datafileTableVisable}" id="topgrid" columns="2" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" border="0" width="100%">
-                <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.currentDatafiles) > sessionScope.sessionHistory.numberOfResultsDatafiles}" >            
+                <h:panelGroup style="float: left" rendered="#{fn:length(sessionScope.visit.visitData.currentDatafiles) > sessionScope.sessionHistory.numberOfResultsDatafiles}" >            
                     <t:dataScroller id="scroll_4_datafile"
                                     for="data"
                                     fastStep="10"
@@ -417,20 +438,20 @@
                     <f:facet name="header">
                         <h:panelGrid columns="" >
                             
-                            <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datafileExpanded}" actionListener="#{datafileBean.expandAll}">
+                           <%-- <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datafileExpanded}" actionListener="#{datafileBean.expandAll}">
                                 
                                 <t:graphicImage   id="exp" value="../../images/button_plus1.gif"  border="0"/>
                             </a4j:commandLink>   
                             <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.datafileExpanded}" actionListener="#{datafileBean.collapseAll}">
                                 
                                 <t:graphicImage  id="coll" value="../../images/button_minus1.gif"  border="0"/>
-                            </a4j:commandLink> 
+                            </a4j:commandLink> --%>
                             
                         </h:panelGrid>        
                     </f:facet>
                     
-                    <h:panelGrid rendered="#{fn:length(dataFile.datafileParameterCollection) > 0}" columns="" >
-                        <a4j:commandLink  reRender="data" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
+                    <h:panelGrid columns="" >
+                        <a4j:commandLink oncomplete="normalStatus();" onclick="waitStatus();"  reRender="data" style="table-header" ajaxSingle="true" id="abS" actionListener="#{datafileBean.getDatafileParameters}" action="#{detailToggler.toggleDetail}">
                             
                             <t:graphicImage id="up" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
                             <t:graphicImage id="up-f" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
@@ -462,7 +483,7 @@
                     <f:facet name="header">
                         
                         <a4j:commandLink reRender="data, props" style="table-header" id="size" actionListener="#{datafileBean.sortColumn}">
-                            <h:outputText value="File Size" />
+                            <h:outputText value="File Size (B)" />
                             <f:param name="column" value="size"/>
                             <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
                             <t:graphicImage id="afilesize" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.fileSize}" border="0"/>
@@ -470,9 +491,9 @@
                             <%--  </c:if>--%>
                         </a4j:commandLink>
                     </f:facet>
-                    
-                    <h:outputText value="#{dataFile.fileSize}" />
-                    
+                                                       
+                         <h:outputText value="#{dataFile.fileSize}" />
+                  
                 </h:column>
                 
                 <!--  Format -->
@@ -617,7 +638,7 @@
             </t:dataTable>
             
             <h:panelGrid rendered="#{visit.visitData.datafileTableVisable}" id="bottomgrid" columns="2" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" border="0" width="100%">
-                <h:panelGroup rendered="#{fn:length(visit.visitData.currentDatafiles) > sessionHistory.numberOfResultsDatafiles}" >            
+                <h:panelGroup style="float: left" rendered="#{fn:length(visit.visitData.currentDatafiles) > sessionHistory.numberOfResultsDatafiles}" >            
                     <t:dataScroller id="scroll_2_datafile"
                                     for="data"
                                     fastStep="10"
@@ -694,7 +715,7 @@
             
             <%---  ///////////  DataSet Table /////////        -----%>
             <h:panelGrid rendered="#{visit.visitData.datasetTableVisable}" id="topgridds" columns="2" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" border="0" width="100%">
-                <h:panelGroup rendered="#{fn:length(sessionScope.visit.visitData.currentDatasets) > sessionScope.sessionHistory.numberOfResultsDatasets}" >            
+                <h:panelGroup style="float: left" rendered="#{fn:length(sessionScope.visit.visitData.currentDatasets) > sessionScope.sessionHistory.numberOfResultsDatasets}" >            
                     <t:dataScroller id="scroll_5_datafile"
                                     for="dataset"
                                     fastStep="10"
@@ -773,20 +794,20 @@
                         <h:panelGrid columns="" >
                             
                             
-                            <a4j:commandLink reRender="dataset"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datasetExpanded}" actionListener="#{datasetBean.expandAll}">
+                          <%--  <a4j:commandLink reRender="dataset"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datasetExpanded}" actionListener="#{datasetBean.expandAll}">
                                 
                                 <t:graphicImage  id="expds" value="../../images/button_plus1.gif"  border="0"/>
                             </a4j:commandLink>   
                             <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="collapseAll" rendered="#{visit.visitData.datasetExpanded}" actionListener="#{datasetBean.collapseAll}">
                                 
                                 <t:graphicImage  id="collds" value="../../images/button_minus1.gif"  border="0"/>
-                            </a4j:commandLink> 
+                            </a4j:commandLink> --%>
                             
                         </h:panelGrid>        
                     </f:facet>
                     
-                    <h:panelGrid rendered="#{fn:length(dataSet.datasetParameterCollection) > 0}" columns="" >
-                        <a4j:commandLink reRender="dataset" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
+                    <h:panelGrid  columns="" >
+                        <a4j:commandLink actionListener="#{datasetBean.getDatasetParameters}" oncomplete="normalStatus();" onclick="waitStatus();"  reRender="dataset" style="table-header" ajaxSingle="true" id="abS" action="#{detailToggler.toggleDetail}">
                             
                             <t:graphicImage id="upds" value="../../images/button_plus1.gif" rendered="#{!detailToggler.currentDetailExpanded}" border="0"/>
                             <t:graphicImage id="up-fds" value="../../images/button_minus1.gif" rendered="#{detailToggler.currentDetailExpanded}" border="0"/>
@@ -808,7 +829,7 @@
                         </a4j:commandLink>
                     </f:facet>
                     
-                    <a4j:commandLink reRender="tableGrid" style="color:black" id="viewFilesTable" actionListener="#{datasetTree.viewDataFiles}">
+                    <a4j:commandLink oncomplete="normalStatus();" onclick="waitStatus();"  reRender="status, tableGrid" style="color:black" id="viewFilesTable" actionListener="#{datasetTree.viewDataFiles}">
                         <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                         <h:outputText id="textfgg4" value="#{dataSet.name}" style="font-family: Verdana, Geneva, sans-serif; font-size: 12px;" />
                         
@@ -946,7 +967,7 @@
             
             
             <h:panelGrid rendered="#{visit.visitData.datasetTableVisable}" id="bottomgridds" columns="2" styleClass="scrollerTable2" columnClasses="standardTable_ColumnCentered" border="0" width="100%">
-                <h:panelGroup rendered="#{fn:length(visit.visitData.currentDatasets) > sessionHistory.numberOfResultsDatasets}" >            
+                <h:panelGroup style="float: left" rendered="#{fn:length(visit.visitData.currentDatasets) > sessionHistory.numberOfResultsDatasets}" >            
                     <t:dataScroller id="scroll_6_dataset"
                                     for="dataset"
                                     fastStep="10"

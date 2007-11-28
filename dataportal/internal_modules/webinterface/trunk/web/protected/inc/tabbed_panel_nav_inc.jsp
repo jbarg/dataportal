@@ -580,11 +580,11 @@
                     
                     <h:panelGroup >
                         
-                        <h:inputText styleClass="text" id="runNumberMinj_id_1" size="5" required="false" binding="#{sessionHistory.isisSearchHistoryBean.runStartUI}" value="#{sessionHistory.advancedSearchHistoryBean.runStart}" >
+                        <h:inputText styleClass="text" id="runNumberMinj_id_1" size="5" required="false" binding="#{sessionHistory.isisSearchHistoryBean.runStartUI}" value="#{sessionHistory.isisSearchHistoryBean.runStart}" >
                             <f:validateDoubleRange minimum="0" maximum="90000000" />
                         </h:inputText>                
                         &nbsp;
-                        <h:inputText styleClass="text" id="runNumberMaxj_id_1" size="5" required="false" validator="#{sessionHistory.isisSearchHistoryBean.validateRun}" value="#{sessionHistory.advancedSearchHistoryBean.runEnd}" >
+                        <h:inputText styleClass="text" id="runNumberMaxj_id_1" size="5" required="false" validator="#{sessionHistory.isisSearchHistoryBean.validateRun}" value="#{sessionHistory.isisSearchHistoryBean.runEnd}" >
                             <f:validateDoubleRange minimum="0" maximum="90000000" />
                         </h:inputText>
                     </h:panelGroup>
