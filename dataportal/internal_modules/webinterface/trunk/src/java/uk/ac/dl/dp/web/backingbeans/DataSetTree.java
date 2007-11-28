@@ -37,6 +37,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
+import uk.ac.dp.icatws.DatasetInclude;
 import uk.ac.dp.icatws.Investigation;
 
 /**
@@ -254,8 +255,8 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
 
                         try {
                             //now get the datafiles for the dataset
-                            Collection<Datafile> datafiles = QueryDelegate.getInstance().getDatafiles(getVisit().getSid(), ds, fac);
-                            log.trace("Returned " + datafiles.size() + " for " + ds.getId());
+                            Dataset datasetReturned = QueryDelegate.getInstance().getDataset(getVisit().getSid(), ds, fac, DatasetInclude.DATASET_AND_DATAFILES_ONLY);
+                            log.trace("Returned " + datasetReturned.getDatafileCollection().size() + " for " + ds.getId());
                             for (Investigation investigation : getVisitData().getCurrentInvestigations()) {
                                 if (investigation.getId().equals(ds.getInvestigationId()) && investigation.getFacility().equals(fac)) {
                                     log.trace("Found that dataset: "+ds.getId()+" belongs to investigation: "+investigation.getId());
@@ -264,7 +265,9 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
                                         if (dataset.getId().equals(ds.getId())) {
                                             Collection<Datafile> datafilesSearched = dataset.getDatafileCollection(); //will return empty collection
                                             datafilesSearched.clear(); //make sure if clear though should be
-                                            for(Datafile df : datafiles){
+                                            for(Datafile df : datasetReturned.getDatafileCollection()){
+                                                                                               
+                                                df.setUniqueId(fac);
                                                 dataset.getDatafileCollection().add(df);
                                             }                                            
                                             log.trace("Setting datafiles for Investigation " + investigation.getId() + " and dataset " + dataset.getId());
@@ -275,7 +278,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
                             }
 
                             //now set current datafiles                           
-                            getVisitData().setCurrentDatafiles(datafiles);
+                            getVisitData().setCurrentDatafiles(datasetReturned.getDatafileCollection());
                         } catch (Throwable ex) {
                             log.error("Cannot view datafiles", ex);
                             error("Error: Cannot view datafiles");
@@ -307,7 +310,7 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
                     log.trace("viewing datasets for INVESTIGATION: " + investigation.getId());
 
                     //now set current datasets
-                     getVisitData().setCurrentInvestigation(investigation.getTitle());
+                    getVisitData().setCurrentInvestigation(investigation.getTitle());
                     getVisitData().setCurrentDatasets(investigation.getDatasetCollection());
                 }
                 break;

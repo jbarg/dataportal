@@ -323,6 +323,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 fuzzy = true;
             }
 
+            log.debug("TYPE of SEARCH "+searchType);
             if (searchType == DPQueryType.ADVANCED) {
                 //set history bean
                 AdvancedSearchHistoryBean advancedSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
@@ -351,23 +352,25 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 advancedSearchHistoryBean.setAutoComplete(sessionHistory.isAdvancedSearchAutoComplete());
                 advancedSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
             } else if (searchType == DPQueryType.ISIS) {
+               
                 ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
 
                 isisSearchHistoryBean.setKeyword(getKeyword());
                 isisSearchHistoryBean.setInstrument(getInstrument());
                 isisSearchHistoryBean.setLikeExpression(getLikeExpression());
                 isisSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
-
+                //log.trace("Run end is "+getRunEnd());
                 isisSearchHistoryBean.setRunEnd(getRunEnd());
                 isisSearchHistoryBean.setRunStart(getRunStart());
                 isisSearchHistoryBean.setFirstDate(getFirstDate());
                 isisSearchHistoryBean.setSecondDate(getSecondDate());
-
+                //log.trace("isisSearchHistoryBean Run end is "+isisSearchHistoryBean.getRunEnd());
                 //prefs
                 isisSearchHistoryBean.setAutoComplete(sessionHistory.isAdvancedSearchAutoComplete());
                 isisSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
 
             } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+               
                 ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
 
                 isisSearchHistoryBean.setInstrumentDF(getInstrumentDF());

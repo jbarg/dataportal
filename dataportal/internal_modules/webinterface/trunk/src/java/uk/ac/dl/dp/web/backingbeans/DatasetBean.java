@@ -17,9 +17,12 @@ import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.event.ActionEvent;
 import javax.faces.component.*;
 import org.apache.log4j.*;
+import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.web.util.SortableList;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
+import uk.ac.dp.icatws.DatasetInclude;
+import uk.ac.dp.icatws.DatasetParameter;
 
 /**
  *
@@ -185,6 +188,35 @@ public class DatasetBean extends SortableList {
         getTable().collapseAllDetails();
     }
 
+     public void getDatasetParameters(ActionEvent event) {
+        log.trace("getting dataset parameters");
+        Dataset datasetTable = (Dataset) table.getRowData();
+
+        if (datasetTable.getDatasetParameterCollection().size() == 0) {
+            try {
+                QueryDelegate qd = QueryDelegate.getInstance();
+
+                //get the datafile
+                Dataset datasetReturned = qd.getDataset(getVisit().getSid(), datasetTable, datasetTable.getUniqueId(), DatasetInclude.DATASET_PARAMETERS_ONLY);
+
+                Collection<Dataset> datasets = getVisitData().getCurrentDatasets();
+                for (Dataset currentDataset : datasets) {
+                    if (currentDataset.getId().equals(datasetTable.getId())) {
+                        log.debug("Adding " + datasetReturned.getDatasetParameterCollection().size() + " parameters to " + currentDataset.getId());
+                        for (DatasetParameter datasetparameter : datasetReturned.getDatasetParameterCollection()) {
+                            currentDataset.getDatasetParameterCollection().add(datasetparameter);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                error("Error: Unable to get Data Set Parameters.");
+                log.fatal("Unable to get dataset parameters for " + datasetTable.getId() + " user for: " + getVisit().getSid(), ex);
+            }
+        } else {
+            log.trace("Already have parameters for " + datasetTable.getId());
+        }
+    }
+     
     /**
      * method to select all data
      */
@@ -267,7 +299,7 @@ public class DatasetBean extends SortableList {
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
-
+      
      /**
      * Sets if case sensitive is  for a particular item
      */
