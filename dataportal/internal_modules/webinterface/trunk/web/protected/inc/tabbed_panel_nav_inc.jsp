@@ -31,34 +31,40 @@
     }
     
     function chooseCityNavAdv(city) {
-    
-    var textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1');
-    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_2');
-    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_3');   
+   
+    //1.1.6
+    var textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1');  
+    if(textField == null)  textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_2');  
+    if(textField == null)  textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_3');  
+  
+   // 1.1.5 var textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1');
+    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_2');
+    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_3');   
     var oldvalue = textField.value;
-        
-    // OLD way 1.1.6   var oldvalue = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value;  
+       
     var index = oldvalue.lastIndexOf(' ');          
     var old = oldvalue.substring(0, index);     
     
     if(old == ""){       
     textField.value = city+" ";
-    // OLD way 1.1.6 document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value = city+" ";
     }
     else {     
      textField.value = old+" "+city+" ";
-          // OLD way 1.1.6 document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1').value = old+" "+city+" ";
     
     }
     }
     
     function chooseCityNav(city) {
+     // OLD way 1.1.6 
+        var textField = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1');
+    if(textField == null) textField = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_2');
+    if(textField == null) textField = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_3');   
     
     
-    // OLD way 1.1.6  var oldvalue = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value;         
-    var textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_1');
-    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_2');
-    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_3');   
+        //old way 1.1.5
+      // var textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_1');
+   //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_2');
+    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_3');   
     
     var oldvalue = textField.value;  
     var index = oldvalue.lastIndexOf(' ');          
@@ -77,12 +83,16 @@
     }
     
     function chooseCityNavISIS(city) {
+    //new wya
+        var textField = document.getElementById('navigation_search:ISIS:autofillform_nav_isis:keywordField_nav_isisj_id_1');
+    if(textField == null) textField = document.getElementById('navigation_search:ISIS:autofillform_nav_isis:keywordField_nav_isisj_id_2');
+    if(textField == null) textField = document.getElementById('navigation_search:ISIS:autofillform_nav_isis:keywordField_nav_isisj_id_3');   
     
     
-    // OLD way 1.1.6  var oldvalue = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value;         
-    var textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_1');
-    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_2');
-    if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_3');   
+    // OLD way 1.1.5
+   // var textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_1');
+    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_2');
+    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_3');   
     
     var oldvalue = textField.value;  
     var index = oldvalue.lastIndexOf(' ');          
