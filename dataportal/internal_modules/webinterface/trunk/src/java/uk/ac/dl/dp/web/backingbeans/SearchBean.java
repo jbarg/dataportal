@@ -14,14 +14,11 @@ import java.util.*;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
-import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
@@ -48,11 +45,8 @@ public class SearchBean extends AbstractRequestBean {
     private Collection<String> keywords;
     private List<String> facilities;
     //default it to AND
-
     private String logicalExpression = "AND";
-    //default to EXACT
-
-    private String likeExpression = "EXACT";
+  
     private List<SelectItem> logicalExpressions;
 
     public List<SelectItem> getLogicalExpressions() {
@@ -202,12 +196,7 @@ public class SearchBean extends AbstractRequestBean {
         if (getLogicalExpression().equals("OR")) {
             type = LogicalOperator.OR;
         }
-
-        boolean fuzzy = false;
-        if (getLikeExpression().equals("LIKE")) {
-            fuzzy = true;
-        }
-
+              
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
@@ -216,8 +205,7 @@ public class SearchBean extends AbstractRequestBean {
             
             BasicSearchHistoryBean bsb = sessionHistory.getBasicSearchHistoryBean();
             bsb.setKeyword(getKeyword());
-            bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
-            bsb.setLikeExpression(getLikeExpression());
+            bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());           
             bsb.setLogicalExpression(getLogicalExpression());  
             
             //set nav history
@@ -230,7 +218,7 @@ public class SearchBean extends AbstractRequestBean {
            
             KeywordDetails details = new KeywordDetails();            
             details.setCaseSensitve(sessionHistory.isKeywordSearchCaseSensitive());
-            details.setInvestigationIncludes(InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
+            details.setInvestigationIncludes(InvestigationInclude.NONE);
            
             for (String keyword : keywords) {
                 details.getKeywords().add(keyword);
@@ -310,7 +298,7 @@ public class SearchBean extends AbstractRequestBean {
 
             KeywordDetails details = new KeywordDetails();            
             details.setCaseSensitve(sessionHistory.isKeywordSearchNavigationCaseSensitive());
-            details.setInvestigationIncludes(InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
+            details.setInvestigationIncludes(InvestigationInclude.NONE);
             details.setOperator(type);
             for (String keyword : getKeywords()) {
                 details.getKeywords().add(keyword);
@@ -571,16 +559,7 @@ public class SearchBean extends AbstractRequestBean {
         //log.trace("Setting loca expression: "+logicalExpression);
         this.logicalExpression = logicalExpression;
     }
-
-    public String getLikeExpression() {
-        //  return getVisitData().getBasicSearchBean().getLikeExpression();
-        return likeExpression;
-    }
-
-    public void setLikeExpression(String likeExpression) {
-        this.likeExpression = likeExpression;
-    }
-       
+          
     /**
      * Checks which page to goto for the facility search
      * 

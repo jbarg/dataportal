@@ -83,9 +83,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     private List<String> investigators;
     private List<String> keywords;
     private List<String> facilities;
-    //default to EXACT
-
-    private String likeExpression = "EXACT";
+    
     /**
      * Investigation run start number
      */
@@ -166,22 +164,17 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         QueryRequest query_request = null;
 
         log.trace("searching for advanced:");
-
         log.trace("searching for facilities :" + getVisitData().getCurrentSelectedFacilities());
 
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-
-            boolean fuzzy = false;
+            
             SessionHistory sessionHistory = getSessionHistory();
-
 
             AdvancedSearchHistoryBean advancedTypeSearchHistoryBean = null;
             if (searchType == DPQueryType.ADVANCED) {
-                if (sessionHistory.getAdvancedSearchHistoryBean().getLikeExpression().equals("LIKE")) {
-                    fuzzy = true;
-                }
+                
                 //set history bean
                 advancedTypeSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
 
@@ -190,9 +183,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 advancedTypeSearchHistoryBean.setCaseSensitive(getSessionHistory().isAdvancedSearchNavigationCaseSensitive());
 
             } else if (searchType == DPQueryType.ISIS) {
-                if (sessionHistory.getIsisSearchHistoryBean().getLikeExpression().equals("LIKE")) {
-                    fuzzy = true;
-                }
+                
                 //set history bean
                 advancedTypeSearchHistoryBean = (AdvancedSearchHistoryBean) sessionHistory.getIsisSearchHistoryBean();
 
@@ -220,9 +211,9 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             asdDTO.setInvestigationAbstract(advancedTypeSearchHistoryBean.getInvAbstract());
             asdDTO.setInvestigationName(advancedTypeSearchHistoryBean.getInvName());
             asdDTO.setInvestigationType(advancedTypeSearchHistoryBean.getInvType());
-            asdDTO.setFuzzy(fuzzy);
+            
             asdDTO.setCaseSensitive(sessionHistory.isAdvancedSearchNavigationCaseSensitive());
-            asdDTO.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
+            asdDTO.setInvestigationInclude(InvestigationInclude.NONE);
 
             //new stuff
             asdDTO.setDatafileName(advancedTypeSearchHistoryBean.getDatafileName());
@@ -319,10 +310,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
             boolean fuzzy = false;
             SessionHistory sessionHistory = getSessionHistory();
-            if (getLikeExpression().equals("LIKE")) {
-                fuzzy = true;
-            }
-
+            
             log.debug("TYPE of SEARCH "+searchType);
             if (searchType == DPQueryType.ADVANCED) {
                 //set history bean
@@ -335,8 +323,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 advancedSearchHistoryBean.setGrantId(getGrantId());
                 advancedSearchHistoryBean.setInvAbstract(getInvAbstract());
                 advancedSearchHistoryBean.setInvType(getInvType());
-                advancedSearchHistoryBean.setInvestigator(getInvestigator());
-                advancedSearchHistoryBean.setLikeExpression(getLikeExpression());
+                advancedSearchHistoryBean.setInvestigator(getInvestigator());               
                 advancedSearchHistoryBean.setInvName(getInvName());
                 advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
 
@@ -356,8 +343,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
 
                 isisSearchHistoryBean.setKeyword(getKeyword());
-                isisSearchHistoryBean.setInstrument(getInstrument());
-                isisSearchHistoryBean.setLikeExpression(getLikeExpression());
+                isisSearchHistoryBean.setInstrument(getInstrument());              
                 isisSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
                 //log.trace("Run end is "+getRunEnd());
                 isisSearchHistoryBean.setRunEnd(getRunEnd());
@@ -432,7 +418,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 asdDTO.setDateRangeEnd(getXMLGregorianCalendar(getSecondDate()));
             }
 
-            asdDTO.setInvestigationInclude(InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
+            asdDTO.setInvestigationInclude(InvestigationInclude.NONE);
 
             //check if the information passed is valid, if not, show the error message
             try {
@@ -540,16 +526,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     public void setFacilities(List<String> facilities) {
         this.facilities = facilities;
     }
-
-    public String getLikeExpression() {
-        //  return getVisitData().getBasicSearchBean().getLikeExpression();
-        return likeExpression;
-    }
-
-    public void setLikeExpression(String likeExpression) {
-        this.likeExpression = likeExpression;
-    }
-
+   
     public String getInvNumber() {
         if (invNumber == null || invNumber.equals("")) {
             return null;
