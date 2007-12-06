@@ -99,9 +99,7 @@ public class AdvancedSearchHistoryBean extends AbstractRequestBean {
     public void setCaseSensitive(boolean caseSensitive) {
         this.caseSensitive = caseSensitive;
     }
-    //default to EXACT
-    private String likeExpression = "EXACT";
-    
+        
     /** Creates a new instance of AdvancedSearchBean */
     public AdvancedSearchHistoryBean() {
     }
@@ -113,16 +111,7 @@ public class AdvancedSearchHistoryBean extends AbstractRequestBean {
     public String getKeyword(){
         return keyword;
     }
-    
-    public String getLikeExpression() {
-        //   return getVisitData().getBasicSearchBean().getLikeExpression();
-        return likeExpression;
-    }
-    
-    public void setLikeExpression(String likeExpression) {
-        this.likeExpression = likeExpression;
-    }
-    
+           
     public String getInvNumber() {
         if(invNumber == null || invNumber.equals("")) return null;
         else return invNumber;
