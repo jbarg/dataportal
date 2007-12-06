@@ -140,7 +140,7 @@ public class KeywordsFileBean {
             keywords = (String[]) obj_in.readObject();
             log.info("Loaded keywords from " + facility + " for user: " + user + " has : " + keywords.length + " keywords");
         } catch (Exception ex) {
-            log.warn("Error loading keywords " + file.getAbsolutePath() + " from disk");
+            if(file != null) log.warn("Error loading keywords " + file.getAbsolutePath() + " from disk");            
             keywords = new String[0];
         } finally {
             try {
