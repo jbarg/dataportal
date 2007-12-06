@@ -19,7 +19,8 @@ public enum DPDefaultLocation {
     ADVANCED_SEARCH("ADVANCED_SEARCH"),
     DATA_REFERENCES("DATA_REFERENCES"),
     BOOKMARKS("BOOKMARKS"),   
-    BASIC_SEARCH("BASIC_SEARCH");
+    BASIC_SEARCH("BASIC_SEARCH"),
+    FACILITY_SEARCH("FACILITY_SEARCH");
     
     DPDefaultLocation(String value) {
         this.value = value;
