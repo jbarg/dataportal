@@ -7,113 +7,113 @@
 
 <script type="text/javascript">
     function extractCityNav(citystatezip) {
-    
-    var index = citystatezip.indexOf(',');
-    var nextcity = citystatezip.substring(0, index+4);   
-    
-    return citystatezip;
+        
+        var index = citystatezip.indexOf(',');
+        var nextcity = citystatezip.substring(0, index+4);   
+        
+        return citystatezip;
     }
     
     function extractCityNavAdv(citystatezip) {
-    
-    var index = citystatezip.indexOf(',');
-    var nextcity = citystatezip.substring(0, index+4);   
-    
-    return citystatezip;
+        
+        var index = citystatezip.indexOf(',');
+        var nextcity = citystatezip.substring(0, index+4);   
+        
+        return citystatezip;
     }
     
     function extractCityNavISIS(citystatezip) {
-    
-    var index = citystatezip.indexOf(',');
-    var nextcity = citystatezip.substring(0, index+4);   
-    
-    return citystatezip;
+        
+        var index = citystatezip.indexOf(',');
+        var nextcity = citystatezip.substring(0, index+4);   
+        
+        return citystatezip;
     }
     
     function chooseCityNavAdv(city) {
-   
-    //1.1.6
-    var textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1');  
-    if(textField == null)  textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_2');  
-    if(textField == null)  textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_3');  
-  
-   // 1.1.5 var textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1');
-    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_2');
-    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_3');   
-    var oldvalue = textField.value;
-       
-    var index = oldvalue.lastIndexOf(' ');          
-    var old = oldvalue.substring(0, index);     
-    
-    if(old == ""){       
-    textField.value = city+" ";
-    }
-    else {     
-     textField.value = old+" "+city+" ";
-    
-    }
+        
+        //1.1.6
+        var textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_1');  
+        if(textField == null)  textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_2');  
+        if(textField == null)  textField = document.getElementById('navigation_search:advancedSearch:autofillform_nav_adv:keywordField_nav_advj_id_3');  
+        
+        // 1.1.5 var textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_1');
+        //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_2');
+        //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_adv:keywordField_nav_advj_id_3');   
+        var oldvalue = textField.value;
+        
+        var index = oldvalue.lastIndexOf(' ');          
+        var old = oldvalue.substring(0, index);     
+        
+        if(old == ""){       
+            textField.value = city+" ";
+        }
+        else {     
+            textField.value = old+" "+city+" ";
+            
+        }
     }
     
     function chooseCityNav(city) {
-     // OLD way 1.1.6 
+        // OLD way 1.1.6 
         var textField = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1');
-    if(textField == null) textField = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_2');
-    if(textField == null) textField = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_3');   
-    
-    
+        if(textField == null) textField = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_2');
+        if(textField == null) textField = document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_3');   
+        
+        
         //old way 1.1.5
-      // var textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_1');
-   //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_2');
-    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_3');   
-    
-    var oldvalue = textField.value;  
-    var index = oldvalue.lastIndexOf(' ');          
-    var old = oldvalue.substring(0, index);     
-    
-    if(old == ""){       
-    textField.value = city+" ";
-    // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = city+" ";
-    }
-    else {     
-    textField.value = old+" "+city+" ";
-    // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
-    
-    }
-    
+        // var textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_1');
+        //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_2');
+        //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav:keywordField_navj_id_3');   
+        
+        var oldvalue = textField.value;  
+        var index = oldvalue.lastIndexOf(' ');          
+        var old = oldvalue.substring(0, index);     
+        
+        if(old == ""){       
+            textField.value = city+" ";
+            // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = city+" ";
+        }
+        else {     
+            textField.value = old+" "+city+" ";
+            // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
+            
+        }
+        
     }
     
     function chooseCityNavISIS(city) {
-    //new wya
+        //new wya
         var textField = document.getElementById('navigation_search:ISIS:autofillform_nav_isis:keywordField_nav_isisj_id_1');
-    if(textField == null) textField = document.getElementById('navigation_search:ISIS:autofillform_nav_isis:keywordField_nav_isisj_id_2');
-    if(textField == null) textField = document.getElementById('navigation_search:ISIS:autofillform_nav_isis:keywordField_nav_isisj_id_3');   
-    
-    
-    // OLD way 1.1.5
-   // var textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_1');
-    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_2');
-    //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_3');   
-    
-    var oldvalue = textField.value;  
-    var index = oldvalue.lastIndexOf(' ');          
-    var old = oldvalue.substring(0, index);     
-    
-    if(old == ""){       
-    textField.value = city+" ";
-    // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = city+" ";
+        if(textField == null) textField = document.getElementById('navigation_search:ISIS:autofillform_nav_isis:keywordField_nav_isisj_id_2');
+        if(textField == null) textField = document.getElementById('navigation_search:ISIS:autofillform_nav_isis:keywordField_nav_isisj_id_3');   
+        
+        
+        // OLD way 1.1.5
+        // var textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_1');
+        //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_2');
+        //if(textField == null) textField = document.getElementById('navigation_search:autofillform_nav_isis:keywordField_nav_isisj_id_3');   
+        
+        var oldvalue = textField.value;  
+        var index = oldvalue.lastIndexOf(' ');          
+        var old = oldvalue.substring(0, index);     
+        
+        if(old == ""){       
+            textField.value = city+" ";
+            // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = city+" ";
+        }
+        else {     
+            textField.value = old+" "+city+" ";
+            // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
+            
+        }
+        
     }
-    else {     
-    textField.value = old+" "+city+" ";
-    // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
-    
-    }
-    
-    }
     
     
     
     
-</script>
+    </script>
 <br />
 <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties"  />
 
@@ -121,7 +121,7 @@
     
     
     <t:panelTabbedPane selectedIndex="#{visit.tabIndex}" width="202px" bgcolor="#EAF4F4" serverSideTabSwitch="false" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
-         
+        
         <t:panelTab id="basicSearch"  label="Keyword" >
             <h:form id="autofillform_nav">
                 
@@ -202,7 +202,7 @@
                     </h:panelGrid>  
                     
                     
-                   
+                    
                     
                     <h:panelGroup/>
                     <h:panelGrid columns="2" >
@@ -508,6 +508,7 @@
                 </h:panelGrid>
             </h:form>
         </t:panelTab>
+        
          <t:panelTab id="ISIS" label="ISIS" rendered="#{visit.customisation.facilitySearchPageVisible}">
             <h:form id="autofillform_nav_isis">
                 
@@ -581,35 +582,8 @@
                         </h:outputLabel> 
                     </h:panelGrid>                      
                     
-                                       
-                    <!----------------     Start of Run number ---------------->
-                    <h:outputLabel>            
-                        <h:outputText value="Run #" style="font-size: 10px" />                   
-                    </h:outputLabel>
-                    
-                    
-                    <h:panelGroup >
-                        
-                        <h:inputText styleClass="text" id="runNumberMinj_id_1" size="5" required="false" binding="#{sessionHistory.isisSearchHistoryBean.runStartUI}" value="#{sessionHistory.isisSearchHistoryBean.runStart}" >
-                            <f:validateDoubleRange minimum="0" maximum="90000000" />
-                        </h:inputText>                
-                        &nbsp;
-                        <h:inputText styleClass="text" id="runNumberMaxj_id_1" size="5" required="false" validator="#{sessionHistory.isisSearchHistoryBean.validateRun}" value="#{sessionHistory.isisSearchHistoryBean.runEnd}" >
-                            <f:validateDoubleRange minimum="0" maximum="90000000" />
-                        </h:inputText>
-                    </h:panelGroup>
-                    
-                    <h:panelGroup/>   
-                    
-                    <h:panelGroup>
-                        <h:message for="runNumberMinj_id_1" styleClass="error"/>
-                        <h:message for="runNumberMaxj_id_1" styleClass="error"/>
-                    </h:panelGroup>
-                    <!----------------     End of Run number ---------------->
-                    
-                    <!----------------     Start of Start Date ---------------->
-                    
-                    
+                     <!----------------     Start of Start Date ---------------->
+                                        
                     <h:outputLabel>            
                         <h:outputText value="Date range:" style="font-size: 10px" />                   
                     </h:outputLabel>
@@ -636,7 +610,32 @@
                         <h:message for="endDatej_id_1" styleClass="error"/>
                     </h:panelGroup>
                     <!----------------     End of Start Date ---------------->                               
+                                                           
+                    <!----------------     Start of Run number ---------------->
+                    <h:outputLabel>            
+                        <h:outputText value="Run #" style="font-size: 10px" />                   
+                    </h:outputLabel>
+                                        
+                    <h:panelGroup >
+                        
+                        <h:inputText styleClass="text" id="runNumberMinj_id_1" size="5" required="false" binding="#{sessionHistory.isisSearchHistoryBean.runStartUI}" value="#{sessionHistory.isisSearchHistoryBean.runStart}" >
+                            <f:validateDoubleRange minimum="0" maximum="90000000" />
+                        </h:inputText>                
+                        &nbsp;
+                        <h:inputText styleClass="text" id="runNumberMaxj_id_1" size="5" required="false" validator="#{sessionHistory.isisSearchHistoryBean.validateRun}" value="#{sessionHistory.isisSearchHistoryBean.runEnd}" >
+                            <f:validateDoubleRange minimum="0" maximum="90000000" />
+                        </h:inputText>
+                    </h:panelGroup>
                     
+                    <h:panelGroup/>   
+                    
+                    <h:panelGroup>
+                        <h:message for="runNumberMinj_id_1" styleClass="error"/>
+                        <h:message for="runNumberMaxj_id_1" styleClass="error"/>
+                    </h:panelGroup>
+                    <!----------------     End of Run number ---------------->
+                    
+                   
                     <!----------------     Start of instruemnt ---------------->
                     <h:outputLabel>            
                         <h:outputText value="Instrument" style="font-size: 10px" />                   
@@ -666,6 +665,65 @@
                     
                 </h:panelGrid>
             </h:form>
+            <br />
+            
+            <h:form>
+                <h:panelGrid  border="0" columns="2"  >                      
+                                   
+                    <!----------------     Start of Run number ---------------->
+                    <h:outputLabel>            
+                        <h:outputText value="Run #" style="font-size: 10px" />                   
+                    </h:outputLabel>
+                    
+                    <h:panelGroup >
+                        
+                        <h:inputText styleClass="text" id="runNumberMinDFj_id_1" size="5" required="false" binding="#{sessionHistory.isisSearchHistoryBean.runStartUIDF}" value="#{sessionHistory.isisSearchHistoryBean.runStartDF}" >
+                            <f:validateDoubleRange minimum="0" maximum="90000000" />
+                        </h:inputText>                
+                        &nbsp;
+                        <h:inputText styleClass="text" id="runNumberMaxDFj_id_1" size="5" required="false" validator="#{sessionHistory.isisSearchHistoryBean.validateRunDF}" value="#{sessionHistory.isisSearchHistoryBean.runEndDF}" >
+                            <f:validateDoubleRange minimum="0" maximum="90000000" />
+                        </h:inputText>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup/>   
+                    
+                    <h:panelGroup>
+                        <h:message for="runNumberMinDFj_id_1" styleClass="error"/>
+                        <h:message for="runNumberMaxDFj_id_1" styleClass="error"/>
+                    </h:panelGroup>
+                    <!----------------     End of Run number ---------------->
+                    
+                    
+                    <!----------------     Start of instruemnt ---------------->
+                    <h:outputLabel>            
+                        <h:outputText value="Instrument " style="font-size: 10px" />                   
+                    </h:outputLabel>
+                    
+                    <h:selectOneMenu id="instrumentj_id_DF" required="false" value="#{sessionHistory.isisSearchHistoryBean.instrumentDF}" >                           
+                        <f:selectItems value="#{visit.customisation.instrumentsItems}" />                           
+                    </h:selectOneMenu> 
+                    
+                    <%--  <h:inputText styleClass="text" id="instrumentj_id_1" size="14" required="false" value="#{visit.visitData.advancedSearchBean.instrument}">
+                    
+                    </h:inputText>        --%>
+                    
+                    <h:panelGroup/>
+                    <h:message for="instrumentj_id_DF" styleClass="error"/>
+                    
+                    <!----------------     End of instruemnt---------------->
+                    
+                    <h:panelGroup/>                  
+                    
+                    <h:panelGrid columns="2" >
+                        <h:commandButton id="f54" style="font-size:9px" styleClass="button" action="#{advancedSearchBean.searchAdvancedNavigationISISDF}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                        
+                        <h:commandButton style="font-size:9px" id="reset4" type="reset" styleClass="button"  title="Reset" value="Reset"/>
+                    </h:panelGrid>
+                    
+                    
+                </h:panelGrid>
+            </h:form>
         </t:panelTab>      
         
         
@@ -681,4 +739,4 @@
     
     
     
-</SCRIPT>
+    </SCRIPT>

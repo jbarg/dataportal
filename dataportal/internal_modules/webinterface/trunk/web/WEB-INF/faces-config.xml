@@ -189,6 +189,24 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
             <redirect />            
         </navigation-case>  
         
+         <navigation-case>
+            <from-outcome>LOGIN_SUCCESS_ISIS</from-outcome>
+            <to-view-id>/protected/isis_search.jsp</to-view-id>
+            <redirect />            
+        </navigation-case>  
+        
+        <navigation-case>
+            <from-outcome>LOGIN_SUCCESS_DIAMOND</from-outcome>
+            <to-view-id>/protected/diamond_search.jsp</to-view-id>
+            <redirect />            
+        </navigation-case> 
+        
+        <navigation-case>
+            <from-outcome>LOGIN_SUCCESS_CLF</from-outcome>
+            <to-view-id>/protected/clf_search.jsp</to-view-id>
+            <redirect />            
+        </navigation-case> 
+        
         <navigation-case>
             <from-outcome>LOGIN_SUCCESS_BOOKMARKS</from-outcome>
             <to-view-id>/protected/bookmark.jsp</to-view-id>
