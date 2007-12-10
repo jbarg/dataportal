@@ -19,10 +19,9 @@ import uk.ac.dl.dp.web.util.AbstractSessionBean;
 public class SessionHistory extends AbstractSessionBean implements Serializable {
 
     private static Logger log = Logger.getLogger(SessionHistory.class);
-    private transient  BasicSearchHistoryBean basicSearchHistoryBean = new BasicSearchHistoryBean();
+    private transient BasicSearchHistoryBean basicSearchHistoryBean = new BasicSearchHistoryBean();
     private transient AdvancedSearchHistoryBean advancedSearchHistoryBean = new AdvancedSearchHistoryBean();
     private transient ISISSearchHistoryBean isisSearchHistoryBean = new ISISSearchHistoryBean();
-
     /**
      * Investigation page results
      */
@@ -41,7 +40,6 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     private int numberOfResultsDatafiles;
     private String numberOfResultsDatafilesString;
     private String numberOfResultsDatafilesString2;
-
     /**
      * Keyword Search
      */
@@ -175,6 +173,9 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     }
 
     public ISISSearchHistoryBean getIsisSearchHistoryBean() {
+        if (this.isisSearchHistoryBean == null) {
+            this.isisSearchHistoryBean = new ISISSearchHistoryBean();
+        }
         return isisSearchHistoryBean;
     }
 
@@ -183,10 +184,16 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     }
 
     public AdvancedSearchHistoryBean getAdvancedSearchHistoryBean() {
+        if (this.advancedSearchHistoryBean == null) {
+            this.advancedSearchHistoryBean = new AdvancedSearchHistoryBean();
+        }
         return advancedSearchHistoryBean;
     }
 
     public BasicSearchHistoryBean getBasicSearchHistoryBean() {
+        if (this.basicSearchHistoryBean == null) {
+            this.basicSearchHistoryBean = new BasicSearchHistoryBean();
+        }
         return basicSearchHistoryBean;
     }
 

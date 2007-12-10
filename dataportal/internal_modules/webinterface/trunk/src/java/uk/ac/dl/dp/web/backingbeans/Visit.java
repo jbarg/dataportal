@@ -297,7 +297,8 @@ public class Visit extends AbstractSessionBean implements Serializable {
     }
 
     public VisitData getVisitData() {
-        return visitData;
+        if(this.visitData == null) this.visitData = new VisitData();
+        return this.visitData;
     }
 
     public void setVisitData(VisitData visitData) {
