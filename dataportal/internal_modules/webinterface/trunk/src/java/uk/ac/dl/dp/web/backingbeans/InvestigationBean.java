@@ -25,7 +25,10 @@ import uk.ac.dl.dp.web.util.WebConstants;
 import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
+import uk.ac.dp.icatws.Investigator;
+import uk.ac.dp.icatws.Publication;
 import uk.ac.dp.icatws.Sample;
+import uk.ac.dp.icatws.Shift;
 
 /**
  *
@@ -40,7 +43,7 @@ public class InvestigationBean extends SortableList {
     private boolean startFirst = false;
 
     public InvestigationBean() {
-        super("name");        
+        super("name");
     }
 
     public HtmlDataTable getTable() {
@@ -48,7 +51,7 @@ public class InvestigationBean extends SortableList {
     }
 
     public void setTable(HtmlDataTable aTable) {
-        table = aTable;       
+        table = aTable;
     }
 
     protected boolean isDefaultAscending(String sortColumn) {
@@ -64,7 +67,9 @@ public class InvestigationBean extends SortableList {
             getTable().collapseAllDetails();
             getVisitData().setNewResults(false);
         }
-        if(startFirst) table.setFirst(0);
+        if (startFirst) {
+            table.setFirst(0);
+        }
         return (List<Investigation>) getVisitData().getSearchedInvestigations();
     }
 
@@ -81,135 +86,135 @@ public class InvestigationBean extends SortableList {
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
 
-                    public int compare(Object o1, Object o2) {
-                        Investigation c1 = (Investigation) o1;
-                        Investigation c2 = (Investigation) o2;
-                        if (column == null) {
-                            return 0;
-                        }
-                        if (column.equals("facility")) {
-                            if (c1.getFacility() == null && c2.getFacility() == null) {
-                                return 0;
-                            } else if (c1.getFacility() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getFacility() == null) {
-                                return ascending ? -1 : 1;
-                            }
-                            return ascending ? c1.getFacility().compareTo(c2.getFacility()) : c2.getFacility().compareTo(c1.getFacility());
-                        } else if (column.equals("name")) {
-                            if (c1.getTitle() == null && c2.getTitle() == null) {
-                                return 0;
-                            } else if (c1.getTitle() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getTitle() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getTitle().compareTo(c2.getTitle()) : c2.getTitle().compareTo(c1.getTitle());
-                            }
-                        } else if (column.equals("grantId")) {
-                            if (c1.getGrantId() == null && c2.getGrantId() == null) {
-                                return 0;
-                            } else if (c1.getGrantId() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getGrantId() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getGrantId().compareTo(c2.getGrantId()) : c2.getGrantId().compareTo(c1.getGrantId());
-                            }
-                        } else if (column.equals("releaseDate")) {
-                            if (c1.getReleaseDate() == null && c2.getReleaseDate() == null) {
-                                return 0;
-                            } else if (c1.getReleaseDate() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getReleaseDate() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getReleaseDate().toGregorianCalendar().compareTo(c2.getReleaseDate().toGregorianCalendar()) : c2.getReleaseDate().toGregorianCalendar().compareTo(c1.getReleaseDate().toGregorianCalendar());
-                            }
-                        } else if (column.equals("facilityCycle")) {
-                            if (c1.getFacilityCycle() == null && c2.getFacilityCycle() == null) {
-                                return 0;
-                            } else if (c1.getFacilityCycle() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getFacilityCycle() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getFacilityCycle().getName().compareTo(c2.getFacilityCycle().getName()) : c2.getFacilityCycle().getName().compareTo(c1.getFacilityCycle().getName());
-                            }
-                        } else if (column.equals("invNumber")) {
-                            if (c1.getInvNumber() == null && c2.getInvNumber() == null) {
-                                return 0;
-                            } else if (c1.getInvNumber() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getInvNumber() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getInvNumber().compareTo(c2.getInvNumber()) : c2.getInvNumber().compareTo(c1.getInvNumber());
-                            }
-                        } else if (column.equals("visitId")) {
-                            if (c1.getVisitId() == null && c2.getVisitId() == null) {
-                                return 0;
-                            } else if (c1.getVisitId() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getVisitId() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getVisitId().compareTo(c2.getVisitId()) : c2.getVisitId().compareTo(c1.getVisitId());
-                            }
-                        } else if (column.equals("invType")) {
-                            if (c1.getInvType() == null && c2.getInvType() == null) {
-                                return 0;
-                            } else if (c1.getInvType() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getInvType() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType().compareTo(c1.getInvType());
-                            }
-                        } else if (column.equals("abstract")) {
-                            //if no abstract put it behind it
-                            if (c1.getInvAbstract() == null && c2.getInvAbstract() == null) {
-                                return 0;
-                            } else if (c1.getInvAbstract() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getInvAbstract() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getInvAbstract().compareTo(c2.getInvAbstract()) : c2.getInvAbstract().compareTo(c1.getInvAbstract());
-                            }
-                        } else if (column.equals("bcatInvStr")) {
-                            if (c1.getBcatInvStr() == null && c2.getBcatInvStr() == null) {
-                                return 0;
-                            } else if (c1.getBcatInvStr() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getBcatInvStr() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getBcatInvStr().compareTo(c2.getBcatInvStr()) : c2.getBcatInvStr().compareTo(c1.getBcatInvStr());
-                            }
-                        } else if (column.equals("type")) {
-                            if (c1.getInvType() == null && c2.getInvType() == null) {
-                                return 0;
-                            } else if (c1.getInvType() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getInvType() == null) {
-                                return ascending ? -1 : 1;
-                            }
-                            return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType().compareTo(c1.getInvType());
-                        } else if (column.equals("instrument")) {
-                            if (c1.getInstrument() == null && c2.getInstrument() == null) {
-                                return 0;
-                            } else if (c1.getInstrument() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getInstrument() == null) {
-                                return ascending ? -1 : 1;
-                            }
-                            return ascending ? c1.getInstrument().compareTo(c2.getInstrument()) : c2.getInstrument().compareTo(c1.getInstrument());
-                        } else {
-                            return 0;
-                        }
+            public int compare(Object o1, Object o2) {
+                Investigation c1 = (Investigation) o1;
+                Investigation c2 = (Investigation) o2;
+                if (column == null) {
+                    return 0;
+                }
+                if (column.equals("facility")) {
+                    if (c1.getFacility() == null && c2.getFacility() == null) {
+                        return 0;
+                    } else if (c1.getFacility() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getFacility() == null) {
+                        return ascending ? -1 : 1;
                     }
-                };
+                    return ascending ? c1.getFacility().compareTo(c2.getFacility()) : c2.getFacility().compareTo(c1.getFacility());
+                } else if (column.equals("name")) {
+                    if (c1.getTitle() == null && c2.getTitle() == null) {
+                        return 0;
+                    } else if (c1.getTitle() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getTitle() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getTitle().compareTo(c2.getTitle()) : c2.getTitle().compareTo(c1.getTitle());
+                    }
+                } else if (column.equals("grantId")) {
+                    if (c1.getGrantId() == null && c2.getGrantId() == null) {
+                        return 0;
+                    } else if (c1.getGrantId() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getGrantId() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getGrantId().compareTo(c2.getGrantId()) : c2.getGrantId().compareTo(c1.getGrantId());
+                    }
+                } else if (column.equals("releaseDate")) {
+                    if (c1.getReleaseDate() == null && c2.getReleaseDate() == null) {
+                        return 0;
+                    } else if (c1.getReleaseDate() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getReleaseDate() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getReleaseDate().toGregorianCalendar().compareTo(c2.getReleaseDate().toGregorianCalendar()) : c2.getReleaseDate().toGregorianCalendar().compareTo(c1.getReleaseDate().toGregorianCalendar());
+                    }
+                } else if (column.equals("facilityCycle")) {
+                    if (c1.getFacilityCycle() == null && c2.getFacilityCycle() == null) {
+                        return 0;
+                    } else if (c1.getFacilityCycle() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getFacilityCycle() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getFacilityCycle().getName().compareTo(c2.getFacilityCycle().getName()) : c2.getFacilityCycle().getName().compareTo(c1.getFacilityCycle().getName());
+                    }
+                } else if (column.equals("invNumber")) {
+                    if (c1.getInvNumber() == null && c2.getInvNumber() == null) {
+                        return 0;
+                    } else if (c1.getInvNumber() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getInvNumber() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getInvNumber().compareTo(c2.getInvNumber()) : c2.getInvNumber().compareTo(c1.getInvNumber());
+                    }
+                } else if (column.equals("visitId")) {
+                    if (c1.getVisitId() == null && c2.getVisitId() == null) {
+                        return 0;
+                    } else if (c1.getVisitId() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getVisitId() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getVisitId().compareTo(c2.getVisitId()) : c2.getVisitId().compareTo(c1.getVisitId());
+                    }
+                } else if (column.equals("invType")) {
+                    if (c1.getInvType() == null && c2.getInvType() == null) {
+                        return 0;
+                    } else if (c1.getInvType() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getInvType() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType().compareTo(c1.getInvType());
+                    }
+                } else if (column.equals("abstract")) {
+                    //if no abstract put it behind it
+                    if (c1.getInvAbstract() == null && c2.getInvAbstract() == null) {
+                        return 0;
+                    } else if (c1.getInvAbstract() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getInvAbstract() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getInvAbstract().compareTo(c2.getInvAbstract()) : c2.getInvAbstract().compareTo(c1.getInvAbstract());
+                    }
+                } else if (column.equals("bcatInvStr")) {
+                    if (c1.getBcatInvStr() == null && c2.getBcatInvStr() == null) {
+                        return 0;
+                    } else if (c1.getBcatInvStr() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getBcatInvStr() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getBcatInvStr().compareTo(c2.getBcatInvStr()) : c2.getBcatInvStr().compareTo(c1.getBcatInvStr());
+                    }
+                } else if (column.equals("type")) {
+                    if (c1.getInvType() == null && c2.getInvType() == null) {
+                        return 0;
+                    } else if (c1.getInvType() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getInvType() == null) {
+                        return ascending ? -1 : 1;
+                    }
+                    return ascending ? c1.getInvType().compareTo(c2.getInvType()) : c2.getInvType().compareTo(c1.getInvType());
+                } else if (column.equals("instrument")) {
+                    if (c1.getInstrument() == null && c2.getInstrument() == null) {
+                        return 0;
+                    } else if (c1.getInstrument() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getInstrument() == null) {
+                        return ascending ? -1 : 1;
+                    }
+                    return ascending ? c1.getInstrument().compareTo(c2.getInstrument()) : c2.getInstrument().compareTo(c1.getInstrument());
+                } else {
+                    return 0;
+                }
+            }
+        };
         Collections.sort((List<Investigation>) getVisitData().getSearchedInvestigations(), comparator);
 
     }
@@ -217,31 +222,69 @@ public class InvestigationBean extends SortableList {
     //This listens to changes in the users isSelected.  This is because the list could be
     //larger than one page so have to do it this way
    /* public void listen(ValueChangeEvent e){
-        log.debug("value change event");
-        Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
-    
-        Investigation d = (Investigation)table.getRowData();
-        if(e.getNewValue().equals(new Boolean(true)) ){
-            log.trace("true selected boolean");
-            for(Investigation invest : investigations){
-                if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
-                    invest.setSelected(true);
-                    log.trace(invest.isSelected()+" for "+invest.getId());
-    
-                }
-            }
-        }
-        if(e.getNewValue().equals(new Boolean(false)) ){
-            log.trace("false selected boolean");
-            for(Investigation invest : investigations){
-                if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
-                    log.trace("setting false");
-                    invest.setSelected(false);
-                    log.trace(invest.isSelected()+" for "+invest.getId());
-                }
-            }
-        }
+    log.debug("value change event");
+    Collection<Investigation> investigations = getVisitData().getSearchedInvestigations();
+    Investigation d = (Investigation)table.getRowData();
+    if(e.getNewValue().equals(new Boolean(true)) ){
+    log.trace("true selected boolean");
+    for(Investigation invest : investigations){
+    if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
+    invest.setSelected(true);
+    log.trace(invest.isSelected()+" for "+invest.getId());
+    }
+    }
+    }
+    if(e.getNewValue().equals(new Boolean(false)) ){
+    log.trace("false selected boolean");
+    for(Investigation invest : investigations){
+    if(invest.getId().equals(d.getId()) && invest.getFacility().equals(d.getFacility())) {
+    log.trace("setting false");
+    invest.setSelected(false);
+    log.trace(invest.isSelected()+" for "+invest.getId());
+    }
+    }
+    }
     }*/
+    public void getInvestigationInfo(ActionEvent event) {
+        log.trace("getting investigation information");
+        Investigation investigationTable = (Investigation) table.getRowData();
+
+        if (investigationTable.getSampleCollection().size() == 0 && investigationTable.getInvestigatorCollection().size() == 0 &&
+                investigationTable.getShiftCollection().size() == 0) {
+            try {
+                QueryDelegate qd = QueryDelegate.getInstance();
+
+                //get the datafile
+                Collection<Investigation> investigations = new ArrayList<Investigation>();
+                investigations.add(investigationTable);
+                Collection<Investigation> investigationsReturned = qd.getInvestigations(getVisit().getSid(), investigations, InvestigationInclude.INVESTIGATORS_SHIFTS_SAMPLES_AND_PUBLICATIONS);
+
+                Collection<Investigation> searchedInvestigations = getVisitData().getSearchedInvestigations();
+                for (Investigation currentInvestigation : searchedInvestigations) {
+                    if (currentInvestigation.getId().equals(investigationTable.getId())) {
+                        Investigation fullInvestigation = investigationsReturned.iterator().next();
+                        for (Shift shift : fullInvestigation.getShiftCollection()) {
+                            currentInvestigation.getShiftCollection().add(shift);
+                        }
+                        for (Investigator investigator : fullInvestigation.getInvestigatorCollection()) {
+                            currentInvestigation.getInvestigatorCollection().add(investigator);
+                        }
+                        for (Publication publication : fullInvestigation.getPublicationCollection()) {
+                            currentInvestigation.getPublicationCollection().add(publication);
+                        }
+                        for (Sample sample : fullInvestigation.getSampleCollection()) {
+                            currentInvestigation.getSampleCollection().add(sample);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                error("Error: Unable to get investigation Information.");
+                log.fatal("Unable to get investigation information for " + investigationTable.getId() + " user for: " + getVisit().getSid(), ex);
+            }
+        } else {
+            log.trace("Already have parameters for " + investigationTable.getId());
+        }
+    }
 
     /**
      * This listens to changes in the users isSelected using Ajax.  This is because the list could be
@@ -412,7 +455,9 @@ public class InvestigationBean extends SortableList {
                 for (Dataset dataset : invest.getDatasetCollection()) {
                     Long sampleId = dataset.getSampleId();
                     log.trace("dataset " + dataset.getId() + " has sampleId " + sampleId);
-                    if (sampleId == null) log.trace("Setting unique id for " + dataset.getId() + " to: " + invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:");
+                    if (sampleId == null) {
+                        log.trace("Setting unique id for " + dataset.getId() + " to: " + invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:");
+                    }
                     dataset.setUniqueId(invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:");
                     if (sampleId != null) {
                         //now find the investigation with that sampleId                    
@@ -434,7 +479,7 @@ public class InvestigationBean extends SortableList {
             getVisitData().setCurrentInvestigations(investigationsDatasets);
 
         //reset tree so it loads it again
-            //getVisitData().setDataSetTree(null);
+        //getVisitData().setDataSetTree(null);
         } catch (DataPortalException ex) {
             error("Error: Unable to gets Data Sets.");
             log.fatal("Unable to create query user for: " + getVisit().getSid(), ex);
@@ -458,8 +503,8 @@ public class InvestigationBean extends SortableList {
         log.trace("Dummy method called");
         dummyDone = true;
     }
-    
-     /**
+
+    /**
      * Sets if case sensitive is  for a particular item
      */
     public void maxDisplay() {
@@ -480,7 +525,6 @@ public class InvestigationBean extends SortableList {
     }
 
     //for sorting columns
-
     private boolean is(String column) {
         if (getSort().equals(column) && isAscending()) {
             return true;

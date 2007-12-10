@@ -26,16 +26,15 @@ import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dp.icatws.InvestigationInclude;
+
 /**
  *
  * @author gjd37
  */
-
 public class AdvancedSearchBean extends AbstractRequestBean {
 
     private static Logger log = Logger.getLogger(AdvancedSearchBean.class);
     //componets on advanced search page
-
     private String keyword;
     /**
      * Investigation number
@@ -83,7 +82,6 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     private List<String> investigators;
     private List<String> keywords;
     private List<String> facilities;
-    
     /**
      * Investigation run start number
      */
@@ -159,6 +157,13 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         return searchAdvancedNavigation(DPQueryType.ISIS);
     }
 
+    /**
+     * Action method to do basic search for navigation bar
+     */
+    public String searchAdvancedNavigationISISDF() {
+        return searchAdvancedNavigation(DPQueryType.ADVANCED_DATAFILE);
+    }
+
     public String searchAdvancedNavigation(DPQueryType searchType) {
         //sets up initial values        
         QueryRequest query_request = null;
@@ -169,12 +174,12 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-            
+
             SessionHistory sessionHistory = getSessionHistory();
 
             AdvancedSearchHistoryBean advancedTypeSearchHistoryBean = null;
             if (searchType == DPQueryType.ADVANCED) {
-                
+
                 //set history bean
                 advancedTypeSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
 
@@ -183,54 +188,84 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 advancedTypeSearchHistoryBean.setCaseSensitive(getSessionHistory().isAdvancedSearchNavigationCaseSensitive());
 
             } else if (searchType == DPQueryType.ISIS) {
-                
+
                 //set history bean
                 advancedTypeSearchHistoryBean = (AdvancedSearchHistoryBean) sessionHistory.getIsisSearchHistoryBean();
 
                 //prefs           
                 advancedTypeSearchHistoryBean.setAutoComplete(getSessionHistory().isFacilitySearchNavigationAutoComplete());
                 advancedTypeSearchHistoryBean.setCaseSensitive(getSessionHistory().isFacilitySearchNavigationCaseSensitive());
+            } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+            //no need to set anything here as they have already been set         
 
             }
 
             //create advanced search bean
             AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO();
-            asdDTO.setExperimentNumber(advancedTypeSearchHistoryBean.getInvNumber());
 
-            setKeyword(advancedTypeSearchHistoryBean.getKeyword());
-            asdDTO.setKeywords(getKeywords());
-            if (advancedTypeSearchHistoryBean.getGrantId() != null) {
-                asdDTO.setGrantId(new Long(advancedTypeSearchHistoryBean.getGrantId()));
-            }
-            asdDTO.setVisitId(advancedTypeSearchHistoryBean.getVisitId());
-            asdDTO.setSampleName(advancedTypeSearchHistoryBean.getSample());
-            setInstrument(advancedTypeSearchHistoryBean.getInstrument());
-            setInvestigator(advancedTypeSearchHistoryBean.getInvestigator());
-            asdDTO.setInvestigators(getInvestigators());
-            asdDTO.setInstruments(getInstruments());
-            asdDTO.setInvestigationAbstract(advancedTypeSearchHistoryBean.getInvAbstract());
-            asdDTO.setInvestigationName(advancedTypeSearchHistoryBean.getInvName());
-            asdDTO.setInvestigationType(advancedTypeSearchHistoryBean.getInvType());
-            
-            asdDTO.setCaseSensitive(sessionHistory.isAdvancedSearchNavigationCaseSensitive());
-            asdDTO.setInvestigationInclude(InvestigationInclude.NONE);
+            if (searchType != DPQueryType.ADVANCED_DATAFILE) {
+                asdDTO.setExperimentNumber(advancedTypeSearchHistoryBean.getInvNumber());
 
-            //new stuff
-            asdDTO.setDatafileName(advancedTypeSearchHistoryBean.getDatafileName());
-            if (advancedTypeSearchHistoryBean.getRunEnd() != null) {
-                asdDTO.setRunEnd(new Double(advancedTypeSearchHistoryBean.getRunEnd()));
-            }
-            if (advancedTypeSearchHistoryBean.getRunStart() != null) {
-                asdDTO.setRunStart(new Double(advancedTypeSearchHistoryBean.getRunStart()));
-            }
-            asdDTO.setExperimentNumber(advancedTypeSearchHistoryBean.getInvNumber());
-            if (advancedTypeSearchHistoryBean.getFirstDate() != null) {
-                asdDTO.setDateRangeStart(getXMLGregorianCalendar(advancedTypeSearchHistoryBean.getFirstDate()));
-            }
-            if (advancedTypeSearchHistoryBean.getSecondDate() != null) {
-                asdDTO.setDateRangeEnd(getXMLGregorianCalendar(advancedTypeSearchHistoryBean.getSecondDate()));
+                setKeyword(advancedTypeSearchHistoryBean.getKeyword());
+                asdDTO.setKeywords(getKeywords());
+                if (advancedTypeSearchHistoryBean.getGrantId() != null) {
+                    asdDTO.setGrantId(new Long(advancedTypeSearchHistoryBean.getGrantId()));
+                }
+                asdDTO.setVisitId(advancedTypeSearchHistoryBean.getVisitId());
+                asdDTO.setSampleName(advancedTypeSearchHistoryBean.getSample());
+                setInstrument(advancedTypeSearchHistoryBean.getInstrument());
+                setInvestigator(advancedTypeSearchHistoryBean.getInvestigator());
+                asdDTO.setInvestigators(getInvestigators());
+                asdDTO.setInstruments(getInstruments());
+                asdDTO.setInvestigationAbstract(advancedTypeSearchHistoryBean.getInvAbstract());
+                asdDTO.setInvestigationName(advancedTypeSearchHistoryBean.getInvName());
+                asdDTO.setInvestigationType(advancedTypeSearchHistoryBean.getInvType());
+
+                asdDTO.setCaseSensitive(sessionHistory.isAdvancedSearchNavigationCaseSensitive());
+                asdDTO.setInvestigationInclude(InvestigationInclude.NONE);
+
+                //new stuff
+                asdDTO.setDatafileName(advancedTypeSearchHistoryBean.getDatafileName());
+                if (advancedTypeSearchHistoryBean.getRunEnd() != null) {
+                    asdDTO.setRunEnd(new Double(advancedTypeSearchHistoryBean.getRunEnd()));
+                }
+                if (advancedTypeSearchHistoryBean.getRunStart() != null) {
+                    asdDTO.setRunStart(new Double(advancedTypeSearchHistoryBean.getRunStart()));
+                }
+                asdDTO.setExperimentNumber(advancedTypeSearchHistoryBean.getInvNumber());
+                if (advancedTypeSearchHistoryBean.getFirstDate() != null) {
+                    asdDTO.setDateRangeStart(getXMLGregorianCalendar(advancedTypeSearchHistoryBean.getFirstDate()));
+                }
+                if (advancedTypeSearchHistoryBean.getSecondDate() != null) {
+                    asdDTO.setDateRangeEnd(getXMLGregorianCalendar(advancedTypeSearchHistoryBean.getSecondDate()));
+                }
             }
 
+            if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+                List<String> instruments = new ArrayList<String>();
+                instruments.add(sessionHistory.getIsisSearchHistoryBean().getInstrumentDF());
+                asdDTO.setInstruments(instruments);
+                if (sessionHistory.getIsisSearchHistoryBean().getRunEndDF() != null) {
+                    asdDTO.setRunEnd(new Double(sessionHistory.getIsisSearchHistoryBean().getRunEndDF()));
+                }
+                if (sessionHistory.getIsisSearchHistoryBean().getRunStartDF() != null) {
+                    asdDTO.setRunStart(new Double(sessionHistory.getIsisSearchHistoryBean().getRunStartDF()));
+                    if (sessionHistory.getIsisSearchHistoryBean().getRunEndDF() == null) {
+                        asdDTO.setRunEnd(new Double(sessionHistory.getIsisSearchHistoryBean().getRunStartDF()));
+                    }
+                }
+            } else {
+                asdDTO.setInstruments(getInstruments());
+                if (getRunEnd() != null) {
+                    asdDTO.setRunEnd(new Double(getRunEnd()));
+                }
+                if (getRunStart() != null) {
+                    asdDTO.setRunStart(new Double(getRunStart()));
+                    if (getRunEnd() == null) {
+                        asdDTO.setRunEnd(new Double(getRunStart()));
+                    }
+                }
+            }
             //check if the information passed is valid, if not, show the error message
             try {
                 asdDTO.isValid();
@@ -239,14 +274,30 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 return null;
             }
 
-            query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
-            getVisitData().setQueryRequest(query_request);
-            //set the index of the tabbed pane to a search
             if (searchType == DPQueryType.ADVANCED) {
                 getVisit().setTabIndex(1);
             } else if (searchType == DPQueryType.ISIS) {
                 getVisit().setTabIndex(2);
+            } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+                getVisit().setTabIndex(2);
             }
+
+            //set the type of search
+            if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+                query_request = new QueryRequest();
+                query_request.setAdvancedSearch(asdDTO);
+                //wait for results.
+                SearchBean searchBean = (SearchBean) getBean("searchBean");
+                return searchBean.getQueryResults(query_request, searchType, 120);
+            }
+
+
+            query_request = qd.queryAdvanced(getVisit().getSid(), asdDTO, getVisitData().getSelectedFacilities());
+
+            getVisitData().setQueryRequest(query_request);
+            //set the index of the tabbed pane to a search
+
+
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -266,7 +317,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             getVisitData().setSearchedTitle(getVisit().getFacility() + " Search Results");
         }
 
-        //wait for results.
+//wait for results.
         SearchBean searchBean = (SearchBean) getBean("searchBean");
         return searchBean.getQueryResults(query_request, searchType, 120);
     }
@@ -295,7 +346,8 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     /**
      * Action method to do basic search
      */
-    public String searchAdvanced(DPQueryType searchType) {
+    public String searchAdvanced(
+            DPQueryType searchType) {
         //sets up initial values
 
         QueryRequest query_request = null;
@@ -310,8 +362,8 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
             boolean fuzzy = false;
             SessionHistory sessionHistory = getSessionHistory();
-            
-            log.debug("TYPE of SEARCH "+searchType);
+
+            log.debug("TYPE of SEARCH " + searchType);
             if (searchType == DPQueryType.ADVANCED) {
                 //set history bean
                 AdvancedSearchHistoryBean advancedSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
@@ -323,7 +375,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 advancedSearchHistoryBean.setGrantId(getGrantId());
                 advancedSearchHistoryBean.setInvAbstract(getInvAbstract());
                 advancedSearchHistoryBean.setInvType(getInvType());
-                advancedSearchHistoryBean.setInvestigator(getInvestigator());               
+                advancedSearchHistoryBean.setInvestigator(getInvestigator());
                 advancedSearchHistoryBean.setInvName(getInvName());
                 advancedSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
 
@@ -339,11 +391,11 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 advancedSearchHistoryBean.setAutoComplete(sessionHistory.isAdvancedSearchAutoComplete());
                 advancedSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
             } else if (searchType == DPQueryType.ISIS) {
-               
+
                 ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
 
                 isisSearchHistoryBean.setKeyword(getKeyword());
-                isisSearchHistoryBean.setInstrument(getInstrument());              
+                isisSearchHistoryBean.setInstrument(getInstrument());
                 isisSearchHistoryBean.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
                 //log.trace("Run end is "+getRunEnd());
                 isisSearchHistoryBean.setRunEnd(getRunEnd());
@@ -356,7 +408,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 isisSearchHistoryBean.setCaseSensitive(sessionHistory.isAdvancedSearchCaseSensitive());
 
             } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
-               
+
                 ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
 
                 isisSearchHistoryBean.setInstrumentDF(getInstrumentDF());
@@ -367,16 +419,17 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
             }
 
-            //create advanced search bean
+//create advanced search bean
             AdvancedSearchDetailsDTO asdDTO = new AdvancedSearchDetailsDTO();
             asdDTO.setExperimentNumber(getInvNumber());
             asdDTO.setKeywords(getKeywords());
             if (getGrantId() != null) {
                 asdDTO.setGrantId(new Long(getGrantId()));
             }
+
             asdDTO.setVisitId(getVisitId());
             asdDTO.setSampleName(getSample());
-            asdDTO.setInvestigators(getInvestigators());            
+            asdDTO.setInvestigators(getInvestigators());
             asdDTO.setInvestigationAbstract(getInvAbstract());
             asdDTO.setInvestigationName(getInvName());
             asdDTO.setInvestigationType(getInvType());
@@ -391,22 +444,26 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 if (getRunEndDF() != null) {
                     asdDTO.setRunEnd(new Double(getRunEndDF()));
                 }
+
                 if (getRunStartDF() != null) {
                     asdDTO.setRunStart(new Double(getRunStartDF()));
                     if (getRunEndDF() == null) {
                         asdDTO.setRunEnd(new Double(getRunStartDF()));
                     }
+
                 }
             } else {
                 asdDTO.setInstruments(getInstruments());
                 if (getRunEnd() != null) {
                     asdDTO.setRunEnd(new Double(getRunEnd()));
                 }
+
                 if (getRunStart() != null) {
                     asdDTO.setRunStart(new Double(getRunStart()));
                     if (getRunEnd() == null) {
                         asdDTO.setRunEnd(new Double(getRunStart()));
                     }
+
                 }
             }
 
@@ -414,6 +471,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             if (getFirstDate() != null) {
                 asdDTO.setDateRangeStart(getXMLGregorianCalendar(getFirstDate()));
             }
+
             if (getSecondDate() != null) {
                 asdDTO.setDateRangeEnd(getXMLGregorianCalendar(getSecondDate()));
             }
@@ -428,7 +486,15 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 return null;
             }
 
-            //set the type of search
+            if (searchType == DPQueryType.ADVANCED) {
+                getVisit().setTabIndex(1);
+            } else if (searchType == DPQueryType.ISIS) {
+                getVisit().setTabIndex(2);
+            } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
+                getVisit().setTabIndex(2);
+            }
+
+//set the type of search
             if (searchType == DPQueryType.ADVANCED_DATAFILE) {
                 query_request = new QueryRequest();
                 query_request.setAdvancedSearch(asdDTO);
@@ -441,13 +507,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             getVisitData().setQueryRequest(query_request);
             //set the index of the tabbed pane to a search
 
-            if (searchType == DPQueryType.ADVANCED) {
-                getVisit().setTabIndex(1);
-            } else if (searchType == DPQueryType.ISIS) {
-                getVisit().setTabIndex(2);
-            } else if (searchType == DPQueryType.ADVANCED_DATAFILE) {
-                getVisit().setTabIndex(2);
-            }
+
 
             log.info("Query Id is " + query_request.getQueryid());
         } catch (DataPortalException ex) {
@@ -460,14 +520,14 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             return null;
         }
 
-        //set the title from the seach
+//set the title from the seach
         if (searchType == DPQueryType.ADVANCED) {
             getVisitData().setSearchedTitle("Advanced Search Results");
         } else if (searchType == DPQueryType.ISIS) {
             getVisitData().setSearchedTitle(getVisit().getFacility() + " Search Results");
         }
 
-        //wait for results.
+//wait for results.
         SearchBean searchBean = (SearchBean) getBean("searchBean");
         return searchBean.getQueryResults(query_request, searchType, 120);
     }
@@ -484,6 +544,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             log.warn(e);
             return null;
         }
+
         Calendar dateNeeded = Calendar.getInstance();
         dateNeeded.setTime(date);
         xmlCal.setDay(dateNeeded.get(Calendar.DAY_OF_MONTH));
@@ -506,11 +567,11 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 log.trace("Invalid keyword " + val);
                 throw new ValidatorException(new FacesMessage("Validation Error", "Validation Error: Enter keyword."));
             }
+
         }
     }
 
     //getters setters of page info
-
     public List<String> getKeywords() {
         return keywords;
     }
@@ -526,13 +587,14 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     public void setFacilities(List<String> facilities) {
         this.facilities = facilities;
     }
-   
+
     public String getInvNumber() {
         if (invNumber == null || invNumber.equals("")) {
             return null;
         } else {
             return invNumber;
         }
+
     }
 
     public void setInvNumber(String invNumber) {
@@ -545,6 +607,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return invType;
         }
+
     }
 
     public void setInvType(String invType) {
@@ -557,6 +620,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return visitId;
         }
+
     }
 
     public void setVisitId(String visitId) {
@@ -569,6 +633,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return grantId;
         }
+
     }
 
     public void setGrantId(String grantId) {
@@ -581,6 +646,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return invName;
         }
+
     }
 
     public void setInvName(String invName) {
@@ -593,6 +659,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return invAbstract;
         }
+
     }
 
     public void setInvAbstract(String invAbstract) {
@@ -612,6 +679,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             instrumentsNew.add(instrument);
             this.setInstruments(instrumentsNew);
         }
+
         log.trace("Instrument is " + this.instrument);
         log.trace("Instruments is " + this.instruments);
     }
@@ -629,6 +697,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             instrumentsDF.add(instrumentDF);
             this.setInstrumentsDF(instrumentsDF);
         }
+
         log.trace("Instrument is " + this.instrumentDF);
         log.trace("Instruments is " + this.instrumentsDF);
     }
@@ -655,6 +724,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return sample;
         }
+
     }
 
     public void setSample(String sample) {
@@ -677,10 +747,11 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 if (!k.trim().equals("")) {
                     newInvestigators.add(k.trim());
                 }
+
             }
             this.setInvestigators(newInvestigators);
         }
-    //  log.trace("Investigators : "+investigators);
+//  log.trace("Investigators : "+investigators);
     }
 
     public List<String> getInvestigators() {
@@ -691,10 +762,9 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         this.investigators = investigators;
     }
 
-    //way to validate two components.  Put val on last one and then check the local value (in this class)
-    // of the other one abobve it in the page
-    // before cannot be after after !!
-
+//way to validate two components.  Put val on last one and then check the local value (in this class)
+// of the other one abobve it in the page
+// before cannot be after after !!
     public void validateDate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         log.debug("validateDate: ");
         if (value != null) {
@@ -705,6 +775,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                     log.trace("Invalid");
                     throw new ValidatorException(new FacesMessage("Validation Error", "End Date cannot be before Start Date."));
                 }
+
             }
         }
     }
@@ -712,7 +783,6 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     //way to validate two components.  Put val on last one and then check the local value (in this class)
     // of the other one abobve it in the page
     // before cannot be after after !!
-
     public void validateRun(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         log.debug("validateRunNumber: ");
         if (value != null) {
@@ -724,6 +794,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                     log.trace("Invalid");
                     throw new ValidatorException(new FacesMessage("Validation Error", "Run end number cannot be lower than run start number"));
                 }
+
             }
         }
     }
@@ -731,7 +802,6 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     //way to validate two components.  Put val on last one and then check the local value (in this class)
     // of the other one abobve it in the page
     // before cannot be after after !!
-
     public void validateRunDF(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         log.debug("validateRunNumberDF: ");
         if (value != null) {
@@ -743,6 +813,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                     log.trace("Invalid");
                     throw new ValidatorException(new FacesMessage("Validation Error", "Run end number cannot be lower than run start number"));
                 }
+
             }
         }
     }
@@ -785,6 +856,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return datafileName;
         }
+
     }
 
     public void setDatafileName(String datafileName) {
@@ -813,6 +885,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return runStart;
         }
+
     }
 
     public void setRunStart(String runStart) {
@@ -825,6 +898,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return runEnd;
         }
+
     }
 
     public void setRunEnd(String runEnd) {
@@ -837,6 +911,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return runStartDF;
         }
+
     }
 
     public void setRunStartDF(String runStartDF) {
@@ -849,6 +924,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
         } else {
             return runEndDF;
         }
+
     }
 
     public void setRunEndDF(String runEndDF) {

@@ -71,14 +71,14 @@ public class ISISSearchHistoryBean extends AdvancedSearchHistoryBean {
         return runStartUIDF;
     }
     
-    public void setRunStartUI(UIInput runStartUIDF) {
+    public void setRunStartUIDF(UIInput runStartUIDF) {
         this.runStartUIDF = runStartUIDF;
     }
     
     // way to validate two components.  Put val on last one and then check the local value (in this class)
     // of the other one abobve it in the page
     // before cannot be after after !!
-    public void validateRun(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
+    public void validateRunDF(FacesContext context, UIComponent component,  Object value) throws ValidatorException {
         log.debug("validateRunNumberDF: ");
         if (value != null) {
             if(getRunStartUIDF().getLocalValue() != null){
