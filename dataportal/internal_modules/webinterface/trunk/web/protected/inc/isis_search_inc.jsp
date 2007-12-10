@@ -427,9 +427,9 @@
             
             <!----------------     Start of instrument ---------------->
             <h:outputLabel>            
-                <h:outputText value="Instrument: " style="font-size: 14px" />                   
+                <h:outputText value="Instrument: " style="font-size: 14px" /> 
             </h:outputLabel>
-            
+           
             <h:selectOneMenu id="instrumentDFj_id_1" required="true" value="#{advancedSearchBean.instrumentDF}" >                           
                 <f:selectItems value="#{visit.customisation.instrumentsItems}" />                           
             </h:selectOneMenu>           
