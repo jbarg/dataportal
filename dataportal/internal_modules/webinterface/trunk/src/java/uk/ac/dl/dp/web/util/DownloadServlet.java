@@ -41,7 +41,7 @@ public class DownloadServlet extends HttpServlet {
         workingDir = sc.getRealPath("");
         context = sc.getContextPath();
         
-        try {
+       /* try {
             
             boolean isSet = DownloadDelegate.getInstance().isSet();
             if(!isSet){
@@ -75,7 +75,7 @@ public class DownloadServlet extends HttpServlet {
             }
         } catch (Exception ex) {
             log.warn("Error setting up the constants",ex);
-        }
+        }*/
     }
     
     /** Destroys the servlet.

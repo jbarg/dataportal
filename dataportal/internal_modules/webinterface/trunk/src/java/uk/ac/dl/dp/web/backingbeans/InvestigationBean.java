@@ -249,7 +249,7 @@ public class InvestigationBean extends SortableList {
         log.trace("getting investigation information");
         Investigation investigationTable = (Investigation) table.getRowData();
 
-        if (investigationTable.getSampleCollection().size() == 0 && investigationTable.getInvestigatorCollection().size() == 0 &&
+        if (investigationTable.getInvestigatorCollection().size() == 0 &&
                 investigationTable.getShiftCollection().size() == 0) {
             try {
                 QueryDelegate qd = QueryDelegate.getInstance();
@@ -272,9 +272,9 @@ public class InvestigationBean extends SortableList {
                         for (Publication publication : fullInvestigation.getPublicationCollection()) {
                             currentInvestigation.getPublicationCollection().add(publication);
                         }
-                        for (Sample sample : fullInvestigation.getSampleCollection()) {
+                        /*for (Sample sample : fullInvestigation.getSampleCollection()) {
                             currentInvestigation.getSampleCollection().add(sample);
-                        }
+                        }*/
                     }
                 }
             } catch (Exception ex) {
@@ -464,9 +464,9 @@ public class InvestigationBean extends SortableList {
                         for (Investigation investigationsSearched : getVisitData().getSearchedInvestigations()) {
                             for (Sample sample : investigationsSearched.getSampleCollection()) {
                                 if (sample.getId().equals(sampleId)) {
-                                    log.trace("Setting unique id for " + dataset.getId() + " to: " + invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName() + " - " + sample.getInstance());
+                                    log.trace("Setting unique id for " + dataset.getId() + " to: " + invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName() );
                                     //got the sample for dataset from its Id from parent investigation
-                                    dataset.setUniqueId(invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName() + " - " + sample.getInstance());
+                                    dataset.setUniqueId(invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName());
                                     break;
                                 }
                             }

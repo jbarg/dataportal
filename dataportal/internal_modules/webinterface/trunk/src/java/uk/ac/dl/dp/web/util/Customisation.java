@@ -51,6 +51,10 @@ public class Customisation {
      */
     private boolean visitIdVisible;
      /**
+     * Is cycle displayed
+     */
+    private boolean cycleVisible;
+     /**
      * Is facility search page displayed
      */
     private boolean facilitySearchPageVisible;
@@ -105,6 +109,12 @@ public class Customisation {
                 facilitySearchPageVisible = new Boolean(getProperty("facility.search.page.visible", "false")).booleanValue();
             } catch (Exception mre) {
                 facilitySearchPageVisible = false;
+            }
+            
+             try {
+                cycleVisible = new Boolean(getProperty("cycle.visible", "false")).booleanValue();
+            } catch (Exception mre) {
+                cycleVisible = false;
             }
              
             //load up select items for advanced search
@@ -242,6 +252,15 @@ public class Customisation {
 
     public void setFacilitySearchPageVisible(boolean facilitySearchPageVisible) {
         this.facilitySearchPageVisible = facilitySearchPageVisible;
+    }
+    
+    
+    public boolean isCycleVisible() {
+        return cycleVisible;
+    }
+
+    public void setCycleVisible(boolean cycleVisible) {
+        this.cycleVisible = cycleVisible;
     }
 }
 
