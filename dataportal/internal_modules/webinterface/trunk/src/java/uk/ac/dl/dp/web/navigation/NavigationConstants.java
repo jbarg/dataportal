@@ -24,6 +24,9 @@ public class NavigationConstants {
     public final static String LOGIN_SUCCESS_MYDATA = "LOGIN_SUCCESS_MYDATA";
     public final static String LOGIN_SUCCESS_BOOKMARKS = "LOGIN_SUCCESS_BOOKMARKS";
     public final static String LOGIN_SUCCESS_ADVANCED = "LOGIN_SUCCESS_ADVANCED";
+    public final static String LOGIN_SUCCESS_ISIS = "LOGIN_SUCCESS_ISIS";
+    public final static String LOGIN_SUCCESS_DIAMOND = "LOGIN_SUCCESS_DIAMOND";
+     public final static String LOGIN_SUCCESS_CLF = "LOGIN_SUCCESS_CLF";
     public final static String LOGIN_SUCCESS_DATA_REFS = "LOGIN_SUCCESS_DATA_REFS";
     //searching navs
 

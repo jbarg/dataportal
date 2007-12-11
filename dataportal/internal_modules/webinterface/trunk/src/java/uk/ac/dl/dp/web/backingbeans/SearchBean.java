@@ -218,7 +218,7 @@ public class SearchBean extends AbstractRequestBean {
            
             KeywordDetails details = new KeywordDetails();            
             details.setCaseSensitve(sessionHistory.isKeywordSearchCaseSensitive());
-            details.setInvestigationIncludes(InvestigationInclude.NONE);
+            details.setInvestigationIncludes(InvestigationInclude.SAMPLES_ONLY);
            
             for (String keyword : keywords) {
                 details.getKeywords().add(keyword);
@@ -298,7 +298,7 @@ public class SearchBean extends AbstractRequestBean {
 
             KeywordDetails details = new KeywordDetails();            
             details.setCaseSensitve(sessionHistory.isKeywordSearchNavigationCaseSensitive());
-            details.setInvestigationIncludes(InvestigationInclude.NONE);
+            details.setInvestigationIncludes(InvestigationInclude.SAMPLES_ONLY);
             details.setOperator(type);
             for (String keyword : getKeywords()) {
                 details.getKeywords().add(keyword);

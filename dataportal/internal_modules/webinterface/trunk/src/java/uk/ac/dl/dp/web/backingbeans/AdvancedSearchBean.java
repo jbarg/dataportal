@@ -222,7 +222,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 asdDTO.setInvestigationType(advancedTypeSearchHistoryBean.getInvType());
 
                 asdDTO.setCaseSensitive(sessionHistory.isAdvancedSearchNavigationCaseSensitive());
-                asdDTO.setInvestigationInclude(InvestigationInclude.NONE);
+                asdDTO.setInvestigationInclude(InvestigationInclude.SAMPLES_ONLY);
 
                 //new stuff
                 asdDTO.setDatafileName(advancedTypeSearchHistoryBean.getDatafileName());
@@ -312,7 +312,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
         if (searchType == DPQueryType.ADVANCED) {
             //set the title from the seach
-            getVisitData().setSearchedTitle("Advanced Search");
+            getVisitData().setSearchedTitle("Advanced Search Results");
         } else if (searchType == DPQueryType.ISIS) {
             getVisitData().setSearchedTitle(getVisit().getFacility() + " Search Results");
         }
@@ -476,7 +476,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
                 asdDTO.setDateRangeEnd(getXMLGregorianCalendar(getSecondDate()));
             }
 
-            asdDTO.setInvestigationInclude(InvestigationInclude.NONE);
+            asdDTO.setInvestigationInclude(InvestigationInclude.SAMPLES_ONLY);
 
             //check if the information passed is valid, if not, show the error message
             try {
