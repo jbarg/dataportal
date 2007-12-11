@@ -418,16 +418,16 @@
                     
                     
                     <!----------------     Start of visit id ---------------->
-                    <h:outputLabel>            
-                        <h:outputText value="Visit Id" style="font-size: 10px" />                   
+                    <h:outputLabel rendered="#{visit.customisation.visitIdVisible}">            
+                        <h:outputText rendered="#{visit.customisation.visitIdVisible}" value="Visit Id" style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <h:inputText styleClass="text" id="visitIdj_id_1" size="14" required="false" value="#{sessionHistory.advancedSearchHistoryBean.visitId}">
+                    <h:inputText rendered="#{visit.customisation.visitIdVisible}" styleClass="text" id="visitIdj_id_1" size="14" required="false" value="#{sessionHistory.advancedSearchHistoryBean.visitId}">
                         
                     </h:inputText>        
                     
-                    <h:panelGroup/>
-                    <h:message for="visitIdj_id_1" styleClass="error"/>
+                    <h:panelGroup rendered="#{visit.customisation.visitIdVisible}" />
+                    <h:message rendered="#{visit.customisation.visitIdVisible}" for="visitIdj_id_1" styleClass="error"/>
                     
                     <!----------------     End of visit id ---------------->
                     
@@ -446,16 +446,16 @@
                     <!----------------     End of grant id ---------------->
                     
                     <!----------------     Start of Inv no ---------------->
-                    <h:outputLabel>            
-                        <h:outputText value="Inv Number:" style="font-size: 10px" />                   
+                    <h:outputLabel rendered="#{visit.customisation.invNumberVisible}">             
+                        <h:outputText rendered="#{visit.customisation.invNumberVisible}" value="Rb Number" style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <h:inputText styleClass="text" id="invNumj_id_1" size="14" required="false" value="#{sessionHistory.advancedSearchHistoryBean.invNumber}">                       
+                    <h:inputText rendered="#{visit.customisation.invNumberVisible}" styleClass="text" id="invNumj_id_1" size="14" required="false" value="#{sessionHistory.advancedSearchHistoryBean.invNumber}">                       
                     </h:inputText>        
                     
                     
-                    <h:panelGroup/>
-                    <h:message for="invNumj_id_1" showDetail="false" showSummary="true" styleClass="error"/>
+                    <h:panelGroup rendered="#{visit.customisation.invNumberVisible}"/>
+                    <h:message rendered="#{visit.customisation.invNumberVisible}" for="invNumj_id_1" showDetail="false" showSummary="true" styleClass="error"/>
                     
                     <!----------------     End of Inv no ---------------->
                     
@@ -677,7 +677,7 @@
                     
                     <h:panelGroup >
                         
-                        <h:inputText styleClass="text" id="runNumberMinDFj_id_1" size="5" required="false" binding="#{sessionHistory.isisSearchHistoryBean.runStartUIDF}" value="#{sessionHistory.isisSearchHistoryBean.runStartDF}" >
+                        <h:inputText styleClass="text" id="runNumberMinDFj_id_1" size="5" required="true" binding="#{sessionHistory.isisSearchHistoryBean.runStartUIDF}" value="#{sessionHistory.isisSearchHistoryBean.runStartDF}" >
                             <f:validateDoubleRange minimum="0" maximum="90000000" />
                         </h:inputText>                
                         &nbsp;
@@ -700,7 +700,7 @@
                         <h:outputText value="Instrument " style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <h:selectOneMenu id="instrumentj_id_DF" required="false" value="#{sessionHistory.isisSearchHistoryBean.instrumentDF}" >                           
+                    <h:selectOneMenu id="instrumentj_id_DF" required="true" value="#{sessionHistory.isisSearchHistoryBean.instrumentDF}" >                           
                         <f:selectItems value="#{visit.customisation.instrumentsItems}" />                           
                     </h:selectOneMenu> 
                     

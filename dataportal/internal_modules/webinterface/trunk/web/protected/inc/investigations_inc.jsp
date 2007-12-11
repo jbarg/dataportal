@@ -187,7 +187,7 @@
                                 
                             </h:column>
                             
-                            <!--    Experiment Number (Run#)              -->                                            
+                            <!--    Experiment Number (Rb #)              -->                                            
                             <h:column rendered="#{visit.customisation.invNumberVisible}">
                                 <f:facet name="header">
                                     <a4j:commandLink reRender="data" style="table-header" ajaxSingle="true" id="invNumber" actionListener="#{investigationBean.sortColumn}">
@@ -464,12 +464,12 @@
                                                 <h:outputText  value="#{sample.name}" style="font-size:12px;"  />  
                                             </h:column>
                                             
-                                            <h:column>
+                                         <%--   <h:column>
                                                 <f:facet name="header">
                                                     <h:outputText value="Instance" style="font-size:12px; color: blue;  font-weight: bold;" />
                                                 </f:facet> 
                                                 <h:outputText  value="#{sample.instance}" style="font-size:12px;"  />  
-                                            </h:column>                            
+                                            </h:column>    --%>                        
                                         </t:dataTable>                           
                                     </h:column> 
                                     

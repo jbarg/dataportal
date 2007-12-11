@@ -9,56 +9,55 @@
 
 <script type="text/javascript">
     function extractCity(citystatezip) {
-    var index = citystatezip.indexOf(',');
-    var nextcity = citystatezip.substring(0, index+4);
-    
-    
-    
-    return citystatezip;
+        var index = citystatezip.indexOf(',');
+        var nextcity = citystatezip.substring(0, index+4);
+        
+        
+        
+        return citystatezip;
     }
     
     
     function chooseCity(city) {
-    var textField = document.getElementById('body:autofillform:keywordFieldj_id_1');
-    if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_2');
-    if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_3');   
-    
-    var oldvalue = textField.value;
-    
-    var index = oldvalue.lastIndexOf(' ');
-    
-    var old = oldvalue.substring(0, index);
-    
-    
-    if(old == ""){
-    
-    textField.value = city+" ";        
-    
+        var textField = document.getElementById('body:autofillform:keywordFieldj_id_1');
+        if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_2');
+        if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_3');   
+        
+        var oldvalue = textField.value;
+        
+        var index = oldvalue.lastIndexOf(' ');
+        
+        var old = oldvalue.substring(0, index);
+        
+        
+        if(old == ""){
+            
+            textField.value = city+" ";        
+            
+        }
+        else {
+            
+            textField.value = old+" "+city+" ";
+            
+        }
+        //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
+        
+        
     }
-    else {
-    
-    textField.value = old+" "+city+" ";
-    
-    }
-    //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
-    
-    
-    }
     
     
     
-</script>
-
-
-<br />
+    </script>
 
 <a4j:region  selfRendered="true"> 
-     <h5>Investigation Search</h5>
+    <h:panelGrid border="0" columns="2"> 
+        <h:messages globalOnly="true" errorClass="error" infoClass="info" />        
+    </h:panelGrid>
+    
+    <h5>Investigation Search</h5>
+    
     <h:form id="autofillform">
-        <h:panelGrid border="0" columns="2"> 
-            <h:messages globalOnly="true" errorClass="error" infoClass="info" />
-            
-        </h:panelGrid>
+        
         
         <h:panelGrid  border="0" columns="4">      
             
@@ -113,8 +112,8 @@
                         <h:panelGrid  columns="1" >                            
                             <h3>Keyword(s)</h3>
                             <p> Use * to denote a wild card.  I.e.  *data, data* or *data*portal*<br />
-                            <br />Searching ship* will match ships and shipping, when SHIP* will<br />
-                             match SHIPS and shipping if Case Sensitive is turned off (unchecked)</p> 
+                                <br />Searching ship* will match ships and shipping, when SHIP* will<br />
+                            match SHIPS and shipping if Case Sensitive is turned off (unchecked)</p> 
                             
                             
                         </h:panelGrid>
@@ -168,7 +167,7 @@
                         <h:panelGrid columns="1" >
                             <h3>Auto Complete</h3>
                             <p>'Yes' auto complete is enabled.  If enabled, the list is not a full <br />
-                              list of all your possible keywords, only alpha numeric.<br /> 
+                                list of all your possible keywords, only alpha numeric.<br /> 
                             'No' auto complete is disabled</p>   
                             
                             <h3>Case Sensitive</h3>

@@ -48,18 +48,16 @@
     
 </script>
 
-
 <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties"  />
-
 
 <a4j:region  selfRendered="true"> 
     
     <h:panelGrid border="0" columns="2"> 
-        <h:messages globalOnly="true" errorClass="error" infoClass="info" />
-        
+        <h:messages globalOnly="true" errorClass="error" infoClass="info" />        
     </h:panelGrid>
     
     <h5>Investigation Search</h5>
+    
     <h:form id="autofillform">
         
         <h:panelGrid id="searchPanelGrid" border="0" columns="4">      
@@ -445,8 +443,7 @@
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
                              <h3>Instrument</h3>
-                            <p>Instrument used in creating the datafile<br /><br />
-                            If you do not select any it will search all intruments.
+                            <p>Instrument used in creating the datafile.
                             </p> 
                         </h:panelGrid>
                     </h:panelGroup>
