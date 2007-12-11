@@ -8,57 +8,59 @@
 
 <script type="text/javascript">
     function extractCity(citystatezip) {
-    var index = citystatezip.indexOf(',');
-    var nextcity = citystatezip.substring(0, index+4);
-    //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').value;
-    //alert(oldvalue);
-    
-    return citystatezip;
+        var index = citystatezip.indexOf(',');
+        var nextcity = citystatezip.substring(0, index+4);
+        //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').value;
+        //alert(oldvalue);
+        
+        return citystatezip;
     }
     
     
     function chooseCity(city) {
-    var textField = document.getElementById('body:autofillform:keywordFieldj_id_1');
-    if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_2');
-    if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_3');   
-    
-    var oldvalue = textField.value;
-    
-    var index = oldvalue.lastIndexOf(' ');
-    
-    var old = oldvalue.substring(0, index);
-    
-    
-    if(old == ""){
-    
-    textField.value = city+" ";        
-    
+        var textField = document.getElementById('body:autofillform:keywordFieldj_id_1');
+        if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_2');
+        if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_3');   
+        
+        var oldvalue = textField.value;
+        
+        var index = oldvalue.lastIndexOf(' ');
+        
+        var old = oldvalue.substring(0, index);
+        
+        
+        if(old == ""){
+            
+            textField.value = city+" ";        
+            
+        }
+        else {
+            
+            textField.value = old+" "+city+" ";
+            
+        }
+        //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
+        
+        
     }
-    else {
-    
-    textField.value = old+" "+city+" ";
-    
-    }
-    //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
-    
-    
-    }
     
     
     
-</script>
-<br />
+    </script>
+
 
 <f:loadBundle basename="uk.ac.dl.dp.web.messages.facility" var="facility_properties"  />
 
 
 <a4j:region  selfRendered="true"> 
+    <h:panelGrid border="0" columns="2"> 
+        <h:messages globalOnly="true" errorClass="error" infoClass="info" />        
+    </h:panelGrid>
+    
     <h5>Investigation Search</h5>
+    
     <h:form id="autofillform">
-        <h:panelGrid border="0" columns="2"> 
-            <h:messages globalOnly="true" errorClass="error" infoClass="info" />
-            
-        </h:panelGrid>
+        
         
         <h:panelGrid  border="0" columns="4">      
             
@@ -112,9 +114,9 @@
                         <h:panelGrid columns="1" >
                             <h3>Keyword(s)</h3>
                             <p> Use * to denote a wild card.  I.e.  *data, data* or *data*portal*<br />
-                              <br />Searching ship* will match ships and shipping, when SHIP* will<br />
-                             match SHIPS and shipping if Case Sensitive is turned off (unchecked)</p> 
-                          
+                                <br />Searching ship* will match ships and shipping, when SHIP* will<br />
+                            match SHIPS and shipping if Case Sensitive is turned off (unchecked)</p> 
+                            
                         </h:panelGrid>
                     </h:panelGroup>
                 </f:facet>
@@ -471,7 +473,7 @@
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
-                           <h3>End date</h3>
+                            <h3>End date</h3>
                             <p>End date range for the investigation.<br />
                                 <br />If this is left empty the search will have no end date, only a start date<br />
                                 so it will return all the investigations after the start date
@@ -487,18 +489,18 @@
             <!----------------     End of End Date ---------------->
             
             <!----------------     Start of Visit Id ---------------->
-            <h:outputLabel>            
-                <h:outputText value="Visit Id:" style="font-size: 14px" />                   
+            <h:outputLabel rendered="#{visit.customisation.visitIdVisible}">            
+                <h:outputText rendered="#{visit.customisation.visitIdVisible}" value="Visit Id:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <h:inputText styleClass="text" id="visitIdj_id_1" size="20" required="false" value="#{advancedSearchBean.visitId}" />
+            <h:inputText rendered="#{visit.customisation.visitIdVisible}" styleClass="text" id="visitIdj_id_1" size="20" required="false" value="#{advancedSearchBean.visitId}" />
             
-            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
+            <t:popup rendered="#{visit.customisation.visitIdVisible}" styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
                      displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help_16.png" border="0" />
+                <t:graphicImage rendered="#{visit.customisation.visitIdVisible}" url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
@@ -510,7 +512,7 @@
                 </f:facet>
             </t:popup>
             
-            <h:message for="visitIdj_id_1" styleClass="error"/>
+            <h:message rendered="#{visit.customisation.visitIdVisible}" for="visitIdj_id_1" styleClass="error"/>
             
             <!----------------     End of Visit Id ---------------->
             
@@ -545,20 +547,20 @@
             <!----------------     End of Grant Id ---------------->
             
             <!----------------     Start of Inv no ---------------->
-            <h:outputLabel>            
-                <h:outputText value="Inv Number:" style="font-size: 14px" />                   
+            <h:outputLabel rendered="#{visit.customisation.invNumberVisible}">            
+                <h:outputText rendered="#{visit.customisation.invNumberVisible}" value="Rb Number:" style="font-size: 14px" />                   
             </h:outputLabel>
             
-            <h:inputText styleClass="text" id="invNumj_id_1" size="20" required="false" value="#{advancedSearchBean.invNumber}">
+            <h:inputText rendered="#{visit.customisation.invNumberVisible}" styleClass="text" id="invNumj_id_1" size="20" required="false" value="#{advancedSearchBean.invNumber}">
                 
             </h:inputText>        
             
-            <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
+            <t:popup rendered="#{visit.customisation.invNumberVisible}" styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
                      closePopupOnExitingPopup="true"
                      displayAtDistanceX="15"
                      displayAtDistanceY="-40" >
                 
-                <t:graphicImage url="../../images/help_16.png" border="0" />
+                <t:graphicImage rendered="#{visit.customisation.invNumberVisible}" url="../../images/help_16.png" border="0" />
                 <f:facet name="popup">
                     <h:panelGroup>
                         <h:panelGrid columns="1" >
@@ -570,7 +572,7 @@
                 </f:facet>
             </t:popup>
             
-            <h:message for="invNumj_id_1" showDetail="false" showSummary="true" styleClass="error"/>
+            <h:message rendered="#{visit.customisation.invNumberVisible}" for="invNumj_id_1" showDetail="false" showSummary="true" styleClass="error"/>
             
             <!----------------     End of Inv no ---------------->
             
@@ -643,7 +645,7 @@
                         <h:panelGrid columns="1" >                                                            
                             <h3>Instrument</h3>
                             <p>Instrument used in investigation<br /><br />
-                            If you do not select any it will search all intruments.
+                                If you do not select any it will search all intruments.
                             </p>
                         </h:panelGrid>
                     </h:panelGroup>

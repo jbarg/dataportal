@@ -23,12 +23,12 @@
                 
                 <t:navigationMenuItem split="true"> </t:navigationMenuItem> 
                 
-                <t:navigationMenuItem id="nav_4"  itemLabel="Data Links" >                  
+            <%--    <t:navigationMenuItem id="nav_4"  itemLabel="Data Links" >                  
                 <t:navigationMenuItem id="nav_4_1"  itemLabel="Data References" action="GOTO_DATA_REFERENCES" />
                 <t:navigationMenuItem id="nav_4_2"  itemLabel="Bookmarks" action="GOTO_BOOKMARKS" />
                 </t:navigationMenuItem> 
                 
-                <t:navigationMenuItem split="true"> </t:navigationMenuItem> 
+                <t:navigationMenuItem split="true"> </t:navigationMenuItem> --%>
                 
                 <t:navigationMenuItem id="nav_5"  itemLabel="User Preferences &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;" action="GOTO_USER_PREFS" />
                 

@@ -106,8 +106,7 @@ function waitStatus(){
                                 </h:selectBooleanCheckbox>--%>
                             </h:panelGroup>
                         </f:facet>
-                        
-                        
+                                                
                         <%----   Investigation branch ----%>
                         <f:facet name="invest">
                             <h:panelGroup>
@@ -145,8 +144,7 @@ function waitStatus(){
                                     <f:param name="datasets" value="#{node.identifier}"/>             
                                 </a4j:commandLink>
                             </h:panelGroup>
-                        </f:facet>
-                        
+                        </f:facet>                        
                         
                         <%----   Dataset status  ----%>
                         <f:facet name="status-folder">
@@ -341,11 +339,9 @@ function waitStatus(){
                                 
                             </h:panelGroup>
                         </f:facet>
-                        
-                        
+                                                
                     </t:tree2>
-                    
-                    
+                                        
                 </tr>
             </tbody>      
             
@@ -899,7 +895,7 @@ function waitStatus(){
                     <f:facet name="header">
                         
                         <a4j:commandLink reRender="dataset, props" style="table-header" id="sample" actionListener="#{datasetBean.sortColumn}">
-                            <h:outputText value="Sample - Instance" />
+                            <h:outputText value="Sample" />
                             <f:param name="column" value="sample"/>
                             <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
                             <t:graphicImage id="aformatTypeds" value="../../images/ascending-arrow.gif" rendered="#{datasetBean.sample}" border="0"/>
