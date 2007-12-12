@@ -111,7 +111,7 @@
                             
                         </h:panelGrid>
                         
-                        <t:dataTable renderedIfEmpty="true"
+                        <t:dataTable renderedIfEmpty="false"
                                      id="data" width="97%"
                                      styleClass="scrollerTable"
                                      headerClass="standardTable_Header"

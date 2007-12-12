@@ -6,24 +6,24 @@
 <%@ taglib uri="https://ajax4jsf.dev.java.net/ajax" prefix="a4j"%>
 
 <script>
-
-function waitStatus(){
+    
+    function waitStatus(){
         
         var image =  document.getElementById("body:tableForm:status");
         image.src = "../images/connect_active.gif";
         document.body.style.cursor = 'wait';
         return true;
-        }  
-        
-        function normalStatus(){
+    }  
+    
+    function normalStatus(){
         
         var image =  document.getElementById("body:tableForm:status");
         image.src = "../images/connect_idle.gif";
         document.body.style.cursor = 'default';
         return true;
-        }          
-
-</script>
+    }          
+    
+    </script>
 <a4j:region  selfRendered="true"> 
     
     <h:form id="tableForm">
@@ -41,7 +41,7 @@ function waitStatus(){
                                 <td> <h:messages id="messages" globalOnly="true" warnClass="error" errorClass="error" infoClass="info" />
                                 </td>     
                                 <td align="right"> 
-                                     <h:graphicImage id="status" url="../images/connect_idle.gif" />
+                                    <h:graphicImage id="status" url="../images/connect_idle.gif" />
                                 </td> 
                             </tr>
                         </tbody>      
@@ -106,7 +106,7 @@ function waitStatus(){
                                 </h:selectBooleanCheckbox>--%>
                             </h:panelGroup>
                         </f:facet>
-                                                
+                        
                         <%----   Investigation branch ----%>
                         <f:facet name="invest">
                             <h:panelGroup>
@@ -339,9 +339,9 @@ function waitStatus(){
                                 
                             </h:panelGroup>
                         </f:facet>
-                                                
+                        
                     </t:tree2>
-                                        
+                    
                 </tr>
             </tbody>      
             
@@ -434,7 +434,7 @@ function waitStatus(){
                     <f:facet name="header">
                         <h:panelGrid columns="" >
                             
-                           <%-- <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datafileExpanded}" actionListener="#{datafileBean.expandAll}">
+                            <%-- <a4j:commandLink reRender="data"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datafileExpanded}" actionListener="#{datafileBean.expandAll}">
                                 
                                 <t:graphicImage   id="exp" value="../../images/button_plus1.gif"  border="0"/>
                             </a4j:commandLink>   
@@ -463,14 +463,19 @@ function waitStatus(){
                         <a4j:commandLink reRender="data, props" style="table-header" id="name" actionListener="#{datafileBean.sortColumn}">
                             <h:outputText value="Name" />
                             <f:param name="column" value="name"/>
-                            <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
                             <t:graphicImage id="acname" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.name}" border="0"/>
                             <t:graphicImage id="dename" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notName}" border="0"/>
-                            <%--  </c:if>--%>
+                            
                         </a4j:commandLink>
                     </f:facet>
                     
-                    <h:outputText value="#{dataFile.name}" />
+                    <!--  Download -->
+                    <h:commandLink rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" onclick="download('#{dataFile.id}','DATA_FILE','DATA_SETS'); return false;" style="color:black" id="downloadname">                    
+                        <h:outputText value="#{dataFile.name}" />
+                    </h:commandLink> 
+                    
+                    <!-- No download -->
+                    <h:outputText rendered="#{!dataFile.icatRole.actionDownload || dataFile.location == null}" value="#{dataFile.name}" />
                     
                 </h:column>
                 
@@ -481,15 +486,14 @@ function waitStatus(){
                         <a4j:commandLink reRender="data, props" style="table-header" id="size" actionListener="#{datafileBean.sortColumn}">
                             <h:outputText value="File Size (B)" />
                             <f:param name="column" value="size"/>
-                            <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
                             <t:graphicImage id="afilesize" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.fileSize}" border="0"/>
                             <t:graphicImage id="dfilesize" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFileSize}" border="0"/>
-                            <%--  </c:if>--%>
+                            
                         </a4j:commandLink>
                     </f:facet>
-                                                       
-                         <h:outputText value="#{dataFile.fileSize}" />
-                  
+                    
+                    <h:outputText value="#{dataFile.fileSize}" />
+                    
                 </h:column>
                 
                 <!--  Format -->
@@ -499,10 +503,9 @@ function waitStatus(){
                         <a4j:commandLink reRender="data, props" style="table-header" id="format" actionListener="#{datafileBean.sortColumn}">
                             <h:outputText value="Format" />
                             <f:param name="column" value="format"/>
-                            <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
                             <t:graphicImage id="aformat" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.format}" border="0"/>
                             <t:graphicImage id="dformat" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormat}" border="0"/>
-                            <%--  </c:if>--%>
+                            
                         </a4j:commandLink>
                     </f:facet>
                     
@@ -517,10 +520,9 @@ function waitStatus(){
                         <a4j:commandLink reRender="data, props" style="table-header" id="version" actionListener="#{datafileBean.sortColumn}">
                             <h:outputText value="Format Version" />
                             <f:param name="column" value="formatVersion"/>
-                            <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
                             <t:graphicImage id="aversion" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.formatVersion}" border="0"/>
                             <t:graphicImage id="dversion" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormatVersion}" border="0"/>
-                            <%--  </c:if>--%>
+                            
                         </a4j:commandLink>
                     </f:facet>
                     
@@ -535,10 +537,9 @@ function waitStatus(){
                         <a4j:commandLink reRender="data, props" style="table-header" id="formatType" actionListener="#{datafileBean.sortColumn}">
                             <h:outputText value="Format Type" />
                             <f:param name="column" value="formatType"/>
-                            <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
                             <t:graphicImage id="aformatType" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.formatType}" border="0"/>
                             <t:graphicImage id="dformatType" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notFormatType}" border="0"/>
-                            <%--  </c:if>--%>
+                            
                         </a4j:commandLink>
                     </f:facet>
                     
@@ -552,10 +553,9 @@ function waitStatus(){
                         <a4j:commandLink reRender="data, props" style="table-header" id="createTime" actionListener="#{datafileBean.sortColumn}">
                             <h:outputText value="Create Time" />
                             <f:param name="column" value="createTime"/>
-                            <%--   <c:if test="${requestScope.investigationBean.sort == 'name'}" >--%>
                             <t:graphicImage id="acreateTime" value="../../images/ascending-arrow.gif" rendered="#{datafileBean.createTime}" border="0"/>
                             <t:graphicImage id="dcreateTime" value="../../images/descending-arrow.gif" rendered="#{datafileBean.notCreateTime}" border="0"/>
-                            <%--  </c:if>--%>
+                            
                         </a4j:commandLink>
                     </f:facet>
                     
@@ -570,7 +570,7 @@ function waitStatus(){
                         
                     </f:facet>
                     
-                    <h:selectBooleanCheckbox title="select datafile" rendered="#{dataFile.icatRole.actionDownload}" value="#{dataFile.selected}" >
+                    <h:selectBooleanCheckbox title="select datafile" rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" value="#{dataFile.selected}" >
                         <f:param name="id" value="#{dataFile.id}"/>
                         <a4j:support reRender="data" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datafileBean.listenAjax}">
                             <a4j:actionparam name="id" value="#{dataFile.id}"/>   
@@ -595,7 +595,7 @@ function waitStatus(){
                                  id="parameter" 
                                  var="parameter"
                                  value="#{dataFile.datafileParameterCollection}">
-                        
+                                 
                         <!-- Name -->
                         <h:column>
                             <f:facet name="header">
@@ -790,7 +790,7 @@ function waitStatus(){
                         <h:panelGrid columns="" >
                             
                             
-                          <%--  <a4j:commandLink reRender="dataset"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datasetExpanded}" actionListener="#{datasetBean.expandAll}">
+                            <%--  <a4j:commandLink reRender="dataset"  style="table-header" ajaxSingle="true" id="expandAll" rendered="#{!visit.visitData.datasetExpanded}" actionListener="#{datasetBean.expandAll}">
                                 
                                 <t:graphicImage  id="expds" value="../../images/button_plus1.gif"  border="0"/>
                             </a4j:commandLink>   
@@ -923,7 +923,7 @@ function waitStatus(){
                                  id="datasetParameter" 
                                  var="datasetParameter"
                                  value="#{dataSet.datasetParameterCollection}">
-                        
+                                 
                         <!-- Name -->
                         <h:column>
                             <f:facet name="header">
@@ -1082,7 +1082,7 @@ function waitStatus(){
                 </h:panelGrid>
                 
                 <h:panelGrid columns="3" style="float: right" >
-                    <h:commandButton styleClass="button" id="downloaddataset" style="width: 130px"  onclick="download('DOWNLOAD_ALL','DATA_SET','DATA_SETS'); return false;"  title="Download All" value="Download All"/>
+                    <h:commandButton styleClass="button" id="downloaddataset" style="width: 130px"  onclick="download('#{visit.visitData.currentDatasetId}','DATA_SET','DATA_SETS'); return false;"  title="Download All" value="Download All"/>
                     <h:panelGroup/>
                     <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
                 </h:panelGrid>
@@ -1101,4 +1101,4 @@ function waitStatus(){
             </h:panelGrid>
         </h:panelGrid>
     </a4j:form>
-</a4j:region> 
+    </a4j:region> 
