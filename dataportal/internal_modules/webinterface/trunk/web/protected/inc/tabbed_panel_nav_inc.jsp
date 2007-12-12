@@ -49,8 +49,7 @@
             textField.value = city+" ";
         }
         else {     
-            textField.value = old+" "+city+" ";
-            
+            textField.value = old+" "+city+" ";            
         }
     }
     
@@ -78,8 +77,7 @@
             textField.value = old+" "+city+" ";
             // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
             
-        }
-        
+        }        
     }
     
     function chooseCityNavISIS(city) {
@@ -104,14 +102,9 @@
         }
         else {     
             textField.value = old+" "+city+" ";
-            // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";
-            
-        }
-        
-    }
-    
-    
-    
+            // OLD way 1.1.6  document.getElementById('navigation_search:basicSearch:autofillform_nav:keywordField_navj_id_1').value = old+" "+city+" ";            
+        }        
+    }        
     
     </script>
 <br />
@@ -432,16 +425,16 @@
                     <!----------------     End of visit id ---------------->
                     
                     <!----------------     Start of grant id ---------------->
-                    <h:outputLabel>            
-                        <h:outputText value="Grant Id" style="font-size: 10px" />                   
+                    <h:outputLabel rendered="#{visit.customisation.grantIdVisible}">            
+                        <h:outputText rendered="#{visit.customisation.grantIdVisible}" value="Grant Id" style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <h:inputText styleClass="text" id="grantIdj_id_1" size="14" required="false" value="#{sessionHistory.advancedSearchHistoryBean.grantId}">
+                    <h:inputText rendered="#{visit.customisation.grantIdVisible}" styleClass="text" id="grantIdj_id_1" size="14" required="false" value="#{sessionHistory.advancedSearchHistoryBean.grantId}">
                         <f:validateDoubleRange minimum="0" maximum="90000000" />
                     </h:inputText>        
                     
-                    <h:panelGroup/>
-                    <h:message for="grantIdj_id_1" styleClass="error"/>
+                    <h:panelGroup rendered="#{visit.customisation.grantIdVisible}" />
+                    <h:message rendered="#{visit.customisation.grantIdVisible}" for="grantIdj_id_1" styleClass="error"/>
                     
                     <!----------------     End of grant id ---------------->
                     
