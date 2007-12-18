@@ -59,29 +59,20 @@
                                  <tbody>
                                     <tr>
                                         <td valign="top" width="200">
-                                            <!-- does not work inside subview??? -->
-                                            <%-- <f:subview id="navigation">
-                                                <c:import url="inc/header_img.jsp" />
-                                            </f:subview>--%>
-                                            <%--
-                                            <img align="center" src="../../images/diamond.gif" width=170" height="60" />
-                                            --%>    <br />
-                                            
+                                           <br />
+                                            <br />
+                                            <br />
                                             <br />
                                             <t:div id="subnavigation_outer">
                                                 <t:div id="subnavigation">
-                                                    <t:panelNavigation2 renderAll="false" id="nav1" layout="list" 
-                                                                        disabledStyle="color:red;padding: 2px 20px 2px 25px">
-                                                        <t:navigationMenuItems  id="navitems" value="#{navigationMenu.panelNavigationItems}" />
-                                                    </t:panelNavigation2>
+                                                    <f:subview id="navigation">
+                                                        <c:import url="inc/navigation_left.jsp" />
+                                                    </f:subview>
+                                                    
                                                 </t:div>
                                             </t:div>
                                             
-                                               <t:div id="subnavigation_nav">
-                                                <f:subview id="navigation_search">
-                                                    <c:import url="../protected/inc/tabbed_panel_nav_inc.jsp" />
-                                                </f:subview>
-                                            </t:div>
+                                           
                                         </td>
                                         <td width="*" valign="top" >
                                             <table border="0" width="100%" >  
