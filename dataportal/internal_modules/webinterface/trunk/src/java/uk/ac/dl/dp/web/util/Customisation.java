@@ -54,6 +54,10 @@ public class Customisation {
      * Is cycle displayed
      */
     private boolean cycleVisible;
+      /**
+     * Is grant id displayed
+     */
+    private boolean grantIdVisible;
      /**
      * Is facility search page displayed
      */
@@ -115,6 +119,12 @@ public class Customisation {
                 cycleVisible = new Boolean(getProperty("cycle.visible", "false")).booleanValue();
             } catch (Exception mre) {
                 cycleVisible = false;
+            }
+            
+            try {
+                grantIdVisible = new Boolean(getProperty("grantId.visible", "false")).booleanValue();
+            } catch (Exception mre) {
+                grantIdVisible = false;
             }
              
             //load up select items for advanced search
@@ -261,6 +271,15 @@ public class Customisation {
 
     public void setCycleVisible(boolean cycleVisible) {
         this.cycleVisible = cycleVisible;
+    }
+    
+    
+    public boolean isGrantIdVisible() {
+        return grantIdVisible;
+    }
+
+    public void setGrantIdVisible(boolean grantIdVisible) {
+        this.grantIdVisible = grantIdVisible;
     }
 }
 
