@@ -244,6 +244,10 @@ public class DataSetTree extends AbstractRequestBean implements Serializable {
 
                 if (current.getName().equals("datafiles") && current.getValue() != null) {
                     String param = current.getValue().toString();
+                    
+                    //set current dataset as param
+                    getVisitData().setCurrentDatasetId(param);
+                    
                     Dataset ds = getVisitData().getDataSetFromSearchedData(param);
 
                     log.trace("viewing datafiles for DATASET: " + ds.getId());

@@ -38,6 +38,7 @@ import uk.ac.dp.icatws.Investigation;
 public class VisitData implements Serializable {
 
     private static Logger log = Logger.getLogger(VisitData.class);
+    
     /**
      * All the keywords from all the facilities (that the user can view)
      */
@@ -52,7 +53,7 @@ public class VisitData implements Serializable {
     private List<String> currentSelectedFacilities;
     //private Collection<Study> currentStudies;
 
-            /**
+    /**
      * Sets wheather the users has selected all the investigations to be expanded on investigations page
      */
     private boolean investigationExpanded;
@@ -81,6 +82,8 @@ public class VisitData implements Serializable {
     private String currentInvestigation;
     private Collection<Dataset> currentDatasets;
     private String currentDataset;
+    private String currentDatasetId;
+   
     private Collection<Datafile> currentDatafiles;
     private boolean dataFilesDownloadable = false;
 
@@ -212,10 +215,10 @@ public class VisitData implements Serializable {
     //same with data sets
 
     public boolean isDatasets() {
-        if (currentInvestigations == null) {
-            return false;
-        } else {
+        if (currentInvestigations != null || currentDatafiles != null) {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -247,8 +250,8 @@ public class VisitData implements Serializable {
         //check if one is downloadable
         this.dataFilesDownloadable = false;
         for(Datafile file  : currentDatafiles){
-            if(file.getIcatRole().isActionDownload()) {
-                 this.dataFilesDownloadable = true;
+            if(file.getIcatRole().isActionDownload() && file.getLocation() != null) {
+                this.dataFilesDownloadable = true;
                 break;
             }
         }
@@ -419,6 +422,19 @@ public class VisitData implements Serializable {
         this.investigationsSelected = investigationsSelected;
     }
 
+    /**
+     * Current selected dataset id
+     * 
+     * @return
+     */
+     public String getCurrentDatasetId() {
+        return currentDatasetId;
+    }
+
+    public void setCurrentDatasetId(String currentDatasetId) {
+        this.currentDatasetId = currentDatasetId;
+    }
+    
     /**
      * access methods to search and access Data Sets and file by their unique ID
      *  FACILITY-INV_ID-DS_ID-DF_ID
