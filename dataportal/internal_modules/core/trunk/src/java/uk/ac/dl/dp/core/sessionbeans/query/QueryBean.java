@@ -65,6 +65,7 @@ import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
 //@Interceptors(ArgumentValidator.class)
 
 
+
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLocal {
 
@@ -259,16 +260,16 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
             throw new QueryException("Unable to query for investigation: " + investigationId);
         }
     }
-    
-     public Collection<Datafile> queryDatafiles(String sessionId, AdvancedSearchDetailsDTO asdDTO, String facility, int startIndex, int numberResults) throws SessionException, QueryException {
+
+    public Collection<Datafile> queryDatafiles(String sessionId, AdvancedSearchDetailsDTO asdDTO, String facility, int startIndex, int numberResults) throws SessionException, QueryException {
         log.debug("queryDatafiles(" + sessionId + ", " + asdDTO + ", " + facility + ")");
         if (sessionId == null) {
             throw new IllegalArgumentException("Session ID cannot be null.");
         }
 
         //check of user logged into all facilities
-        HashSet<String> facs = new HashSet<String>();       
-        facs.add(facility);        
+        HashSet<String> facs = new HashSet<String>();
+        facs.add(facility);
         isLoggedIn(sessionId, facs, em);
 
         //check is valid sessionid
@@ -280,7 +281,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
             ModuleLookup facilityLookup = lookupLocal.getFacility(facility);
 
             String facilitySessionId = new SessionUtil(sessionId, em).getFacilitySessionId(facility);
-            return ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).searchByRunNumberPagination(facilitySessionId, asdDTO.getInstruments(), asdDTO.getRunStart().floatValue(), asdDTO.getRunEnd().floatValue(), startIndex, numberResults );
+            return ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).searchByRunNumberPagination(facilitySessionId, asdDTO.getInstruments(), asdDTO.getRunStart().floatValue(), asdDTO.getRunEnd().floatValue(), startIndex, numberResults);
         } catch (Throwable throwable) {
             log.error("Unable to query for datafiles: " + asdDTO, throwable);
             throw new QueryException("Unable to query for datafiles ");
@@ -319,7 +320,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     @PermitAll
     
     
+    
     @ExcludeClassInterceptors
+    
     
     
     @ExcludeDefaultInterceptors
@@ -434,7 +437,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
         return st;
     }
 
-    public Collection<Datafile> getDatafiles(String sid, Dataset dataset, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception {
+    public Datafile getDatafile(String sid, Datafile datafile, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception {
         if (sid == null) {
             throw new IllegalArgumentException("Session ID cannot be null.");
         }
@@ -454,22 +457,59 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
 
             String facilitySessionId = sessionUtil.getFacilitySessionId(facility);
 
-            Dataset datasetFound = ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).getDatasetIncludes(facilitySessionId, dataset.getId(), DatasetInclude.DATASET_DATAFILES_AND_PARAMETERS);
-            return datasetFound.getDatafileCollection();
-         } catch (InsufficientPrivilegesException_Exception ispe) {
+            Datafile datafileFound = ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).getDatafile(facilitySessionId, datafile.getId());
+            return datafileFound;
+        } catch (InsufficientPrivilegesException_Exception ispe) {
+            log.error("Insufficient privileges to view this datafile: " + datafile.getId(), ispe);
+            throw ispe;
+        } catch (NoSuchObjectFoundException_Exception nsofe) {
+            log.error("No datafile fonund with id:" + datafile.getId(), nsofe);
+            throw nsofe;
+        } catch (Exception exception) {
+            log.error("Unable to query for datafile: " + datafile.getId(), exception);
+            throw new QueryException("Unable to query for datafile: " + datafile.getId());
+        } catch (Throwable throwable) {
+            log.error("Unable to query for datafile: " + datafile.getId(), throwable);
+            throw new QueryException("Unable to query for datafile: " + datafile.getId());
+        }
+    }
+
+    public Dataset getDataset(String sid, Dataset dataset, String facility, DatasetInclude includes) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception {
+        if (sid == null) {
+            throw new IllegalArgumentException("Session ID cannot be null.");
+        }
+
+        //check of user logged into all facilities
+        HashSet<String> facs = new HashSet<String>();
+        facs.add(facility);
+        isLoggedIn(sid, facs, em);
+
+        //check is valid sessionid
+        SessionUtil sessionUtil = new SessionUtil(sid, em);
+
+        //now get the investigation
+        try {
+            //get a list of facilites
+            ModuleLookup facilityLookup = lookupLocal.getFacility(facility);
+
+            String facilitySessionId = sessionUtil.getFacilitySessionId(facility);
+
+            Dataset datasetFound = ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).getDatasetIncludes(facilitySessionId, dataset.getId(), includes);
+            return datasetFound;
+        } catch (InsufficientPrivilegesException_Exception ispe) {
             log.error("Insufficient privileges to view this dataset: " + dataset.getId(), ispe);
             throw ispe;
         } catch (NoSuchObjectFoundException_Exception nsofe) {
-            log.error("No investigation fonund with id:" + dataset.getId(), nsofe);
+            log.error("No dataset fonund with id:" + dataset.getId(), nsofe);
             throw nsofe;
         } catch (Exception exception) {
-            log.error("Unable to query for investigation: " + dataset.getId(), exception);
-            throw new QueryException("Unable to query for investigation: " + dataset.getId());
+            log.error("Unable to query for dataset: " + dataset.getId(), exception);
+            throw new QueryException("Unable to query for dataset: " + dataset.getId());
         } catch (Throwable throwable) {
-            log.error("Unable to query for investigation: " + dataset.getId(), throwable);
-            throw new QueryException("Unable to query for investigation: " + dataset.getId());
-        }       
-           }
+            log.error("Unable to query for dataset: " + dataset.getId(), throwable);
+            throw new QueryException("Unable to query for dataset: " + dataset.getId());
+        }
+    }
 
     public Collection<Investigation> getInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException {
         if (sid == null) {
