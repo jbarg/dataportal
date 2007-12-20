@@ -177,7 +177,7 @@ public class UserUtil {
         prefs.setDefaultFacility(facilities.iterator().next().getShortName());
         
         
-        prefs.setResultsPerPage(15);
+        prefs.setResultsPerPage(10);
         prefs.setResolution(DPResolution.res_1024x768.toString());
         prefs.setDefaultLocation(DPDefaultLocation.MY_DATA.toString());
         //get the myproxy
@@ -185,7 +185,8 @@ public class UserUtil {
         //prefs.setProxyServerId(proxyservers.iterator().next());
         //  log.debug("User proxyserver is "+proxyservers.iterator().next().getId()+" with address: "+proxyservers.iterator().next().getProxyServerAddress());
         
-        prefs.setProxyServerId(null);
+        
+        prefs.setProxyServerId(null);       
         
         
         return prefs;
