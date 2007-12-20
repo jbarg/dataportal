@@ -1016,7 +1016,7 @@
                 <h:panelGroup style="float: left"  >            
                     
                     <t:dataScroller id="scroll_1_datasets"
-                                    for="data"
+                                    for="dataset"
                                     rowsCountVar="rowsCount"
                                     displayedRowsCountVar="displayedRowsCountVar"
                                     firstRowIndexVar="firstRowIndex"
