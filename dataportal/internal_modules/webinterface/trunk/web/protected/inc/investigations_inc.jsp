@@ -220,7 +220,7 @@
                                     </a4j:commandLink>
                                 </f:facet>
                                 
-                                <h:commandLink value="#{invest.title}" style=" color: black" styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />
+                                <h:commandLink value="#{invest.title}" style="color: black; " styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />
                                 
                                 
                             </h:column>
@@ -530,7 +530,7 @@
                                 </h:selectOneMenu>   
                             </h:panelGroup>
                             
-                            <h:panelGroup style="float: left" rendered="#{fn:length(visit.visitData.searchedInvestigations) > sessionHistory.numberOfResultsInvestigations}" >            
+                            <h:panelGroup style="float: left"  >            
                                 
                                 <t:dataScroller id="scroll_2"
                                                 for="data"

@@ -92,7 +92,7 @@
                                 <h:outputText value=" " />
                                 <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                 
-                                <a4j:commandLink oncomplete="normalStatus();" onclick="waitStatus();"  reRender="tableGrid, status" style="color:black" id="viewFiles" actionListener="#{datasetTree.viewDataFiles}">
+                                <a4j:commandLink oncomplete="normalStatus();" onclick="waitStatus();"  reRender="tableGrid, status" styleClass="investigation" style="color: black; " id="viewFiles" actionListener="#{datasetTree.viewDataFiles}">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="text934" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     
@@ -137,7 +137,7 @@
                                 
                                 <t:graphicImage id="grd918" value="../../images/blue-folder-closed.png" rendered="#{!t.nodeExpanded}" border="0"/>
                                 
-                                <a4j:commandLink  oncomplete="normalStatus();" onclick="waitStatus();"  reRender="tableGrid, status" style="color:black" id="viewSets" actionListener="#{datasetTree.viewDataSets}">
+                                <a4j:commandLink  oncomplete="normalStatus();" onclick="waitStatus();"  reRender="tableGrid, status" style="color: black; " styleClass="investigation" id="viewSets" actionListener="#{datasetTree.viewDataSets}">
                                     <%--    style is used cos IE7 hover does not worj with IE7 :  styleClass="nodeFolderLink"--%>
                                     <h:outputText id="textd19g0" value="#{node.description}" style="font-family: Verdana, Geneva, sans-serif; font-size: 10px;" />
                                     
@@ -470,7 +470,7 @@
                     </f:facet>
                     
                     <!--  Download -->
-                    <h:commandLink rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" onclick="download('#{dataFile.id}','DATA_FILE','DATA_SETS'); return false;" style="color:black" id="downloadname">                    
+                    <h:commandLink rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" onclick="download('#{dataFile.id}','DATA_FILE','DATA_SETS'); return false;" style="color: black; " styleClass="investigation" id="downloadname">                    
                         <h:outputText value="#{dataFile.name}" />
                     </h:commandLink> 
                     
@@ -570,7 +570,7 @@
                         
                     </f:facet>
                     
-                    <h:selectBooleanCheckbox title="select datafile" rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" value="#{dataFile.selected}" >
+                    <h:selectBooleanCheckbox title="select datafile" disabled="#{!(dataFile.icatRole.actionDownload && dataFile.location != null)}" value="#{dataFile.selected}" >
                         <f:param name="id" value="#{dataFile.id}"/>
                         <a4j:support reRender="data" event="onclick" ajaxSingle="true"  immediate="true" actionListener="#{datafileBean.listenAjax}">
                             <a4j:actionparam name="id" value="#{dataFile.id}"/>   
@@ -684,7 +684,7 @@
                     </h:selectOneMenu>   
                 </h:panelGroup>
                 
-                <h:panelGroup style="float: left" rendered="#{fn:length(visit.visitData.currentDatafiles) > sessionHistory.numberOfResultsDatafiles}" >            
+                <h:panelGroup style="float: left" >            
                     
                     <t:dataScroller id="scroll_1_datafile"
                                     for="data"
@@ -1013,7 +1013,7 @@
                     </h:selectOneMenu>   
                 </h:panelGroup>
                 
-                <h:panelGroup style="float: left" rendered="#{fn:length(visit.visitData.currentDatasets) > sessionHistory.numberOfResultsDatasets}" >            
+                <h:panelGroup style="float: left"  >            
                     
                     <t:dataScroller id="scroll_1_datasets"
                                     for="data"
@@ -1038,7 +1038,7 @@
             </h:panelGrid>   
             
             
-            <h:panelGrid  width="100%" border="0" columns="1" style="align: right" rendered="#{visit.visitData.datafileTableVisable && visit.visitData.dataFilesDownloadable}">
+            <h:panelGrid  width="100%" border="0" columns="1" style="align: right" rendered="#{visit.visitData.datafileTableVisable}">
                 
                 
                 <%-- <tr>   
@@ -1076,13 +1076,13 @@
                 
                 </tr>--%>
                 <h:panelGrid columns="3" style="float: right" >
-                    <h:commandButton styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections" value="Download selection"/>
+                    <h:commandButton disabled="#{!visit.visitData.dataFilesDownloadable}" styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections" value="Download selection"/>
                     <h:panelGroup/>
                     <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
                 </h:panelGrid>
                 
                 <h:panelGrid columns="3" style="float: right" >
-                    <h:commandButton styleClass="button" id="downloaddataset" style="width: 130px"  onclick="download('#{visit.visitData.currentDatasetId}','DATA_SET','DATA_SETS'); return false;"  title="Download All" value="Download All"/>
+                    <h:commandButton disabled="#{!visit.visitData.dataFilesDownloadable}" styleClass="button" id="downloaddataset" style="width: 130px"  onclick="download('#{visit.visitData.currentDatasetId}','DATA_SET','DATA_SETS'); return false;"  title="Download All" value="Download All"/>
                     <h:panelGroup/>
                     <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
                 </h:panelGrid>
