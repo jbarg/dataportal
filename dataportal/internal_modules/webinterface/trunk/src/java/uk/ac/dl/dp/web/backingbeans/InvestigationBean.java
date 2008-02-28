@@ -151,6 +151,16 @@ public class InvestigationBean extends SortableList {
                     } else {
                         return ascending ? c1.getInvNumber().compareTo(c2.getInvNumber()) : c2.getInvNumber().compareTo(c1.getInvNumber());
                     }
+                } else if (column.equals("invParamValue")) {
+                    if (c1.getInvParamValue() == null && c2.getInvParamValue() == null) {
+                        return 0;
+                    } else if (c1.getInvParamValue() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getInvParamValue() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getInvParamValue().compareTo(c2.getInvParamValue()) : c2.getInvParamValue().compareTo(c1.getInvParamValue());
+                    }
                 } else if (column.equals("visitId")) {
                     if (c1.getVisitId() == null && c2.getVisitId() == null) {
                         return 0;
@@ -583,6 +593,14 @@ public class InvestigationBean extends SortableList {
 
     public boolean isNotInvType() {
         return isNot("invType");
+    }
+    
+     public boolean isInvParamValue() {
+        return is("invParamValue");
+    }
+
+    public boolean isNotInvParamValue() {
+        return isNot("invParamValue");
     }
 
     public boolean isInvNumber() {

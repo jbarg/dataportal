@@ -24,6 +24,9 @@ import uk.ac.dl.dp.web.util.AbstractRequestBean;
 public class AdvancedSearchHistoryBean extends AbstractRequestBean {
     
     private static Logger log = Logger.getLogger(AdvancedSearchHistoryBean.class);
+   
+    //This is used not for history for the main Advanced Search
+    private String keywordForAdvancedSearch;
     
     //componets on advanced search page
     private String keyword;
@@ -265,6 +268,15 @@ public class AdvancedSearchHistoryBean extends AbstractRequestBean {
     public void setCalendarSecond(UIInput calendarSecond) {
         this.calendarSecond = calendarSecond;
     }
+    
+     public String getKeywordForAdvancedSearch() {
+        return keywordForAdvancedSearch;
+    }
+
+    public void setKeywordForAdvancedSearch(String keywordForAdvancedSearch) {
+        this.keywordForAdvancedSearch = keywordForAdvancedSearch;
+    }
+    
     
     //way to validate two components.  Put val on last one and then check the local value (in this class)
     // of the other one abobve it in the page

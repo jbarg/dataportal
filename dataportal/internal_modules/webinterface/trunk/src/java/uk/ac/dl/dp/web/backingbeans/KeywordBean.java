@@ -17,16 +17,18 @@ import javax.faces.context.FacesContext;
 import com.sun.j2ee.blueprints.ui.autocomplete.AutoCompleteUtilities;
 import com.sun.j2ee.blueprints.ui.autocomplete.CompletionResult;
 import java.util.Collection;
+import javax.faces.component.UIParameter;
+import javax.faces.event.ActionEvent;
 import uk.ac.dl.dp.web.util.AbstractApplicationBean;
 import uk.ac.dl.dp.web.backingbeans.Visit;
 import javax.faces.event.ValueChangeEvent;
 import uk.ac.dl.dp.coreutil.util.KeywordsFileBean;
 import uk.ac.dl.dp.web.util.AbstractSessionBean;
+
 /**
  *
  * @author gjd37
  */
-
 public class KeywordBean extends AbstractSessionBean {
 
     private static Logger log = Logger.getLogger(KeywordBean.class);
@@ -35,21 +37,25 @@ public class KeywordBean extends AbstractSessionBean {
     public KeywordBean() {
     }
 
-    public void completeCityCaseSensitive(FacesContext context, String prefix, CompletionResult result) {
-        completeCity(context, prefix, result, true);
+    public void completeCaseSensitive(FacesContext context, String prefix, CompletionResult result) {
+          completeSearch(context, prefix, result, true);
     }
 
-    public void completeCityCaseInsensitive(FacesContext context, String prefix, CompletionResult result) {
-        completeCity(context, prefix, result, false);
+    public void completeCaseInsensitive(FacesContext context, String prefix, CompletionResult result) {
+          completeSearch(context, prefix, result, false);
     }
+    
     /**
      * Completes the Keyword list for the user
      */
-
-    public void completeCity(FacesContext context, String prefix, CompletionResult result, boolean caseSensitive) {
+    public void completeSearch(FacesContext context, String prefix, CompletionResult result, boolean caseSensitive) {
         String defaultFacility = getVisit().getUserPreferences().getDefaultFacility();
         log.trace("Completing City - " + prefix + " for default: " + defaultFacility);
         String[] allKeywords = null;
+
+        //set last search string
+        getSessionHistory().setLastSearchString(prefix);
+        ((SearchBean) getBean("searchBean")).setKeyword(prefix);
 
         for (String facility : getVisitData().getCurrentSelectedFacilities()) {
             log.trace("Getting keywords for: " + facility);
