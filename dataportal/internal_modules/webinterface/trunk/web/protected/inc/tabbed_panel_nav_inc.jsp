@@ -113,9 +113,10 @@
 <a4j:region  selfRendered="true"> 
     
     
-    <t:panelTabbedPane selectedIndex="#{visit.tabIndex}" width="202px" bgcolor="#EAF4F4" serverSideTabSwitch="false" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
+    <t:panelTabbedPane activeSubStyleClass="tabPanel" selectedIndex="#{visit.tabIndex}" width="202px" tabContentStyleClass="tabPanel"
+ serverSideTabSwitch="true" inactiveTabStyleClass="tabinactive" activeTabStyleClass="tabactive" >
         
-        <t:panelTab id="basicSearch"  label="Keyword" >
+        <t:panelTab  id="basicSearch"  label="Keyword" >
             <h:form id="autofillform_nav">
                 
                 <h:panelGrid  border="0" columns="2"  >      
@@ -143,19 +144,21 @@
                     
                     <h:panelGrid id="inputKeywordField" >   
                         <ui:autoComplete rendered="#{sessionHistory.keywordSearchNavigationAutoComplete && sessionHistory.keywordSearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_navj_id_1" 
-                                         completionMethod="#{keyword.completeCityCaseSensitive}" 
+                                         completionMethod="#{keyword.completeCaseSensitive}" 
                                          value="#{sessionHistory.basicSearchHistoryBean.keyword}" required="true"
                                          ondisplay="function(item) { return extractCityNav(item); }"
                                          onchoose="function(item) { return chooseCityNav(item); }"  validator="#{searchBean.validateKeyword}"/>
                         
                         <ui:autoComplete rendered="#{sessionHistory.keywordSearchNavigationAutoComplete && !sessionHistory.keywordSearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_navj_id_2" 
-                                         completionMethod="#{keyword.completeCityCaseInsensitive}" 
+                                         completionMethod="#{keyword.completeCaseInsensitive}" 
                                          value="#{sessionHistory.basicSearchHistoryBean.keyword}" required="true"
                                          ondisplay="function(item) { return extractCityNav(item); }"
                                          onchoose="function(item) { return chooseCityNav(item); }"  validator="#{searchBean.validateKeyword}"/>
                         
                         <h:inputText rendered="#{!sessionHistory.keywordSearchNavigationAutoComplete}" styleClass="text" size="14" maxlength="60" id="keywordField_navj_id_3"
-                                     value="#{sessionHistory.basicSearchHistoryBean.keyword}" required="true" validator="#{searchBean.validateKeyword}" />
+                                     value="#{sessionHistory.basicSearchHistoryBean.keyword}" required="true" validator="#{searchBean.validateKeyword}" >
+                                   <%--    <a4j:support id="noneAutoComplete" event="onkeyup" />--%>
+                </h:inputText>
                     </h:panelGrid> 
                     
                     <h:panelGroup/>
@@ -199,7 +202,7 @@
                     
                     <h:panelGroup/>
                     <h:panelGrid columns="2" >
-                        <h:commandButton style="font-size:9px" id="f2" styleClass="button" action="#{searchBean.searchByKeywordNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                        <h:commandButton style="font-size:9px" id="f2" styleClass="button" actionListener="#{sessionHistory.setIndex0}"action="#{searchBean.searchByKeywordNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
                         
                         <h:commandButton style="font-size:9px" id="reset" type="reset" styleClass="button"  title="Reset" value="Reset"/>
                     </h:panelGrid>
@@ -208,7 +211,7 @@
             </h:form>
         </t:panelTab>
         
-        <t:panelTab id="advancedSearch"  label="Advanced" >
+        <t:panelTab styleClass="panelTab" id="advancedSearch"  label="Advanced" >
             <h:form id="autofillform_nav_adv">
                 
                 <h:panelGrid  border="0" columns="2"  >      
@@ -234,13 +237,13 @@
                     
                     <h:panelGrid id="inputAdvancedKeywordField" >   
                         <ui:autoComplete rendered="#{sessionHistory.advancedSearchNavigationAutoComplete && sessionHistory.advancedSearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_advj_id_1" 
-                                         completionMethod="#{keyword.completeCityCaseSensitive}" 
+                                         completionMethod="#{keyword.completeCaseSensitive}" 
                                          value="#{sessionHistory.advancedSearchHistoryBean.keyword}" required="false"
                                          ondisplay="function(item) { return extractCityNavAdv(item); }"
                                          onchoose="function(item) { return chooseCityNavAdv(item); }"  validator="#{searchBean.validateKeyword}"/>
                         
                         <ui:autoComplete rendered="#{sessionHistory.advancedSearchNavigationAutoComplete && !sessionHistory.advancedSearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_advj_id_2" 
-                                         completionMethod="#{keyword.completeCityCaseInsensitive}" 
+                                         completionMethod="#{keyword.completeCaseInsensitive}" 
                                          value="#{sessionHistory.advancedSearchHistoryBean.keyword}" required="false"
                                          ondisplay="function(item) { return extractCityNavAdv(item); }"
                                          onchoose="function(item) { return chooseCityNavAdv(item); }"  validator="#{searchBean.validateKeyword}"/>
@@ -380,35 +383,41 @@
                     <!----------------     End of Run number ---------------->
                     
                     <!----------------     Start of Start Date ---------------->
-                    
-                    
+                                        
                     <h:outputLabel>            
-                        <h:outputText value="Date range:" style="font-size: 10px" />                   
+                        <h:outputText value="Start Date:" style="font-size: 10px" />                   
                     </h:outputLabel>
-                    
-                    <h:panelGroup>
-                        
-                        <t:inputCalendar size="1" styleClass="text" binding="#{sessionHistory.advancedSearchHistoryBean.calendarFirst}" id="startDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                                             
+                     <t:inputCalendar size="9" styleClass="text" binding="#{sessionHistory.advancedSearchHistoryBean.calendarFirst}" id="startDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                          currentDayCellClass="currentDayCell" value="#{sessionHistory.advancedSearchHistoryBean.firstDate}" renderAsPopup="true"
                                          popupTodayString="Today is:"
                                          popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
-                                         helpText="" validator="#{sessionHistory.advancedSearchHistoryBean.validateDate}"/>  
-                        
-                        <t:inputCalendar size="1"  styleClass="text"  binding="#{sessionHistory.advancedSearchHistoryBean.calendarSecond}" id="endDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                         helpText="DD/MM/YYYY" validator="#{sessionHistory.advancedSearchHistoryBean.validateDate}"/>  
+                                             
+                    
+                    <h:panelGroup/>   
+                                       
+                    <h:message for="startDatej_id_1" styleClass="error"/>
+                                           
+                    <!----------------     End of Start Date ---------------->
+                    
+                    <!----------------     Start of End Date ---------------->
+                                        
+                    <h:outputLabel>            
+                        <h:outputText value="End Date:" style="font-size: 10px" />                   
+                    </h:outputLabel>
+                                                              
+                    <t:inputCalendar size="9"  styleClass="text"  binding="#{sessionHistory.advancedSearchHistoryBean.calendarSecond}" id="endDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                          currentDayCellClass="currentDayCell" value="#{sessionHistory.advancedSearchHistoryBean.secondDate}" renderAsPopup="true"
                                          popupTodayString="Today is:" 
                                          popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
-                                         helpText="" validator="#{sessionHistory.advancedSearchHistoryBean.validateDate}"/>  
-                    </h:panelGroup>
-                    
+                                        helpText="DD/MM/YYYY" validator="#{sessionHistory.advancedSearchHistoryBean.validateDate}"/>  
+                                       
                     <h:panelGroup/>   
-                    
-                    <h:panelGroup>
-                        <h:message for="startDatej_id_1" styleClass="error"/>
-                        <h:message for="endDatej_id_1" styleClass="error"/>
-                    </h:panelGroup>
-                    <!----------------     End of Start Date ---------------->
-                    
+                                      
+                    <h:message for="endDatej_id_1" styleClass="error"/>
+                   
+                    <!----------------     End of End Date ---------------->
                     
                     <!----------------     Start of visit id ---------------->
                     <h:outputLabel rendered="#{visit.customisation.visitIdVisible}">            
@@ -492,7 +501,7 @@
                     <h:panelGroup/>                  
                     
                     <h:panelGrid columns="2" >
-                        <h:commandButton id="f28" style="font-size:9px" styleClass="button" action="#{advancedSearchBean.searchAdvancedNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                        <h:commandButton id="f28" style="font-size:9px" styleClass="button" actionListener="#{sessionHistory.setIndex1}" action="#{advancedSearchBean.searchAdvancedNavigation}" onclick="busyBox.Show();" title="Search" value="Search"/>
                         
                         <h:commandButton style="font-size:9px" id="reset32" type="reset" styleClass="button"  title="Reset" value="Reset"/>
                     </h:panelGrid>
@@ -502,7 +511,7 @@
             </h:form>
         </t:panelTab>
         
-         <t:panelTab id="ISIS" label="ISIS" rendered="#{visit.customisation.facilitySearchPageVisible}">
+         <t:panelTab styleClass="panelTab" id="ISIS" label="ISIS" rendered="#{visit.customisation.facilitySearchPageVisible}">
             <h:form id="autofillform_nav_isis">
                 
                 <h:panelGrid  border="0" columns="2"  >      
@@ -528,13 +537,13 @@
                     
                     <h:panelGrid id="inputisisKeywordField" >   
                         <ui:autoComplete rendered="#{sessionHistory.facilitySearchNavigationAutoComplete && sessionHistory.facilitySearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_isisj_id_1" 
-                                         completionMethod="#{keyword.completeCityCaseSensitive}" 
+                                         completionMethod="#{keyword.completeCaseSensitive}" 
                                          value="#{sessionHistory.isisSearchHistoryBean.keyword}" required="false"
                                          ondisplay="function(item) { return extractCityNavISIS(item); }"
                                          onchoose="function(item) { return chooseCityNavISIS(item); }"  validator="#{searchBean.validateKeyword}"/>
                         
                         <ui:autoComplete rendered="#{sessionHistory.facilitySearchNavigationAutoComplete && !sessionHistory.facilitySearchNavigationCaseSensitive}" styleClass="text" size="14" maxlength="60" id="keywordField_nav_isisj_id_2" 
-                                         completionMethod="#{keyword.completeCityCaseInsensitive}" 
+                                         completionMethod="#{keyword.completeCaseInsensitive}" 
                                          value="#{sessionHistory.isisSearchHistoryBean.keyword}" required="false"
                                          ondisplay="function(item) { return extractCityNavISIS(item); }"
                                          onchoose="function(item) { return chooseCityNavISIS(item); }"  validator="#{searchBean.validateKeyword}"/>
@@ -581,29 +590,38 @@
                         <h:outputText value="Date range:" style="font-size: 10px" />                   
                     </h:outputLabel>
                     
-                    <h:panelGroup>
-                        
-                        <t:inputCalendar size="1" styleClass="text" binding="#{sessionHistory.isisSearchHistoryBean.calendarFirst}" id="startDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                        <t:inputCalendar size="9" styleClass="text" binding="#{sessionHistory.isisSearchHistoryBean.calendarFirst}" id="startDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                          currentDayCellClass="currentDayCell" value="#{sessionHistory.isisSearchHistoryBean.firstDate}" renderAsPopup="true"
                                          popupTodayString="Today is:"
                                          popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
-                                         helpText="" validator="#{sessionHistory.isisSearchHistoryBean.validateDate}"/>  
-                        
-                        <t:inputCalendar size="1"  styleClass="text"  binding="#{sessionHistory.isisSearchHistoryBean.calendarSecond}" id="endDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
+                                         helpText="DD/MM/YYYY" validator="#{sessionHistory.isisSearchHistoryBean.validateDate}"/>  
+                                             
+                        <h:panelGroup/>  
+                                      
+                        <h:message for="startDatej_id_1" styleClass="error"/>
+                      
+                    <!----------------     End of Start Date ---------------->                               
+                      
+                        <!----------------     Start of End Date ---------------->
+                                        
+                    <h:outputLabel>            
+                        <h:outputText value="End Date:" style="font-size: 10px" />                   
+                    </h:outputLabel>
+                                                  
+                    <t:inputCalendar size="9"  styleClass="text"  binding="#{sessionHistory.isisSearchHistoryBean.calendarSecond}" id="endDatej_id_1" required="false" monthYearRowClass="yearMonthHeader" weekRowClass="weekHeader" popupButtonStyleClass="standard_bold"
                                          currentDayCellClass="currentDayCell" value="#{sessionHistory.isisSearchHistoryBean.secondDate}" renderAsPopup="true"
                                          popupTodayString="Today is:" 
                                          popupDateFormat="dd/MM/yyyy" popupWeekString="Wk"
-                                         helpText="" validator="#{sessionHistory.isisSearchHistoryBean.validateDate}"/>  
-                    </h:panelGroup>
+                                         helpText="DD/MM/YYYY" validator="#{sessionHistory.isisSearchHistoryBean.validateDate}"/>  
+                   
                     
                     <h:panelGroup/>   
                     
-                    <h:panelGroup>
-                        <h:message for="startDatej_id_1" styleClass="error"/>
-                        <h:message for="endDatej_id_1" styleClass="error"/>
-                    </h:panelGroup>
-                    <!----------------     End of Start Date ---------------->                               
-                                                           
+                    
+                    <h:message for="endDatej_id_1" styleClass="error"/>
+                    
+                    <!----------------     End of End Date ---------------->    
+                    
                     <!----------------     Start of Run number ---------------->
                     <h:outputLabel>            
                         <h:outputText value="Run #" style="font-size: 10px" />                   
@@ -650,7 +668,7 @@
                     <h:panelGroup/>                  
                     
                     <h:panelGrid columns="2" >
-                        <h:commandButton id="f54" style="font-size:9px" styleClass="button" action="#{advancedSearchBean.searchAdvancedNavigationISIS}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                        <h:commandButton id="f54" style="font-size:9px" styleClass="button" actionListener="#{sessionHistory.setIndex2}" action="#{advancedSearchBean.searchAdvancedNavigationISIS}" onclick="busyBox.Show();" title="Search" value="Search"/>
                         
                         <h:commandButton style="font-size:9px" id="reset4" type="reset" styleClass="button"  title="Reset" value="Reset"/>
                     </h:panelGrid>
@@ -658,11 +676,11 @@
                     
                 </h:panelGrid>
             </h:form>
-            <br />
-            
+           
+            <hr align="left" size="-1" width="100%"  />    
             <h:form>
                 <h:panelGrid  border="0" columns="2"  >                      
-                                   
+                
                     <!----------------     Start of Run number ---------------->
                     <h:outputLabel>            
                         <h:outputText value="Run #" style="font-size: 10px" />                   
@@ -709,7 +727,7 @@
                     <h:panelGroup/>                  
                     
                     <h:panelGrid columns="2" >
-                        <h:commandButton id="f54" style="font-size:9px" styleClass="button" action="#{advancedSearchBean.searchAdvancedNavigationISISDF}" onclick="busyBox.Show();" title="Search" value="Search"/>
+                        <h:commandButton id="f54" style="font-size:9px" styleClass="button" actionListener="#{sessionHistory.setIndex2}" action="#{advancedSearchBean.searchAdvancedNavigationISISDF}" onclick="busyBox.Show();" title="Search" value="Search"/>
                         
                         <h:commandButton style="font-size:9px" id="reset4" type="reset" styleClass="button"  title="Reset" value="Reset"/>
                     </h:panelGrid>

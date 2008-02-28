@@ -51,13 +51,13 @@
             </tbody>
         </table>
         <br />
-        <table width="95%" border="0" >
+        <table width="100%" border="0" >
             <tbody>
                 <tr>             
-                    <td width=20">&nbsp;</td>
+                    <td width=0">&nbsp;</td>
                     <td>
                         
-                        <h:panelGrid id="topgrid" border="0" width="97%" columns="2" styleClass="scrollerTable3" columnClasses="standardTable_ColumnCentered">
+                        <h:panelGrid id="topgrid" border="0" width="100%" columns="2" styleClass="scrollerTable3" columnClasses="standardTable_ColumnCentered">
                             
                             <h:panelGroup  style="float: left" rendered="#{fn:length(sessionScope.visit.visitData.searchedInvestigations) > sessionScope.sessionHistory.numberOfResultsInvestigations}" >
                                 
@@ -118,6 +118,7 @@
                                      footerClass="standardTable_Header"
                                      rowClasses="standardTable_Row1,standardTable_Row2"
                                      columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
+                                     rowIndexVar="rowIndex"
                                      var="invest"
                                      value="#{investigationBean.investigations}"
                                      preserveDataModel="true"
@@ -151,8 +152,19 @@
                                             <a4j:actionparam name="id" value="#{invest.id}"/>   
                                             </a4j:support>
                                             </h:selectBooleanCheckbox>
-                                            </h:column>--%>
-                                            
+                            </h:column>--%>
+                            
+                            <!--    Number           -->  
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText style="table-header" value="#" />       
+                                </f:facet>
+                                
+                                <h:outputText styleClass="investigation" value="#{rowIndex+1}" />
+                                
+                            </h:column>
+                            
+                            <!--    Expand           -->
                             <h:column>
                                 <f:facet name="header">
                                     <h:panelGrid columns="" >
@@ -209,7 +221,7 @@
                             <h:column>
                                 <f:facet name="header">
                                     <%--  <a4j:commandLink reRender="data" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">--%>
-                                                    
+                                    
                                     <a4j:commandLink reRender="data, props" style="table-header" id="name" actionListener="#{investigationBean.sortColumn}">
                                         <h:outputText value="Title" />
                                         <f:param name="column" value="name"/>
@@ -220,10 +232,27 @@
                                     </a4j:commandLink>
                                 </f:facet>
                                 
-                                <h:commandLink value="#{invest.title}" style="color: black; " styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />
+                                <t:popup  style="font-size: 14px; background-color: #F6F4F4;" styleClass="popup"   closePopupOnExitingElement="true"
+                                          closePopupOnExitingPopup="true"
+                                          displayAtDistanceX="20"
+                                          displayAtDistanceY="10" 
+                                          rendered="#{visit.customisation.abstractPopupVisible}">
+                                    
+                                    <h:commandLink value="#{invest.title}" style="color: black; " styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />
+                                    
+                                    <f:facet name="popup">
+                                        <h:panelGroup>
+                                            <h:panelGrid columns="1" width="200px">                                               
+                                                <p><h:outputText style="font-size: 10px" value="#{invest.invAbstract}" /></p>   
+                                            </h:panelGrid>
+                                        </h:panelGroup>
+                                         
+                                    </f:facet>
+                                </t:popup>
                                 
-                                
+                                <h:commandLink  rendered="#{!visit.customisation.abstractPopupVisible}" value="#{invest.title}" style="color: black; " styleClass="investigation" action="#{investigationBean.viewSingleInvestigation}" />   
                             </h:column>
+                            
                             
                             <!--  Type -->
                             <h:column rendered="#{visit.customisation.invTypeVisible}">
@@ -238,14 +267,14 @@
                                         <%--  </c:if>--%>
                                     </a4j:commandLink>
                                 </f:facet>
-                                <h:outputText  value="#{invest.invType}" />     
+                                <h:outputText value="#{invest.invType}" />     
                             </h:column>                                                                                    
                             
                             <!--  Facility -->
                             <h:column rendered="#{!visit.singleFacility}">
                                 <f:facet name="header">
                                     <%--<a4j:commandLink reRender="data" style="table-header" id="facility" actionListener="#{investigationBean.sortColumn}">--%>
-                                                    
+                                    
                                     <a4j:commandLink reRender="data" style="table-header" id="facility" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
                                         <h:outputText value="Facility" />
                                         <f:param name="column" value="facility"/>
@@ -309,12 +338,30 @@
                                 
                             </h:column>
                             
+                            <!--  Inv Param -->
+                            <h:column rendered="#{visit.customisation.invParamVisible}">
+                                <f:facet name="header">
+                                    
+                                    <a4j:commandLink reRender="data" style="table-header" id="invParamValue" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
+                                        <h:outputText value="#{visit.customisation.invParamName}" />
+                                        <f:param name="column" value="invParamValue"/>
+                                        <t:graphicImage id="f2ff" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.invParamValue}" border="0"/>
+                                        <t:graphicImage id="g2ffg" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notInvParamValue}" border="0"/>
+                                        
+                                    </a4j:commandLink>
+                                </f:facet>
+                                
+                                <h:outputText value="#{invest.invParamValue}">
+                                    
+                                </h:outputText>
+                            </h:column>
+                            
                             <!--  Release Date -->
                             <h:column>
                                 <f:facet name="header">
                                     
                                     <a4j:commandLink reRender="data" style="table-header" id="releaseDate" ajaxSingle="true" actionListener="#{investigationBean.sortColumn}">
-                                        <h:outputText value="Release Date" />
+                                        <h:outputText value="Year" />
                                         <f:param name="column" value="releaseDate"/>
                                         <t:graphicImage id="fff" value="../../images/ascending-arrow.gif" rendered="#{investigationBean.releaseDate}" border="0"/>
                                         <t:graphicImage id="gffg" value="../../images/descending-arrow.gif" rendered="#{investigationBean.notReleaseDate}" border="0"/>
@@ -322,8 +369,8 @@
                                     </a4j:commandLink>
                                 </f:facet>
                                 
-                                <h:outputText value="#{fn:substringBefore(invest.releaseDate,\"T\")}">
-                                    <f:convertDateTime pattern="HH:mm a dd.MM.yyyy "/>
+                                <h:outputText value="#{fn:substringBefore(invest.invStartDate,\"-\")}">
+                                    
                                 </h:outputText>
                             </h:column>
                             
@@ -464,7 +511,7 @@
                                                 <h:outputText  value="#{sample.name}" style="font-size:12px;"  />  
                                             </h:column>
                                             
-                                         <%--   <h:column>
+                                            <%--   <h:column>
                                                 <f:facet name="header">
                                                     <h:outputText value="Instance" style="font-size:12px; color: blue;  font-weight: bold;" />
                                                 </f:facet> 
@@ -530,7 +577,7 @@
                                 </h:selectOneMenu>   
                             </h:panelGroup>
                             
-                            <h:panelGroup style="float: left"  >            
+                            <h:panelGroup style="float: left"  rendered="#{fn:length(visit.visitData.searchedInvestigations) > 0 }">            
                                 
                                 <t:dataScroller id="scroll_2"
                                                 for="data"

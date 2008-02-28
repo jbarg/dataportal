@@ -8,11 +8,13 @@
 
 
 <script type="text/javascript">
+    
+    //last string that was entered into search 
+    var lastString = "";
+    
     function extractCity(citystatezip) {
         var index = citystatezip.indexOf(',');
-        var nextcity = citystatezip.substring(0, index+4);
-        
-        
+        var nextcity = citystatezip.substring(0, index+4);              
         
         return citystatezip;
     }
@@ -30,18 +32,24 @@
         var old = oldvalue.substring(0, index);
         
         
-        if(old == ""){
-            
-            textField.value = city+" ";        
-            
+        if(old == ""){            
+            textField.value = city+" ";                    
         }
-        else {
-            
-            textField.value = old+" "+city+" ";
-            
+        else {            
+            textField.value = old+" "+city+" ";            
         }
         //var oldvalue = document.getElementById('body:autofillform:facilities_SELECTED').options[0].value;
         
+    }
+    
+    function getSearchString(){
+        
+        var textField = document.getElementById('body:autofillform:keywordFieldj_id_1');
+        if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_2');
+        if(textField == null) textField = document.getElementById('body:autofillform:keywordFieldj_id_3');   
+        
+              
+        return textField.value;            
         
     }
     
@@ -81,22 +89,27 @@
             <h:outputLabel for="keywordFieldj_id_1">
                 <h:outputText value="Keyword(s): " style="font-size:14px"/>
             </h:outputLabel  >                      
-            
-            <h:panelGrid id="inputKeywordField" >   
-                <ui:autoComplete rendered="#{sessionHistory.keywordSearchAutoComplete && sessionHistory.keywordSearchCaseSensitive}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_1" 
-                                 completionMethod="#{keyword.completeCityCaseSensitive}" 
-                                 value="#{searchBean.keyword}" required="true"
-                                 ondisplay="function(item) { return extractCity(item); }"
-                                 onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
+                        
+            <h:panelGrid id="inputKeywordField" >                                
+               <ui:autoComplete rendered="#{sessionHistory.keywordSearchAutoComplete && sessionHistory.keywordSearchCaseSensitive}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_1" 
+                                 completionMethod="#{keyword.completeCaseSensitive}" 
+                                 value="#{sessionHistory.basicSearchHistoryBean.keywordForBasicSearch}" required="true"                                 
+                                 ondisplay="function(item) { return extractCity(item); }"                         
+                                 onchoose="function(item) { return chooseCity(item); }"  
+                                 validator="#{searchBean.validateKeyword}" />
                 
                 <ui:autoComplete rendered="#{sessionHistory.keywordSearchAutoComplete && !sessionHistory.keywordSearchCaseSensitive}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_2" 
-                                 completionMethod="#{keyword.completeCityCaseInsensitive}" 
-                                 value="#{searchBean.keyword}" required="true"
+                                 completionMethod="#{keyword.completeCaseInsensitive}" 
+                                 value="#{sessionHistory.basicSearchHistoryBean.keywordForBasicSearch}" required="true"
                                  ondisplay="function(item) { return extractCity(item); }"
-                                 onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
+                                 onchoose="function(item) { return chooseCity(item); }"  
+                                 validator="#{searchBean.validateKeyword}" />
                 
                 <h:inputText rendered="#{!sessionHistory.keywordSearchAutoComplete}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_3"
-                             value="#{searchBean.keyword}" required="true" validator="#{searchBean.validateKeyword}" />
+                             value="#{sessionHistory.basicSearchHistoryBean.keywordForBasicSearch}" required="true" validator="#{searchBean.validateKeyword}" >
+                    
+                    <%--<a4j:support id="noneAutoComplete" event="onkeyup" />--%>
+                </h:inputText>
             </h:panelGrid> 
             
             

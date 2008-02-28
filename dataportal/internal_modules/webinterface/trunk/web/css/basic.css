@@ -679,7 +679,11 @@ html>body #subnavigation_outer {
     margin: 0px 0px 0px 0px;
 }
 
-.tabactive {
+.tabPanel {    
+    background-color: #EAF4F4;    
+}
+
+.tabactive {    
     background-color: #EAF4F4;    
 }
 
