@@ -86,19 +86,21 @@
             
             <h:panelGrid id="inputKeywordField" >   
                 <ui:autoComplete rendered="#{sessionHistory.facilitySearchAutoComplete && sessionHistory.facilitySearchCaseSensitive}" styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_1" 
-                                 completionMethod="#{keyword.completeCityCaseSensitive}" 
-                                 value="#{advancedSearchBean.keyword}" required="false"
+                                 completionMethod="#{keyword.completeCaseSensitive}" 
+                                 value="#{sessionHistory.isisSearchHistoryBean.keywordForAdvancedSearch}" required="false"
                                  ondisplay="function(item) { return extractCity(item); }"
                                  onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
                 
                 <ui:autoComplete rendered="#{sessionHistory.facilitySearchAutoComplete && !sessionHistory.facilitySearchCaseSensitive}"  styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_2" 
-                                 completionMethod="#{keyword.completeCityCaseInsensitive}" 
-                                 value="#{advancedSearchBean.keyword}" required="false"
+                                 completionMethod="#{keyword.completeCaseInsensitive}" 
+                                 value="#{sessionHistory.isisSearchHistoryBean.keywordForAdvancedSearch}" required="false"
                                  ondisplay="function(item) { return extractCity(item); }"
                                  onchoose="function(item) { return chooseCity(item); }"  validator="#{searchBean.validateKeyword}"/>
                 
                 <h:inputText rendered="#{!sessionHistory.facilitySearchAutoComplete}"  styleClass="text" size="35" maxlength="60" id="keywordFieldj_id_3"
-                             value="#{advancedSearchBean.keyword}" required="false" validator="#{searchBean.validateKeyword}" />
+                             value="#{sessionHistory.isisSearchHistoryBean.keywordForAdvancedSearch}" required="false" validator="#{searchBean.validateKeyword}" >
+                            <%--   <a4j:support id="noneAutoComplete" event="onkeyup" />--%>
+                </h:inputText>
             </h:panelGrid> 
             
             <t:popup styleClass="popup" style="font-size: 14px; background-color: #D1E4E4;" closePopupOnExitingElement="true"
@@ -374,6 +376,10 @@
             <h:panelGroup/>
         </h:panelGrid>
     </h:form>
+    
+    <br />
+    <hr align="left" size="-1" width="65%"  />    
+   
     
     <h5>Data File Search</h5>
     <!--------------  DATAFILE SEARCH ------------------------>

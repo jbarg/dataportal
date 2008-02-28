@@ -416,6 +416,7 @@
                          rowClasses="standardTable_Row1,standardTable_Row2"
                          columnClasses="standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered,standardTable_ColumnCentered"
                          var="dataFile"
+                         rowIndexVar="rowIndex"
                          value="#{datafileBean.datafiles}"
                          preserveDataModel="true"
                          rows="#{sessionHistory.numberOfResultsDatafiles}"       
@@ -428,6 +429,16 @@
                 <f:facet name="header">
                     <h:outputText value="#{visit.visitData.currentDataset}'s datafiles" />
                 </f:facet>
+                
+                <!--    Number     -->  
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText style="table-header" value="#" />       
+                    </f:facet>
+                    
+                    <h:outputText styleClass="investigation" value="#{rowIndex+1}" />
+                    
+                </h:column>
                 
                 <!--  Expand -->
                 <h:column>
@@ -684,7 +695,7 @@
                     </h:selectOneMenu>   
                 </h:panelGroup>
                 
-                <h:panelGroup style="float: left" >            
+                <h:panelGroup style="float: left" rendered="#{fn:length(visit.visitData.currentDatafiles) > 0 }">            
                     
                     <t:dataScroller id="scroll_1_datafile"
                                     for="data"
@@ -773,6 +784,7 @@
                          var="dataSet"
                          value="#{datasetBean.datasets}"
                          preserveDataModel="true"
+                          rowIndexVar="rowIndex"
                          rows="#{sessionHistory.numberOfResultsDatasets}"       
                          binding="#{datasetBean.table}"
                          sortColumn="#{datasetBean.sort}"
@@ -780,9 +792,20 @@
                          preserveSort="true"
                          varDetailToggler="detailToggler"  
                          rendered="#{visit.visitData.datasetTableVisable}"  >
+                             
                 <f:facet name="header">
                     <h:outputText value="#{visit.visitData.currentInvestigation}'s datasets" />
                 </f:facet>
+                
+                <!--    Number     -->  
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText style="table-header" value="#" />       
+                    </f:facet>
+                    
+                    <h:outputText styleClass="investigation" value="#{rowIndex+1}" />
+                    
+                </h:column>
                 
                 <!--  Expand -->
                 <h:column>
@@ -1013,7 +1036,7 @@
                     </h:selectOneMenu>   
                 </h:panelGroup>
                 
-                <h:panelGroup style="float: left"  >            
+                <h:panelGroup style="float: left"  rendered="#{fn:length(visit.visitData.currentDatasets) > 0 }">            
                     
                     <t:dataScroller id="scroll_1_datasets"
                                     for="dataset"
