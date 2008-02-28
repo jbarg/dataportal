@@ -10,7 +10,7 @@
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.util.List;
-import javax.faces.model.SelectItem;
+import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.Logger;
 
 /**
@@ -21,8 +21,12 @@ public class BasicSearchHistoryBean {
     
     private static Logger log = Logger.getLogger(BasicSearchHistoryBean.class);
     
+    //This is used not for history for the main Basic Search
+    private String keywordForBasicSearch;
+    
     private String keyword ;
     private List<String> selectedFacilities;
+    
     //default it to AND
     private String logicalExpression ="AND";
     
@@ -80,6 +84,13 @@ public class BasicSearchHistoryBean {
         this.likeExpression = likeExpression;
     }
     
-    
-    
+    public String getKeywordForBasicSearch() {
+        return keywordForBasicSearch;
+    }
+
+    public void setKeywordForBasicSearch(String keywordForBasicSearch) {
+        log.trace("Setting setKeywordForBasicSearch to "+keywordForBasicSearch);
+        this.keywordForBasicSearch = keywordForBasicSearch;
+    }      
+            
 }

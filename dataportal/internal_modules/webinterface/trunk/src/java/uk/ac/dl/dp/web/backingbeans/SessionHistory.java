@@ -71,6 +71,19 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
     private boolean facilitySearchNavigationCaseSensitive;
     private boolean facilitySearchNavigationAutoComplete = true;
 
+    /**
+     * Last String entered in a search box
+     */
+    private String lastSearchString;
+
+    public String getLastSearchString() {
+        return lastSearchString;
+    }
+
+    public void setLastSearchString(String lastSearchString) {
+        this.lastSearchString = lastSearchString;
+    }
+    
     public boolean isAdvancedSearchNavigationAutoComplete() {
         return advancedSearchNavigationAutoComplete;
     }
@@ -382,5 +395,22 @@ public class SessionHistory extends AbstractSessionBean implements Serializable 
      */
     public void maxDisplay() {
         log.trace("Max display changed");
+    }
+    
+    /**
+     * Sets the tab index of what button got pressed incase the button
+     * called avalidation exception and therefore did not set what tab index
+     * it came from           
+     */
+    public void setIndex1(ActionEvent event) { 
+        getVisit().setTabIndex(1);
+    }
+    
+    public void setIndex2(ActionEvent event) { 
+        getVisit().setTabIndex(2);
+    }
+    
+    public void setIndex0(ActionEvent event) { 
+        getVisit().setTabIndex(0);
     }
 }

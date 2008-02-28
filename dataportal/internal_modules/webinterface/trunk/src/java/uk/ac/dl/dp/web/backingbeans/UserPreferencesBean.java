@@ -91,8 +91,7 @@ public class UserPreferencesBean extends AbstractRequestBean {
     public List<SelectItem> getResults() {
         List<SelectItem> results = new ArrayList<SelectItem>();
         results.add(new SelectItem("5", "5"));
-        results.add(new SelectItem("10", "10"));
-        results.add(new SelectItem("15", "15"));
+        results.add(new SelectItem("10", "10"));        
         results.add(new SelectItem("20", "20"));
         results.add(new SelectItem("50", "50"));
         results.add(new SelectItem("100", "100"));

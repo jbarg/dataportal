@@ -134,9 +134,9 @@ public class Visit extends AbstractSessionBean implements Serializable {
         String res = this.userPreferences.getResolution().toString();
 
         //set default history of number results
-        this.getSessionHistory().setNumberOfResultsDatafiles(this.userPreferences.getResultsPerPage());
-        this.getSessionHistory().setNumberOfResultsDatasets(this.userPreferences.getResultsPerPage());
-        this.getSessionHistory().setNumberOfResultsInvestigations(this.userPreferences.getResultsPerPage());
+        this.getSessionHistory().setNumberOfResultsDatafilesString(""+this.userPreferences.getResultsPerPage());
+        this.getSessionHistory().setNumberOfResultsDatasetsString(""+this.userPreferences.getResultsPerPage());
+        this.getSessionHistory().setNumberOfResultsInvestigationsString(""+this.userPreferences.getResultsPerPage());
 
         setUserWidth(res);
         log.trace("Width set to: " + width);
@@ -185,11 +185,9 @@ public class Visit extends AbstractSessionBean implements Serializable {
         } catch (Exception ex) {
             log.warn("Error reading in facility.properties file", ex);
         }
-
-        ResourceBundle facilityResources = ResourceBundle.getBundle("uk.ac.dl.dp.web.messages.facility");
-
+     
         try {
-            facility = facilityResources.getString("facility.name");
+            facility = customisation.getProperty("facility.name");
         } catch (Exception mre) {
             facility = "ISIS";
         }
@@ -367,15 +365,16 @@ public class Visit extends AbstractSessionBean implements Serializable {
 
     /**
      * Tabbed pane index of the nav bar
-     * 0 = basic search
-     * 1 = advanced search
-     * 2 = preferneces
+     * 0 = Keyword search
+     * 1 = Advanced search
+     * 2 = Facility
      */
     public int getTabIndex() {
         return tabIndex;
     }
 
     public void setTabIndex(int tabIndex) {
+        log.trace("Setting tab index to "+tabIndex);
         this.tabIndex = tabIndex;
     }
 

@@ -35,7 +35,6 @@ import uk.ac.dp.icatws.KeywordDetails;
  *
  * @author gjd37
  */
-
 public class SearchBean extends AbstractRequestBean {
 
     private static Logger log = Logger.getLogger(SearchBean.class);
@@ -183,8 +182,13 @@ public class SearchBean extends AbstractRequestBean {
         //sets up initial values
         String sid = null;
         QueryRequest query_request = null;
+        
+          //set last query data
+            SessionHistory sessionHistory = getSessionHistory();
 
         log.trace("searching for keywords:");
+        setKeyword(sessionHistory.getBasicSearchHistoryBean().getKeywordForBasicSearch());
+                
         for (String keyword : getKeywords()) {
             log.trace(keyword);
         }
@@ -199,11 +203,12 @@ public class SearchBean extends AbstractRequestBean {
               
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
-        try {
-            //set last query data
-            SessionHistory sessionHistory = getSessionHistory();
-            
+        try {                     
             BasicSearchHistoryBean bsb = sessionHistory.getBasicSearchHistoryBean();
+            //set keyword from hisotry
+            setKeyword(sessionHistory.getBasicSearchHistoryBean().getKeywordForBasicSearch());
+              sessionHistory.getBasicSearchHistoryBean().setKeywordForBasicSearch("");
+      
             bsb.setKeyword(getKeyword());
             bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());           
             bsb.setLogicalExpression(getLogicalExpression());  
@@ -266,6 +271,7 @@ public class SearchBean extends AbstractRequestBean {
          
         log.trace("searching for keywords:");
         setKeyword(sessionHistory.getBasicSearchHistoryBean().getKeyword());
+        
         for (String keyword : getKeywords()) {
             log.trace(keyword);
         }
@@ -289,6 +295,7 @@ public class SearchBean extends AbstractRequestBean {
             //set last query data            
             BasicSearchHistoryBean bsb = sessionHistory.getBasicSearchHistoryBean();
             bsb.setKeyword(getKeyword());
+            
             bsb.setSelectedFacilities(getVisitData().getCurrentSelectedFacilities());
             bsb.setCaseSensitive(sessionHistory.isKeywordSearchNavigationCaseSensitive());
             

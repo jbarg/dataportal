@@ -170,14 +170,13 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
         log.trace("searching for advanced:");
         log.trace("searching for facilities :" + getVisitData().getCurrentSelectedFacilities());
-
+        SessionHistory sessionHistory = getSessionHistory();
+       
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
-
-            SessionHistory sessionHistory = getSessionHistory();
-
             AdvancedSearchHistoryBean advancedTypeSearchHistoryBean = null;
+            
             if (searchType == DPQueryType.ADVANCED) {
 
                 //set history bean
@@ -205,7 +204,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
 
             if (searchType != DPQueryType.ADVANCED_DATAFILE) {
                 asdDTO.setExperimentNumber(advancedTypeSearchHistoryBean.getInvNumber());
-
+                
                 setKeyword(advancedTypeSearchHistoryBean.getKeyword());
                 asdDTO.setKeywords(getKeywords());
                 if (advancedTypeSearchHistoryBean.getGrantId() != null) {
@@ -317,7 +316,7 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             getVisitData().setSearchedTitle(getVisit().getFacility() + " Search Results");
         }
 
-//wait for results.
+        //wait for results.
         SearchBean searchBean = (SearchBean) getBean("searchBean");
         return searchBean.getQueryResults(query_request, searchType, 120);
     }
@@ -346,28 +345,36 @@ public class AdvancedSearchBean extends AbstractRequestBean {
     /**
      * Action method to do basic search
      */
-    public String searchAdvanced(
-            DPQueryType searchType) {
+    public String searchAdvanced(DPQueryType searchType) {
         //sets up initial values
 
         QueryRequest query_request = null;
+        SessionHistory sessionHistory = getSessionHistory();
 
         log.trace("searching for advanced:");
-
         log.trace("searching for facilities :" + getVisitData().getCurrentSelectedFacilities());
 
+        //set the keyword
+        setKeyword(sessionHistory.getAdvancedSearchHistoryBean().getKeywordForAdvancedSearch());
+       
+        
         //send off initail query
         QueryDelegate qd = QueryDelegate.getInstance();
         try {
 
             boolean fuzzy = false;
-            SessionHistory sessionHistory = getSessionHistory();
+
 
             log.debug("TYPE of SEARCH " + searchType);
             if (searchType == DPQueryType.ADVANCED) {
                 //set history bean
                 AdvancedSearchHistoryBean advancedSearchHistoryBean = sessionHistory.getAdvancedSearchHistoryBean();
                 advancedSearchHistoryBean.setInvNumber(getInvNumber());
+                
+                //set the keyword
+                setKeyword(advancedSearchHistoryBean.getKeywordForAdvancedSearch());
+                sessionHistory.getAdvancedSearchHistoryBean().setKeywordForAdvancedSearch("");
+ 
                 advancedSearchHistoryBean.setKeyword(getKeyword());
                 advancedSearchHistoryBean.setInstrument(getInstrument());
                 advancedSearchHistoryBean.setSample(getSample());
@@ -393,6 +400,10 @@ public class AdvancedSearchBean extends AbstractRequestBean {
             } else if (searchType == DPQueryType.ISIS) {
 
                 ISISSearchHistoryBean isisSearchHistoryBean = sessionHistory.getIsisSearchHistoryBean();
+
+                //set the keyword
+                setKeyword(isisSearchHistoryBean.getKeywordForAdvancedSearch());
+                sessionHistory.getIsisSearchHistoryBean().setKeywordForAdvancedSearch("");
 
                 isisSearchHistoryBean.setKeyword(getKeyword());
                 isisSearchHistoryBean.setInstrument(getInstrument());
