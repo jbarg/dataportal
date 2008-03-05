@@ -37,6 +37,7 @@ import uk.ac.dp.icatws.Shift;
 public class InvestigationBean extends SortableList {
 
     private static Logger log = Logger.getLogger(InvestigationBean.class);
+    
     private HtmlDataTable table;
     private List<Investigation> investigations;
     private boolean expanded = false;
@@ -282,9 +283,9 @@ public class InvestigationBean extends SortableList {
                         for (Publication publication : fullInvestigation.getPublicationCollection()) {
                             currentInvestigation.getPublicationCollection().add(publication);
                         }
-                        /*for (Sample sample : fullInvestigation.getSampleCollection()) {
-                            currentInvestigation.getSampleCollection().add(sample);
-                        }*/
+                    /*for (Sample sample : fullInvestigation.getSampleCollection()) {
+                    currentInvestigation.getSampleCollection().add(sample);
+                    }*/
                     }
                 }
             } catch (Exception ex) {
@@ -341,64 +342,41 @@ public class InvestigationBean extends SortableList {
     }
 
     /**
-     * method to select all data
-     */
-    public String selectall() {
-        for (Investigation invest : getVisitData().getSearchedInvestigations()) {
-            invest.setSelected(true);
-        }
-        return null;
-    }
-
-    /**
-     * method to select no data
-     */
-    public String selectnone() {
-        for (Investigation invest : getVisitData().getSearchedInvestigations()) {
-            invest.setSelected(false);
-        }
-        return null;
-    }
-
-    /**
      * exapnds all the abstracts
      */
-    public void expandAll(ActionEvent event) {
-
-        log.debug("Expanding");
-        getTable().expandAllDetails();
-        getVisitData().setInvestigationExpanded(true);
-
-    }
-
+    /*public void expandAll(ActionEvent event) {
+    log.debug("Expanding");
+    getTable().expandAllDetails();
+    getVisitData().setInvestigationExpanded(true);
+    }*/
     /**
      * collapses all the abstracts
      */
-    public void collapseAll(ActionEvent event) {
-        log.debug("Collapsing");
-        getTable().collapseAllDetails();
-        getVisitData().setInvestigationExpanded(false);
-
-    }
-
+    /*public void collapseAll(ActionEvent event) {
+    log.debug("Collapsing");
+    getTable().collapseAllDetails();
+    getVisitData().setInvestigationExpanded(false);
+    }*/
     /**
      * select none the investigations
      */
-    public void selectNone(ActionEvent event) {
-        selectnone();
-        getVisitData().setInvestigationsSelected(false);
-        log.trace("Setect selected false");
+    /*public void selectNone(ActionEvent event) {
+    for (Investigation invest : getVisitData().getSearchedInvestigations()) {
+    invest.setSelected(false);
     }
-
+    getVisitData().setInvestigationsSelected(false);
+    log.trace("Setect selected false");
+    }*/
     /**
      * select all the investigations
      */
-    public void selectAll(ActionEvent event) {
-        selectall();
-        getVisitData().setInvestigationsSelected(true);
-        log.trace("Setect selected true");
+    /*public void selectAll(ActionEvent event) {
+    for (Investigation invest : getVisitData().getSearchedInvestigations()) {
+    invest.setSelected(true);
     }
-
+    getVisitData().setInvestigationsSelected(true);
+    log.trace("Setect selected true");
+    }*/
     /**
      * when user clicks on the investigation hyperlink on the investigations page
      */
@@ -474,7 +452,7 @@ public class InvestigationBean extends SortableList {
                         for (Investigation investigationsSearched : getVisitData().getSearchedInvestigations()) {
                             for (Sample sample : investigationsSearched.getSampleCollection()) {
                                 if (sample.getId().equals(sampleId)) {
-                                    log.trace("Setting unique id for " + dataset.getId() + " to: " + invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName() );
+                                    log.trace("Setting unique id for " + dataset.getId() + " to: " + invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName());
                                     //got the sample for dataset from its Id from parent investigation
                                     dataset.setUniqueId(invest.getFacility() + "-" + invest.getId() + "-" + dataset.getId() + "-:" + sample.getName());
                                     break;
@@ -501,18 +479,6 @@ public class InvestigationBean extends SortableList {
         }
         return NavigationConstants.GET_DATASETS_SUCCESS;
     }
-    /**
-     * TODO: Dummy method to allow the datatable to function.
-     *
-     * Bug, the table does not allow links to work without a ajax request
-     * Only works with Firefox
-     */
-    private boolean dummyDone = false;
-
-    public void dummyAjax(ActionEvent e) {
-        log.trace("Dummy method called");
-        dummyDone = true;
-    }
 
     /**
      * Sets if case sensitive is  for a particular item
@@ -520,10 +486,6 @@ public class InvestigationBean extends SortableList {
     public void maxDisplay() {
         log.trace("Max display changed");
         startFirst = true;
-    }
-
-    public boolean getDummyAjaxDone() {
-        return dummyDone;
     }
 
     public boolean isExpanded() {
@@ -594,8 +556,8 @@ public class InvestigationBean extends SortableList {
     public boolean isNotInvType() {
         return isNot("invType");
     }
-    
-     public boolean isInvParamValue() {
+
+    public boolean isInvParamValue() {
         return is("invParamValue");
     }
 
