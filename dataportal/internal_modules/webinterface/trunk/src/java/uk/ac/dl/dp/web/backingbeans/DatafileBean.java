@@ -30,13 +30,28 @@ import uk.ac.dp.icatws.DatafileParameter;
 public class DatafileBean extends SortableList {
 
     private static Logger log = Logger.getLogger(DatafileBean.class);
+    
+    /**
+     * Datafile table
+     */
     private HtmlDataTable table;
+    
+    /**
+     * Collection of datafiles representing the data for the table
+     */
     private List<Datafile> datafiles;
+    
+    /**
+     * 
+     */
     private boolean expanded = false;
     private boolean startFirst = false;
 
+    /**
+     * Constructor
+     */
     public DatafileBean() {
-        super("name");
+        super("name"); //sort by name by default
     }
 
     public HtmlDataTable getTable() {
@@ -52,7 +67,7 @@ public class DatafileBean extends SortableList {
     }
 
     /**
-     * data for the table to show, data already got from search bean
+     * Data for the table to show, data already got from search bean
      */
     public List<Datafile> getDatafiles() {
         sort(getSort(), isAscending());
@@ -116,15 +131,14 @@ public class DatafileBean extends SortableList {
     }
 
     /**
-     * Download all datafiles
-     * 
+     * Download all datafiles 
      */
     public void downloadAllData() {
         log.trace("Downloading all datafiles");
         String facility = null;
         Collection<Long> datafileIds = new ArrayList<Long>();
         for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
-            if (datafile.getIcatRole().isActionDownload() && datafile.isSelected()) {
+            if (datafile.getIcatRole().isActionDownload()) {
                 log.trace("Adding " + datafile.getId() + " to download list");
                 datafileIds.add(datafile.getId());
             }
@@ -141,6 +155,9 @@ public class DatafileBean extends SortableList {
      * @param facility from which to download from
      */
     private void download(Collection<Long> datafileIds, String facility) {
+        if (datafileIds == null || datafileIds.size() == 0) {
+            error("Please select atleast one file to download");
+        }
         FacesContext context = FacesContext.getCurrentInstance();
         String URL = null;
         try {
@@ -158,7 +175,10 @@ public class DatafileBean extends SortableList {
         }
     }
 
-    public void downloadSingleData(ActionEvent event) {
+    /**
+     * Download a single file 
+     */
+    public void downloadSingleData() {
         log.trace("Downloading single datafile");
 
         Collection<Long> datafileIds = new ArrayList<Long>();
@@ -166,7 +186,10 @@ public class DatafileBean extends SortableList {
 
         Datafile datafileTable = (Datafile) table.getRowData();
 
-        if (datafileTable.getIcatRole().isActionDownload() && datafileTable.isSelected()) {
+        if (datafileTable == null) {
+            log.trace("Unable to get the row data from table");
+            error("Unable to download file");
+        } else if (datafileTable.getIcatRole().isActionDownload()) {
             log.trace("Adding " + datafileTable.getId() + " to download list");
             datafileIds.add(datafileTable.getId());
             facility = datafileTable.getUniqueId();
@@ -176,8 +199,7 @@ public class DatafileBean extends SortableList {
     }
 
     /**
-     * Download all datafiles
-     * 
+     * Download selected datafiles 
      */
     public void downloadData() {
         log.trace("Downloading selected datafiles");
@@ -185,7 +207,7 @@ public class DatafileBean extends SortableList {
 
         Collection<Long> datafileIds = new ArrayList<Long>();
         for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
-            if (datafile.getIcatRole().isActionDownload()) {
+            if (datafile.getIcatRole().isActionDownload() && datafile.isSelected()) {
                 log.trace("Adding " + datafile.getId() + " to download list");
                 datafileIds.add(datafile.getId());
             }
@@ -214,6 +236,12 @@ public class DatafileBean extends SortableList {
         }
     }
 
+    /**
+     * Gets the datafile parameters if the size is 0.  If 0 then gets it again and sets
+     * the parameters from the datafile.  If !=0 then this process has already happened.
+     * 
+     * @param event
+     */
     public void getDatafileParameters(ActionEvent event) {
         log.trace("getting datafile parameters");
         Datafile datafileTable = (Datafile) table.getRowData();
@@ -261,92 +289,58 @@ public class DatafileBean extends SortableList {
                     sort(param);
                     break;
                 }
-
             }
             i++;
         }
         //collaspe all details in the data table.
-
         getTable().collapseAllDetails();
     }
-
+      
     /**
-     * method to select all data
+     * Expands all the datafiles in the datafile table showing the parameters
+     * 
+     * @param event actionevent that represents the expandAll click
      */
-    public String selectall() {
-        for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
-            datafile.setSelected(true);
-        }
-
-        return null;
-    }
-
-    /**
-     * method to select no data
-     */
-    public String selectnone() {
-        for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
-            datafile.setSelected(false);
-        }
-
-        return null;
-    }
-
-    /**
-     * exapnds all the abstracts
-     */
-    public void expandAll(ActionEvent event) {
-
+    /*public void expandAll(ActionEvent event) {
         log.debug("Expanding");
         getTable().expandAllDetails();
         getVisitData().setDatafileExpanded(true);
-
-    }
+    }*/
 
     /**
-     * collapses all the abstracts
+     * Collapses all the datafiles in the datafile table showing the parameters
+     * 
+     * @param event actionevent that represents the collapseAll click
      */
-    public void collapseAll(ActionEvent event) {
+    /*public void collapseAll(ActionEvent event) {
         log.debug("Collapsing");
         getTable().collapseAllDetails();
         getVisitData().setDatafileExpanded(false);
-
-    }
+    }*/
 
     /**
-     * select none the investigations
+     * Select none the datafiles in the datafile table
+     * 
+     * @param event actionevent that represents the selectNone click
      */
-    public void selectNone(ActionEvent event) {
-        selectnone();
-        getVisitData().setInvestigationsSelected(false);
+    /*public void selectNone(ActionEvent event) {
         log.trace("Setect selected false");
-    }
+        for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
+            datafile.setSelected(false);
+        }
+    }*/
 
     /**
-     * select all the investigations
+     * Select all of the datafiles in the datafile table
+     * 
+     * @param event actionevent that represents the selectAll click
      */
-    public void selectAll(ActionEvent event) {
-        selectall();
-        getVisitData().setInvestigationsSelected(true);
+    /*public void selectAll(ActionEvent event) {
         log.trace("Setect selected true");
-    }
-    /**
-     * TODO: Dummy method to allow the datatable to function.
-     *
-     * Bug, the table does not allow links to work without a ajax request
-     * Only works with Firefox
-     */
-    private boolean dummyDone = false;
-
-    public void dummyAjax(ActionEvent e) {
-        log.trace("Dummy method called");
-        dummyDone =
-                true;
-    }
-
-    public boolean getDummyAjaxDone() {
-        return dummyDone;
-    }
+        for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
+            datafile.setSelected(true);
+        }
+    }*/
 
     public boolean isExpanded() {
         return expanded;
@@ -357,12 +351,11 @@ public class DatafileBean extends SortableList {
     }
 
     /**
-     * Sets if case sensitive is  for a particular item
+     * Sets if max display of the datafile table
      */
     public void maxDisplay() {
         log.trace("Max display changed");
-        startFirst =
-                true;
+        startFirst = true;
     }
 
     //for sorting columns
