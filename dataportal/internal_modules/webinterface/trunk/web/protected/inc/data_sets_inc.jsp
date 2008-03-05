@@ -480,14 +480,29 @@
                         </a4j:commandLink>
                     </f:facet>
                     
-                    <!--  Download -->
-                    <h:commandLink rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" onclick="download('#{dataFile.id}','DATA_FILE','DATA_SETS'); return false;" style="color: black; " styleClass="investigation" id="downloadname">                    
-                        <h:outputText value="#{dataFile.name}" />
-                    </h:commandLink> 
+                    <%--   SRB Type download   --%>
+                    <h:panelGrid rendered="#{visit.customisation.downloadTypeSRB}" columns="2">
                     
-                    <!-- No download -->
-                    <h:outputText rendered="#{!dataFile.icatRole.actionDownload || dataFile.location == null}" value="#{dataFile.name}" />
+                        <!--  Download -->
+                        <h:commandLink rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" onclick="download('#{dataFile.id}','DATA_FILE','DATA_SETS'); return false;" style="color: black; " styleClass="investigation" id="downloadname">                    
+                            <h:outputText value="#{dataFile.name}" />
+                        </h:commandLink> 
+                        
+                        <!-- No download -->
+                        <h:outputText rendered="#{!dataFile.icatRole.actionDownload || dataFile.location == null}" value="#{dataFile.name}" />
+                    </h:panelGrid>
                     
+                     <%--   HTTP Type download   --%>
+                    <h:panelGrid rendered="#{!visit.customisation.downloadTypeSRB}" columns="2">
+                    
+                        <!--  Download -->
+                        <h:commandLink rendered="#{dataFile.icatRole.actionDownload}" action="#{datafileBean.downloadSingleData}" styleClass="investigation" id="downloadname">                    
+                            <h:outputText value="#{dataFile.name}" />
+                        </h:commandLink> 
+                        
+                        <!-- No download -->
+                        <h:outputText rendered="#{!dataFile.icatRole.actionDownload}" value="#{dataFile.name}" />
+                    </h:panelGrid>
                 </h:column>
                 
                 <!--  File Size -->
@@ -784,7 +799,7 @@
                          var="dataSet"
                          value="#{datasetBean.datasets}"
                          preserveDataModel="true"
-                          rowIndexVar="rowIndex"
+                         rowIndexVar="rowIndex"
                          rows="#{sessionHistory.numberOfResultsDatasets}"       
                          binding="#{datasetBean.table}"
                          sortColumn="#{datasetBean.sort}"
@@ -792,7 +807,7 @@
                          preserveSort="true"
                          varDetailToggler="detailToggler"  
                          rendered="#{visit.visitData.datasetTableVisable}"  >
-                             
+                
                 <f:facet name="header">
                     <h:outputText value="#{visit.visitData.currentInvestigation}'s datasets" />
                 </f:facet>
@@ -1098,14 +1113,29 @@
                 </td>
                 
                 </tr>--%>
-                <h:panelGrid columns="3" style="float: right" >
-                    <h:commandButton disabled="#{!visit.visitData.dataFilesDownloadable}" styleClass="button" id="downloadnow" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections" value="Download selection"/>
+                
+                <%--   SRB Type download   --%>
+                <h:panelGrid rendered="#{visit.customisation.downloadTypeSRB}" columns="3" style="float: right" >
+                    <h:commandButton disabled="#{!visit.visitData.dataFilesDownloadable}" styleClass="button" id="downloadnowSRB" style="width: 130px"  onclick="download('DOWNLOAD_MULTIPLE','DOWNLOAD_MULTIPLE','DATA_SETS'); return false;"  title="Download selections" value="Download selection"/>
                     <h:panelGroup/>
                     <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
                 </h:panelGrid>
                 
-                <h:panelGrid columns="3" style="float: right" >
-                    <h:commandButton disabled="#{!visit.visitData.dataFilesDownloadable}" styleClass="button" id="downloaddataset" style="width: 130px"  onclick="download('#{visit.visitData.currentDatasetId}','DATA_SET','DATA_SETS'); return false;"  title="Download All" value="Download All"/>
+                <h:panelGrid rendered="#{visit.customisation.downloadTypeSRB}" columns="3" style="float: right" >
+                    <h:commandButton disabled="#{!visit.visitData.dataFilesDownloadable}" styleClass="button" id="downloaddatasetSRB" style="width: 130px"  onclick="download('#{visit.visitData.currentDatasetId}','DATA_SET','DATA_SETS'); return false;"  title="Download All" value="Download All"/>
+                    <h:panelGroup/>
+                    <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                </h:panelGrid>
+                
+                <%--   HTTP Type download   --%>
+                <h:panelGrid rendered="#{!visit.customisation.downloadTypeSRB}" columns="3" style="float: right" >
+                    <h:commandButton disabled="#{!visit.visitData.dataFilesDownloadable}" styleClass="button" id="downloadnow" style="width: 130px"  action="#{datafileBean.downloadData}" title="Download selections" value="Download selection" />
+                    <h:panelGroup/>
+                    <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
+                </h:panelGrid>
+                
+                <h:panelGrid rendered="#{!visit.customisation.downloadTypeSRB}" columns="3" style="float: right" >
+                    <h:commandButton disabled="#{!visit.visitData.dataFilesDownloadable}" styleClass="button" id="downloaddataset" style="width: 130px"  action="#{datafileBean.downloadAllData}" title="Download All" value="Download All" />
                     <h:panelGroup/>
                     <h:graphicImage value="../../images/download.gif" width="19" height="14" />                                                             
                 </h:panelGrid>
