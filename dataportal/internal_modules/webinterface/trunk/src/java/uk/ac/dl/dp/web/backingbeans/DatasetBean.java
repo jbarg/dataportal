@@ -19,7 +19,6 @@ import javax.faces.component.*;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.web.util.SortableList;
-import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
 import uk.ac.dp.icatws.DatasetInclude;
 import uk.ac.dp.icatws.DatasetParameter;
@@ -31,13 +30,28 @@ import uk.ac.dp.icatws.DatasetParameter;
 public class DatasetBean extends SortableList {
 
     private static Logger log = Logger.getLogger(DatasetBean.class);
+    
+     /**
+     * Dataset table
+     */
     private HtmlDataTable table;
+    
+     /**
+     * Collection of datasets representing the data for the table
+     */
     private List<Dataset> datasets;
+    
+    /**
+     * 
+     */
     private boolean expanded = false;
     private boolean startFirst = false;
     
+    /**
+     * Constructor
+     */
     public DatasetBean() {
-        super("name");
+        super("name"); //sort by name by default
     }
 
     public HtmlDataTable getTable() {
@@ -53,11 +67,13 @@ public class DatasetBean extends SortableList {
     }
 
     /**
-     * data for the table to show, data already got from search bean
+     * Data for the table to show, data already got from search bean
      */
     public List<Dataset> getDatasets() {
         sort(getSort(), isAscending());
-        if(startFirst) table.setFirst(0);
+        if(startFirst) {
+            table.setFirst(0);
+        }
         List<Dataset> datasets = (List<Dataset>) getVisitData().getCurrentDatasets();
         if (datasets == null) {
             return (List<Dataset>) new ArrayList<Dataset>();
@@ -188,6 +204,12 @@ public class DatasetBean extends SortableList {
         getTable().collapseAllDetails();
     }
 
+    /**
+     * Gets the dataset parameters if the size is 0.  If 0 then gets it again and sets
+     * the parameters from the dataset.  If !=0 then this process has already happened.
+     * 
+     * @param event
+     */
      public void getDatasetParameters(ActionEvent event) {
         log.trace("getting dataset parameters");
         Dataset datasetTable = (Dataset) table.getRowData();
@@ -216,82 +238,45 @@ public class DatasetBean extends SortableList {
             log.trace("Already have parameters for " + datasetTable.getId());
         }
     }
-     
-    /**
-     * method to select all data
-     */
-    public String selectall() {
-        for (Dataset dataset : getVisitData().getCurrentDatasets()) {
-            dataset.setSelected(true);
-        }
-        return null;
-    }
-
-    /**
-     * method to select no data
-     */
-    public String selectnone() {
-        for (Dataset dataset : getVisitData().getCurrentDatasets()) {
-            dataset.setSelected(false);
-        }
-        return null;
-    }
-
+        
     /**
      * exapnds all the abstracts
      */
-    public void expandAll(ActionEvent event) {
-
+    /*public void expandAll(ActionEvent event) {
         log.debug("Expanding");
         getTable().expandAllDetails();
         getVisitData().setDatasetExpanded(true);
-
-    }
+    }*/
 
     /**
      * collapses all the abstracts
      */
-    public void collapseAll(ActionEvent event) {
+    /*public void collapseAll(ActionEvent event) {
         log.debug("Collapsing");
         getTable().collapseAllDetails();
         getVisitData().setDatasetExpanded(false);
-
-    }
+    }*/
 
     /**
      * select none the investigations
      */
-    public void selectNone(ActionEvent event) {
-        selectnone();
-        getVisitData().setInvestigationsSelected(false);
+    /*public void selectNone(ActionEvent event) {
         log.trace("Setect selected false");
-    }
+        for (Dataset dataset : getVisitData().getCurrentDatasets()) {
+            dataset.setSelected(false);
+        }       
+    }*/
 
     /**
      * select all the investigations
      */
-    public void selectAll(ActionEvent event) {
-        selectall();
-        getVisitData().setInvestigationsSelected(true);
+    /*public void selectAll(ActionEvent event) {
         log.trace("Setect selected true");
-    }
-    /**
-     * TODO: Dummy method to allow the datatable to function.
-     *
-     * Bug, the table does not allow links to work without a ajax request
-     * Only works with Firefox
-     */
-    private boolean dummyDone = false;
-
-    public void dummyAjax(ActionEvent e) {
-        log.trace("Dummy method called");
-        dummyDone = true;
-    }
-
-    public boolean getDummyAjaxDone() {
-        return dummyDone;
-    }
-
+        for (Dataset dataset : getVisitData().getCurrentDatasets()) {
+            dataset.setSelected(true);
+        }       
+    }*/
+         
     public boolean isExpanded() {
         return expanded;
     }
@@ -309,7 +294,6 @@ public class DatasetBean extends SortableList {
     }
     
     //for sorting columns
-
     private boolean is(String column) {
         if (getSort().equals(column) && isAscending()) {
             return true;
