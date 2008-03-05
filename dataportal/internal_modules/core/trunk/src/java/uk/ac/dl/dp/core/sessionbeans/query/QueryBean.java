@@ -1,11 +1,11 @@
  /*
-  * QuerySlaveMasterBean.java
-  *
-  * Created on 30 June 2006, 08:43
-  *
-  * To change this template, choose Tools | Template Manager
-  * and open the template in the editor.
-  */
+ * QuerySlaveMasterBean.java
+ *
+ * Created on 30 June 2006, 08:43
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ */
 package uk.ac.dl.dp.core.sessionbeans.query;
 
 import java.io.File;
@@ -44,7 +44,6 @@ import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.interfaces.QueryLocal;
 import uk.ac.dl.dp.coreutil.interfaces.SendMDBLocal;
-
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.InvestigationIncludeRequest;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
@@ -63,9 +62,6 @@ import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
  */
 @Stateless(mappedName = DataPortalConstants.QUERY)
 //@Interceptors(ArgumentValidator.class)
-
-
-
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLocal {
 
@@ -287,8 +283,8 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
             throw new QueryException("Unable to query for datafiles ");
         }
     }
-    
-     public String getDownloadURL(String sessionId, Collection<Long> datafileIds, String facility) throws SessionException, QueryException {
+
+    public String getDownloadURL(String sessionId, Collection<Long> datafileIds, String facility) throws SessionException, QueryException {
         log.debug("getDownloadURL(" + sessionId + ", " + datafileIds + ", " + facility + ")");
         if (sessionId == null) {
             throw new IllegalArgumentException("Session ID cannot be null.");
@@ -308,9 +304,9 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
             ModuleLookup facilityLookup = lookupLocal.getFacility(facility);
 
             String facilitySessionId = new SessionUtil(sessionId, em).getFacilitySessionId(facility);
-            return ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).downloadDatafiles(facilitySessionId, (List<Long>)datafileIds);
+            return ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).downloadDatafiles(facilitySessionId, (List<Long>) datafileIds);
         } catch (Throwable throwable) {
-            log.error("Unable to download datafiles: " + datafileIds+" for facility "+facility, throwable);
+            log.error("Unable to download datafiles: " + datafileIds + " for facility " + facility, throwable);
             throw new QueryException("Unable to download datafiles");
         }
     }
@@ -345,13 +341,7 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }
 
     @PermitAll
-    
-    
-    
     @ExcludeClassInterceptors
-    
-    
-    
     @ExcludeDefaultInterceptors
     public boolean isFinished(QueryRequest q_request) throws SessionException {
         //log.trace("isFinished("+q_request+")");
@@ -373,7 +363,6 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
     }
 
     //TODO put together a single method to recurse over QueryManager
-
     @PermitAll
     public Collection<Investigation> getQueryResults(String sessionId, String queryId) throws SessionException {
         log.debug("getQueryResults(" + sessionId + ", " + queryId + ")");
