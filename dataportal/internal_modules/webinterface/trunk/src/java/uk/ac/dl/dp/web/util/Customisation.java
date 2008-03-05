@@ -31,37 +31,53 @@ public class Customisation {
      */
     private String instrument;
     /**
+     * Investigation Param Name, this is name of param,   ISIS = Run Number Range
+     */
+    private String invParamName;
+    /**
      * Is inv type displayed
      */
     private boolean invTypeVisible;
     /**
      * Is inv type displayed
      */
-    private boolean shiftVisible;   
-     /**
+    private boolean shiftVisible;
+    /**
      * Is inv number displayed
      */
     private boolean invNumberVisible;
     /**
      * Is bcatinvstr displayed
      */
-    private boolean bcatInvStr;   
+    private boolean bcatInvStr;
     /**
      * Is visit displayed
      */
     private boolean visitIdVisible;
-     /**
+    /**
      * Is cycle displayed
      */
     private boolean cycleVisible;
-      /**
+    /**
      * Is grant id displayed
      */
     private boolean grantIdVisible;
-     /**
+    /**
+     * Is abstract popup displayed
+     */
+    private boolean abstractPopupVisible;
+    /**
+     * Is inv param displayed
+     */
+    private boolean invParamVisible;
+    /**
      * Is facility search page displayed
      */
     private boolean facilitySearchPageVisible;
+    /**
+     * Download Type
+     */
+    private boolean downloadTypeSRB;
     /**
      * Hardcoded values of instruments
      */
@@ -84,49 +100,73 @@ public class Customisation {
             } catch (Exception mre) {
                 invTypeVisible = true;
             }
-            
+
             try {
                 invNumberVisible = new Boolean(getProperty("inv.number.visible", "true")).booleanValue();
             } catch (Exception mre) {
                 invNumberVisible = true;
             }
-             
+
             try {
                 visitIdVisible = new Boolean(getProperty("visitId.visible", "true")).booleanValue();
             } catch (Exception mre) {
                 visitIdVisible = true;
             }
-            
-             try {
+
+            try {
                 shiftVisible = new Boolean(getProperty("shift.visible", "true")).booleanValue();
             } catch (Exception mre) {
                 shiftVisible = true;
             }
-            
-             try {
+
+            try {
                 bcatInvStr = new Boolean(getProperty("bcatinvstr.visible", "true")).booleanValue();
             } catch (Exception mre) {
                 bcatInvStr = true;
             }
-            
-             try {
+
+            try {
                 facilitySearchPageVisible = new Boolean(getProperty("facility.search.page.visible", "false")).booleanValue();
             } catch (Exception mre) {
                 facilitySearchPageVisible = false;
             }
-            
-             try {
+
+            try {
                 cycleVisible = new Boolean(getProperty("cycle.visible", "false")).booleanValue();
             } catch (Exception mre) {
                 cycleVisible = false;
             }
-            
+
             try {
                 grantIdVisible = new Boolean(getProperty("grantId.visible", "false")).booleanValue();
             } catch (Exception mre) {
                 grantIdVisible = false;
             }
-             
+
+            try {
+                abstractPopupVisible = new Boolean(getProperty("abstract.popup.visible", "false")).booleanValue();
+            } catch (Exception mre) {
+                abstractPopupVisible = false;
+            }
+
+            try {
+                invParamVisible = new Boolean(getProperty("inv.param.visible", "false")).booleanValue();
+            } catch (Exception mre) {
+                invParamVisible = false;
+            }
+
+            try {
+                downloadTypeSRB = new Boolean(getProperty("download.type.srb", "false")).booleanValue();
+            } catch (Exception mre) {
+                downloadTypeSRB = false;
+            }
+
+            try {
+                invParamName = getProperty("inv.param.name", "false");
+            } catch (Exception mre) {
+                invParamName = "Param Name";
+            }
+
             //load up select items for advanced search
             //TODO hard code the instruments
             try {
@@ -191,14 +231,14 @@ public class Customisation {
         }
     }
 
-     public boolean isShiftVisible() {
+    public boolean isShiftVisible() {
         return shiftVisible;
     }
 
     public void setShiftVisible(boolean shiftVisible) {
         this.shiftVisible = shiftVisible;
     }
-    
+
     public String getInstrument() {
         return instrument;
     }
@@ -214,8 +254,8 @@ public class Customisation {
     public void setInvTypeVisible(boolean invTypeVisible) {
         this.invTypeVisible = invTypeVisible;
     }
-    
-     public boolean isInvNumberVisible() {
+
+    public boolean isInvNumberVisible() {
         return invNumberVisible;
     }
 
@@ -246,16 +286,15 @@ public class Customisation {
     public void setInvestigationTypeItems(List<SelectItem> investigationTypeItems) {
         this.investigationTypeItems = investigationTypeItems;
     }
-    
-     public boolean isBcatInvStr() {
+
+    public boolean isBcatInvStr() {
         return bcatInvStr;
     }
 
     public void setBcatInvStr(boolean bcatInvStr) {
         this.bcatInvStr = bcatInvStr;
     }
-    
-    
+
     public boolean isFacilitySearchPageVisible() {
         return facilitySearchPageVisible;
     }
@@ -263,8 +302,7 @@ public class Customisation {
     public void setFacilitySearchPageVisible(boolean facilitySearchPageVisible) {
         this.facilitySearchPageVisible = facilitySearchPageVisible;
     }
-    
-    
+
     public boolean isCycleVisible() {
         return cycleVisible;
     }
@@ -272,14 +310,45 @@ public class Customisation {
     public void setCycleVisible(boolean cycleVisible) {
         this.cycleVisible = cycleVisible;
     }
-    
-    
+
     public boolean isGrantIdVisible() {
         return grantIdVisible;
     }
 
     public void setGrantIdVisible(boolean grantIdVisible) {
         this.grantIdVisible = grantIdVisible;
+    }
+
+    public boolean isAbstractPopupVisible() {
+        return abstractPopupVisible;
+    }
+
+    public void setAbstractPopupVisible(boolean abstractPopupVisible) {
+        this.abstractPopupVisible = abstractPopupVisible;
+    }
+
+    public boolean isInvParamVisible() {
+        return invParamVisible;
+    }
+
+    public void setInvParamVisible(boolean invParamVisible) {
+        this.invParamVisible = invParamVisible;
+    }
+
+    public String getInvParamName() {
+        return invParamName;
+    }
+
+    public void setInvParamName(String invParamName) {
+        this.invParamName = invParamName;
+    }
+
+    public boolean isDownloadTypeSRB() {
+        return downloadTypeSRB;
+    }
+
+    public void setDownloadTypeSRB(boolean downloadTypeSRB) {
+        this.downloadTypeSRB = downloadTypeSRB;
     }
 }
 
