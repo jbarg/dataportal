@@ -287,6 +287,33 @@ public class QueryBean extends SessionEJBObject implements QueryRemote, QueryLoc
             throw new QueryException("Unable to query for datafiles ");
         }
     }
+    
+     public String getDownloadURL(String sessionId, Collection<Long> datafileIds, String facility) throws SessionException, QueryException {
+        log.debug("getDownloadURL(" + sessionId + ", " + datafileIds + ", " + facility + ")");
+        if (sessionId == null) {
+            throw new IllegalArgumentException("Session ID cannot be null.");
+        }
+
+        //check of user logged into all facilities
+        HashSet<String> facs = new HashSet<String>();
+        facs.add(facility);
+        isLoggedIn(sessionId, facs, em);
+
+        //check is valid sessionid
+        new SessionUtil(sessionId, em);
+
+        //now get the investigation
+        try {
+            //get a list of facilites
+            ModuleLookup facilityLookup = lookupLocal.getFacility(facility);
+
+            String facilitySessionId = new SessionUtil(sessionId, em).getFacilitySessionId(facility);
+            return ICATSingleton.getInstance(facilityLookup.getWsdlLocation()).downloadDatafiles(facilitySessionId, (List<Long>)datafileIds);
+        } catch (Throwable throwable) {
+            log.error("Unable to download datafiles: " + datafileIds+" for facility "+facility, throwable);
+            throw new QueryException("Unable to download datafiles");
+        }
+    }
 
     private void isLoggedIn(String sid, HashSet<String> facilities, EntityManager manager) throws SessionException {
         for (String facility : facilities) {
