@@ -21,12 +21,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.ExcludeClassInterceptors;
 import javax.interceptor.ExcludeDefaultInterceptors;
 import javax.interceptor.Interceptors;
-import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.jws.WebService;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.core.sessionbeans.ArgumentValidator;
-
 import uk.ac.dl.dp.core.sessionbeans.SessionEJBObject;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
@@ -43,7 +40,6 @@ import uk.ac.dl.dp.coreutil.interfaces.SessionLocal;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
-import uk.ac.dp.icatws.AdvancedSearchDetails;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
 
