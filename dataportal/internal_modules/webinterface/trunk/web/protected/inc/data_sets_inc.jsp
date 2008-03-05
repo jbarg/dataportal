@@ -484,7 +484,7 @@
                     <h:panelGrid rendered="#{visit.customisation.downloadTypeSRB}" columns="2">
                     
                         <!--  Download -->
-                        <h:commandLink rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" onclick="download('#{dataFile.id}','DATA_FILE','DATA_SETS'); return false;" style="color: black; " styleClass="investigation" id="downloadname">                    
+                        <h:commandLink rendered="#{dataFile.icatRole.actionDownload && dataFile.location != null}" onclick="download('#{dataFile.id}','DATA_FILE','DATA_SETS'); return false;" style="color: black; " styleClass="investigation" id="downloadnameSRB">                    
                             <h:outputText value="#{dataFile.name}" />
                         </h:commandLink> 
                         
@@ -496,7 +496,7 @@
                     <h:panelGrid rendered="#{!visit.customisation.downloadTypeSRB}" columns="2">
                     
                         <!--  Download -->
-                        <h:commandLink rendered="#{dataFile.icatRole.actionDownload}" action="#{datafileBean.downloadSingleData}" styleClass="investigation" id="downloadname">                    
+                        <h:commandLink rendered="#{dataFile.icatRole.actionDownload}" action="#{datafileBean.downloadSingleData}" style="color: black; "  styleClass="investigation" id="downloadname">                    
                             <h:outputText value="#{dataFile.name}" />
                         </h:commandLink> 
                         
