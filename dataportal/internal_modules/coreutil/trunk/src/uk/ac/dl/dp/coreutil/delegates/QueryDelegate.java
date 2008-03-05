@@ -17,6 +17,7 @@ import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
+import uk.ac.dp.icatws.DatasetInclude;
 import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -101,8 +102,16 @@ public class QueryDelegate {
         return qsmr.getPastQueryResults(sid, query_dto);
     }
 
-    public Collection<Datafile> getDatafiles(String sid, Dataset dataset, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception {
-        return qsmr.getDatafiles(sid, dataset, facility);
+    public Dataset getDataset(String sid, Dataset dataset, String facility, DatasetInclude incldues) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception {
+        return qsmr.getDataset(sid, dataset, facility, incldues);
+    }
+
+    public Datafile getDatafile(String sid, Datafile datafile, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception {
+        return qsmr.getDatafile(sid, datafile, facility);
+    }
+    
+    public String getDownloadURL(String sid, Collection<Long> datafileIds, String facility) throws SessionException, QueryException {
+        return qsmr.getDownloadURL(sid, datafileIds, facility);
     }
 
     public Collection<Datafile> queryDatafiles(String sessionId, AdvancedSearchDetailsDTO asdDTO, String facility, int startIndex, int numberResults) throws SessionException, QueryException {

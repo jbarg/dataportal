@@ -13,6 +13,7 @@ import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
+import uk.ac.dp.icatws.DatasetInclude;
 import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -34,7 +35,9 @@ public interface QueryRemote {
 
     public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
 
-    public Collection<Datafile> getDatafiles(String sid, Dataset dataset, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
+    public Dataset getDataset(String sid, Dataset dataset, String facility, DatasetInclude includes) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
+ 
+    public Datafile getDatafile(String sid, Datafile datafile, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
 
     public Collection<Datafile> queryDatafiles(String sessionId, AdvancedSearchDetailsDTO asdDTO, String facility, int startIndex, int numberResults) throws SessionException, QueryException;
    
@@ -55,4 +58,6 @@ public interface QueryRemote {
     public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO dto) throws SessionException;
 
     public HashMap<String, Collection<String>> getKeywords(String sid, boolean redownload) throws QueryException;
+
+    public java.lang.String getDownloadURL(String sessionId, Collection<Long> datafileIds, String facility) throws SessionException, QueryException;
 }
