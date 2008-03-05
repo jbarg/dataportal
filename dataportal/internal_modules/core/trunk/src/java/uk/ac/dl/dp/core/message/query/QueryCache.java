@@ -6,7 +6,6 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package uk.ac.dl.dp.core.message.query;
 
 import java.util.LinkedHashMap;
@@ -17,11 +16,10 @@ import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
  *
  * @author gjd37
  */
-public class QueryCache <K, V> extends LinkedHashMap<K, V> {
-    
-    
+public class QueryCache<K, V> extends LinkedHashMap<K, V> {
+
     private static int MAX_ENTRIES = DataPortalConstants.QUERY_LIMIT;
-    
+
     protected boolean removeEldestEntry(Map.Entry eldest) {
         return size() > getMAX_ENTRIES();
     }
@@ -33,9 +31,4 @@ public class QueryCache <K, V> extends LinkedHashMap<K, V> {
     public static void setMAX_ENTRIES(int aMAX_ENTRIES) {
         MAX_ENTRIES = aMAX_ENTRIES;
     }
-    
-    
-    
-    
-    
 }
