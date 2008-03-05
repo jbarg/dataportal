@@ -37,10 +37,10 @@ import uk.ac.dp.icatws.KeywordType;
  */
 @MessageDriven(mappedName = DataPortalConstants.KEYWORD_MDB) /*, activationConfig =
 {
-    @ActivationConfigProperty(propertyName="destinationType",
-    propertyValue="javax.jms.Queue"),
-    @ActivationConfigProperty(propertyName="destination",
-    propertyValue=DataPortalConstants.KEYWORD_MDB)
+@ActivationConfigProperty(propertyName="destinationType",
+propertyValue="javax.jms.Queue"),
+@ActivationConfigProperty(propertyName="destination",
+propertyValue=DataPortalConstants.KEYWORD_MDB)
 })*/
 
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
