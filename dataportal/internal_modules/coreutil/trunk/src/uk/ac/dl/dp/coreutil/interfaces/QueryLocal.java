@@ -1,4 +1,3 @@
-
 package uk.ac.dl.dp.coreutil.interfaces;
 
 import java.util.Collection;
@@ -13,6 +12,7 @@ import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dp.icatws.Datafile;
 import uk.ac.dp.icatws.Dataset;
+import uk.ac.dp.icatws.DatasetInclude;
 import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
 import uk.ac.dp.icatws.Investigation;
 import uk.ac.dp.icatws.InvestigationInclude;
@@ -23,38 +23,42 @@ import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
  */
 @Local
 public interface QueryLocal {
+
     public QueryRequest queryByKeyword(String sid, KeywordQueryRequest kqr) throws QueryException, SessionException;
-    
+
     public QueryRequest queryMydata(String sid, HashSet<String> facilities) throws SessionException, QueryException;
-    
+
     public QueryRequest queryAdvanced(String sid, AdvancedSearchDetailsDTO AdvancedSearchDetails, HashSet<String> facilities) throws SessionException, QueryException;
-    
+
     public QueryRequest queryInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
-    
+
     public Investigation getInvestigationById(String sessionId, Long investigationId, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
-    
-    public Collection<Datafile> getDatafiles(String sid, Dataset dataset, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception ;
-             
+
+    public Dataset getDataset(String sid, Dataset dataset, String facility, DatasetInclude includes) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
+
+    public Datafile getDatafile(String sid, Datafile datafile, String facility) throws SessionException, QueryException, InsufficientPrivilegesException_Exception, NoSuchObjectFoundException_Exception;
+
     public boolean isFinished(QueryRequest request) throws SessionException;
-    
+
     public Collection<Investigation> getQueryResults(String sid, String queryId) throws SessionException;
-    
+
     public Collection<Investigation> getQueryResults(QueryRequest request) throws SessionException;
-    
+
     public Collection<String> getCompleted(QueryRequest request) throws SessionException;
-    
+
     public Collection<Investigation> getInvestigations(String sid, Collection<Investigation> investigations, InvestigationInclude include) throws SessionException, QueryException;
-    
+
     public Collection<QueryRecordDTO> getCurrentResults(String sid) throws SessionException;
-    
+
     public Collection<Investigation> getPastQueryResults(String sid, String queryid) throws SessionException;
-    
+
     public Collection<Investigation> getPastQueryResults(String sid, QueryRecordDTO dto) throws SessionException;
-    
+
     public HashMap<String, Collection<String>> getKeywords(String sid, boolean redownload) throws QueryException;
-    
+
     public HashMap<String, Collection<String>> getKeywords(String sid) throws QueryException;
-    
+
     public Collection<String> getKeywordsForFacility(String sid, String facility) throws QueryException;
-    
+
+   public java.lang.String getDownloadURL(String sessionId, Collection<Long> datafileIds, String facility) throws SessionException, QueryException;
 }

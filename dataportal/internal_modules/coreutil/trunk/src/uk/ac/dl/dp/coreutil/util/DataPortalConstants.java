@@ -34,7 +34,7 @@ public class DataPortalConstants {
     /**
      * Max number of results passed to the iCAT API to return from each ICAT
      */
-    public final static int MAX_RESULTS = 100;
+    public final static int MAX_RESULTS = 200;
         
     
     //allowd imageJ file types
