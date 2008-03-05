@@ -40,12 +40,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     
-     <managed-bean>
-        <managed-bean-name>autoCompleteCollapsibleBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.navigation.AutoCompleteCollapsibleBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-    
     <managed-bean>
         <managed-bean-name>adminBean</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.admin.AdminBean</managed-bean-class>
@@ -131,33 +125,9 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     </managed-bean>
     
     <managed-bean>
-        <managed-bean-name>investigationHelpTree</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.InvestigationHelpTree</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>       
-    </managed-bean>
-    
-    <managed-bean>
         <managed-bean-name>datasetTree</managed-bean-name>
         <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DataSetTree</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>       
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>datasetHelpTree</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DataSetHelpTree</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>        
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>datacenterBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.DataCenterBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>       
-    </managed-bean>
-    
-    <managed-bean>
-        <managed-bean-name>bookmarkBean</managed-bean-name>
-        <managed-bean-class>uk.ac.dl.dp.web.backingbeans.BookmarkBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean>
     
     <managed-bean>
