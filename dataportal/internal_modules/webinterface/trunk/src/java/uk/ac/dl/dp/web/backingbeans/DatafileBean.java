@@ -6,7 +6,6 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package uk.ac.dl.dp.web.backingbeans;
 
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import java.util.List;
 import org.apache.myfaces.component.html.ext.HtmlDataTable;
 import javax.faces.event.ActionEvent;
 import javax.faces.component.*;
+import javax.faces.context.FacesContext;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.web.util.SortableList;
@@ -78,41 +78,121 @@ public class DatafileBean extends SortableList {
     protected void sort(final String column, final boolean ascending) {
         Comparator comparator = new Comparator() {
 
-                    public int compare(Object o1, Object o2) {
-                        Datafile c1 = (Datafile) o1;
-                        Datafile c2 = (Datafile) o2;
-                        if (column == null) {
-                            return 0;
-                        }
-                        if (column.equals("name")) {
-                            if (c1.getName() == null && c2.getName() == null) {
-                                return 0;
-                            } else if (c1.getName() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getName() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getName().compareTo(c2.getName()) : c2.getName().compareTo(c1.getName());
-                            }
-                        } else if (column.equals("size")) {
-                            if (c1.getFileSize() == null && c2.getFileSize() == null) {
-                                return 0;
-                            } else if (c1.getFileSize() == null) {
-                                return ascending ? 1 : -1;
-                            } else if (c2.getFileSize() == null) {
-                                return ascending ? -1 : 1;
-                            } else {
-                                return ascending ? c1.getFileSize().compareTo(c2.getFileSize()) : c2.getFileSize().compareTo(c1.getFileSize());
-                            }
-                        } else {
-                            return 0;
-                        }
+            public int compare(Object o1, Object o2) {
+                Datafile c1 = (Datafile) o1;
+                Datafile c2 = (Datafile) o2;
+                if (column == null) {
+                    return 0;
+                }
+                if (column.equals("name")) {
+                    if (c1.getName() == null && c2.getName() == null) {
+                        return 0;
+                    } else if (c1.getName() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getName() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getName().compareTo(c2.getName()) : c2.getName().compareTo(c1.getName());
                     }
-                };
+                } else if (column.equals("size")) {
+                    if (c1.getFileSize() == null && c2.getFileSize() == null) {
+                        return 0;
+                    } else if (c1.getFileSize() == null) {
+                        return ascending ? 1 : -1;
+                    } else if (c2.getFileSize() == null) {
+                        return ascending ? -1 : 1;
+                    } else {
+                        return ascending ? c1.getFileSize().compareTo(c2.getFileSize()) : c2.getFileSize().compareTo(c1.getFileSize());
+                    }
+                } else {
+                    return 0;
+                }
+            }
+        };
         if (getVisitData().getCurrentDatafiles() != null) {
             Collections.sort((List<Datafile>) getVisitData().getCurrentDatafiles(), comparator);
         }
 
+    }
+
+    /**
+     * Download all datafiles
+     * 
+     */
+    public void downloadAllData() {
+        log.trace("Downloading all datafiles");
+        String facility = null;
+        Collection<Long> datafileIds = new ArrayList<Long>();
+        for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
+            if (datafile.getIcatRole().isActionDownload() && datafile.isSelected()) {
+                log.trace("Adding " + datafile.getId() + " to download list");
+                datafileIds.add(datafile.getId());
+            }
+            facility = datafile.getUniqueId();
+        }
+
+        download(datafileIds, facility);
+    }
+
+    /**
+     * Actually downloads the data
+     * 
+     * @param datafileIds collection of datafile ids to download
+     * @param facility from which to download from
+     */
+    private void download(Collection<Long> datafileIds, String facility) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String URL = null;
+        try {
+            //now get download URL
+            QueryDelegate qd = QueryDelegate.getInstance();
+
+            URL = qd.getDownloadURL(getVisit().getSid(), datafileIds, facility);
+            log.trace("Download URL for " + datafileIds + " is " + URL);
+            context.getExternalContext().redirect(URL);
+        } catch (Exception ex) {
+            error("Error downloading data.");
+            log.warn("Error forwarding to download the data to URL " + URL);
+        } finally {
+            context.responseComplete();
+        }
+    }
+
+    public void downloadSingleData(ActionEvent event) {
+        log.trace("Downloading single datafile");
+
+        Collection<Long> datafileIds = new ArrayList<Long>();
+        String facility = null;
+
+        Datafile datafileTable = (Datafile) table.getRowData();
+
+        if (datafileTable.getIcatRole().isActionDownload() && datafileTable.isSelected()) {
+            log.trace("Adding " + datafileTable.getId() + " to download list");
+            datafileIds.add(datafileTable.getId());
+            facility = datafileTable.getUniqueId();
+        }
+
+        download(datafileIds, facility);
+    }
+
+    /**
+     * Download all datafiles
+     * 
+     */
+    public void downloadData() {
+        log.trace("Downloading selected datafiles");
+        String facility = null;
+
+        Collection<Long> datafileIds = new ArrayList<Long>();
+        for (Datafile datafile : getVisitData().getCurrentDatafiles()) {
+            if (datafile.getIcatRole().isActionDownload()) {
+                log.trace("Adding " + datafile.getId() + " to download list");
+                datafileIds.add(datafile.getId());
+            }
+            facility = datafile.getUniqueId();
+        }
+
+        download(datafileIds, facility);
     }
 
     /**
@@ -162,7 +242,6 @@ public class DatafileBean extends SortableList {
             log.trace("Already have parameters for " + datafileTable.getId());
         }
     }
-
 
     /**
      * Listens for sort column action events, and gets the column by thge param name passed in
@@ -287,7 +366,6 @@ public class DatafileBean extends SortableList {
     }
 
     //for sorting columns
-
     private boolean is(String column) {
         if (getSort().equals(column) && isAscending()) {
             return true;
