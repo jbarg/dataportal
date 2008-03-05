@@ -219,7 +219,7 @@ public class DatasetBean extends SortableList {
                 QueryDelegate qd = QueryDelegate.getInstance();
 
                 //get the datafile
-                Dataset datasetReturned = qd.getDataset(getVisit().getSid(), datasetTable, datasetTable.getUniqueId(), DatasetInclude.DATASET_PARAMETERS_ONLY);
+                Dataset datasetReturned = qd.getDataset(getVisit().getSid(), datasetTable, datasetTable.getUniqueId().substring(0, datasetTable.getUniqueId().indexOf("-")), DatasetInclude.DATASET_PARAMETERS_ONLY);
 
                 Collection<Dataset> datasets = getVisitData().getCurrentDatasets();
                 for (Dataset currentDataset : datasets) {
