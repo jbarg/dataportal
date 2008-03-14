@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+
+<system systemId="https://volga.dl.ac.uk:7181/ICATService/ICAT?wsdl" uri="xml-resources/web-service-references/ICAT/wsdl/volga.dl.ac.uk_7181/ICATService/ICAT.wsdl"/>
+<system systemId="https://volga.dl.ac.uk:7181/ICATService/ICAT/__container$publishing$subctx/META-INF/wsdl/ICATService_schema1.xsd" uri="xml-resources/web-service-references/ICAT/wsdl/volga.dl.ac.uk_7181/ICATService/ICAT/__container_publishing_subctx/META-INF/wsdl/ICATService_schema1.xsd"/>
+    <system systemId="https://facilities01.esc.rl.ac.uk:8182/ICATCLFService/ICAT?wsdl" uri="xml-resources/web-service-references/ICAT/wsdl/facilities01.esc.rl.ac.uk_8182/ICATCLFService/ICAT.wsdl"/>
+    <system systemId="https://facilities01.esc.rl.ac.uk:8182/ICATCLFService/ICAT?xsd=1" uri="xml-resources/web-service-references/ICAT/wsdl/facilities01.esc.rl.ac.uk_8182/ICATCLFService/ICAT.xsd_1.xsd"/>
+    <system systemId="https://volga.dl.ac.uk:9181/ICATService/ICAT?wsdl" uri="xml-resources/web-service-references/ICAT/wsdl/volga.dl.ac.uk_9181/ICATService/ICAT.wsdl"/>
+    <system systemId="https://volga.dl.ac.uk:9181/ICATService/ICAT?xsd=1" uri="xml-resources/web-service-references/ICAT/wsdl/volga.dl.ac.uk_9181/ICATService/ICAT.xsd_1.xsd"/>
+    <system systemId="https://isras123.nd.rl.ac.uk:8181/ICATService/ICAT?wsdl" uri="xml-resources/web-service-references/ICAT/wsdl/isras123.nd.rl.ac.uk_8181/ICATService/ICAT.wsdl"/>
+    <system systemId="https://isras123.nd.rl.ac.uk:8181/ICATService/ICAT?xsd=1" uri="xml-resources/web-service-references/ICAT/wsdl/isras123.nd.rl.ac.uk_8181/ICATService/ICAT.xsd_1.xsd"/>
+    <system systemId="https://volga.dl.ac.uk:8181/ICATService/ICAT?wsdl" uri="xml-resources/web-service-references/ICAT/wsdl/volga.dl.ac.uk_8181/ICATService/ICAT.wsdl"/>
+    <system systemId="https://volga.dl.ac.uk:8181/ICATService/ICAT?xsd=1" uri="xml-resources/web-service-references/ICAT/wsdl/volga.dl.ac.uk_8181/ICATService/ICAT.xsd_1.xsd"/>
+    <system systemId="https://escvig6.dl.ac.uk:8182/ICATService/ICAT?wsdl" uri="xml-resources/web-service-references/ICAT/wsdl/escvig6.dl.ac.uk_8182/ICATService/ICAT.wsdl"/>
+    <system systemId="https://escvig6.dl.ac.uk:8182/ICATService/ICAT?xsd=1" uri="xml-resources/web-service-references/ICAT/wsdl/escvig6.dl.ac.uk_8182/ICATService/ICAT.xsd_1.xsd"/>
+</catalog>
