@@ -27,11 +27,11 @@ import uk.ac.dl.dp.coreutil.interfaces.LookupLocal;
 import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.util.SessionUtil;
-import uk.ac.dp.icatws.AdvancedSearchDetails;
+import uk.icat3.client.AdvancedSearchDetails;
 import uk.ac.dp.icatws.ICATSingleton;
-import uk.ac.dp.icatws.Investigation;
-import uk.ac.dp.icatws.InvestigationInclude;
-import uk.ac.dp.icatws.SessionException_Exception;
+import uk.icat3.client.Investigation;
+import uk.icat3.client.InvestigationInclude;
+import uk.icat3.client.SessionException_Exception;
 
 /**
  *
