@@ -9,7 +9,9 @@
 
 package uk.ac.dp.icatws.test;
 
-import uk.icat3.client.ICATSingleton;
+import uk.ac.dp.icatws.ICATSingleton;
+
+
 
 /**
  *
