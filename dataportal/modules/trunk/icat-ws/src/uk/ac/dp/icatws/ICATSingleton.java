@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package uk.icat3.client;
+package uk.ac.dp.icatws;
 
 import java.util.HashMap;
 import javax.xml.ws.BindingProvider;
