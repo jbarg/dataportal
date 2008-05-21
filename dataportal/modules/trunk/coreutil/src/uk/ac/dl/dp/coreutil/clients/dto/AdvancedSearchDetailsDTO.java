@@ -16,7 +16,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
-import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.icat3.client.AdvancedSearchDetails;
 import uk.icat3.client.InvestigationInclude;
 
