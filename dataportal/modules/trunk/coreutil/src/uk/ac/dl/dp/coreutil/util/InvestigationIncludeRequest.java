@@ -11,8 +11,8 @@ package uk.ac.dl.dp.coreutil.util;
 
 import java.io.Serializable;
 import java.util.Collection;
-import uk.ac.dp.icatws.Investigation;
-import uk.ac.dp.icatws.InvestigationInclude;
+import uk.icat3.client.Investigation;
+import uk.icat3.client.InvestigationInclude;
 
 /**
  *

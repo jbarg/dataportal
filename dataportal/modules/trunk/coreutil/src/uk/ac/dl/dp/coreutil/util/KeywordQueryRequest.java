@@ -13,9 +13,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import javax.xml.bind.annotation.XmlTransient;
-import uk.ac.dp.icatws.InvestigationInclude;
-import uk.ac.dp.icatws.LogicalOperator;
-import uk.ac.dp.icatws.KeywordDetails;
+import uk.icat3.client.InvestigationInclude;
+import uk.icat3.client.LogicalOperator;
+import uk.icat3.client.KeywordDetails;
 
 /**
  *
