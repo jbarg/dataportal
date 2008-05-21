@@ -7,7 +7,6 @@
             <name>core</name>
             <minimum-ant-version>1.6</minimum-ant-version>
             <included-library files="1">file.reference.log4j-1.2.14.jar</included-library>
-            <included-library files="1">reference.dp-coreutil.jar</included-library>
             <included-library files="1">file.reference.cog-jglobus-kerberos.jar</included-library>
             <included-library files="1">file.reference.commons-logging.jar</included-library>
             <included-library files="1">file.reference.jargon-v.1.4.25.1.jar</included-library>
@@ -25,6 +24,14 @@
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
                 <foreign-project>DP5_Adaptor_Module</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>coreutil</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.util.QueryRecord;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.util.UserUtil;
-import uk.ac.dp.icatws.Investigation;
+import uk.icat3.client.Investigation;
 
 public class QueryManager {
 

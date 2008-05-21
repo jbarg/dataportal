@@ -273,12 +273,14 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             -->
     <target depends="init" if="no.dist.ear.dir" name="-deps-module-jar" unless="no.deps">
         <ant antfile="${project.DP5_Adaptor_Module}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.coreutil}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.dp-coreutil}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.dpal}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.icat-ws}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-deps-ear-jar" unless="no.deps">
         <ant antfile="${project.DP5_Adaptor_Module}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.coreutil}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.dp-coreutil}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.dpal}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.icat-ws}/build.xml" inheritall="false" target="jar"/>
@@ -294,7 +296,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="compile" name="library-inclusion-in-archive">
         <copy file="${file.reference.log4j-1.2.14.jar}" todir="${build.classes.dir}"/>
-        <copy file="${reference.dp-coreutil.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.cog-jglobus-kerberos.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.commons-logging.jar}" todir="${build.classes.dir}"/>
         <copy file="${file.reference.jargon-v.1.4.25.1.jar}" todir="${build.classes.dir}"/>
@@ -303,8 +304,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     <target depends="compile" name="library-inclusion-in-manifest">
         <basename file="${file.reference.log4j-1.2.14.jar}" property="included.lib.file.reference.log4j-1.2.14.jar"/>
         <copy file="${file.reference.log4j-1.2.14.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${reference.dp-coreutil.jar}" property="included.lib.reference.dp-coreutil.jar"/>
-        <copy file="${reference.dp-coreutil.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.cog-jglobus-kerberos.jar}" property="included.lib.file.reference.cog-jglobus-kerberos.jar"/>
         <copy file="${file.reference.cog-jglobus-kerberos.jar}" todir="${dist.ear.dir}"/>
         <basename file="${file.reference.commons-logging.jar}" property="included.lib.file.reference.commons-logging.jar"/>
@@ -314,7 +313,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <basename file="${file.reference.srb_access_api-v2.1.2.jar}" property="included.lib.file.reference.srb_access_api-v2.1.2.jar"/>
         <copy file="${file.reference.srb_access_api-v2.1.2.jar}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.file.reference.log4j-1.2.14.jar} ${included.lib.reference.dp-coreutil.jar} ${included.lib.file.reference.cog-jglobus-kerberos.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.jargon-v.1.4.25.1.jar} ${included.lib.file.reference.srb_access_api-v2.1.2.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.file.reference.log4j-1.2.14.jar} ${included.lib.file.reference.cog-jglobus-kerberos.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.jargon-v.1.4.25.1.jar} ${included.lib.file.reference.srb_access_api-v2.1.2.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -583,6 +582,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
         <ant antfile="${project.DP5_Adaptor_Module}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.coreutil}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.dp-coreutil}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.dpal}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.icat-ws}/build.xml" inheritall="false" target="clean"/>

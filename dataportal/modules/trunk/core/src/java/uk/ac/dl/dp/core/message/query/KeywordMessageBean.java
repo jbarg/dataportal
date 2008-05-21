@@ -29,7 +29,7 @@ import uk.ac.dl.dp.core.message.MessageEJBObject;
 import uk.ac.dl.dp.coreutil.entity.ModuleLookup;
 import uk.ac.dl.dp.coreutil.util.KeywordMessage;
 import uk.ac.dp.icatws.ICATSingleton;
-import uk.ac.dp.icatws.KeywordType;
+import uk.icat3.client.KeywordType;
 
 /**
  *
