@@ -31,8 +31,7 @@
                 <clean-target>clean</clean-target>
                 <id>jar</id>
             </reference>
-            
-            <
+                        
             <reference>
                 <foreign-project>icat-ws</foreign-project>
                 <artifact-type>jar</artifact-type>
