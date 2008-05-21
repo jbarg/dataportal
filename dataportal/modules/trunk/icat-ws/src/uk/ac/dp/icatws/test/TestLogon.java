@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package uk.icat3.client.test;
+package uk.ac.dp.icatws.test;
 
 import uk.icat3.client.ICATSingleton;
 
