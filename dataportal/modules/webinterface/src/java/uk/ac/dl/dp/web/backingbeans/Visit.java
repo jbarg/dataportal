@@ -1,0 +1,388 @@
+/*
+ * Visit.java
+ *
+ * Created on 08 August 2006, 09:33
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ */
+package uk.ac.dl.dp.web.backingbeans;
+
+import java.io.Serializable;
+import java.net.URL;
+import uk.ac.dl.dp.coreutil.clients.dto.FacilityDTO;
+import uk.ac.dl.dp.coreutil.clients.dto.SessionDTO;
+import uk.ac.dl.dp.coreutil.clients.dto.UserPreferencesDTO;
+import uk.ac.dl.dp.coreutil.util.DPRole;
+import java.util.*;
+import javax.faces.model.SelectItem;
+import org.apache.log4j.*;
+import uk.ac.dl.dp.coreutil.entity.FacilitySession;
+import uk.ac.dl.dp.coreutil.util.DPEvent;
+import uk.ac.dl.dp.coreutil.util.KeywordsFileBean;
+import uk.ac.dl.dp.web.backingbeans.admin.AdminData;
+import uk.ac.dl.dp.web.util.AbstractSessionBean;
+import uk.ac.dl.dp.web.util.Customisation;
+import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
+
+/**
+ *
+ * @author gjd37
+ */
+public class Visit extends AbstractSessionBean implements Serializable {
+
+    /**
+     * Dn of the user
+     */
+    private String dn;
+    /**
+     * Tabbed pane index of the nav bar
+     * 0 = Keyword search
+     * 1 = advanced search
+     * 2 = facility ISIS
+     */
+    private int tabIndex = 0;
+    /**
+     * List of roles the user has
+     */
+    private Collection<DPRole> roles;
+    /**
+     * Session Id of the user
+     */
+    private String sid;
+    /**
+     * Is this user a admin, found from sessionDTO
+     */
+    private boolean isAdmin = false;
+    /**
+     * User prefe returned by the core DP containing all prefs information
+     */
+    private transient UserPreferencesDTO userPreferences;
+    /**
+     * SessionDTO returned by the core DP containing all log on information
+     */
+    private transient SessionDTO session;
+    // private String investigationSort;
+
+    /**
+     * Current width of page that the user wants
+     */
+    private String width;
+    private HashMap<String, SRBFileManagerThread> srbManager = new HashMap<String, SRBFileManagerThread>();
+    /**
+     * List of facilities that have been logged onto as selectItems for JSF pages
+     */
+    private List<SelectItem> facilities;
+    /**
+     * Type of logon, this is used to determine the log out situation
+     */
+    private String logonType = DPEvent.LOG_ON.toString();
+    /**
+     * All current Visit Data for this session, selections etc
+     */
+    private transient VisitData visitData;
+    /**
+     * All current Admin Data for this session
+     */
+    private transient AdminData adminData;
+    /**
+     * List of all the facilities in the DP and how they have logged on or failed to log on.
+     */
+    private transient Collection<FacilitySession> facilitySessions;
+    private boolean _collapsed;
+    /**
+     * Customisations
+     */
+    private transient Customisation customisation;
+
+    public boolean isSingleFacility() {
+        return singleFacility;
+    }
+    /**
+     * Is single facility, then do some customisation
+     */
+    private boolean singleFacility = false;
+    private String facility;
+
+    public String getFacility() {
+        return facility;
+    }
+
+    public void setFacility(String facility) {
+        this.facility = facility;
+    }
+    private static Logger log = Logger.getLogger(Visit.class);
+
+    public Visit() {
+        setVisitData(new VisitData());
+    }
+
+    public SessionDTO getSession() {
+        return session;
+    }
+
+    /**
+     * This sets all the information from the SessionDTO returned upon logging on
+     */
+    public void setSession(SessionDTO session) {
+        this.session = session;
+        this.sid = session.getUserSessionId();
+        this.dn = session.getDN();
+        this.roles = session.getRoles();
+        this.userPreferences = session.getUserPrefs();
+
+        String res = this.userPreferences.getResolution().toString();
+
+        //set default history of number results
+        this.getSessionHistory().setNumberOfResultsDatafilesString(""+this.userPreferences.getResultsPerPage());
+        this.getSessionHistory().setNumberOfResultsDatasetsString(""+this.userPreferences.getResultsPerPage());
+        this.getSessionHistory().setNumberOfResultsInvestigationsString(""+this.userPreferences.getResultsPerPage());
+
+        setUserWidth(res);
+        log.trace("Width set to: " + width);
+
+        for (DPRole role : roles) {
+            if (role.toString().equals(DPRole.ADMIN.toString())) {
+                isAdmin = true;
+                setAdminData(new AdminData());
+                break;
+            }
+        }
+        log.trace("User is admin: " + isAdmin);
+
+
+        //set session facility list
+        Collection<FacilityDTO> facs = this.session.getFacilities();
+
+        //create the selectitems and the keywordFileBeans from the list of loged in facilities
+        List<SelectItem> items = new ArrayList<SelectItem>();
+        HashMap<String, KeywordsFileBean> keywordsFileBeans = new HashMap<String, KeywordsFileBean>();
+        for (FacilityDTO dto : facs) {
+            items.add(new SelectItem(dto.getFacility(), dto.getFacility()));
+            keywordsFileBeans.put(dto.getFacility(), new KeywordsFileBean(session.getFedId(), dto.getFacility()));
+        }
+
+        //initialise the keywords
+        getVisitData().setKeywordsFileBeans(keywordsFileBeans);
+        this.setFacilities(items);
+
+        //sets the information about the logging onto ICATs
+        this.setFacilitySessions(session.getFacilitySessions());
+        if (session.getFacilitySessions().size() == 1) {
+            this.singleFacility = true;
+        }
+
+        //set the current default as the sleected fac in basic search
+        List<String> fac = new ArrayList<String>();
+        fac.add(this.userPreferences.getDefaultFacility());
+
+        getVisitData().setCurrentSelectedFacilities(fac);
+
+
+        //load resource bundle
+        try {
+            customisation = new Customisation();
+        } catch (Exception ex) {
+            log.warn("Error reading in facility.properties file", ex);
+        }
+     
+        try {
+            facility = customisation.getProperty("facility.name");
+        } catch (Exception mre) {
+            facility = "ISIS";
+        }
+
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public boolean isValid() {
+        return (session.getExpireTime().before(new Date())) ? false : true;
+    }
+
+    public Collection<DPRole> getRoles() {
+        return this.roles;
+    }
+
+    public String getDn() {
+        return dn;
+    }
+
+    public String getName() {
+        return session.getName();
+    }
+
+    public String getSid() {
+        return sid;
+    }
+
+    public UserPreferencesDTO getUserPreferences() {
+        return userPreferences;
+    }
+
+    public void setUserPreferences(UserPreferencesDTO userPreferences) {
+        //set user prefs in session
+        getSession().setUserPrefs(userPreferences);
+
+        //set the current selected fac in basic search to users default
+        ArrayList<String> list = new ArrayList<String>();
+        list.add(userPreferences.getDefaultFacility());
+        getVisitData().setCurrentSelectedFacilities(list);
+
+        //set width of all screens based on user pref resolution
+        setUserWidth(userPreferences.getResolution().toString());
+        this.userPreferences = userPreferences;
+    }
+
+    /**
+     * Current width of page that the user wants
+     */
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    //sets the users width of DP screen to 70 less than users default screen res
+
+    public void setUserWidth(String res) {
+        int length = res.length();
+        String split_res = res.substring(4, length);
+        int width_int = new Integer(split_res.split("x")[0]).intValue() - 70;
+
+        this.width = String.valueOf(width_int);
+    }
+
+    public SRBFileManagerThread getSrbManager(String param) {
+        return srbManager.get(param);
+    }
+
+    /**
+     * Used to keep downloads of the SRB
+     */
+    public void putSrbManager(String param, SRBFileManagerThread srbManager) {
+        // if(!this.srbManager.containsKey(param)){
+        this.srbManager.put(param, srbManager);
+    //}
+    }
+
+    /**
+     * Removes SRB downloads, if not finished it tries to stop the download
+     */
+    public void removeSrbManager(String param) {
+        if (this.srbManager.containsKey(param)) {
+            log.trace("removing " + param + " from cache");
+            SRBFileManagerThread man = srbManager.get(param);
+            try {
+                if (!man.isFinished()) {
+                    man.stopDownload();
+                }
+            } finally {
+            }
+            this.srbManager.remove(param);
+        }
+    }
+
+    /**
+     * Checks weather the visit contains a SRB download1
+     */
+    public boolean contains(String param) {
+        return this.srbManager.containsKey(param);
+    }
+
+    public VisitData getVisitData() {
+        if(this.visitData == null) this.visitData = new VisitData();
+        return this.visitData;
+    }
+
+    public void setVisitData(VisitData visitData) {
+        this.visitData = visitData;
+    }
+
+    public AdminData getAdminData() {
+        return adminData;
+    }
+
+    public void setAdminData(AdminData adminData) {
+        this.adminData = adminData;
+    }
+
+    public List<SelectItem> getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(List<SelectItem> facilities) {
+        this.facilities = facilities;
+    }
+
+    /**
+     * Checks weather one of the current selected facilities only allows one keyword ie ac.isTopics()
+     */
+    public boolean isCurrentFacilitysTopics() {
+        //check if EMAT is selected as a keyword
+        Collection<String> facilities = getVisitData().getCurrentSelectedFacilities();
+        Collection<FacilityDTO> facs = getVisit().getSession().getFacilities();
+
+        //TODO move to usit methd
+        boolean isTopic = false;
+        for (FacilityDTO fac : facs) {
+            for (String fac_name : facilities) {
+                if (fac.isTopics() && fac.getFacility().equals(fac_name)) {
+                    isTopic = true;
+                }
+            }
+        }
+        return isTopic;
+    }
+
+    public String getLogonType() {
+        return logonType;
+    }
+
+    public void setLogonType(String logonType) {
+        this.logonType = logonType;
+    }
+
+    public boolean isCollapsed() {
+        return _collapsed;
+    }
+
+    public void setCollapsed(boolean collapsed) {
+        _collapsed = collapsed;
+    }
+
+    public Collection<FacilitySession> getFacilitySessions() {
+        return facilitySessions;
+    }
+
+    public void setFacilitySessions(Collection<FacilitySession> facilitySessions) {
+        this.facilitySessions = facilitySessions;
+    }
+
+    /**
+     * Tabbed pane index of the nav bar
+     * 0 = Keyword search
+     * 1 = Advanced search
+     * 2 = Facility
+     */
+    public int getTabIndex() {
+        return tabIndex;
+    }
+
+    public void setTabIndex(int tabIndex) {
+        log.trace("Setting tab index to "+tabIndex);
+        this.tabIndex = tabIndex;
+    }
+
+    public Customisation getCustomisation() {
+        return customisation;
+    }
+
+    public void setCustomisation(Customisation customisation) {
+        this.customisation = customisation;
+    }
+}
