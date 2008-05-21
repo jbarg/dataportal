@@ -17,8 +17,8 @@ import uk.ac.dl.dp.coreutil.entity.DPConstants;
 import uk.ac.dl.dp.coreutil.entity.SrbServer;
 import uk.ac.dl.dp.coreutil.util.SRBUrl;
 import uk.ac.dl.srbapi.srb.SRBFileManagerThread;
-import uk.ac.dp.icatws.Datafile;
-import uk.ac.dp.icatws.Dataset;
+import uk.icat3.client.Datafile;
+import uk.icat3.client.Dataset;
 
 /**
  *

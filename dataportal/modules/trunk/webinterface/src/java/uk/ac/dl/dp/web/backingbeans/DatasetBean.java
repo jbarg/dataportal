@@ -19,9 +19,9 @@ import javax.faces.component.*;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.web.util.SortableList;
-import uk.ac.dp.icatws.Dataset;
-import uk.ac.dp.icatws.DatasetInclude;
-import uk.ac.dp.icatws.DatasetParameter;
+import uk.icat3.client.Dataset;
+import uk.icat3.client.DatasetInclude;
+import uk.icat3.client.DatasetParameter;
 
 /**
  *

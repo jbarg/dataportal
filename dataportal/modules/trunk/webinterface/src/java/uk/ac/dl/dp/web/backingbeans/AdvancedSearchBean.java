@@ -25,7 +25,7 @@ import uk.ac.dl.dp.coreutil.clients.dto.AdvancedSearchDetailsDTO;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
-import uk.ac.dp.icatws.InvestigationInclude;
+import uk.icat3.client.InvestigationInclude;
 
 /**
  *

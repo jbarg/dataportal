@@ -27,9 +27,9 @@ import uk.ac.dl.dp.coreutil.util.KeywordsFileBean;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.coreutil.util.SRBUrl;
 import uk.ac.dl.dp.web.backingbeans.BasicSearchHistoryBean;
-import uk.ac.dp.icatws.Datafile;
-import uk.ac.dp.icatws.Dataset;
-import uk.ac.dp.icatws.Investigation;
+import uk.icat3.client.Datafile;
+import uk.icat3.client.Dataset;
+import uk.icat3.client.Investigation;
 /**
  *
  * @author gjd37

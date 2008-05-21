@@ -20,8 +20,8 @@ import javax.faces.context.FacesContext;
 import org.apache.log4j.*;
 import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.web.util.SortableList;
-import uk.ac.dp.icatws.Datafile;
-import uk.ac.dp.icatws.DatafileParameter;
+import uk.icat3.client.Datafile;
+import uk.icat3.client.DatafileParameter;
 
 /**
  *
