@@ -26,11 +26,11 @@ import uk.ac.dl.dp.coreutil.util.QueryRequest;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.WebConstants;
-import uk.ac.dp.icatws.Datafile;
-import uk.ac.dp.icatws.Investigation;
-import uk.ac.dp.icatws.InvestigationInclude;
-import uk.ac.dp.icatws.LogicalOperator;
-import uk.ac.dp.icatws.KeywordDetails;
+import uk.icat3.client.Datafile;
+import uk.icat3.client.Investigation;
+import uk.icat3.client.InvestigationInclude;
+import uk.icat3.client.LogicalOperator;
+import uk.icat3.client.KeywordDetails;
 /**
  *
  * @author gjd37

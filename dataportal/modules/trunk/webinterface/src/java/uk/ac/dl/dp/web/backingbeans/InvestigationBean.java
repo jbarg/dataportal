@@ -22,13 +22,13 @@ import uk.ac.dl.dp.coreutil.exceptions.DataPortalException;
 import uk.ac.dl.dp.web.navigation.NavigationConstants;
 import uk.ac.dl.dp.web.util.SortableList;
 import uk.ac.dl.dp.web.util.WebConstants;
-import uk.ac.dp.icatws.Dataset;
-import uk.ac.dp.icatws.Investigation;
-import uk.ac.dp.icatws.InvestigationInclude;
-import uk.ac.dp.icatws.Investigator;
-import uk.ac.dp.icatws.Publication;
-import uk.ac.dp.icatws.Sample;
-import uk.ac.dp.icatws.Shift;
+import uk.icat3.client.Dataset;
+import uk.icat3.client.Investigation;
+import uk.icat3.client.InvestigationInclude;
+import uk.icat3.client.Investigator;
+import uk.icat3.client.Publication;
+import uk.icat3.client.Sample;
+import uk.icat3.client.Shift;
 
 /**
  *

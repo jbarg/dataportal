@@ -35,10 +35,10 @@ import uk.ac.dl.dp.coreutil.delegates.QueryDelegate;
 import uk.ac.dl.dp.coreutil.exceptions.DataCenterException;
 import uk.ac.dl.dp.coreutil.exceptions.SessionException;
 import uk.ac.dl.dp.coreutil.util.SRBInfo;
-import uk.ac.dp.icatws.Datafile;
-import uk.ac.dp.icatws.Dataset;
-import uk.ac.dp.icatws.DatasetInclude;
-import uk.ac.dp.icatws.Investigation;
+import uk.icat3.client.Datafile;
+import uk.icat3.client.Dataset;
+import uk.icat3.client.DatasetInclude;
+import uk.icat3.client.Investigation;
 
 /**
  *

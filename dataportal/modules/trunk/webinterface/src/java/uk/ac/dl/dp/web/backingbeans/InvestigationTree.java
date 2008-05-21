@@ -23,7 +23,7 @@ import javax.faces.component.*;
 import uk.ac.dl.dp.web.util.AbstractRequestBean;
 import uk.ac.dl.dp.web.util.Util;
 import uk.ac.dl.dp.web.util.WebConstants;
-import uk.ac.dp.icatws.Investigation;
+import uk.icat3.client.Investigation;
 
 /**
  *
