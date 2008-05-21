@@ -5,7 +5,7 @@
  * Created on 25 June 2007, 11:23
  */
 
-package uk.ac.dp.icatws;
+package uk.icat3.client;
 
 
 import javax.xml.ws.BindingProvider;
