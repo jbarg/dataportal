@@ -45,7 +45,7 @@ public class TestLogon {
      */
     public static void main(String[] args) throws Exception {
         // TODO code application logic here
-        login("gjd37", "(gsd+37@Dl");
+            login(System.getProperty("user.name"), System.getProperty("usersso.password"));
         
     }
 
