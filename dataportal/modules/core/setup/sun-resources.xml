@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 9.0 Resource Definitions //EN" "http://www.sun.com/software/appserver/dtds/sun-resources_1_3.dtd">
+<resources>
+  <mail-resource debug="false" enabled="true" from="root@localhost" host="localhost" jndi-name="MailSession" object-type="user" store-protocol="imap" store-protocol-class="com.sun.mail.imap.IMAPStore" transport-protocol="smtp" transport-protocol-class="com.sun.mail.smtp.SMTPTransport" user="root">
+    <description/>
+  </mail-resource>
+  <admin-object-resource enabled="true" jndi-name="jms/EventMDBQueue" object-type="user" res-adapter="jmsra" res-type="javax.jms.Queue">
+    <description/>
+    <property name="Name" value="EventMDBQueue"/>
+  </admin-object-resource>
+  <admin-object-resource enabled="true" jndi-name="jms/DownloadMDBQueue" object-type="user" res-adapter="jmsra" res-type="javax.jms.Queue">
+    <description/>
+    <property name="Name" value="DownloadMDBQueue"/>
+  </admin-object-resource>
+  <admin-object-resource enabled="true" jndi-name="jms/KeywordMDBQueue" object-type="user" res-adapter="jmsra" res-type="javax.jms.Queue">
+    <description/>
+    <property name="Name" value="KeywordMDBQueue"/>
+  </admin-object-resource>
+  <admin-object-resource enabled="true" jndi-name="jms/QueryMDBQueue" object-type="user" res-adapter="jmsra" res-type="javax.jms.Queue">
+    <description/>
+    <property name="Name" value="QueryMDBQueue"/>
+  </admin-object-resource>
+  <admin-object-resource enabled="true" jndi-name="jms/LoginICATMDBQueue" object-type="user" res-adapter="jmsra" res-type="javax.jms.Queue">
+    <description/>
+    <property name="Name" value="LoginICATMDBQueue"/>
+  </admin-object-resource>
+  <admin-object-resource enabled="true" jndi-name="jms/sendMDBQueue" object-type="user" res-adapter="jmsra" res-type="javax.jms.Queue">
+    <description/>
+    <property name="Name" value="sendMDBQueue"/>
+  </admin-object-resource>
+  <connector-resource enabled="true" jndi-name="MDBQueueConnectionFactory" object-type="user" pool-name="MDBQueueConnectionFactory">
+    <description/>
+  </connector-resource>
+  <connector-connection-pool associate-with-thread="false" connection-creation-retry-attempts="0" connection-creation-retry-interval-in-seconds="10" connection-definition-name="javax.jms.QueueConnectionFactory" connection-leak-reclaim="false" connection-leak-timeout-in-seconds="0" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" lazy-connection-association="false" lazy-connection-enlistment="false" match-connections="true" max-connection-usage-count="0" max-pool-size="32" max-wait-time-in-millis="60000" name="MDBQueueConnectionFactory" pool-resize-quantity="2" resource-adapter-name="jmsra" steady-pool-size="8" validate-atmost-once-period-in-seconds="0"/>
+</resources>
