@@ -28,51 +28,28 @@ is divided into following sections:
     <target depends="-pre-init" name="-init-private">
         <property file="nbproject/private/private.properties"/>
     </target>
-    <target depends="-pre-init,-init-private" name="-init-libraries">
-        <property location="../Libraries\nblibraries.properties" name="libraries.1.path"/>
-        <dirname file="${libraries.1.path}" property="libraries.1.dir.nativedirsep"/>
-        <pathconvert dirsep="/" property="libraries.1.dir">
-            <path path="${libraries.1.dir.nativedirsep}"/>
-        </pathconvert>
-        <basename file="${libraries.1.path}" property="libraries.1.basename" suffix=".properties"/>
-        <touch file="${libraries.1.dir}/${libraries.1.basename}-private.properties"/>
-        <loadproperties srcfile="${libraries.1.dir}/${libraries.1.basename}-private.properties">
-            <filterchain>
-                <replacestring from="$${base}" to="${libraries.1.dir}"/>
-            </filterchain>
-        </loadproperties>
-        <loadproperties srcfile="${libraries.1.path}">
-            <filterchain>
-                <replacestring from="$${base}" to="${libraries.1.dir}"/>
-            </filterchain>
-        </loadproperties>
-    </target>
-    <target depends="-pre-init,-init-private,-init-libraries" name="-init-userdir">
+    <target depends="-pre-init,-init-private" name="-init-userdir">
         <property location="${netbeans.user}/build.properties" name="user.properties.file"/>
     </target>
-    <target depends="-pre-init,-init-private,-init-libraries,-init-userdir" name="-init-user">
+    <target depends="-pre-init,-init-private,-init-userdir" name="-init-user">
         <property file="${user.properties.file}"/>
         <!-- The two properties below are usually overridden -->
         <!-- by the active platform. Just a fallback. -->
         <property name="default.javac.source" value="1.4"/>
         <property name="default.javac.target" value="1.4"/>
     </target>
-    <target depends="-pre-init,-init-private,-init-libraries,-init-userdir,-init-user" name="-init-project">
+    <target depends="-pre-init,-init-private,-init-userdir,-init-user" name="-init-project">
         <property file="nbproject/project.properties"/>
     </target>
-    <target depends="-pre-init,-init-private,-init-libraries,-init-userdir,-init-user,-init-project,-init-macrodef-property" name="-do-init">
+    <target depends="-pre-init,-init-private,-init-userdir,-init-user,-init-project,-init-macrodef-property" name="-do-init">
         <!-- Ensure configuration directory exists. -->
         <mkdir dir="${meta.inf}"/>
         <property name="runmain.jvmargs" value=""/>
         <condition property="have.tests">
-            <or>
-                <available file="${test.src.dir}"/>
-            </or>
+            <or/>
         </condition>
         <condition property="have.sources">
-            <or>
-                <available file="${src.dir}"/>
-            </or>
+            <or/>
         </condition>
         <condition property="netbeans.home+have.tests">
             <and>
@@ -119,9 +96,7 @@ is divided into following sections:
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target depends="-pre-init,-init-private,-init-libraries,-init-userdir,-init-user,-init-project,-do-init" name="-init-check">
-        <fail unless="src.dir">Must set src.dir</fail>
-        <fail unless="test.src.dir">Must set test.src.dir</fail>
+    <target depends="-pre-init,-init-private,-init-userdir,-init-user,-init-project,-do-init" name="-init-check">
         <fail unless="build.dir">Must set build.dir</fail>
         <fail unless="build.generated.dir">Must set build.generated.dir</fail>
         <fail unless="dist.dir">Must set dist.dir</fail>
@@ -148,7 +123,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target name="-init-macrodef-javac">
         <macrodef name="javac" uri="http://www.netbeans.org/ns/j2ee-ejbjarproject/2">
-            <attribute default="${src.dir}" name="srcdir"/>
+            <attribute default="" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}:${j2ee.platform.classpath}" name="classpath"/>
             <attribute default="${javac.debug}" name="debug"/>
@@ -170,9 +145,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <attribute default="**/*Test.java" name="includes"/>
             <sequential>
                 <junit dir="${basedir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" showoutput="true">
-                    <batchtest todir="${build.test.results.dir}">
-                        <fileset dir="${test.src.dir}" includes="@{includes}"/>
-                    </batchtest>
+                    <batchtest todir="${build.test.results.dir}"/>
                     <classpath>
                         <path path="${run.test.classpath}"/>
                         <path path="${j2ee.platform.classpath}"/>
@@ -289,25 +262,16 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="compile" name="library-inclusion-in-archive">
-        <copy file="${file.reference.log4j-1.2.14.jar}" todir="${build.classes.dir}"/>
-        <copy file="${file.reference.cog-jglobus-kerberos.jar}" todir="${build.classes.dir}"/>
-        <copy file="${file.reference.commons-logging.jar}" todir="${build.classes.dir}"/>
-        <copy file="${file.reference.jargon-v.1.4.25.1.jar}" todir="${build.classes.dir}"/>
-        <copy file="${file.reference.srb_access_api-v2.1.2.jar}" todir="${build.classes.dir}"/>
+        <copy file="${reference.icat-ws.jar}" todir="${build.classes.dir}"/>
+        <copy file="${reference.coreutil.jar}" todir="${build.classes.dir}"/>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
-        <basename file="${file.reference.log4j-1.2.14.jar}" property="included.lib.file.reference.log4j-1.2.14.jar"/>
-        <copy file="${file.reference.log4j-1.2.14.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${file.reference.cog-jglobus-kerberos.jar}" property="included.lib.file.reference.cog-jglobus-kerberos.jar"/>
-        <copy file="${file.reference.cog-jglobus-kerberos.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${file.reference.commons-logging.jar}" property="included.lib.file.reference.commons-logging.jar"/>
-        <copy file="${file.reference.commons-logging.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${file.reference.jargon-v.1.4.25.1.jar}" property="included.lib.file.reference.jargon-v.1.4.25.1.jar"/>
-        <copy file="${file.reference.jargon-v.1.4.25.1.jar}" todir="${dist.ear.dir}"/>
-        <basename file="${file.reference.srb_access_api-v2.1.2.jar}" property="included.lib.file.reference.srb_access_api-v2.1.2.jar"/>
-        <copy file="${file.reference.srb_access_api-v2.1.2.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${reference.icat-ws.jar}" property="included.lib.reference.icat-ws.jar"/>
+        <copy file="${reference.icat-ws.jar}" todir="${dist.ear.dir}"/>
+        <basename file="${reference.coreutil.jar}" property="included.lib.reference.coreutil.jar"/>
+        <copy file="${reference.coreutil.jar}" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.file.reference.log4j-1.2.14.jar} ${included.lib.file.reference.cog-jglobus-kerberos.jar} ${included.lib.file.reference.commons-logging.jar} ${included.lib.file.reference.jargon-v.1.4.25.1.jar} ${included.lib.file.reference.srb_access_api-v2.1.2.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.reference.icat-ws.jar} ${included.lib.reference.coreutil.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">
@@ -320,9 +284,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,deps-jar,-pre-pre-compile,-pre-compile,-copy-meta-inf" if="have.sources" name="-do-compile">
         <ejbjarproject2:javac destdir="${classes.dir}"/>
-        <copy todir="${classes.dir}">
-            <fileset dir="${src.dir}" excludes="${build.classes.excludes}"/>
-        </copy>
+        <copy todir="${classes.dir}"/>
     </target>
     <target name="-post-compile">
         <!-- Empty placeholder for easier customization. -->
@@ -471,11 +433,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             <classpath>
                 <path path="${javac.classpath}:${j2ee.platform.classpath}"/>
             </classpath>
-            <sourcepath>
-                <pathelement location="${src.dir}"/>
-            </sourcepath>
-            <packageset dir="${src.dir}" includes="*/**"/>
-            <fileset dir="${src.dir}" includes="*.java"/>
+            <sourcepath/>
         </javadoc>
     </target>
     <target depends="init,javadoc-build" if="netbeans.home" name="javadoc-browse" unless="no.javadoc.preview">
@@ -493,10 +451,8 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="init,compile,-pre-pre-compile-test,-pre-compile-test" if="have.tests" name="-do-compile-test">
-        <ejbjarproject2:javac classpath="${javac.test.classpath}:${j2ee.platform.classpath}" debug="true" destdir="${build.test.classes.dir}" srcdir="${test.src.dir}"/>
-        <copy todir="${build.test.classes.dir}">
-            <fileset dir="${test.src.dir}" excludes="**/*.java"/>
-        </copy>
+        <ejbjarproject2:javac classpath="${javac.test.classpath}:${j2ee.platform.classpath}" debug="true" destdir="${build.test.classes.dir}" srcdir=""/>
+        <copy todir="${build.test.classes.dir}"/>
     </target>
     <target name="-post-compile-test">
         <!-- Empty placeholder for easier customization. -->
@@ -509,7 +465,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,compile,-pre-pre-compile-test,-pre-compile-test-single" if="have.tests" name="-do-compile-test-single">
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
-        <ejbjarproject2:javac classpath="${javac.test.classpath}:${j2ee.platform.classpath}" debug="true" destdir="${build.test.classes.dir}" srcdir="${test.src.dir}">
+        <ejbjarproject2:javac classpath="${javac.test.classpath}:${j2ee.platform.classpath}" debug="true" destdir="${build.test.classes.dir}" srcdir="">
             <customize>
                 <patternset includes="${javac.includes}"/>
             </customize>
