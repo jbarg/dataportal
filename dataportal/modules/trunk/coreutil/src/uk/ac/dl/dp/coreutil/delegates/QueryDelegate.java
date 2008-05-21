@@ -15,13 +15,13 @@ import uk.ac.dl.dp.coreutil.util.CachingServiceLocator;
 import uk.ac.dl.dp.coreutil.util.DataPortalConstants;
 import uk.ac.dl.dp.coreutil.util.KeywordQueryRequest;
 import uk.ac.dl.dp.coreutil.util.QueryRequest;
-import uk.ac.dp.icatws.Datafile;
-import uk.ac.dp.icatws.Dataset;
-import uk.ac.dp.icatws.DatasetInclude;
-import uk.ac.dp.icatws.InsufficientPrivilegesException_Exception;
-import uk.ac.dp.icatws.Investigation;
-import uk.ac.dp.icatws.InvestigationInclude;
-import uk.ac.dp.icatws.NoSuchObjectFoundException_Exception;
+import uk.icat3.client.Datafile;
+import uk.icat3.client.Dataset;
+import uk.icat3.client.DatasetInclude;
+import uk.icat3.client.InsufficientPrivilegesException_Exception;
+import uk.icat3.client.Investigation;
+import uk.icat3.client.InvestigationInclude;
+import uk.icat3.client.NoSuchObjectFoundException_Exception;
 
 /**
  *

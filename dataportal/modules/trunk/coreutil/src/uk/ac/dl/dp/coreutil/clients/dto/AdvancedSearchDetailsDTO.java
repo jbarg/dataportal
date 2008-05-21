@@ -17,8 +17,8 @@ import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
 import uk.ac.dl.dp.coreutil.util.DPQueryType;
-import uk.ac.dp.icatws.AdvancedSearchDetails;
-import uk.ac.dp.icatws.InvestigationInclude;
+import uk.icat3.client.AdvancedSearchDetails;
+import uk.icat3.client.InvestigationInclude;
 
 /**
  * This class is used because the generated stub is not Serializable and therefore cannot be

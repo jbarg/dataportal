@@ -13,7 +13,7 @@ package uk.ac.dl.dp.coreutil.util;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.Collection;
-import uk.ac.dp.icatws.Investigation;
+import uk.icat3.client.Investigation;
 
 /**
  *
