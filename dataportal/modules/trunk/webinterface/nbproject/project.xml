@@ -28,9 +28,6 @@
                 <library files="1">
                     <file>${reference.coreutil.jar}</file>
                 </library>
-                <library files="1">
-                    <file>${reference.icat-ws.jar}</file>
-                </library>
                 <library files="2">
                     <file>${libs.jboss-ajax4jsf.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
@@ -62,14 +59,6 @@
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
                 <foreign-project>coreutil</foreign-project>
-                <artifact-type>jar</artifact-type>
-                <script>build.xml</script>
-                <target>jar</target>
-                <clean-target>clean</clean-target>
-                <id>jar</id>
-            </reference>
-            <reference>
-                <foreign-project>icat-ws</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
