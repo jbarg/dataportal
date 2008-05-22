@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/C:/Documents%20and%20Settings/gjd37/My%20Documents/NetBeansProjects/dataportal/trunk/icat-ws/xml-resources/web-service-references/ICAT/wsdl/ICAT.wsdl" uri="xml-resources/web-service-references/ICAT/wsdl/ICAT.wsdl"/>
+    <system systemId="https://localhost:8181/ICATService/ICAT?xsd=1" uri="xml-resources/web-service-references/ICAT/wsdl/localhost_8181/ICATService/ICAT.xsd_1.xsd"/>
+</catalog>

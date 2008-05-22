@@ -66,4 +66,15 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-post-compile">      
+        <!-- You can override this target in the ../build.xml file. -->
+         <!-- Ading section to copy the WSDL file into the uk.icat3.client directory -->
+        <condition property="ICAT-wsdl-exists">
+            <available file="${basedir}/xml-resources/web-service-references/ICAT/wsdl/ICAT.wsdl" type="file"/>
+        </condition>
+        <fail unless="ICAT-wsdl-exists">Must have ICAT.wsdl in ${basedir}/xml-resources/web-service-references/ICAT/wsdl/ICAT.wsdl
+        </fail>
+        <echo level="info"  message="Copying ICAT.wsdl to ${build.classes.dir}/uk/icat3/client" />
+        <copy file="${basedir}/xml-resources/web-service-references/ICAT/wsdl/ICAT.wsdl" todir="${build.classes.dir}/uk/icat3/client"/>
+    </target>
 </project>
