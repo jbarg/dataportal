@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  This is a binding file and makes all of the stubs generated Serializable on wsimport -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+ elementFormDefault="qualified" attributeFormDefault="unqualified"
+ 	jaxb:extensionBindingPrefixes="xjc" jaxb:version="1.0">
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:globalBindings>
+                <xjc:serializable uid="-6026937020915831338"/>
+            </jaxb:globalBindings>
+        </xs:appinfo>
+    </xs:annotation>
+</xs:schema>
