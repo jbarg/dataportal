@@ -18,7 +18,7 @@
         </condition>
     </target>
     <target name="wsimport-client-ICAT" depends="wsimport-init,wsimport-client-check-ICAT" unless="wsimport-client-ICAT.notRequired">
-        <wsimport fork="true" xendorsed="true" sourcedestdir="${build.generated.dir}/wsimport/client" extension="true" destdir="${build.generated.dir}/wsimport/binaries" wsdl="${basedir}/xml-resources/web-service-references/ICAT/wsdl/ICAT.wsdl" wsdlLocation="ICAT.wsdl" catalog="catalog.xml">
+        <wsimport binding="${basedir}/nbproject/jax-ws-binding.xml" fork="true" xendorsed="true" sourcedestdir="${build.generated.dir}/wsimport/client" extension="true" destdir="${build.generated.dir}/wsimport/binaries" wsdl="${basedir}/xml-resources/web-service-references/ICAT/wsdl/ICAT.wsdl" wsdlLocation="ICAT.wsdl" catalog="catalog.xml">
             <jvmarg value="-Djava.endorsed.dirs=${jaxws.endorsed.dir}"/>
         </wsimport>
         <copy todir="${build.classes.dir}">
