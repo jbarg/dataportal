@@ -1,0 +1,1 @@
+The Data Portal is a visual front-end to 1 or more ICAT (http://code.google.com/p/icatproject/) repositories.
